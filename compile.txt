@@ -1,0 +1,50 @@
+Compiling Instructions 
+ 
+(note: in all cases below, the NPPAngband* directory indicates the directory to 
+which you 
+have chosen to download the source code.)
+
+========================
+Windows & lcc-win32 by Robert Ruehlmann (edited for NPPAngband): 
+========================
+
+1.	Getting the free lcc-win32 compiler: 
+Download the compiler and install it. 
+2.	Install the NPPAngband source: 
+Unzip and extract the zip-file "NPPAngband Source Code v0.1.0.zip" with your 
+favorite archive tool (like WinZip, or untgz.exe).
+3.	Create the LCC project: 
+Start lcc-win32. Select 'File/New/Project...' from the menu and enter 
+"NPPAngband" as the project name. On the "Definition of a new project" set the 
+working directory to "C:\NPPAngband*\src" (wherever you extracted the source 
+code to) and then select the "Windows executable" option. Press the 'Create' 
+button and answer the question about using the wizard to generate the 
+application skeleton with "no". We want to use the existing NPPAngband source 
+code, so we don't need the skeleton code. 
+4.	Adding the NPPAngband source files to the project: 
+Add all files from birth.c to load.c to the project, then add the "main-win.c" 
+file with the "Add new file..." option and finally the files from melee1.c to z-
+virt.c. Select "Add new file..." again, and this time select the "Resources" 
+filetype and select the "angband.rc" file. 
+5.	Setting various project options: 
+Type "winmm.lib" in the 'Additional files to be included in the link' field. In the 'Debugger 
+settings' you should change the start directory to "C:\NPPAngband*" (or again 
+use your own path to the NPPAngband directory). The 'Executable to start' should 
+be "C:\NPPAngband*\NPPangband.exe" (did I already mention change it to your path 
+if necessary?). The settings part is now finished. When asked if you want to 
+"Open ... files?" simply say no. 
+6.	Compiling: 
+Select 'Compiler/Generate Makefile' from the menu and wait for it to finish. Now 
+select 'Compiler/Make' and NPPAngband should be compiled. 
+7.	Run NPPAngband: 
+Go back to the NPPAngband* folder and run the NPPAngband.exe. 
+
+All other operating Systems and compilers:
+
+Please see the following site for other compiling instructions:
+
+http://rephial.org/wiki/Compiling
+
+NPPangband should compile with virtually the same instructions as found on this site. 
+Please note NPPAngband has a slightly different directory structure and file names.
+However NPPAngband is based on the most recent source code.
