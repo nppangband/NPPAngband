@@ -85,7 +85,6 @@ static void look_mon_desc(char *buf, size_t max, int m_idx)
 	if ((!m_ptr->m_timed[MON_TMD_SLOW]) && (m_ptr->m_timed[MON_TMD_FAST])) my_strcat(buf, ", hasted", max);
 }
 
-
 /*
  * Draw a visible path over the squares between (x1,y1) and (x2,y2).
  * The path consists of "*", which are white except where there is a
@@ -106,7 +105,7 @@ static int draw_path(u16b path_n, u16b *path_g, char *c, byte *a, int y1, int x1
 	bool on_screen;
 
 	/* No path, so do nothing. */
-	if (path_n < 1) return 0;
+	if (path_n < 1) return (FALSE);;
 
 	/* The starting square is never drawn, but notice if it is being
      * displayed. In theory, it could be the last such square.

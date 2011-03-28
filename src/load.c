@@ -1172,6 +1172,8 @@ static errr rd_extra(void)
 
 	rd_u16b(&p_ptr->fame);
 
+
+
 	rd_s32b(&p_ptr->au);
 
 	rd_s32b(&p_ptr->max_exp);
@@ -1188,6 +1190,8 @@ static errr rd_extra(void)
 		note(format("Invalid player level (%d).", p_ptr->lev));
 		return (-1);
 	}
+
+
 
 	rd_s16b(&p_ptr->mhp);
 	rd_s16b(&p_ptr->chp);
@@ -1393,20 +1397,19 @@ static errr rd_extra(void)
 	/* Read the randart seed */
 	rd_u32b(&seed_randart);
 
-	/* Skip the flags */
+	/* Skip the flags 12 */
 	strip_bytes(12);
-
 
 	/* Hack -- the two "special seeds" */
 	rd_u32b(&seed_flavor);
 	rd_u32b(&seed_town);
 
-
 	/* Special stuff */
 	rd_u16b(&p_ptr->panic_save);
-	rd_u16b(&p_ptr->total_winner);
-	rd_u16b(&p_ptr->noscore);
 
+	rd_u16b(&p_ptr->total_winner);
+
+	rd_u16b(&p_ptr->noscore);
 
 	/* Read "death" */
 	rd_byte(&tmp8u);

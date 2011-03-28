@@ -5401,7 +5401,7 @@ int do_ident_item(int item, object_type *o_ptr)
 		char shorter_desc[120];
 
 		/* Get a shorter description to fit the notes file */
-		object_desc(shorter_desc, sizeof(shorter_desc), o_ptr, ODESC_BASE);
+		object_desc(shorter_desc, sizeof(shorter_desc), o_ptr, ODESC_PREFIX | ODESC_BASE);
 
 		/* Build note and write */
         	sprintf(note, "Found %s", shorter_desc);

@@ -4,6 +4,8 @@ Along with the resources below, the NPPAngband home page and forums are located 
 
 http://forum.nppangband.org/
 
+NPPAngband is a variant of Angband.  The Angband readme is included below:
+
 
 Angband 3.1.0
 =============

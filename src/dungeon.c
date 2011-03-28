@@ -20,10 +20,28 @@
 #include "game-event.h"
 
 /*
- * Change dungeon level
+ * Change dungeon level.
+ * Aside from setting hte player depth at the beginning of the game,
+ * this should be the only place where a player depth is actually
+ * changed.
  */
 void dungeon_change_level(int dlev)
 {
+	/* Handle lost greater vaults */
+	if (g_vault_name[0] != '\0')
+	{
+		if (adult_take_notes)
+		{
+	    	char note[120];
+			char *fmt = "Left the level without entering the %s";
+
+			strnfmt(note, sizeof(note), fmt, g_vault_name);
+			do_cmd_note(note, p_ptr->depth);
+	 	}
+
+	  	g_vault_name[0] = '\0';
+	}
+
 	/* New depth */
 	p_ptr->depth = dlev;
 
@@ -752,7 +770,7 @@ static void process_world(void)
 	if (turn % 10) return;
 
 	/*** Update quests ***/
-	if (p_ptr->cur_quest) /* playtesting && !(turn % QUEST_TURNS)) */
+	if ((p_ptr->cur_quest) && !(turn % QUEST_TURNS))
 	{
 
 		quest_type *q_ptr = &q_info[quest_num(p_ptr->cur_quest)];
@@ -1805,7 +1823,6 @@ void process_player(void)
 		/* Normal command */
 		else
 		{
-
 			/* Check monster recall */
 			process_player_aux();
 
@@ -1815,6 +1832,7 @@ void process_player(void)
 			/* Get and process a command */
 			process_command(CMD_GAME, FALSE);
 
+			py_pickup_gold();
 		}
 
 		/*** Clean up ***/
@@ -2052,6 +2070,47 @@ void process_player(void)
 
 }
 
+/*
+ * Checks if multi-color monsters onscreen.
+ */
+void do_animation(void)
+{
+	int i;
+
+	for (i = 1; i < mon_max; i++)
+	{
+		monster_type *m_ptr = &mon_list[i];
+		monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+		if (!m_ptr->r_idx) continue;
+		if (!m_ptr->ml) continue;
+		if (!(r_ptr->flags1 & (RF1_ATTR_MULTI))) continue;
+
+		m_ptr->m_attr = multi_hued_attr(r_ptr);
+
+		p_ptr->redraw |= (PR_MAP | PR_MONLIST);
+	}
+}
+
+
+/*
+ * This is used when the user is idle to allow for simple animations.
+ * Currently the only thing it really does is animate shimmering monsters.
+ */
+void idle_update(void)
+{
+	if (!character_dungeon) return;
+
+	if (!animate_flicker) return;
+
+	/* Animate and redraw if necessary */
+	do_animation();
+	redraw_stuff();
+
+	/* Refresh the main screen */
+	Term_fresh();
+}
+
 
 /*
  * Interact with the current dungeon level.
@@ -2275,6 +2334,9 @@ static void dungeon(void)
 
 		/* Hack -- Compress the object list occasionally */
 		if (o_cnt + 32 < o_max) compact_objects(0);
+
+		/* Do any necessary animations */
+		do_animation();
 
 		/* Update terrain damage every game turn */
 		if ((!is_player_native(p_ptr->py, p_ptr->px)) && (!p_ptr->timed[TMD_FLYING]))
@@ -2592,21 +2654,6 @@ void play_game(void)
 
 		/* Handle "quit and save" */
 		if (!p_ptr->playing && !p_ptr->is_dead) break;
-
-		/* Handle lost greater vaults */
-		if (g_vault_name[0] != '\0')
-		{
-			if (adult_take_notes)
-			{
-		    	char note[120];
-				char *fmt = "Left the level without entering the %s";
-
-		   		strnfmt(note, sizeof(note), fmt, g_vault_name);
-				do_cmd_note(note, p_ptr->depth);
-		  	}
-
-		  	g_vault_name[0] = '\0';
-		}
 
 		/* Erase the old cave */
 		wipe_o_list();

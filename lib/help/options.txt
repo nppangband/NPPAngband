@@ -296,6 +296,11 @@ Automatically display drop-down lists	    [always_show_list]   (off)  :
 Allow accents in output files		    [xchars_to_file]   	 (off)  :	
     Allow non-ascii characters to be saved in output files.
 
+***** <animate_flicker>
+Animate multi-coloured monsters and items   [animate_flicker]    (off)  :
+    Certain powerful monsters and items will shimmer in real time, i.e. 
+    between keypresses. 
+
 --- Option Set #6:  Birth ---
 
      You may only change birth options when starting up a new character.

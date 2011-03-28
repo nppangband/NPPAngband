@@ -604,7 +604,7 @@ static bool eat_food(object_type *o_ptr, bool *ident)
 		{
 			if (!p_ptr->state.resist_blind)
 			{
-				if (inc_timed(TMD_POISONED, rand_int(200) + 200, TRUE))
+				if (inc_timed(TMD_BLIND, rand_int(200) + 200, TRUE))
 				{
 					*ident = TRUE;
 				}
@@ -790,6 +790,8 @@ static bool eat_food(object_type *o_ptr, bool *ident)
 
 static bool quaff_potion(object_type *o_ptr, bool *ident)
 {
+
+
 	/* Analyze the potion */
 	switch (o_ptr->sval)
 	{
@@ -1298,6 +1300,22 @@ static bool quaff_potion(object_type *o_ptr, bool *ident)
 			break;
 		}
 
+	}
+
+	/*
+	 * Some potions can feed the player
+	 * Hack - but they can't gorge the player.
+	 */
+	if (o_ptr->pval)
+	{
+		int new_food = p_ptr->food + o_ptr->pval;
+
+		if (new_food >= PY_FOOD_MAX)
+		{
+			new_food = PY_FOOD_MAX - 1;
+		}
+
+		if (new_food > p_ptr->food)(void)set_food(new_food);
 	}
 
 	return (TRUE);

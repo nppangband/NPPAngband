@@ -2781,6 +2781,7 @@ void do_cmd_quest(void)
 	}
 	/* No quest at all */
 	else msg_print("You are not currently undertaking a quest.");
+
 }
 /*
  * Encode the screen colors

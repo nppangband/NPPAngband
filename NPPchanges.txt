@@ -1,3 +1,19 @@
+NPP 0.5.3 changes:
+Changed the color of monsters who breathe time to pink.
+Added the flicker_monsters option to shimmer monster color with attr_multi when game is idle.
+Bugfix:  Artifacts printed in the notes file did not have the appropriate prefix (ex. "The").
+Added the ATTR_MULTI flag to most of the great wyrms.
+Added some of the new vaults from Angband 3.2.
+Updated a couple of the file handling functions to the new ones in ANgband 3.2 to eliminate a compiler warning.
+Increased the number of shades a monster can flicker with the ATTR_MULTI flag.
+Bugfix:  A mushroom of blindness poisoned instead of blinds.
+Bugfix:  When the player left a monster quest level, quest failure was happening far too frequently.
+Bugfix:  The player could duplicate ammunition with certain inscriptions.
+Bugfix:  The note that a player left a level without entering a greater vault
+         gave the wrong depth (The depth was only correct if the player was using word-of-recall).
+Gave Azathoth the teleport_to and teleport_player_to spells again, changed its color to violet.
+
+
 NPP 0.5.2 changes:
 Added a flag to monster_type "project" to indicate when the monster is in projectable los to the player.
 Fixed a typo in the message when the player gets their constitution drained by a GF_TIME attack.

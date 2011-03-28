@@ -382,6 +382,7 @@ extern int distance(int y1, int x1, int y2, int x2);
 extern bool generic_los(int y1, int x1, int y2, int x2, u16b flg);
 extern bool no_light(void);
 extern bool cave_valid_bold(int y, int x);
+extern byte multi_hued_attr(monster_race *r_ptr);
 extern bool feat_supports_lighting(u16b feat);
 extern bool dtrap_edge(int y, int x);
 extern void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp);
@@ -427,6 +428,7 @@ extern void textui_process_command(bool no_request);
 extern void search(void);
 extern bool put_object_in_inventory(object_type *o_ptr);
 extern void do_cmd_pickup_from_pile(bool message);
+extern void py_pickup_gold(void);
 extern void py_pickup(bool pickup);
 extern s16b move_player(int dir, int jumping);
 
@@ -581,6 +583,7 @@ void death_screen(void);
 extern void dungeon_change_level(int dlev);
 extern void process_player_terrain_damage(void);
 extern void process_player(void);
+extern void idle_update(void);
 extern void play_game(void);
 
 

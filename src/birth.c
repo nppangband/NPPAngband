@@ -499,7 +499,6 @@ static void player_wipe(void)
 		l_ptr->pkills = 0;
 	}
 
-
 	/*No current player ghosts*/
 	bones_selector = 0;
 
