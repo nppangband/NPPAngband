@@ -1926,7 +1926,7 @@ option_entry options[OPT_MAX] =
 	{NULL,				NULL,								FALSE},/* xxx */
 	{"show_piles",			"Show stacks using special attr/char",	FALSE},	/* OPT_show_piles */
 	{"center_player",		"Center map continuously (very slow)",	FALSE},	/* OPT_center_player */
-	{NULL,				NULL,								FALSE},/* xxx */
+	{"animate_flicker",    	"Shimmer multi-colored things",  		FALSE}, /* OPT_animate_flicker */
 	{"xchars_to_file",		"Allow accents in output files",		FALSE},	/* OPT_xchars_to_file */
 	{"auto_more",			"Automatically clear '-more-' prompts",	FALSE},	/* OPT_auto_more */
 	{NULL,				NULL,								FALSE},/* xxx */
@@ -2160,7 +2160,7 @@ const byte option_page[OPT_PAGE_MAX][OPT_PAGE_PER] =
 		OPT_view_perma_grids,
 		OPT_view_torch_grids,
 		OPT_mark_squelch_items,
-		OPT_NONE,
+		OPT_animate_flicker,
 		OPT_NONE,
 		OPT_NONE,
 		OPT_NONE,

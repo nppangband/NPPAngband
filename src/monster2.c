@@ -940,11 +940,11 @@ static void get_mon_name(char *output_name, size_t max, int r_idx, int in_los)
  */
 void display_monlist(void)
 {
-	size_t i, j, k;
+	u16b i, j, k;
 	int max;
 	int line = 1, x = 0;
 	int cur_x;
-	unsigned total_count = 0, disp_count = 0, type_count = 0, los_count = 0;
+	u16b total_count = 0, disp_count = 0, type_count = 0, los_count = 0;
 
 	byte attr;
 
@@ -989,7 +989,7 @@ void display_monlist(void)
 	list = C_ZNEW(z_info->r_max, monster_vis);
 
 	/* Scan the list of monsters on the level */
-	for (i = 1; i < (size_t)mon_max; i++)
+	for (i = 1; i < mon_max; i++)
 	{
 		m_ptr = &mon_list[i];
 
@@ -1004,6 +1004,13 @@ void display_monlist(void)
 
 		/* If this is the first one of this type, count the type */
 		if (!list[m_ptr->r_idx].count) type_count++;
+		if (!list[m_ptr->r_idx].s_attr)
+		{
+			/* Get the monster info */
+			r_ptr = &r_info[m_ptr->r_idx];
+
+			list[m_ptr->r_idx].s_attr = m_ptr->m_attr ? m_ptr->m_attr : r_ptr->x_attr;
+		}
 
 		/* Check for LOS */
 		if (m_ptr->project)
@@ -1154,7 +1161,7 @@ void display_monlist(void)
 		}
 
 		/* Display the pict */
-		Term_putch(cur_x++, line, r_ptr->x_attr, r_ptr->x_char);
+		Term_putch(cur_x++, line, list[r_idx].s_attr, r_ptr->x_char);
 		if (use_bigtile) Term_putch(cur_x++, line, 255, -1);
 		Term_putch(cur_x++, line, TERM_WHITE, ' ');
 
@@ -1248,7 +1255,7 @@ void display_monlist(void)
 		}
 
 		/* Display the pict */
-		Term_putch(cur_x++, line, r_ptr->x_attr, r_ptr->x_char);
+		Term_putch(cur_x++, line, list[r_idx].s_attr, r_ptr->x_char);
 		if (use_bigtile) Term_putch(cur_x++, line, 255, -1);
 		Term_putch(cur_x++, line, TERM_WHITE, ' ');
 

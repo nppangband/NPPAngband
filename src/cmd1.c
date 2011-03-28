@@ -455,7 +455,6 @@ void do_cmd_pickup_from_pile(bool message)
 
 	/* Combine / Reorder the pack */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER | PN_SORT_QUIVER);
-
 	p_ptr->redraw |= (PR_ITEMLIST | PR_INVEN | PR_EQUIP);
 
 	/* Just be sure all inventory management is done. */
@@ -464,41 +463,13 @@ void do_cmd_pickup_from_pile(bool message)
 
 }
 
-/*
- * Handle picking up objects from a given square.
- * First anything marked always squelch is destroyed.
- * Next Several items are picked up automatically.
- * Gold, items marked "always pickup", items that go
- * in the quiver, and objects marked "always pickup".
- *
- * The function stops at that point if pickup is false.
- *
- * This function has been re-writtten to be more linear,
- * and it sacrifices efficiency for clarity and flexability.
- *
- *
- */
-void py_pickup(bool pickup)
+void py_pickup_gold(void)
 {
 	int py = p_ptr->py;
 	int px = p_ptr->px;
-
 	s16b this_o_idx, next_o_idx = 0;
-
 	object_type *o_ptr;
-
-	int objects_left = 0;
-
 	char o_name[80];
-
-	/* Are we allowed to pick up anything here? */
-	if (!(f_info[cave_feat[py][px]].f_flags1 & (FF1_DROP))) return;
-
- 	/* Automatically destroy squelched items in pile if necessary */
-	do_squelch_pile(py, px);
-
-	/* Nothing left */
-	if (!cave_o_idx[py][px]) return;
 
 	/* First, pick up the gold automatically */
 	for (this_o_idx = cave_o_idx[py][px]; this_o_idx; this_o_idx = next_o_idx)
@@ -538,8 +509,49 @@ void py_pickup(bool pickup)
 
 		/* Check the next object */
 		continue;
-
 	}
+
+	return;
+}
+
+/*
+ * Handle picking up objects from a given square.
+ * First anything marked always squelch is destroyed.
+ * Next Several items are picked up automatically.
+ * Gold, items marked "always pickup", items that go
+ * in the quiver, and objects marked "always pickup".
+ *
+ * The function stops at that point if pickup is false.
+ *
+ * This function has been re-writtten to be more linear,
+ * and it sacrifices efficiency for clarity and flexability.
+ *
+ *
+ */
+void py_pickup(bool pickup)
+{
+	int py = p_ptr->py;
+	int px = p_ptr->px;
+
+	s16b this_o_idx, next_o_idx = 0;
+
+	object_type *o_ptr;
+
+	int objects_left = 0;
+
+	char o_name[80];
+
+	/* Are we allowed to pick up anything here? */
+	if (!(f_info[cave_feat[py][px]].f_flags1 & (FF1_DROP))) return;
+
+ 	/* Automatically destroy squelched items in pile if necessary */
+	do_squelch_pile(py, px);
+
+	/* Nothing left */
+	if (!cave_o_idx[py][px]) return;
+
+	/* First, pick up gold */
+	py_pickup_gold();
 
 	/* Nothing left */
 	if (!cave_o_idx[py][px]) return;

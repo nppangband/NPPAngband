@@ -53,7 +53,7 @@
 /*
  * Current version string
  */
-#define VERSION_STRING	"0.5.2"
+#define VERSION_STRING	"0.5.3 WIP"
 
 
 /*
@@ -778,7 +778,7 @@ enum
 /* xxx */
 #define OPT_show_piles				67
 #define OPT_center_player			68
-/* xxx */
+#define OPT_animate_flicker			69
 #define OPT_xchars_to_file			70
 #define OPT_auto_more				71
 /* xxx */
@@ -915,7 +915,7 @@ enum
 /* xxx */
 #define show_piles				op_ptr->opt[OPT_show_piles]
 #define center_player			op_ptr->opt[OPT_center_player]
-/* xxx */
+#define animate_flicker 		op_ptr->opt[OPT_animate_flicker]
 #define xchars_to_file			op_ptr->opt[OPT_xchars_to_file]
 #define auto_more				op_ptr->opt[OPT_auto_more]
 /* xxx */
