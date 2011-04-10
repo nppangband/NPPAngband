@@ -101,8 +101,8 @@ immediate quest failure.
 THEMED LEVEL QUESTS:
 
 This quest is a more difficult version of the Monster Pit/Nest quests.  Instead of
-95 creatures in a pit or nest specified depth, and entire level is full between 
-195 - 275 monsters of a particular theme.  
+95 creatures in a pit or nest, the entire level is full of 200 or more
+monsters of a particular theme.
 Since there are so many like creatures bunched so closely together, a creature
 from inside one of these themed levels will not attempt to summon more 
 creatures to the battle.  This tends to be the most difficult type of quest, 
