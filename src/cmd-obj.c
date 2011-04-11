@@ -1640,7 +1640,7 @@ static bool read_scroll(object_type *o_ptr, bool *ident)
 			int item;
 
 			/*artifact power is based on depth*/
-			int randart_power = 10 + p_ptr->depth;
+			int randart_power = 10 + effective_depth(p_ptr->depth);
 
 			/* Get an item */
 			cptr q = "Choose an item to be made into an artifact. ";
