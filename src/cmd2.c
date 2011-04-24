@@ -471,7 +471,7 @@ static void chest_death(int y, int x, s16b o_idx)
 	}
 
 	/* Reset the object level */
-	object_level = p_ptr->depth;
+	object_level = effective_depth(p_ptr->depth);
 
 	/* No longer opening a chest */
 	object_generation_mode = OB_GEN_MODE_NORMAL;
@@ -1499,7 +1499,7 @@ static bool do_cmd_disarm_aux(int y, int x, bool disarm)
 	/* XXX XXX XXX Variable power? */
 
 	/* Extract trap "power" */
-	power = 5 + p_ptr->depth / 4;
+	power = 5 + effective_depth(p_ptr->depth) / 4;
 
 	/* Prevent the player's own traps granting exp. */
 	if (feat_ff2_match(feat, FF2_TRAP_MON)) power = 0;

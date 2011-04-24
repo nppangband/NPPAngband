@@ -4117,4 +4117,10 @@ errr next_line_to_number(ang_file *fff, int *dest)
 	return (TRUE);
 }
 
+int effective_depth(int depth)
+{
+	/* in Quickband this is different */
+	return depth;
+}
+
 

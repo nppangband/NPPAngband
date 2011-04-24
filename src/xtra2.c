@@ -400,7 +400,7 @@ void monster_death(int m_idx, int who)
 	coin_type = force_coin;
 
 	/* Average dungeon and monster levels */
-	set_object_level = object_level = (p_ptr->depth + r_ptr->level) / 2;
+	set_object_level = object_level = (effective_depth(p_ptr->depth) + r_ptr->level) / 2;
 
 	/* Drop some objects */
 	for (j = 0; j < number_drops; j++)
@@ -511,7 +511,7 @@ void monster_death(int m_idx, int who)
 	}
 
 	/* Reset the object level */
-	object_level = p_ptr->depth;
+	object_level = effective_depth(p_ptr->depth);
 
 	/* Reset "coin" type */
 	coin_type = 0;

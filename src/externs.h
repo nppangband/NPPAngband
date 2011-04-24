@@ -1280,6 +1280,7 @@ extern bool is_a_vowel(int ch);
 extern int color_char_to_attr(char c);
 extern int color_text_to_attr(cptr name);
 extern cptr attr_to_text(byte a);
+extern int effective_depth(int depth);
 
 #ifdef SUPPORT_GAMMA
 extern void build_gamma_table(int gamma);

@@ -6298,7 +6298,7 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 				power = r_ptr->level;
 
 			}
-			else power = p_ptr->depth;
+			else power = effective_depth(p_ptr->depth);
 
 			if (blind) msg_print("You feel spores all around you...");
 
