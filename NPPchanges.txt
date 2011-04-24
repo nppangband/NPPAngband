@@ -12,6 +12,8 @@ Bugfix:  The player could duplicate ammunition with certain inscriptions.
 Bugfix:  The note that a player left a level without entering a greater vault
          gave the wrong depth (The depth was only correct if the player was using word-of-recall).
 Gave Azathoth the teleport_to and teleport_player_to spells again, changed its color to violet.
+Added fixed monster quests as a guild quest option.
+Vault quests are now available 25% of the time. Previously it was when the player fame is equally divisible by 7.
 
 
 NPP 0.5.2 changes:

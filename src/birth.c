@@ -459,7 +459,7 @@ static void player_wipe(void)
 		quest_type *q_ptr = &q_info[i];
 
 		/* Reset level */
-		if ((q_ptr->type == QUEST_FIXED) || (q_ptr->type == QUEST_FIXED_U))
+		if ((q_ptr->q_type == QUEST_FIXED) || (q_ptr->q_type == QUEST_FIXED_U))
 		{
 			q_ptr->active_level = q_ptr->base_level;
 			q_ptr->cur_num = 0;

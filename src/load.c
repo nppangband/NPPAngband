@@ -1215,8 +1215,17 @@ static errr rd_extra(void)
 	/* Hack -- Repair recall dungeon level */
 	if (p_ptr->recall_depth < 0) p_ptr->recall_depth = 1;
 
+	rd_s16b(&p_ptr->quest_depth);
+
+	/* Hack -- Repair max quest level */
+	if ((p_ptr->max_depth > 1) &&
+		(p_ptr->max_depth > p_ptr->quest_depth))
+	{
+		p_ptr->quest_depth = p_ptr->max_depth;
+	}
+
 	/* More info */
-	strip_bytes(8);
+	strip_bytes(6);
 	rd_s16b(&p_ptr->sc);
 	strip_bytes(2);
 
@@ -2283,14 +2292,16 @@ static errr rd_savefile_new_aux(void)
 	for (i = 0; i < tmp16u; i++)
 
 	 {
-		rd_byte(&q_info[i].type);
+		rd_byte(&q_info[i].q_type);
 
-		if ((q_info[i].type == QUEST_FIXED) || (q_info[i].type == QUEST_FIXED_U))
+		if ((q_info[i].q_type == QUEST_FIXED) || (q_info[i].q_type == QUEST_FIXED_U))
 		{
 			rd_byte(&q_info[i].active_level);
 			rd_s16b(&q_info[i].cur_num);
 		}
-		else if ((q_info[i].type == QUEST_MONSTER) || (q_info[i].type == QUEST_UNIQUE))
+		else if ((q_info[i].q_type == QUEST_MONSTER) ||
+				 (q_info[i].q_type == QUEST_UNIQUE) ||
+				 (q_info[i].q_type == QUEST_FIXED_MON))
 		{
 			rd_byte(&q_info[i].reward);
 			rd_byte(&q_info[i].active_level);
@@ -2306,7 +2317,7 @@ static errr rd_savefile_new_aux(void)
 			if (q_info[i].active_level || q_info[i].reward)
 				p_ptr->cur_quest = q_info[i].base_level;
 		}
-		else if (q_info[i].type == QUEST_VAULT)
+		else if (q_info[i].q_type == QUEST_VAULT)
 		{
 			rd_byte(&q_info[i].reward);
 			rd_byte(&q_info[i].active_level);
@@ -2322,9 +2333,9 @@ static errr rd_savefile_new_aux(void)
 			if (q_info[i].active_level || q_info[i].reward)
 				p_ptr->cur_quest = q_info[i].base_level;
 		}
-		else if ((q_info[i].type == QUEST_THEMED_LEVEL) ||
-				 (q_info[i].type == QUEST_NEST) ||
-			     (q_info[i].type == QUEST_PIT))
+		else if ((q_info[i].q_type == QUEST_THEMED_LEVEL) ||
+				 (q_info[i].q_type == QUEST_NEST) ||
+			     (q_info[i].q_type == QUEST_PIT))
 		{
 			rd_byte(&q_info[i].reward);
 			rd_byte(&q_info[i].active_level);

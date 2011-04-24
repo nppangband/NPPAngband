@@ -656,9 +656,9 @@ s16b get_mon_num(int level, int y, int x)
 	/*filter out non-terrain flags*/
 	native_flags &= TERRAIN_MASK;
 
-	if (((q_ptr->type == QUEST_THEMED_LEVEL) ||
-		 (q_ptr->type == QUEST_PIT) ||
-		 (q_ptr->type == QUEST_NEST)) &&
+	if (((q_ptr->q_type == QUEST_THEMED_LEVEL) ||
+		 (q_ptr->q_type == QUEST_PIT) ||
+		 (q_ptr->q_type == QUEST_NEST)) &&
 		(p_ptr->cur_quest == p_ptr->depth)) quest_level = TRUE;
 
 	/* Boost the level, but not for quest levels.  That has already been done */
@@ -746,7 +746,8 @@ s16b get_mon_num(int level, int y, int x)
 				/* Check quests for uniques*/
 				for (k = 0; k < z_info->q_max; k++)
 				{
-					if ((q_info[k].type == QUEST_UNIQUE) || (q_info[k].type == QUEST_FIXED_U))
+					if ((q_info[k].q_type == QUEST_UNIQUE) ||
+						(q_info[k].q_type == QUEST_FIXED_U))
 					{
 						/* Is this unique marked for a quest? */
 						if (q_info[k].mon_idx == table[i].index)
@@ -2970,7 +2971,8 @@ static bool place_monster_one(int y, int x, int r_idx, bool slp)
 		/* Check quests for uniques*/
 		for (i = 0; i < z_info->q_max; i++)
 		{
-			if ((q_info[i].type == QUEST_UNIQUE) || (q_info[i].type == QUEST_FIXED_U))
+			if ((q_info[i].q_type == QUEST_UNIQUE) ||
+				(q_info[i].q_type == QUEST_FIXED_U))
 			{
 				/*is this unique marked for a quest?*/
 				if (q_info[i].mon_idx == r_idx)

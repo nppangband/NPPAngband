@@ -6061,6 +6061,7 @@ static bool alloc_stairs(u16b feat, int num)
 		/* Quest -- must go up */
 		else if ((quest_check(p_ptr->depth) == QUEST_FIXED) ||
 				 (quest_check(p_ptr->depth) == QUEST_FIXED_U) ||
+				 (quest_check(p_ptr->depth) == QUEST_FIXED_MON) ||
 				 (p_ptr->depth >= MAX_DEPTH-1))
 		{
 			/* Clear previous contents, add up stairs */
@@ -7261,17 +7262,18 @@ static void build_nature(void)
 		if (q_ptr->active_level != p_ptr->depth) continue;
 
 		/* Monster quests */
-		if ((q_ptr->type == QUEST_FIXED) ||
-			(q_ptr->type == QUEST_FIXED_U) ||
-			(q_ptr->type == QUEST_MONSTER) ||
-			(q_ptr->type == QUEST_UNIQUE))
+		if ((q_ptr->q_type == QUEST_FIXED) ||
+			(q_ptr->q_type == QUEST_FIXED_U) ||
+			(q_ptr->q_type == QUEST_FIXED_MON) ||
+			(q_ptr->q_type == QUEST_MONSTER) ||
+			(q_ptr->q_type == QUEST_UNIQUE))
 		{
 			/* Restrict feature generation */
 			level_flag |= get_level_flag_from_race(&r_info[q_ptr->mon_idx]);
 		}
 		/* Pit/Nest quests */
-		else if ((q_ptr->type == QUEST_PIT) ||
-			(q_ptr->type == QUEST_NEST))
+		else if ((q_ptr->q_type == QUEST_PIT) ||
+			(q_ptr->q_type == QUEST_NEST))
 		{
 			u16b j;
 
@@ -9367,7 +9369,9 @@ static bool place_monsters_objects(void)
 		{
 			int y, x;
 
-			if ((q_ptr->type == QUEST_MONSTER) || (q_ptr->type == QUEST_FIXED))
+			if ((q_ptr->q_type == QUEST_MONSTER) ||
+				(q_ptr->q_type == QUEST_FIXED) ||
+				(q_ptr->q_type == QUEST_FIXED_MON))
 			{
 				int j;
 
@@ -9398,7 +9402,8 @@ static bool place_monsters_objects(void)
 				}
 			}
 
-			else if ((q_ptr->type == QUEST_UNIQUE) || (q_ptr->type == QUEST_FIXED_U))
+			else if ((q_ptr->q_type == QUEST_UNIQUE) ||
+					 (q_ptr->q_type == QUEST_FIXED_U))
 			{
 				monster_race *r_ptr = &r_info[q_ptr->mon_idx];
 
@@ -9895,7 +9900,7 @@ static bool cave_gen(void)
 		/* Hack -- No destroyed "quest" levels */
 		destroyed = FALSE;
 
-		switch (q_ptr->type)
+		switch (q_ptr->q_type)
 		{
 			case QUEST_VAULT:
 			case QUEST_PIT:

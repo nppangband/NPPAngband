@@ -596,9 +596,9 @@ static void wr_extra(void)
 	wr_s16b(p_ptr->max_lev);
 	wr_s16b(p_ptr->max_depth);
 	wr_s16b(p_ptr->recall_depth);
+	wr_s16b(p_ptr->quest_depth);
 
 	/* More info */
-	wr_s16b(0);	/* oops */
 	wr_s16b(0);	/* oops */
 	wr_s16b(0);	/* oops */
 	wr_s16b(0);	/* oops */
@@ -1173,15 +1173,17 @@ static bool wr_savefile_new(void)
 	wr_u16b(tmp16u);
 	for (i = 0; i < tmp16u; i++)
 	{
-		wr_byte(q_info[i].type);
+		wr_byte(q_info[i].q_type);
 
-		if ((q_info[i].type == QUEST_FIXED) || (q_info[i].type == QUEST_FIXED_U))
+		if ((q_info[i].q_type == QUEST_FIXED) || (q_info[i].q_type == QUEST_FIXED_U))
 		{
 			wr_byte(q_info[i].active_level);
 			wr_s16b(q_info[i].cur_num);
 		}
 
-		else if ((q_info[i].type == QUEST_MONSTER) || (q_info[i].type == QUEST_UNIQUE))
+		else if ((q_info[i].q_type == QUEST_MONSTER) ||
+				 (q_info[i].q_type == QUEST_UNIQUE) ||
+				 (q_info[i].q_type == QUEST_FIXED_MON))
 		{
 			wr_byte(q_info[i].reward);
 			wr_byte(q_info[i].active_level);
@@ -1193,16 +1195,16 @@ static bool wr_savefile_new(void)
 			wr_s16b(q_info[i].max_num);
 			wr_byte(q_info[i].q_flags);
 		}
-		else if (q_info[i].type == QUEST_VAULT)
+		else if (q_info[i].q_type == QUEST_VAULT)
 		{
 			wr_byte(q_info[i].reward);
 			wr_byte(q_info[i].active_level);
 			wr_byte(q_info[i].base_level);
 			wr_byte(q_info[i].q_flags);
 		}
-		else if ((q_info[i].type == QUEST_THEMED_LEVEL) ||
-			     (q_info[i].type == QUEST_NEST) ||
-			     (q_info[i].type == QUEST_PIT))
+		else if ((q_info[i].q_type == QUEST_THEMED_LEVEL) ||
+			     (q_info[i].q_type == QUEST_NEST) ||
+			     (q_info[i].q_type == QUEST_PIT))
 		{
 			wr_byte(q_info[i].reward);
 			wr_byte(q_info[i].active_level);

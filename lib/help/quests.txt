@@ -49,7 +49,7 @@ pressing <CTRL-Q>.
 The Adventurer's Guild (building # 9 in the town) chooses what kind of quest the
 adventurer is given. The guild can assign five different types of quests:
 
-MONSTER QUESTS-
+MONSTER QUESTS:
 
 This is the most common quest. The player is assigned to go to a specified
 depth, based on the average difficulty of monsters 0-5 levels below the quest 
@@ -61,6 +61,20 @@ the game.  A player can choose to dive right past the designated quest level, or
 leave and return to a quest level. Leaving an optional quest level without
 killing the required number of creatures can result in a failed quest.  Failing
 a quest greatly tarnishes the player's reputation at the guild.
+
+FIXED MONSTER QUESTS:
+Similar to monster quests.  The player is assigned to go to a specified
+depth, based on the average difficulty of monsters 4-9 levels below the quest 
+level, and kill a certain number of monsters (usually around 15 creatures). 
+The depth of the quest and number of monsters varies.
+
+Unlike fixed quests, it is not mandatory to complete the quest in order to win
+the game.  Unlike a monster quest, a player cannot dive past the designated quest
+level until they complete the quest.  Unlike a regular monster quest, you may
+leave and return to the level without killing the required number of creatures,
+and you will not fail your quest.  The only ways to fail this quest are to 
+die trying and to request to abandon the quest at the adventurer's guild.  A
+down staircase will appear when you complete this quest.
 
 UNIQUE QUESTS:
 

@@ -189,16 +189,6 @@ static cptr service_names[STORE_SERVICE_MAX] =
 
 
 
-
-
-/*slots for the following tables*/
-/*The source code assumes QUEST_SLOT_MONSTER is first and always available to the player*/
-#define QUEST_SLOT_MONSTER		0
-#define QUEST_SLOT_PIT_NEST		1
-#define QUEST_SLOT_LEVEL		2
-#define QUEST_SLOT_VAULT		3
-#define QUEST_SLOT_MAX			4
-
 static byte services_offered[STORE_SERVICE_MAX];
 static byte quests_offered[QUEST_SLOT_MAX];
 
@@ -208,7 +198,8 @@ static cptr quest_title[QUEST_SLOT_MAX] =
 	"Monster or Unique Quest",	/*QUEST_MONSTER*/
 	"Pit or Nest Quest",		/*QUEST_PIT*/
   	"Level Quest",				/*QUEST_LEVEL*/
-	"Vault Quest"				/*QUEST_VAULT*/
+	"Vault Quest",				/*QUEST_VAULT*/
+  	"Fixed Monster Quest"		/*QUEST_FIXED */
 };
 
 
@@ -490,10 +481,10 @@ static void init_services_and_quests(int store_num)
 			if (!p_ptr->cur_quest) continue;
 			if (quest_reward) continue;
 
-			if (q_ptr->type == QUEST_VAULT) continue;
-			if (q_ptr->type == QUEST_PIT) continue;
-			if (q_ptr->type == QUEST_NEST) continue;
-			if (q_ptr->type == QUEST_THEMED_LEVEL) continue;
+			if (q_ptr->q_type == QUEST_VAULT) continue;
+			if (q_ptr->q_type == QUEST_PIT) continue;
+			if (q_ptr->q_type == QUEST_NEST) continue;
+			if (q_ptr->q_type == QUEST_THEMED_LEVEL) continue;
 		}
 
 		/* Offer this service. */
@@ -1108,8 +1099,9 @@ static bool store_service_aux(int store_num, s16b choice)
 			monster_race *r_ptr = &r_info[q_ptr->mon_idx];
 			monster_lore *l_ptr = &l_list[q_ptr->mon_idx];
 
-			if (((q_ptr->type != QUEST_MONSTER) &&
-			     (q_ptr->type != QUEST_UNIQUE)) ||
+			if (((q_ptr->q_type != QUEST_MONSTER) &&
+			     (q_ptr->q_type != QUEST_UNIQUE) &&
+			     (q_ptr->q_type != QUEST_FIXED_MON)) ||
 				(q_ptr->mon_idx == 0))
 			{
 				msg_print("You are not currently questing for a specific creature.");

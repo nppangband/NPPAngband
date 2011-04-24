@@ -21,7 +21,7 @@
 
 /*
  * Change dungeon level.
- * Aside from setting hte player depth at the beginning of the game,
+ * Aside from setting the player depth at the beginning of the game,
  * this should be the only place where a player depth is actually
  * changed.
  */
@@ -780,12 +780,12 @@ static void process_world(void)
 		{
 			/* Check if quest is in progress */
 			if ((q_ptr->q_flags & (QFLAG_STARTED)) && q_ptr->active_level &&
-				((q_ptr->type == QUEST_MONSTER) || (q_ptr->type == QUEST_UNIQUE)))
+				((q_ptr->q_type == QUEST_MONSTER) || (q_ptr->q_type == QUEST_UNIQUE)))
 				quest_fail();
 		}
 
 		/* hack - make sure there are enough monsters */
-		if (q_ptr->type == QUEST_THEMED_LEVEL)
+		if (q_ptr->q_type == QUEST_THEMED_LEVEL)
 		{
 			if ((q_ptr->max_num - q_ptr->cur_num) > mon_cnt)
 			{
@@ -2169,6 +2169,13 @@ static void dungeon(void)
 		p_ptr->max_depth = p_ptr->depth;
 	}
 
+	/* Track maximum quest level */
+	if ((p_ptr->max_depth > 1) &&
+		(p_ptr->max_depth > p_ptr->quest_depth))
+	{
+		p_ptr->quest_depth = p_ptr->max_depth;
+	}
+
 	/* Track recall dungeon level */
 	if (p_ptr->recall_depth < p_ptr->depth)
 	{
@@ -2184,7 +2191,8 @@ static void dungeon(void)
 
 	/* No stairs down from fixed quests */
 	if ((quest_check(p_ptr->depth) == QUEST_FIXED) ||
-		(quest_check(p_ptr->depth) == QUEST_FIXED_U))
+		(quest_check(p_ptr->depth) == QUEST_FIXED_U) ||
+		(quest_check(p_ptr->depth) == QUEST_FIXED_MON))
 	{
 		if ((p_ptr->create_stair == FEAT_MORE) ||
 			(p_ptr->create_stair == FEAT_MORE_SHAFT))
