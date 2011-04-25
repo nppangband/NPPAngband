@@ -1048,6 +1048,7 @@ extern bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, i
 /* spells2.c */
 extern bool hp_player(int num);
 extern bool warding_glyph(void);
+extern bool create_elements(int cy, int cx, int range);
 extern bool create_glacier(void);
 extern bool do_dec_stat(int stat);
 extern bool do_res_stat(int stat);

@@ -15,6 +15,7 @@ Gave Azathoth the teleport_to and teleport_player_to spells again, changed its c
 Added fixed monster quests as a guild quest option.
 Vault quests are now available 25% of the time. Previously it was when the player fame is equally divisible by 7.
 Changed p_ptr->depth to a function call effective_depth to help quickband stay current with the NPP codebase.
+Added the druid spell "create elements".
 
 
 NPP 0.5.2 changes:

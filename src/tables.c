@@ -1555,7 +1555,7 @@ const s16b spell_list[3][BOOKS_PER_REALM][SPELLS_PER_BOOK] =
 			DRUID_DETECT_TERRAIN,
 			DRUID_EARTHQUAKE,
 			DRUID_LIFE_DRAIN_BURST,
-			-1,
+			DRUID_CREATE_ELEMENTS,
 		},
 
 		/* Lore of Engagement */

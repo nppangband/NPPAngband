@@ -269,6 +269,7 @@
 #define DRUID_DETECT_TERRAIN	      	23
 #define DRUID_EARTHQUAKE 	     		24
 #define DRUID_LIFE_DRAIN_BURST		 	26
+#define DRUID_CREATE_ELEMENTS			27
 
 /* Lore of Engagement */
 #define DRUID_ELEMENTAL_BRAND          	28
