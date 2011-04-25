@@ -621,25 +621,25 @@ static void play_ambient_sound(void)
 	}
 
 	/* Dungeon level 1-20 */
-	else if (p_ptr->depth <= 20)
+	else if (effective_depth(p_ptr->depth) <= 20)
 	{
 		sound(MSG_AMBIENT_DNG1);
 	}
 
 	/* Dungeon level 21-40 */
-	else if (p_ptr->depth <= 40)
+	else if (effective_depth(p_ptr->depth) <= 40)
 	{
 		sound(MSG_AMBIENT_DNG2);
 	}
 
 	/* Dungeon level 41-60 */
-	else if (p_ptr->depth <= 60)
+	else if (effective_depth(p_ptr->depth) <= 60)
 	{
 		sound(MSG_AMBIENT_DNG3);
 	}
 
 	/* Dungeon level 61-80 */
-	else if (p_ptr->depth <= 80)
+	else if (effective_depth(p_ptr->depth) <= 80)
 	{
 		sound(MSG_AMBIENT_DNG4);
 	}
@@ -794,7 +794,7 @@ static void process_world(void)
 				int best_r_idx, r_idx;
 				int attempts_left = 10000;
 
-				monster_level = p_ptr->depth + THEMED_LEVEL_QUEST_BOOST;
+				monster_level = effective_depth(p_ptr->depth) + THEMED_LEVEL_QUEST_BOOST;
 
 				/* make a monster */
 				get_mon_hook(q_ptr->theme);
@@ -869,7 +869,7 @@ static void process_world(void)
 
 				feeling = old_feeling;
 
-				monster_level = p_ptr->depth;
+				monster_level = effective_depth(p_ptr->depth);
 
 				/* Remove restriction */
 				get_mon_num_hook = NULL;
@@ -2314,10 +2314,10 @@ static void dungeon(void)
 	/*** Process this dungeon level ***/
 
 	/* Reset the monster generation level */
-	monster_level = p_ptr->depth;
+	monster_level = effective_depth(p_ptr->depth);
 
 	/* Reset the object generation level */
-	object_level = p_ptr->depth;
+	object_level = effective_depth(p_ptr->depth);
 
 	/* Main loop */
 	while (TRUE)

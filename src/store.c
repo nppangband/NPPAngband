@@ -2545,7 +2545,7 @@ static void store_create_random(int which)
 	}
 
 	/* Reset the object level */
-	object_level = p_ptr->depth;
+	object_level = effective_depth(p_ptr->depth);
 
 }
 
