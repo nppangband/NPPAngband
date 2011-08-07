@@ -19,7 +19,6 @@
 
 #include "init.h"
 
-
 /*
  * This file loads savefiles from Angband 2.9.X.
  *
@@ -2351,6 +2350,7 @@ static errr rd_savefile_new_aux(void)
 				p_ptr->cur_quest = q_info[i].base_level;
 
 		}
+		else if (!older_than(0,5,3)) rd_byte(&q_info[i].q_flags);
 	}
 
 	if (arg_fiddle) note("Loaded Quests");

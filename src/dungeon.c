@@ -785,7 +785,8 @@ static void process_world(void)
 		}
 
 		/* hack - make sure there are enough monsters */
-		if (q_ptr->q_type == QUEST_THEMED_LEVEL)
+		if ((q_ptr->q_type == QUEST_THEMED_LEVEL) ||
+			(q_ptr->q_type == PIT_NEST_QUEST_BOOST))
 		{
 			if ((q_ptr->max_num - q_ptr->cur_num) > mon_cnt)
 			{
@@ -794,7 +795,11 @@ static void process_world(void)
 				int best_r_idx, r_idx;
 				int attempts_left = 10000;
 
-				monster_level = effective_depth(p_ptr->depth) + THEMED_LEVEL_QUEST_BOOST;
+				if (q_ptr->q_type == QUEST_THEMED_LEVEL)
+				{
+					monster_level = effective_depth(p_ptr->depth) + THEMED_LEVEL_QUEST_BOOST;
+				}
+				else  monster_level = effective_depth(p_ptr->depth) + PIT_NEST_QUEST_BOOST;
 
 				/* make a monster */
 				get_mon_hook(q_ptr->theme);
@@ -842,6 +847,9 @@ static void process_world(void)
 
 						r_ptr = &r_info[r_idx];
 
+						/* Don't use a unique as a replacement */
+						if (r_ptr->flags1 & (RF1_UNIQUE)) continue;
+
 						/* Weaker monster.  Don't use it */
 						if (r_ptr->mon_power < r2_ptr->mon_power) continue;
 
@@ -849,7 +857,6 @@ static void process_world(void)
 						r2_ptr = &r_info[best_r_idx];
 
 					}
-
 
 					if (place_monster_aux(y, x, best_r_idx, TRUE, FALSE))
 					{

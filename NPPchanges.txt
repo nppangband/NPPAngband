@@ -1,4 +1,21 @@
 NPP 0.5.3 changes:
+
+Latest commit:
+Added files by Brian Bull that assist in compiling with Visual C++ 2008.
+
+Bugfix: Savefiles were prevented from loading properly on the Mac OS when a player ghost was active.
+Bugfix: Savefiles did not properly save some of the quest status flags.
+Bugfix: The game could crash if a new character goes into a shop, views an ego-weapon, leaves the shop, 
+        starts the knowledge menu, and looks at the ego. (fixed by Brian BUll)
+Bugfix: The detect_monsters_evil function returned "true" if there isn't a monster on the square. (fixed by Brian BUll)
+Bugfix: The sleep monster spell only worked for one turn.    (fixed by Brian BUll)
+Bugfix:  Squelch settings could be used to identify objects. (fixed by Brian BUll)
+Bugfix: Monster breath damage sometimes incorrectly determined monsters were the same race or similar.
+Bugfix: Monsters in pit/nest quests killed that aren't killed by the player are now replenished somewhere on the level
+        Also, the replacement monster can't be a unique.
+
+
+Previous commits:
 Changed the color of monsters who breathe time to pink.
 Added the flicker_monsters option to shimmer monster color with attr_multi when game is idle.
 Bugfix:  Artifacts printed in the notes file did not have the appropriate prefix (ex. "The").

@@ -3982,7 +3982,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 	int haste_note = 0;
 
 	/* Sleep amount (amount to sleep) */
-	bool do_sleep = FALSE;
+	int do_sleep = 0;
 	int sleep_note = 0;
 
 	/* Fear amount (amount to fear) */
@@ -4684,7 +4684,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			 * No "real" damage, but damage is
 			 * used to determine the length of the sleep.
 			 */
-			do_sleep = TRUE;
+			do_sleep = damage;
 			damage = 0;
 			break;
 		}

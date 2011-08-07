@@ -4096,16 +4096,16 @@ int pick_random_item(int chance_values[], int max)
  * The number is stored in dest.
  * Return FALSE on error.
  */
-errr next_line_to_number(ang_file *fff, int *dest)
+errr next_line_to_number(ang_file *fff, byte *dest)
 {
 	char buf[1024], *end;
-	int number;
+	byte number;
 
 	/* Read the line */
 	if (!file_getl(fff, buf, sizeof(buf))) return (FALSE);
 
 	/* Convert to number */
-	number = (int)strtol(buf, &end, 10);
+	number = (byte)strtol(buf, &end, 10);
 
 	/* Check success */
 	if (end == buf) return (FALSE);

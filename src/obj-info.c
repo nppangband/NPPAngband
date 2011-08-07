@@ -1051,7 +1051,7 @@ bool object_info_out(const object_type *o_ptr,  bool extra_info)
 	bool something = FALSE;
 
 	/* Grab the object flags */
-	object_info_out_flags(o_ptr, &f1, &f2, &f3, &fn);
+	object_flags_known(o_ptr, &f1, &f2, &f3, &fn);
 
 	/* Describe the object */
 	if (describe_stats(o_ptr, f1)) something = TRUE;

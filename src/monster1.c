@@ -2803,7 +2803,7 @@ static void process_ghost_class(int ghost_class, int r_idx)
  */
 bool prepare_ghost(int r_idx, bool from_savefile)
 {
-	int ghost_sex = 0, ghost_race = 0, ghost_class = 0;
+	byte ghost_sex = 0, ghost_race = 0, ghost_class = 0;
 	byte	try, i, backup_file_selector;
 	bool prepare_new_template = FALSE;
 
@@ -2934,7 +2934,7 @@ bool prepare_ghost(int r_idx, bool from_savefile)
 	/*** Process sex. ***/
 
 	/* Sanity check. */
-	if ((ghost_sex >= MAX_SEXES) || (ghost_class < 0)) ghost_sex = rand_int(MAX_SEXES);
+	if (ghost_sex >= MAX_SEXES) ghost_sex = rand_int(MAX_SEXES);
 
 	/* And use that number to toggle on either the male or the female flag. */
 	if (ghost_sex == 0) r_ptr->flags1 |= (RF1_FEMALE);

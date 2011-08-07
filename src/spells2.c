@@ -144,7 +144,7 @@ bool create_elements(int cy, int cx, int range)
     int y, x, k;
 	u16b feat, feat2 = FEAT_TREE;
     u16b elements[1024];
-	int n = 0;
+	u16b n = 0;
 	/* Trees are rare */
 	bool trees_enabled = one_in_(30);
 
@@ -1764,7 +1764,7 @@ static bool detect_monsters_evil(int y, int x)
 	}
 
 	/* Result */
-	return (TRUE);
+	return (FALSE);
 }
 
 /*

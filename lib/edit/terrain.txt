@@ -56,7 +56,7 @@
 
 # Version stamp (required)
 
-V:0.5.2
+V:0.5.3
 
 N:0:nothing
 G: :w

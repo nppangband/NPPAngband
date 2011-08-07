@@ -703,7 +703,7 @@ static void wr_extra(void)
 		/*something would have to be very strange for this not to be true*/
 		if (fp)
 		{
-			int ghost_sex = 0, ghost_race = 0, ghost_class = 0;
+			byte ghost_sex = 0, ghost_race = 0, ghost_class = 0;
 			bool err = FALSE;
 
 			/* Ghost name is a global variable and is not needed */
@@ -1214,7 +1214,7 @@ static bool wr_savefile_new(void)
 			wr_s16b(q_info[i].max_num);
 			wr_byte(q_info[i].q_flags);
 		}
-
+		else wr_byte(q_info[i].q_flags);
 	}
 
 	/* Hack -- Dump the artifacts */
