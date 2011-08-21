@@ -1,18 +1,9 @@
 NPP 0.5.3 changes:
 
 Latest commit:
-Added files by Brian Bull that assist in compiling with Visual C++ 2008.
-
-Bugfix: Savefiles were prevented from loading properly on the Mac OS when a player ghost was active.
-Bugfix: Savefiles did not properly save some of the quest status flags.
-Bugfix: The game could crash if a new character goes into a shop, views an ego-weapon, leaves the shop, 
-        starts the knowledge menu, and looks at the ego. (fixed by Brian BUll)
-Bugfix: The detect_monsters_evil function returned "true" if there isn't a monster on the square. (fixed by Brian BUll)
-Bugfix: The sleep monster spell only worked for one turn.    (fixed by Brian BUll)
-Bugfix:  Squelch settings could be used to identify objects. (fixed by Brian BUll)
-Bugfix: Monster breath damage sometimes incorrectly determined monsters were the same race or similar.
-Bugfix: Monsters in pit/nest quests killed that aren't killed by the player are now replenished somewhere on the level
-        Also, the replacement monster can't be a unique.
+Updated creates elements spell provided (Diego).
+Bugfix: The previous commit corrupted savefiles and made them unplayable after the first use.
+Bugfix: In several instances in the source code, the monster list window wasn't being re-drawn due to a typo.
 
 
 Previous commits:
@@ -33,6 +24,18 @@ Added fixed monster quests as a guild quest option.
 Vault quests are now available 25% of the time. Previously it was when the player fame is equally divisible by 7.
 Changed p_ptr->depth to a function call effective_depth to help quickband stay current with the NPP codebase.
 Added the druid spell "create elements".
+Added files by Brian Bull that assist in compiling with Visual C++ 2008.
+
+Bugfix: Savefiles were prevented from loading properly on the Mac OS when a player ghost was active.
+Bugfix: Savefiles did not properly save some of the quest status flags.
+Bugfix: The game could crash if a new character goes into a shop, views an ego-weapon, leaves the shop, 
+        starts the knowledge menu, and looks at the ego. (fixed by Brian BUll)
+Bugfix: The detect_monsters_evil function returned "true" if there isn't a monster on the square. (fixed by Brian BUll)
+Bugfix: The sleep monster spell only worked for one turn.    (fixed by Brian BUll)
+Bugfix:  Squelch settings could be used to identify objects. (fixed by Brian BUll)
+Bugfix: Monster breath damage sometimes incorrectly determined monsters were the same race or similar.
+Bugfix: Monsters in pit/nest quests killed that aren't killed by the player are now replenished somewhere on the level
+        Also, the replacement monster can't be a unique.
 
 
 NPP 0.5.2 changes:

@@ -135,8 +135,8 @@ bool warding_glyph(void)
 /*
  * Place elemental features around the given grid and range
  * Most elemental features are forest grids.
- * Sometimes we can place other elemental grids depending on player nativity
- * Return TRUE if succeds
+ * Sometimes we can place other elemental grids
+ * Return TRUE if it succeeds
  * -DiegoGonzalez-
  */
 bool create_elements(int cy, int cx, int range)
@@ -149,7 +149,7 @@ bool create_elements(int cy, int cx, int range)
 	bool trees_enabled = one_in_(30);
 
 	/* Process chance to place other features than forest */
-	if (one_in_(10))
+	if (one_in_(2))
 	{
 		/* Traverse dungeon */
 		for (y = 1; y <= p_ptr->cur_map_hgt; y++)
@@ -169,7 +169,7 @@ bool create_elements(int cy, int cx, int range)
 				if (!cave_ff2_match(y, x, (FF2_LAKE | FF2_RIVER))) continue;
 
 				/* Player must be native */
-				if (!is_player_native(y, x)) continue;
+				/* if (!is_player_native(y, x)) continue; */
 
 				/* Array is full? */
 				if (n >= N_ELEMENTS(elements))
@@ -4180,7 +4180,7 @@ void light_room(int y1, int x1)
 	cave_temp_room_light();
 
 	/* Redraw map */
-	p_ptr->redraw |= (PR_MAP | PW_OVERHEAD | PW_MONLIST | PR_ITEMLIST);
+	p_ptr->redraw |= (PR_MAP | PR_MONLIST | PR_ITEMLIST);
 
 }
 

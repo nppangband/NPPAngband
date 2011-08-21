@@ -196,9 +196,9 @@ static void wr_monster(const monster_type *m_ptr)
 	wr_s16b(m_ptr->m_timed[MON_TMD_SLEEP]);
 	wr_byte(m_ptr->mspeed);
 	wr_s16b(m_ptr->m_energy);
-	wr_byte(m_ptr->m_timed[MON_TMD_STUN]);
-	wr_byte(m_ptr->m_timed[MON_TMD_CONF]);
-	wr_byte(m_ptr->m_timed[MON_TMD_FEAR]);
+	wr_s16b(m_ptr->m_timed[MON_TMD_STUN]);
+	wr_s16b(m_ptr->m_timed[MON_TMD_CONF]);
+	wr_s16b(m_ptr->m_timed[MON_TMD_FEAR]);
 	wr_s16b(m_ptr->m_timed[MON_TMD_FAST]);
 	wr_s16b(m_ptr->m_timed[MON_TMD_SLOW]);
 
@@ -1174,47 +1174,14 @@ static bool wr_savefile_new(void)
 	for (i = 0; i < tmp16u; i++)
 	{
 		wr_byte(q_info[i].q_type);
-
-		if ((q_info[i].q_type == QUEST_FIXED) || (q_info[i].q_type == QUEST_FIXED_U))
-		{
-			wr_byte(q_info[i].active_level);
-			wr_s16b(q_info[i].cur_num);
-		}
-
-		else if ((q_info[i].q_type == QUEST_MONSTER) ||
-				 (q_info[i].q_type == QUEST_UNIQUE) ||
-				 (q_info[i].q_type == QUEST_FIXED_MON))
-		{
-			wr_byte(q_info[i].reward);
-			wr_byte(q_info[i].active_level);
-			wr_byte(q_info[i].base_level);
-
-			wr_s16b(q_info[i].mon_idx);
-
-			wr_s16b(q_info[i].cur_num);
-			wr_s16b(q_info[i].max_num);
-			wr_byte(q_info[i].q_flags);
-		}
-		else if (q_info[i].q_type == QUEST_VAULT)
-		{
-			wr_byte(q_info[i].reward);
-			wr_byte(q_info[i].active_level);
-			wr_byte(q_info[i].base_level);
-			wr_byte(q_info[i].q_flags);
-		}
-		else if ((q_info[i].q_type == QUEST_THEMED_LEVEL) ||
-			     (q_info[i].q_type == QUEST_NEST) ||
-			     (q_info[i].q_type == QUEST_PIT))
-		{
-			wr_byte(q_info[i].reward);
-			wr_byte(q_info[i].active_level);
-			wr_byte(q_info[i].base_level);
-			wr_byte(q_info[i].theme);
-			wr_s16b(q_info[i].cur_num);
-			wr_s16b(q_info[i].max_num);
-			wr_byte(q_info[i].q_flags);
-		}
-		else wr_byte(q_info[i].q_flags);
+		wr_byte(q_info[i].reward);
+		wr_byte(q_info[i].active_level);
+		wr_byte(q_info[i].base_level);
+		wr_byte(q_info[i].theme);
+		wr_s16b(q_info[i].mon_idx);
+		wr_s16b(q_info[i].cur_num);
+		wr_s16b(q_info[i].max_num);
+		wr_byte(q_info[i].q_flags);
 	}
 
 	/* Hack -- Dump the artifacts */

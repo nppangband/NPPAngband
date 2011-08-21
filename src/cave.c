@@ -4767,7 +4767,7 @@ void wiz_light(void)
 	p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS);
 
 	/* Redraw map */
-	p_ptr->redraw |= (PR_MAP | PW_OVERHEAD | PW_MONLIST | PR_ITEMLIST);
+	p_ptr->redraw |= (PR_MAP | PR_MONLIST | PR_ITEMLIST);
 
 }
 

@@ -2327,7 +2327,7 @@ void disease(int *damage)
  *
  * This function is also called from the "melee" code.
  *
- * The "mode" is currently unused.
+ * The "mode" changes the message for disenchantment vs. damage.
  *
  * Return "TRUE" if the player notices anything.
  *
