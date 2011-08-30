@@ -1,8 +1,11 @@
 NPP 0.5.3 changes:
 
 Latest commit:
+Fix a bug in the store_no_selling option where gold in the town was incorrectly calculated.
+
+Previous 0.5.3 commits:
 Added birth_connected_stairs option for people who don't want connected stairs.
-Added store_no_selling option where allitems purchased by stores are for 0 gold.
+Added store_no_selling option where all items purchased by stores are for 0 gold, and gold drops are 5 times more valuable.
 Rogues no longer have the cure light wounds spell.
 Allows the player to run through more types of terrains without being interrupted.
 Monsters waking up from sleep are also cleared of hasting, slowing, confusion, stunning, and fear.
@@ -14,10 +17,6 @@ Bugfix: Some deep pit and nest quests were using easy room themes for their dept
 Bugfix: The help files gave the wrong command for rogues and brigands setting traps.
 Bugfix: DUring targeting, sometimes a nonsense path was being drawn.
 Bugfix: Fixed a memory leak with the temp_y and temp_x arrays.
-
-
-
-
 Updated creates elements spell provided (Diego).
 Bugfix: The previous commit corrupted savefiles and made them unplayable after the first use.
 Bugfix: In several instances in the source code, the monster list window wasn't being re-drawn due to a typo.
