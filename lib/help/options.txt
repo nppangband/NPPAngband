@@ -339,10 +339,9 @@ into the dungeon, or that you must use a down staircase as soon as you see it
 certain objects available in ironman mode that are not available in a regular
 game.
 
-***** <birth_no_stairs>
-Adult: Restrict the use of stairs/recall      [adult_ironman]        (off) :
-     Can never go up.  Can never use recall until you win the game.  No stairs
-are ever placed under you when you change levels.
+***** <birth_connected_stairs>
+Adult: ALlow connected stairs	      [adult_connected_stairs]  (on) :
+     If false, no stairs are ever placed under you when you change levels.
 
 ***** <birth_no_stores>
 Adult: Restrict the use of stores/home        [adult_no_stores]      (off) :
@@ -405,6 +404,11 @@ Adult: 	Disable extra artifacts		      [birth_no_xtra_artifacts](off) :
     just prevents additional artifacts from being created in mid-game.
     If birth_no_artifacts option is set to true, no artifacts are generated and
     this option has no effect.
+
+***** <birth_no_selling>
+Adult: 	No selling items to stores     		[birth_no_store_services] (off) :
+    If this option is set, items will sell to the stores for 0 gold.  Gold found
+in the dungeon will be approximatly 5 times the value.
 
 --- Option Set #7:  Cheat ---
 

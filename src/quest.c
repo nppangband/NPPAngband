@@ -2287,8 +2287,8 @@ static bool place_pit_nest_quest(int lev)
 		if ((tries++) > 5000) return (FALSE);
 
 		/*Get the actual theme for either the pit or nest*/
-		if (q_ptr->q_type == QUEST_PIT) q_ptr->theme = get_pit_theme(lev + 3);
-		else q_ptr->theme = get_nest_theme(lev + 3);
+		if (q_ptr->q_type == QUEST_PIT) q_ptr->theme = get_pit_theme(lev + 3, TRUE);
+		else q_ptr->theme = get_nest_theme(lev + 3, TRUE);
 
 		/*hack - never do jelly quests*/
 		if (q_ptr->theme == LEV_THEME_JELLY) continue;

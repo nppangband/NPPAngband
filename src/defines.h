@@ -751,7 +751,7 @@ enum
 /* xxx */
 /* xxx xxx */
 /* xxx xxx */       				/*(OPT_BIRTH+0)*/
-/* xxx xxx */        				/*(OPT_BIRTH+1)*/
+#define OPT_birth_no_selling		(OPT_BIRTH+1)
 #define OPT_birth_maximize          (OPT_BIRTH+2)
 #define OPT_birth_preserve          (OPT_BIRTH+3)
 #define OPT_birth_ironman           (OPT_BIRTH+4)
@@ -761,7 +761,7 @@ enum
 #define OPT_birth_no_stacking       (OPT_BIRTH+8)
 #define OPT_birth_take_notes        (OPT_BIRTH+9)
 #define OPT_birth_force_small_lev	(OPT_BIRTH+10)
-/* xxx */
+#define OPT_birth_connected_stairs	(OPT_BIRTH+11)
 #define OPT_birth_no_quests			(OPT_BIRTH+12)
 #define OPT_birth_no_player_ghosts	(OPT_BIRTH+13)
 #define OPT_birth_no_store_services	(OPT_BIRTH+14)
@@ -777,7 +777,7 @@ enum
 #define OPT_cheat_live				(OPT_CHEAT+5)
 /* xxx xxx */
 /* xxx xxx */       				/*(OPT_ADULT+0)*/
-/* xxx xxx */        				/*(OPT_ADULT+1)*/
+#define OPT_adult_no_selling       	(OPT_ADULT+1)
 #define OPT_adult_maximize			(OPT_ADULT+2)
 #define OPT_adult_preserve			(OPT_ADULT+3)
 #define OPT_adult_ironman			(OPT_ADULT+4)
@@ -787,7 +787,7 @@ enum
 #define OPT_adult_no_stacking		(OPT_ADULT+8)
 #define OPT_adult_take_notes        (OPT_ADULT+9)
 #define OPT_adult_force_small_lev   (OPT_ADULT+10)
-/* xxx */
+#define OPT_adult_connected_stairs	(OPT_ADULT+11)
 #define OPT_adult_no_quests			(OPT_ADULT+12)
 #define OPT_adult_no_player_ghosts	(OPT_ADULT+13)
 #define OPT_adult_no_store_services	(OPT_ADULT+14)
@@ -882,7 +882,7 @@ enum
 /* xxx */
 /* xxx */
 /* xxx */
-/* xxx xxx */
+#define birth_no_selling		op_ptr->opt[OPT_birth_no_selling]
 #define birth_maximize			op_ptr->opt[OPT_birth_maximize]
 #define birth_preserve			op_ptr->opt[OPT_birth_preserve]
 #define birth_ironman			op_ptr->opt[OPT_birth_ironman]
@@ -892,7 +892,7 @@ enum
 #define birth_no_stacking       op_ptr->opt[OPT_birth_no_stacking]
 #define birth_take_notes        op_ptr->opt[OPT_birth_take_notes]
 #define	birth_force_small_lev	op_ptr->opt[OPT_birth_force_small_lev]
-/* xxx */
+#define	birth_connected_stairs	op_ptr->opt[OPT_birth_connected_stairs]
 #define birth_no_quests			op_ptr->opt[OPT_birth_no_quests]
 #define birth_no_player ghosts	op_ptr->opt[OPT_birth_no_player_ghosts]
 #define birth_no_store_services	op_ptr->opt[OPT_birth_no_store_services]
@@ -908,7 +908,7 @@ enum
 #define cheat_live				op_ptr->opt[OPT_cheat_live]
 /* xxx xxx */
 /* xxx xxx */
-/* xxx xxx */
+#define adult_no_selling		op_ptr->opt[OPT_adult_no_selling]
 #define adult_maximize			op_ptr->opt[OPT_adult_maximize]
 #define adult_preserve			op_ptr->opt[OPT_adult_preserve]
 #define adult_ironman			op_ptr->opt[OPT_adult_ironman]
@@ -918,7 +918,7 @@ enum
 #define adult_no_stacking		op_ptr->opt[OPT_adult_no_stacking]
 #define adult_take_notes		op_ptr->opt[OPT_adult_take_notes]
 #define	adult_force_small_lev	op_ptr->opt[OPT_adult_force_small_lev]
-/* xxx xxx */
+#define	adult_connected_stairs	op_ptr->opt[OPT_adult_connected_stairs]
 #define adult_no_quests			op_ptr->opt[OPT_adult_no_quests]
 #define adult_no_player_ghosts	op_ptr->opt[OPT_adult_no_player_ghosts]
 #define adult_no_store_services	op_ptr->opt[OPT_adult_no_store_services]

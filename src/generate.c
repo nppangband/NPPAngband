@@ -636,20 +636,38 @@ static void correct_dir(int *rdir, int *cdir, int y1, int x1, int y2, int x2)
 }
 
 /*
+ * Returns true if you are next to stairs.
+ *
+ * Note -- Assumes "in_bounds_fully(y, x)"
+ */
+static int next_to_stairs(int y, int x)
+{
+	int k = 0;
+
+	if (cave_ff1_match(y + 1, x, FF1_STAIRS)) k++;
+	if (cave_ff1_match(y - 1, x, FF1_STAIRS)) k++;
+	if (cave_ff1_match(y, x + 1, FF1_STAIRS)) k++;
+	if (cave_ff1_match(y, x - 1, FF1_STAIRS)) k++;
+
+	return (k);
+}
+
+
+/*
  * Count the number of walls adjacent to the given grid.
  *
  * Note -- Assumes "in_bounds_fully(y, x)"
  *
- * We count only granite walls and permanent walls, and stairs.
+ * We count only stairs, granite walls and permanent walls.
  */
 static int next_to_walls(int y, int x)
 {
 	int k = 0;
 
-	if (cave_ff1_match(y + 1, x, FF1_WALL | FF1_STAIRS)) k++;
-	if (cave_ff1_match(y - 1, x, FF1_WALL | FF1_STAIRS)) k++;
-	if (cave_ff1_match(y, x + 1, FF1_WALL | FF1_STAIRS)) k++;
-	if (cave_ff1_match(y, x - 1, FF1_WALL | FF1_STAIRS)) k++;
+	if (cave_ff1_match(y + 1, x, (FF1_WALL | FF1_STAIRS))) k++;
+	if (cave_ff1_match(y - 1, x, (FF1_WALL | FF1_STAIRS))) k++;
+	if (cave_ff1_match(y, x + 1, (FF1_WALL | FF1_STAIRS))) k++;
+	if (cave_ff1_match(y, x - 1, (FF1_WALL | FF1_STAIRS))) k++;
 
 	return (k);
 }
@@ -2412,7 +2430,7 @@ void get_mon_hook(byte theme)
 }
 
 /*return a theme for a monster nest*/
-byte get_nest_theme(int nestlevel)
+byte get_nest_theme(int nestlevel, bool quest_theme)
 {
 	int mindepth, whatnest;
 
@@ -2423,7 +2441,19 @@ byte get_nest_theme(int nestlevel)
 	if ((mindepth + nestlevel) > 100) nestlevel = 100 - mindepth;
 
 	/* Hack -- Choose a nest type */
-	whatnest = randint(nestlevel) + mindepth;
+	whatnest = randint(nestlevel);
+
+	/* Try for harder themes for quests */
+	if (quest_theme)
+	{
+		int whatnest2 = randint(nestlevel);
+		int whatnest3 = randint(nestlevel);
+		if (whatnest2 > whatnest) whatnest = whatnest2;
+		if (whatnest3 > whatnest) whatnest = whatnest3;
+
+	}
+
+	whatnest += mindepth;
 
 	if ((whatnest <= 25)  && (nestlevel <= 35))
 	{
@@ -2455,7 +2485,7 @@ byte get_nest_theme(int nestlevel)
 }
 
 /*return a theme for a monster pit*/
-byte get_pit_theme(int pitlevel)
+byte get_pit_theme(int pitlevel, bool quest_theme)
 {
 	int mindepth, whatpit;
 
@@ -2466,7 +2496,18 @@ byte get_pit_theme(int pitlevel)
 	if ((mindepth + pitlevel) > 100) pitlevel = 100 - mindepth;
 
 	/* Hack -- Choose a nest type */
-	whatpit = randint(pitlevel) + mindepth;
+	whatpit = randint(pitlevel);
+
+	/* Try for harder themes for quests */
+	if (quest_theme)
+	{
+		int whatpit2 = randint(pitlevel);
+		int whatpit3 = randint(pitlevel);
+		if (whatpit2 > whatpit) whatpit = whatpit2;
+		if (whatpit3 > whatpit) whatpit = whatpit3;
+	}
+
+	whatpit += mindepth;
 
 	/* Orc pit */
 	if ((whatpit <= 20) && (pitlevel <= 35))
@@ -2594,7 +2635,7 @@ static void build_type_nest(int y0, int x0)
 
 	/*select the theme, or get the quest level theme*/
 	if (is_quest_level) room_theme = q_ptr->theme;
-	else room_theme = get_nest_theme(effective_depth(p_ptr->depth));
+	else room_theme = get_nest_theme(effective_depth(p_ptr->depth), FALSE);
 
 	/*get the mon_hook*/
 	get_mon_hook(room_theme);
@@ -2840,7 +2881,7 @@ static void build_type_pit(int y0, int x0)
 
 	/* Choose a pit type */
 	if(is_quest_level) pit_theme = q_ptr->theme;
-	else pit_theme = get_pit_theme(effective_depth(p_ptr->depth));
+	else pit_theme = get_pit_theme(effective_depth(p_ptr->depth), FALSE);
 
 	/*get the monster hook*/
 	get_mon_hook(pit_theme);
@@ -6015,8 +6056,18 @@ static bool alloc_stairs(u16b feat, int num)
 				/* Check allowance with dungeon capabilities */
 				if (!(*dun_cap->can_place_stairs)(yy, xx)) continue;
 
-				/* We like to be next to walls */
+				/* We like to be next to walls, but not other stairs */
 				if (next_to_walls(yy, xx) < 3) continue;
+				if (next_to_stairs(yy, xx) > 0) continue;
+
+				/* Hack - not too many stairs in pillar rooms */
+				if (cave_info[yy][xx] & (CAVE_ROOM))
+				{
+					if (!(one_in_(10))) continue;
+				}
+
+				/* No stairs in greater vaults */
+				if (cave_info[yy][xx] & (CAVE_G_VAULT))	continue;
 
 				/*don't go over size of array*/
 				if (i < 40)
@@ -6341,7 +6392,7 @@ static bool scramble_and_connect_rooms_stairs(void)
 	}
 
 	/* Place 3 or 5 down stairs near some walls */
-	if (!alloc_stairs(FEAT_MORE, (3 + randint(2))))
+	if (!alloc_stairs(FEAT_MORE, (3 + randint0(3))))
 	{
 		if (cheat_room) msg_format("failed to place down stairs");
 
@@ -6349,7 +6400,7 @@ static bool scramble_and_connect_rooms_stairs(void)
 	}
 
 	/* Place 1 or 3 up stairs near some walls */
-	if (!alloc_stairs(FEAT_LESS, (1 + randint(2))))
+	if (!alloc_stairs(FEAT_LESS, (1 + randint0(3))))
 	{
 		if (cheat_room) msg_format("failed to place up stairs");
 
@@ -7429,6 +7480,8 @@ static bool build_themed_level(void)
 	u32b max_diff, max_diff_unique;
 	u32b highest_power = 0;
 
+	int max_uniques = 3;
+
 	alloc_entry *table = alloc_race_table;
 
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
@@ -7704,6 +7757,9 @@ static bool build_themed_level(void)
 		/*not a monster*/
 		if (!r_idx) dont_use = TRUE;
 
+		/* Limit the number of uniques per level */
+		if ((r_ptr->flags1 & (RF1_UNIQUE)) && (max_uniques < 1)) dont_use = TRUE;
+
 		if (dont_use)
 		{
 			/*Take out the weakest monster and repeat*/
@@ -7758,6 +7814,8 @@ static bool build_themed_level(void)
 
 		/* Attempt to place the monster, allow sleeping, don't allow groups*/
 		if (!place_monster_aux(y, x, r_idx, TRUE, FALSE)) continue;
+
+		if (r_ptr->flags1 & (RF1_UNIQUE)) max_uniques--;
 
 		/*Don't bother with mimics, mark 1 in 10 monsters for a bonus item */
 		if (cave_m_idx[y][x] > 0)

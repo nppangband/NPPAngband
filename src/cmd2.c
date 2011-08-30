@@ -151,7 +151,7 @@ void do_cmd_go_up(cmd_code code, cmd_arg args[])
 	message(MSG_STAIRS_UP, 0, "You enter a maze of up staircases.");
 
 	/* Create a way back */
-	p_ptr->create_stair = FEAT_MORE;
+	if (adult_connected_stairs) p_ptr->create_stair = FEAT_MORE;
 
 	/* New depth */
 	decrease++;
@@ -166,7 +166,7 @@ void do_cmd_go_up(cmd_code code, cmd_arg args[])
 		decrease++;
 
 		/* Create a way back (usually) */
-		p_ptr->create_stair = FEAT_MORE_SHAFT;
+		if (adult_connected_stairs) p_ptr->create_stair = FEAT_MORE_SHAFT;
 	}
 
 	/* Change level */
@@ -220,7 +220,7 @@ void do_cmd_go_down(cmd_code code, cmd_arg args[])
 	message(MSG_STAIRS_DOWN, 0, "You enter a maze of down staircases.");
 
 	/* Create a way back (usually) */
-	p_ptr->create_stair = FEAT_LESS;
+	if (adult_connected_stairs) p_ptr->create_stair = FEAT_LESS;
 
 	/* New level */
 	increase++;
@@ -235,7 +235,7 @@ void do_cmd_go_down(cmd_code code, cmd_arg args[])
 		increase++;
 
 		/* Create a way back (usually) */
-		p_ptr->create_stair = FEAT_LESS_SHAFT;
+		if (adult_connected_stairs) p_ptr->create_stair = FEAT_LESS_SHAFT;
 	}
 
 	/* Change level */

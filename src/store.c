@@ -451,6 +451,10 @@ static void init_services_and_quests(int store_num)
 	/* Get the store services for the current store*/
 	for (i = 0; i < STORE_SERVICE_MAX; i++)
 	{
+
+		/* Check if the services option is disabled */
+		if (adult_no_store_services) break;
+
 		/* Services are store-specific */
 		if (service_store[i] != store_num) continue;
 
@@ -505,6 +509,9 @@ static void init_services_and_quests(int store_num)
 
 	/*Honor the no quests option*/
 	if (!can_quest_at_level()) return;
+
+	/* Check if the no_quests option is on */
+	if (adult_no_quests) return;
 
 	/*get a list of allowable quests*/
 	for (i = 0;i < QUEST_SLOT_MAX; i++)
@@ -1437,6 +1444,9 @@ s32b price_item(const object_type *o_ptr, bool store_buying)
 	/* Shop is buying */
 	if (store_buying)
 	{
+		/* Check for no_selling option */
+		if (adult_no_selling) return (0L);
+
 		/* Set the factor */
 		adjust = 185 - adjust;
 

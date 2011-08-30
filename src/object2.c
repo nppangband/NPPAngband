@@ -3624,6 +3624,8 @@ bool make_gold(object_type *j_ptr)
 	int sval;
 	int k_idx;
 	s32b base;
+	s32b value;
+	s32b mult = (birth_no_selling ? MIN(5, p_ptr->depth) : 1);
 
 	/* Hack -- Pick a Treasure variety */
 	sval = ((randint(object_level + 2) + 2) / 2);
@@ -3646,16 +3648,21 @@ bool make_gold(object_type *j_ptr)
 	object_prep(j_ptr, k_idx);
 
 	/* Hack -- Base coin cost */
-	base = k_info[k_idx].cost;
+	base = k_info[k_idx].cost * mult;
 
 	/* Determine how much the treasure is "worth" */
-	j_ptr->pval = (base + (8L * randint(base)) + randint(8));
+	value = (base + (8L * randint(base)) + randint(8 * mult));
 
 	/*chests containing gold are very lucritive*/
 	if (object_generation_mode > 0)
 	{
-		j_ptr->pval += ((randint(4) + randint(4) + object_level / 4 ) * 50);
+		value += ((randint(4 * mult) + randint(4 * mult) + object_level / 4 ) * 50);
 	}
+
+	/* Cap gold at max short (or alternatively make pvals s32b) */
+	if (value > MAX_SHORT)	value = MAX_SHORT;
+
+	j_ptr->pval = value;
 
 	/* Success */
 	return (TRUE);

@@ -2361,6 +2361,12 @@ static errr rd_savefile_new_aux(void)
 			rd_s16b(&q_info[i].cur_num);
 			rd_s16b(&q_info[i].max_num);
 			rd_byte(&q_info[i].q_flags);
+
+			/* Set current quest */
+			if (q_info[i].active_level || q_info[i].reward)
+			{
+				p_ptr->cur_quest = q_info[i].base_level;
+			}
 		}
 
 	}
