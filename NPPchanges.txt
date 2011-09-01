@@ -1,9 +1,10 @@
 NPP 0.5.3 changes:
 
 Latest commit:
-Fix a bug in the store_no_selling option where gold in the town was incorrectly calculated.
+Bugfix:  The quest status indicator was displaying Morgoth at level 100 as the active quest insteat of the current guild quest.
 
 Previous 0.5.3 commits:
+Bugfix: the store_no_selling option where gold in the town was incorrectly calculated.
 Added birth_connected_stairs option for people who don't want connected stairs.
 Added store_no_selling option where all items purchased by stores are for 0 gold, and gold drops are 5 times more valuable.
 Rogues no longer have the cure light wounds spell.

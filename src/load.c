@@ -2363,7 +2363,9 @@ static errr rd_savefile_new_aux(void)
 			rd_byte(&q_info[i].q_flags);
 
 			/* Set current quest */
-			if (q_info[i].active_level || q_info[i].reward)
+			if ((q_info[i].active_level || q_info[i].reward) &&
+				(q_info[i].q_type != QUEST_FIXED) &&
+				(q_info[i].q_type != QUEST_FIXED_U))
 			{
 				p_ptr->cur_quest = q_info[i].base_level;
 			}
