@@ -1144,19 +1144,6 @@ static ui_event_data inkey_aux(int scan_cutoff)
 static cptr inkey_next = NULL;
 
 
-#ifdef ALLOW_BORG
-
-/*
- * Mega-Hack -- special "inkey_hack" hook.  XXX XXX XXX
- *
- * This special function hook allows the "Borg" (see elsewhere) to take
- * control of the "inkey()" function, and substitute in fake keypresses.
- */
-char (*inkey_hack)(int flush_first) = NULL;
-
-#endif /* ALLOW_BORG */
-
-
 /*
  * Get a keypress from the user.
  *
@@ -1250,22 +1237,6 @@ ui_event_data inkey_ex(void)
 
 	/* Forget pointer */
 	inkey_next = NULL;
-
-#ifdef ALLOW_BORG
-
-	/* Mega-Hack -- Use the special hook */
-	if (inkey_hack && ((ke.key = (*inkey_hack)(inkey_xtra)) != 0))
-	{
-		/* Cancel the various "global parameters" */
-		inkey_base = inkey_xtra = inkey_flag = FALSE;
-		inkey_scan = 0;
-		ke.type = EVT_KBRD;
-
-		/* Accept result */
-		return (ke);
-	}
-
-#endif /* ALLOW_BORG */
 
 	/* Hack -- handle delayed "flush()" */
 	if (inkey_xtra)

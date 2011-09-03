@@ -49,8 +49,8 @@ pressing <CTRL-Q>.
 The Adventurer's Guild (building # 9 in the town) chooses what kind of quest the
 adventurer is given. The guild can assign five different types of quests:
 
+***** <Monster or Unique Quest>
 MONSTER QUESTS:
-
 This is the most common quest. The player is assigned to go to a specified
 depth, based on the average difficulty of monsters 0-5 levels below the quest 
 level, and kill a certain number of monsters (usually around 11 creatures). 
@@ -62,6 +62,7 @@ leave and return to a quest level. Leaving an optional quest level without
 killing the required number of creatures can result in a failed quest.  Failing
 a quest greatly tarnishes the player's reputation at the guild.
 
+***** <Fixed Monster Quest>
 FIXED MONSTER QUESTS:
 Similar to monster quests.  The player is assigned to go to a specified
 depth, based on the average difficulty of monsters 4-9 levels below the quest 
@@ -76,8 +77,8 @@ and you will not fail your quest.  The only ways to fail this quest are to
 die trying and to request to abandon the quest at the adventurer's guild.  A
 down staircase will appear when you complete this quest.
 
-UNIQUE QUESTS:
 
+UNIQUE QUESTS:
 When the player chooses monster quest, the player can either get assigned a 
 monster quest or a unique quest.
 Unique quests are similar to guild quests, except the quest is always to kill
@@ -87,8 +88,8 @@ killed or the quest fails. Since Uniques tend to be more difficult to kill than
 regular creatures, this type of quest tends to be more difficult than monster
 quests.
 
+***** <Vault Quest>
 VAULT, or ARTIFACT QUESTS:
-
 This quest is to go to a specified depth, retrieve an artifact and return 
 it to the guild, which is being held by a monster inside a small vault on a 
 small, or "arena", level. The artifact is special in that it cannot be 
@@ -99,9 +100,8 @@ of tunneling, such as a digging tool or a magic source of stone-to-mud,
 to gain access to the vault.   Voluntarily leaving a level with the quest
 vault results in immediate quest failure.
 
-
+***** <Pit or Nest Quest>
 PIT, or NEST QUESTS:
-
 This quest is to go to a specified depth and kill or destroy every creature
 in a monster pit or nest.  A monster pit/nest has 95 creatures of a given theme.
 Since there are so many like creatures bunched so closely together, a creature
@@ -112,8 +112,8 @@ by a greater amount than a regular monster quest, and offers more lucrative
 rewards.  Voluntarily leaving a Pit/Nest quest level results in
 immediate quest failure.
 
+***** <Level Quest>
 THEMED LEVEL QUESTS:
-
 This quest is a more difficult version of the Monster Pit/Nest quests.  Instead of
 95 creatures in a pit or nest, the entire level is full of 200 or more
 monsters of a particular theme.

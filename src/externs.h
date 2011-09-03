@@ -427,7 +427,7 @@ extern void textui_process_command(bool no_request);
 /* cmd1.c */
 extern void search(void);
 extern bool put_object_in_inventory(object_type *o_ptr);
-extern void do_cmd_pickup_from_pile(bool message);
+extern void do_cmd_pickup_from_pile(bool pickup, bool message);
 extern void py_pickup_gold(void);
 extern void py_pickup(bool pickup);
 extern s16b move_player(int dir, int jumping);
@@ -868,7 +868,7 @@ extern void delete_object(int y, int x);
 extern void compact_objects(int size);
 extern void wipe_o_list(void);
 extern s16b o_pop(void);
-extern int count_floor_items(int y, int x);
+extern int count_floor_items(int y, int x, bool pickup_only);
 extern object_type* get_first_object(int y, int x);
 extern object_type* get_next_object(const object_type *o_ptr);
 extern errr get_obj_num_prep(void);
@@ -1389,27 +1389,6 @@ extern void init_display(void);
 
 
 
-
-#ifdef ALLOW_BORG
-
-
-/*
- * Some global variables for the borg.
- */
-
-extern u32b count_stop;
-extern int count_change_level;
-extern int count_teleport;
-extern byte allowed_depth[2];
-extern byte borg_dir;
-
-extern void do_cmd_borg(void);
-
-#endif /* ALLOW_BORG */
-
-
-
-
 #ifdef RISCOS
 /* main-ros.c */
 extern char *riscosify_name(cptr path);
@@ -1430,11 +1409,6 @@ extern void fsetfileinfo(cptr path, u32b fcreator, u32b ftype);
 
 
 
-#ifdef ALLOW_BORG
-/* borg.h */
-extern void do_cmd_borg(void);
-#endif /* ALLOW_BORG */
-
 
 
 #ifdef ALLOW_DATA_DUMP
@@ -1451,11 +1425,6 @@ extern void dump_artifact_power(void);
 extern void write_mon_power(void);
 
 #endif /*ALLOW_DATA_DUMP*/
-
-/* borg.h */
-#ifdef ALLOW_BORG
-extern void do_cmd_borg(void);
-#endif /* ALLOW_BORG */
 
 
 extern u16b lazymove_delay;

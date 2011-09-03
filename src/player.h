@@ -632,11 +632,9 @@ enum
 #define PW_STATUS           0x00000800L /* Display Status */
 #define PW_ITEMLIST	        0x00001000L /* Display item list */
 #define PW_FEATURE		    0x00002000L /* Display feature status */
-#define PW_BORG_1           0x00004000L /* Display borg messages */
-#define PW_BORG_2           0x00008000L /* Display borg status */
 
 
-#define PW_MAX_FLAGS		16
+#define PW_MAX_FLAGS		14
 
 
 /*Player Native Flags*/

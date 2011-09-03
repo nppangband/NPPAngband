@@ -3739,10 +3739,8 @@ static void quit_calmly(void)
  * optimize non-blocking calls to "CheckEvents()"
  * idea from "maarten hazewinkel <mmhazewi@cs.ruu.nl>"
  *
- * was: 6. the value of one (~ 60 fps) seems to work better with the borg,
- * and so should be for other cpu-intensive features like the autoroller.
  */
-#define event_ticks 1
+#define event_ticks 6
 
 
 /*

@@ -1320,7 +1320,7 @@ enum
 /* player_type.noscore flags */
 #define NOSCORE_WIZARD		0x0002
 #define NOSCORE_DEBUG		0x0008
-#define NOSCORE_BORG		0x0010
+
 
 
 #define SCAN_INSTANT ((u32b) -1)

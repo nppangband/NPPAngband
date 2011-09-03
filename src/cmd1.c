@@ -328,7 +328,7 @@ static int get_first_item_for_pickup(void)
  * any energy because it costs a player no extra energy
  * to walk into a grid and automatically pick up items
  */
-void do_cmd_pickup_from_pile(bool message)
+void do_cmd_pickup_from_pile(bool pickup, bool message)
 {
 	byte objs_picked_up = 0;
 	object_type *o_ptr;
@@ -352,6 +352,7 @@ void do_cmd_pickup_from_pile(bool message)
 
 		int floor_num;
 		int pickup_num;
+		int want_pickup_num;
 
 		if (cycles < 2) cycles++;
 
@@ -372,6 +373,12 @@ void do_cmd_pickup_from_pile(bool message)
 
 		pickup_num = count_possible_pickups();
 
+		/* Filter out items you don't want to pickup */
+		want_pickup_num = count_floor_items(py, px, TRUE);
+
+		/* Nothing the player wants */
+		if ((!want_pickup_num) && (!pickup)) break;
+
 		/* Can't pick anything up */
 		if(!pickup_num)
 		{
@@ -383,9 +390,8 @@ void do_cmd_pickup_from_pile(bool message)
 
 		/* Auto-pickup if only one item */
 		else if ((!floor_query_flag) && (cycles < 2) &&
-				 (count_floor_items(py, px) == 1))
+				(want_pickup_num == 1))
 		{
-
 			item = get_first_item_for_pickup();
 
 			/* paranoia */
@@ -693,7 +699,7 @@ void py_pickup(bool pickup)
 
 	if ((carry_query_flag) && (!pack_is_full()))
 	{
-		do_cmd_pickup_from_pile(FALSE);
+		do_cmd_pickup_from_pile(pickup, FALSE);
 		return;
 	}
 

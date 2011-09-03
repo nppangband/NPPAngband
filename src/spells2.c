@@ -530,6 +530,7 @@ static int remove_curse_aux(bool heavy)
 		u32b f1, f2, f3, fn;
 
 		object_type *o_ptr = &inventory[i];
+		char o_name[80];
 
 		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
@@ -549,6 +550,10 @@ static int remove_curse_aux(bool heavy)
 		/* Uncurse the object */
 		uncurse_object(o_ptr);
 
+		object_desc(o_name, sizeof(o_name), o_ptr, ODESC_BASE);
+
+		msg_format("The curse on your %s is broken!", o_name);
+
 		/* Recalculate the bonuses */
 		p_ptr->update |= (PU_BONUS);
 
@@ -558,10 +563,11 @@ static int remove_curse_aux(bool heavy)
 	/* Combine and re-order the pack - and redraw stuff */
 	if (cnt)
 	{
-
 		p_ptr->notice |= (PN_COMBINE | PN_REORDER | PN_SORT_QUIVER);
 		p_ptr->redraw |= (PR_INVEN | PR_EQUIP | PR_ITEMLIST);
 	}
+
+	else msg_print("Nothing happens.");
 
 	/* Return "something uncursed" */
 	return (cnt);

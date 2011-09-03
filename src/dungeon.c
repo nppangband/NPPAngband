@@ -1480,40 +1480,6 @@ static bool enter_wizard_mode(void)
 }
 
 
-
-#ifdef ALLOW_BORG
-
-/*
- * Verify use of "borg" mode
- */
-static bool verify_borg_mode(void)
-{
-	/* Ask first time */
-	if (!(p_ptr->noscore & 0x0010))
-	{
-		/* Mention effects */
-		msg_print("You are about to use the dangerous, unsupported, borg commands!");
-		msg_print("Your machine may crash, and your savefile may become corrupted!");
-		message_flush();
-
-		/* Verify request */
-		if (!get_check("Are you sure you want to use the borg commands? "))
-		{
-			return (FALSE);
-		}
-	}
-
-	/* Mark savefile */
-	p_ptr->noscore |= 0x0010;
-
-	/* Okay */
-	return (TRUE);
-}
-
-#endif /* ALLOW_BORG */
-
-
-
 /*
  * Hack -- helper function for "process_player()"
  *

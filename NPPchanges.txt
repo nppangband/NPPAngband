@@ -1,9 +1,15 @@
 NPP 0.5.3 changes:
 
 Latest commit:
-Bugfix:  The quest status indicator was displaying Morgoth at level 100 as the active quest insteat of the current guild quest.
+Added descriptions for store services to the help documentation. 
+While in the guild, when the player examines a quest or service, the appropriate section of the help documentation will load onscreen.
+Misc updates to the help documentation.
+A message now displays when all forms of the remove curse spell is cast. 
+Removed all references and code related to the Angband borg.
+Bugfix:  Sometimes a single object was being picked up regardless of the pickup and quelch settings.
 
 Previous 0.5.3 commits:
+Bugfix:  The quest status indicator was displaying Morgoth at level 100 as the active quest insteat of the current guild quest.
 Bugfix: the store_no_selling option where gold in the town was incorrectly calculated.
 Added birth_connected_stairs option for people who don't want connected stairs.
 Added store_no_selling option where all items purchased by stores are for 0 gold, and gold drops are 5 times more valuable.

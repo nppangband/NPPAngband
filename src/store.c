@@ -188,7 +188,6 @@ static cptr service_names[STORE_SERVICE_MAX] =
 };
 
 
-
 static byte services_offered[STORE_SERVICE_MAX];
 static byte quests_offered[QUEST_SLOT_MAX];
 
@@ -201,6 +200,7 @@ static cptr quest_title[QUEST_SLOT_MAX] =
 	"Vault Quest",				/*QUEST_VAULT*/
   	"Fixed Monster Quest"		/*QUEST_FIXED */
 };
+
 
 
 /*** Utilities ***/
@@ -4124,6 +4124,8 @@ static void store_examine(int oid)
 {
 	store_type *st_ptr = &store[current_store()];
 	object_type *o_ptr;
+	char file_name[80];
+	char service_name[120];
 
 	int entry_num, entry_type;
 
@@ -4131,11 +4133,20 @@ static void store_examine(int oid)
 
 	entry_num = find_entry_type(&entry_type, oid);
 
-	/* The quests and services are self explanatory */
-	if (entry_type != ENTRY_OBJECT)
+	/* Display the entry name and, if object, weight*/
+	if (entry_type == ENTRY_SERVICE)
 	{
-		msg_print("Please select an item to examine.");
-
+		strnfmt(file_name, sizeof(file_name), "town.txt");
+		strnfmt(service_name, sizeof(service_name), service_names[services_offered[entry_num]]);
+		show_file(format("%s#%s", file_name, service_name), NULL,  0, 0);
+		return;
+	}
+	else if (entry_type == ENTRY_QUEST)
+	{
+		strnfmt(file_name, sizeof(file_name), "quests.txt");
+		strnfmt(service_name, sizeof(service_name), quest_title[quests_offered[entry_num]]);
+		playtesting(format("service name is %s, file name is %s", service_name, file_name));
+		show_file(format("%s#%s", file_name, service_name), NULL,  0, 0);
 		return;
 	}
 

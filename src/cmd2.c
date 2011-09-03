@@ -2636,7 +2636,7 @@ void do_cmd_pickup(cmd_code code, cmd_arg args[])
 	(void)code;
 	(void)args[0].choice;
 
-	do_cmd_pickup_from_pile(TRUE);
+	do_cmd_pickup_from_pile(TRUE, TRUE);
 
 	/*
 	 * Intentionally use some energy in case
