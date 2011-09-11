@@ -779,7 +779,7 @@ static void target_display_help(bool monster, bool free)
  *
  * This function must handle blindness/hallucination.
  */
-static ui_event_data target_set_interactive_aux(int y, int x, int mode, cptr info)
+static ui_event_data target_set_interactive_aux(int y, int x, int mode, cptr info, bool list_floor_objects)
 {
 	s16b this_o_idx, next_o_idx = 0;
 	s16b this_x_idx, next_x_idx = 0;
@@ -1216,37 +1216,34 @@ static ui_event_data target_set_interactive_aux(int y, int x, int mode, cptr inf
 					}
 
 					prt(out_val, 0, 0);
+
+					if (list_floor_objects)
+					{
+						/* Save screen */
+						screen_save();
+
+						/* Display */
+						show_floor(floor_list, floor_num, (OLIST_WEIGHT | OLIST_GOLD));
+					}
 					move_cursor_relative(y, x);
 					query = inkey_ex();
+
+					if (list_floor_objects)
+					{
+						screen_load();
+					}
 
 					/* Display objects */
 					if (query.key == 'r')
 					{
 						int pos;
 
-						/* Save screen */
-						screen_save();
-
-						/* Display */
-						show_floor(floor_list, floor_num, (OLIST_WEIGHT | OLIST_GOLD));
-
-						/* Describe the pile */
-						prt(out_val, 0, 0);
-						query = inkey_ex();
-
-						/* Load screen */
-						screen_load();
-
 						pos = query.key - 'a';
 						if (0 <= pos && pos < floor_num)
 						{
 							track_object(-floor_list[pos]);
 							handle_stuff();
-							continue;
 						}
-
-						/* Continue on 'r' only */
-						if (query.key == 'r') continue;
 					}
 
 					/* Done */
@@ -1557,6 +1554,7 @@ bool target_set_interactive(int mode, int x, int y)
 	bool done = FALSE;
 	bool flag = TRUE;
 	bool help = FALSE;
+	bool list_floor_objects = auto_display_lists;
 
 	u16b path_n;
 	u16b path_g[PATH_SIZE];
@@ -1659,7 +1657,7 @@ bool target_set_interactive(int mode, int x, int y)
 			}
 
 			/* Describe and Prompt */
-			query = target_set_interactive_aux(y, x, mode, info);
+			query = target_set_interactive_aux(y, x, mode, info, list_floor_objects);
 
 			/* Remove the path */
 			if (path_drawn) load_path(path_n, path_g, path_char, path_attr);
@@ -1763,6 +1761,11 @@ bool target_set_interactive(int mode, int x, int y)
 					cmd_insert(CMD_PATHFIND, y, x);
 					done = TRUE;
 					break;
+				}
+
+				case 'r':
+				{
+					list_floor_objects = (!list_floor_objects);
 				}
 
 				case '?':
@@ -1871,7 +1874,7 @@ bool target_set_interactive(int mode, int x, int y)
 			}
 
 			/* Describe and Prompt (enable "TARGET_LOOK") */
-			query = target_set_interactive_aux(y, x, (mode | TARGET_LOOK), info);
+			query = target_set_interactive_aux(y, x, (mode | TARGET_LOOK), info, list_floor_objects);
 
 			/* Remove the path */
 			if (path_drawn)  load_path(path_n, path_g, path_char, path_attr);
@@ -1997,6 +2000,11 @@ bool target_set_interactive(int mode, int x, int y)
 					cmd_insert(CMD_PATHFIND, y, x);
 					done = TRUE;
 					break;
+				}
+
+				case 'r':
+				{
+					list_floor_objects = (!list_floor_objects);
 				}
 
 				case '?':

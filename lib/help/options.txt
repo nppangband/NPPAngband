@@ -291,7 +291,8 @@ item.
 
 ***** <always_show_list>
 Automatically display drop-down lists	    [always_show_list]   (off)  :	
-    If selecting anything from a list, the list will automatically pop up.
+    If selecting anything from a list, the list will automatically pop up.  Lists
+of objects will automatically display when targeting with the (l)ook command.
 
 ***** <xchars_to_file>
 Allow accents in output files		    [xchars_to_file]   	 (off)  :	

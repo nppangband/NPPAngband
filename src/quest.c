@@ -2757,8 +2757,8 @@ bool guild_purchase(int choice)
 	if (one_in_(2)) q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_EXTRA_LEVEL);
 	else q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_EXTRA_LEVEL);
 
-	/* Vault quest allowed 25% of the time */
-	if (one_in_(4)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_VAULT_QUEST);
+	/* Vault quest allowed 1/3 of the time */
+	if (one_in_(3)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_VAULT_QUEST);
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_VAULT_QUEST);
 
 	return (TRUE);
@@ -2834,14 +2834,19 @@ void guild_quest_wipe(void)
 {
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 	bool extra_level = FALSE;
+	bool vault_quest = FALSE;
 
-	/* Save if there should be an extra level added to the next quest depth */
+
+	/* Remember if there should be an extra level added to the next quest depth */
 	if (q_ptr->q_flags & (QFLAG_EXTRA_LEVEL)) extra_level = TRUE;
+	/* Remember if we should allow a vault quest */
+	if (q_ptr->q_flags & (QFLAG_VAULT_QUEST)) vault_quest = TRUE;
 
 	/* Wipe the structure */
 	(void)WIPE(q_ptr, quest_type);
 
 	if (extra_level) q_ptr->q_flags |= QFLAG_EXTRA_LEVEL;
+	if (vault_quest) q_ptr->q_flags |= QFLAG_VAULT_QUEST;
 
 	p_ptr->cur_quest = 0;
 

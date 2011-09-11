@@ -3889,6 +3889,9 @@ static bool project_o(int who, int y, int x, int dam, int typ)
 		}
 	}
 
+	/* For mass_identify, squelch the pile to get rid of junk */
+	if (typ == GF_MASS_IDENTIFY) do_squelch_pile(y, x);
+
 	/* Return "Anything seen?" */
 	return (obvious);
 }

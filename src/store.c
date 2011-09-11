@@ -57,7 +57,7 @@ static unsigned int scr_places_y[LOC_MAX];
 
 #define STORE_SHOW_HELP        0x04
 
-
+#define STORE_MAX_ITEM			99
 
 
 /* Compound flag for the initial display of a store */
@@ -1492,7 +1492,7 @@ s32b price_item(const object_type *o_ptr, bool store_buying)
  *
  * Standard percentage discounts include 10, 25, 50, 75, and 90.
  */
-static void mass_produce(object_type *o_ptr)
+static void mass_produce(object_type *o_ptr, int store)
 {
 	int size = 1;
 
@@ -1689,7 +1689,7 @@ static void store_object_absorb(object_type *o_ptr, object_type *j_ptr)
 	int total = o_ptr->number + j_ptr->number;
 
 	/* Combine quantity, lose excess items */
-	o_ptr->number = (total > 99) ? 99 : total;
+	o_ptr->number = (total > STORE_MAX_ITEM) ? STORE_MAX_ITEM : total;
 
 	/*
 	 *Hack -- if rods are stacking, add the pvals (maximum timeouts)
@@ -2184,8 +2184,14 @@ static void store_item_increase(int st, int item, int num)
 
 	/* Verify the number */
 	cnt = o_ptr->number + num;
-	if (cnt > 255) cnt = 255;
+	if (cnt > STORE_MAX_ITEM) cnt = STORE_MAX_ITEM;
 	else if (cnt < 0) cnt = 0;
+
+	/* Hack - don't let theh store be bought out of items that are always in stock run out */
+	if (keep_in_stock(o_ptr, st))
+	{
+		cnt = STORE_MAX_ITEM;
+	}
 
 	/* Save the new number */
 	o_ptr->number = cnt;
@@ -2269,8 +2275,14 @@ static bool black_market_ok(const object_type *o_ptr)
 	return (TRUE);
 }
 
-/* Keep certain objects (undiscounted only*/
-static bool keep_in_stock(const object_type *o_ptr, int which)
+/*
+ * Keep certain objects (undiscounted only.
+ *
+ * Note if this list is greatly expanded, teh store_maint function
+ * could get caught in an eternal loop.  Be mindful of the fixed
+ * variable STORE_MAX_KEEP and STORE_MIN_KEEP when making this list.
+ */
+bool keep_in_stock(const object_type *o_ptr, int which)
 {
 
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
@@ -2352,6 +2364,37 @@ static bool keep_in_stock(const object_type *o_ptr, int which)
 	}
 	return (FALSE);
 }
+
+/*
+ * Return true if all items in store are standard stock items.
+ * False if standard items.
+ * Used to determine if the store should shuffle inventory or
+ * if the shopkeeper should retire.
+ */
+int count_nonstandard_inven(int which)
+{
+	store_type *st_ptr = &store[which];
+	int i;
+	int counter = 0;
+
+	/* Discount all the items */
+	for (i = 0; i < st_ptr->stock_num; i++)
+	{
+		object_type *o_ptr;
+
+		/* Get the object */
+		o_ptr = &st_ptr->stock[i];
+
+		/* Don't count essential stock items*/
+		if (keep_in_stock(o_ptr, which)) continue;
+
+		/* We have some non-standard inventory */
+		counter++;
+	}
+
+	return (counter);
+}
+
 
 /*
  * Delete an object from store 'st', or, if it is a stack, perhaps only
@@ -2445,12 +2488,18 @@ static void store_delete_random(int st)
 {
 	int what;
 	store_type *st_ptr = &store[st];
+	object_type *o_ptr;
 
 	/* Paranoia */
 	if (st_ptr->stock_num <= 0) return;
 
 	/* Pick a random slot */
 	what = randint0(st_ptr->stock_num);
+
+	/* Get the object */
+	o_ptr = &st_ptr->stock[what];
+
+	if (keep_in_stock(o_ptr, st)) return;
 
 	store_delete_index(st, what);
 }
@@ -2537,7 +2586,7 @@ static void store_create_random(int which)
 
 
 		/* Mass produce and/or Apply discount */
-		mass_produce(i_ptr);
+		mass_produce(i_ptr, which);
 
 		/* Attempt to carry the (known) object */
 		(void)store_carry(which, i_ptr);
@@ -2558,7 +2607,7 @@ static void store_create_random(int which)
  */
 void store_maint(int which)
 {
-	int j, x;
+	int j;
 	int alt_min = 0;
 
 	int old_rating = rating;
@@ -2607,20 +2656,14 @@ void store_maint(int which)
 	/* Always "keep" at least "STORE_MIN_KEEP" items */
 	if (j < STORE_MIN_KEEP) j = STORE_MIN_KEEP;
 
-	/*go through the store inventory and count how many items must be kept*/
-	for (x = 0; x < st_ptr->stock_num; x++)
-	{
-		object_type *o_ptr = &st_ptr->stock[x];
+	/* Count how many items must be kept*/
+	alt_min = st_ptr->stock_num - count_nonstandard_inven(which);
 
-		/* Nothing here */
-		if (!o_ptr->k_idx) continue;
-
-		if (keep_in_stock(o_ptr, which)) alt_min ++;
-
-	}
+	/* Paranoia */
+	if (alt_min < 0) alt_min = 0;
 
 	/*
-	 * The while loop below will lock up game if j
+	 * Paranoia - the while loop below will lock up game if j
 	 * is less than the # of "must-keep" items in store
 	 */
 	if (j < alt_min) j = alt_min;
@@ -2639,6 +2682,12 @@ void store_maint(int which)
 
 	/* Always "keep" at least "STORE_MIN_KEEP" items */
 	if (j < STORE_MIN_KEEP) j = STORE_MIN_KEEP;
+
+	/*
+	 * Paranoia - should never happen unless the items in
+	 * the keep_in_stock function is greatly enlarged.
+	 */
+	if (j < alt_min) j = alt_min;
 
 	/* Hack -- prevent "overflow" */
 	if (j >= st_ptr->stock_size) j = st_ptr->stock_size - 1;
@@ -3504,7 +3553,7 @@ void do_cmd_buy(cmd_code code, cmd_arg args[])
 	store_item_optimize(this_store, item);
 
 	/* Store is empty */
-	if (st_ptr->stock_num == 0)
+	if ((st_ptr->stock_num == 0) || (count_nonstandard_inven(this_store) == 0))
 	{
 		int i;
 
@@ -3516,6 +3565,7 @@ void do_cmd_buy(cmd_code code, cmd_arg args[])
 
 			/* Shuffle the store */
 			store_shuffle(this_store);
+			store_maint(this_store);
 			store_flags |= STORE_FRAME_CHANGE;
 		}
 

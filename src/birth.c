@@ -1260,7 +1260,7 @@ void player_birth(bool quickstart_allowed)
 		op_ptr->opt[OPT_SCORE + (i - OPT_CHEAT)] = op_ptr->opt[i];
 	}
 
-	/*Re-set teh squelch settings.  Spellbooks are never_pickup by default. */
+	/*Re-set the squelch settings.  Spellbooks are never_pickup by default. */
 	for (i = 0; i < z_info->k_max; i++)
 	{
 		/* Analyze the item type */

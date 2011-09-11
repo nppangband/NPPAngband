@@ -1656,6 +1656,29 @@ static void do_cmd_wiz_query(void)
 	prt_map();
 }
 
+static void wiz_create_items(void)
+{
+	int i;
+	object_type object_type_body;
+
+	object_type *i_ptr;
+
+	for(i=0; i < 25; i++)
+	{
+		/* Get local object */
+		i_ptr = &object_type_body;
+
+		/* Wipe the object */
+		object_wipe(i_ptr);
+
+		/* Make a object (if possible) */
+		if (!make_object(i_ptr, FALSE, FALSE, DROP_TYPE_UNTHEMED, FALSE)) continue;
+
+		/* Drop the object */
+		drop_near(i_ptr, -1, p_ptr->py, p_ptr->px);
+	}
+}
+
 /* Create a specific terrain grid given its feature number or query a grid */
 static void do_cmd_wiz_monster(void)
 {
@@ -1881,6 +1904,13 @@ void do_cmd_debug(void)
 			break;
 		}
 
+		/* Create and drop objects */
+		case 'M':
+		{
+			wiz_create_items();
+			break;
+		}
+
 		/* Create an artifact */
 		case 'C':
 		{
@@ -1928,7 +1958,7 @@ void do_cmd_debug(void)
 		/* Identify */
 		case 'i':
 		{
-			(void)ident_spell();
+			(void)mass_identify(3);
 			break;
 		}
 

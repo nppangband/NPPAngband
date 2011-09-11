@@ -760,7 +760,7 @@ enum
 /* flags for q_flags */
 #define QFLAG_STARTED   	0x01
 #define QFLAG_EXTRA_LEVEL   0x02
-#define QFLAG_VAULT_QUEST   0x04  /* Allow the player tho choose a vault quest */
+#define QFLAG_VAULT_QUEST   0x04  /* Allow the player to choose a vault quest */
 
 #endif /*INCLUDED_PLAYER_H*/
 

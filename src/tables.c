@@ -2062,10 +2062,10 @@ option_entry options[OPT_MAX] =
 	{"adult_force_small_lev",	"Adult: All levels generated small",			FALSE},	/* OPT_adult_force_small_lev*/
 	{"adult_conected_stairs",   "Adult: Generate connected stairs",       		TRUE},	/* OPT_adult_connected_stairs */
 	{"adult_no_quests",			"Adult: Disable quests",						FALSE},	/* OPT_adult_no_quests*/
-	{"adult_no_player ghosts",	"Adult: Disable player ghosts",					FALSE},	/* OPT_adult_no_player ghosts*/
+	{"adult_no_player_ghosts",	"Adult: Disable player ghosts",					FALSE},	/* OPT_adult_no_player ghosts*/
 	{"adult_no_store_services",	"Adult: Disable store services",				FALSE},	/* OPT_adult_no_store_services*/
 	{"adult_no_xtra_artifacts",	"Adult: Disable extra artifacts",				FALSE},	/* OPT_adult_no_xtra_artifacts*/
-	{ "adult_birth_money",      "Adult: Start with more money and no equipment",FALSE },/* OPT_adult_birth_money*/
+	{"adult_birth_money",      	"Adult: Start with more money and no equipment",FALSE },/* OPT_adult_birth_money*/
 	{NULL,NULL,FALSE},/* xxx */
 	{NULL,NULL,FALSE},/* xxx */
 	{NULL,NULL,FALSE},/* xxx */
