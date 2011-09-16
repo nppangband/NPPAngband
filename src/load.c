@@ -1172,8 +1172,6 @@ static errr rd_extra(void)
 
 	rd_u16b(&p_ptr->fame);
 
-
-
 	rd_s32b(&p_ptr->au);
 
 	rd_s32b(&p_ptr->max_exp);
@@ -1190,8 +1188,6 @@ static errr rd_extra(void)
 		note(format("Invalid player level (%d).", p_ptr->lev));
 		return (-1);
 	}
-
-
 
 	rd_s16b(&p_ptr->mhp);
 	rd_s16b(&p_ptr->chp);
@@ -1215,8 +1211,17 @@ static errr rd_extra(void)
 	/* Hack -- Repair recall dungeon level */
 	if (p_ptr->recall_depth < 0) p_ptr->recall_depth = 1;
 
+	rd_s16b(&p_ptr->quest_depth);
+
+	/* Hack -- Repair max quest level */
+	if ((p_ptr->max_depth > 1) &&
+		(p_ptr->max_depth > p_ptr->quest_depth))
+	{
+		p_ptr->quest_depth = p_ptr->max_depth;
+	}
+
 	/* More info */
-	strip_bytes(8);
+	strip_bytes(6);
 	rd_s16b(&p_ptr->sc);
 	strip_bytes(2);
 
@@ -1397,19 +1402,20 @@ static errr rd_extra(void)
 	/* Read the randart seed */
 	rd_u32b(&seed_randart);
 
-	/* Skip the flags 12 */
+	/* Skip the flags */
 	strip_bytes(12);
+
 
 	/* Hack -- the two "special seeds" */
 	rd_u32b(&seed_flavor);
 	rd_u32b(&seed_town);
 
+
 	/* Special stuff */
 	rd_u16b(&p_ptr->panic_save);
-
 	rd_u16b(&p_ptr->total_winner);
-
 	rd_u16b(&p_ptr->noscore);
+
 
 	/* Read "death" */
 	rd_byte(&tmp8u);
@@ -2281,16 +2287,19 @@ static errr rd_savefile_new_aux(void)
 
 	/* Load the Quests */
 	for (i = 0; i < tmp16u; i++)
+	{
+		if (older_than(0,5,4))
+		{
+		rd_byte(&q_info[i].q_type);
 
-	 {
-		rd_byte(&q_info[i].type);
-
-		if ((q_info[i].type == QUEST_FIXED) || (q_info[i].type == QUEST_FIXED_U))
+		if ((q_info[i].q_type == QUEST_FIXED) || (q_info[i].q_type == QUEST_FIXED_U))
 		{
 			rd_byte(&q_info[i].active_level);
 			rd_s16b(&q_info[i].cur_num);
 		}
-		else if ((q_info[i].type == QUEST_MONSTER) || (q_info[i].type == QUEST_UNIQUE))
+		else if ((q_info[i].q_type == QUEST_MONSTER) ||
+				 (q_info[i].q_type == QUEST_UNIQUE) ||
+				 (q_info[i].q_type == QUEST_FIXED_MON))
 		{
 			rd_byte(&q_info[i].reward);
 			rd_byte(&q_info[i].active_level);
@@ -2306,7 +2315,7 @@ static errr rd_savefile_new_aux(void)
 			if (q_info[i].active_level || q_info[i].reward)
 				p_ptr->cur_quest = q_info[i].base_level;
 		}
-		else if (q_info[i].type == QUEST_VAULT)
+		else if (q_info[i].q_type == QUEST_VAULT)
 		{
 			rd_byte(&q_info[i].reward);
 			rd_byte(&q_info[i].active_level);
@@ -2322,9 +2331,9 @@ static errr rd_savefile_new_aux(void)
 			if (q_info[i].active_level || q_info[i].reward)
 				p_ptr->cur_quest = q_info[i].base_level;
 		}
-		else if ((q_info[i].type == QUEST_THEMED_LEVEL) ||
-				 (q_info[i].type == QUEST_NEST) ||
-			     (q_info[i].type == QUEST_PIT))
+		else if ((q_info[i].q_type == QUEST_THEMED_LEVEL) ||
+			 (q_info[i].q_type == QUEST_NEST) ||
+		     (q_info[i].q_type == QUEST_PIT))
 		{
 			rd_byte(&q_info[i].reward);
 			rd_byte(&q_info[i].active_level);
@@ -2337,9 +2346,31 @@ static errr rd_savefile_new_aux(void)
 
 			/* Set current quest */
 			if (q_info[i].active_level || q_info[i].reward)
-				p_ptr->cur_quest = q_info[i].base_level;
+			p_ptr->cur_quest = q_info[i].base_level;
 
 		}
+		}
+		else
+		{
+			rd_byte(&q_info[i].q_type);
+			rd_byte(&q_info[i].reward);
+			rd_byte(&q_info[i].active_level);
+			rd_byte(&q_info[i].base_level);
+			rd_byte(&q_info[i].theme);
+			rd_s16b(&q_info[i].mon_idx);
+			rd_s16b(&q_info[i].cur_num);
+			rd_s16b(&q_info[i].max_num);
+			rd_byte(&q_info[i].q_flags);
+
+			/* Set current quest */
+			if ((q_info[i].active_level || q_info[i].reward) &&
+				(q_info[i].q_type != QUEST_FIXED) &&
+				(q_info[i].q_type != QUEST_FIXED_U))
+			{
+				p_ptr->cur_quest = q_info[i].base_level;
+			}
+		}
+
 	}
 
 	if (arg_fiddle) note("Loaded Quests");

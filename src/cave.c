@@ -958,7 +958,7 @@ static void map_hidden_monster(monster_type *m_ptr, byte *ap, char *cp)
 		level = 9;
 	}
 	/* First attempt. Compare monster power with the average power at that depth */
-	else if ((div = mon_power_ave[p_ptr->depth][CREATURE_NON_UNIQUE]) > 0)
+	else if ((div = mon_power_ave[effective_depth(p_ptr->depth)][CREATURE_NON_UNIQUE]) > 0)
 	{
 		level = (r_ptr->mon_power * 9) / div + 1;
 	}
@@ -4767,7 +4767,7 @@ void wiz_light(void)
 	p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS);
 
 	/* Redraw map */
-	p_ptr->redraw |= (PR_MAP | PW_OVERHEAD | PW_MONLIST | PR_ITEMLIST);
+	p_ptr->redraw |= (PR_MAP | PR_MONLIST | PR_ITEMLIST);
 
 }
 

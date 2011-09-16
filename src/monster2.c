@@ -656,9 +656,9 @@ s16b get_mon_num(int level, int y, int x)
 	/*filter out non-terrain flags*/
 	native_flags &= TERRAIN_MASK;
 
-	if (((q_ptr->type == QUEST_THEMED_LEVEL) ||
-		 (q_ptr->type == QUEST_PIT) ||
-		 (q_ptr->type == QUEST_NEST)) &&
+	if (((q_ptr->q_type == QUEST_THEMED_LEVEL) ||
+		 (q_ptr->q_type == QUEST_PIT) ||
+		 (q_ptr->q_type == QUEST_NEST)) &&
 		(p_ptr->cur_quest == p_ptr->depth)) quest_level = TRUE;
 
 	/* Boost the level, but not for quest levels.  That has already been done */
@@ -746,7 +746,8 @@ s16b get_mon_num(int level, int y, int x)
 				/* Check quests for uniques*/
 				for (k = 0; k < z_info->q_max; k++)
 				{
-					if ((q_info[k].type == QUEST_UNIQUE) || (q_info[k].type == QUEST_FIXED_U))
+					if ((q_info[k].q_type == QUEST_UNIQUE) ||
+						(q_info[k].q_type == QUEST_FIXED_U))
 					{
 						/* Is this unique marked for a quest? */
 						if (q_info[k].mon_idx == table[i].index)
@@ -763,7 +764,7 @@ s16b get_mon_num(int level, int y, int x)
 			}
 
 			/* Depth Monsters never appear out of depth */
-			if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (r_ptr->level > p_ptr->depth))
+			if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (r_ptr->level > effective_depth(p_ptr->depth)))
 			{
 				continue;
 			}
@@ -1129,7 +1130,7 @@ void display_monlist(void)
 		{
 			attr = TERM_VIOLET;
 		}
-		else if (r_ptr->level > p_ptr->depth)
+		else if (r_ptr->level > effective_depth(p_ptr->depth))
 		{
 			attr = TERM_RED;
 		}
@@ -1227,7 +1228,7 @@ void display_monlist(void)
 		{
 			attr = TERM_VIOLET;
 		}
-		else if (r_ptr->level > p_ptr->depth)
+		else if (r_ptr->level > effective_depth(p_ptr->depth))
 		{
 			attr = TERM_RED;
 		}
@@ -2970,7 +2971,8 @@ static bool place_monster_one(int y, int x, int r_idx, bool slp)
 		/* Check quests for uniques*/
 		for (i = 0; i < z_info->q_max; i++)
 		{
-			if ((q_info[i].type == QUEST_UNIQUE) || (q_info[i].type == QUEST_FIXED_U))
+			if ((q_info[i].q_type == QUEST_UNIQUE) ||
+				(q_info[i].q_type == QUEST_FIXED_U))
 			{
 				/*is this unique marked for a quest?*/
 				if (q_info[i].mon_idx == r_idx)
@@ -2993,7 +2995,7 @@ static bool place_monster_one(int y, int x, int r_idx, bool slp)
 
 
 	/* Depth monsters may NOT be created out of depth */
-	if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (p_ptr->depth < r_ptr->level))
+	if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (effective_depth(p_ptr->depth) < r_ptr->level))
 	{
 		/* Cannot create */
 		return (FALSE);
@@ -3141,7 +3143,7 @@ static bool place_monster_one(int y, int x, int r_idx, bool slp)
 	calc_monster_speed(y, x);
 
 	/* Powerful monster */
-	if (r_ptr->level > p_ptr->depth)
+	if (r_ptr->level > effective_depth(p_ptr->depth))
 	{
 		/* Unique monsters */
 		if (r_ptr->flags1 & (RF1_UNIQUE))
@@ -3150,7 +3152,7 @@ static bool place_monster_one(int y, int x, int r_idx, bool slp)
 			if (cheat_hear) msg_format("Deep Unique (%s).", name);
 
 			/* Boost rating by twice delta-depth */
-			rating += (r_ptr->level - p_ptr->depth) * 2;
+			rating += (r_ptr->level - effective_depth(p_ptr->depth)) * 2;
 		}
 
 		/* Normal monsters */
@@ -3159,7 +3161,7 @@ static bool place_monster_one(int y, int x, int r_idx, bool slp)
 			/* Message for cheaters */
 			if (cheat_hear) msg_format("Deep Monster (%s).", name);
 			/* Boost rating by half delta-depth */
-			rating += (r_ptr->level - p_ptr->depth) / 2;
+			rating += (r_ptr->level - effective_depth(p_ptr->depth)) / 2;
 		}
 	}
 
@@ -3200,9 +3202,9 @@ static bool place_monster_group(int y, int x, int r_idx, bool slp, s16b group_si
  	byte hack_x[GROUP_MAX];
 
 	/* Hard monsters, smaller groups */
- 	if (r_ptr->level > p_ptr->depth)
+ 	if (r_ptr->level > effective_depth(p_ptr->depth))
  	{
-		reduce = (r_ptr->level - p_ptr->depth) / 2;
+		reduce = (r_ptr->level - effective_depth(p_ptr->depth)) / 2;
 		group_size -= randint(reduce);
  	}
 

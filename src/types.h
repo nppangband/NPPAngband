@@ -714,7 +714,7 @@ struct alloc_entry
 struct quest_type
 {
 	u32b name;			/* Name (offset) */
-	byte type;			/* Quest Type */
+	byte q_type;		/* Quest Type */
 	byte reward;		/* Quest Reward */
 	byte theme;			/* Monster Theme for themed levels and nests/pits*/
 
@@ -1038,6 +1038,7 @@ struct player_type
 
 	s32b au;			/* Current Gold */
 
+	s16b quest_depth;	/* Max depth */
 	s16b max_depth;		/* Max depth */
 	s16b depth;			/* Cur depth */
 	s16b recall_depth;		/* recall depth*/
