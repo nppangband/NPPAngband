@@ -1,23 +1,22 @@
 NPP 0.5.3 changes:
 
-Latest commit (Beta-1):
+
+Reinstated the menus allowing the player to edit visuals and tilesets for monsters, terrain, flavors, and objects.
+Many updates to the help files.
+Bugfix:  The store help file incorrectly indicated you could purchase an item using the enter key.
 Incorporated changes from current Angband that should get the extended characters working on MAC compiles.
 Object weight is shown when an object is examined.
 Vault quests are now available 1/3 of the time.
 Bugfix:  Vault quests were still not working.  This should be fixed.
 Casting mass identify now squelches the whole pile, instead of just items set for a quality squelch.
 Items in a store marked to "keep in stock" now always have a quantity of 99, even when some are purchased.
-In order to trigger a buyout of store inventory, items that are kept in stock don't have to be purchased.
+In order to trigger a buyout of store inventory, items that are permanently kept in stock don't have to be purchased.
 Fixed a typo in the no_player_ghosts option on the option screen.
 When targeting, the list of floor items displays automatically with the auto_show_lists option on.
 Wizard mode:  Added a command "M" to create 15 random items.
 Wizard mode:  The 'i' command is now mass_identify instead of identify.
-
-
-Previous 0.5.3 commits:
 Added descriptions for store services to the help documentation. 
 While in the guild, when the player examines a quest or service, the appropriate section of the help documentation will load onscreen.
-Misc updates to the help documentation.
 A message now displays when all forms of the remove curse spell is cast. 
 Removed all references and code related to the Angband borg.
 Bugfix:  Sometimes a single object was being picked up regardless of the pickup and quelch settings.
@@ -57,7 +56,6 @@ Vault quests are now available 25% of the time. Previously it was when the playe
 Changed p_ptr->depth to a function call effective_depth to help quickband stay current with the NPP codebase.
 Added the druid spell "create elements".
 Added files by Brian Bull that assist in compiling with Visual C++ 2008.
-
 Bugfix: Savefiles were prevented from loading properly on the Mac OS when a player ghost was active.
 Bugfix: Savefiles did not properly save some of the quest status flags.
 Bugfix: The game could crash if a new character goes into a shop, views an ego-weapon, leaves the shop, 

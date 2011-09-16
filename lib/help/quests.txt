@@ -1,12 +1,12 @@
 QUESTS:
-(This file was last edited for NPPAngband 0.5.1)
+(This file was last edited for NPPAngband 0.5.3)
 
 There are five different styles of quests in NPPAngband. There are two types of
 fixed quests and five types of optional quests.
 
 FIXED QUESTS:
 
-"Vanilla" Angband has always had two standard fixed quests:
+NPPAngband has always had two standard fixed quests:
 
 Kill Sauron at 4950 feet.
 Kill Morgoth at 5000 feet.
@@ -36,8 +36,8 @@ OPTIONAL QUESTS:
 NPPAngband has a town building called the Adventurer's Guild.
 A player may choose to visit this building and receive a quest from the
 Guild. Initially, a player can choose only monster quest.  After the player has
-gone as deep as level 10 (500') they may choose a quest to clear out a pit or 
-nest.  After the player has gone as deep as  level 15 (750') they may choose 
+gone as deep as level 6 (300') they may choose a quest to clear out a pit or 
+nest.  After the player has gone as deep as level 14 (700') they may choose 
 a quest to clear an entire level of a particular type of monster.  Occasionally, 
 the player has the choice of a vault (artifact) quest. The guild will never 
 assign more than one optional quest at any time. Upon completion of an 
@@ -79,7 +79,7 @@ down staircase will appear when you complete this quest.
 
 
 UNIQUE QUESTS:
-When the player chooses monster quest, the player can either get assigned a 
+When the player chooses a monster quest, the player can either get assigned a 
 monster quest or a unique quest.
 Unique quests are similar to guild quests, except the quest is always to kill
 one unique. The unique will be from several levels deeper than typical guild

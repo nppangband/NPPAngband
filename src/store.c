@@ -3201,6 +3201,8 @@ static void store_display_help(void)
 
 	text_out("Use the ");
 	text_out_c(TERM_L_GREEN, "movement keys");
+	text_out(" or ");
+	text_out_c(TERM_L_GREEN, "a mouseclick");
 	text_out(" to navigate, or ");
 	text_out_c(TERM_L_GREEN, "Space");
 	text_out(" to advance to the next page. '");
@@ -3212,10 +3214,8 @@ static void store_display_help(void)
 
 	text_out("' examines and '");
 	text_out_c(TERM_L_GREEN, "p");
-	text_out("', '");
+	text_out("' or'");
 	text_out_c(TERM_L_GREEN, "g");
-	text_out("', or'");
-	text_out_c(TERM_L_GREEN, "ENTER");
 
 	if (current_store() == STORE_HOME) text_out("' picks up");
 	else text_out("' purchases");
