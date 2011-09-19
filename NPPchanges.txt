@@ -2,6 +2,7 @@ NPP 0.5.4 changes:
 Bugfix: Equipment and itemlist windows were not updating properly when the player was in a store.
 Bugfix: There was a playtesting message when examining a store service.
 Bugfix: Player ghost templates were not saving properly when a player died.
+Bugfix: Several of the player ghost templates were defective.
 
 
 NPP 0.5.3 changes:
