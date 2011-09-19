@@ -4195,7 +4195,6 @@ static void store_examine(int oid)
 	{
 		strnfmt(file_name, sizeof(file_name), "quests.txt");
 		strnfmt(service_name, sizeof(service_name), quest_title[quests_offered[entry_num]]);
-		playtesting(format("service name is %s, file name is %s", service_name, file_name));
 		show_file(format("%s#%s", file_name, service_name), NULL,  0, 0);
 		return;
 	}
