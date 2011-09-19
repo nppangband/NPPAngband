@@ -348,7 +348,7 @@ static void store_updates(void)
 	/* Redraw stuff */
 	p_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_INVEN | PR_EQUIP | PR_MESSAGE);
 
-	p_ptr->window |= (PR_INVEN | PR_EQUIP | PR_ITEMLIST);
+	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_ITEMLIST);
 
 }
 
