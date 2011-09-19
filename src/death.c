@@ -130,23 +130,12 @@ static void make_bones(void)
 				/* Build the filename */
 				path_build(str, 1024, ANGBAND_DIR_BONE, tmp);
 
-				/* Attempt to open the bones file */
-				fp = file_open(str, MODE_READ, -1);
-
-				/* Close it right away */
-				if (fp)
-				{
-					file_close(fp);
-					/* Do not over-write a previous ghost */
-					continue;
-				}
+				/* Do not over-write a previous ghost */
+				if (file_exists(str)) continue;
 
 				/* If no file by that name exists, we can make a new one. */
-				if (!(fp)) break;
+				break;
 			}
-
-			/* Failure */
-			if (fp) return;
 
 			/* Try to write a new "Bones File" */
 			fp = file_open(str, MODE_WRITE, FTYPE_TEXT);

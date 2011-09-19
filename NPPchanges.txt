@@ -1,3 +1,8 @@
+NPP 0.5.4 changes:
+Bugfix: There was a playtesting message when examining a store service.
+Bugfix: Player ghost templates were not saving properly when a player died.
+
+
 NPP 0.5.3 changes:
 
 
