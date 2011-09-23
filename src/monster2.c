@@ -3974,7 +3974,7 @@ static char *msg_repository[MAX_MON_MSG + 1] =
 	"[is|are] no longer afraid.",/* MON_MSG_NOT_AFRAID */
 	"~You hear [a|several] scream[|s] of agony!",/* MON_MSG_MORIA_DEATH */
 	"disintegrates!",		/* MON_MSG_DISENTEGRATES */
-	"freez[es] and shatter[s]",  /* MON_MSG_FREEZE_SHATTER */
+	"freeze[s] and shatter[s]",  /* MON_MSG_FREEZE_SHATTER */
 	"lose[s] some mana!",		/* MON_MSG_MANA_DRAIN */
 
 
