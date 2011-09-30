@@ -198,7 +198,7 @@ static cptr quest_title[QUEST_SLOT_MAX] =
 	"Pit or Nest Quest",		/*QUEST_PIT*/
   	"Level Quest",				/*QUEST_LEVEL*/
 	"Vault Quest",				/*QUEST_VAULT*/
-  	"Fixed Monster Quest"		/*QUEST_FIXED */
+  	"Guardian Quest"			/*QUEST_FIXED */
 };
 
 

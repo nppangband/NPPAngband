@@ -466,7 +466,7 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 		my_strcpy(intro, "To complete your ", sizeof(intro));
 		if (q_ptr->q_type == QUEST_FIXED_MON)
 		{
-			my_strcat(intro, "fixed ", sizeof(intro));
+			my_strcat(intro, "guardian ", sizeof(intro));
 		}
 		my_strcat(intro, "quest.", sizeof(intro));
 	}
@@ -3122,7 +3122,7 @@ void quest_monster_update(void)
 
 		if (q_ptr->q_type == QUEST_FIXED_MON)
 		{
-			my_strcat(note, "fixed ", sizeof(note));
+			my_strcat(note, "guardian ", sizeof(note));
 		}
 
 		my_strcat(note, "quest.", sizeof(note));
