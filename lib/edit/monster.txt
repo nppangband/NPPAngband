@@ -9670,7 +9670,7 @@ D: rarely fights without them.
 N:644:Morgoth, Lord of Darkness
 G:A:D
 I:140:200d100:100:150:0
-W:100:1:300:60000
+W:100:1:400:60000
 B:HIT:SHATTER:20d10
 B:HIT:SHATTER:20d10
 B:HIT:LOSE_ALL:8d12
@@ -9684,9 +9684,9 @@ F:RES_NETHR | RES_WATER | RES_PLAS | RES_NEXUS | RES_DISEN
 F:NO_SLOW | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
 F:N_LAVA | N_ICE | N_OIL | N_FIRE | N_SAND
 F:N_FOREST | N_ACID | N_MUD
-S:SPELL_PCT_45 | POW_200
+S:SPELL_PCT_60 | POW_200
 S:BALL_MANA | BOLT_PLAS | BOLT_MANA | ADD_MANA | HEAL
-S:CURE | TELE_TO | BRAIN_SMASH | WOUND | S_HI_DRAGON
+S:CURE | TELE_SELF_TO | TELE_TO | BRAIN_SMASH | WOUND | S_HI_DRAGON
 S:S_HI_DEMON | S_HI_UNIQUE | S_HI_UNDEAD | S_WRAITH
 D:He is the Master of the Pits of Angband.  His figure is like a black
 D: mountain crowned with lightning.  He rages with everlasting anger,
