@@ -1970,7 +1970,7 @@ static bool use_staff(object_type *o_ptr, bool *ident)
 
 static bool aim_wand(object_type *o_ptr, bool *ident, int dir)
 {
-	int lev, sval;
+	int sval;
 
 
 	/*Special allowance for disarming and traps*/
@@ -1990,9 +1990,6 @@ static bool aim_wand(object_type *o_ptr, bool *ident, int dir)
 
 	/* Not identified yet */
 	*ident = FALSE;
-
-	/* Get the level */
-	lev = k_info[o_ptr->k_idx].k_level;
 
 	/* Sound */
 	/* TODO: Create wand sound?  Do the individual effects have sounds? */
@@ -2236,7 +2233,6 @@ static bool aim_wand(object_type *o_ptr, bool *ident, int dir)
 
 static bool zap_rod(object_type *o_ptr, bool *ident, int dir)
 {
-	int lev;
 	bool used_charge = TRUE;
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
@@ -2245,9 +2241,6 @@ static bool zap_rod(object_type *o_ptr, bool *ident, int dir)
 
 	/* Not identified yet */
 	*ident = FALSE;
-
-	/* Extract the item level */
-	lev = k_info[o_ptr->k_idx].k_level;
 
 	/* Still charging? */
 	if (o_ptr->timeout > (o_ptr->pval - k_ptr->pval))

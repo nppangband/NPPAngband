@@ -378,12 +378,7 @@ static void recharged_notice(object_type *o_ptr, bool all)
 
 	cptr s;
 
-	bool notify = FALSE;
-
-	if (notify_recharge)
-	{
-		notify = TRUE;
-	}
+	if (!notify_recharge) return;
 
 	/* No inscription */
 	if (!o_ptr->obj_note) return;
@@ -1430,8 +1425,8 @@ static void process_world(void)
 		else chance = 40;
 
 		/* After sufficient time, can learn about the level */
-		if ((rand_int(80) < p_ptr->state.skills[SKILL_SEARCH]) &&
-			(rand_int(80) < p_ptr->state.skills[SKILL_SEARCH]))
+		if ((rand_int(chance) < p_ptr->state.skills[SKILL_SEARCH]) &&
+			(rand_int(chance) < p_ptr->state.skills[SKILL_SEARCH]))
 		{
 			/* Now have a feeling */
 			do_feeling = TRUE;

@@ -331,9 +331,6 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 	/* Assume trap is not destroyed */
 	bool trap_destroyed = FALSE;
 
-	/* Assume monster lives */
-	bool mon_dies = FALSE;
-
 	char m_name[80];
 
 	int m_idx = 0;
@@ -567,9 +564,6 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 					mon_take_hit(cave_m_idx[y][x], (trap_power / 3), &fear, note_dies, SOURCE_PLAYER);
 
-			   		/*note if monster died*/
-					if (!(m_ptr->r_idx)) mon_dies = TRUE;
-
 				}
 				break;
 			}
@@ -642,8 +636,6 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 					/*ball of drain life*/
 					(void)explosion(SOURCE_PLAYER, rad, y, x, (3 * trap_power) / 4, GF_LIFE_DRAIN, PROJECT_KILL);
 
-					if (!(m_ptr->r_idx)) mon_dies = TRUE;
-
 					break;
 				}
 			}
@@ -665,9 +657,6 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 					/*ball of poison*/
 					(void)explosion(SOURCE_PLAYER, rad, y, x, (4 * trap_power) / 3, GF_POIS, (PROJECT_KILL | PROJECT_PLAY));
-
-					/*note if monster died*/
-					if (!(m_ptr->r_idx)) mon_dies = TRUE;
 
 				}
 
@@ -692,7 +681,6 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 					(void)explosion(SOURCE_PLAYER, rad, y, x, (7 * trap_power) /8 , GF_ELEC, PROJECT_KILL);
 
-					if (!(m_ptr->r_idx)) mon_dies = TRUE;
 				}
 
 				break;
@@ -719,8 +707,6 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 					/*followed by shards*/
 					(void)explosion(SOURCE_PLAYER, 3, y, x, trap_power, GF_SHARD, PROJECT_KILL);
 
-					/*note if monster died*/
-					if (!(m_ptr->r_idx)) mon_dies = TRUE;
 				}
 
 				break;
@@ -767,8 +753,6 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 					/* Damage the target monster */
 					(void)project_los(y, x, dam, GF_DISP_ALL);
 
-					/*note if monster died*/
-					if (!(m_ptr->r_idx)) mon_dies = TRUE;
 				}
 
 				break;
@@ -786,8 +770,8 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 				if (mode == MODE_ACTION)
 				{
 
-					if (mon_take_hit(cave_m_idx[y][x], trap_power / 2, &fear,
-								note_dies, SOURCE_PLAYER)) mon_dies = TRUE;
+					(void)(mon_take_hit(cave_m_idx[y][x], trap_power / 2, &fear,
+								note_dies, SOURCE_PLAYER));
 				}
 
 				break;
@@ -3948,15 +3932,11 @@ static void make_confused_move(monster_type *m_ptr, int y, int x)
 {
 	char m_name[80];
 
-	monster_race *r_ptr;
-
 	bool seen = FALSE;
 	bool fear = FALSE;
 	bool death = TRUE;
 
 	bool confused = m_ptr->m_timed[MON_TMD_CONF];
-
-	r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Check Bounds (fully) */
 	if (!in_bounds_fully(y, x)) return;
@@ -4982,14 +4962,6 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 			/*Is there a trap there?*/
 			if cave_monster_trap_bold(oy,ox)
 			{
-				monster_type *n_ptr;
-				monster_type monster_type_body;
-
-				/* Get local monster */
-				n_ptr = &monster_type_body;
-
-				n_ptr = &mon_list[cave_m_idx[oy][ox]];
-
 				/* Apply trap */
 				apply_monster_trap(x_list[cave_x_idx[ny][nx]].x_f_idx, oy, ox, MODE_ACTION);
 			}

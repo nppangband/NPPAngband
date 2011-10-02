@@ -523,7 +523,6 @@ static void do_cmd_menu(void)
 	menu_iter commands_menu = { NULL, NULL, cmd_list_entry, cmd_list_action };
 	region area = { 21, 5, 37, 6 };
 
-	ui_event_data evt;
 	int cursor = 0;
 	command_type chosen_command = {NULL, '\0', CMD_NULL, NULL};
 
@@ -539,7 +538,7 @@ static void do_cmd_menu(void)
 	window_make(19, 4, 58, 11);
 
 	/* Select an entry */
-	evt = menu_select(&menu, &cursor, 0);
+	(void)menu_select(&menu, &cursor, 0);
 
 	/* Load de screen */
 	screen_load();

@@ -627,12 +627,6 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 				break;
 			}
 
-			case ESCAPE:
-			{
-				flag = TRUE;
-				continue;
-			}
-
 			case EVT_SELECT:
 			{
 				if (panel == 1 && oid >= 0 && o_cur == active_menu->cursor)

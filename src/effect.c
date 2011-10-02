@@ -735,7 +735,7 @@ void effect_near(int feat, int y, int x, byte effect_type)
 	/* Give it to the floor */
 	if (flag)
 	{
-		pick_and_set_trap(y, x, 0);
+		pick_and_set_trap(by, bx, 0);
 	}
 }
 

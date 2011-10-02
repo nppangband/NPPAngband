@@ -220,16 +220,6 @@ void wield_item(object_type *o_ptr, int item, int slot)
 	cptr fmt;
 	char o_name[80];
 
-	bool combined_ammo = FALSE;
-	int num = 1;
-
-	/* If we are stacking ammo in the quiver */
-	if (obj_is_ammo(o_ptr))
-	{
-		num = o_ptr->number;
-		combined_ammo = object_similar(o_ptr, &inventory[slot]);
-	}
-
 	/* Describe the result */
 	object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
 

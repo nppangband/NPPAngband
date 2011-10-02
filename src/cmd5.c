@@ -570,7 +570,6 @@ void do_cmd_browse_aux(const object_type *o_ptr)
 	int i;
 	int spell;
 	int num = 0;
-	cptr spell_type;
 
 	byte spells[SPELLS_PER_BOOK];
 
@@ -579,9 +578,6 @@ void do_cmd_browse_aux(const object_type *o_ptr)
 
 	/* Hack -- Handle stuff */
 	handle_stuff();
-
-	if (cp_ptr->spell_book == TV_PRAYER_BOOK) spell_type = "prayer";
-	else spell_type = "spell";
 
 	/* Extract spells */
 	for (i = 0; i < SPELLS_PER_BOOK; i++)

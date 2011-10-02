@@ -5835,7 +5835,6 @@ static void misc_place_elements(int y, int x, int gf_type, int rad)
 	int yy, xx;
 	int i;
 	u16b feat = 0;
-	bool flag = FALSE;
 
 	/* Find the spell type in the list and retrieve the feature */
 	for (i = 0; info[i].gf_type; i++)
@@ -5876,8 +5875,6 @@ static void misc_place_elements(int y, int x, int gf_type, int rad)
 			{
 				/* Put the feature */
 				cave_set_feat(yy, xx, feat);
-
-				flag = TRUE;
 			}
 		}
 	}
