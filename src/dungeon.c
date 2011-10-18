@@ -780,8 +780,8 @@ static void process_world(void)
 		}
 
 		/* hack - make sure there are enough monsters */
-		if ((q_ptr->q_type == QUEST_THEMED_LEVEL) ||
-			(q_ptr->q_type == PIT_NEST_QUEST_BOOST))
+		if ((q_ptr->q_type == QUEST_THEMED_LEVEL) || (q_ptr->q_type == QUEST_PIT) ||
+			(q_ptr->q_type == QUEST_NEST))
 		{
 			if ((q_ptr->max_num - q_ptr->cur_num) > mon_cnt)
 			{

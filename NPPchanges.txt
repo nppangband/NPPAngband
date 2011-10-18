@@ -7,7 +7,7 @@ Bugfix: There was a playtesting message when examining a store service.
 Bugfix: Player ghost templates were not saving properly when a player died.
 Bugfix: Several of the player ghost templates were defective.
 Bugfix: Teleport level allowed the player to bypass a guardian (fixed monster) quest.
-
+Bugfix: If a monster from a pit.nest quest was killed by something other than the player, it wasn't replaced properly.
 
 NPP 0.5.3 changes:
 Reinstated the menus allowing the player to edit visuals and tilesets for monsters, terrain, flavors, and objects.
