@@ -2190,7 +2190,7 @@ static void store_item_increase(int st, int item, int num)
 	/* Hack - don't let theh store be bought out of items that are always in stock run out */
 	if (keep_in_stock(o_ptr, st))
 	{
-		cnt = STORE_MAX_ITEM;
+		if (st != STORE_HOME) cnt = STORE_MAX_ITEM;
 	}
 
 	/* Save the new number */
@@ -2292,6 +2292,9 @@ bool keep_in_stock(const object_type *o_ptr, int which)
 	if (o_ptr->art_num) return (FALSE);
 	if (o_ptr->ego_num) return (FALSE);
 
+	/* Never in the home */
+	if (which == STORE_HOME) return (FALSE);
+
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
@@ -2351,12 +2354,14 @@ bool keep_in_stock(const object_type *o_ptr, int which)
 		/* Flasks should be kept */
 		case TV_FLASK:
 		{
+			if (which != STORE_GENERAL) return (FALSE);
 			return (TRUE);
 		}
 		case TV_PRAYER_BOOK:
 		case TV_MAGIC_BOOK:
 		case TV_DRUID_BOOK:
 		{
+			if (which != STORE_BOOKSHOP) return (FALSE);
 			if (k_ptr->sval < SV_BOOK_MIN_GOOD) return (TRUE);
 			return (FALSE);
 		}

@@ -8,6 +8,8 @@ Bugfix: Player ghost templates were not saving properly when a player died.
 Bugfix: Several of the player ghost templates were defective.
 Bugfix: Teleport level allowed the player to bypass a guardian (fixed monster) quest.
 Bugfix: If a monster from a pit.nest quest was killed by something other than the player, it wasn't replaced properly.
+Bugfix: Fix a bug that allows the player to always have 99 magic books in the home.
+
 
 NPP 0.5.3 changes:
 Reinstated the menus allowing the player to edit visuals and tilesets for monsters, terrain, flavors, and objects.
