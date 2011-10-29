@@ -799,6 +799,14 @@ s16b wield_slot(const object_type *o_ptr)
 		case TV_POLEARM:
 		case TV_SWORD:
 		{
+			/* See if the throwing weapon can go into the quiver first */
+			if ((is_throwing_weapon(o_ptr)) && (weapon_inscribed_for_quiver(o_ptr)))
+			{
+				s16b x = (wield_slot_ammo(o_ptr));
+
+				if (x != QUIVER_END) return (x);
+			}
+
 			return (INVEN_WIELD);
 		}
 
