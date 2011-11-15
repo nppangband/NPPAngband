@@ -2,6 +2,7 @@ NPP 0.5.4 changes:
 Rename fixed monster quests to Guardian quests.
 Increase Morgoth's spellpower and percentage.
 Give Morgoth the teleport_self_to spell.
+Removed Potions of Heroism and Scrolls of Holy Chant from the "infinite stock" list.
 Bugfix: Equipment and itemlist windows were not updating properly when the player was in a store.
 Bugfix: There was a playtesting message when examining a store service.
 Bugfix: Player ghost templates were not saving properly when a player died.

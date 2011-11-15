@@ -2336,7 +2336,6 @@ bool keep_in_stock(const object_type *o_ptr, int which)
 			if (which != STORE_TEMPLE) return (FALSE);
 			if (k_ptr->sval == SV_POTION_CURE_CRITICAL) return (TRUE);
 			if (k_ptr->sval == SV_POTION_RESTORE_EXP) return (TRUE);
-			if (k_ptr->sval == SV_POTION_HEROISM) return (TRUE);
 			return (FALSE);
 		}
 		case TV_SCROLL:
@@ -2347,7 +2346,6 @@ bool keep_in_stock(const object_type *o_ptr, int which)
 			if (k_ptr->sval == SV_SCROLL_SATISFY_HUNGER) return (TRUE);
 			if (k_ptr->sval == SV_SCROLL_IDENTIFY) return (TRUE);
 			if (k_ptr->sval == SV_SCROLL_WORD_OF_RECALL) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_HOLY_CHANT) return (TRUE);
 			return (FALSE);
 
 		}
