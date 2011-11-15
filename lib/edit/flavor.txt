@@ -1333,7 +1333,7 @@ G:":o1
 D:Cirtine
 
 N:322:40
-G:":s
+G:":D
 D:Jet Black
 
 N:323:80
