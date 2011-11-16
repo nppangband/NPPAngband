@@ -726,7 +726,7 @@ struct quest_type
 	s16b cur_num;		/* Number killed */
 	s16b max_num;		/* Number required */
 
-	byte q_flags;		/* Has the player start the quest */
+	byte q_flags;		/* Various quest flags */
 };
 
 
@@ -1151,7 +1151,7 @@ struct player_type
 	int  command_inv;		/* Gives item of current command */
 	ui_event_data command_cmd_ex; /* Gives additional information of current command */
 
-
+	s16b command_see;	/**< See "cmd1.c" */
 	s16b command_wrk;		/* See "cmd1.c" */
 
 	s16b command_new;		/* Hack -- command chaining XXX XXX */

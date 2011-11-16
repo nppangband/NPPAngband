@@ -8,10 +8,10 @@ Bugfix: There was a playtesting message when examining a store service.
 Bugfix: Player ghost templates were not saving properly when a player died.
 Bugfix: Several of the player ghost templates were defective.
 Bugfix: Teleport level allowed the player to bypass a guardian (fixed monster) quest.
-Bugfix: If a monster from a pit.nest quest was killed by something other than the player, it wasn't replaced properly.
 Bugfix: The player was allowed to keep a never ending supply of magic books in the home.
 Bugfix: A throwing weapon that had been in the quiver couldn't be wielded again.
 Bugfix: The jet black amulet was being shown with a blue colored tile.
+Bugfix: Fixed several bugs regarding replacing a quest monster that has not been killed by the player. 
 
 
 NPP 0.5.3 changes:

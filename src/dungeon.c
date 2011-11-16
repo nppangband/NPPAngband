@@ -767,6 +767,7 @@ static void process_world(void)
 	/*** Update quests ***/
 	if ((p_ptr->cur_quest) && !(turn % QUEST_TURNS))
 	{
+		bool fail_quest = FALSE;
 
 		quest_type *q_ptr = &q_info[quest_num(p_ptr->cur_quest)];
 
@@ -776,14 +777,30 @@ static void process_world(void)
 			/* Check if quest is in progress */
 			if ((q_ptr->q_flags & (QFLAG_STARTED)) && q_ptr->active_level &&
 				((q_ptr->q_type == QUEST_MONSTER) || (q_ptr->q_type == QUEST_UNIQUE)))
+			{
 				quest_fail();
+				fail_quest = TRUE;
+			}
 		}
 
-		/* hack - make sure there are enough monsters */
-		if ((q_ptr->q_type == QUEST_THEMED_LEVEL) || (q_ptr->q_type == QUEST_PIT) ||
-			(q_ptr->q_type == QUEST_NEST))
+		if ((!fail_quest) && (q_ptr->q_type != QUEST_FIXED_U) && (q_ptr->q_type != QUEST_VAULT))
 		{
-			if ((q_ptr->max_num - q_ptr->cur_num) > mon_cnt)
+			int cur_quest_monsters = 0;
+			int j;
+
+			/* Make sure there are enough quest monsters */
+			for (j = 1; j < mon_max; j++)
+			{
+				monster_type *m_ptr = &mon_list[j];
+
+				/* Paranoia -- Skip dead monsters */
+				if (!m_ptr->r_idx) continue;
+
+				/* Count Quest monsters */
+				if (m_ptr->mflag & (MFLAG_QUEST)) cur_quest_monsters++;
+			}
+
+			if ((q_ptr->max_num - q_ptr->cur_num) > cur_quest_monsters)
 			{
 				int old_feeling = feeling;
 				int i, y, x;
@@ -820,7 +837,7 @@ static void process_world(void)
 					if (!cave_empty_bold(y, x)) continue;
 
 					/* Accept far away grids */
-					if (distance(y, x, p_ptr->py, p_ptr->px) >  MAX_SIGHT + 5) break;
+					if (distance(y, x, p_ptr->py, p_ptr->px) >  MAX_SIGHT) break;
 				}
 
 				if (attempts_left)
@@ -828,8 +845,11 @@ static void process_world(void)
 					monster_race *r_ptr;
 					monster_race *r2_ptr = &r_info[best_r_idx];
 
+					/* Quests where the monster is specified (monster quests, unique quests*/
+					if (q_ptr->mon_idx) best_r_idx = q_ptr->mon_idx;
+
 					/* 10 chances to get the strongest monster possible */
-					for (i = 0; i < 10; i++)
+					else for (i = 0; i < 10; i++)
 					{
 						r_idx = get_mon_num(monster_level, y, x);
 
@@ -855,6 +875,7 @@ static void process_world(void)
 
 					if (place_monster_aux(y, x, best_r_idx, TRUE, FALSE))
 					{
+
 						/* Scan the monster list */
 						for (i = 1; i < mon_max; i++)
 						{
@@ -862,6 +883,9 @@ static void process_world(void)
 
 							/* Ignore dead monsters */
 							if (!m_ptr->r_idx) continue;
+
+							/* Make sure we have the right monster race */
+							if (m_ptr->r_idx != best_r_idx) continue;
 
 							/*mark it as a quest monster*/
 							m_ptr->mflag |= (MFLAG_QUEST);
@@ -878,7 +902,6 @@ static void process_world(void)
 
 				/* Prepare allocation table */
 				get_mon_num_prep();
-
 			}
 		}
 	}
@@ -1620,6 +1643,9 @@ void process_player(void)
 {
 	int i;
 
+	int py = p_ptr->py;
+	int px = p_ptr->px;
+
 	/* One more player turn */
 	p_ptr->p_turn++;
 
@@ -1703,6 +1729,21 @@ void process_player(void)
 			msg_print("Cancelled.");
 		}
 	}
+
+
+	/* Update buttons if player is on up stairs or down stairs */
+	basic_buttons();
+	if (cave_up_stairs(py, px)) button_add("[<]", '<');
+	else button_kill('<');
+	if (cave_down_stairs(py, px)) button_add("[>]", '>');
+	else button_kill('>');
+	if (cave_shop_bold(p_ptr->py,p_ptr->px)) button_add("[ENTER]", '_');
+	/* Check if there is anything to pickup */
+	if (cave_o_idx[py][px] > 0) button_add("[PICKUP]", 'g');
+	else button_kill('g');
+
+
+
 
 	/*** Handle actual user input ***/
 
@@ -2160,7 +2201,7 @@ static void dungeon(void)
 	/* No stairs down from fixed quests */
 	if ((quest_check(p_ptr->depth) == QUEST_FIXED) ||
 		(quest_check(p_ptr->depth) == QUEST_FIXED_U) ||
-		(quest_check(p_ptr->depth) == QUEST_FIXED_MON))
+		(quest_check(p_ptr->depth) == QUEST_GUARDIAN))
 	{
 		if ((p_ptr->create_stair == FEAT_MORE) ||
 			(p_ptr->create_stair == FEAT_MORE_SHAFT))
@@ -2241,11 +2282,7 @@ static void dungeon(void)
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER | PN_SORT_QUIVER);
 
 	/* Make basic mouse buttons */
-	(void) button_add("[ESC]", ESCAPE);
-	(void) button_add("[Ret]", '\r');
-	(void) button_add("[Spc]", ' ');
-	(void) button_add("[Rpt]", 'n');
-	(void) button_add("[Std]", ',');
+	basic_buttons();
 
 	/* Redraw buttons */
 	p_ptr->redraw |= (PR_BUTTONS);
@@ -2359,6 +2396,13 @@ static void dungeon(void)
 		/* Count game turns */
 		turn++;
 	}
+
+	/* Kill basic mouse buttons */
+	(void) button_kill(ESCAPE);
+	(void) button_kill('\r');
+	(void) button_kill(' ');
+	(void) button_kill('n');
+	(void) button_kill(',');
 }
 
 
