@@ -610,8 +610,11 @@ void pick_and_set_trap(int y, int x, int mode)
 	/* Paranoia */
 	if (cave_any_trap_bold(y, x)) return;
 
+	/* No NPP terrains option turned on */
+	if (adult_simple_dungeons) mode = EFFECT_TRAP_DUMB;
+
 	/*Make sure there aren't too many smart traps in the same place*/
-	if (mode != EFFECT_TRAP_DUMB)
+	else if (mode != EFFECT_TRAP_DUMB)
 	{
 		/*There is a nearby trap in line of sight*/
 		if (found_smart_trap(y, x)) mode = EFFECT_TRAP_DUMB;

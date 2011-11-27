@@ -408,6 +408,12 @@ Adult: 	No selling items to stores     		[birth_no_store_services] (off) :
     If this option is set, items will sell to the stores for 0 gold.  Gold found
 in the dungeon will be approximatly 5 times the value.
 
+***** <birth_simple_dungeons>
+Adult: 	Prevent unusual terrains or dungeons	[birth_simple_dungeons]   (off) :
+    If this option is set, only simple, Angband dungeons will be generated.  No
+NPP unusual terrains (trees, water, smart traps, etc) will be created.  
+No wilderness levels.
+
 --- Option Set #7:  Cheat ---
 
 ***** <cheat_peek>
