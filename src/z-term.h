@@ -329,6 +329,7 @@ struct term
 /*  47 and beyond is unused  */
 
 
+
 /* The following allow color 'translations' to support environments with a limited color depth
  * as well as translate colours to alternates for e.g. menu highlighting. */
 

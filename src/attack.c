@@ -1063,7 +1063,7 @@ void do_cmd_fire(cmd_code code, cmd_arg args[])
 	dir = args[1].direction;
 
 	/* Check the item being fired is usable by the player. */
-	if (!item_is_available(item, NULL, (USE_EQUIP | USE_INVEN | USE_FLOOR)))
+	if (!item_is_available(item, NULL, (USE_EQUIP | USE_INVEN | USE_FLOOR | USE_QUIVER | QUIVER_FIRST)))
 	{
 		msg_format("That item is not within your reach.");
 		return;
@@ -1092,8 +1092,9 @@ void do_cmd_fire(cmd_code code, cmd_arg args[])
 	/* Obtain a local object */
 	object_copy(i_ptr, o_ptr);
 
-	/* Single object */
+	/* Single object, not marked */
 	i_ptr->number = 1;
+	i_ptr->obj_in_use = FALSE;
 
 	if (IS_QUIVER_SLOT(item))
 	{
@@ -1380,7 +1381,7 @@ void textui_cmd_fire(void)
 	p_ptr->command_wrk = USE_EQUIP;
 
 	/* Get an item */
-	if (!get_item(&item, q, s, (USE_INVEN | USE_EQUIP | USE_FLOOR))) return;
+	if (!get_item(&item, q, s, (USE_INVEN | USE_QUIVER | QUIVER_FIRST | USE_FLOOR))) return;
 
 	/* Get a direction (or cancel) */
 	if (!get_aim_dir(&dir, FALSE)) return;
@@ -1404,9 +1405,26 @@ void textui_cmd_fire_at_nearest(void)
 	/* Find first eligible ammo in the quiver */
 	for (i=QUIVER_START; i < QUIVER_END; i++)
 	{
-		if (inventory[i].tval != p_ptr->state.ammo_tval) continue;
+		object_type *o_ptr = & inventory [i];
+
+		if (!ammo_can_fire(o_ptr, i)) continue;
+
 		item = i;
 		break;
+	}
+
+	/* Next, try the backpack if necessary*/
+	if (item < 0)
+	{
+		for (i = 0; i < INVEN_PACK; i++)
+		{
+			object_type *o_ptr = & inventory [i];
+
+			if (!ammo_can_fire(o_ptr, i)) continue;
+
+			item = i;
+			break;
+		}
 	}
 
 	/* Require usable ammo */
@@ -1954,7 +1972,7 @@ void do_cmd_throw(cmd_code code, cmd_arg args[])
 	}
 
 	/* Check the item being thrown is usable by the player. */
-	if (!item_is_available(item, NULL, (USE_EQUIP | USE_INVEN | USE_FLOOR)))
+	if (!item_is_available(item, NULL, (USE_EQUIP | USE_INVEN | USE_FLOOR | USE_QUIVER)))
 	{
 		msg_format("That item is not within your reach.");
 		return;
@@ -1974,6 +1992,7 @@ void do_cmd_throw(cmd_code code, cmd_arg args[])
 
 	/* Single object */
 	i_ptr->number = 1;
+	i_ptr->obj_in_use = FALSE;
 
 	if (IS_QUIVER_SLOT(item))
 	{
@@ -2319,7 +2338,7 @@ void textui_cmd_throw(void)
 	/* Get an item */
 	q = "Throw which item? ";
 	s = "You have nothing to throw.";
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return;
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_QUIVER | USE_FLOOR))) return;
 
 	if (item >= INVEN_WIELD && item < QUIVER_START)
 	{

@@ -1,4 +1,5 @@
 NPP 0.5.4 changes:
+Added FAAngband-style mouse support.
 Rename fixed monster quests to Guardian quests.
 Increase Morgoth's spellpower and percentage.
 Give Morgoth the teleport_self_to spell.

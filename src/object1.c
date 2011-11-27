@@ -791,6 +791,7 @@ size_t object_desc(char *buf, size_t max, const object_type *o_ptr, odesc_detail
 	/* Object is in the inventory of a store */
 	if (o_ptr->ident & IDENT_STORE)
 	{
+
 		/* Pretend known and aware */
 		aware = TRUE;
 		known = TRUE;

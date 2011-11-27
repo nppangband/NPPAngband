@@ -269,7 +269,6 @@ static void init_header(header *head, int num, int len)
        /* Save the size of "*_head" and "*_info" */
        head->head_size = sizeof(header);
        head->info_size = head->info_num * head->info_len;
-
 }
 
 
@@ -1336,10 +1335,6 @@ bool init_angband(void)
 
 	event_signal(EVENT_ENTER_INIT);
 
-	/* Initialize the menus */
-		/* This must occur before preference files are read(?) */
-		init_cmd4_c();
-
 	/*** Initialize some arrays ***/
 
 	/* Initialize size info */
@@ -1487,6 +1482,11 @@ void cleanup_angband(void)
 
 	/* Free the stores */
 	FREE(store);
+
+	event_remove_all_handlers();
+
+	/* free the buttons */
+	button_free();
 
 	/* Free the player inventory */
 	FREE(inventory);

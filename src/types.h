@@ -618,6 +618,7 @@ struct object_type
 	u32b ident;			/* Special flags (was byte) */
 
 	byte marked;		/* Object is marked */
+	bool obj_in_use; 	/* Object is in use */
 
 	u16b obj_note;		/* Inscription index */
 
@@ -1096,6 +1097,8 @@ struct player_type
 	/*** Temporary fields ***/
 
 	bool playing;			/* True if player is playing */
+
+	bool noun_verb;			/* Player is using the object verb-noun menu */
 
 	bool leaving;			/* True if player is leaving */
 

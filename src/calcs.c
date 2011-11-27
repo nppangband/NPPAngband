@@ -29,7 +29,7 @@
  * Note that this function induces various "status" messages,
  * which must be bypasses until the character is created.
  */
-static void calc_spells(void)
+void calc_spells(void)
 {
 	int i, j, k, levels;
 	int num_allowed, num_known;
@@ -39,7 +39,7 @@ static void calc_spells(void)
 
 	s16b old_spells;
 
-	cptr p = ((cp_ptr->spell_book == TV_PRAYER_BOOK) ? "prayer" : "spell" );
+	cptr p = cast_spell(MODE_SPELL_NOUN, cp_ptr->spell_book, 1, 0);
 
 	/* Hack -- must be literate */
 	if (!cp_ptr->spell_book) return;
@@ -1748,7 +1748,7 @@ void update_stuff(void)
 	{
 		/* Clear the flags */
 		p_ptr->update &= ~(PU_TORCH | PU_BONUS | PU_STEALTH | PU_NATIVE | \
-							PU_STEALTH | PU_HP | PU_MANA | PU_SPELLS);
+							PU_HP | PU_MANA | PU_SPELLS);
 		return;
 	}
 
@@ -1837,12 +1837,12 @@ void redraw_stuff(void)
 	{
 		const struct flag_event_trigger *hnd = &redraw_events[i];
 
-		if (p_ptr->redraw & hnd->flag)
+		if (p_ptr->redraw & (hnd->flag))
 			event_signal(hnd->event);
 	}
 
 	/* Then the ones that require parameters to be supplied. */
-	if (p_ptr->redraw & PR_MAP)
+	if (p_ptr->redraw & (PR_MAP))
 	{
 		/* Mark the whole map to be redrawn */
 		event_signal_point(EVENT_MAP, -1, -1);

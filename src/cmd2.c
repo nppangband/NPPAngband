@@ -26,7 +26,7 @@
  * Check if action permissable here.
  */
 
-static bool do_cmd_test(int y, int x, int action)
+bool do_cmd_test(int y, int x, int action, bool message)
 {
 	u32b bitzero = 0x01;
 	u32b flag;
@@ -41,7 +41,7 @@ static bool do_cmd_test(int y, int x, int action)
 	if (!(cave_info[y][x] & (CAVE_MARK)))
 	{
 		/* Message */
-		msg_format("You see nothing %s.", here);
+		if (message) msg_format("You see nothing %s.", here);
 
 		/* Nope */
 		return (FALSE);
@@ -67,7 +67,7 @@ static bool do_cmd_test(int y, int x, int action)
 		flag = bitzero << (action - FS_FLAGS1);
 		if (!(f_ptr->f_flags1 & flag))
 		{
-			msg_format("You see nothing %s%s.", here, act);
+			if (message) msg_format("You see nothing %s%s.", here, act);
 		 	return (FALSE);
 		}
 	}
@@ -77,7 +77,7 @@ static bool do_cmd_test(int y, int x, int action)
 		flag = bitzero << (action - FS_FLAGS2);
 		if (!(f_ptr->f_flags2 & flag))
 		{
-		 	msg_format("You see nothing %s%s.", here, act);
+			if (message) msg_format("You see nothing %s%s.", here, act);
 		 	return (FALSE);
 		}
 	}
@@ -87,7 +87,7 @@ static bool do_cmd_test(int y, int x, int action)
 		flag = bitzero << (action - FS_FLAGS3);
 		if (!(f_ptr->f_flags2 & flag))
 		{
-			msg_format("You see nothing %s%s.", here, act);
+			if (message) msg_format("You see nothing %s%s.", here, act);
 		 	return (FALSE);
 		}
 	}
@@ -826,7 +826,7 @@ static int count_traps(int *y, int *x, bool known)
  * Return the number of chests around (or under) the character.
  * If requested, count only trapped chests.
  */
-static int count_chests(int *y, int *x, bool trapped)
+int count_chests(int *y, int *x, bool trapped)
 {
 	int d, count, o_idx;
 
@@ -901,7 +901,7 @@ static bool do_cmd_open_aux(int y, int x)
 	int door_power;
 
 	/* Verify legality */
-	if (!do_cmd_test(y, x, FS_OPEN)) return (FALSE);
+	if (!do_cmd_test(y, x, FS_OPEN, TRUE)) return (FALSE);
 
 	/* Secrets on doors */
 	if (feat_ff1_match(feat, FF1_DOOR | FF1_SECRET) == (FF1_DOOR | FF1_SECRET))
@@ -1035,7 +1035,7 @@ void do_cmd_open(cmd_code code, cmd_arg args[])
 	o_idx = chest_check(y, x, FALSE);
 
 	/* Verify legality */
-	if (!o_idx && !do_cmd_test(y, x, FS_OPEN)) return;
+	if (!o_idx && !do_cmd_test(y, x, FS_OPEN, TRUE)) return;
 
 	/* Take a turn */
 	p_ptr->p_energy_use = BASE_ENERGY_MOVE;
@@ -1134,7 +1134,7 @@ static bool do_cmd_close_aux(int y, int x)
 	int feat = cave_feat[y][x];
 
 	/* Verify legality */
-	if (!do_cmd_test(y, x, FS_CLOSE)) return (FALSE);
+	if (!do_cmd_test(y, x, FS_CLOSE, TRUE)) return (FALSE);
 
 	/* Broken door */
 	if (feat_ff3_match(feat, FF3_DOOR_BROKEN))
@@ -1191,7 +1191,7 @@ void do_cmd_close(cmd_code code, cmd_arg args[])
 	x = p_ptr->px + ddx[dir];
 
 	/* Verify legality */
-	if (!do_cmd_test(y, x, FS_CLOSE))
+	if (!do_cmd_test(y, x, FS_CLOSE, TRUE))
 	{
 		/* Cancel repeat */
 		disturb(0, 0);
@@ -1277,7 +1277,7 @@ static bool do_cmd_tunnel_aux(int y, int x)
 	feat = cave_feat[y][x];
 
 	/* Verify legality */
-	if (!do_cmd_test(y, x, FS_TUNNEL)) return (FALSE);
+	if (!do_cmd_test(y, x, FS_TUNNEL, TRUE)) return (FALSE);
 
 	j = feat_state_power(feat, FS_TUNNEL);
 
@@ -1398,7 +1398,7 @@ void do_cmd_tunnel(cmd_code code, cmd_arg args[])
 	x = p_ptr->px + ddx[dir];
 
 	/* Oops */
-	if (!do_cmd_test(y, x, FS_TUNNEL)) return;
+	if (!do_cmd_test(y, x, FS_TUNNEL, TRUE)) return;
 
 	/* Take a turn */
 	p_ptr->p_energy_use = BASE_ENERGY_MOVE;
@@ -1726,7 +1726,7 @@ static bool do_cmd_bash_aux(int y, int x)
 	feature_lore *f_l_ptr = &f_l_list[cave_feat[y][x]];
 
 	/* Verify legality */
-	if (!do_cmd_test(y, x, FS_BASH)) return (FALSE);
+	if (!do_cmd_test(y, x, FS_BASH, TRUE)) return (FALSE);
 
 	/* Get the name */
 	feature_desc(name, sizeof(name), feat, FALSE, TRUE);
@@ -1874,7 +1874,7 @@ void do_cmd_bash(cmd_code code, cmd_arg args[])
 	x = p_ptr->px + ddx[dir];
 
 	/* Verify legality */
-	if (!do_cmd_test(y, x, FS_BASH)) return;
+	if (!do_cmd_test(y, x, FS_BASH, TRUE)) return;
 
 	/* Take a turn */
 	p_ptr->p_energy_use = BASE_ENERGY_MOVE;
@@ -2260,7 +2260,7 @@ void do_cmd_spike(cmd_code code, cmd_arg args[])
 	x = p_ptr->px + ddx[dir];
 
 	/* Verify legality */
-	if (!do_cmd_test(y, x, FS_SPIKE)) return;
+	if (!do_cmd_test(y, x, FS_SPIKE, TRUE)) return;
 
 	/* Take a turn */
 	p_ptr->p_energy_use = BASE_ENERGY_MOVE;
@@ -2295,7 +2295,7 @@ void do_cmd_spike(cmd_code code, cmd_arg args[])
 		f_l_ptr->f_l_flags1 |= (FF1_CAN_SPIKE);
 
 		/* Verify legality */
-		if (!do_cmd_test(y, x, FS_SPIKE)) return;
+		if (!do_cmd_test(y, x, FS_SPIKE, TRUE)) return;
 
 		/* Secrets on door/permanent doors */
 		if (feat_ff1_match(feat, FF1_SECRET | FF1_PERMANENT))
@@ -2712,12 +2712,24 @@ void textui_cmd_rest(void)
   	/* Prompt for time if needed */
 	if (p_ptr->command_arg <= 0)
 	{
-		cptr p = "Rest (0-9999, '!' for HP or SP, '*' for HP and SP, '&' as needed): ";
+		cptr p = "Rest (0-9999, 'h' for HP, 's' for SP, '*' for HP and SP, '&' as needed): ";
 
 		char out_val[5] = "& ";
 
+		/* Buttons */
+		button_kill_all();
+		button_add("[Rest-all]", '&');
+		button_add("[Rest-HP&SP]", '*');
+		button_add("[Rest-HP]", 'h');
+		button_add("[Rest-SP]", 's');
+		event_signal(EVENT_MOUSEBUTTONS);
+
 		/* Ask for duration */
 		if (!get_string(p, out_val, sizeof(out_val))) return;
+
+		/* Restore normal buttons */
+		basic_buttons();
+		event_signal(EVENT_MOUSEBUTTONS);
 
 		/* Rest until done */
 		if (out_val[0] == '&')

@@ -2293,7 +2293,7 @@ bool enchant_spell(int num_hit, int num_dam, int num_ac)
 	/* Get an item */
 	q = "Enchant which item? ";
 	s = "You have nothing to enchant.";
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | USE_QUIVER))) return (FALSE);
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -2357,7 +2357,7 @@ bool ident_spell(void)
 	/* Get an item */
 	q = "Identify which item? ";
 	s = "You have nothing to identify.";
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | USE_QUIVER))) return (FALSE);
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -2404,7 +2404,7 @@ bool identify_fully(void)
 	/* Get an item */
 	q = "Identify which item? ";
 	s = "You have nothing to identify.";
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | USE_QUIVER))) return (FALSE);
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -5200,7 +5200,7 @@ bool brand_ammo(bool enchant)
 	/* Get an item */
 	q = "Brand which kind of ammunition? ";
 	s = "You have nothing to brand.";
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | USE_QUIVER | QUIVER_FIRST))) return (FALSE);
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -5243,7 +5243,7 @@ bool brand_bolts(bool enchant)
 	/* Get an item */
 	q = "Brand which bolts? ";
 	s = "You have no bolts to brand.";
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | USE_QUIVER | QUIVER_FIRST))) return (FALSE);
 
 	/* Get the item (in the pack) */
 	if (item >= 0)

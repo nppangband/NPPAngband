@@ -603,13 +603,13 @@ _feat_ff3_match(f_info + cave_feat[y][x], flags)
 	 (x_list[cave_x_idx[Y][X]].x_flags & (EF1_TRAP_SMART))
 
 /*
- * Determine if a "legal" grid is a smart "trap" for players (set by monsters)
+ * Determine if a "legal" grid is a passive "trap" for players (set by monsters)
  */
 #define cave_passive_trap_bold(Y,X) \
 	 (x_list[cave_x_idx[Y][X]].x_flags & (EF1_TRAP_DUMB))
 
 /*
- * Determine if a "legal" grid is a "trap" grid for players (set by monsters)
+ * Determine if a "legal" grid is a glyph.
  */
 #define cave_player_glyph_bold(Y,X) \
 	 (x_list[cave_x_idx[Y][X]].x_flags & (EF1_GLYPH))
@@ -744,6 +744,12 @@ _feat_ff3_match(f_info + cave_feat[y][x], flags)
  */
 #define cave_stair_bold(Y,X) \
 	cave_ff1_match(Y, X, FF1_STAIRS)
+
+/*
+ * Determine if a "legal" grid is a "stair" grid
+ */
+#define cave_shaft_bold(Y,X) \
+	cave_ff2_match(Y, X, FF2_SHAFT)
 
 /*
  * Determine if a "legal" grid is "permanent"

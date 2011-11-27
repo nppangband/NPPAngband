@@ -280,6 +280,9 @@ bool put_object_in_inventory(object_type *o_ptr)
 	/* Message */
 	msg_c_format(msgt, "You have %s (%c).", o_name, index_to_label(slot));
 
+	/* No longer marked "in use */
+	o_ptr->obj_in_use = FALSE;
+
 	/* Combine / Reorder the pack */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER | PN_SORT_QUIVER);
 
@@ -330,7 +333,6 @@ static int get_first_item_for_pickup(void)
  */
 void do_cmd_pickup_from_pile(bool pickup, bool message)
 {
-	byte objs_picked_up = 0;
 	object_type *o_ptr;
 
 	int py = p_ptr->py;
@@ -404,7 +406,6 @@ void do_cmd_pickup_from_pile(bool pickup, bool message)
 			{
 				/* Delete the gold */
 				delete_object_idx(item);
-				objs_picked_up++;
 				break;
 			}
 		}
@@ -437,7 +438,6 @@ void do_cmd_pickup_from_pile(bool pickup, bool message)
 		{
 			/* Delete the gold */
 			delete_object_idx(floor_list[item]);
-			objs_picked_up++;
 		}
 
 		/* Pickup failed.  Quit. */

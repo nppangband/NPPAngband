@@ -53,7 +53,7 @@
 /*
  * Current version string
  */
-#define VERSION_STRING	"0.5.3"
+#define VERSION_STRING	"0.5.4-BETA-1"
 
 
 /*
@@ -148,6 +148,40 @@
 #define ANGBAND_TERM_MAX 8
 
 
+/* Sidebar types */
+#define SIDEBAR_RACE		0
+#define SIDEBAR_TITLE		1
+#define SIDEBAR_CLASS		2
+#define SIDEBAR_LEVEL		3
+#define SIDEBAR_XP			4
+#define SIDEBAR_GOLD		5
+#define SIDEBAR_EQUIPPY		6
+#define SIDEBAR_STAT_MIN	7
+#define SIDEBAR_STAT_MAX	8
+#define SIDEBAR_AC			9
+#define SIDEBAR_HP			10
+#define SIDEBAR_MANA		11
+#define SIDEBAR_MON_HP		12
+#define SIDEBAR_MON_MANA	13
+#define SIDEBAR_SPEED		14
+#define SIDEBAR_DEPTH		15
+#define SIDEBAR_QUEST		16
+#define SIDEBAR_FEELING		17
+
+#define SIDEBAR_MAX_TYPES	18
+
+/*
+ * Mouse click region names
+ */
+#define MOUSE_NULL    		SIDEBAR_MAX_TYPES + 0
+#define MOUSE_MAP     		SIDEBAR_MAX_TYPES + 1
+#define MOUSE_MESSAGE 		SIDEBAR_MAX_TYPES + 2
+#define MOUSE_STATUS_BAR	SIDEBAR_MAX_TYPES + 3
+
+
+
+/* mouseclick */
+#define DEFINED_XFF	'\xff'
 
 /*
  * Maximum number of player "sex" types (see "table.c", etc)
@@ -336,21 +370,6 @@
 #define MAX_FLOOR_STACK			23
 
 
-
-/*** Screen Locations ***/
-
-/*
- * Some screen locations for various display routines
- * Currently, row 8 and 15 are the only "blank" rows.
- * That leaves a "border" around the "stat" values.
- */
-
-
-#define ROW_HUNGRY		(Term->hgt - 1)
-#define COL_HUNGRY		0	/* "Weak" / "Hungry" / "Full" / "Gorged" */
-
-#define ROW_STATE		(Term->hgt - 1)
-#define COL_STATE		38	/* <state> */
 
 
 
@@ -1330,7 +1349,6 @@ enum
 
 #define MAX_ITEMLIST 256
 
-#define DEFINED_XFF	'\xff'
 
 
 #endif /* INCLUDED_DEFINES_H */

@@ -506,7 +506,7 @@ void teleport_player_level(int who)
 	 */
 	if ((kind_of_quest == QUEST_FIXED) ||
 	    (kind_of_quest == QUEST_FIXED_U) ||
-	    (kind_of_quest == QUEST_FIXED_MON) ||
+	    (kind_of_quest == QUEST_GUARDIAN) ||
 	    (p_ptr->depth >= MAX_DEPTH-1))
 	{
 		go_up = TRUE;

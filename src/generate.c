@@ -6112,7 +6112,7 @@ static bool alloc_stairs(u16b feat, int num)
 		/* Quest -- must go up */
 		else if ((quest_check(p_ptr->depth) == QUEST_FIXED) ||
 				 (quest_check(p_ptr->depth) == QUEST_FIXED_U) ||
-				 (quest_check(p_ptr->depth) == QUEST_FIXED_MON) ||
+				 (quest_check(p_ptr->depth) == QUEST_GUARDIAN) ||
 				 (effective_depth(p_ptr->depth) >= MAX_DEPTH-1))
 		{
 			/* Clear previous contents, add up stairs */
@@ -7315,7 +7315,7 @@ static void build_nature(void)
 		/* Monster quests */
 		if ((q_ptr->q_type == QUEST_FIXED) ||
 			(q_ptr->q_type == QUEST_FIXED_U) ||
-			(q_ptr->q_type == QUEST_FIXED_MON) ||
+			(q_ptr->q_type == QUEST_GUARDIAN) ||
 			(q_ptr->q_type == QUEST_MONSTER) ||
 			(q_ptr->q_type == QUEST_UNIQUE))
 		{
@@ -9429,7 +9429,7 @@ static bool place_monsters_objects(void)
 
 			if ((q_ptr->q_type == QUEST_MONSTER) ||
 				(q_ptr->q_type == QUEST_FIXED) ||
-				(q_ptr->q_type == QUEST_FIXED_MON))
+				(q_ptr->q_type == QUEST_GUARDIAN))
 			{
 				int j;
 

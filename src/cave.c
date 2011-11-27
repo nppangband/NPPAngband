@@ -6381,6 +6381,9 @@ void disturb(int stop_search, int unused_flag)
 		p_ptr->redraw |= (PR_STATE);
 	}
 
+	/* Cancel noun-verb menu */
+	p_ptr->noun_verb = FALSE;
+
 	/* Flush the input if requested */
 	if (flush_disturb) flush();
 }

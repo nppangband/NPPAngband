@@ -595,7 +595,7 @@ static bool store_service_aux(int store_num, s16b choice)
 			/* Get an item */
 			q = "Enchant which item? ";
 			s = "You have nothing to enchant.";
-			if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return (FALSE);
+			if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_QUIVER))) return (FALSE);
 
 			/*Got the item*/
 			o_ptr = &inventory[item];
@@ -701,7 +701,7 @@ static bool store_service_aux(int store_num, s16b choice)
 			/* Get an item */
 			q = "Brand which item? ";
 			s = "You have nothing to Brand.";
-			if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return (FALSE);
+			if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_QUIVER))) return (FALSE);
 
 			/*Got the item*/
 			o_ptr = &inventory[item];
@@ -772,7 +772,7 @@ static bool store_service_aux(int store_num, s16b choice)
 			/* Get an item */
 			q = "Recharge which item? ";
 			s = "You have nothing to recharge.";
-			if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return (FALSE);
+			if (!get_item(&item, q, s, (USE_EQUIP))) return (FALSE);
 
 			/*Got the item*/
 			o_ptr = &inventory[item];
@@ -1108,7 +1108,7 @@ static bool store_service_aux(int store_num, s16b choice)
 
 			if (((q_ptr->q_type != QUEST_MONSTER) &&
 			     (q_ptr->q_type != QUEST_UNIQUE) &&
-			     (q_ptr->q_type != QUEST_FIXED_MON)) ||
+			     (q_ptr->q_type != QUEST_GUARDIAN)) ||
 				(q_ptr->mon_idx == 0))
 			{
 				msg_print("You are not currently questing for a specific creature.");
@@ -2276,7 +2276,7 @@ static bool black_market_ok(const object_type *o_ptr)
 }
 
 /*
- * Keep certain objects (undiscounted only.
+ * Keep certain objects (undiscounted only).
  *
  * Note if this list is greatly expanded, teh store_maint function
  * could get caught in an eternal loop.  Be mindful of the fixed
@@ -3256,6 +3256,7 @@ static void store_redraw(void)
 			prt("Press '?' for help.", scr_places_y[LOC_HELP_PROMPT], 1);
 
 		store_flags &= ~(STORE_FRAME_CHANGE);
+		event_signal(EVENT_MOUSEBUTTONS);
 	}
 
 	if (store_flags & (STORE_GOLD_CHANGE))
@@ -3272,25 +3273,37 @@ static void store_redraw(void)
 
 static bool store_get_check(const char *prompt)
 {
-	char ch;
+	ui_event_data ch;
 	bool return_v = FALSE;
 
 	/* Prompt for it */
 	prt(prompt, 0, 0);
 
+	/* Make some buttons */
+	button_backup_all();
+	button_kill_all();
+	button_add("[YES]", 'y');
+	button_add("[NO]", 'n');
+	event_signal(EVENT_MOUSEBUTTONS);
+
 	while (TRUE)
 	{
 		/* Get an answer */
-		ch = inkey();
+		ch = inkey_ex();
 
-		if ((strchr("Nn", ch)) || (ch == ESCAPE)) break;
-		if ((strchr("Yy", ch)) || (ch == '\r') || (ch == '\r') || (ch == '\xff'))
+		if ((strchr("Nn", ch.key)) || (ch.key == ESCAPE)) break;
+		if ((strchr("Yy", ch.key)) || (ch.key == '\r') || (ch.key == '\r') || (ch.key == '\xff'))
 		{
 			return_v = TRUE;
 			break;
 		}
 
 	}
+
+	/* Kill the buttons */
+	/* Restore the old buttons */
+	button_restore();
+	event_signal(EVENT_MOUSEBUTTONS);
 
 	/* Erase the prompt */
 	prt("", 0, 0);
@@ -4050,7 +4063,7 @@ static bool store_sell(void)
 {
 	int amt;
 	int item;
-	int get_mode = USE_EQUIP | USE_INVEN | USE_FLOOR;
+	int get_mode = (USE_EQUIP | USE_INVEN | USE_FLOOR  | USE_QUIVER);
 
 	object_type *o_ptr;
 	object_type object_type_body;
@@ -4086,7 +4099,6 @@ static bool store_sell(void)
 	else
 	{
 		item_tester_hook = store_will_buy_tester;
-		get_mode |= SHOW_PRICES;
 	}
 
 	/* Get an item */
@@ -4223,7 +4235,7 @@ static void store_examine(int oid)
 	if (o_ptr->tval == cp_ptr->spell_book)
 	{
 		/* Call the aux function */
-		do_cmd_browse_aux(o_ptr);
+		get_spell_menu(o_ptr, BOOK_BROWSE);
 	}
 }
 
@@ -4498,7 +4510,7 @@ static bool store_process_command(char cmd, void *db, int oid)
 
 			/* Redisplay */
 			store_flags |= STORE_INIT_CHANGE;
-
+			redraw = TRUE;
 			command_processed = TRUE;
 			break;
 		}
@@ -4526,7 +4538,6 @@ static bool store_process_command(char cmd, void *db, int oid)
 
 		/* Check knowledge */
 		case '~':
-		case '|':
 		{
 			do_cmd_knowledge();
 			break;
@@ -4553,6 +4564,7 @@ static bool store_process_command(char cmd, void *db, int oid)
 
 		event_signal(EVENT_INVENTORY);
 		event_signal(EVENT_EQUIPMENT);
+
 	}
 
 	return command_processed;
@@ -4582,7 +4594,6 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
 		msg_print("The doors are locked.");
 		return;
 	}
-
 	/*
 	 * Quests and services are re-counted
 	 * each time a person enters the store
@@ -4596,6 +4607,7 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
 	 */
 	event_signal(EVENT_LEAVE_GAME);
 	event_signal(EVENT_ENTER_STORE);
+	event_signal(EVENT_INIT_STATUSLINE);
 
 	/* Forget the view */
 	forget_view();
@@ -4604,7 +4616,6 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
 	p_ptr->command_arg = 0;
 	p_ptr->command_rep = 0;
 	p_ptr->command_new = 0;
-
 
 	/*** Display ***/
 
@@ -4650,6 +4661,27 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
 		/* Loop */
 		while (!leave)
 		{
+			/* add the store buttons */
+			button_kill_all();
+			button_add("[HELP]", '?');
+			if (this_store == STORE_HOME)
+			{
+				button_add("[GET]", 'p');
+				button_add("[DROP]", 's');
+			}
+			else if (this_store == STORE_GUILD)
+			{
+				button_add("[BUY]", 'p');
+			}
+			else
+			{
+				button_add("[BUY]", 'p');
+				button_add("[SELL]", 's');
+			}
+			button_add("[EXAMINE]", 'x');
+			button_add("[LEAVE]", ESCAPE);
+			event_signal(EVENT_MOUSEBUTTONS);
+
 			/* As many rows in the menus as there are items in the store */
 			menu.count = st_ptr->stock_num + quests_max;
 
@@ -4692,10 +4724,18 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
 			{
 				evt = menu_select(&menu, &cursor, EVT_MOVE);
 			}
-
 			if (evt.key == ESCAPE || evt.type == EVT_BACK)
 			{
 				leave = TRUE;
+			}
+			/* Handle buttons */
+			else if (evt.type == EVT_BUTTON)
+			{
+				store_process_command(evt.key, FALSE, cursor);
+
+				/* Display the store */
+				store_display_recalc(this_store);
+				store_redraw();
 			}
 			else if (evt.type == EVT_RESIZE)
 			{
@@ -4726,6 +4766,7 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
 	}
 
 	/* Switch back to the normal game view. */
+	event_signal(EVENT_REMOVE_STATUSLINE);
 	event_signal(EVENT_LEAVE_STORE);
 	event_signal(EVENT_ENTER_GAME);
 
@@ -4749,4 +4790,7 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
 
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
+
+	/* restore the buttons */
+	basic_buttons();
 }

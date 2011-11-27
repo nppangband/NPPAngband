@@ -1829,6 +1829,7 @@ void process_player(void)
 			}
 		}
 
+
 		/* Normal command */
 		else
 		{
@@ -1838,8 +1839,16 @@ void process_player(void)
 			/* Place the cursor on the player */
 			move_cursor_relative(p_ptr->py, p_ptr->px);
 
+			/* Using the noun-verb menu */
+			if (p_ptr->noun_verb)
+			{
+				cmd_use_item();
+				process_command(CMD_GAME, TRUE);
+
+			}
+
 			/* Get and process a command */
-			process_command(CMD_GAME, FALSE);
+			else process_command(CMD_GAME, FALSE);
 
 			py_pickup_gold();
 		}
@@ -2280,6 +2289,9 @@ static void dungeon(void)
 
 	/* Combine / Reorder the pack */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER | PN_SORT_QUIVER);
+
+	/* Noun-verb menu by command only */
+	p_ptr->noun_verb = FALSE;
 
 	/* Make basic mouse buttons */
 	basic_buttons();

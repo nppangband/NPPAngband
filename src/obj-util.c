@@ -799,6 +799,7 @@ s16b wield_slot(const object_type *o_ptr)
 		case TV_POLEARM:
 		case TV_SWORD:
 		{
+
 			/* See if the throwing weapon can go into the quiver first */
 			if ((is_throwing_weapon(o_ptr)) && (weapon_inscribed_for_quiver(o_ptr)))
 			{
@@ -4232,6 +4233,9 @@ s16b inven_takeoff(int item, int amt)
 	/* Modify quantity */
 	i_ptr->number = amt;
 
+	/* No longer in use */
+	i_ptr->obj_in_use = FALSE;
+
 	/* Modify, Optimize */
 	inven_item_increase(item, -amt);
 	inven_item_optimize(item);
@@ -4246,7 +4250,7 @@ s16b inven_takeoff(int item, int amt)
 	slot = inven_carry(i_ptr);
 
 	/* Remove the mark to auto-wield in quiver */
-	if (is_throwing_weapon(o_ptr)) o_ptr->ident &= ~(IDENT_QUIVER);
+	o_ptr->ident &= ~(IDENT_QUIVER);
 
 	/* Special handling for the quiver */
 	if ((item > QUIVER_START) && (item < QUIVER_END))
@@ -4344,6 +4348,9 @@ void inven_drop(int item, int amt)
 
 	/* Modify quantity */
 	i_ptr->number = amt;
+
+	/* No longer in use */
+	i_ptr->obj_in_use = FALSE;
 
 	/* Describe local object */
 	object_desc(o_name, sizeof(o_name), i_ptr, ODESC_PREFIX | ODESC_FULL);
@@ -5269,6 +5276,17 @@ bool obj_can_refill(const object_type *o_ptr)
 	return (FALSE);
 }
 
+/* Is this a spellbook */
+bool obj_is_spellbook(const object_type *o_ptr)
+{
+	if (o_ptr->tval == TV_MAGIC_BOOK) return (TRUE);
+	if (o_ptr->tval == TV_PRAYER_BOOK) return (TRUE);
+	if (o_ptr->tval == TV_DRUID_BOOK) return (TRUE);
+
+	return (FALSE);
+}
+
+
 
 /* Basic tval testers */
 bool obj_is_staff(const object_type *o_ptr)  { return o_ptr->tval == TV_STAFF; }
@@ -5288,6 +5306,9 @@ bool obj_is_ring(const object_type *o_ptr)   { return o_ptr->tval == TV_RING; }
  */
 bool obj_is_ammo(const object_type *o_ptr)
 {
+	/* Ignore empty objects */
+	if (!o_ptr->k_idx) return (FALSE);
+
 	switch (o_ptr->tval)
 	{
 		case TV_SHOT:
@@ -5299,6 +5320,59 @@ bool obj_is_ammo(const object_type *o_ptr)
 	}
 }
 
+
+/*
+ * Determine whether the ammo can be fired with the current launcher
+ */
+bool ammo_can_fire(const object_type *o_ptr, int item)
+{
+	/* Get the "bow" (if any) */
+	object_type *j_ptr = &inventory[INVEN_BOW];
+
+	/* No ammo */
+	if (!obj_is_ammo(o_ptr)) return (FALSE);
+
+	/* No launcher */
+	if (!j_ptr->tval || !p_ptr->state.ammo_tval) return (FALSE);
+
+	/* Not within reach */
+	if (!item_is_available(item, NULL, (USE_INVEN | USE_FLOOR | USE_EQUIP | USE_QUIVER))) return (FALSE);
+
+	/* Cursed quiver */
+	if (IS_QUIVER_SLOT(item) && p_ptr->cursed_quiver && !cursed_p(o_ptr)) return (FALSE);
+
+	/* Wrong ammo type */
+	if (o_ptr->tval != p_ptr->state.ammo_tval) return (FALSE);
+
+	/* Success! */
+	return (TRUE);
+}
+
+/* See if the player has ammo that can be used with the launcher in the quiver */
+bool has_correct_ammo(void)
+{
+	int i;
+
+	/* First search the quiver */
+	for (i=QUIVER_START; i < QUIVER_END; i++)
+	{
+		object_type *o_ptr = & inventory [i];
+
+		if (ammo_can_fire(o_ptr, i)) return (TRUE);
+	}
+
+	/* Next, search the inventory */
+	for (i = 0; i < INVEN_PACK; i++)
+	{
+		object_type *o_ptr = & inventory [i];
+
+		if (ammo_can_fire(o_ptr, i)) return (TRUE);
+	}
+
+	return (FALSE);
+}
+
+
 /* Determine if an object has charges */
 bool obj_has_charges(const object_type *o_ptr)
 {
@@ -5307,6 +5381,18 @@ bool obj_has_charges(const object_type *o_ptr)
 	if (o_ptr->pval <= 0) return FALSE;
 
 	return TRUE;
+}
+
+/* Determine if an object has charges */
+bool rod_can_zap(const object_type *o_ptr)
+{
+	object_kind *k_ptr = &k_info[o_ptr->k_idx];
+
+	if (!obj_is_rod(o_ptr)) return FALSE;
+
+	if (o_ptr->timeout > (o_ptr->pval - k_ptr->pval)) return (FALSE);
+
+	return (TRUE);
 }
 
 bool obj_can_browse(const object_type *o_ptr)
@@ -5324,7 +5410,9 @@ bool obj_can_takeoff(const object_type *o_ptr)
 /* Can only put on wieldable items */
 bool obj_can_wear(const object_type *o_ptr)
 {
-	return (wield_slot(o_ptr) >= INVEN_WIELD);
+	s16b x = wield_slot(o_ptr);
+
+	return ((x >= INVEN_WIELD) && x < QUIVER_END);
 }
 
 /* Can has inscrip pls */
@@ -5480,6 +5568,7 @@ int scan_items(int *item_list, size_t item_list_max, int mode)
 	bool use_inven = ((mode & USE_INVEN) ? TRUE : FALSE);
 	bool use_equip = ((mode & USE_EQUIP) ? TRUE : FALSE);
 	bool use_floor = ((mode & USE_FLOOR) ? TRUE : FALSE);
+	bool use_quiver = ((mode & USE_QUIVER) ? TRUE : FALSE);
 
 	int floor_list[MAX_FLOOR_STACK];
 	int floor_num;
@@ -5498,7 +5587,16 @@ int scan_items(int *item_list, size_t item_list_max, int mode)
 
 	if (use_equip)
 	{
-		for (i = INVEN_WIELD; i < ALL_INVEN_TOTAL && item_list_num < item_list_max; i++)
+		for (i = INVEN_WIELD; i < INVEN_TOTAL && item_list_num < item_list_max; i++)
+		{
+			if (get_item_okay(i))
+				item_list[item_list_num++] = i;
+		}
+	}
+
+	if (use_quiver)
+	{
+		for (i = QUIVER_START; i < QUIVER_END && item_list_num < item_list_max; i++)
 		{
 			if (get_item_okay(i))
 				item_list[item_list_num++] = i;

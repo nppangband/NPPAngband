@@ -19,6 +19,8 @@
 #include "angband.h"
 #include "ui.h"
 #include "ui-menu.h"
+#include "game-event.h"
+
 
 
 /* Flag value for missing array entry */
@@ -414,13 +416,10 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 	/* Disable the roguelike commands for the duration */
 	rogue_like_commands = FALSE;
 
-
-
 	/* Do the group by. ang_sort only works on (void **) */
 	/* Maybe should make this a precondition? */
 	if (g_funcs.gcomp)
 		qsort(obj_list, o_count, sizeof(*obj_list), g_funcs.gcomp);
-
 
 	/* Sort everything into group order */
 	g_list = C_ZNEW(max_group + 1, int);
@@ -478,6 +477,8 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 	menu_init(&group_menu, MN_SKIN_SCROLL, find_menu_iter(MN_ITER_STRINGS), &group_region);
 	menu_init(&object_menu, MN_SKIN_SCROLL, &object_iter, &object_region);
 
+	/* Start with no buttons */
+	button_kill_all();
 
 	/* This is the event loop for a multi-region panel */
 	/* Panels are -- text panels, two menus, and visual browser */
@@ -545,13 +546,49 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 			const char *xtra = o_funcs.xtra_prompt ? o_funcs.xtra_prompt(oid) : "";
 			const char *pvs = "";
 
-			if (visual_list) pvs = ", ENTER to accept";
-			else if (o_funcs.xattr) pvs = ", 'v' for visuals";
+			button_add("|ESC", ESCAPE);
+			button_add("|RECALL", 'r');
+
+			/* Sort out the cut-and-paste buttons */
+			if (o_funcs.xattr)
+			{
+				if (attr_idx|char_idx)
+				{
+					button_add("|PASTE", 'p');
+					button_kill('c');
+				}
+				else
+				{
+					button_kill('p');
+					button_add("|COPY", 'c');
+				}
+			}
+			else
+			{
+				button_kill('p');
+				button_kill('c');
+			}
+
+			/* Either ENTER or VISUALS */
+			if (visual_list)
+			{
+				pvs = ", ENTER to accept";
+				button_add("|ENTER", '\r');
+				button_kill('v');
+			}
+			else if (o_funcs.xattr)
+			{
+				pvs = ", 'v' for visuals";
+				button_add("|VISUALS", 'v');
+				button_kill('\r');
+			}
 
 
-
-			prt(format("<dir>%s%s%s, ESC", pvs, pedit, xtra), hgt - 1, 0);
+			prt(format("<dir>%s%s%s, ESC", pvs, pedit, xtra), hgt - 2, 0);
 		}
+
+		/* Update the buttons */
+		event_signal(EVENT_MOUSEBUTTONS);
 
 		if (do_swap)
 		{
@@ -623,6 +660,7 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 		switch (ke.type)
 		{
 			case EVT_KBRD:
+			case EVT_BUTTON:
 			{
 				break;
 			}
@@ -658,6 +696,7 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 
 		switch (ke.key)
 		{
+
 			case ESCAPE:
 			{
 				flag = TRUE;
@@ -730,6 +769,10 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 	FREE(g_names);
 	FREE(g_offset);
 	FREE(g_list);
+
+	/* Restore the buttons */
+	button_kill_all();
+	button_restore();
 }
 
 /*
@@ -2006,6 +2049,9 @@ static const char *o_xtra_prompt(int oid)
 	const char *no_insc = ", 's' to toggle squelch, 'r'ecall, '{'";
 	const char *with_insc = ", 's' to toggle squelch, 'r'ecall, '{', '}'";
 
+	button_add("|TOGGLESQUELCH",'s');
+	button_add("|INSCRIBE", '{');
+
 
 	/* Forget it if we've never seen the thing */
 	if (k_ptr->flavor && !k_ptr->aware)
@@ -2013,7 +2059,11 @@ static const char *o_xtra_prompt(int oid)
 
 	/* If it's already inscribed */
 	if (idx != -1)
+	{	button_add("|UNINSCRIBE", '}');
 		return with_insc;
+	}
+	/* Else */
+	button_kill('}');
 
 	return no_insc;
 }
@@ -2514,13 +2564,24 @@ void do_cmd_knowledge(void)
 	screen_save();
 	menu_layout(&knowledge_menu, &knowledge_region);
 
+	/* Back up the buttons */
+	button_backup_all();
+	button_kill_all();
+
+
 	while (c.key != ESCAPE)
 	{
 		clear_from(0);
+		button_kill_all();
+		button_add("ESC", ESCAPE);
+		event_signal(EVENT_MOUSEBUTTONS);
 		c = menu_select(&knowledge_menu, &cursor, 0);
 	}
 
 	screen_load();
+
+	button_restore();
+	event_signal(EVENT_MOUSEBUTTONS);
 }
 
 

@@ -273,8 +273,6 @@ byte angband_color_table[256][4] =
 	{0x00, 0xE1, 0xA9, 0x5F} 	/* TERM_EARTH_YELLOW (Shade 2 - U2) */
 };
 
-
-
 /*
  * Standard sound (and message) names
  */
@@ -1069,6 +1067,11 @@ quiver_group_type quiver_group[MAX_QUIVER_GROUPS] =
 u16b quest_indicator_timer = 0;
 
 /*
+ * Remember what is being displayed on each row on the side of the screen.
+ */
+int sidebar_details[SIDEBAR_MAX_TYPES];
+
+/*
  * It's TRUE if the player won a quest.
  */
 byte quest_indicator_complete = FALSE;
@@ -1089,3 +1092,5 @@ dungeon_capabilities_type *dun_cap = NULL;
 /* Delay in centiseconds before moving to allow another keypress */
 /* Zero means normal instant movement. */
 u16b lazymove_delay =0;
+
+

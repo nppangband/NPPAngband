@@ -19,6 +19,7 @@
 #include "angband.h"
 #include "cmds.h"
 #include "ui-menu.h"
+#include "game-event.h"
 
 byte squelch_level[SQUELCH_BYTES];
 const size_t squelch_size = SQUELCH_BYTES;
@@ -832,6 +833,41 @@ static int ego_comp_func(const void *a_ptr, const void *b_ptr)
 	return (strcmp(a->short_name, b->short_name));
 }
 
+/*** Quality-squelch menu ***/
+
+static void ego_squelch_hook(int oid, void *db, const region *loc)
+{
+	clear_from(0);
+
+	/* Help text */
+
+	/* Output to the screen */
+	text_out_hook = text_out_to_screen;
+
+	/* Indent output */
+	text_out_indent = 1;
+	text_out_wrap = 79;
+	Term_gotoxy(1, 0);
+
+	/* Help text */
+	prt("Ego-Item squelch menu", 0, 0);
+
+	Term_gotoxy(1, 1);
+
+	/* Display some helpful information */
+	text_out("Use the ");
+	text_out_c(TERM_L_GREEN, "space bar");
+	text_out(" and ");
+	text_out_c(TERM_L_GREEN, "return");
+	text_out(" to toggle the squelch setting.  Use ");
+	text_out_c(TERM_L_GREEN, "ESC" );
+	text_out(" to return to the main squelch menu.  ");
+	text_out_c(TERM_L_RED, "[*] Squelch" );
+	text_out(" [ ]:   ");
+	text_out_c(TERM_L_GREEN, " No Squelch" );
+	text_out(".");
+}
+
 /*
  * Display an entry in the menu.
  * The procedure for displaying the name is complicated, as it
@@ -990,7 +1026,7 @@ static void ego_item_menu(void *unused, const char *also_unused)
 {
 	menu_type menu;
 	menu_iter menu_f = { NULL, NULL, ego_item_display, ego_item_action };
-	region area = { 1, 5, -1, -1 };
+	region area = { 0, 4, -1, -1 };
 	ui_event_data evt = { EVT_NONE, 0, 0, 0, 0 };
 	int cursor = 0;
 	int num = 0;
@@ -1035,34 +1071,6 @@ static void ego_item_menu(void *unused, const char *also_unused)
 	screen_save();
 	clear_from(0);
 
-	/* Help text */
-
-	/* Output to the screen */
-	text_out_hook = text_out_to_screen;
-
-	/* Indent output */
-	text_out_indent = 1;
-	text_out_wrap = 79;
-	Term_gotoxy(1, 0);
-
-	/* Help text */
-	prt("Ego-Item squelch menu", 0, 0);
-
-	Term_gotoxy(1, 1);
-
-	/* Display some helpful information */
-	text_out("Use the ");
-	text_out_c(TERM_L_GREEN, "space bar");
-	text_out(" and ");
-	text_out_c(TERM_L_GREEN, "return");
-	text_out(" to toggle the squelch setting.  Use ");
-	text_out_c(TERM_L_GREEN, "ESC" );
-	text_out(" to return to the main squelch menu.  ");
-	text_out_c(TERM_L_RED, "[*] Squelch" );
-	text_out(" [ ]:   ");
-	text_out_c(TERM_L_GREEN, " No Squelch" );
-	text_out(".");
-
 	/* Set up the menu */
 	WIPE(&menu, menu);
 
@@ -1070,11 +1078,19 @@ static void ego_item_menu(void *unused, const char *also_unused)
 	menu.menu_data = ego_choice;
 	menu.count = num;
 	menu_init(&menu, MN_SKIN_SCROLL, &menu_f, &area);
+	menu.browse_hook = ego_squelch_hook;
 
 	/* Select an entry */
 	while (evt.key != ESCAPE)
 	{
 		int old_cursor = cursor;
+
+		button_kill_all();
+		button_add("[ESC]", ESCAPE);
+		button_add("[HELP]", '?');
+		button_add("[TOGGLE]", '\r');
+
+		event_signal(EVENT_MOUSEBUTTONS);
 
 		evt = menu_select(&menu, &cursor, 0);
 
@@ -1082,6 +1098,22 @@ static void ego_item_menu(void *unused, const char *also_unused)
 		{
 			ego_item_action('\r', ego_choice, cursor);
 		}
+
+		else if (evt.type == EVT_BUTTON)
+		{
+			switch (evt.key)
+			{
+				case '\r':
+				{
+					ego_item_action(evt.key, ego_choice, cursor);
+					break;
+				}
+				case '?':	{show_file("options.txt#ego_squelch", NULL, 0, 0); break;}
+				default:  	break;
+			}
+		}
+
+
 	}
 
 	FREE(ego_choice);
@@ -1095,6 +1127,35 @@ static void ego_item_menu(void *unused, const char *also_unused)
 
 
 /*** Quality-squelch menu ***/
+
+static void quality_squelch_hook(int oid, void *db, const region *loc)
+{
+	/* Help text */
+
+	/* Output to the screen */
+	text_out_hook = text_out_to_screen;
+
+	/* Indent output */
+	text_out_indent = 1;
+	text_out_wrap = 79;
+	Term_gotoxy(1, 0);
+
+	/* Help text */
+	prt("Quality squelch menu", 0, 0);
+
+	Term_gotoxy(1, 1);
+
+	/* Display some helpful information */
+	text_out("Use the ");
+	text_out_c(TERM_L_GREEN, "movement keys or mouse");
+	text_out(" to navigate.  Use  ");
+	text_out_c(TERM_L_GREEN, "ncvgwa");
+	text_out(" to change the highlighted setting.  ");
+	text_out_c(TERM_L_GREEN, "NCVGWA" );
+	text_out(" changes settings for all items.  For Rings and Amulets, only ");
+	text_out_c(TERM_L_GREEN, "nca");
+	text_out(" are applicable settings.");
+}
 
 /*
  * Display an entry in the menu.
@@ -1294,6 +1355,7 @@ static bool quality_action(char cmd, void *db, int oid)
 
 		case '+':
 		case '6':
+		case DEFINED_XFF:
 		{
 			change_squelch_level(index, 1);
 			break;
@@ -1312,52 +1374,67 @@ static void quality_menu(void *unused, const char *also_unused)
 {
 	menu_type menu;
 	menu_iter menu_f = { NULL, NULL, quality_display, quality_action };
-	region area = { 1, 5, -1, -1 };
 	ui_event_data evt = { EVT_NONE, 0, 0, 0, 0 };
+	region area = { 0, 5, -1, -1 };
 	int cursor = 0;
 
 	/* Save the screen and clear it */
 	screen_save();
 	clear_from(0);
 
-	/* Help text */
-
-	/* Output to the screen */
-	text_out_hook = text_out_to_screen;
-
-	/* Indent output */
-	text_out_indent = 1;
-	text_out_wrap = 79;
-	Term_gotoxy(1, 0);
-
-	/* Help text */
-	prt("Quality squelch menu", 1, 0);
-
-	Term_gotoxy(1, 1);
-
-	/* Display some helpful information */
-	text_out("Use the ");
-	text_out_c(TERM_L_GREEN, "movement keys");
-	text_out(" to navigate.  Use  ");
-	text_out_c(TERM_L_GREEN, "ncvga");
-	text_out(" to change the highlighted setting.  ");
-	text_out_c(TERM_L_GREEN, "NCVGWA" );
-	text_out(" changes settings for all items.  For Rings and Amulets, only ");
-	text_out_c(TERM_L_GREEN, "nca");
-	text_out(" are applicable settings.");
-
 	/* Set up the menu */
 	WIPE(&menu, menu);
 
 	menu.cmd_keys = "nNcCvVgGwWaA+-\n\r";
-
+	menu.selections = "bdefhijklmopqrstuwxyz";
+	menu.browse_hook = quality_squelch_hook;
 	menu.count = PS_TYPE_MAX;
 	menu_init(&menu, MN_SKIN_SCROLL, &menu_f, &area);
+	menu.flags = MN_DBL_TAP;
 
 	/* Select an entry */
 	while (evt.key != ESCAPE)
 	{
-		evt = menu_select(&menu, &cursor, 0);
+		bool strong_squelch = (cursor != PS_TYPE_AMULET) && (cursor != PS_TYPE_RING);
+		button_kill_all();
+		/* Kill the buttons */
+		button_add("ESC|", ESCAPE);
+		button_add("HELP|", '?');
+		button_add("NEVER_SQ|", 'n');
+		button_add("SQ_CURSED|", 'c');
+		if(strong_squelch)
+		{
+			button_add("SQ_AVE|", 'v');
+			if (!(cp_ptr->flags & (CF_PSEUDO_ID_HEAVY)))	button_add("SQ_WEAK|", 'w');
+			button_add("SQ_GOOD|", 'g');
+		}
+		button_add("SQ_GREAT", 'a');
+		button_add("[+]", '+');
+		button_add("[-]", '-');
+		event_signal(EVENT_MOUSEBUTTONS);
+
+		evt = menu_select(&menu, &cursor, EVT_MOVE);
+
+		if (evt.type == EVT_BUTTON)
+		{
+			switch (evt.key)
+			{
+				case 'n':
+				case 'c':
+				case 'v':
+				case 'w':
+				case 'g':
+				case 'a':
+				case '+':
+				case '-':
+				{
+					quality_action(evt.key, NULL, cursor);
+					break;
+				}
+				case '?':	{show_file("options.txt#qual_squelch", NULL, 0, 0); break;}
+				default:  	break;
+			}
+		}
 	}
 
 	/* Load screen */
@@ -1368,6 +1445,38 @@ static void quality_menu(void *unused, const char *also_unused)
 
 
 /*** Object Squelch Menu ***/
+
+static void object_squelch_hook(int oid, void *db, const region *loc)
+{
+	/* Help text */
+
+	/* Output to the screen */
+	text_out_hook = text_out_to_screen;
+
+	/* Indent output */
+	text_out_indent = 1;
+	text_out_wrap = 79;
+	Term_gotoxy(1, 0);
+
+	/* Display some helpful information */
+	text_out("Use the ");
+	text_out_c(TERM_L_GREEN, "ESC");
+	text_out(" to return to the previous menu.  ");
+	text_out_c(TERM_L_GREEN, "{");
+	text_out(" to create an autoinscription.  ");
+	text_out_c(TERM_L_GREEN, "Enter, '+', or '-'" );
+	text_out(" changes the current setting.  'N' changes to setting ");
+	text_out_c(TERM_YELLOW, "Never Squelch");
+	text_out(" and defer to the game pickup options.  'L' changes to  ");
+	text_out_c(TERM_L_GREEN, "Never Pickup");
+	text_out(".  'A' changes to  ");
+	text_out_c(TERM_L_UMBER, "Always Pickup");
+	text_out(".  'S' changes to ");
+	text_out_c(TERM_L_RED, "Always Squelch");
+	text_out(".");
+
+	text_out_indent = 0;
+}
 
 /*
  * Display an entry on the sval menu
@@ -1380,7 +1489,6 @@ static void object_squelch_display(menu_type *menu, int oid, bool cursor, int ro
 	const char *inscrip = get_autoinscription(idx);
 
 	byte attr = (cursor ? TERM_L_BLUE : TERM_WHITE);
-
 
 	/* Acquire the "name" of object "i" */
 	strip_name(buf, idx);
@@ -1458,7 +1566,6 @@ static bool object_squelch_action(char cmd, void *db, int oid)
 			screen_load();
 			return (FALSE);
 		}
-
 		case 'S':
 		{
 			k_info[idx].squelch = SQUELCH_ALWAYS;
@@ -1479,7 +1586,6 @@ static bool object_squelch_action(char cmd, void *db, int oid)
 			k_info[idx].squelch = SQUELCH_NEVER;
 			return (TRUE);
 		}
-
 		case '+':
 		case DEFINED_XFF:
 		{
@@ -1505,10 +1611,9 @@ static bool object_sqelch_menu(int tval, const char *desc)
 {
 	menu_type menu;
 	menu_iter menu_f = { NULL, NULL, object_squelch_display, object_squelch_action };
-	region area = { 1, 5, -1, -1 };
 	ui_event_data evt = { EVT_NONE, 0, 0, 0, 0 };
 	int cursor = 0;
-
+	region area = { 0, 4, -1, -1 };
 	int num = 0;
 	size_t i;
 	int x, y;
@@ -1563,48 +1668,54 @@ static bool object_sqelch_menu(int tval, const char *desc)
 	screen_save();
 	clear_from(0);
 
-	/* Help text */
-
-	/* Output to the screen */
-	text_out_hook = text_out_to_screen;
-
-	/* Indent output */
-	text_out_indent = 1;
-	text_out_wrap = 79;
-	Term_gotoxy(1, 0);
-
-	/* Display some helpful information */
-	text_out("Use the ");
-	text_out_c(TERM_L_GREEN, "ESC");
-	text_out(" to return to the previous menu.  ");
-	text_out_c(TERM_L_GREEN, "{");
-	text_out(" to create an autoinscription.  ");
-	text_out_c(TERM_L_GREEN, "Enter, '+', or '-'" );
-	text_out(" changes the current setting.  'N' changes to setting ");
-	text_out_c(TERM_YELLOW, "Never Squelch");
-	text_out(" and defer to the game pickup options.  'L' changes to  ");
-	text_out_c(TERM_L_GREEN, "Never Pickup");
-	text_out(".  'A' changes to  ");
-	text_out_c(TERM_L_UMBER, "Always Pickup");
-	text_out(".  'S' changes to ");
-	text_out_c(TERM_L_RED, "Always Squelch");
-	text_out(".");
-
-	text_out_indent = 0;
-
 	/* Set up the menu */
 	WIPE(&menu, menu);
 
 	menu.cmd_keys = "ANLS{+-";
-
+	/*menu.selections = "abcdefghijklmnopqrstuvwxyzBCDEFGHIJKMOPQRTUVWXYZ1234567890[]!@#";*/
 	menu.count = num;
 	menu.menu_data = choice;
 	menu_init(&menu, MN_SKIN_SCROLL, &menu_f, &area);
+	menu.flags = MN_DBL_TAP;
+	menu.browse_hook = object_squelch_hook;
 
 	/* Select an entry */
 	while (evt.key != ESCAPE)
 	{
+		button_kill_all();
+		button_add("[ESC]", ESCAPE);
+		button_add("[HELP]", '?');
+		button_add("[NEVER_SQ]", 'N');
+		button_add("[NEVER_PICKUP]", 'L');
+		button_add("[AUTO_PICKUP]", 'A');
+		button_add("[SQUELCH]", 'S');
+		button_add("[INSCRIBE]", '{');
+		button_add("[-]", '-');
+		button_add("[+]", '+');
+
+		event_signal(EVENT_MOUSEBUTTONS);
+
 		evt = menu_select(&menu, &cursor, 0);
+
+		if (evt.type == EVT_BUTTON)
+		{
+			switch (evt.key)
+			{
+				case 'N':
+				case 'L':
+				case 'A':
+				case 'S':
+				case '{':
+				case '+':
+				case '-':
+				{
+					object_squelch_action(evt.key, choice, cursor);
+					break;
+				}
+				case '?':	{show_file("options.txt#squelch", NULL, 0, 0); break;}
+				default:  	break;
+			}
+		}
 	}
 
 	/* Free memory */
@@ -1697,7 +1808,7 @@ static void init_tv_to_type(void)
 
 static void squelch_prefs_save(void *unused, const char *also_unused)
 {
-	int col = 30;
+	int col = 26;
 	int row = 17;
 	char ftmp[80];
 	char buf[80];
@@ -1732,8 +1843,6 @@ static void squelch_prefs_save(void *unused, const char *also_unused)
 		/* Test for success */
 		if (fff)
 		{
-			char sq;
-
 			/* Skip some lines */
 			file_putf(fff, "\n\n");
 
@@ -1769,7 +1878,7 @@ static void squelch_prefs_save(void *unused, const char *also_unused)
 
 			/* Ending message */
 			prt("Squelch file saved successfully.  (Hit a key.)", row, col);
-			get_com("", &sq);
+			(void)inkey_ex();
 		}
 
 	}
@@ -1778,7 +1887,7 @@ static void squelch_prefs_save(void *unused, const char *also_unused)
 
 static void squelch_prefs_load(void *unused, const char *also_unused)
 {
-	int col = 30;
+	int col = 26;
 	int row = 17;
 	char ftmp[80];
 
@@ -1794,8 +1903,6 @@ static void squelch_prefs_load(void *unused, const char *also_unused)
 	/* Ask for a file (or cancel) */
 	if (askfor_aux(ftmp, 80, NULL))
 	{
-		char sq;
-
 		/* Process the given filename */
 		if (process_pref_file(ftmp))
 		{
@@ -1807,13 +1914,13 @@ static void squelch_prefs_load(void *unused, const char *also_unused)
 			/* Mention success */
 			prt("Squelch data loaded!  (Hit a key.)",  row+1, col);
 		}
-		get_com("", &sq);
+		(void)inkey_ex();
 	}
 }
 
 static void autoinscribe_prefs_save(void *unused, const char *also_unused)
 {
-	int col = 30;
+	int col = 26;
 	int row = 17;
 	char ftmp[80];
 	char buf[80];
@@ -1848,8 +1955,6 @@ static void autoinscribe_prefs_save(void *unused, const char *also_unused)
 		/* Test for success */
 		if (fff && inscriptions)
 		{
-			char sq;
-
 			/* Start dumping */
 			file_putf(fff, "# Format: B:[Item Kind]:[Inscription]\n\n");
 
@@ -1870,14 +1975,14 @@ static void autoinscribe_prefs_save(void *unused, const char *also_unused)
 
 			/* Ending message */
 			prt("Autoinscribe file saved successfully.  (Hit a key.)", row+1, col);
-				get_com("", &sq);
+			(void)inkey_ex();
 		}
 	}
 }
 
 static void autoinscribe_prefs_load(void *unused, const char *also_unused)
 {
-	int col = 30;
+	int col = 26;
 	int row = 17;
 	char ftmp[80];
 
@@ -1893,8 +1998,6 @@ static void autoinscribe_prefs_load(void *unused, const char *also_unused)
 	/* Ask for a file (or cancel) */
 	if (askfor_aux(ftmp, 80, NULL))
 	{
-		char sq;
-
 		/* Process the given filename */
 		if (process_pref_file(ftmp))
 		{
@@ -1907,7 +2010,8 @@ static void autoinscribe_prefs_load(void *unused, const char *also_unused)
 			/* Mention success */
 			prt("Autoinscribe data loaded!  (Hit a key.)", row+1, col);
 		}
-		get_com("", &sq);
+		(void)inkey_ex();
+
 	}
 }
 
@@ -2009,6 +2113,7 @@ void do_cmd_squelch_autoinsc(void *unused, cptr title)
 	ui_event_data c = EVENT_EMPTY;
 	const char cmd_keys[] = { ARROW_LEFT, ARROW_RIGHT, '\0' };
 	menu_type menu;
+	region area = (mouse_buttons ? SCREEN_REGION_BUTTONS : SCREEN_REGION);
 
 	init_tv_to_type();
 
@@ -2016,15 +2121,29 @@ void do_cmd_squelch_autoinsc(void *unused, cptr title)
 	menu.title = title;
 	menu.cmd_keys = cmd_keys;
  	menu.count = N_ELEMENTS(tvals) + N_ELEMENTS(extra_item_options) + 1;
-	menu_init(&menu, MN_SKIN_SCROLL, &options_item_iter, &SCREEN_REGION);
+	menu_init(&menu, MN_SKIN_SCROLL, &options_item_iter, &area);
 
 	/* Save and clear screen */
 	screen_save();
-	clear_from(0);
+
+	/* Kill the buttons */
+	button_kill_all();
 
 	while (c.key != ESCAPE)
 	{
 		clear_from(0);
+		/* Kill the buttons */
+		button_kill_all();
+		button_add("ESC|", ESCAPE);
+		button_add("HELP|", '?');
+		button_add("QUAL_SQ|", 'Q');
+		button_add("EGO_SQ|", 'E');
+		button_add("SAVE_SQ|", 'S');
+		button_add("LOAD_SQ|", 'L');
+		button_add("SAVE_INSCRIP|", 'B');
+		button_add("LOAD_INSCRIP", 'G');
+		event_signal(EVENT_MOUSEBUTTONS);
+
 		c = menu_select(&menu, &cursor, 0);
 
 		if (c.type == EVT_SELECT)
@@ -2040,10 +2159,26 @@ void do_cmd_squelch_autoinsc(void *unused, cptr title)
 					extra_item_options[cursor].action(NULL, NULL);
 			}
 		}
+		else if (c.type == EVT_BUTTON)
+		{
+			switch (c.key)
+			{
+				case 'Q':	{quality_menu(NULL, NULL); break;}
+				case 'E':	{ego_item_menu(NULL, NULL); break;}
+				case 'S':	{squelch_prefs_save(NULL, NULL); break;}
+				case 'L':	{squelch_prefs_load(NULL, NULL); break;}
+				case 'B':	{autoinscribe_prefs_save(NULL, NULL); break;}
+				case 'G':	{autoinscribe_prefs_load(NULL, NULL); break;}
+				case '?':	{show_file("options.txt#squelch", NULL, 0, 0); break;}
+				default:  	break;
+			}
+		}
 	}
 
 	/* Load screen and finish */
 	screen_load();
+
+
 
 	return;
 }

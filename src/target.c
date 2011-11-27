@@ -17,6 +17,8 @@
  */
 #include "angband.h"
 #include "game-cmd.h"
+#include "ui-menu.h"
+#include "game-event.h"
 /*#include "cmds.h"*/
 
 /*
@@ -707,7 +709,7 @@ static void target_display_help(bool monster, bool free)
 	/* Determine help location */
 	int wid, hgt, help_loc;
 	Term_get_size(&wid, &hgt);
-	help_loc = hgt - HELP_HEIGHT;
+	help_loc = hgt - HELP_HEIGHT - (mouse_buttons ? 1 : 0);
 
 	/* Clear */
 	clear_from(help_loc);
@@ -1013,6 +1015,11 @@ static ui_event_data target_set_interactive_aux(int y, int x, int mode, cptr inf
 				/* Interact */
 				while (1)
 				{
+					if (recall)	button_add("[CLEAR_RECALL]", 'r');
+					else 		button_add("[RECALL]", 'r');
+					if (cave_o_idx[y][x] > 0)button_add("[VIEW_FLOOR]", 'f');
+					event_signal(EVENT_MOUSEBUTTONS);
+
 					/* Recall, but not mimics */
 					if ((recall) && (!(m_ptr->mimic_k_idx)))
 					{
@@ -1035,6 +1042,7 @@ static ui_event_data target_set_interactive_aux(int y, int x, int mode, cptr inf
 					/* Normal */
 					else
 					{
+
 						/* Basic info */
 						strnfmt(out_val, sizeof(out_val),
 							"%s%s%s", s1, s2, m_name);
@@ -1077,6 +1085,10 @@ static ui_event_data target_set_interactive_aux(int y, int x, int mode, cptr inf
 						query = inkey_ex();
 					}
 
+					button_kill('r');
+					button_kill('f');
+					event_signal(EVENT_MOUSEBUTTONS);
+
 					/* Handle fake object recall */
 					if (m_ptr->mimic_k_idx)
 					{
@@ -1112,8 +1124,12 @@ static ui_event_data target_set_interactive_aux(int y, int x, int mode, cptr inf
 					}
 				}
 
-				/* Stop on everything but "return"/"space" */
-				if ((query.key != '\n') && (query.key != '\r') && (query.key != ' ')) break;
+				/* Stop on everything but "return"/"space", or floor */
+				if ((query.key != '\n') && (query.key != '\r') &&
+					(query.key != ' ') && (query.key != 'f')) break;
+
+				/* continue with 'f' only if there are floor items....*/
+				if ((query.key == 'f') && (!cave_o_idx[y][x])) break;
 
 				/* Sometimes stop at "space" key */
 				if ((query.key == ' ') && !(mode & (TARGET_LOOK))) break;
@@ -1437,6 +1453,48 @@ static ui_event_data target_set_interactive_aux(int y, int x, int mode, cptr inf
 	return (query);
 }
 
+/* checks if there is a visible monster in line-of-sight */
+bool valid_target_exists(int mode)
+{
+	int y, x, m_idx;
+
+	/* Save target info */
+	s16b old_target_set = p_ptr->target_set;
+	s16b old_target_who = p_ptr->target_who;
+	s16b old_target_row = p_ptr->target_row;
+	s16b old_target_col = p_ptr->target_col;
+
+	/* Cancel old target */
+	target_set_monster(0);
+
+	/* Get ready to do targetting */
+	target_set_interactive_prepare(mode);
+
+	/* Find the first monster in the queue */
+	y = temp_y[0];
+	x = temp_x[0];
+	m_idx = cave_m_idx[y][x];
+
+	/* restore old target into */
+	p_ptr->target_set = old_target_set;
+	p_ptr->target_who = old_target_who;
+	p_ptr->target_row = old_target_row;
+	p_ptr->target_col = old_target_col ;
+
+	/* If nothing was prepared, then return */
+	 if (temp_n < 1)
+	{
+		return FALSE;
+	}
+
+	/* Target the monster, if possible */
+	if ((m_idx <= 0) || !target_able(m_idx))
+	{
+		return FALSE;
+	}
+
+	return (TRUE);
+}
 
 bool target_set_closest(int mode)
 {
@@ -1586,6 +1644,16 @@ bool target_set_interactive(int mode, int x, int y)
 	/* Cancel target */
 	target_set_monster(0);
 
+	/* make some buttons */
+	button_backup_all();
+	button_kill_all();
+	button_add("[ESCAPE]", ESCAPE);
+	button_add("[NEXT]", '+');
+	button_add("[PREV]", '-');
+	button_add("[PLAYER]", 'p');
+	button_add("[PATHFIND]", 'g');
+	button_add("[TARGET]", 't');
+
 	/* health_track(0); */
 
 	  /* All grids are selectable */
@@ -1600,10 +1668,10 @@ bool target_set_interactive(int mode, int x, int y)
 
 	/* Calculate the window location for the help prompt */
 	Term_get_size(&wid, &hgt);
-	help_prompt_loc = hgt - 1;
+	help_prompt_loc = hgt - (mouse_buttons ? 2 : 1);
 
 	/* Display the help prompt */
-	prt("Press '?' for help.", help_prompt_loc, 0);
+	prt("'?' - help", help_prompt_loc, 0);
 
 	/* Prepare the "temp" array */
 	target_set_interactive_prepare(mode);
@@ -1614,6 +1682,19 @@ bool target_set_interactive(int mode, int x, int y)
 	/* Interact */
 	while (!done)
 	{
+		button_kill('l');
+		button_kill('?');
+		if (list_floor_objects)
+		{
+			button_add("[HIDE_OBJLIST]", 'l');
+		}
+		else button_add("[SHOW_OBJLIST]", 'l');
+		if (help)
+		{
+			button_add("[HIDE_HELP]", '?');
+		}
+		else button_add("[SHOW_HELP]",'?');
+
 		/* Interesting grids */
 		if (flag && temp_n)
 		{
@@ -1623,6 +1704,15 @@ bool target_set_interactive(int mode, int x, int y)
 			y = temp_y[m];
 			x = temp_x[m];
 
+			button_add("[SCAN]",'o');
+
+			/* Update help */
+			if (help)
+			{
+				bool good_target = ((cave_m_idx[y][x] > 0) && target_able(cave_m_idx[y][x]));
+				target_display_help(good_target, !(flag && temp_n));
+			}
+
 			/* Dummy pointers to send to project_path */
 			yy = y;
 			xx = x;
@@ -1631,13 +1721,13 @@ bool target_set_interactive(int mode, int x, int y)
 			if (((cave_m_idx[y][x] > 0) && target_able(cave_m_idx[y][x])) ||
 				((mode & (TARGET_TRAP)) && target_able_trap(y, x)))
 			{
-				strcpy(info, "q,t,p,o,+,-,<dir>");
+				strcpy(info, "q,t,r,l,p,o,+,-,<dir>");
 			}
 
 			/* Dis-allow target */
 			else
 			{
-				strcpy(info, "q,p,o,+,-,<dir>");
+				strcpy(info, "q,p,l,o,+,-,<dir>");
 			}
 
 			/* Adjust panel if needed */
@@ -1655,6 +1745,7 @@ bool target_set_interactive(int mode, int x, int y)
 			{
 				path_drawn = draw_path(path_n, path_g, path_char, path_attr, py, px);
 			}
+			event_signal(EVENT_MOUSEBUTTONS);
 
 			/* Describe and Prompt */
 			query = target_set_interactive_aux(y, x, mode, info, list_floor_objects);
@@ -1763,7 +1854,7 @@ bool target_set_interactive(int mode, int x, int y)
 					break;
 				}
 
-				case 'r':
+				case 'l':
 				{
 					list_floor_objects = (!list_floor_objects);
 				}
@@ -1777,7 +1868,7 @@ bool target_set_interactive(int mode, int x, int y)
 					Term_clear();
 					handle_stuff();
 					if (!help)
-						prt("Press '?' for help.", help_prompt_loc, 0);
+						prt("'?' - help", help_prompt_loc, 0);
 
 					break;
 				}
@@ -1844,6 +1935,9 @@ bool target_set_interactive(int mode, int x, int y)
 			int yy = y;
 			int xx = x;
 
+			/* Don't need this button any more */
+			button_kill('o');
+
 			/* Update help */
 			if (help)
 			{
@@ -1854,13 +1948,13 @@ bool target_set_interactive(int mode, int x, int y)
 			/* Default prompt */
 			if (!(mode & (TARGET_GRID)))
 			{
-				strcpy(info, "q,t,p,m,+,-,<dir>");
+				strcpy(info, "q,t,l,p,m,+,-,<dir>");
 			}
 
 			/* Disable monster selection */
 			else
 			{
-				strcpy(info, "q,t,p,+,-,<dir>");
+				strcpy(info, "q,t,l.p,+,-,<dir>");
 			}
 
 			/* Find the path. */
@@ -1872,6 +1966,8 @@ bool target_set_interactive(int mode, int x, int y)
 				/* Save target info */
 				path_drawn = draw_path(path_n, path_g, path_char, path_attr, py, px);
 			}
+
+			event_signal(EVENT_MOUSEBUTTONS);
 
 			/* Describe and Prompt (enable "TARGET_LOOK") */
 			query = target_set_interactive_aux(y, x, (mode | TARGET_LOOK), info, list_floor_objects);
@@ -2002,7 +2098,7 @@ bool target_set_interactive(int mode, int x, int y)
 					break;
 				}
 
-				case 'r':
+				case 'l':
 				{
 					list_floor_objects = (!list_floor_objects);
 				}
@@ -2016,7 +2112,7 @@ bool target_set_interactive(int mode, int x, int y)
 					Term_clear();
 					handle_stuff();
 					if (!help)
-						prt("Press '?' for help.", help_prompt_loc, 0);
+						prt("'?' - help.", help_prompt_loc, 0);
 
 					break;
 				}
@@ -2082,8 +2178,13 @@ bool target_set_interactive(int mode, int x, int y)
 		p_ptr->redraw |= (PR_DEPTH | PR_STATUS);
 	}
 
+
+
 	/* Recenter around player */
 	verify_panel();
+
+	/* Restore buttons */
+	button_restore();
 
 	/* Handle stuff */
 	handle_stuff();

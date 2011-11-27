@@ -1935,7 +1935,7 @@ option_entry options[OPT_MAX] =
 	{"verify_leave_quests",	"Verify before descending from quest level",TRUE},/* OPT_verify_leave_quests*/
 	{"mark_squelch_items",	"Items marked for squelch appear as dot",FALSE},/* OPT_mark_squelch_items */
 	{"mouse_movement",      "Allow mouse clicks to move the player",       TRUE }, /*OPT_mouse_movement*/
-	{"mouse_buttons",       "Show mouse status line buttons",              FALSE }, /*OPT_mouse_buttons*/
+	{"mouse_buttons",       "Show mouse status line buttons",              TRUE }, /*OPT_mouse_buttons*/
 	{"notify_recharge",		"Notify on object recharge", 	FALSE},/* OPT_notify_recharge */
 	{NULL,				NULL,								FALSE},/* xxx */
 	{NULL,				NULL,							FALSE},/* xxx */

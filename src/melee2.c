@@ -680,7 +680,6 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 					/*ball of electricity*/
 
 					(void)explosion(SOURCE_PLAYER, rad, y, x, (7 * trap_power) /8 , GF_ELEC, PROJECT_KILL);
-
 				}
 
 				break;
@@ -752,7 +751,6 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 					/* Damage the target monster */
 					(void)project_los(y, x, dam, GF_DISP_ALL);
-
 				}
 
 				break;

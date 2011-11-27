@@ -106,7 +106,7 @@ Player attempts to automatically move to the spot where the player clicks on
 the screen.
 
 ***** <mouse_buttons>
-Show mouse status line buttons                 [mouse_buttons]       (off): 
+Show mouse status line buttons                 [mouse_buttons]       (on): 
 Show mouse status line buttons on the bottom line of the main screen.       
 
 ***** <auto_scum>
@@ -300,13 +300,7 @@ Verify before descending from quest level     [verify_leave_quest]     (on) :
     Asks for confirmation when you try to leave a quest level using down 
 stairs (thereby risking quest failure).
 
-
-
-
-
-
-
-
+***** <birth_opt_menu>
 --- Option Set #4:  Birth ---
 
      You may only change birth options when starting up a new character.
@@ -473,6 +467,7 @@ useful information.  The best thing about these windows is that they are
 
 --- Miscellaneous Options ---
 
+***** <squelch>
 Item Squelch and Autoinscribe Menus:
      The squelching menu is a place where the player can specify certain items
 to be automatically destroyed when walked over.  Each item the player has seen
@@ -495,32 +490,35 @@ Enter Autoinscription - An inscription can be entered for a specific object type
                 (useful for preserving average maces of disruption when hafted 
                 weapons are set to squelch average and below}.
 
+***** <qual_squelch>
 Quality squelching sub menu:  Categories of items (shields, swords) can be 
 set to automatically be destroyed when either identified or pseudo-identified 
 as cursed, average or below, good or below (both strong and weak speugo id), 
 or all but artifacts.  The option to squelch open chests can also be set at 
 this screen.  Note that items with an auto inscription are not quality squelched.
 
+***** <ego_squelch>
 Ego-item squelching sub-menu: allows the player to set certain ego-items to
 always squelch upon identification (ex. the player has little need for a 
 shield of resistance after they find their first shield of elvenkind).
 
+***** <delay factor>
 Base Delay Factor:
      The "delay_factor" value, if non-zero, will slow down the visual effects
 used for missile, bolt, beam, and ball attacks.  The actual time delay is equal
 to "delay_factor" squared, in milliseconds.  A value of five works well on many
 machines.
 
+***** <hp warning>
 Hitpoint warning:
      If non-zero, is the percentage of maximal hitpoints (x10) at which you
 start to get special warnings.  It is also used as the cut-off for using red to
 display both hitpoints and mana.
 
-  
+***** <lazymove>
 Movement Delay Factor:
      The "delay_factor" value, if non-zero, will slow down the movement for 
-players.  The actual time delay is equal to "delay_factor" squared, in 
-milliseconds.  A value of five works well on many machines.
+players.
 
 
 --- Options Commands ---
