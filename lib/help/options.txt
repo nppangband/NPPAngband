@@ -412,7 +412,7 @@ in the dungeon will be approximatly 5 times the value.
 Adult: 	Prevent unusual terrains or dungeons	[birth_simple_dungeons]   (off) :
     If this option is set, only simple, Angband dungeons will be generated.  No
 NPP unusual terrains (trees, water, smart traps, etc) will be created.  
-No wilderness levels.
+Also, no wilderness levels, themed levels, starburst rooms will be created.
 
 --- Option Set #7:  Cheat ---
 

@@ -7449,7 +7449,7 @@ static void build_themed_level_nature(byte theme)
 	level_flag = 0;
 
 	/* No NPP terrains option turned on */
-	if (!adult_simple_dungeons) return;
+	if (adult_simple_dungeons) return;
 
 	/* Find if the theme has some restrictions to generate terrain */
 	for (i = 0; i < N_ELEMENTS(themed_level_flags); i++)
