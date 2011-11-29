@@ -2186,15 +2186,16 @@ static void store_item_increase(int st, int item, int num)
 	cnt = o_ptr->number + num;
 	if (cnt > STORE_MAX_ITEM) cnt = STORE_MAX_ITEM;
 	else if (cnt < 0) cnt = 0;
-
-	/* Hack - don't let theh store be bought out of items that are always in stock run out */
-	if (keep_in_stock(o_ptr, st))
-	{
-		if (st != STORE_HOME) cnt = STORE_MAX_ITEM;
-	}
+	num = cnt - o_ptr->number;
 
 	/* Save the new number */
-	o_ptr->number = cnt;
+	o_ptr->number += num;
+
+	/* Hack - don't let the store be bought out of items that are always in stock run out */
+	if (keep_in_stock(o_ptr, st))
+	{
+		if (st != STORE_HOME) o_ptr->number = STORE_MAX_ITEM;
+	}
 }
 
 
