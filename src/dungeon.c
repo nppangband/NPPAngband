@@ -783,7 +783,8 @@ static void process_world(void)
 			}
 		}
 
-		if ((!fail_quest) && (q_ptr->q_type != QUEST_FIXED_U) && (q_ptr->q_type != QUEST_VAULT))
+		if ((!fail_quest) && (p_ptr->cur_quest == p_ptr->depth) &&
+			(q_ptr->q_type != QUEST_FIXED_U) && (q_ptr->q_type != QUEST_VAULT))
 		{
 			int cur_quest_monsters = 0;
 			int j;
