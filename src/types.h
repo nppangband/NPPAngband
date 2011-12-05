@@ -49,6 +49,7 @@ typedef struct feature_state feature_state;
 typedef struct feature_type feature_type;
 typedef struct feature_lore feature_lore;
 typedef struct object_kind object_kind;
+typedef struct ghost_template ghost_template;
 typedef struct artifact_type artifact_type;
 typedef struct artifact_lore artifact_lore;
 typedef struct ego_item_type ego_item_type;
@@ -114,7 +115,9 @@ struct maxima
 	u16b o_max;		/* Max size for "o_list[]" */
 	u16b m_max;		/* Max size for "mon_list[]" */
 	u16b x_max;		/* Max size for "x_info[]" */
-	u16b ghost_other_max;  /* number of maintainer player ghost templates*/
+	u16b ghost_template_max;  /* number of maintainer maintainer + player ghost templates*/
+	u16b ghost_player_max;
+	u16b ghost_maint_max;
 	u16b art_spec_max; /* Max number of special artifacts*/
 
 	u16b art_norm_max; /* Max number for normal artifacts (special - normal)*/
@@ -373,7 +376,17 @@ struct ego_item_type
 	bool squelch;			/* Squelch this ego-item */
 };
 
-
+/*
+ * Information about ghost "templates".
+ */
+struct ghost_template
+{
+	u32b t_name;	/* Ghost Name */
+	u32b t_text;	/* Ghost Text */
+	byte t_gender;	/* Ghost gender (0 = male  1 = female) */
+	byte t_race;	/* Ghost race */
+	byte t_class; 	/* Ghost class */
+};
 
 
 /*

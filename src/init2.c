@@ -249,6 +249,7 @@ header g_head;
 header flavor_head;
 header q_head;
 header n_head;
+header t_head;
 
 
 /*
@@ -443,6 +444,29 @@ static errr init_k_info(void)
 	k_info = k_head.info_ptr;
 	k_name = k_head.name_ptr;
 	k_text = k_head.text_ptr;
+
+	return (err);
+}
+
+/*
+ * Initialize the "t_info" array
+ */
+static errr init_t_info(void)
+{
+	errr err;
+
+	/* Init the header */
+	init_header(&t_head, z_info->ghost_template_max, sizeof(ghost_template));
+
+	/* Save a pointer to the parsing function */
+	t_head.parse_info_txt = parse_t_info;
+
+	err = init_info("player_ghost", &t_head);
+
+	/* Set the global variables */
+	t_info = t_head.info_ptr;
+	t_name = t_head.name_ptr;
+	t_text = t_head.text_ptr;
 
 	return (err);
 }
@@ -1349,6 +1373,10 @@ bool init_angband(void)
 	event_signal_string(EVENT_INITSTATUS, "Initializing arrays... (objects)");
 	if (init_k_info()) quit("Cannot initialize objects");
 
+	/* Initialize object info */
+	event_signal_string(EVENT_INITSTATUS, "Initializing arrays... (ghosts)");
+	if (init_t_info()) quit("Cannot initialize ghosts");
+
 	/* Initialize artifact info */
 	event_signal_string(EVENT_INITSTATUS, "Initializing arrays... (artifacts)");
 	if (init_a_info()) quit("Cannot initialize artifacts");
@@ -1558,6 +1586,7 @@ void cleanup_angband(void)
 	free_info(&e_head);
 	free_info(&a_head);
 	free_info(&k_head);
+	free_info(&t_head);
 	free_info(&f_head);
 	free_info(&z_head);
 	free_info(&n_head);

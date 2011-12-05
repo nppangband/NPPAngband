@@ -731,6 +731,14 @@ char *k_name;
 char *k_text;
 
 /*
+ * The ghost template arrays
+ */
+ghost_template *t_info;
+char *t_name;
+char *t_text;
+
+
+/*
  * The artifact arrays
  */
 artifact_type *a_info;

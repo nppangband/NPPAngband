@@ -44,7 +44,8 @@ M:R:750
 M:X:750
 
 # Maximum number of permanant maintainer ghost templates (in *angband/lib/bones)
-M:G:21
+# followed by the max number of player ghost templates
+M:G:21:20
 
 # Maximum number of vaults
 M:V:69
