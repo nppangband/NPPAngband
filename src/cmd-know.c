@@ -1241,42 +1241,42 @@ static void do_cmd_knowledge_monsters(void *obj, const char *name)
 
 static const grouper object_text_order[] =
 {
-	{TV_RING,			"Ring"			},
-	{TV_AMULET,			"Amulet"		},
-	{TV_POTION,			"Potion"		},
-	{TV_SCROLL,			"Scroll"		},
-	{TV_WAND,			"Wand"			},
-	{TV_STAFF,			"Staff"			},
-	{TV_ROD,			"Rod"			},
+	{TV_RING,			"Rings"			},
+	{TV_AMULET,			"Amulets"		},
+	{TV_POTION,			"Potions"		},
+	{TV_SCROLL,			"Scrolls"		},
+	{TV_WAND,			"Wands"			},
+	{TV_STAFF,			"Staves"		},
+	{TV_ROD,			"Rods"			},
 	{TV_FOOD,			"Food"			},
 	{TV_PRAYER_BOOK,	"Priest Books"	},
 	{TV_DRUID_BOOK,		"Druid Books"	},
 	{TV_MAGIC_BOOK,		"Mage Books"	},
-	{TV_LIGHT,			"Light"			},
-	{TV_FLASK,			"Flask"			},
-	{TV_SWORD,			"Sword"			},
-	{TV_POLEARM,		"Polearm"		},
-	{TV_HAFTED,			"Hafted Weapon" },
-	{TV_BOW,			"Bow"			},
+	{TV_LIGHT,			"Lights"		},
+	{TV_FLASK,			"Flasks"		},
+	{TV_SWORD,			"Swords"		},
+	{TV_POLEARM,		"Polearms"		},
+	{TV_HAFTED,			"Hafted Weapons"},
+	{TV_BOW,			"Bows"			},
 	{TV_ARROW,			"Ammunition"	},
 	{TV_BOLT,			NULL			},
 	{TV_SHOT,			NULL			},
-	{TV_SHIELD,			"Shield"		},
-	{TV_CROWN,			"Crown"			},
-	{TV_HELM,			"Helm"			},
+	{TV_SHIELD,			"Shields"		},
+	{TV_CROWN,			"Crowns"		},
+	{TV_HELM,			"Helms"			},
 	{TV_GLOVES,			"Gloves"		},
 	{TV_BOOTS,			"Boots"			},
-	{TV_CLOAK,			"Cloak"			},
+	{TV_CLOAK,			"Cloaks"			},
 	{TV_DRAG_ARMOR,		"Dragon Scale Mail" },
-	{TV_DRAG_SHIELD,	"Dragon Scale Shield" },
-	{TV_HARD_ARMOR,		"Hard Armor"	},
-	{TV_SOFT_ARMOR,		"Soft Armor"	},
-	{TV_SPIKE,			"Spike"			},
-	{TV_DIGGING,		"Digger"		},
+	{TV_DRAG_SHIELD,	"Dragon Scale Shields" },
+	{TV_HARD_ARMOR,		"Hard Armors"	},
+	{TV_SOFT_ARMOR,		"Soft Armors"	},
+	{TV_CHEST,          "Chests"		},
+	{TV_SPIKE,			"Spikes"		},
+	{TV_DIGGING,		"Diggers"		},
 	{TV_JUNK,			"Junk"			},
 	{0,					NULL			}
 };
-
 
 
 /* =================== ARTIFACTS ==================================== */
@@ -1997,7 +1997,9 @@ static int o_cmp_tval(const void *a, const void *b)
 		case TV_LIGHT:
 		case TV_MAGIC_BOOK:
 		case TV_PRAYER_BOOK:
+		case TV_DRUID_BOOK:
 		case TV_DRAG_ARMOR:
+		case TV_DRAG_SHIELD:
 			/* leave sorted by sval */
 			break;
 

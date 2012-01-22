@@ -125,12 +125,12 @@ bool spell_okay(int spell, bool known)
 
 
 byte spells[SPELLS_PER_BOOK];
-byte num;
+byte num_spells;
 int spell_mode;
-#define SPELL_DISP_ROW		2
-#define SPELL_DISP_COL		2
-#define SPELL_DISP_WIDTH	60
-#define SPELL_DISP_HGT		12
+#define SPELL_DISP_ROW		0
+#define SPELL_DISP_COL		6
+#define SPELL_DISP_WIDTH	70
+#define SPELL_DISP_HGT		15
 #define SPELL_ERROR			-3
 int spell_pick;
 
@@ -157,7 +157,6 @@ static byte update_spells(const object_type *o_ptr)
 
 		/* Collect this spell */
 		if (spell != -1) spells[count++] = spell;
-
 	}
 
 
@@ -172,6 +171,9 @@ static void spell_menu_hook(int oid, void *db, const region *loc)
 	cptr comment = cast_spell(MODE_SPELL_DESC, cp_ptr->spell_book, spell, 0);
 	char out_val[80];
 
+	/* Don't display if the menu is hidden */
+	if (!loc->col) return;
+
 	/* Output to the screen */
 	text_out_hook = text_out_to_screen;
 
@@ -180,13 +182,14 @@ static void spell_menu_hook(int oid, void *db, const region *loc)
 	text_out_wrap = 65;
 	/* Dump the spell --(-- */
 	strnfmt(out_val, sizeof(out_val), " %s", comment);
-	prt("", SPELL_DISP_ROW + num + 3, SPELL_DISP_COL);
-	prt("", SPELL_DISP_ROW + num + 4, SPELL_DISP_COL);
+	prt("", loc->row + num_spells + 1, loc->col);
+	prt("", loc->row + num_spells + 2, loc->col);
+	prt("", loc->row + num_spells + 3, loc->col);
 
 	/* No info until they have cast the spell */
 	if (!(p_ptr->spell_flags[spell] & PY_SPELL_WORKED)) return;
 
-	Term_gotoxy(SPELL_DISP_COL + 6, SPELL_DISP_ROW + num + 3);
+	Term_gotoxy(loc->col + 6, loc->row + num_spells + 2);
 	text_out(out_val);
 
 }
@@ -293,7 +296,7 @@ static bool spell_cast_action(char cmd, void *db, int oid)
 		default: /* keyboard */
 		{
 			/* Not a spell choice */
-			if ((i >= 0) || (i < num))
+			if ((i >= 0) || (i < num_spells))
 			{
 				if (spell_okay(spells[i], TRUE)) spell_pick = spells[i];
 				else spell_pick = SPELL_ERROR;
@@ -342,7 +345,7 @@ static bool spell_study_action(char cmd, void *db, int oid)
 		default:
 		{
 			/* Not a spell choice */
-			if ((i >= 0) || (i < num))
+			if ((i >= 0) || (i < num_spells))
 			{
 				if (spell_okay(spells[i], FALSE)) spell_pick = spells[i];
 				else spell_pick = SPELL_ERROR;
@@ -405,6 +408,9 @@ int get_spell_menu(const object_type *o_ptr, int mode_dummy)
 	int cursor = 0;
 	cptr noun = cast_spell(MODE_SPELL_NOUN, cp_ptr->spell_book, 1, 0);
 	cptr verb = cast_spell(MODE_SPELL_VERB, cp_ptr->spell_book, 1, 0);
+	int row_count;
+
+	bool show_menu = TRUE;
 
 	spell_mode = mode_dummy;
 	spell_pick = -2;
@@ -412,14 +418,17 @@ int get_spell_menu(const object_type *o_ptr, int mode_dummy)
 	/* Get the right verb for studying */
 	if (spell_mode == BOOK_STUDY) verb = "study";
 
+	/* Always view if we are browsing*/
+	if ((!auto_display_lists) && (spell_mode != BOOK_BROWSE)) show_menu = FALSE;
+
 	/* Update the spell table */
-	num = update_spells(o_ptr);
+	num_spells = update_spells(o_ptr);
 
 	/*
 	 * Check for "okay" spells, note browse mode is already true, so
 	 * this is just for study and cast
 	 * */
-	if (!okay) for (i = 0; i < num; i++)
+	if (!okay) for (i = 0; i < num_spells; i++)
 	{
 		bool check = (spell_mode == BOOK_CAST);
 
@@ -430,27 +439,22 @@ int get_spell_menu(const object_type *o_ptr, int mode_dummy)
 	}
 
 	/* Return here if there are no objects or acceptable spells */
-	if ((!num) || (!okay))
+	if ((!num_spells) || (!okay))
 	{
 		return (-2);
 	}
 
-	if (spell_mode == BOOK_BROWSE) my_strcpy(header, "       Press ESCAPE to continue", sizeof(header));
-	else  my_strcpy(header, format("(%^ss %c-%c to %s,*=List,ESC=exit,?=help) %^s which %s? ",
-				noun, I2A(0), I2A(num - 1), verb, verb, noun), sizeof(header));
+	/* Save the screen */
+	screen_save();
 
 	/* Set up the menu */
 	WIPE(&menu, menu);
-
 	menu.flags = MN_DBL_TAP;
-	menu.cmd_keys = "abcdefghiMG? \n\r";
+	menu.cmd_keys = "abcdefghi*MG? \n\r";
 	menu.menu_data = spells;
-	menu.count = num;
-	menu.title = "     Name                          Lv Mana Fail Info  ";
-	menu_init(&menu, MN_SKIN_SCROLL, &menu_f, &area);
+	menu.count = num_spells;
+	menu.title = "          Name                          Lv Mana Fail Info  ";
 	menu.browse_hook = spell_menu_hook;
-
-	i = 0;
 
 	/* Select an entry */
 	while ((spell_pick == -2) && (evt.key != ESCAPE))
@@ -472,11 +476,34 @@ int get_spell_menu(const object_type *o_ptr, int mode_dummy)
 		{
 			button_add("[CAST]", 'M');
 		}
-
-		prt(header, 1, 2);
+		screen_load();
+		screen_save();
 		event_signal(EVENT_MOUSEBUTTONS);
 
+		/* Update the spell table */
+		if (!show_menu) row_count = 0;
+		else row_count = num_spells;
+		if (spell_mode == BOOK_BROWSE) my_strcpy(header, "       Press ESCAPE to continue", sizeof(header));
+		else my_strcpy(header, format("(%^ss %c-%c to %s,%s,ESC=exit,?=help) %^s which %s? ",
+						noun, I2A(0), I2A(num_spells - 1), verb, (show_menu ? "*=Hide" : "*=List"),verb, noun), sizeof(header));
+
+		/* Update the menus */
+		menu.prompt = header;
+		menu.count = row_count;
+		area.page_rows = row_count+1;
+		if (!show_menu) area.col = 0;
+		else area.col = SPELL_DISP_COL;
+
+		menu_init(&menu, MN_SKIN_SCROLL, &menu_f, &area);
 		evt = menu_select(&menu, &cursor, EVT_MOVE | EVT_KBRD);
+
+		/* Toggle menu display */
+		if (evt.key == '*')
+		{
+			spell_pick = -2;
+			show_menu = (!show_menu);
+			continue;
+		}
 
 		/* Handle mouseclicks */
 		if ((old_cursor == cursor) && (evt.key == DEFINED_XFF))
@@ -504,7 +531,7 @@ int get_spell_menu(const object_type *o_ptr, int mode_dummy)
 		{
 			int x = A2I(evt.key);
 
-			if ((x >= 0) || (x < num))
+			if ((x >= 0) || (x < num_spells))
 			{
 				cursor= x;
 
@@ -518,12 +545,11 @@ int get_spell_menu(const object_type *o_ptr, int mode_dummy)
 			msg_format("You may not %s that %s.", verb, noun);
 			message_flush();
 		}
-
 	}
 
+	screen_load();
 	basic_buttons();
-	if (!character_icky) do_cmd_redraw();
-	else event_signal(EVENT_MOUSEBUTTONS);
+	event_signal(EVENT_MOUSEBUTTONS);
 
 	if (evt.key == ESCAPE) return (-1);
 

@@ -794,6 +794,7 @@ byte gf_color(int type)
 		case GF_MISSILE:	return (TERM_VIOLET);
 		case GF_ACID:		return (acid_color());
 		case GF_ELEC:		return (elec_color());
+		case GF_ELEC_BURST:	return (elec_color());
 		case GF_FIRE:		return (fire_color());
 		case GF_COLD:		return (cold_color());
 		case GF_POIS:		return (pois_color());
@@ -811,6 +812,7 @@ byte gf_color(int type)
 		case GF_NEXUS:		return (TERM_L_RED);
 		case GF_CONFUSION:	return (confu_color());
 		case GF_SOUND:		return (TERM_YELLOW);
+		case GF_SPORE:		return (TERM_UMBER);
 		case GF_SHARD:		return (TERM_UMBER);
 		case GF_FORCE:		return (TERM_UMBER);
 		case GF_INERTIA:	return (TERM_L_WHITE);

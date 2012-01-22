@@ -3680,7 +3680,6 @@ static bool trap_related_object(object_type *o_ptr)
 /*** Old-style noun-verb functions ***/
 
 /* Generic "do item action" function */
-/* Generic "do item action" function */
 static void do_item(item_act act)
 {
 	int item;

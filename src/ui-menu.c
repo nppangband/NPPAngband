@@ -780,8 +780,6 @@ ui_event_data menu_select(menu_type *menu, int *cursor, int no_handle)
 				break;
 			}
 		}
-
-
 	}
 
 	return ke;
