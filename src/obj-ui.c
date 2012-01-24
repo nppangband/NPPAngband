@@ -931,6 +931,7 @@ static void get_item_display(menu_type *menu, int oid, bool cursor, int row, int
 	const int *choice = menu->menu_data;
 	int idx = choice[oid];
 	char o_name[120];
+	char label;
 
 	byte attr = TERM_WHITE;
 
@@ -958,7 +959,10 @@ static void get_item_display(menu_type *menu, int oid, bool cursor, int row, int
 		if (!get_item_okay(0 - idx)) return;
 	}
 
-	if (cursor) attr = TERM_L_BLUE;
+	/* Get the color, unless it is the quiver (above).*/
+	if (attr == TERM_WHITE) attr = tval_to_attr[o_ptr->tval & 0x7F];
+	if (cursor) attr = TERM_NAVY_BLUE;
+
 
 	/* Get the object description */
 	object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
@@ -967,12 +971,18 @@ static void get_item_display(menu_type *menu, int oid, bool cursor, int row, int
 	/* Hack -- enforce max length */
 	o_name[width - 3] = '\0';
 
+	/* Hack - re-print the label with the right color, code taken from get_item_tag above*/
+	if (p_ptr->command_wrk == USE_FLOOR)  label = I2A(oid);
+	else label = index_to_label(idx);
+	c_put_str(attr, format("%c)",label), row, (col-3));
+
+	/* Nor print the object */
 	c_put_str(attr, format("%s",o_name), row, col);
 }
 
 #ifdef GARBAGE_CODE
 
-/* This doesn't reefresh right because some object descriptions are much longer than others */
+/* This doesn't refresh right because some object descriptions are much longer than others */
 static void item_menu_hook(int oid, void *db, const region *loc)
 {
 	const int *choice = (const int *) db;
@@ -1265,8 +1275,6 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 		/* Redraw windows */
 		redraw_stuff();
 		event_signal(EVENT_MOUSEBUTTONS);
-		event_signal(EVENT_INVENTORY);
-		event_signal(EVENT_EQUIPMENT);
 
 		/* Change the display if needed */
 		if (refresh)
