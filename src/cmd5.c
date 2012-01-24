@@ -178,20 +178,19 @@ static void spell_menu_hook(int oid, void *db, const region *loc)
 	text_out_hook = text_out_to_screen;
 
 	/* Indent output */
-	text_out_indent = SPELL_DISP_COL + 7;
+	text_out_indent = loc->col + 7;
 	text_out_wrap = 65;
 	/* Dump the spell --(-- */
 	strnfmt(out_val, sizeof(out_val), " %s", comment);
-	prt("", loc->row + num_spells + 1, loc->col);
-	prt("", loc->row + num_spells + 2, loc->col);
-	prt("", loc->row + num_spells + 3, loc->col);
+	prt("", loc->row + loc->page_rows, loc->col);
+	prt("", loc->row + loc->page_rows + 1, loc->col);
 
 	/* No info until they have cast the spell */
 	if (!(p_ptr->spell_flags[spell] & PY_SPELL_WORKED)) return;
 
-	Term_gotoxy(loc->col + 6, loc->row + num_spells + 2);
-	text_out(out_val);
-
+	Term_gotoxy(loc->col + 6, loc->row + loc->page_rows);
+	text_out_c(TERM_L_BLUE, out_val);
+	text_out_indent = 0;
 }
 
 /**
@@ -453,7 +452,6 @@ int get_spell_menu(const object_type *o_ptr, int mode_dummy)
 	menu.cmd_keys = "abcdefghi*MG? \n\r";
 	menu.menu_data = spells;
 	menu.count = num_spells;
-	menu.title = "          Name                          Lv Mana Fail Info  ";
 	menu.browse_hook = spell_menu_hook;
 
 	/* Select an entry */
@@ -481,19 +479,29 @@ int get_spell_menu(const object_type *o_ptr, int mode_dummy)
 		event_signal(EVENT_MOUSEBUTTONS);
 
 		/* Update the spell table */
-		if (!show_menu) row_count = 0;
-		else row_count = num_spells;
 		if (spell_mode == BOOK_BROWSE) my_strcpy(header, "       Press ESCAPE to continue", sizeof(header));
 		else my_strcpy(header, format("(%^ss %c-%c to %s,%s,ESC=exit,?=help) %^s which %s? ",
 						noun, I2A(0), I2A(num_spells - 1), verb, (show_menu ? "*=Hide" : "*=List"),verb, noun), sizeof(header));
 
 		/* Update the menus */
-		menu.prompt = header;
+		if (show_menu)
+		{
+			row_count = num_spells;
+			menu.prompt = header;
+			menu.title = "        Name                          Lv Mana Fail Info  ";
+			area.page_rows = row_count+3;
+			area.col = SPELL_DISP_COL;
+		}
+		else
+		{
+			row_count = 1;
+			menu.title = header;
+			menu.prompt = NULL;
+			area.page_rows = row_count;
+			/* Note this value is used in spell_menu_hook to check if a spell desc should be shown*/
+			area.col = 0;
+		}
 		menu.count = row_count;
-		area.page_rows = row_count+1;
-		if (!show_menu) area.col = 0;
-		else area.col = SPELL_DISP_COL;
-
 		menu_init(&menu, MN_SKIN_SCROLL, &menu_f, &area);
 		evt = menu_select(&menu, &cursor, EVT_MOVE | EVT_KBRD);
 

@@ -743,77 +743,6 @@ static bool get_item_allow(int item, bool is_harmless)
 
 
 
-/*
- * Find the "first" inventory object with the given "tag".
- *
- * A "tag" is a char "n" appearing as "@n" anywhere in the
- * inscription of an object.
- *
- * Also, the tag "@xn" will work as well, where "n" is a tag-char,
- * and "x" is the "current" p_ptr->command_cmd code.
- */
-static int get_tag(int *cp, char tag)
-{
-	int i;
-	cptr s;
-
-	/* (f)ire is handled differently from all others, due to the quiver */
-	if (p_ptr->command_cmd == 'f')
-	{
-		i = QUIVER_START + tag - '0';
-		if (inventory[i].k_idx)
-		{
-			*cp = i;
-			return (TRUE);
-		}
-		return (FALSE);
-	}
-
-	/* Check every object */
-	for (i = 0; i < ALL_INVEN_TOTAL; ++i)
-	{
-		object_type *o_ptr = &inventory[i];
-
-		/* Skip non-objects */
-		if (!o_ptr->k_idx) continue;
-
-		/* Skip empty inscriptions */
-		if (!o_ptr->obj_note) continue;
-
-		/* Find a '@' */
-		s = strchr(quark_str(o_ptr->obj_note), '@');
-
-		/* Process all tags */
-		while (s)
-		{
-			/* Check the normal tags */
-			if (s[1] == tag)
-			{
-				/* Save the actual inventory ID */
-				*cp = i;
-
-				/* Success */
-				return (TRUE);
-			}
-
-			/* Check the special tags */
-			if ((s[1] == p_ptr->command_cmd) && (s[2] == tag))
-			{
-				/* Save the actual inventory ID */
-				*cp = i;
-
-				/* Success */
-				return (TRUE);
-			}
-
-			/* Find another '@' */
-			s = strchr(s + 1, '@');
-		}
-	}
-
-	/* No such tag */
-	return (FALSE);
-}
 
 
 /* Arrays for inventory, equipment and floor */
@@ -831,16 +760,13 @@ int quiver_items[QUIVER_SIZE];
 /**
  * Make the correct prompt for items, handle mouse buttons
  */
-static void item_prompt(int mode, cptr pmt)
+static void item_prompt(menu_type *menu, int mode, cptr pmt)
 {
 	bool use_inven   = ((mode & (USE_INVEN))   ? TRUE : FALSE);
 	bool use_equip   = ((mode & (USE_EQUIP))   ? TRUE : FALSE);
 
 	char tmp_val[160];
 	char out_val[160];
-
-	/* Clear the line */
-	prt("", 0, 0);
 
 	/* Viewing inventory */
 	if (p_ptr->command_wrk == (USE_INVEN))
@@ -982,10 +908,7 @@ static void item_prompt(int mode, cptr pmt)
 	strcat(out_val, " ESC");
 
 	/* Build the prompt */
-	sprintf(tmp_val, "(%s) %s", out_val, pmt);
-
-	/* Show the prompt */
-	prt(tmp_val, 0, 0);
+	menu->title = format("(%s) %s", out_val, pmt);
 }
 
 
@@ -1047,6 +970,46 @@ static void get_item_display(menu_type *menu, int oid, bool cursor, int row, int
 	c_put_str(attr, format("%s",o_name), row, col);
 }
 
+#ifdef GARBAGE_CODE
+
+/* This doesn't reefresh right because some object descriptions are much longer than others */
+static void item_menu_hook(int oid, void *db, const region *loc)
+{
+	const int *choice = (const int *) db;
+	int idx = choice[oid];
+	cptr desc;
+	int dlen;
+
+	/* Get the object */
+	object_type *o_ptr = &inventory[idx];
+
+	/* No info until they know about the item */
+	if (!object_is_known(o_ptr)) return;
+
+	/* Not displaying full menu */
+	if (loc->page_rows == 1) return;
+
+	/* Output to the screen */
+	text_out_hook = text_out_to_screen;
+
+	/* Indent output */
+	text_out_indent = loc->col + 7;
+	text_out_wrap = loc->col + loc->width - 7;
+
+	prt("", loc->row + loc->page_rows, loc->col);
+	prt("", loc->row + loc->page_rows + 1, loc->col);
+	prt("", loc->row + loc->page_rows + 2, loc->col);
+
+	Term_gotoxy(loc->col + 6, loc->row + loc->page_rows);
+
+	desc = k_text + k_info[o_ptr->k_idx].text;
+	dlen = strlen(desc);
+	text_out_c(TERM_L_BLUE, k_text + k_info[o_ptr->k_idx].text);
+	text_out_indent = 0;
+}
+
+#endif /* GARBAGE_CODE*/
+
 /**
  * Deal with events on the get_item menu
  */
@@ -1063,7 +1026,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 {
 	menu_type menu;
 	menu_iter menu_f = {get_item_tag, NULL, get_item_display, get_item_action };
-	region area = { 0, 1, -1, -1 };
+	region area = { 0, 0, -1, -1 };
 	ui_event_data evt = { EVT_NONE, 0, 0, 0, 0 };
 	int num_entries;
 	bool done;
@@ -1074,7 +1037,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 	int j, k = 0;
 	bool item;
 
-	bool refresh = FALSE;
+	bool refresh = TRUE;
 
 	bool use_inven  = ((mode & (USE_INVEN)) ? TRUE : FALSE);
 	bool use_equip  = ((mode & (USE_EQUIP)) ? TRUE : FALSE);
@@ -1084,7 +1047,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 	bool allow_equip = FALSE;
 	bool allow_inven = FALSE;
 	bool allow_floor = FALSE;
-
+	int cursor = 0;
 	bool toggle = FALSE;
 
 	int floor_list[24];
@@ -1217,7 +1180,6 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 	/* Assume we'll be looking at something*/
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
-
 	/* Hack -- Start on quiver if shooting or throwing */
 	if ((mode & (QUIVER_FIRST)) && use_quiver)
 	{
@@ -1263,46 +1225,12 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 	WIPE(&menu, menu);
 	menu.cmd_keys = "\n\r";
 
-	/* Set the prompt */
-	item_prompt(mode, pmt);
-
-	/* Choose an appropriate set of items to display */
-	if (p_ptr->command_wrk == (USE_INVEN))
-	{
-		menu.menu_data = inven_items;
-		num_entries = inven_count;
-	}
-	else if ((p_ptr->command_wrk == (USE_EQUIP)) && use_quiver && !use_inven)
-	{
-		menu.menu_data = quiver_items;
-		num_entries = quiver_count;
-    }
-	else if (p_ptr->command_wrk == (USE_EQUIP))
-	{
-		menu.menu_data = equip_items;
-		num_entries = equip_count;
-	}
-	else if (p_ptr->command_wrk == (USE_FLOOR))
-	{
-		menu.menu_data = floor_items;
-		num_entries = floor_count;
-	}
-	else return FALSE;
-	if (!p_ptr->command_see)
-	{
-		num_entries = 0;
-	}
-
 	/* Clear space */
-	area.page_rows = num_entries + 1;
 	area.width = len;
-	menu.count = num_entries;
-	menu_init(&menu, MN_SKIN_SCROLL, &menu_f, &area);
 
 	/* Play until item selected or refused */
 	while (!done)
 	{
-		ui_event_data ke0;
 		int ni = 0;
 		int ne = 0;
 
@@ -1332,11 +1260,13 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 		}
 
 		/* Update */
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
+		p_ptr->redraw |= (PR_INVEN | PR_EQUIP);
 
 		/* Redraw windows */
 		redraw_stuff();
 		event_signal(EVENT_MOUSEBUTTONS);
+		event_signal(EVENT_INVENTORY);
+		event_signal(EVENT_EQUIPMENT);
 
 		/* Change the display if needed */
 		if (refresh)
@@ -1346,13 +1276,18 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 			screen_save();
 
 			/* Set the prompt */
-			item_prompt(mode, pmt);
+			item_prompt(&menu, mode, pmt);
 
 			/* Pick the right menu */
 			if (p_ptr->command_wrk == (USE_INVEN))
 			{
 				menu.menu_data = inven_items;
 				num_entries = inven_count;
+			}
+			else if ((p_ptr->command_wrk == (USE_EQUIP)) && use_quiver && !use_inven)
+			{
+				menu.menu_data = quiver_items;
+				num_entries = quiver_count;
 			}
 			else if (p_ptr->command_wrk == (USE_EQUIP))
 			{
@@ -1366,34 +1301,24 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 			}
 			else return FALSE;
 
+			/* Different menu sizes depending on if the objects are listed or not */
 			if (!p_ptr->command_see)
 			{
-				num_entries = 0;
+				area.page_rows = 1;
+				menu.count = 1;
+			}
+			else
+			{
+				area.page_rows = num_entries + 3;
+				menu.count = num_entries;
 			}
 
-			/* Clear space */
-			area.page_rows = num_entries + 1;
-			menu.count = num_entries;
 			menu_init(&menu, MN_SKIN_SCROLL, &menu_f, &area);
 
 			refresh = FALSE;
 		}
 
-		menu_refresh(&menu);
-
-		evt = inkey_ex();
-
-		/* Hack - check for arrow-like inscriptions */
-		if (get_tag(&k, evt.key) && ((evt.key == '2') || (evt.key == '4') ||
-				   (evt.key == '6') || (evt.key == '8')))
-		{
-			/* Intentionally blank */
-		}
-		else
-		{
-			ke0 = run_event_loop(&menu.target, &evt);
-			if (ke0.type != EVT_AGAIN) evt = ke0;
-		}
+		evt = menu_select(&menu, &cursor, EVT_MOVE | EVT_KBRD);
 
 		switch(evt.type)
 		{
