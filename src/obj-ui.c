@@ -755,6 +755,7 @@ int equip_items[INVEN_WIELD];
 int	inven_items[ALL_INVEN_TOTAL - INVEN_WIELD];
 int floor_items[MAX_FLOOR_STACK];
 int quiver_items[QUIVER_SIZE];
+char header_val[160];
 
 
 /**
@@ -907,8 +908,7 @@ static void item_prompt(menu_type *menu, int mode, cptr pmt)
 	/* Finish the prompt */
 	strcat(out_val, " ESC");
 
-	/* Build the prompt */
-	menu->title = format("(%s) %s", out_val, pmt);
+	my_strcpy(header_val, out_val, sizeof(header_val));
 }
 
 
@@ -1234,6 +1234,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 	/* Set up the menu */
 	WIPE(&menu, menu);
 	menu.cmd_keys = "\n\r";
+	menu.flags = MN_DBL_TAP;
 
 	/* Clear space */
 	area.width = len;
@@ -1283,31 +1284,28 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 			screen_load();
 			screen_save();
 
-			/* Set the prompt */
-			item_prompt(&menu, mode, pmt);
-
 			/* Pick the right menu */
 			if (p_ptr->command_wrk == (USE_INVEN))
 			{
 				menu.menu_data = inven_items;
 				num_entries = inven_count;
 			}
-			else if ((p_ptr->command_wrk == (USE_EQUIP)) && use_quiver && !use_inven)
+			else if ((p_ptr->command_wrk == (USE_EQUIP)) && use_quiver && (!use_inven) &&
+					 (mode & (QUIVER_FIRST)))
 			{
 				menu.menu_data = quiver_items;
 				num_entries = quiver_count;
-			}
-			else if (p_ptr->command_wrk == (USE_EQUIP))
-			{
-				menu.menu_data = equip_items;
-				num_entries = equip_count;
 			}
 			else if (p_ptr->command_wrk == (USE_FLOOR))
 			{
 				menu.menu_data = floor_items;
 				num_entries = floor_count;
 			}
-			else return FALSE;
+			else /* if (p_ptr->command_wrk == (USE_EQUIP)) */
+			{
+				menu.menu_data = equip_items;
+				num_entries = equip_count;
+			}
 
 			/* Different menu sizes depending on if the objects are listed or not */
 			if (!p_ptr->command_see)
@@ -1320,6 +1318,11 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 				area.page_rows = num_entries + 3;
 				menu.count = num_entries;
 			}
+
+			/* Set the prompt */
+			item_prompt(&menu, mode, pmt);
+
+			menu.title = header_val;
 
 			menu_init(&menu, MN_SKIN_SCROLL, &menu_f, &area);
 
