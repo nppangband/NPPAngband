@@ -358,11 +358,11 @@ static void calc_mana(void)
 		/* Message */
 		if (p_ptr->cumber_armor)
 		{
-			msg_print("The weight of your armor encumbers your movement.");
+			msg_print("The weight of your equipment is reducing your mana.");
 		}
 		else
 		{
-			msg_print("You feel able to move more freely.");
+			msg_print("Your equipment is no longer reducing your mana.");
 		}
 	}
 }
