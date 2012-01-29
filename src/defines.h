@@ -1240,7 +1240,13 @@ enum
 /*
  * Maximum number of colours, and number of "basic" Angband colours
  */
-#define MAX_COLORS        128
+#define MAX_COLORS        	128
+#define MAX_COLOR_USED		(TERM_EARTH_YELLOW + 1)
+
+/* For the colors to tiles table */
+#define TILE_BALL_INFO	0
+#define TILE_BOLT_INFO	1
+
 /*
  * Number of base colors. These are the TERM_* constants
  */

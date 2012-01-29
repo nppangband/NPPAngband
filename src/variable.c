@@ -639,13 +639,12 @@ s16b alloc_race_size;
  */
 alloc_entry *alloc_race_table;
 
-
 /*
  * Specify attr/char pairs for visual special effects
- * Be sure to use "index & 0xFF" to avoid illegal access
+ * for ball spells and bolt spells
  */
-byte misc_to_attr[256];
-char misc_to_char[256];
+byte color_to_attr[2][MAX_COLOR_USED];
+char color_to_char[2][MAX_COLOR_USED];
 
 
 /*

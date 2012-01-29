@@ -1234,7 +1234,6 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 	/* Set up the menu */
 	WIPE(&menu, menu);
 	menu.cmd_keys = "\n\r";
-	menu.flags = MN_DBL_TAP;
 
 	/* Clear space */
 	area.width = len;
@@ -2124,7 +2123,6 @@ void cmd_use_item(void)
 	bool oops = FALSE;
 	ui_event_data evt;
 	byte menu_stage = MENU_OBJECT;
-	bool needs_redraw = FALSE;
 
 	/* Get item */
 	cptr q = "Select an object.";
@@ -2133,7 +2131,7 @@ void cmd_use_item(void)
 	menu_type menu;
 	menu_iter commands_menu = {command_tag, NULL, command_display, command_action };
 	/* Note that the column needs to be at least 1 due to the title line below */
-	region area = { 0, 1, 30, 12 };
+	region area = { 0, 0, -1, -1 };
 
 	/* Set up the menu */
 	WIPE(&menu, menu);
@@ -2172,25 +2170,21 @@ void cmd_use_item(void)
 
 		if (menu_stage == MENU_OBJECT)
 		{
-			/* Total Redraw */
-			if (needs_redraw)
-			{
-				message_flush();
-				do_cmd_redraw();
-				needs_redraw = FALSE;
-			}
+
+			message_flush();
+			screen_save();
 
 			if (!item_menu(&item, q, (USE_QUIVER | USE_INVEN | USE_EQUIP | USE_FLOOR | NOUN_VERB), &oops))
 			{
 				/* Total Redraw, print warning, then quit  */
 				menu_stage = MENU_QUIT;
 				p_ptr->noun_verb = FALSE;
+				screen_load();
 				break;
 			}
 			else
 			{
 				menu_stage = MENU_COMMAND;
-				needs_redraw = TRUE;
 			}
 
 			/* No objects, */
@@ -2201,10 +2195,14 @@ void cmd_use_item(void)
 				p_ptr->noun_verb = FALSE;
 				menu_stage = MENU_QUIT;
 			}
+			screen_load();
+
 		}
 
 		if (menu_stage >= MENU_COMMAND)
 		{
+			char title[120];
+			int len = 70;
 
 			/* Get the item */
 			o_ptr = object_from_item_idx(item);
@@ -2215,23 +2213,26 @@ void cmd_use_item(void)
 			/* Update the menu */
 			menu.count = poss;
 			menu.menu_data = comm;
-			area.page_rows = poss + 2;
+			area.page_rows = poss + 3;
 
-			/* Total Redraw */
-			if (needs_redraw)
-			{
-				message_flush();
-				do_cmd_redraw();
-				needs_redraw = FALSE;
-			}
-			Term_putstr(area.col, area.row-1, -1, TERM_WHITE, format(" Enter a command for %s", o_name));
+			/* Find the column to start in */
+			if ((Term->wid - len + 1) < 12 ) area.col = 12;
+			else area.col = Term->wid - (len + 1);
+			area.width = len;
+
+			message_flush();
+			screen_save();
+
+			my_strcpy(title, format(" Enter a command for %s", o_name), sizeof(title));
+
+			menu.title = title;
 
 			menu_init(&menu, MN_SKIN_SCROLL, &commands_menu, &area);
 
 			/* Select an entry */
 			evt = menu_select(&menu, &cursor, EVT_SELECT);
 
-			needs_redraw = TRUE;
+			screen_load();
 
 			/* Go back to the object manu */
 			if (evt.key == ESCAPE)
@@ -2246,13 +2247,7 @@ void cmd_use_item(void)
 
 				o_ptr->obj_in_use = TRUE;
 
-				/* Total Redraw */
-				if (needs_redraw)
-				{
-					message_flush();
-					do_cmd_redraw();
-					needs_redraw = FALSE;
-				}
+				message_flush();
 
 				handle_command(command_line, item);
 
@@ -2271,12 +2266,13 @@ void cmd_use_item(void)
 
 				process_command(CMD_GAME, TRUE);
 			}
+			handle_stuff();
 		}
 	}
 
+	handle_stuff();
 	basic_buttons();
 	message_flush();
-	do_cmd_redraw();
 
 }
 

@@ -87,6 +87,39 @@ static void look_mon_desc(char *buf, size_t max, int m_idx)
 	if ((!m_ptr->m_timed[MON_TMD_SLOW]) && (m_ptr->m_timed[MON_TMD_FAST])) my_strcat(buf, ", hasted", max);
 }
 
+
+#define TILE_TYPE_MON		0
+#define TILE_TYPE_OBJ		1
+#define TILE_TYPE_WALL		2
+#define TILE_TYPE_FLOOR		3
+#define TILE_TYPE_EFCT		4
+#define TILE_TYPE_UNKN		5
+
+#define TILE_TYPE_MAX		(TILE_TYPE_UNKN + 1)
+
+
+/**
+ * Mouse button structure
+ */
+struct path_markings
+{
+	byte a;
+	char c;
+	byte path_color;
+};
+
+/*
+ * Tile mapping for the paths (small ball types)
+ */
+static const struct path_markings path_marks[TILE_TYPE_MAX] =
+{
+	{ (byte)0x81,		(char)0xB0, TERM_RED },	/*  TILE_TYPE_MON  */
+	{ (byte)0x81,		(char)0xB6, TERM_YELLOW},	/*  TILE_TYPE_OBJ  */
+	{ (byte)0x81,		(char)0xB2, TERM_BLUE}, /*  TILE_TYPE_WALL  */
+	{ (byte)0x81, 		(char)0xB8, TERM_WHITE}, /*  TILE_TYPE_FLOOR  */
+	{ (byte)0x81,		(char)0xB1, TERM_GREEN}, /*  TILE_TYPE_EFCT  */
+	{ (byte)0x81,   	(char)0xBA, TERM_L_DARK}, /*  TILE_TYPE_UNKN  */
+};
 /*
  * Draw a visible path over the squares between (x1,y1) and (x2,y2).
  * The path consists of "*", which are white except where there is a
@@ -105,6 +138,7 @@ static int draw_path(u16b path_n, u16b *path_g, char *c, byte *a, int y1, int x1
 {
 	int i;
 	bool on_screen;
+	const struct path_markings *mp;
 
 	/* No path, so do nothing. */
 	if (path_n < 1) return (FALSE);
@@ -117,11 +151,13 @@ static int draw_path(u16b path_n, u16b *path_g, char *c, byte *a, int y1, int x1
 	/* Draw the path. */
 	for (i = 0; i < path_n; i++)
 	{
-		byte colour;
-
 		/* Find the co-ordinates on the level. */
 		int y = GRID_Y(path_g[i]);
 		int x = GRID_X(path_g[i]);
+
+		byte this_a;
+		char this_c;
+
 		/*
 		 * As path[] is a straight line and the screen is oblong,
 		 * there is only section of path[] on-screen.
@@ -149,36 +185,54 @@ static int draw_path(u16b path_n, u16b *path_g, char *c, byte *a, int y1, int x1
 			monster_type *m_ptr = &mon_list[cave_m_idx[y][x]];
 
 			/*mimics act as objects*/
-			if (m_ptr->mimic_k_idx) colour = TERM_YELLOW;
-			else colour = TERM_L_RED;
+			if (m_ptr->mimic_k_idx) mp = &path_marks[TILE_TYPE_OBJ];
+			else mp = &path_marks[TILE_TYPE_MON];
 		}
 
 		/* Known objects are yellow. */
 		else if (cave_o_idx[y][x] && o_list[cave_o_idx[y][x]].marked)
 		{
-
-			colour = TERM_YELLOW;
+			mp = &path_marks[TILE_TYPE_OBJ];
     	}
+
+		/* Effects are green */
+		else if ((cave_x_idx[y][x] > 0) && (cave_info[y][x] & (CAVE_SEEN | CAVE_MARK)))
+		{
+			mp = &path_marks[TILE_TYPE_EFCT];
+		}
 
 		/* Known walls are blue. */
 		else if (!cave_project_bold(y,x) &&
 				((cave_info[y][x] & (CAVE_MARK)) ||	player_can_see_bold(y,x)))
 		{
-			colour = TERM_BLUE;
+			mp = &path_marks[TILE_TYPE_WALL];
 		}
 		/* Unknown squares are grey. */
 		else if (!(cave_info[y][x] & (CAVE_MARK)) && !player_can_see_bold(y,x))
 		{
-			colour = TERM_L_DARK;
+			mp = &path_marks[TILE_TYPE_UNKN];
 		}
 		/* Unoccupied squares are white. */
 		else
 		{
-			colour = TERM_WHITE;
+			mp = &path_marks[TILE_TYPE_FLOOR];
 		}
 
-		/* Draw the path segment */
-		(void)Term_addch(colour, '*');
+		/* Get the character */
+		if (!(use_graphics && (arg_graphics == GRAPHICS_DAVID_GERVAIS)))
+		{
+			this_a = '*';
+			this_c = mp->path_color;
+		}
+		/* GRAPHICS_DAVID_GERVAIS being used */
+		else
+		{
+			this_a = mp->a;
+			this_c = mp->c;
+		}
+
+		/* Visual effects -- Display */
+		print_rel(this_c, this_a, y, x);
 	}
 	return i;
 }
@@ -1741,7 +1795,7 @@ bool target_set_interactive(int mode, int x, int y)
 			path_n = project_path(path_g, path_gx, MAX_RANGE, py, px, &yy, &xx, PROJECT_THRU);
 
 			/* Draw the path in "target" mode. If there is one */
-			if ((mode & (TARGET_KILL)) && (projectable(py, px, y, x, PROJECT_THRU)))
+			if ((mode & (TARGET_KILL)) && (cave_info[y][x] & (CAVE_FIRE)))
 			{
 				path_drawn = draw_path(path_n, path_g, path_char, path_attr, py, px);
 			}
@@ -1961,7 +2015,7 @@ bool target_set_interactive(int mode, int x, int y)
 			path_n = project_path(path_g, path_gx, MAX_RANGE, py, px, &yy, &xx, PROJECT_THRU);
 
 			/* Draw the path in "target" mode. If there is one */
-			if ((mode & (TARGET_KILL)) && (projectable(py, px, y, x, PROJECT_THRU)))
+			if ((mode & (TARGET_KILL)) && (cave_info[y][x] & (CAVE_FIRE)))
 			{
 				/* Save target info */
 				path_drawn = draw_path(path_n, path_g, path_char, path_attr, py, px);

@@ -983,6 +983,22 @@ static void map_hidden_monster(monster_type *m_ptr, byte *ap, char *cp)
 	if (use_graphics) *ap = r_ptr->d_attr;
 }
 
+static void get_dtrap_edge_char(byte *a, char *c)
+{
+	if ((use_graphics) && (arg_graphics == GRAPHICS_DAVID_GERVAIS))
+	{
+		{
+			*a = (byte)0x81;
+			*c = (char)0xE1;
+		}
+	}
+	else
+	{
+		*a = TERM_L_GREEN;
+		*c = '*';
+	}
+}
+
 
 /*
  * Extract the attr/char to display at the given (legal) map location
@@ -1169,6 +1185,9 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 
 	int floor_num = 0;
 
+	bool det_trap_edge = dtrap_edge(y, x);
+	bool do_dtrap = FALSE;
+
 	bool sq_flag = FALSE;
 	bool do_purple_dot = TRUE;
 
@@ -1199,6 +1218,9 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 	/* Boring grids (floors, etc) */
 	else if (!(f_info[feat].f_flags1 & (FF1_REMEMBER)))
 	{
+		/* Trap detection edge */
+		do_dtrap = TRUE;
+
 		/* Memorized (or seen) floor */
 		if ((info & (CAVE_MARK)) || (info & (CAVE_SEEN)))
 		{
@@ -1266,6 +1288,9 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 		/* Unknown */
 		else
 		{
+			/* Trap detection edge */
+			do_dtrap = TRUE;
+
 			/* Get the darkness feature */
 			f_ptr = &f_info[FEAT_NONE];
 
@@ -1277,13 +1302,6 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 		}
 	}
 
-	/* Check for trap detection boundaries */
-	if ((dtrap_edge(y, x)) && (f_info[feat].f_flags1 & (FF1_FLOOR)) &&
-			(use_graphics == GRAPHICS_NONE || use_graphics == GRAPHICS_PSEUDO))
-	{
-		a = TERM_L_GREEN;
-	}
-
 	/*Reveal the square with the right cheat option*/
 	if (info & (CAVE_MARKED))
 	{
@@ -1293,10 +1311,12 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 		}
 	}
 
-
 	/* Save the terrain info for the transparency effects */
 	(*tap) = a;
 	(*tcp) = c;
+
+	/* Now add the dtrap edge characteristic as an overlay*/
+	if ((do_dtrap) && (det_trap_edge)) get_dtrap_edge_char(&a, &c);
 
 	/* Objects */
 	for (o_ptr = get_first_object(y, x); o_ptr; o_ptr = get_next_object(o_ptr))
@@ -1343,12 +1363,24 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 			{
 				if (use_graphics)
 				{
-					/* Special squelch character HACK */
-					/* Colour of Blade of Chaos */
-					/* This can't be right, but I am not sure what to do for graphics */
-					a = k_info[GRAF_BROKEN_BONE].x_attr;
-					/* Symbol of floor */
-					c = k_info[GRAF_BROKEN_BONE].x_char;
+					/* Unused voilet cloud symbol */
+					if (arg_graphics == GRAPHICS_DAVID_GERVAIS)
+					{
+						a = (byte)0x81;
+						c = (char)0xD9;
+
+					}
+					else
+					{
+						/* Special squelch character HACK */
+						/* This can't be right, but I am not sure what to do for graphics */
+						a = k_info[GRAF_BROKEN_BONE].x_attr;
+
+						/* Symbol of floor */
+						c = k_info[GRAF_BROKEN_BONE].x_char;
+					}
+
+
 				}
 				else
 				{
@@ -1361,21 +1393,27 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 			}
 
 			/* Special stack symbol, unless everything in the pile is squelchable */
-			if ((++floor_num > 1) && (use_graphics ?
-				((a != k_info[GRAF_BROKEN_BONE].x_attr) || (c != k_info[GRAF_BROKEN_BONE].x_char)) :
-				((a != TERM_VIOLET) || (c != f_info[1].x_char))))
+			else if (++floor_num > 1)
 			{
-				object_kind *k_ptr;
+				if ((use_graphics) && (arg_graphics == GRAPHICS_DAVID_GERVAIS))
+				{
+					a = (byte)0x87;
+					c = (char)0xB6;
+				}
 
-				/* Get the "pile" feature */
-				k_ptr = &k_info[0];
+				else
+				{
+					object_kind *k_ptr;
 
-				/* Normal attr */
-				a = k_ptr->x_attr;
+					/* Get the "pile" feature */
+					k_ptr = &k_info[0];
 
-				/* Normal char */
-				c = k_ptr->x_char;
+					/* Normal attr */
+					a = k_ptr->x_attr;
 
+					/* Normal char */
+					c = k_ptr->x_char;
+				}
 				break;
 			}
 		}

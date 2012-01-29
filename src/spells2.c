@@ -1261,9 +1261,17 @@ static void animate_detect(int rad)
 {
 	int x, y;
 
-	byte a, c;
+	byte a = TERM_YELLOW;
+	char c = '*';
 
 	int dist_squared = rad * rad;
+
+	/* Special tile for DVG graphics */
+	if ((use_graphics) && (arg_graphics == GRAPHICS_DAVID_GERVAIS))
+	{
+		a = (byte)0x81;
+		c = (char)0xE3;
+	}
 
 	/* Scan the map */
 	for (y = 0; y < p_ptr->cur_map_hgt; y++)
@@ -1279,11 +1287,6 @@ static void animate_detect(int rad)
 			 */
 			if (((px * px + py * py) <= dist_squared) && (panel_contains(y, x)))
 			{
-
-               	/* Hack - Obtain attr/char */
-               	a = TERM_YELLOW;
-               	c = '*';
-
                	/* Hack -- Visual effects -- Display a yellow star */
                	print_rel(c, a, y, x);
 			}
