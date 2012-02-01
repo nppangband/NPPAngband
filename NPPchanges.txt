@@ -2,9 +2,11 @@ NPP 0.5.4 changes:
 The edges of the detected trap areas now show up onscreen.
 DVG tileset - code changes to support tiles for detect trap edge, squelch objects, and object piles.
 Expanded colors are now used when spells are cast by the monsters and player.
+During targeting, modified how the path is drawn.
 DVG tileset - epanded tile support for ball spells and bolt spells.
 Deleted files supporting Nintento DS, Amiga, and RISC-OS operating sytems.
 Changed the message a player gets regarding the weight of armor reducing the player's mana.
+Changed the message a player gets when they are holding a sling/bow/crossbow that is too heavy.
 Added birth option for simple, Vanilla Angband dungeon generation.
 Added FAAngband-style mouse support.
 Rename fixed monster quests to Guardian quests.

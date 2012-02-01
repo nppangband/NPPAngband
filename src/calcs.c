@@ -1597,18 +1597,29 @@ static void calc_bonuses(void)
 	/* Take note when "heavy bow" changes */
 	if (old_heavy_shoot != p_ptr->heavy_shoot)
 	{
+		/* default: SV_SHORT_BOW or SV_LONG_BOW	*/
+		cptr launcher = "bow";
+
+		/* Examine the "current bow" */
+		object_kind *k_ptr = &k_info[inventory[INVEN_BOW].k_idx];
+
+		/* Make sure we are calling the launcher by the right name */
+		if (k_ptr->sval == SV_SLING) launcher = "sling";
+		else if ((k_ptr->sval == SV_LIGHT_XBOW) ||
+				 (k_ptr->sval == SV_LIGHT_XBOW)) launcher = "crossbow";
+
 		/* Message */
 		if (p_ptr->heavy_shoot)
 		{
-			msg_print("You have trouble wielding such a heavy bow.");
+			msg_print(format("You have trouble aiming such a heavy %s.", launcher));
 		}
 		else if (inventory[INVEN_BOW].k_idx)
 		{
-			msg_print("You have no trouble wielding your bow.");
+			msg_print(format("You have no trouble aiming your %s.", launcher));
 		}
 		else
 		{
-			msg_print("You feel relieved to put down your heavy bow.");
+			msg_print(format("You feel relieved to put down your heavy %s.", launcher));
 		}
 	}
 
