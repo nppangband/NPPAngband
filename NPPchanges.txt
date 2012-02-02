@@ -15,6 +15,7 @@ Give Morgoth the teleport_self_to spell.
 Removed Potions of Heroism and Scrolls of Holy Chant from the "infinite stock" list.
 In the object knowledge menu, the categories now have plural names.
 Change the colors of some spells (electric bursts, spores).
+The "create elements" spell now lights up the cleared area and bordering walls.
 Bugfix: Equipment and itemlist windows were not updating properly when the player was in a store.
 Bugfix: There was a playtesting message when examining a store service.
 Bugfix: Player ghost templates were not saving properly when a player died.

@@ -3486,10 +3486,26 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 				/* Destroy the wall/door */
 				cave_alter_feat(y, x, FS_HURT_ROCK);
 
+				obvious = TRUE;
+
 				/* Make it a room, if called for. */
 				if (flg & PROJECT_ROOM)
 				{
-					cave_info[y][x] |= (CAVE_ROOM);
+					int d;
+
+					/* Look in all directions. */
+					for (d = 0; d < 8; d++)
+					{
+						/* Extract adjacent location */
+						int yy = y + ddy_ddd[d];
+						int xx = x + ddx_ddd[d];
+
+						/* Ignore annoying locations */
+						if (!in_bounds_fully(yy, xx)) continue;
+
+						/* Make part of the room and light it up*/
+						cave_info[yy][xx] |= (CAVE_ROOM | CAVE_GLOW);
+					}
 				}
 			}
 
