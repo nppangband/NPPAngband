@@ -26,6 +26,7 @@ Bugfix: The jet black amulet was being shown with a blue colored tile.
 Bugfix: Fixed several bugs regarding replacing a quest monster that has not been killed by the player.
 Bugfix: In the object knowledge menu, Dragon shields and Druid spellbooks now appear in the right order.
 Bugfix: In the object knowledge menu, a section has been added for chests.
+Bugfix: The druid spell "create elements" now creates native terrain below the player as well.
 
 
 

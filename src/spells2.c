@@ -188,15 +188,17 @@ bool create_elements(int cy, int cx, int range)
 		if (n > 0) feat2 = elements[rand_int(n)];
 	}
 
+
+
 	/* Traverse grids */
     for (y = cy - range; y <= cy + range; y++)
     {
         for (x = cx - range; x <= cx + range; x++)
         {
-			/* Ignore out of range grids */
+        	/* Ignore out of range grids */
             if (distance(y, x, cy, cx) > range) continue;
 
-			/* Ignore invalid grids */
+  			/* Ignore invalid grids */
             if (!in_bounds(y, x)) continue;
 
 			/* Ignore perma-walls, stairs, etc. */
@@ -208,8 +210,8 @@ bool create_elements(int cy, int cx, int range)
 			/* Ignore walls, doors, etc. */
 			if (!cave_passable_bold(y, x)) continue;
 
-			/* Ignore grids with monsters/player */
-			if (cave_m_idx[y][x] != 0) continue;
+			/* Ignore grids with monsters */
+			if (cave_m_idx[y][x] > 0) continue;
 
 			/* Ignore grids with objects */
 			if (cave_o_idx[y][x] != 0) continue;
@@ -236,7 +238,7 @@ bool create_elements(int cy, int cx, int range)
         }
     }
 
-	/* Success */
+    /* Success */
 	return (TRUE);
 }
 
