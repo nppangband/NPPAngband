@@ -18,6 +18,7 @@ For the druid "clear area" spell, the cleared area and borderinging walls now li
 The druid spell stone to mud is now 4 mana to cast.
 The druid spell clear area is now 9 mana to cast. 
 Change the colors of some spells (electric bursts, spores).
+Made most of the lizards, frogs, and snakes cold-blooded.
 Bugfix: Equipment and itemlist windows were not updating properly when the player was in a store.
 Bugfix: There was a playtesting message when examining a store service.
 Bugfix: Player ghost templates were not saving properly when a player died.
