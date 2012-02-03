@@ -2222,11 +2222,15 @@ static int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash)
 	/* Is the monster native to that square */
 	else if (!is_native)
 	{
+		/* confused monsters or stunned monsters don't know any better */
+		if (m_ptr->m_timed[MON_TMD_CONF]) move_chance = 100;
+		else if ((m_ptr->m_timed[MON_TMD_STUN]) && (one_in_(10))) move_chance = 100;
+
 		/* Will monster be significantly damaged by going there? */
-		if ((f_info[feat].dam_non_native) > (m_ptr->hp / 15)) return (0);
+		else if ((f_info[feat].dam_non_native) > (m_ptr->hp / 15)) return (0);
 
 		/*desirability of the move is based on energy to go in square*/
-		move_chance = 10000 / f_info[feat].non_native_energy_move;
+		else move_chance = 10000 / f_info[feat].non_native_energy_move;
 
 		/*Never more than 100*/
 		if (move_chance > 100) move_chance = 100;
