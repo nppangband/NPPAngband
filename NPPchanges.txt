@@ -19,6 +19,7 @@ The druid spell stone to mud is now 4 mana to cast.
 The druid spell clear area is now 9 mana to cast. 
 Change the colors of some spells (electric bursts, spores).
 Made most of the lizards, frogs, and snakes cold-blooded.
+Made the spirit troll cold-blooded.
 Bugfix: Equipment and itemlist windows were not updating properly when the player was in a store.
 Bugfix: There was a playtesting message when examining a store service.
 Bugfix: Player ghost templates were not saving properly when a player died.
@@ -31,7 +32,7 @@ Bugfix: Fixed several bugs regarding replacing a quest monster that has not been
 Bugfix: In the object knowledge menu, Dragon shields and Druid spellbooks now appear in the right order.
 Bugfix: In the object knowledge menu, a section has been added for chests.
 Bugfix: The druid spell "create elements" now creates native terrain below the player as well.
-
+Bugfix:  Stunned and confused monsters were prevented from walking into terrain that caused them damage.
 
 
 NPP 0.5.3 changes:

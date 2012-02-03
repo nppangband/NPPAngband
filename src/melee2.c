@@ -2224,7 +2224,7 @@ static int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash)
 	{
 		/* confused monsters or stunned monsters don't know any better */
 		if (m_ptr->m_timed[MON_TMD_CONF]) move_chance = 100;
-		else if ((m_ptr->m_timed[MON_TMD_STUN]) && (one_in_(10))) move_chance = 100;
+		else if ((m_ptr->m_timed[MON_TMD_STUN]) && (one_in_(25))) move_chance = 100;
 
 		/* Will monster be significantly damaged by going there? */
 		else if ((f_info[feat].dam_non_native) > (m_ptr->hp / 15)) return (0);
