@@ -805,12 +805,20 @@ static void process_world(void)
 			{
 				int old_feeling = feeling;
 				int i, y, x;
-				int best_r_idx, r_idx;
+				int best_r_idx = 0;
+				int r_idx;
 				int attempts_left = 10000;
 
 				if (q_ptr->q_type == QUEST_THEMED_LEVEL)
 				{
 					monster_level = effective_depth(p_ptr->depth) + THEMED_LEVEL_QUEST_BOOST;
+				}
+				/* For Monster/unique quests the best_r_idx is already known */
+				else if ((q_ptr->q_type == QUEST_MONSTER) ||
+						 (q_ptr->q_type == QUEST_GUARDIAN) ||
+						 (q_ptr->q_type == QUEST_UNIQUE))
+				{
+					best_r_idx = q_ptr->mon_idx;
 				}
 				else  monster_level = effective_depth(p_ptr->depth) + PIT_NEST_QUEST_BOOST;
 
@@ -822,8 +830,6 @@ static void process_world(void)
 
 				/* mega-hack - undo feeling so monster can be generated */
 				feeling = 0;
-
-				best_r_idx = 0;
 
 				/* Find a legal, distant, unoccupied, space */
 				while (attempts_left)
@@ -841,7 +847,7 @@ static void process_world(void)
 					if (distance(y, x, p_ptr->py, p_ptr->px) >  MAX_SIGHT) break;
 				}
 
-				if (attempts_left)
+				if ((attempts_left) && (!best_r_idx))
 				{
 					monster_race *r_ptr;
 					monster_race *r2_ptr = &r_info[best_r_idx];
@@ -873,24 +879,24 @@ static void process_world(void)
 						r2_ptr = &r_info[best_r_idx];
 
 					}
+				}
 
-					if (place_monster_aux(y, x, best_r_idx, TRUE, FALSE))
+				if (place_monster_aux(y, x, best_r_idx, TRUE, FALSE))
+				{
+
+					/* Scan the monster list */
+					for (i = 1; i < mon_max; i++)
 					{
+						monster_type *m_ptr = &mon_list[i];
 
-						/* Scan the monster list */
-						for (i = 1; i < mon_max; i++)
-						{
-							monster_type *m_ptr = &mon_list[i];
+						/* Ignore dead monsters */
+						if (!m_ptr->r_idx) continue;
 
-							/* Ignore dead monsters */
-							if (!m_ptr->r_idx) continue;
+						/* Make sure we have the right monster race */
+						if (m_ptr->r_idx != best_r_idx) continue;
 
-							/* Make sure we have the right monster race */
-							if (m_ptr->r_idx != best_r_idx) continue;
-
-							/*mark it as a quest monster*/
-							m_ptr->mflag |= (MFLAG_QUEST);
-						}
+						/*mark it as a quest monster*/
+						m_ptr->mflag |= (MFLAG_QUEST);
 					}
 				}
 
