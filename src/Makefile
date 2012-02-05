@@ -6,7 +6,7 @@ include Makefile.src
 INCLUDE = $(HDRS) $(INCS)
 OBJECTS = $(ANGFILES) $(MAINFILES) $(ZFILES)
 SRCS    = ${OBJECTS:.o=.c}
-SUBDIRS = gtk monster object player
+SUBDIRS = gtk
 PROG    = NPPangband
 CFLAGS += -I.
 
