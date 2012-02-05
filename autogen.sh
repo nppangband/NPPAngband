@@ -1,7 +1,4 @@
-﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<!DOCTYPE HTML>><HTML><HEAD>
-<META content="text/html; charset=utf-8" http-equiv="Content-Type"></HEAD>
-<BODY><PRE># !/bin/sh
+# !/bin/sh
 
 TOP_DIR=$(dirname $0)
 LAST_DIR=$PWD
@@ -49,9 +46,8 @@ run_or_die ()
 
 cd $TOP_DIR
 
-run_or_die $ACLOCAL -I m4
+run_or_die $ACLOCAL
 run_or_die $AUTOHEADER
 run_or_die $AUTOCONF
 
 cd $LAST_DIR
-</PRE></BODY></HTML>
