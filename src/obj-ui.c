@@ -1640,6 +1640,9 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 	/* Forget the item_tester_hook restriction */
 	item_tester_hook = NULL;
 
+	/* Make sure the windows are up to date */
+	p_ptr->redraw |= (PR_INVEN | PR_EQUIP);
+
 	/* Clear the prompt line */
 	prt("", 0, 0);
 
