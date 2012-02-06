@@ -221,8 +221,8 @@ static int draw_path(u16b path_n, u16b *path_g, char *c, byte *a, int y1, int x1
 		/* Get the character */
 		if (!(use_graphics && (arg_graphics == GRAPHICS_DAVID_GERVAIS)))
 		{
-			this_a = '*';
-			this_c = mp->path_color;
+			this_a = mp->path_color;
+			this_c = '*';
 		}
 		/* GRAPHICS_DAVID_GERVAIS being used */
 		else
