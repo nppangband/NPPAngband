@@ -7,10 +7,10 @@ INCLUDE = $(HDRS) $(INCS)
 OBJECTS = $(ANGFILES) $(MAINFILES) $(ZFILES)
 SRCS    = ${OBJECTS:.o=.c}
 SUBDIRS = gtk
-PROG    = NPPangband
+PROG    = nppangband
 CFLAGS += -I.
 
-angband: $(OBJECTS)
+$(PROG): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) $(LDADD) -o $@ 
 	@printf "%10s %-20s\n" LINK $@
 
