@@ -88,12 +88,13 @@ static void look_mon_desc(char *buf, size_t max, int m_idx)
 }
 
 
-#define TILE_TYPE_MON		0
-#define TILE_TYPE_OBJ		1
-#define TILE_TYPE_WALL		2
-#define TILE_TYPE_FLOOR		3
-#define TILE_TYPE_EFCT		4
-#define TILE_TYPE_UNKN		5
+#define TILE_TYPE_TARGET	0
+#define TILE_TYPE_MON		1
+#define TILE_TYPE_OBJ		2
+#define TILE_TYPE_WALL		3
+#define TILE_TYPE_FLOOR		4
+#define TILE_TYPE_EFCT		5
+#define TILE_TYPE_UNKN		6
 
 #define TILE_TYPE_MAX		(TILE_TYPE_UNKN + 1)
 
@@ -113,12 +114,13 @@ struct path_markings
  */
 static const struct path_markings path_marks[TILE_TYPE_MAX] =
 {
-	{ (byte)0x81,		(char)0xB0, TERM_RED },	/*  TILE_TYPE_MON  */
+	{ (byte)0x81,		(char)0xB0, TERM_RED },		/*  TILE_TYPE_TARGET  */
+	{ (byte)0x81,		(char)0xB7, TERM_ORANGE },	/*  TILE_TYPE_MON  */
 	{ (byte)0x81,		(char)0xB6, TERM_YELLOW},	/*  TILE_TYPE_OBJ  */
-	{ (byte)0x81,		(char)0xB2, TERM_BLUE}, /*  TILE_TYPE_WALL  */
-	{ (byte)0x81, 		(char)0xB8, TERM_WHITE}, /*  TILE_TYPE_FLOOR  */
-	{ (byte)0x81,		(char)0xB1, TERM_GREEN}, /*  TILE_TYPE_EFCT  */
-	{ (byte)0x81,   	(char)0xBA, TERM_L_DARK}, /*  TILE_TYPE_UNKN  */
+	{ (byte)0x81,		(char)0xB2, TERM_BLUE}, 	/*  TILE_TYPE_WALL  */
+	{ (byte)0x81, 		(char)0xB8, TERM_WHITE}, 	/*  TILE_TYPE_FLOOR  */
+	{ (byte)0x81,		(char)0xB1, TERM_GREEN}, 	/*  TILE_TYPE_EFCT  */
+	{ (byte)0x81,   	(char)0xBA, TERM_L_DARK}, 	/*  TILE_TYPE_UNKN  */
 };
 /*
  * Draw a visible path over the squares between (x1,y1) and (x2,y2).
@@ -134,7 +136,7 @@ static const struct path_markings path_marks[TILE_TYPE_MAX] =
  * The first two result from information being lost from the dungeon arrays,
  * which requires changes elsewhere
  */
-static int draw_path(u16b path_n, u16b *path_g, char *c, byte *a, int y1, int x1)
+static int draw_path(u16b path_n, u16b *path_g, char *c, byte *a, int y1, int x1, int cur_tar_y, int cur_tar_x)
 {
 	int i;
 	bool on_screen;
@@ -217,6 +219,9 @@ static int draw_path(u16b path_n, u16b *path_g, char *c, byte *a, int y1, int x1
 		{
 			mp = &path_marks[TILE_TYPE_FLOOR];
 		}
+
+		/* ALways use red for the current target square */
+		if ((cur_tar_y == y) && (cur_tar_x == x)) mp = &path_marks[TILE_TYPE_TARGET];
 
 		/* Get the character */
 		if (!(use_graphics && (arg_graphics == GRAPHICS_DAVID_GERVAIS)))
@@ -1797,7 +1802,7 @@ bool target_set_interactive(int mode, int x, int y)
 			/* Draw the path in "target" mode. If there is one */
 			if ((mode & (TARGET_KILL)) && (cave_info[y][x] & (CAVE_FIRE)))
 			{
-				path_drawn = draw_path(path_n, path_g, path_char, path_attr, py, px);
+				path_drawn = draw_path(path_n, path_g, path_char, path_attr, py, px, y, x);
 			}
 			event_signal(EVENT_MOUSEBUTTONS);
 
@@ -2018,7 +2023,7 @@ bool target_set_interactive(int mode, int x, int y)
 			if ((mode & (TARGET_KILL)) && (cave_info[y][x] & (CAVE_FIRE)))
 			{
 				/* Save target info */
-				path_drawn = draw_path(path_n, path_g, path_char, path_attr, py, px);
+				path_drawn = draw_path(path_n, path_g, path_char, path_attr, py, px, y, x);
 			}
 
 			event_signal(EVENT_MOUSEBUTTONS);
