@@ -869,8 +869,8 @@ static void do_cmd_options_win(void)
 		/* Move */
 		if (d != 0)
 		{
-			x = (x + ddx[d] + 8) % ANGBAND_TERM_MAX;
-			y = (y + ddy[d] + 16) % PW_MAX_FLAGS;
+			x = (x + ddx[d]) % ANGBAND_TERM_MAX;
+			y = (y + ddy[d]) % PW_MAX_FLAGS;
 		}
 
 		/* Oops */
