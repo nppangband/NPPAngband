@@ -269,6 +269,7 @@
 #define FEAT_SHARD                     203
 #define FEAT_METEOR_BURST              204
 #define FEAT_ACID_WALL                 205
+#define FEAT_TOWN_FLOOR				206
 
 
 /* Level flags - extracted from feature flags */

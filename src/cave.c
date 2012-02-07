@@ -1522,7 +1522,7 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 				u16b feat2 = cave_feat[y][x];
 
 				/* Not boring floor? */
-				if (feat2 != FEAT_FLOOR)
+				if ((feat2 != FEAT_FLOOR) && (feat2 != FEAT_TOWN_FLOOR))
 				{
 					/* Get mimiced feature */
 					feat2 = f_info[feat2].f_mimic;
@@ -4868,7 +4868,7 @@ void town_illuminate(bool daytime)
 			bool always_lit = FALSE;
 
 			/* Obvious */
-			if (cave_feat[y][x] != FEAT_FLOOR) always_lit = TRUE;
+			if (cave_feat[y][x] != FEAT_TOWN_FLOOR) always_lit = TRUE;
 
 			/* Glyphs and visible traps */
 			else if (cave_any_trap_bold(y, x) &&
