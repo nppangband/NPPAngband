@@ -1045,7 +1045,6 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 	int px = p_ptr->px;
 
 	int j, k = 0;
-	bool item;
 
 	bool refresh = TRUE;
 
@@ -1071,9 +1070,6 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 
 	/* Not done */
 	done = FALSE;
-
-	/* No item selected */
-	item = FALSE;
 
 	/* Mega-hack -- show lists */
 	if ((auto_display_lists) || (mode & (NOUN_VERB))) p_ptr->command_see = TRUE;
@@ -1439,7 +1435,6 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 
 					/* Accept that choice */
 					(*cp) = k;
-					item = TRUE;
 					done = TRUE;
 				}
 
@@ -1604,15 +1599,12 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
  */
 bool get_item(int *cp, cptr pmt, cptr str, int mode)
 {
-	bool done, item;
+	bool item;
 
 	bool oops = FALSE;
 
 	/* Paranoia XXX XXX XXX */
 	msg_print(NULL);
-
-	/* Not done */
-	done = FALSE;
 
 	/* No item selected */
 	item = FALSE;

@@ -953,6 +953,7 @@ static errr term_data_init_gcu(term_data *td, int rows, int cols, int y, int x)
 	t->wipe_hook = Term_wipe_gcu;
 	t->curs_hook = Term_curs_gcu;
 	t->xtra_hook = Term_xtra_gcu;
+	t->xchar_hook = Term_xchar_gcu;
 
 	/* Save the data */
 	t->data = td;

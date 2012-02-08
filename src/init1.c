@@ -1502,16 +1502,16 @@ errr parse_f_info(char *buf, header *head)
 	/* Process 'M' for "Mimic" (one line only) */
 	else if (buf[0] == 'M')
 	{
-		u32b f_mimic;
+		int f_mimic;
 
 		/* There better be a current f_ptr */
 		if (!f_ptr) return (PARSE_ERROR_MISSING_RECORD_HEADER);
 
 		/* Scan for the values */
-		if (1 != sscanf(buf+2, "%lu", &f_mimic)) return (PARSE_ERROR_GENERIC);
+		if (1 != sscanf(buf+2, "%d", &f_mimic)) return (PARSE_ERROR_GENERIC);
 
 		/* Save the values */
-		f_ptr->f_mimic = f_mimic;
+		f_ptr->f_mimic = (u16b)f_mimic;
 	}
 
 	/* Process 'G' for "Graphics" (one line only) */
