@@ -9,6 +9,8 @@ SRCS    = ${OBJECTS:.o=.c}
 SUBDIRS = gtk
 PROG    = nppangband
 CFLAGS += -I.
+LDFLAGS	+=	-lSDL
+
 
 $(PROG): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) $(LDADD) -o $@ 
