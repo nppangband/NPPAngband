@@ -9,7 +9,7 @@ SRCS    = ${OBJECTS:.o=.c}
 SUBDIRS = gtk
 PROG    = nppangband
 CFLAGS += -I.
-LDFLAGS	+=	-lSDL
+LDFLAGS += -lSDL
 
 
 $(PROG): $(OBJECTS)
