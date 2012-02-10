@@ -1,4 +1,5 @@
 MKPATH=../mk/
-include $(MKPATH)buildsys.mk
+include $(MKPATH)buildsys.mk	
+	
 
-SUBDIRS = apex bone edit file help pref save user xtra info
+SUBDIRS = apex bone data edit file help pref save user xtra info

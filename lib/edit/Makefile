@@ -1,6 +1,7 @@
 MKPATH=../../mk/
 include $(MKPATH)buildsys.mk
 
-CONFIG = artifact.txt ego_item.txt flavor.txt limits.txt monster.txt names.txt object.txt p_class.txt p_hist.txt p_race.txt shop_own.txt player_ghost.txt quest.txt shop_own.txt terrain.txt vault.txt
+CONFIG = artifact.txt ego_item.txt flavor.txt limits.txt monster.txt \
+ names.txt object.txt p_class.txt p_hist.txt player_ghost.txt \
+ p_race.txt shop_own.txt quest.txt store.txt terrain.txt vault.txt 
 PACKAGE = edit
-
