@@ -1,12 +1,11 @@
-#
 # File: Makefile.src
 #
 # A makefile which includes the current object files, hopefully includable
 # across a range of different makefiles, to cut down on maintenance.
 #
 
-VERSION = 3.1.2v2
-COPYRIGHT = (c) 1995-2010 Angband contributors
+VERSION = 0.5.4
+COPYRIGHT = (c) 1995-2012 Angband and NPPAngbandcontributors
 
 HEADERS = \
 	angband.h \
@@ -25,11 +24,11 @@ HEADERS = \
 	player.h \
 	store.h \
 	terrain.h \
+	object.h \
+	textui.h \
 	types.h \
 	ui-event.h \
 	ui.h \
-	ui-birth.h \
-	ui-event.h \
 	ui-menu.h \
 	x-char.h \
 	z-file.h \
@@ -46,15 +45,15 @@ GTKHEADERS = \
 	gtk/cairo-utils.h \
 	gtk/main-gtk.h \
 
-ZFILES = z-msg.o z-quark.o z-rand.o z-term.o z-type.o \
+ZFILES = z-file.o z-form.o z-msg.o z-quark.o z-rand.o z-term.o z-type.o \
          z-util.o z-virt.o
 MAINFILES = main.o main-crb.o main-gcu.o $(GTKMAINFILES) \
-            main-sdl.o main-win.o main-x11.o snd-sdl.o
+           main-sdl.o main-win.o main-x11.o snd-sdl.o
 
 GTKMAINFILES = \
 	gtk/main-gtk.o \
-	gtk/cairo-utils.o
-
+	gtk/cairo-utils.o 
+	
 ANGFILES = \
 	attack.o \
 	birth.o \
@@ -106,7 +105,8 @@ ANGFILES = \
 	target.o \
 	timed.o \
 	ui.o \
-    ui-birth.o \
+	 ui-birth.o \
+	use-obj.o
 	ui-event.o \
 	ui-menu.o \
 	util.o  \
@@ -115,8 +115,6 @@ ANGFILES = \
 	wizard2.o \
 	x-char.o \
 	x-spell.o \
-	z-file.o \
-	z-form.o \
 	xtra1.o\
 	xtra2.o \
 	xtra3.o
