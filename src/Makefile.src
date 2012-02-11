@@ -105,7 +105,6 @@ ANGFILES = \
 	ui-birth.o \
 	ui-event.o \
 	ui-menu.o \
-	use-obj.o  \
 	util.o  \
 	variable.o \
 	wizard1.o \
