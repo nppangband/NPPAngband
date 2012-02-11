@@ -7,8 +7,8 @@ font-xxx.prf graf.prf graf-dvg.prf graf-gcu.prf \
 graf-lsl.prf graf-mac.prf graf-new.prf graf-sdl.prf graf-win.prf \
 graf-x11.prf graf-xxx.prf message.prf pref.prf pref-gcu.prf \
 pref-mac.prf pref-sdl.prf pref-win.prf pref-x11.prf \
-races.prf shades.prf. user.prf user-mac.prf xtra-dvg.prf \
-xtra-new.prf xtra-xxx.prf	
+races.prf shades.prf user.prf user-mac.prf xtra-dvg.prf \
+xtra-new.prf xtra-xxx.prf
 
-PACKAGE = pref	
+PACKAGE = pref
 
