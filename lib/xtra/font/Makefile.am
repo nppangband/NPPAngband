@@ -29,13 +29,13 @@ fonts.dir: $(pcf_gz_files)
 	mkfontdir
 	
 EXTRA_DIST = \
-  $(angband_files) $(bdf_files) compile_bdf_fonts.sh
+	$(angband_files) $(bdf_files) compile_bdf_fonts.sh
 
 if SET_GID
-angbanddir = @DEFAULT_PATH@xtra/font
+	angbanddir = @DEFAULT_PATH@xtra/font
 
 angband_DATA = \
-  $(angband_files) $(pcf_gz_files) fonts.dir
+	$(angband_files) $(pcf_gz_files) fonts.dir
 endif
 
 CLEANFILES = $(pcf_gz_files) fonts.dir
