@@ -20,6 +20,10 @@ The druid spell clear area is now 9 mana to cast.
 Change the colors of some spells (electric bursts, spores).
 Made most of the lizards, frogs, and snakes cold-blooded.
 Made the spirit troll cold-blooded.
+Add terrain for a town floor.
+Many files added to assist compiling in Linux.
+Modify colors in the GCU port
+Modify the colors for the drawn target path inside the targeting menu.
 Bugfix: Equipment and itemlist windows were not updating properly when the player was in a store.
 Bugfix: There was a playtesting message when examining a store service.
 Bugfix: Player ghost templates were not saving properly when a player died.
@@ -32,8 +36,9 @@ Bugfix: Fixed several bugs regarding replacing a quest monster that has not been
 Bugfix: In the object knowledge menu, Dragon shields and Druid spellbooks now appear in the right order.
 Bugfix: In the object knowledge menu, a section has been added for chests.
 Bugfix: The druid spell "create elements" now creates native terrain below the player as well.
-Bugfix:  Stunned and confused monsters were prevented from walking into terrain that caused them damage.
-
+Bugfix: Stunned and confused monsters were prevented from walking into terrain that caused them damage.
+BUgfix: Keyboard navigation in the windows submenu was broken.
+When opening or disarming 2 chests in a stack, the first one was automatically picked instead of giving the player a choice.
 
 NPP 0.5.3 changes:
 Reinstated the menus allowing the player to edit visuals and tilesets for monsters, terrain, flavors, and objects.

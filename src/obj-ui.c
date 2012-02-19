@@ -976,8 +976,8 @@ static void get_item_display(menu_type *menu, int oid, bool cursor, int row, int
 	else label = index_to_label(idx);
 	c_put_str(attr, format("%c)",label), row, (col-3));
 
-	/* Nor print the object */
-	c_put_str(attr, format("%s",o_name), row, col);
+	/* Nor print the object  */
+	c_put_str(attr, format("%s", o_name), row, col);
 }
 
 #ifdef GARBAGE_CODE
@@ -1032,7 +1032,7 @@ static bool get_item_action(char cmd, void *db, int oid)
 /**
  * Display list items to choose from
  */
-bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
+bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 {
 	menu_type menu;
 	menu_iter menu_f = {get_item_tag, NULL, get_item_display, get_item_action };
@@ -1040,9 +1040,6 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 	ui_event_data evt = { EVT_NONE, 0, 0, 0, 0 };
 	int num_entries;
 	bool done;
-
-	int py = p_ptr->py;
-	int px = p_ptr->px;
 
 	int j, k = 0;
 
@@ -1144,7 +1141,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
 	if (mode & (USE_FLOOR))
 	{
 		/* Scan all objects in the grid */
-		floor_num = scan_floor(floor_list, MAX_FLOOR_STACK, py, px, 0x01);
+		floor_num = scan_floor(floor_list, MAX_FLOOR_STACK, sq_y, sq_x, 0x01);
 	}
 
 	/* Full floor */
@@ -1596,6 +1593,8 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops)
  *
  * This function has been largely rewritten for FAangband 0.3.2 using
  * Pete Mack's menu code.
+ *
+ * Assumes the item is on the player square
  */
 bool get_item(int *cp, cptr pmt, cptr str, int mode)
 {
@@ -1611,7 +1610,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 	*cp = 0;
 
 	/* Go to menu */
-	item = item_menu(cp, pmt, mode, &oops);
+	item = item_menu(cp, pmt, mode, &oops, p_ptr->py, p_ptr->px);
 
 	/* Check validity */
 	if (item)
@@ -1634,6 +1633,59 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 
 	/* Make sure the equipment/inventory windows are up to date */
 	p_ptr->redraw |= (PR_INVEN | PR_EQUIP);
+
+	/* Clear the prompt line */
+	prt("", 0, 0);
+
+	/* Warning if needed */
+	if (oops && str) msg_print(str);
+
+	/* Result */
+	return (item);
+}
+
+/*
+* Same notes as above for get_item, except this is used for squares other than the one the player is on.
+* This can be used on any square on the map, but it is intended for
+* disarming opening chests on adjacent squares.
+*/
+bool get_item_beside(int *cp, cptr pmt, cptr str, int sq_y, int sq_x)
+{
+	bool item;
+
+	bool oops = FALSE;
+
+	/* Paranoia XXX XXX XXX */
+	msg_print(NULL);
+
+	/* No item selected */
+	item = FALSE;
+	*cp = 0;
+
+	/* Paranoia */
+	if (!in_bounds_fully(sq_y, sq_x)) oops = TRUE;
+
+	/* Go to menu */
+	else item = item_menu(cp, pmt, (USE_FLOOR), &oops, sq_y, sq_x);
+
+	/* Check validity */
+	if (item)
+	{
+		if (!get_item_allow(*cp, TRUE))
+		{
+			item = FALSE;
+			msg_print(NULL);
+		}
+	}
+
+	/* Hack -- Cancel "display" */
+	p_ptr->command_see = FALSE;
+
+	/* Forget the item_tester_tval restriction */
+	item_tester_tval = 0;
+
+	/* Forget the item_tester_hook restriction */
+	item_tester_hook = NULL;
 
 	/* Clear the prompt line */
 	prt("", 0, 0);
@@ -2169,7 +2221,7 @@ void cmd_use_item(void)
 			message_flush();
 			screen_save();
 
-			if (!item_menu(&item, q, (USE_QUIVER | USE_INVEN | USE_EQUIP | USE_FLOOR | NOUN_VERB), &oops))
+			if (!item_menu(&item, q, (USE_QUIVER | USE_INVEN | USE_EQUIP | USE_FLOOR | NOUN_VERB), &oops, p_ptr->py, p_ptr->px))
 			{
 				/* Total Redraw, print warning, then quit  */
 				menu_stage = MENU_QUIT;

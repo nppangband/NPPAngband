@@ -5297,6 +5297,27 @@ bool obj_is_scroll(const object_type *o_ptr) { return o_ptr->tval == TV_SCROLL; 
 bool obj_is_food(const object_type *o_ptr)   { return o_ptr->tval == TV_FOOD; }
 bool obj_is_light(const object_type *o_ptr)   { return o_ptr->tval == TV_LIGHT; }
 bool obj_is_ring(const object_type *o_ptr)   { return o_ptr->tval == TV_RING; }
+bool obj_is_chest(const object_type *o_ptr)   { return o_ptr->tval == TV_CHEST; }
+
+/**
+ * Determine whether an object is a chest
+ *
+ * \param o_ptr is the object to check
+ */
+bool chest_requires_disarming(const object_type *o_ptr)
+{
+	if (!obj_is_chest(o_ptr)) return FALSE;
+
+	/* We don't know if it is trapped or not */
+	if (!object_known_p(o_ptr)) return FALSE;
+
+	/* Already disarmed. */
+	if (o_ptr->pval <= 0) return FALSE;
+
+	if (!chest_traps[o_ptr->pval]) return FALSE;
+
+	return (TRUE);
+}
 
 
 /**

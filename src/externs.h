@@ -944,6 +944,8 @@ extern bool obj_is_scroll(const object_type *o_ptr);
 extern bool obj_is_food(const object_type *o_ptr);
 extern bool obj_is_light(const object_type *o_ptr);
 extern bool obj_is_ring(const object_type *o_ptr);
+extern bool obj_is_chest(const object_type *o_ptr);
+extern bool chest_requires_disarming(const object_type *o_ptr);
 extern bool obj_is_ammo(const object_type *o_ptr);
 extern bool ammo_can_fire(const object_type *o_ptr, int item);
 extern bool has_correct_ammo(void);
@@ -970,7 +972,9 @@ extern void display_equip(void);
 extern void show_equip(olist_detail_t mode);
 extern void show_floor(const int *floor_list, int floor_num, olist_detail_t mode);
 extern bool get_item(int *cp, cptr pmt, cptr str, int mode);
-extern bool item_menu(int *cp, cptr pmt, int mode, bool *oops);
+extern bool get_item_beside(int *cp, cptr pmt, cptr str, int sq_y, int sq_x);
+extern bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x);
+
 
 /* pathfind.c */
 extern bool findpath(int y, int x);
@@ -1247,8 +1251,6 @@ extern bool set_stun(int v);
 extern bool set_cut(int v);
 extern bool set_food(int v);
 
-
-/*use-obj.c*/
 
 
 /* util.c */

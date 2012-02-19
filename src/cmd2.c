@@ -587,6 +587,12 @@ static bool do_cmd_open_chest(int y, int x, s16b o_idx)
 
 	object_type *o_ptr = &o_list[o_idx];
 
+	/* paranoia - make sure it is a chest */
+	if (o_ptr->tval != TV_CHEST)
+	{
+		msg_print("This object is not a chest!");
+		return (FALSE);
+	}
 
 	/* Attempt to unlock it */
 	if (o_ptr->pval > 0)
@@ -659,7 +665,6 @@ static bool do_cmd_disarm_chest(int y, int x, s16b o_idx)
 	bool more = FALSE;
 
 	object_type *o_ptr = &o_list[o_idx];
-
 
 	/* Get the "disarm" factor */
 	i = p_ptr->state.skills[SKILL_DISARM];
@@ -848,9 +853,6 @@ int count_chests(int *y, int *x, bool trapped)
 		/* Grab the object */
 		o_ptr = &o_list[o_idx];
 
-		/* Already open */
-		if (o_ptr->pval == 0) continue;
-
 		/* No (known) traps here */
 		if (trapped &&
 		    (!object_known_p(o_ptr) ||
@@ -871,7 +873,6 @@ int count_chests(int *y, int *x, bool trapped)
 	/* All done */
 	return count;
 }
-
 
 /*
  * Extract a "direction" which will move one step from the player location
@@ -1001,37 +1002,22 @@ static bool do_cmd_open_aux(int y, int x)
  */
 void do_cmd_open(cmd_code code, cmd_arg args[])
 {
-	int y, x, dir;
+	int cy, cx, y, x;
+	int dir = args[0].direction;
 
-	s16b o_idx;
+	/* Count chests (locked) */
+	int num_chests, o_idx;
 
 	bool more = FALSE;
 
 	dir = args[0].direction;
 
-	/* Easy Open */
-	if (easy_open)
-	{
-		int num_doors, num_chests;
-
-		/* Count closed doors */
-		num_doors = count_feats(&y, &x, FS_OPEN);
-
-		/* Count chests (locked) */
-		num_chests = count_chests(&y, &x, FALSE);
-
-		/* See if only one target */
-		if ((num_doors + num_chests) == 1)
-		{
-			p_ptr->command_dir = coords_to_dir(y, x);
-		}
-	}
-
 	/* Get location */
-	y = p_ptr->py + ddy[dir];
-	x = p_ptr->px + ddx[dir];
+	cy = y = p_ptr->py + ddy[dir];
+	cx = x = p_ptr->px + ddx[dir];
 
 	/* Check for chests */
+	num_chests = count_chests(&y, &x, FALSE);
 	o_idx = chest_check(y, x, FALSE);
 
 	/* Verify legality */
@@ -1044,13 +1030,13 @@ void do_cmd_open(cmd_code code, cmd_arg args[])
 	if (confuse_dir(&dir))
 	{
 		/* Get location */
-		y = p_ptr->py + ddy[dir];
-		x = p_ptr->px + ddx[dir];
+		cy = y = p_ptr->py + ddy[dir];
+		cy = x = p_ptr->px + ddx[dir];
 
 		/* Check for chest */
+		num_chests = count_chests(&y, &x, FALSE);
 		o_idx = chest_check(y, x, FALSE);
 	}
-
 
 	/* Allow repeated command */
 	if (p_ptr->command_arg)
@@ -1076,10 +1062,34 @@ void do_cmd_open(cmd_code code, cmd_arg args[])
 	}
 
 	/* Chest */
-	else if (o_idx)
+	else if (num_chests)
 	{
-		/* Open the chest */
-		more = do_cmd_open_chest(y, x, o_idx);
+		/* Get top chest */
+		o_idx = chest_check(y, x, FALSE);
+
+		/* Open the chest if confused, or only one */
+		if ((p_ptr->timed[TMD_CONFUSED]) || (num_chests == 1))  more = do_cmd_open_chest(y, x, o_idx);
+
+		/* More than one */
+		else
+		{
+			cptr q, s;
+
+			o_idx = 0;
+
+			/* Get an item */
+			q = "Open which chest? ";
+			s = "There are no chests in that direction!";
+
+			/*clear the restriction*/
+			item_tester_hook = obj_is_chest;
+
+			/*player chose escape*/
+			if (!get_item_beside(&o_idx, q, s, cy, cx)) more = 0;
+
+			/* Open the chest */
+			else more = do_cmd_open_chest(cy, cx, -o_idx);
+		}
 	}
 
 	/* Door */
@@ -1095,7 +1105,8 @@ void do_cmd_open(cmd_code code, cmd_arg args[])
 
 void textui_cmd_open(void)
 {
-	int y, x, dir = DIR_UNKNOWN;
+	int y, x;
+	int dir = DIR_UNKNOWN;
 
 	/* Easy Open */
 	if (easy_open)
@@ -1582,40 +1593,37 @@ static bool do_cmd_disarm_aux(int y, int x, bool disarm)
 void do_cmd_disarm(cmd_code code, cmd_arg args[])
 {
 	int dir = args[0].direction;
-	int y = p_ptr->py + ddy[dir];
-	int x = p_ptr->px + ddx[dir];
+	int y, x, cy, cx;
 
-	s16b o_idx;
+	int num_traps, o_idx, num_chests;
 
 	bool more = FALSE;
+
+	/* Get location */
+	cy = y = p_ptr->py + ddy[dir];
+	cx = x = p_ptr->px + ddx[dir];
+
+	/* Count visible traps */
+	num_traps = count_traps(&y, &x, TRUE);
+
+	/* Count chests (trapped) */
+	num_chests = count_chests(&y, &x, TRUE);
+
+	/* Check for trapped chests */
+	o_idx = chest_check(cy, cx, TRUE);
+
+	/* Verify legality */
+	if (!num_traps && !num_chests) return;
 
 	/* Easy Disarm */
 	if (easy_open)
 	{
-		int num_traps, num_chests;
-
-		/* Count visible traps */
-		num_traps = count_traps(&y, &x, TRUE);
-
-		/* Count chests (trapped) */
-		num_chests = count_chests(&y, &x, TRUE);
-
 		/* See if only one target */
 		if ((num_traps + num_chests) == 1)
 		{
 			p_ptr->command_dir = coords_to_dir(y, x);
 		}
 	}
-
-	/* Get location */
-	y = p_ptr->py + ddy[dir];
-	x = p_ptr->px + ddx[dir];
-
-	/* Check for chests */
-	o_idx = chest_check(y, x, TRUE);
-
-	/* Verify legality */
-	if (!o_idx && !cave_any_trap_bold(y, x)) return;
 
 	/* Take a turn */
 	p_ptr->p_energy_use = BASE_ENERGY_MOVE;
@@ -1624,11 +1632,14 @@ void do_cmd_disarm(cmd_code code, cmd_arg args[])
 	if (confuse_dir(&dir))
 	{
 		/* Get location */
-		y = p_ptr->py + ddy[dir];
-		x = p_ptr->px + ddx[dir];
+		cy = y = p_ptr->py + ddy[dir];
+		cx = x = p_ptr->px + ddx[dir];
 
-		/* Check for chests */
-		o_idx = chest_check(y, x, TRUE);
+		/* re-count the chests and traps */
+		num_traps = count_traps(&y, &x, TRUE);
+
+		num_chests= count_chests(&y, &x, TRUE);
+		o_idx = chest_check(cy, cx, TRUE);
 	}
 
 
@@ -1656,10 +1667,31 @@ void do_cmd_disarm(cmd_code code, cmd_arg args[])
 	}
 
 	/* Chest */
-	else if (o_idx)
+	else if (num_chests)
 	{
-		/* Disarm the chest */
-		more = do_cmd_disarm_chest(y, x, o_idx);
+
+		/* Disarm the chest if confused, or only one */
+		if ((p_ptr->timed[TMD_CONFUSED]) || (num_chests == 1))  more = do_cmd_disarm_chest(y, x, o_idx);
+
+		/* More than one */
+		else
+		{
+			cptr q, s;
+			o_idx = 0;
+
+			/* Get an item */
+			q = "Disarm which chest? ";
+			s = "There are no trapped chests in that direction!";
+
+			/*clear the restriction*/
+			item_tester_hook = chest_requires_disarming;
+
+			/*player chose escape*/
+			if (!get_item_beside(&o_idx, q, s, cy, cx)) more = 0;
+
+			/* Disarm the chest */
+			else more = do_cmd_disarm_chest(cy, cx, -o_idx);
+		}
 	}
 
 	/* Disarm trap */
@@ -1694,7 +1726,10 @@ void textui_cmd_disarm(void)
 		if (num_traps || num_chests)
 		{
 			if (num_traps + num_chests <= 1)
+			{
 				dir = coords_to_dir(y, x);
+			}
+
 		}
 	}
 	else

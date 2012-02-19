@@ -319,7 +319,15 @@ static void show_commands(void)
 	{
 		nearby_chest = TRUE;
 
+		/* reset location (count_chests may have moved it */
+		py = p_ptr->py;
+		px = p_ptr->px;
+
 		if (count_chests(&py, &px, TRUE)) nearby_trapped_chest = TRUE;
+
+		/* reset location (count_chests may have moved it */
+		py = p_ptr->py;
+		px = p_ptr->px;
 	}
 
 	/* Check the sourrounding squares for their contents */
