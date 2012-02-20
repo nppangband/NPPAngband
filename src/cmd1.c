@@ -347,8 +347,7 @@ void do_cmd_pickup_from_pile(bool pickup, bool message)
 	while (TRUE)
 	{
 		int item;
-
-		char prompt[80];
+		cptr q, s;
 
 		int floor_list[MAX_FLOOR_STACK];
 
@@ -410,34 +409,25 @@ void do_cmd_pickup_from_pile(bool pickup, bool message)
 			}
 		}
 
-		/* Save screen */
-		screen_save();
-
-		/* Display */
-		show_floor(floor_list, floor_num, (OLIST_WEIGHT));
-
-		my_strcpy(prompt, "Pick up which object? (ESC to cancel):", sizeof(prompt));
-
 		/*clear the restriction*/
 		item_tester_hook = NULL;
 
-		/* Get the object number to be bought */
-		item = get_menu_choice(floor_num, prompt);
+		q = "Pick up which object? (ESC to cancel):";
+		s = "THere are no objects to pick up!";
 
-		/*player chose escape*/
-		if (item == -1)
+		if (!get_item(&item, q, s, (USE_FLOOR)))
 		{
-			screen_load();
+			/*player chose escape*/
 			break;
 		}
 
-		o_ptr = &o_list[floor_list[item]];
+		o_ptr = &o_list[-item];
 
 		/* Pick up the object */
 		if (put_object_in_inventory(o_ptr))
 		{
-			/* Delete the gold */
-			delete_object_idx(floor_list[item]);
+			/* Delete the object */
+			delete_object_idx(-item);
 		}
 
 		/* Pickup failed.  Quit. */
@@ -451,9 +441,6 @@ void do_cmd_pickup_from_pile(bool pickup, bool message)
 			screen_load();
 			break;
 		}
-
-		/* Load screen */
-		screen_load();
 	}
 
 	/*clear the restriction*/
