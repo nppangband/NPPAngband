@@ -287,6 +287,187 @@ static const char *comment_great[] =
 	"Wow.  I'm going to name my new villa in your honour."
 };
 
+int stats[A_MAX];
+#define STAT_ESCAPE		A_MAX
+#define STAT_NO_CHOICE	A_MAX + 1
+
+/**
+ * Item tag/command key
+ */
+static char stats_tag(menu_type *menu, int oid)
+{
+	/* Caution - could be a problem here if KTRL commands were used */
+	return I2A(oid);
+}
+
+/**
+ * Display an entry on a command menu
+ */
+static void stat_display(menu_type *menu, int oid, bool cursor, int row, int col, int width)
+{
+	char buf[80];
+	byte attr = (cursor ? TERM_L_BLUE : TERM_WHITE);
+	int pr_stat = stats[oid];
+
+	/* Write the description */
+	c_prt(attr, stat_names[pr_stat], row, col);
+
+	/* Note if the stat is maxed */
+	if (p_ptr->stat_max[pr_stat] == 18+100) put_str("!", row, col+3);
+
+	/* Internal "natural" maximum value */
+	cnv_stat(p_ptr->stat_max[pr_stat], buf, sizeof(buf));
+	c_put_str(TERM_L_GREEN, buf, row, col+5);
+
+	/* Race Bonus */
+	strnfmt(buf, sizeof(buf), "%+3d", rp_ptr->r_adj[pr_stat]);
+	c_put_str(TERM_L_BLUE, buf, row, col+11);
+
+	/* Class Bonus */
+	strnfmt(buf, sizeof(buf), "%+3d", cp_ptr->c_adj[pr_stat]);
+	c_put_str(TERM_L_BLUE, buf, row, col+14);
+
+	/* Equipment Bonus */
+	strnfmt(buf, sizeof(buf), "%+3d", p_ptr->state.stat_add[pr_stat]);
+	c_put_str(TERM_L_BLUE, buf, row, col+18);
+
+	/* Resulting "modified" maximum value */
+	cnv_stat(p_ptr->state.stat_top[pr_stat], buf, sizeof(buf));
+	c_put_str(TERM_L_GREEN, buf, row, col+22);
+
+	/* Only display stat_use if not maximal */
+	if (p_ptr->state.stat_use[pr_stat] < p_ptr->state.stat_top[pr_stat])
+	{
+		cnv_stat(p_ptr->state.stat_use[pr_stat], buf, sizeof(buf));
+		c_put_str(TERM_YELLOW, buf, row, col+29);
+	}
+}
+
+/**
+ * Handle user input from a command menu
+ */
+static bool stat_action(char cmd, void *db, int oid)
+{
+	return TRUE;
+}
+/*
+ * Pick a stat.
+ */
+static int stats_menu(int service)
+{
+	int i;
+	int count = 0;
+	char title[120];
+	menu_type menu;
+	menu_iter menu_f = { stats_tag, NULL, stat_display, stat_action };
+	ui_event_data evt = { EVT_NONE, 0, 0, 0, 0 };
+	region area = { 0, 1, -1, -1 };
+	int cursor = 0;
+	int return_value = STAT_NO_CHOICE;
+
+	/* Count up the stats that require the service */
+	for (i = 0; i < A_MAX; i++)
+	{
+		/* Add the stat that need to be restored */
+		if (service == SERVICE_RESTORE_STAT)
+		{
+			if (p_ptr->stat_cur[i] < p_ptr->stat_max[i]) stats[count++] = i;
+		}
+		else /*(service == SERVICE_INCREASE_STAT)*/
+		{
+			if (p_ptr->stat_max[i] < 18+100) stats[count++] = i;
+		}
+
+	}
+
+	/* None of the player stats need servicing */
+	if (!count) return (STAT_NO_CHOICE);
+
+	/* Set up the menu */
+	WIPE(&menu, menu);
+	menu.count = count;
+	menu.title = "abcdef+-\n\r";
+	menu.title = "              Self RB CB  EB   Best";
+	menu.menu_data = stats;
+	if (service == SERVICE_RESTORE_STAT)
+	{
+		my_strcpy(title, " Please select a stat to restore.", sizeof(title));
+	}
+	else /*(service == SERVICE_INCREASE_STAT)*/
+	{
+		my_strcpy(title, " Please select a stat to increase.", sizeof(title));
+	}
+
+	menu.prompt = title;
+	area.page_rows = count + 4;
+	area.width = MAX(strlen(menu.title), strlen(menu.prompt)) + 7;
+
+	menu_init(&menu, MN_SKIN_SCROLL, &menu_f, &area);
+
+	/* Make some buttons */
+	button_backup_all();
+	button_kill_all();
+	button_add("[ESC]", ESCAPE);
+
+	/* Add buttons for all stats that require the service */
+	for (i = 0; i < count; i++)
+	{
+		/* Only use the first three digits */
+		char stat_name[4];
+
+		/*
+		 * Very important to use a string function that handles buffer overflow,
+		 * since a string 5 characters long is being put into a variable 3 spaces long.
+		 */
+		my_strcpy(stat_name, stat_names[stats[i]], sizeof(stat_name));
+
+		button_add(format("[%s]", stat_name),I2A(i));
+	}
+
+	event_signal(EVENT_MOUSEBUTTONS);
+
+	/* Select an entry */
+	while (return_value == STAT_NO_CHOICE)
+	{
+		evt = menu_select(&menu, &cursor, EVT_MOVE);
+
+		if (evt.key == ESCAPE)
+		{
+			return_value = STAT_ESCAPE;
+			continue;
+		}
+
+		else if (evt.type == EVT_BUTTON)
+		{
+			switch (evt.key)
+			{
+				case 'a':
+				case 'b':
+				case 'c':
+				case 'd':
+				case 'e':
+				case 'f':
+				{
+					return_value = stats[A2I(evt.key)];
+					continue;
+				}
+					default:  	break;
+			}
+		}
+		else if (evt.type == EVT_SELECT)
+		{
+			return_value = stats[cursor];
+			continue;
+		}
+	}
+
+	/* Load screen */
+	button_kill_all();
+	button_restore();
+	return (return_value);
+}
+
+
 
 /*
  * The greeting a shopkeeper gives the character says a lot about his
@@ -414,18 +595,6 @@ static bool check_gold(s32b price)
 
 	return (TRUE);
 }
-
-/*
- * Convert a store item index into a one character label
- *
- * We use labels "a"-"l" for page 1, and labels "m"-"x" for page 2.
- */
-static s16b store_to_label(int i)
-{
-	/* Assume legal */
-	return (I2A(i));
-}
-
 
 static void init_services_and_quests(int store_num)
 {
@@ -568,7 +737,7 @@ static bool store_service_aux(int store_num, s16b choice)
 
 	cptr q, s;
 
-	int item, i;
+	int item;
 
 	char prompt[160];
 
@@ -929,80 +1098,35 @@ static bool store_service_aux(int store_num, s16b choice)
 		case SERVICE_RESTORE_STAT:
 		case SERVICE_INCREASE_STAT:
 		{
-
-			bool stats_healthy = TRUE;
-			bool stats_maxed = TRUE;
+			int result;
 
 			/*Too expensive*/
 			if (!check_gold(price)) return (FALSE);
 
 			screen_save();
-			window_make(28, 8, 69, 17);
 
-			/* Check the stats for need */
-			for (i = 0; i < A_MAX; i++)
+			/* returning false??*/
+			result = stats_menu(choice);
+
+			if (result == STAT_NO_CHOICE)
 			{
-				byte color = TERM_SLATE;
 
-				/* Display "injured" stat */
-				if (p_ptr->stat_cur[i] < p_ptr->stat_max[i])
+				if (choice == SERVICE_RESTORE_STAT)
 				{
-					stats_healthy = FALSE;
-
-					color = TERM_L_BLUE;
+					screen_load();
+					msg_format("None of your stats need restoring.");
+					return (FALSE);
 				}
-
-				/* Mark natural maximum */
-				if (p_ptr->stat_max[i] < 18+100)
+				else if (choice == SERVICE_INCREASE_STAT)
 				{
-					stats_maxed = FALSE;
-
-					color = TERM_L_BLUE;
-
+					screen_load();
+					msg_format("Your stats cannot be increased any further.");
+					return (FALSE);
 				}
-
-				/*print out the letter (lines up with the next command to display stat info)*/
-				c_put_str(color, format("%c) ",  store_to_label(i)), 10 + i, 30);
-
 			}
-
-			/* All Modes Use Stat info */
-			display_player_stat_info(10, 33);
-
-			if ((choice == SERVICE_RESTORE_STAT) && (stats_healthy))
-			{
-				msg_format("None of your stats need restoring.");
-
-				screen_load();
-				return (FALSE);
-			}
-			else if ((choice == SERVICE_INCREASE_STAT) && (stats_maxed))
-			{
-				msg_format("Your stats cannot be increased any further.");
-				screen_load();
-				return (FALSE);
-			}
-
-			if  (choice == SERVICE_RESTORE_STAT)
-			{
-				/* Copy the string over */
-				my_strcpy(prompt, "Which stat do you wish to restore? (ESC to cancel):",
-					sizeof(prompt));
-			}
-			/*must be SERVICE_INCREASE_STAT*/
-			else
-			{
-				/* Copy the string over */
-				my_strcpy(prompt, "Which stat do you wish to increase? (ESC to cancel):",
-					sizeof(prompt));
-			}
-
-
-			/* Get the object number to be bought */
-			i = get_menu_choice(A_MAX, prompt);
 
 			/*player chose escape - do nothing */
-			if (i == -1)
+			if (result == STAT_ESCAPE)
 			{
 				screen_load();
 				return (FALSE);
@@ -1012,21 +1136,19 @@ static bool store_service_aux(int store_num, s16b choice)
 			if (choice == SERVICE_RESTORE_STAT)
 			{
 				/*charge it*/
-				if (do_res_stat(i)) p_ptr->au -= price;
+				if (do_res_stat(result)) p_ptr->au -= price;
 				else msg_format("Your %s does not need restoring.",
-										stat_names_full[i]);
+										stat_names_full[result]);
 
 			}
 			/*must be SERVICE_INCREASE_STAT*/
 			else
 			{
-				if (do_inc_stat(i)) p_ptr->au -= price;
+				if (do_inc_stat(result)) p_ptr->au -= price;
 				else msg_format("Your %s cannot be increased any further.",
-									stat_names_full[i]);
+									stat_names_full[result]);
 			}
-
 			screen_load();
-
 			return (TRUE);
 		}
 
