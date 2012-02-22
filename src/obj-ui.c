@@ -976,19 +976,20 @@ static void get_item_display(menu_type *menu, int oid, bool cursor, int row, int
 	else label = index_to_label(idx);
 	c_put_str(attr, format("%c)",label), row, (col-3));
 
-	/* Nor print the object  */
+	/* Now print the object  */
 	c_put_str(attr, format("%s", o_name), row, col);
 }
 
-#ifdef GARBAGE_CODE
 
-/* This doesn't refresh right because some object descriptions are much longer than others */
+
+/* Print out the item description of the highlighted object */
 static void item_menu_hook(int oid, void *db, const region *loc)
 {
 	const int *choice = (const int *) db;
 	int idx = choice[oid];
-	cptr desc;
-	int dlen;
+	char out_val[1024];
+	int max_output;
+	bool started = FALSE;
 
 	/* Get the object */
 	object_type *o_ptr = &inventory[idx];
@@ -999,26 +1000,65 @@ static void item_menu_hook(int oid, void *db, const region *loc)
 	/* Not displaying full menu */
 	if (loc->page_rows == 1) return;
 
+
+
 	/* Output to the screen */
 	text_out_hook = text_out_to_screen;
 
 	/* Indent output */
-	text_out_indent = loc->col + 7;
-	text_out_wrap = loc->col + loc->width - 7;
+	text_out_indent = loc->col;
+	text_out_wrap = loc->col + loc->width - 2;
+
+	/* Display the known artifact description */
+	if (!adult_rand_artifacts && o_ptr->art_num &&
+		    object_known_p(o_ptr) && a_info[o_ptr->art_num].text)
+	{
+		my_strcpy(out_val, a_text + a_info[o_ptr->art_num].text, sizeof(out_val));
+		started = TRUE;
+	}
+	/* Display the known object description */
+	else if (object_aware_p(o_ptr) || object_known_p(o_ptr))
+	{
+		if (k_info[o_ptr->k_idx].text)
+		{
+			my_strcpy(out_val, k_text + k_info[o_ptr->k_idx].text, sizeof(out_val));
+			started = TRUE;
+		}
+
+		/* Display an additional ego-item description */
+		if (o_ptr->ego_num && object_known_p(o_ptr) && e_info[o_ptr->ego_num].text)
+		{
+			if (started)
+			{
+				my_strcat(out_val, "   ", sizeof(out_val));
+				my_strcat(out_val, e_text + e_info[o_ptr->ego_num].text, sizeof(out_val));
+			}
+			else
+			{
+				my_strcpy(out_val, e_text + e_info[o_ptr->ego_num].text, sizeof(out_val));
+				started = TRUE;
+			}
+		}
+	}
+
+	/* Now (crudely) terminate it so it doesn't go any longer than three lines, */
+	max_output = ((text_out_wrap - text_out_indent) * 4) - 10;
+	out_val[max_output] = '\0';
 
 	prt("", loc->row + loc->page_rows, loc->col);
 	prt("", loc->row + loc->page_rows + 1, loc->col);
 	prt("", loc->row + loc->page_rows + 2, loc->col);
+	prt("", loc->row + loc->page_rows + 3, loc->col);
 
-	Term_gotoxy(loc->col + 6, loc->row + loc->page_rows);
+	Term_gotoxy(loc->col, loc->row + loc->page_rows);
 
-	desc = k_text + k_info[o_ptr->k_idx].text;
-	dlen = strlen(desc);
-	text_out_c(TERM_L_BLUE, k_text + k_info[o_ptr->k_idx].text);
+	/* Nothing to print */
+	if (!started) return;
+
+	text_out_c(TERM_L_BLUE, out_val);
 	text_out_indent = 0;
 }
 
-#endif /* GARBAGE_CODE*/
 
 /**
  * Deal with events on the get_item menu
@@ -1227,6 +1267,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 	/* Set up the menu */
 	WIPE(&menu, menu);
 	menu.cmd_keys = "\n\r";
+	menu.browse_hook = item_menu_hook;
 
 	/* Clear space */
 	area.width = len;

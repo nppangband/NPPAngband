@@ -820,6 +820,7 @@ static void process_world(void)
 				{
 					best_r_idx = q_ptr->mon_idx;
 				}
+				/* QUEST_PIT and QUEST_NEST */
 				else  monster_level = effective_depth(p_ptr->depth) + PIT_NEST_QUEST_BOOST;
 
 				/* make a monster */
