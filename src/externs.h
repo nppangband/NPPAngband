@@ -1052,7 +1052,7 @@ extern void teleport_player_to(int ny, int nx);
 extern void teleport_towards(int oy, int ox, int ny, int nx);
 extern void teleport_player_level(int who);
 extern byte gf_color(int type);
-extern u16b bolt_pict(int y, int x, int ny, int nx, int typ);
+extern u16b bolt_pict(int y, int x, int ny, int nx, int typ, u32b flg);
 extern void take_terrain_hit(int dam, int feat, cptr kb_str);
 extern void take_hit(int dam, cptr kb_str);
 extern bool hates_location(int y, int x, const object_type *o_ptr);

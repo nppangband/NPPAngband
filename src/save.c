@@ -1107,6 +1107,7 @@ static bool wr_savefile_new(void)
 	wr_byte(VERSION_MAJOR);
 
 	xor_byte = 0;
+
 	wr_byte(VERSION_MINOR);
 	xor_byte = 0;
 	wr_byte(VERSION_PATCH);

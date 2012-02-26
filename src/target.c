@@ -88,40 +88,6 @@ static void look_mon_desc(char *buf, size_t max, int m_idx)
 }
 
 
-#define TILE_TYPE_TARGET	0
-#define TILE_TYPE_MON		1
-#define TILE_TYPE_OBJ		2
-#define TILE_TYPE_WALL		3
-#define TILE_TYPE_FLOOR		4
-#define TILE_TYPE_EFCT		5
-#define TILE_TYPE_UNKN		6
-
-#define TILE_TYPE_MAX		(TILE_TYPE_UNKN + 1)
-
-
-/**
- * Mouse button structure
- */
-struct path_markings
-{
-	byte a;
-	char c;
-	byte path_color;
-};
-
-/*
- * Tile mapping for the paths (small ball types)
- */
-static const struct path_markings path_marks[TILE_TYPE_MAX] =
-{
-	{ (byte)0x81,		(char)0xB0, TERM_RED },		/*  TILE_TYPE_TARGET  */
-	{ (byte)0x81,		(char)0xB7, TERM_ORANGE },	/*  TILE_TYPE_MON  */
-	{ (byte)0x81,		(char)0xB6, TERM_YELLOW},	/*  TILE_TYPE_OBJ  */
-	{ (byte)0x81,		(char)0xB2, TERM_BLUE}, 	/*  TILE_TYPE_WALL  */
-	{ (byte)0x81, 		(char)0xB8, TERM_WHITE}, 	/*  TILE_TYPE_FLOOR  */
-	{ (byte)0x81,		(char)0xB1, TERM_GREEN}, 	/*  TILE_TYPE_EFCT  */
-	{ (byte)0x81,   	(char)0xBA, TERM_L_DARK}, 	/*  TILE_TYPE_UNKN  */
-};
 /*
  * Draw a visible path over the squares between (x1,y1) and (x2,y2).
  * The path consists of "*", which are white except where there is a
@@ -140,7 +106,7 @@ static int draw_path(u16b path_n, u16b *path_g, char *c, byte *a, int y1, int x1
 {
 	int i;
 	bool on_screen;
-	const struct path_markings *mp;
+	byte color_type;
 
 	/* No path, so do nothing. */
 	if (path_n < 1) return (FALSE);
@@ -181,59 +147,59 @@ static int draw_path(u16b path_n, u16b *path_g, char *c, byte *a, int y1, int x1
 		Term_what(Term->scr->cx, Term->scr->cy, a+i, c+i);
 
 		/* Choose a colour. */
-		/* Visible monsters are red. */
+		/* Visible monsters are orange. */
 		if (cave_m_idx[y][x] && mon_list[cave_m_idx[y][x]].ml)
 		{
 			monster_type *m_ptr = &mon_list[cave_m_idx[y][x]];
 
 			/*mimics act as objects*/
-			if (m_ptr->mimic_k_idx) mp = &path_marks[TILE_TYPE_OBJ];
-			else mp = &path_marks[TILE_TYPE_MON];
+			if (m_ptr->mimic_k_idx) color_type = TERM_YELLOW;
+			else color_type = TERM_ORANGE;
 		}
 
 		/* Known objects are yellow. */
 		else if (cave_o_idx[y][x] && o_list[cave_o_idx[y][x]].marked)
 		{
-			mp = &path_marks[TILE_TYPE_OBJ];
+			color_type = TERM_YELLOW;
     	}
 
 		/* Effects are green */
 		else if ((cave_x_idx[y][x] > 0) && (cave_info[y][x] & (CAVE_SEEN | CAVE_MARK)))
 		{
-			mp = &path_marks[TILE_TYPE_EFCT];
+			color_type = TERM_GREEN;
 		}
 
 		/* Known walls are blue. */
 		else if (!cave_project_bold(y,x) &&
 				((cave_info[y][x] & (CAVE_MARK)) ||	player_can_see_bold(y,x)))
 		{
-			mp = &path_marks[TILE_TYPE_WALL];
+			color_type = TERM_BLUE;
 		}
 		/* Unknown squares are grey. */
 		else if (!(cave_info[y][x] & (CAVE_MARK)) && !player_can_see_bold(y,x))
 		{
-			mp = &path_marks[TILE_TYPE_UNKN];
+			color_type = TERM_L_DARK;
 		}
 		/* Unoccupied squares are white. */
 		else
 		{
-			mp = &path_marks[TILE_TYPE_FLOOR];
+			color_type = TERM_WHITE;
 		}
 
 		/* ALways use red for the current target square */
-		if ((cur_tar_y == y) && (cur_tar_x == x)) mp = &path_marks[TILE_TYPE_TARGET];
+		if ((cur_tar_y == y) && (cur_tar_x == x)) color_type = TERM_RED;
 
 		/* Get the character */
-		if (!(use_graphics && (arg_graphics == GRAPHICS_DAVID_GERVAIS)))
+		if (!use_graphics)
 		{
-			this_a = mp->path_color;
+			this_a = color_type;
 			this_c = '*';
 		}
-		/* GRAPHICS_DAVID_GERVAIS being used */
+		/* Graphics are being used */
 		else
 		{
-			this_a = mp->a;
-			this_c = mp->c;
+			this_a = color_to_attr[TILE_BALL_INFO][color_type];
+			this_c = color_to_char[TILE_BALL_INFO][color_type];
 		}
 
 		/* Visual effects -- Display */

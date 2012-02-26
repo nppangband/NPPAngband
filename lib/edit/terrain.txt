@@ -2182,7 +2182,7 @@ F:NOTICE | REMEMBER | CAN_TUNNEL | WALL | ATTR_LIGHT
 F:HURT_ROCK | ACID
 
 
-N:206:town ground
+N:206:cobblestone street
 G:.:s2
 W:0:1:15:0
 C:0:100:100:100:100:0

@@ -1047,7 +1047,6 @@ void do_cmd_fire(cmd_code code, cmd_arg args[])
 	u16b path_g[PATH_SIZE];
 	u16b path_gx[PATH_SIZE];
 
-
 	/* Get the "bow" (if any) */
 	j_ptr = &inventory[INVEN_BOW];
 
@@ -1124,6 +1123,21 @@ void do_cmd_fire(cmd_code code, cmd_arg args[])
 	/* Describe the object */
 	object_desc(o_name, sizeof(o_name), i_ptr, ODESC_FULL | ODESC_SINGULAR);
 
+	/* Cursed ammunition can hurt the player sometimes */
+	if (IS_QUIVER_SLOT(item) && cursed_p(i_ptr) && (rand_int(100) < 70))
+	{
+		/* Get amount of damage */
+		int dam = damroll(i_ptr->dd, i_ptr->ds) + ABS(i_ptr->to_d) + ABS(j_ptr->to_d) + ABS(p_ptr->state.to_d);
+
+		/* Message */
+		msg_format("The %s releases its curse on you!", o_name);
+
+		/* Hurt the player */
+		project_p(SOURCE_OTHER, p_ptr->py, p_ptr->px, dam, GF_NETHER, "firing a cursed projectile");
+
+		return;
+	}
+
 	/* Find the color and symbol for the object for throwing */
 	missile_attr = object_attr(i_ptr);
 	missile_char = object_char(i_ptr);
@@ -1187,6 +1201,33 @@ void do_cmd_fire(cmd_code code, cmd_arg args[])
 		/* Only do visuals if the player can "see" the missile */
 		if (player_can_see_bold(y, x))
 		{
+			/* Hack, get the appropriate arrow graphics for david gervais and adam bolt's graphics*/
+			if (((i_ptr->tval == TV_ARROW) || (i_ptr->tval == TV_BOLT)) &&
+				 (use_graphics) && ((arg_graphics == GRAPHICS_DAVID_GERVAIS) || (arg_graphics == GRAPHICS_ADAM_BOLT)))
+			{
+				int yy, xx;
+				u16b pict;
+
+				if (!i)
+				{
+					yy = p_ptr->py;
+					xx = p_ptr->px;
+				}
+				else
+				{
+					yy = GRID_Y(path_g[i-1]);
+					xx = GRID_X(path_g[i-1]);
+				}
+
+				pict = bolt_pict(yy, xx, ny, nx, GF_ARROW, PROJECT_AMMO);
+
+				missile_attr = PICT_A(pict);
+				missile_char = PICT_C(pict);
+
+				/* Use the other DVG set for bolts */
+				if (i_ptr->tval == TV_BOLT) missile_char += 8;
+			}
+
 			/* Visual effects */
 			print_rel(missile_char, missile_attr, y, x);
 			move_cursor_relative(y, x);

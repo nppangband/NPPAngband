@@ -985,11 +985,11 @@ static void map_hidden_monster(monster_type *m_ptr, byte *ap, char *cp)
 
 static void get_dtrap_edge_char(byte *a, char *c)
 {
-	if ((use_graphics) && (arg_graphics == GRAPHICS_DAVID_GERVAIS))
+	if (use_graphics)
 	{
 		{
-			*a = (byte)0x81;
-			*c = (char)0xE1;
+			*a = color_to_attr[TILE_BALL_INFO][TERM_GREEN];;
+			*c = color_to_char[TILE_BALL_INFO][TERM_GREEN];
 		}
 	}
 	else
@@ -1366,9 +1366,8 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 					/* Unused voilet cloud symbol */
 					if (arg_graphics == GRAPHICS_DAVID_GERVAIS)
 					{
-						a = (byte)0x81;
-						c = (char)0xD9;
-
+						a = (byte)0x9A;
+						c = (char)0xC4;
 					}
 					else
 					{

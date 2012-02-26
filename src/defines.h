@@ -53,7 +53,7 @@
 /*
  * Current version string
  */
-#define VERSION_STRING	"0.5.4-BETA-1"
+#define VERSION_STRING	"0.5.4-BETA-2"
 
 
 /*
@@ -540,9 +540,9 @@ enum
 #define PROJECT_BEAM         0x00000001
 #define PROJECT_ARC          0x00000002
 #define PROJECT_STAR         0x00000004
-#define PROJECT_XXX1         0x00000008
-#define PROJECT_XXX2         0x00000010
-#define PROJECT_XXX3         0x00000020
+#define PROJECT_ROCK         0x00000008 /* A boulder is being thrown, use rock graphic (affects visuals only) */
+#define PROJECT_SHOT         0x00000010 /* A rock is being thrown/fired, use shot graphic (affects visuals only) */
+#define PROJECT_AMMO         0x00000020 /* A bolt/arrow is being thrown/fired, use shot graphic (affects visuals only) */
 
 /* What projections do */
 #define PROJECT_BOOM         0x00000040

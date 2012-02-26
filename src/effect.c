@@ -1328,7 +1328,7 @@ static void show_burst_effects(void)
 			int x = burst_x[i];
 
 			/* Get grapchis */
-			u16b p = bolt_pict(y, x, y, x, burst_gf[i]);
+			u16b p = bolt_pict(y, x, y, x, burst_gf[i], 0L);
 
 			/* Extract attr/char */
 			byte a = PICT_A(p);

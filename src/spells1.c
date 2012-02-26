@@ -935,7 +935,101 @@ byte gf_color(int type)
 	return (TERM_WHITE);
 }
 
+/*
+ * Helper function for bolt_pic.  For Adam Bolt's tileset, there are several series of
+ * arrows pointed in all 8 directions.  This functions helps display the right one based
+ * on a particular direction.
+ * Projectile is moving (or has moved) from (x,y) to (nx,ny).
+ */
+static int get_arrow_direction_new(int y, int x, int ny, int nx)
+{
+	int adjust = 0;
 
+	/* On the same row */
+	if (y == ny)
+	{
+		/* Headed left */
+		if (x > nx) 		adjust = 2;
+		/* Headed right */
+		else if (x < nx)	adjust = 3;
+	}
+	/* On the same column */
+	else if (x == nx)
+	{
+		/* Headed up */
+		if (y > ny) 		adjust = 0;
+
+		/* Headed down */
+		else /*if (y < ny)*/adjust = 1;
+	}
+	/* headed down */
+	else if (y < ny)
+	{
+		/* Diagonally right */
+		if (x > nx)			adjust = 7;
+
+		/* Diagonally left */
+		else if (x < nx)  	adjust = 6;
+	}
+	/* headed up */
+	else /*if (y > ny) */
+	{
+		/* Diagonally right */
+		if (x > nx)			adjust = 5;
+
+		/* Diagonally left */
+		else if (x < nx)	adjust = 4;
+	}
+	return (adjust);
+}
+
+/*
+ * Helper function for bolt_pic.  For the DVG tileset, there are several series of
+ * arrows pointed in all 8 directions.  This functions helps display the right one based
+ * on a particular direction.
+ * Projectile is moving (or has moved) from (x,y) to (nx,ny).
+ */
+static int get_arrow_direction_dvg(int y, int x, int ny, int nx)
+{
+	int adjust = 0;
+
+	/* On the same row */
+	if (y == ny)
+	{
+		/* Headed left */
+		if (x > nx) 		adjust = 3;
+		/* Headed right */
+		else if (x < nx)	adjust = 4;
+	}
+	/* On the same column */
+	else if (x == nx)
+	{
+		/* Headed up */
+		if (y > ny) 		adjust = 6;
+
+		/* Headed down */
+		else /*if (y < ny)*/adjust = 1;
+	}
+	/* headed down */
+	else if (y < ny)
+	{
+		/* Diagonally right */
+		if (x > nx)			adjust = 0;
+
+		/* Diagonally left */
+		else if (x < nx)  	adjust = 2;
+	}
+	/* headed up */
+	else /*if (y > ny) */
+	{
+		/* Diagonally right */
+		if (x > nx)			adjust = 5;
+
+		/* Diagonally left */
+		else if (x < nx)	adjust = 7;
+	}
+	return (adjust);
+}
 
 /*
  * Find the attr/char pair to use for a spell effect
@@ -944,7 +1038,7 @@ byte gf_color(int type)
  *
  * If the distance is not "one", we (may) return "*".
  */
-u16b bolt_pict(int y, int x, int ny, int nx, int typ)
+u16b bolt_pict(int y, int x, int ny, int nx, int typ, u32b flg)
 {
 	/* Get the color */
 	byte typ_color = gf_color(typ);
@@ -952,7 +1046,63 @@ u16b bolt_pict(int y, int x, int ny, int nx, int typ)
 	byte a;
 	char c;
 
-	if (!(use_graphics && (arg_graphics == GRAPHICS_DAVID_GERVAIS)))
+	/* Special handling of boulders */
+	if (flg & (PROJECT_ROCK))
+	{
+		/* Special handling GRAPHICS_DAVID_GERVAIS graphics */
+		if (use_graphics && (arg_graphics == GRAPHICS_DAVID_GERVAIS))
+		{
+			a = (byte)0x97;
+			c = (char)0xfe;
+		}
+		else
+		{
+			a = TERM_SLATE;
+			c = '0';
+		}
+	}
+	/* Special handling of shots */
+	else if (flg & (PROJECT_SHOT))
+	{
+		/* Use character for the iron shot */
+		int k_idx = lookup_kind(TV_SHOT, SV_AMMO_NORMAL);
+		a = object_type_attr(k_idx);
+		c = object_type_char(k_idx);
+
+	}
+
+	else if (flg & (PROJECT_AMMO))
+	{
+		/* Special handling GRAPHICS_DAVID_GERVAIS and GRAPHICS_ADAM_BOLT graphics */
+		if (use_graphics && ((arg_graphics == GRAPHICS_DAVID_GERVAIS) || (arg_graphics == GRAPHICS_ADAM_BOLT)))
+		{
+			if (arg_graphics == GRAPHICS_DAVID_GERVAIS)
+			{
+				int add = get_arrow_direction_dvg(y, x, ny, nx);
+
+				a = (byte)0x81;
+				c = (char)0xec + add;
+			}
+			else /* if (arg_graphics == GRAPHICS_ADAM_BOLT) */
+			{
+				int add = get_arrow_direction_new(y, x, ny, nx);
+
+				a = (byte)0xae;
+				c = (char)0x83 + add;
+			}
+		}
+		else
+		{
+			/* Use character for the arrow */
+			int k_idx = lookup_kind(TV_ARROW, SV_AMMO_NORMAL);
+			a = object_type_attr(k_idx);
+			c = object_type_char(k_idx);
+
+		}
+	}
+
+	/* Using ASCII */
+	else if (!use_graphics)
 	{
 		/* No motion (*) */
 		if ((ny == y) && (nx == x)) c = '*';
@@ -974,6 +1124,7 @@ u16b bolt_pict(int y, int x, int ny, int nx, int typ)
 
 		a = typ_color;
 	}
+	/* Using a tileset */
 	else
 	{
 		int add;
@@ -7185,8 +7336,8 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 					char c;
 
 					/* Obtain the bolt or explosion pict */
-					if (flg & (PROJECT_BEAM)) p = bolt_pict(y, x, y, x, typ);
-					else                      p = bolt_pict(oy, ox, y, x, typ);
+					if (flg & (PROJECT_BEAM)) p = bolt_pict(y, x, y, x, typ, flg);
+					else                      p = bolt_pict(oy, ox, y, x, typ, flg);
 
 					/* Extract attr/char */
 					a = PICT_A(p);
@@ -7554,7 +7705,7 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 				drawn = TRUE;
 
 				/* Obtain the explosion pict */
-				p = bolt_pict(y, x, y, x, typ);
+				p = bolt_pict(y, x, y, x, typ, flg);
 
 				/* Extract attr/char */
 				a = PICT_A(p);

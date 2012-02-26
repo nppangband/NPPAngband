@@ -1000,8 +1000,6 @@ static void item_menu_hook(int oid, void *db, const region *loc)
 	/* Not displaying full menu */
 	if (loc->page_rows == 1) return;
 
-
-
 	/* Output to the screen */
 	text_out_hook = text_out_to_screen;
 
@@ -1041,7 +1039,7 @@ static void item_menu_hook(int oid, void *db, const region *loc)
 		}
 	}
 
-	/* Now (crudely) terminate it so it doesn't go any longer than three lines, */
+	/* Now (crudely) terminate it so it doesn't go any longer than four lines, */
 	max_output = ((text_out_wrap - text_out_indent) * 4) - 10;
 	out_val[max_output] = '\0';
 
@@ -1224,7 +1222,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 	/* Hack -- Start on quiver if shooting or throwing */
-	if ((mode & (QUIVER_FIRST)) && use_quiver)
+	if ((mode & (QUIVER_FIRST)) && use_quiver && allow_quiver)
 	{
 		p_ptr->command_wrk = (USE_EQUIP);
 	}
@@ -1323,7 +1321,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 				menu.menu_data = inven_items;
 				num_entries = inven_count;
 			}
-			else if ((p_ptr->command_wrk == (USE_EQUIP)) && use_quiver && (!use_inven) &&
+			else if ((p_ptr->command_wrk == (USE_EQUIP)) && use_quiver && (!use_inven) && allow_quiver &&
 					 (mode & (QUIVER_FIRST)))
 			{
 				menu.menu_data = quiver_items;

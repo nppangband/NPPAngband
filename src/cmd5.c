@@ -213,6 +213,12 @@ static void get_spell_display(menu_type *menu, int oid, bool cursor, int row,
 	cptr name = cast_spell(MODE_SPELL_NAME, cp_ptr->spell_book, spell, 0);
 	cptr comment = cast_spell(MODE_SPELL_DESC_SHORT, cp_ptr->spell_book, spell, 0);
 
+	/* For known spells */
+	if(cursor)
+	{
+			line_attr = TERM_L_BLUE;
+	}
+
 	/* Skip illegible spells */
 	if (s_ptr->slevel >= 99)
 	{
@@ -225,37 +231,40 @@ static void get_spell_display(menu_type *menu, int oid, bool cursor, int row,
 	if (p_ptr->spell_flags[spell] & PY_SPELL_IRONMAN)
 	{
 		comment = "Ironman Spell";
-		line_attr = TERM_L_RED;
+		if(cursor) line_attr = TERM_UMBER;
+		else line_attr = TERM_L_RED;
 	}
 	/* Analyze the spell */
 	else if (p_ptr->spell_flags[spell] & PY_SPELL_FORGOTTEN)
 	{
 		comment = "forgotten";
-		line_attr = TERM_YELLOW;
+		if(cursor) line_attr = TERM_UMBER;
+		else line_attr = TERM_YELLOW;
 	}
 	else if (!(p_ptr->spell_flags[spell] & PY_SPELL_LEARNED))
 	{
 		if (s_ptr->slevel <= p_ptr->lev)
 		{
 			comment = "unknown";
-			line_attr = TERM_ORANGE;
+			if(cursor) line_attr = TERM_UMBER;
+			else line_attr = TERM_ORANGE;
 		}
 		else
 		{
 			comment = "difficult";
-			line_attr = TERM_RED;
+			if(cursor) line_attr = TERM_UMBER;
+			else line_attr = TERM_RED;
 		}
 	}
 	else if (!(p_ptr->spell_flags[spell] & PY_SPELL_WORKED))
 	{
 		comment = "untried";
-		line_attr = TERM_L_GREEN;
+		if(cursor) line_attr = TERM_GREEN;
+		else line_attr = TERM_L_GREEN;
 	}
 
 	strnfmt(out_val, sizeof(out_val), "%c)  %-30s%2d %4d %3d%% %s",
 			       tag, name, s_ptr->slevel, s_ptr->smana, spell_chance(spell), comment);
-
-	if(cursor) line_attr = TERM_L_BLUE;
 
 	c_prt(line_attr, out_val, row, col);
 }
