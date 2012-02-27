@@ -941,7 +941,7 @@ static bool store_service_aux(int store_num, s16b choice)
 			/* Get an item */
 			q = "Recharge which item? ";
 			s = "You have nothing to recharge.";
-			if (!get_item(&item, q, s, (USE_EQUIP))) return (FALSE);
+			if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return (FALSE);
 
 			/*Got the item*/
 			o_ptr = &inventory[item];
