@@ -174,7 +174,7 @@ bool native_teleport_player(int dis)
 				if ((d >= dis) || (d <= min)) continue;
 
 				/* Require "start" floor space */
-				if (!cave_start_bold(y, x)) continue;
+				if (!cave_teleport_bold(y, x)) continue;
 
 				/* No teleporting into vaults and such */
 				if (cave_info[y][x] & (CAVE_ICKY)) continue;
@@ -251,7 +251,7 @@ void teleport_player(int dis)
 	int py = p_ptr->py;
 	int px = p_ptr->px;
 
-	int d, i, min, y, x;
+	int d, d1, i, min, y, x;
 
 	bool look = TRUE;
 
@@ -264,10 +264,16 @@ void teleport_player(int dis)
 	/* Minimum distance */
 	min = dis / 2;
 
-	/*guage the dungeon size*/
-	d = distance(p_ptr->cur_map_hgt, p_ptr->cur_map_wid, 0, 0);
+	/* Gauge the distance from the player to the 4 corners of the dungeon, take the highest*/
+	d = distance(py, px, 1, 1);
+	d1 = distance(py, px, p_ptr->cur_map_hgt-1, 1);
+	if (d1 > d) d = d1;
+	d1 = distance(py, px, 1, p_ptr->cur_map_wid-1);
+	if (d1 > d) d = d1;
+	d1 = distance(py, px, p_ptr->cur_map_hgt-11, p_ptr->cur_map_wid-1);
+	if (d1 > d) d = d1;
 
-	/*first start with a realistic range*/
+	/* start with a realistic range*/
 	if (dis > d) dis = d;
 
 	/*must have a realistic minimum*/
@@ -289,15 +295,15 @@ void teleport_player(int dis)
 		/* Try several locations */
 		for (i = 0; i < 10000; i++)
 		{
-
+			int dist;
 			/* Pick a location */
 			y = rand_range(min_y, max_y);
 			x = rand_range(min_x, max_x);
-			d = distance(py, px, y, x);
-			if ((d <= min) || (d >= dis)) continue;
+			dist = distance(py, px, y, x);
+			if ((dist <= min) || (dist >= dis)) continue;
 
 			/* Require "start" floor space */
-			if (!cave_start_bold(y, x)) continue;
+			if (!cave_teleport_bold(y, x)) continue;
 
 			/* No teleporting into vaults and such */
 			if (cave_info[y][x] & (CAVE_ICKY)) continue;
@@ -328,6 +334,7 @@ void teleport_player(int dis)
 
 		/* Increase the maximum distance */
 		dis = dis * 2;
+		if (dis > d) dis = d;
 
 		/* Decrease the minimum distance */
 		min = min * 6 / 10;
@@ -383,7 +390,7 @@ void teleport_player_to(int ny, int nx)
 		}
 
 		/* Require "start" floor space */
-		if (cave_start_bold(y, x)) break;
+		if (cave_teleport_bold(y, x)) break;
 
 		/* Occasionally advance the distance */
 		if (++ctr > (4 * dis * dis + 4 * dis + 1))

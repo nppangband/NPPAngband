@@ -655,6 +655,12 @@ _feat_ff3_match(f_info + cave_feat[y][x], flags)
 	 	(f_info[cave_feat[Y][X]].dam_non_native == 0)) && \
  	(cave_m_idx[Y][X] == 0))
 
+/*
+ * Determine if a "legal" grid is a valid starting grid for player
+ */
+#define cave_teleport_bold(Y,X) \
+		(p_ptr->depth ? cave_start_bold(Y, X) : cave_empty_bold(Y, X))
+
 
 /*
  * Determine if a "legal" grid is an "naked" floor grid
