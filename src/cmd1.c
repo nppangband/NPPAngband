@@ -421,13 +421,15 @@ void do_cmd_pickup_from_pile(bool pickup, bool message)
 			break;
 		}
 
-		o_ptr = &o_list[-item];
+		/* FLoor items are returned as negative numbers */
+		item = -item;
+		o_ptr = &o_list[item];
 
 		/* Pick up the object */
 		if (put_object_in_inventory(o_ptr))
 		{
 			/* Delete the object */
-			delete_object_idx(-item);
+			delete_object_idx(item);
 		}
 
 		/* Pickup failed.  Quit. */
