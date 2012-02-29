@@ -321,6 +321,122 @@ void show_inven(olist_detail_t mode)
 }
 
 /*
+ * Find the "first" inventory object with the given "tag".
+ *
+ * A "tag" is a char "n" appearing as "@n" anywhere in the
+ * inscription of an object.
+ *
+ * Also, the tag "@xn" will work as well, where "n" is a tag-char,
+ * and "x" is the "current" p_ptr->command_cmd code.
+ */
+static int get_tag(int *cp, char tag)
+{
+	int i;
+	cptr s;
+
+	/*
+	 * The 'f'ire and 't'hrow commands behave differently when we are using the
+	 * equipment (quiver)
+	 */
+	if (((p_ptr->command_cmd == 'f') || (p_ptr->command_cmd == 'v')) && (p_ptr->command_wrk == USE_EQUIP))
+	{
+		/* The pseudo-tag */
+		byte tag_num = 0;
+		object_type *o_ptr;
+		byte group;
+
+		/* Get the proper quiver group to determine which objects can be selected */
+		if (p_ptr->command_cmd == 'f')
+		{
+			/* Ammo groups are taken from the missile weapon */
+			switch (p_ptr->state.ammo_tval)
+			{
+				case TV_BOLT:	group = QUIVER_GROUP_BOLTS;	break;
+				case TV_ARROW:	group = QUIVER_GROUP_ARROWS;	break;
+				default:		group = QUIVER_GROUP_SHOTS;	break;
+			}
+		}
+		/* Hack - Everything else is a throwing weapon */
+		else
+		{
+		 	group = QUIVER_GROUP_THROWING_WEAPONS;
+		}
+
+		/* Iterate over the quiver */
+		for (i = QUIVER_START; i < QUIVER_END; i++)
+		{
+			o_ptr = &inventory[i];
+
+			/* (Paranoia) Ignore empty slots */
+			if (!o_ptr->k_idx) continue;
+
+			/* Groups must be equal */
+			if (quiver_get_group(o_ptr) != group) continue;
+
+			/* Allow pseudo-tag override */
+			(void)get_tag_num(i, quiver_group[group].cmd, &tag_num);
+
+			/* We have a match? */
+			if (I2D(tag_num) == tag)
+			{
+				*cp = i;
+				return TRUE;
+			}
+
+			/* Try with the next pseudo-tag */
+			++tag_num;
+		}
+	}
+
+	/* Check every object */
+	for (i = 0; i < INVEN_TOTAL; ++i)
+	{
+		object_type *o_ptr = &inventory[i];
+
+		/* Skip non-objects */
+		if (!o_ptr->k_idx) continue;
+
+		/* Skip empty inscriptions */
+		if (!o_ptr->obj_note) continue;
+
+		/* Find a '@' */
+		s = strchr(quark_str(o_ptr->obj_note), '@');
+
+		/* Process all tags */
+		while (s)
+		{
+			/* Check the normal tags */
+			if (s[1] == tag)
+			{
+				/* Save the actual inventory ID */
+				*cp = i;
+
+				/* Success */
+				return (TRUE);
+			}
+
+			/* Check the special tags */
+			if ((s[1] == p_ptr->command_cmd) && (s[2] == tag))
+			{
+				/* Save the actual inventory ID */
+				*cp = i;
+
+				/* Success */
+				return (TRUE);
+			}
+
+			/* Find another '@' */
+			s = strchr(s + 1, '@');
+		}
+	}
+
+	/* No such tag */
+	return (FALSE);
+}
+
+
+
+/*
  * Get the string that represents the pseudo-tag of the given quiver slot.
  * The color of the pseudo-tag is also obtained.
  * Returns the length of the pseudo-tag (0 on error).
@@ -1504,6 +1620,52 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 			{
 				evt.type = EVT_ESCAPE;
 				done = TRUE;
+			}
+
+			case '0':
+			case '1': case '2': case '3':
+			case '4': case '5': case '6':
+			case '7': case '8': case '9':
+			{
+				/* Look up the tag */
+				if (!get_tag(&k, evt.key))
+				{
+					bell("Illegal object choice (tag)!");
+					break;
+				}
+
+				/* Hack -- Validate the item */
+				if ((k < INVEN_WIELD) ? !allow_inven : !allow_equip)
+				{
+					bell("Illegal object choice (tag)!");
+					break;
+				}
+
+				/* Forbid classic equipment if using the quiver */
+				if (use_quiver && (k >= INVEN_WIELD) && !IS_QUIVER_SLOT(k))
+				{
+					bell("Illegal object choice (tag)!");
+					break;
+				}
+
+				/* Validate the item */
+				if (!get_item_okay(k))
+				{
+					bell("Illegal object choice (tag)!");
+					break;
+				}
+
+				/* Allow player to "refuse" certain actions */
+				if (!get_item_allow(k, TRUE))
+				{
+					done = TRUE;
+					break;
+				}
+
+				/* Accept that choice */
+				(*cp) = k;
+				done = TRUE;
+				break;
 			}
 
 			default:
