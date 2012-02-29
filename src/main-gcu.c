@@ -687,60 +687,48 @@ static errr Term_xtra_gcu_react(void)
 	}
 	else if (COLORS == 256)
 	{
-		/* If we have 256 colors, find the best matches. These numbers
-		 * correspond to xterm's builtin color numbers--they do not correspond
-		 * to curses' constants OR with curses' color pairs.
-		 *
-		 * XTerm has 216 (6*6*6) colors, with each RGB setting 0-5. So, to find
-		 * the "closest" match, I just multiply Angband's RGB setting by 5 and
-		 * then divide by 255. I used true rounding because using the floor
-		 * produces too dark a feel, and using the ceiling kind of washes all
-		 * the colors out.
+		/*
+		 *  Shades taken from the color table at
+		 *  http://upload.wikimedia.org/wikipedia/commons/9/95/Xterm_color_chart.png
 		 */
 		set_256color_table(TERM_DARK, 0);
-		set_256color_table(TERM_WHITE, 215);
-		set_256color_table(TERM_SLATE, 129);
-		set_256color_table(TERM_ORANGE, 198);
-		set_256color_table(TERM_RED, 144);
-		set_256color_table(TERM_GREEN, 19);
-		set_256color_table(TERM_BLUE, 11);
-		set_256color_table(TERM_UMBER, 114);
-		set_256color_table(TERM_L_DARK, 86);
-		set_256color_table(TERM_L_WHITE, 172);
-		set_256color_table(TERM_VIOLET, 185);
-		set_256color_table(TERM_YELLOW, 210);
-		set_256color_table(TERM_L_RED, 187);
-		set_256color_table(TERM_L_GREEN, 30);
-		set_256color_table(TERM_L_BLUE, 35);
-		set_256color_table(TERM_L_UMBER, 163);
-
-		set_256color_table(TERM_SNOW_WHITE, 215);
-		set_256color_table(TERM_SLATE_GRAY, 93);
-		set_256color_table(TERM_ORANGE_PEEL, 198);
-		set_256color_table(TERM_RED_LAVA, 145);
-		set_256color_table(TERM_JUNGLE_GREEN, 57);
-		set_256color_table(TERM_NAVY_BLUE, 45);
-		set_256color_table(TERM_AUBURN, 79);
-		set_256color_table(TERM_TAUPE, 129);
-		set_256color_table(TERM_L_WHITE_2, 208);
-		set_256color_table(TERM_D_PURPLE, 113);
-		set_256color_table(TERM_MAIZE, 212);
-		set_256color_table(TERM_RASPBERRY, 146);
-		set_256color_table(TERM_LIME_GREEN, 174);
-		set_256color_table(TERM_SKY_BLUE, 29);
-		set_256color_table(TERM_L_BROWN, 164);
-
-		set_256color_table(TERM_SILVER, 172);
-		set_256color_table(TERM_MAHAGONY, 150);
-		set_256color_table(TERM_RED_RUST, 150);
-
-		set_256color_table(TERM_COPPER, 157);
-
-		set_256color_table(TERM_GOLD, 204);
-		set_256color_table(TERM_PINK, 183);
-
-		set_256color_table(TERM_EARTH_YELLOW, 164);
-
+		set_256color_table(TERM_WHITE, 15);
+		set_256color_table(TERM_SLATE, 145);
+		set_256color_table(TERM_ORANGE, 214);
+		set_256color_table(TERM_RED, 160);
+		set_256color_table(TERM_GREEN, 35);
+		set_256color_table(TERM_BLUE, 27);
+		set_256color_table(TERM_UMBER, 130);
+		set_256color_table(TERM_L_DARK, 102);
+		set_256color_table(TERM_L_WHITE, 188);
+		set_256color_table(TERM_VIOLET, 201);
+		set_256color_table(TERM_YELLOW, 226);
+		set_256color_table(TERM_L_RED, 203);
+		set_256color_table(TERM_L_GREEN, 46);
+		set_256color_table(TERM_L_BLUE, 51);
+		set_256color_table(TERM_L_UMBER, 179);
+		set_256color_table(TERM_SNOW_WHITE, 7);
+		set_256color_table(TERM_SLATE_GRAY, 238);
+		set_256color_table(TERM_ORANGE_PEEL, 202);
+		set_256color_table(TERM_RED_LAVA, 124);
+		set_256color_table(TERM_JUNGLE_GREEN, 39);
+		set_256color_table(TERM_NAVY_BLUE, 20);
+		set_256color_table(TERM_AUBURN, 52);
+		set_256color_table(TERM_TAUPE, 244);
+		set_256color_table(TERM_L_WHITE_2, 231);
+		set_256color_table(TERM_D_PURPLE, 57);
+		set_256color_table(TERM_MAIZE, 227);
+		set_256color_table(TERM_RASPBERRY, 89);
+		set_256color_table(TERM_LIME_GREEN, 118);
+		set_256color_table(TERM_SKY_BLUE, 38);
+		set_256color_table(TERM_L_BROWN, 95);
+		set_256color_table(TERM_SILVER, 246);
+		set_256color_table(TERM_MAHAGONY, 214);
+		set_256color_table(TERM_RED_RUST, 130);
+		set_256color_table(TERM_COPPER, 188);
+		set_256color_table(TERM_GOLD, 226);
+		set_256color_table(TERM_PINK, 165);
+		set_256color_table(TERM_EARTH_YELLOW, 173);
 
 	}
 	/* TODO: figure out how 88-color terminals (e.g. urxvt) work */
