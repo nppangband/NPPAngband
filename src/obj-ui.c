@@ -1678,6 +1678,52 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 				/* Lowercase */
 				evt.key = tolower(evt.key);
 
+				/* Convert letter to inventory index */
+				if (p_ptr->command_wrk == (USE_INVEN))
+				{
+					k = label_to_inven(evt.key);
+
+					if (k < 0)
+					{
+						bell("Illegal object choice (inven)!");
+						break;
+					}
+				}
+
+				/* Convert letter to equipment index */
+				else if (p_ptr->command_wrk == (USE_EQUIP))
+				{
+					k = label_to_equip(evt.key);
+
+					if (k < 0)
+					{
+						bell("Illegal object choice (equip)!");
+						break;
+					}
+
+					/* Forbid classic equipment if using the quiver */
+					if (use_quiver && !IS_QUIVER_SLOT(k))
+					{
+						bell("Illegal object choice (equip)!");
+						break;
+					}
+				}
+
+				/* Convert letter to floor index */
+				else
+				{
+					k = (islower((unsigned char)evt.key) ? A2I(evt.key) : -1);
+
+					if (k < 0 || k >= floor_num)
+					{
+						bell("Illegal object choice (floor)!");
+						break;
+					}
+
+					/* Special index */
+					k = 0 - floor_list[k];
+				}
+
 				/* Validate the item */
 				if (!get_item_okay(k))
 				{
@@ -1690,6 +1736,13 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 				{
 					done = TRUE;
 					evt.type = EVT_ESCAPE;
+					break;
+				}
+
+				/* Allow player to "refuse" certain actions */
+				if (!get_item_allow(k, TRUE))
+				{
+					done = TRUE;
 					break;
 				}
 
