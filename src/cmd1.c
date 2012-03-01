@@ -440,7 +440,6 @@ void do_cmd_pickup_from_pile(bool pickup, bool message)
 			/* Describe the object */
 			object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
 
-			screen_load();
 			break;
 		}
 	}
