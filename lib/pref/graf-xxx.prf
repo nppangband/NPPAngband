@@ -169,1923 +169,1994 @@ S:47:0x85:0x8E:0x84:0x9C
 
 
 
+
 ##### Feature attr/char definitions #####
-# nothing
-F:0:0x81:0x80:YES
 
-# open floor
-F:1:0x80:0x80:YES
+#  Nothing
+F:0:0x81:0x80
 
-# invisible trap
-#F:2:0x80:0x80:YES
+#  open floor
+F:1:0x80:0x80
 
-# Book Shop
-F:2:212:143:YES
+#  Book Shop
+F:2:212:143
 
-# glyph of warding
-F:3:0x8A:0x9C:YES
+#  glyph of warding
+F:3:0x8A:0x9C
 
-# General Store
-F:4:0x81:0x91:YES
+#  General Store
+F:4:0x81:0x91
 
-# Armoury
-F:5:0x81:0x92:YES
+#  Armoury
+F:5:0x81:0x92
 
-# Weapon Smiths
-F:6:0x81:0x93:YES
+#  Weapon Smiths
+F:6:0x81:0x93
 
-# Temple
-F:7:0x81:0x94:YES
+#  Temple
+F:7:0x81:0x94
 
-# Alchemy Shop
-F:8:0x81:0x95:YES
+#  Alchemy Shop
+F:8:0x81:0x95
 
-# Magic Shop
-F:9:0x81:0x96:YES
+#  Magic Shop
+F:9:0x81:0x96
 
-# Black Market
-F:10:0x81:0x97:YES
+#  Black Market
+F:10:0x81:0x97
 
-# Home
-F:11:0x81:0x98:YES
+#  Home
+F:11:0x81:0x98
 
-# Adventurer's Guild
-F:12:0xCC:0x92:YES
+#  Adventurer's Guild
+F:12:0xCC:0x92
 
-# Bookshop - see F:91
+#  dagger pit
+F:13:226:128
 
-# ******************** TRAPS *********
-# dagger pit
-F:13:226:128:YES
+#  trap door
+F:14:226:129
 
-# trap door
-F:14:226:129:YES
+#  pit
+F:15:226:130
 
-# pit
-F:15:226:130:YES
+#  spiked pit
+F:16:226:131
 
-# spiked pit
-F:16:226:131:YES
+#  poison spiked pit
+F:17:226:132
 
-# poison spiked pit
-F:17:226:132:YES
+#  strange spot
+F:18:226:133
 
-# strange rune
-F:18:226:133:YES
+#  luminous spot
+F:19:226:134
 
-# shimmering rune
-F:19:226:134:YES
+#  brown spot
+F:20:226:135
 
-# brown spot
-F:20:226:135:YES
+#  burning spot
+F:21:226:136
 
-# burning spot
-F:21:226:136:YES
+#  gray dart trap
+F:22:226:137
 
-# gray dart trap
-F:22:226:137:YES
+#  red dart trap
+F:23:226:138
 
-# red dart trap
-F:23:226:138:YES
+#  violet dart trap
+F:24:226:139
 
-# violet dart trap
-F:24:226:139:YES
+#  brown dart trap
+F:25:226:140
 
-# brown dart trap
-F:25:226:140:YES
+#  orange dart trap
+F:26:226:141
 
-# orange dart trap
-F:26:226:141:YES
+#  light red gas trap
+F:27:226:142
 
-# light red gas trap
-F:27:226:142:YES
+#  light gray gas trap
+F:28:226:143
 
-# light gray gas trap
-F:28:226:143:YES
+#  yellow gas trap
+F:29:226:144
 
-# yellow gas trap
-F:29:226:144:YES
+#  broken wooden door
+F:30:224:128
 
-# ******************** DOORS ********
+#  broken steel door
+F:31:224:129
 
-# broken wooden door
-F:30:224:128:YES
+#  broken iron door
+F:32:224:130
 
-# broken steel door
-F:31:224:129:YES
+#  locked wooden door
+F:33:224:131
 
-# broken iron door
-F:32:224:130:YES
+#  locked steel door
+F:34:224:132
 
-# locked wooden door
-F:33:224:131:YES
+#  locked iron door
+F:35:224:133
 
-# locked steel door
-F:34:224:132:YES
+#  closed wooden door
+F:36:224:134
 
-# locked iron door
-F:35:224:133:YES
+#  closed steel door
+F:37:224:135
 
-# closed wooden door
-F:36:224:134:YES
+#  closed iron door
+F:38:224:136
 
-# closed steel door
-F:37:224:135:YES
+#  jammed wooden door
+F:39:224:137
 
-# closed iron door
-F:38:224:136:YES
+#  jammed steel door
+F:40:224:138
 
-# jammed wooden door
-F:39:224:137:YES
+#  jammed iron door
+F:41:224:139
 
-# jammed steel door
-F:40:224:138:YES
+#  open wooden door
+F:42:224:140
 
-# jammed iron door
-F:41:224:139:YES
+#  open steel door
+F:43:224:141
 
-# open wooden door
-F:42:224:140:YES
+#  open iron door
+F:44:224:142
 
-# open steel door
-F:43:224:141:YES
+#  secret wooden door
+F:45:224:143
 
-# open iron door
-F:44:224:142:YES
+#  secret steel door
+F:46:224:144
 
-# secret wooden door
-F:45:224:143:YES
+#  secret iron door
+F:47:224:145
 
-# secret steel door
-F:46:224:144:YES
+#  pile of rubble
+F:48:224:146
 
-# secret iron door
-F:47:224:145:YES
+#  magma vein
+F:49:224:147
 
-#*****************WALLS**********
-# pile of rubble
-F:48:224:146:YES
+#  quartz vein
+F:50:224:148
 
-# magma vein
-F:49:224:147:YES
+#  magma vein with treasure
+F:51:224:149
 
-# quartz vein
-F:50:224:148:YES
+#  quartz vein with treasure
+F:52:224:150
 
-# magma vein with treasure
-F:51:224:149:YES
+#  granite wall
+F:53:224:152
 
-# quartz vein with treasure
-F:52:224:150:YES
+#  granite wall (inner)
+F:54:224:153
 
-# granite wall
-F:53:224:152:YES
+#  granite wall (outer)
+F:55:224:154
 
-# granite wall (inner)
-F:54:224:153:YES
+#  granite wall (solid)
+F:56:224:155
 
-# granite wall (outer)
-F:55:224:154:YES
+#  permanent wall
+F:57:224:156
 
-# granite wall (solid)
-F:56:224:155:YES
+#  permanent wall (inner)
+F:58:224:157
 
-# permanent wall
-F:57:224:156:YES
+#  permanent wall (outer)
+F:59:224:158
 
-# permanent wall (inner)
-F:58:224:157:YES
+#  permanent wall (solid)
+F:60:224:159
 
-# permanent wall (outer)
-F:59:224:158:YES
+#  monster trap (basic)
+F:61:226:150
 
-# permanent wall (solid)
-F:60:224:159:YES
+#  monster trap (sturdy)
+F:62:226:151
 
-# ***************** MONSTER TRAP*******
+#  monster trap (slowing)
+F:63:226:152
 
-# monster trap (basic)
-F:61:226:150:YES
+#  monster trap (confusion)
+F:64:226:153
 
-# monster trap (sturdy)
-F:62:226:151:YES
+#  monster trap (poison gas)
+F:65:226:154
 
-# monster trap (slowing)
-F:63:226:152:YES
+#  monster trap (drain life)
+F:66:226:155
 
-# monster trap (confusion)
-F:64:226:153:YES
+#  monster trap (lightning)
+F:67:226:156
 
-# monster trap (poison gas)
-F:65:226:154:YES
+#  monster trap (explosive)
+F:68:226:157
 
-# monster trap (drain life)
-F:66:226:155:YES
+#  monster trap (portal)
+F:69:226:158
 
-# monster trap (lightning)
-F:67:226:156:YES
+#  monster trap (dispel monsters)
+F:70:226:159
 
-# monster trap (explosive)
-F:68:226:157:YES
+#  up staircase
+F:71:130:143
 
-# monster trap (portal)
-F:69:226:158:YES
+#  down staircase
+F:72:130:140
 
-# monster trap (dispel monsters)
-F:70:226:159:YES
+#  up shaft
+F:73:130:139
 
-# ******************* STAIRS  *********
+#  down shaft
+F:74:130:142
 
-# up staircase
-F:71:130:143:YES
+#  limestone wall
+F:75:220:128
 
-# down staircase
-F:72:130:140:YES
+#  sandstone wall
+F:76:220:129
 
-# up shaft
-F:73:130:139:YES
+#  cracked granite wall
+F:77:220:130
 
-# down shaft
-F:74:130:142:YES
+#  earth wall
+F:78:220:131
 
-#*************************************
+#  cracked ice wall
+F:79:220:132
 
-# limestone feature ----- strating at row 220
-F:75:220:128:YES
+#  oil shale
+F:80:220:133
 
-# sandstone
-F:76:220:129:YES
+#  ~coal
+F:81:220:134
 
-# cracked granite wall
-F:77:220:130:YES
+#  ~burning coal
+F:82:220:135
 
-# earth wall
-F:78:220:131:YES
+#  loose rock
+F:83:220:136
 
-# cracked ice wall
-F:79:220:132:YES
+#  earth floor
+F:84:220:137
 
-# oil shale
-F:80:220:133:YES
+#  ~ice
+F:85:220:138
 
-# coal
-F:81:220:134:YES
+#  ice wall
+F:86:220:139
 
-# burning coal
-F:82:220:135:YES
+#  ~water
+F:87:220:140
 
-# loose rock
-F:83:220:136:YES
+#  ~deep water (hidden)
+F:88:220:141
 
-# earth floor
-F:84:220:137:YES
+#  ~acid
+F:89:220:142
 
-# ice
-F:85:220:138:YES
+#  ~deep acid (hidden)
+F:90:220:143
 
-# ice wall
-F:86:220:139:YES
+#N/A
+#N/A
 
-# water
-F:87:220:140:YES
+#N/A
+#N/A
 
-# deep water
-F:88:220:141:YES
+#N/A
+#N/A
 
-# acid
-F:89:220:142:YES
+#  ~burning oil
+F:94:220:144
 
-# deep acid
-F:90:220:143:YES
+#  ~sand
+F:95:220:145
 
-# XXX Record 91 is unused XXX #
-# XXX Record 92 is unused XXX #
-# XXX Record 93 is unused XXX #
+#  ~deep sand (hidden)
+F:96:220:146
 
-# burning oil
-F:94:220:144:YES
+#  ~mud
+F:97:220:147
 
-# sand
-F:95:220:145:YES
+#  ~deep mud (hidden)
+F:98:220:148
 
-# deep sand
-F:96:220:146:YES
+#  ~boiling mud
+F:99:220:149
 
-# mud
-F:97:220:147:YES
+#  ~boiling water
+F:100:220:150
 
-# deep mud
-F:98:220:148:YES
+#  ~lava
+F:101:220:151
 
-# boiling mud
-F:99:220:149:YES
+#  ~deep lava (hidden)
+F:102:220:152
 
-# boiling water
-F:100:220:150:YES
+#  ~oil
+F:103:220:153
 
-# lava
-F:101:220:151:YES
+#  ~deep oil (hidden)
+F:104:220:154
 
-# deep lava
-F:102:220:152:YES
+#  wall of fire
+F:105:220:155
 
-# oil
-F:103:220:153:YES
+#  storm cloud
+F:106:220:156
 
-# deep oil
-F:104:220:154:YES
+#  wet floor
+F:107:220:157
 
-# wall of fire
-F:105:220:155:YES
+#  muddy floor
+F:108:220:158
 
-# storm cloud
-F:106:220:156:YES
+#  ~wet sand
+F:109:220:159
 
-# wet floor
-F:107:220:157:YES
+#  ~earth
+F:110:221:128
 
-# muddy floor
-F:108:220:158:YES
+#  rock
+F:111:221:129
 
-# wet sand
-F:109:220:159:YES
+#  ~pebbles
+F:112:221:130
 
-# earth                    -------- Row 221
-F:110:221:128:YES
+#  fire
+F:113:221:131
 
-# rock
-F:111:221:129:YES
+#  thicket
+F:114:221:132
 
-# pebbles
-F:112:221:130:YES
+#  tree
+F:115:221:133
 
-# fire
-F:113:221:131:YES
+#  burning tree
+F:116:221:134
 
-# thicket
-F:114:221:132:YES
+#N/A
+#N/A
 
-# tree
-F:115:221:133:YES
+#  bush
+F:118:221:135
 
-# burning tree
-F:116:221:134:YES
+#  ~thorns
+F:119:221:136
 
-# bush
-F:118:221:135:YES
+#  bush fire
+F:120:221:137
 
-# XXX Record 117 is unused XXX #
+#  ~brambles
+F:121:221:138
 
-# thorns
-F:119:221:136:YES
+#N/A
+#N/A
 
-# bush fire
-F:120:221:137:YES
+#  crest of a wave over sand
+F:123:221:139
 
-# brambles
-F:121:221:138:YES
+#  crest of a wave over water
+F:124:221:140
 
-# XXX Record 122 is unused XXX #
+#  crest of a wave over deep water (hidden)
+F:125:221:141
 
-# crest of wave over sand
-F:123:221:139:YES
+#  wave over water
+F:126:221:142
 
-# crest of wave over water
-F:124:221:140:YES
+#  wave over deep water (hidden)
+F:127:221:143
 
-# crest of wave over deep water
-F:125:221:141:YES
+#  wave over sand
+F:128:221:144
 
-# wave over water
-F:126:221:142:YES
+#  wave breaking over a stone bridge
+F:129:221:145
 
-# wave over deep water
-F:127:221:143:YES
+#  sand dune
+F:130:221:146
 
-# wave over sand
-F:128:221:144:YES
+#N/A
+#N/A
 
-# wave breaking over a stone bridge
-F:129:221:145:YES
+#N/A
+#N/A
 
-# sand dune
-F:130:221:146:YES
+#  tree branch
+F:133:221:147
 
-# XXX Record 131 is unused XXX #
-# XXX Record 132 is unused XXX #
+#  ~forest soil
+F:134:221:148
 
-# tree branch
-F:133:221:147:YES
+#  ~dry forest soil
+F:135:221:149
 
-# forest soil
-F:134:221:148:YES
+#  stone bridge
+F:136:221:150
 
-# dry forest soil
-F:135:221:149:YES
+#  boiling water geyser
+F:137:221:151
 
-# stone bridge
-F:136:221:150:YES
+#  cracked wall over lava
+F:138:221:152
 
-# boiling water geyser
-F:137:221:151:YES
+#  burnt spot
+F:139:222:128
 
-# lava wall
-F:138:221:152:YES
+#  ~deep water
+F:140:221:153
 
-# ~deep water
-F:140:221:153:YES
+#  ~deep oil
+F:141:221:154
 
-# ~deep oil
-F:141:221:154:YES
+#  ~deep lava
+F:142:221:155
 
-# ~deep lava
-F:142:221:155:YES
+#  ~deep acid
+F:143:221:156
 
-# ~deep acid
-F:143:221:156:YES
+#  ~deep mud
+F:144:221:157
 
-# ~deep mud
-F:144:221:157:YES
+#  ~deep sand
+F:145:221:158
 
-# ~deep sand
-F:145:221:158:YES
+#  crest of a wave over deep water
+F:146:221:159
 
-# crest of a wave over deep water
-F:146:221:159:YES
+#  wave over deep water
+F:147:222:129
 
-# burnt spot
-F:139:222:128:YES
+#  pile of rubble (hidden)
+F:148:224:146
 
-# wave over deep water
-F:147:222:129:YES
+#  pile of rubble over an object
+F:149:130:148
 
-# pile of rubble (hidden)
-#F:148:
+#  shimmering violet rune
+F:150:223:128
 
-# pile of rubble over an object
-F:149:130:148:YES
+#  shimmering gray rune
+F:151:223:129
 
-# ********* RUNES *****************************
+#  shimmering white rune
+F:152:223:130
 
-# shimmering violet rune
-F:150:223:128:YES
+#  green cloudy rune
+F:153:223:131
 
-# shimmering gray rune
-F:151:223:129:YES
+#  fiery rune
+F:154:223:132
 
-# shimmering white rune
-F:152:223:130:YES
+#  rune of sparks
+F:155:223:133
 
-# green cloudy rune
-F:153:223:131:YES
+#  frozen rune
+F:156:223:134
 
-# fiery rune
-F:154:223:132:YES
+#  shimmering light gray rune
+F:157:223:135
 
-# rune of sparks
-F:155:223:133:YES
+#  shimmering light green rune
+F:158:223:136
 
-# frozen rune
-F:156:223:134:YES
+#  shimmering light red rune
+F:159:223:137
 
-# shimmering light gray rune
-F:157:223:135:YES
+#  shimmering tan rune
+F:160:223:138
 
-# shimmering light green rune
-F:158:223:136:YES
+#  shimmering green rune
+F:161:223:139
 
-# shimmering light red rune
-F:159:223:137:YES
+#  shimmering light brown rune
+F:162:223:140
 
-# shimmering tan rune
-F:160:223:138:YES
+#  blurry white rune
+F:163:223:141
 
-# shimmering green rune
-F:161:223:139:YES
+#  humming rune
+F:164:223:142
 
-# shimmering light brown rune
-F:162:223:140:YES
+#  dull white rune
+F:165:223:143
 
-# blurry white rune
-F:163:223:141:YES
+#  shimmering blue rune
+F:166:223:144
 
-# humming rune
-F:164:223:142:YES
+#  shimmering orange rune
+F:167:223:145
 
-# dull white rune
-F:165:223:143:YES
+#  dull gray rune
+F:168:223:146
 
-# shimmering blue rune
-F:166:223:144:YES
+#  bright red rune
+F:169:223:147
 
-# shimmering orange rune
-F:167:223:145:YES
+#  bubbling red rune
+F:170:223:148
 
-# dull gray rune
-F:168:223:146:YES
+#  bright violet rune
+F:171:223:149
 
-# bright red rune
-F:169:223:147:YES
+#  shimmering yellow rune
+F:172:223:150
 
-# bubbling red rune
-F:170:223:148:YES
+#  cloud of frost
+F:173:0x85:0x91
 
-# bright violet rune
-F:171:223:149:YES
+#  inertia cloud
+F:174:0x85:0x8C
 
-# shimmering yellow rune
-F:172:223:150:YES
+#  ~smoke
+F:175:225:128
 
-# XXX Record 173 is unused XXX #
-# XXX Record 174 is unused XXX #
+#  ~fog
+F:176:225:129
 
-# ************** AIR ****************
+#  poison cloud
+F:177:225:130
 
-# ~smoke
-F:175:225:128:YES
+#  static cloud
+F:178:225:131
 
-# ~fog
-F:176:225:129:YES
+#  steam cloud
+F:179:225:132
 
-# poison cloud
-F:177:225:130:YES
+#  gravity cloud
+F:180:225:133
 
-# static cloud
-F:178:225:131:YES
+#  ~sparks
+F:181:225:134
 
-# steam cloud
-F:179:225:132:YES
+#  ~flashing lite
+F:182:225:135
 
-# gravity cloud
-F:180:225:133:YES
+#  ~flashing darkness
+F:183:225:136
 
-# ~sparks
-F:181:225:134:YES
+#  nether cloud
+F:184:225:137
 
-# ~flashing lite
-F:182:225:135:YES
+#  cloud of chaos
+F:185:225:138
 
-# ~flashing darkness
-F:183:225:136:YES
+#  cloud of disenchantment
+F:186:225:139
 
-# nether cloud
-F:184:225:137:YES
+#  nexus cloud
+F:187:225:140
 
-# cloud of chaos
-F:185:225:138:YES
+#  time cloud
+F:188:225:141
 
-# cloud of disenchantment
-F:186:225:139:YES
+#  cloud of confusion
+F:189:225:142
 
-# nexus cloud
-F:187:225:140:YES
+#  ~forest soil (dynamic)
+F:190:221:148
 
-# time cloud
-F:188:225:141:YES
+#  ~drain life
+F:191:222:139
 
-# cloud of confusion
-F:189:225:142:YES
+#  glacier
+F:192:222:138
 
-# ~forest soil (dynamic)
-# F:190
+#  strange inscription
+F:193:129:133
 
-# ~drain life
-F:191:222:139:YES
+#  putrid flower
+F:194:162:155
 
-# glacier
-F:192:222:138:YES
+#  tree branch covered with snow
+F:195:222:137
 
-# strange inscription
-F:193:129:133:YES
+#  cracked wall over boiling water
+F:196:222:130
 
-# putrid flower
-F:194:162:155:YES
+#  cracked wall over boiling mud
+F:197:222:131
 
-# tree branch covered with snow
-F:195:222:137:YES
+#  scorched wall
+F:198:222:132
 
-# ************ MORE WALLS **************
+#  wall carved by elvish hands
+F:199:222:133
 
-# wall under a stream of boiling water
-F:196:222:130:YES
+#  wall covered with vines
+F:200:222:134
 
-# wall covered with boiling mud
-F:197:222:131:YES
+#  silent watcher
+F:201:222:135
 
-# scorched wall
-F:198:222:132:YES
+#  ethereal wall
+F:202:222:136
 
-# wall carved by elvish hands
-F:199:222:133:YES
+#  shard cloud
+F:203:0x85:0x94
 
-# wall covered with vines
-F:200:222:134:YES
+#  meteor strike
+F:204:0x85:0x8C
 
-# silent watcher
-F:201:222:135:YES
+#  cracked wall over acid
+F:205:222:131
 
-# ethereal wall
-F:202:222:136:YES
+#  cobblestone street
+F:206:0x80:0x80
 
-F:206:0x80:0x80:YES
 
 
 ##########################################################
 ##### Object attr/char definitions ##################################
 ##########################################################
-# & Phial~
-K:1:0x87/0x9D
 
-# & Star~
-K:2:0x87/0x9E
+#  Pile of Objects
+K:0:0x8B:0x8B
 
-# & Arkenstone~
-K:3:0x87/0x9F
+#  & Phial~
+K:1:0x87:0x9D
 
-# & Amulet~
-K:4:0x87/0x82
+#  & Star~
+K:2:0x87:0x9E
 
-# & Amulet~
-K:5:0x87/0x83
+#  & Arkenstone~
+K:3:0x87:0x9F
 
-# & Necklace~
-K:6:0x87/0x84
+#  & Amulet~
+K:4:0x87:0x82
 
-# & Gem~
-K:10:0x87/0x9E
+#  & Amulet~
+K:5:0x87:0x83
 
-# & Ring~
-K:11:0x82/0x83
+#  & Necklace~
+K:6:0x87:0x84
 
-# & Ring~
-K:12:0x82/0x83
+#  & Palant['i]r~
+K:7:0x87:0x9F
 
-# & Ring~
-K:13:0x82/0x84
+#  & Elfstone~
+K:8:0x87:0x83
 
-# & Ring~
-K:14:0x82/0x85
+#  & Jewel~
+K:9:0x87:0x84
 
-# & Ring~
-K:15:0x82/0x86
+#  & Gem~
+K:10:0x87:0x9E
 
-# & Ring~
-K:16:0x82/0x87
+#  & Ring~
+K:11:0x82:0x83
 
-# & Mighty Hammer~
-K:19:0x87/0x9A
+#  & Ring~
+K:12:0x82:0x83
 
-# & Massive Iron Crown~
-K:20:0x87/0x9B
+#  & Ring~
+K:13:0x82:0x84
 
-# & Filthy Rag~
-K:21:0x88/0x94
+#  & Ring~
+K:14:0x82:0x85
 
-# & Robe~
-K:22:0x88/0x95
+#  & Ring~
+K:15:0x82:0x86
 
-#------------------------------------- reworking starts
-# Soft Leather Armour~
-K:23:0x88/150
+#  & Ring~
+K:16:0x82:0x87
 
-# Soft Studded Leather~
-K:24:205/146
+#N/A
+#N/A
 
-# Hard Leather Armour~
-K:25:0x88/151
+#N/A
+#N/A
 
-# Hard Studded Leather~
-K:26:205/147
+#  & Mighty Hammer~
+K:19:0x87:0x9A
 
-# Leather Scale Mail~
-K:27:206/142
-#-----------------------
-# Rusty Chain Mail~
-K:28:136/154
+#  & Massive Iron Crown~
+K:20:0x87:0x9B
 
-# Metal Scale Mail~
-K:29:136/152
+#  & Filthy Rag~
+K:21:0x88:0x94
 
-# Chain Mail~
-K:30:136/153
+#  & Robe~
+K:22:0x88:0x95
 
-# Augmented Chain Mail~
-K:31:205/144
+#  Soft Leather Armour~
+K:23:0x88:150
 
-# Double Chain Mail~
-K:32:205/145
-#-------------------------
-# Metal Brigandine Armour~
-K:33:205/144
+#  Soft Studded Leather~
+K:24:205:146
 
-# Partial Plate Armour~
+#  Hard Leather Armour~
+K:25:0x88:151
+
+#  Hard Studded Leather~
+K:26:205:147
+
+#  Leather Scale Mail~
+K:27:206:142
+
+#  Rusty Chain Mail~
+K:28:136:154
+
+#  Metal Scale Mail~
+K:29:136:152
+
+#  Chain Mail~
+K:30:136:153
+
+#  Augmented Chain Mail~
+K:31:205:144
+
+#  Double Chain Mail~
+K:32:205:145
+
+#  Metal Brigandine Armour~
+K:33:205:144
+
+#  Partial Plate Armour~
 K:34:205:148
 
-# Metal Lamellar Armour~
+#  Metal Lamellar Armour~
 K:35:205:149
 
-# Full Plate Armour~
+#  Full Plate Armour~
 K:36:205:154
 
-# Ribbed Plate Armour~
+#  Ribbed Plate Armour~
 K:37:205:153
 
-# Mithril Chain Mail~
+#  Mithril Chain Mail~
 K:38:205:152
 
-# Mithril Plate Mail~
+#  Mithril Plate Mail~
 K:39:205:151
 
-# Adamantite Plate Mail~
+#  Adamantite Plate Mail~
 K:40:205:150
-#--------------------------
-# & Small Leather Shield~
-K:41:0x88/0x8F
 
-# & Small Metal Shield~
-K:42:0x88/0x91
+#  & Small Leather Shield~
+K:41:0x88:0x8F
 
-# & Large Leather Shield~
-K:43:0x88/0x90
+#  & Small Metal Shield~
+K:42:0x88:0x91
 
-# & Large Metal Shield~
-K:44:0x88/0x92
+#  & Large Leather Shield~
+K:43:0x88:0x90
 
-# & Shield~ of Deflection
-K:45:0x88/0x93
-#--------------------------
-# Dragon Scale Mail~
-K:46:136/158
+#  & Large Metal Shield~
+K:44:0x88:0x92
 
-# Medium Dragon Scale Mail~
+#  & Shield~ of Deflection
+K:45:0x88:0x93
+
+#  Dragon Scale Mail~
+K:46:136:158
+
+#  Mature Dragon Scale Mail~
 K:47:136:156
 
-# Ancient Dragon Scale Mail~
+#  Ancient Dragon Scale Mail~
 K:48:136:155
 
-# Great Wyrm Scale Mail~
+#  Great Wyrm Scale Mail~
 K:49:137:130
-#-----------------------------
-# Dragon Scale Shield~
+
+#  Dragon Scale Shield~
 K:50:206:135
 
-# Medium Dragon Scale Shield~
+#  Mature Dragon Scale Shield~
 K:51:206:136
 
-# Ancient Dragon Scale Shield~
+#  Ancient Dragon Scale Shield~
 K:52:206:137
 
-# Great Wyrm Scale Shield~
+#  Great Wyrm Scale Shield~
 K:53:206:138
-#------------------------------
-
-# & Broken Dagger~
-K:54:131/141
-# & Broken Sword~
-K:55:131/142
-
-# & Dagger~
-K:56:131/152
-# & Main Gauche~
-K:57:131/152
-
-# & Rapier~
-K:58:131/153
-# & Small Sword~
-K:59:131/153
-# & Short Sword~
-K:60:131/145
-# & Sabre~
-K:61:131/153
-# & Cutlass~
-K:62:131/153
-
-# & Broad Sword~
-K:63:131/143
-# & Long Sword~
-K:64:131/154
-# & Scimitar~
-K:65:131/144
-# & Katana~
-K:66:131/144
-# & Bastard Sword~
-K:67:131/150
-
-# & Two-Handed Sword~
-K:68:131/149
-# & Executioner's Sword~
-K:69:131/155
-# & Blade~ of Chaos
-K:70:131/156
-
-# & Spear~
-K:71:139/145
-# & Awl-Pike~
-K:72:139/146
-# & Trident~
-K:73:0x89/0x92
-# & Pike~
-K:74:139/147
-
-# & Beaked Axe~
-K:75:139/145
-# & Broad Axe~
-K:76:139/146
-# & Throwing Axe~
-K:77:139/147
-# &	Glaive~
-K:78:139/148
-# &	Halberd~
-K:79:139/149
-# & Scythe~
-K:80:0x89/0x94
-# &	Battle Axe~
-K:81:139/153
-# &	Great Axe~
-K:82:139/154
-# &	Lochaber Axe~
-K:83:139/155
-
-# & Scythe~ of Slicing
-K:84:139/158
-
-# & Whip~
-K:85:0x89/0x89
-
-# & Quarterstaff~
-K:86:0x89/0x8E
-
-# & Mace~
-K:87:0x89/0x8C
-
-# & Ball-and-Chain~
-K:88:0x89/0x88
-
-# & War Hammer~
-K:89:0x89/0x8F
-
-# &	Lucerne Hammer~
-K:90:139/156
-# &	Throwing Hammer~
-K:91:139/157
-
-# & Morning Star~
-K:92:0x89/0x8B
-# & Flail~
-K:93:139/159
-
-# & Lead-Filled Mace~
-K:94:0x8B/0x8C
-
-# & Mace~ of Disruption
-K:95:0x89/0x8D
-
-# & Shovel~
-K:96:0x8A/0x98
-
-# & Pick~
-K:97:0x8A/0x97
-
-# & Mattock~
-K:98:0xCD/0x80
-
-# & Hard Leather Cap~
-K:99:0x88/0x82
-# & Metal Cap~
-K:100:0x88/0x83
-# & Iron Helm~
-K:101:0x88/0x84
-# & Steel Helm~
-K:102:0x88/0x85
-# & Iron Crown~
-K:103:0x88/0x86
-# & Golden Crown~
-K:104:0x88/0x87
-# & Jewel Encrusted Crown~
-K:105:0x88/0x88
-
-# & Cloak~
-K:106:0x88/0x80
-# & Shadow Cloak~
-K:107:0x88/0x81
-
-# & Sling~
-K:108:0x89/0x99
-
-# & Short Bow~
-K:109:0x89/0x95
-# & Long Bow~
-K:110:0x89/0x96
-# & Light Crossbow~
-K:111:0x89/0x97
-# & Heavy Crossbow~
-K:112:0x89/0x98
-
-# & Rounded Pebble~
-K:113:0x89/0x9E
-
-# & Iron Shot~
-K:114:0x89/0x9F
-# & Mithril Shot~
-K:115:0xCD/0x85
-# & Arrow~
-K:116:0x89/0x9A
-# & Seeker Arrow~
-K:117:0x89/0x9B
-# & Mithril Arrow~
-K:118:0xCE/0x91
-# & Bolt~
-K:119:0x89/0x9C
-# & Seeker Bolt~
-K:120:0x89/0x9D
-# & Mithril Bolt~
-K:121:0xCE/0x92
-
-# & Pair~ of Soft Leather Boots
-K:122:0x88/0x89
-# & Pair~ of Hard Leather Boots
-K:123:0x88/0x8A
-# & Pair~ of Metal Shod Boots
-K:124:0x88/0x8B
-
-# & Set~ of Leather Gloves
-K:125:0x88/0x8C
-# & Set~ of Gauntlets
-K:126:0x88/0x8D
-# & Set~ of Cesti
-K:127:0x88/0x8E
-# --------------------------------------- WEAPONS & ARMOUR ENDS
-# & Wooden Torch~
-K:128:0x8B/0x86
-# & Brass Lantern~
-K:129:0x8B/0x85
-# ----------------------- AMULETS
-# DOOM
-K:130:182/128
-
-# Teleportation
-K:131:182/129
-
-# Adornment
-K:132:182/130
-
-# Slow Digestion
-K:133:182/133
-
-# Resist Acid
-K:134:182/134
-
-# Searching
-K:135:182/135
-
-# Wisdom
-K:136:182/131
-
-# Charisma
-K:137:182/132
-
-# the Magi
-K:138:182/136
-
-# Sustenance
-K:139:182/137
 
-# ESP
-K:140:182/138
+#  & Broken Dagger~
+K:54:131:141
 
-# Resistance
-K:141:182/139
+#  & Broken Sword~
+K:55:131:142
 
-# Regeneration
-K:142:182/140
+#  & Dagger~
+K:56:131:152
 
-# Devotion
-K:143:182/141
+#  & Main Gauche~
+K:57:131:152
 
-# Weaponmastery
-K:144:182/143
+#  & Rapier~
+K:58:131:153
 
-# Trickery
-K:145:182/144
+#  & Small Sword~
+K:59:131:153
 
-# Infravision
-K:146:182/146
+#  & Short Sword~
+K:60:131:145
 
-# Resist Lightning
-K:147:182/145
-# ----------------------------- RINGS
-# Woe
-K:148:0x82/0x82
+#  & Sabre~
+K:61:131:153
 
-# Aggravate Monster
-K:149:0x82/0x80
+#  & Cutlass~
+K:62:131:153
 
-# Weakness
-K:150:0x82/0x80
+#  & Broad Sword~
+K:63:131:143
 
-# Stupidity
-K:151:0x82/0x80
+#  & Long Sword~
+K:64:131:154
 
-# Teleportation
-K:152:0x82/0x80
+#  & Scimitar~
+K:65:131:144
 
-# Slow Digestion
-K:153:0x82/0x80
+#  & Katana~
+K:66:131:144
 
-# Feather Falling
-K:154:0x82/0x80
+#  & Bastard Sword~
+K:67:131:150
 
-# Resist Fire
-K:155:0x82/0x80
+#  & Two-Handed Sword~
+K:68:131:149
 
-# Resist Cold
-K:156:0x82/0x80
+#  & Executioner's Sword~
+K:69:131:155
 
-# Sustain Strength
-K:157:0x82/0x81
+#  & Blade~ of Chaos
+K:70:131:156
 
-# Sustain Intelligence
-K:158:0x82/0x81
+#  & Spear~
+K:71:139:145
 
-# Sustain Wisdom
-K:159:0x82/0x81
+#  & Awl-Pike~
+K:72:139:146
 
-# Sustain Constitution
-K:160:0x82/0x81
+#  & Trident~
+K:73:0x89:0x92
 
-# Sustain Dexterity
-K:161:0x82/0x81
+#  & Pike~
+K:74:139:147
 
-# Sustain Charisma
-K:162:0x82/0x81
+#  & Beaked Axe~
+K:75:139:145
 
-# Protection
-K:163:0x82/0x80
+#  & Broad Axe~
+K:76:139:146
 
-# Acid
-K:164:0x82/0x82
+#  & Throwing Axe~
+K:77:139:147
 
-# Flames
-K:165:0x82/0x82
+#  & Glaive~
+K:78:139:148
 
-# Ice
-K:166:0x82/0x82
+#  & Halberd~
+K:79:139:149
 
-# Resist Poison
-K:167:0x82/0x82
+#  & Scythe~
+K:80:0x89:0x94
 
-# Resist Nether
-K:168:0x82/0x81
+#  & Battle Axe~
+K:81:139:153
 
-# Free Action
-K:169:0x82/0x80
+#  & Great Axe~
+K:82:139:154
 
-# See Invisible
-K:170:0x82/0x81
+#  & Lochaber Axe~
+K:83:139:155
 
-# Searching
-K:171:0x82/0x80
+#  & Scythe~ of Slicing
+K:84:139:158
 
-# Strength
-K:172:0x82/0x81
+#  & Whip~
+K:85:0x89:0x89
 
-# Intelligence
-K:173:0x82/0x81
+#  & Quarterstaff~
+K:86:0x89:0x8E
 
-# Dexterity
-K:174:0x82/0x81
+#  & Mace~
+K:87:0x89:0x8C
 
-# Constitution
-K:175:0x82/0x81
+#  & Ball-and-Chain~
+K:88:0x89:0x88
 
-# Accuracy
-K:176:0x82/0x81
+#  & War Hammer~
+K:89:0x89:0x8F
 
-# Damage
-K:177:0x82/0x81
+#  & Lucerne Hammer~
+K:90:139:156
 
-# Slaying
-K:178:0x82/0x81
+#  & Throwing Hammer~
+K:91:139:157
 
-# Speed
-K:179:0x82/0x83
+#  & Morning Star~
+K:92:0x89:0x8B
 
-# Lightning
-K:180:0xB5/0x81
-# ------------------------- STAVES
-# Darkness
-K:181:0x86/0x99
+#  & Flail~
+K:93:139:159
 
-# Slowness
-K:182:0x86/0x99
+#  & Lead-Filled Mace~
+K:94:0x8B:0x8C
 
-# Haste Monsters
-K:183:0x86/0x99
+#  & Mace~ of Disruption
+K:95:0x89:0x8D
 
-# Summoning
-K:184:0x86/0x99
+#  & Shovel~
+K:96:0x8A:0x98
 
-# Teleportation
-K:185:0x86/0x99
+#  & Pick~
+K:97:0x8A:0x97
 
-# Perception
-K:186:0x86/0x99
+#  & Mattock~
+K:98:0xCD:0x80
 
-# Starlight
-K:187:0x86/0x99
+#  & Hard Leather Cap~
+K:99:0x88:0x82
 
-# Light
-K:188:0x86/0x99
+#  & Metal Cap~
+K:100:0x88:0x83
 
-# Magic Mapping
-K:189:0x86/0x9A
+#  & Iron Helm~
+K:101:0x88:0x84
 
-# Treasure Location
-K:190:0x86/0x99
+#  & Steel Helm~
+K:102:0x88:0x85
 
-# Object Location
-K:191:0x86/0x99
+#  & Iron Crown~
+K:103:0x88:0x86
 
-# Trap Location
-K:192:0x86/0x99
+#  & Golden Crown~
+K:104:0x88:0x87
 
-# Door/Stair Location
-K:193:0x86/0x99
+#  & Jewel Encrusted Crown~
+K:105:0x88:0x88
 
-# Detect Invisible
-K:194:0x86/0x99
+#  & Cloak~
+K:106:0x88:0x80
 
-# Detect Evil
-K:195:0x86/0x99
+#  & Shadow Cloak~
+K:107:0x88:0x81
 
-# Cure Light Wounds
-K:196:0x86/0x99
+#  & Sling~
+K:108:0x89:0x99
 
-# Curing
-K:197:0x86/0x9A
+#  & Short Bow~
+K:109:0x89:0x95
 
-# Healing
-K:198:0x86/0x9C
+#  & Long Bow~
+K:110:0x89:0x96
 
-# the Magi
-K:199:0x86/0x9C
+#  & Light Crossbow~
+K:111:0x89:0x97
 
-# Sleep Monsters
-K:200:0x86/0x99
+#  & Heavy Crossbow~
+K:112:0x89:0x98
 
-# Slow Monsters
-K:201:0x86/0x99
+#  & Rounded Pebble~
+K:113:0x89:0x9E
 
-# Speed
-K:202:0x86/0x9A
+#  & Iron Shot~
+K:114:0x89:0x9F
 
-# Probing
-K:203:0x86/0x9A
+#  & Mithril Shot~
+K:115:0xCD:0x85
 
-# Dispel Evil
-K:204:0x86/0x9B
+#  & Arrow~
+K:116:0x89:0x9A
 
-# Power
-K:205:0x86/0x9C
+#  & Seeker Arrow~
+K:117:0x89:0x9B
 
-# Holiness
-K:206:0x86/0x9C
+#  & Mithril Arrow~
+K:118:0xCE:0x91
 
-# Banishment
-K:207:0x86/0x9B
+#  & Bolt~
+K:119:0x89:0x9C
 
-# Earthquakes
-K:208:0x86/0x9A
+#  & Seeker Bolt~
+K:120:0x89:0x9D
 
-# *Destruction*
-K:209:0x86/0x9B
-# ---------------------- WANDS
-# Heal Monster
-K:210:0x86/0x8F
+#  & Mithril Bolt~
+K:121:0xCE:0x92
 
-# Haste Monster
-K:211:0x86/0x8F
+#  & Pair~ of Soft Leather Boots
+K:122:0x88:0x89
 
-# Clone Monster
-K:212:0x86/0x90
+#  & Pair~ of Hard Leather Boots
+K:123:0x88:0x8A
 
-# Teleport Other
-K:213:0x86/0x8F
+#  & Pair~ of Metal Shod Boots
+K:124:0x88:0x8B
 
-# Disarming
-K:214:0x86/0x8F
+#  & Set~ of Leather Gloves
+K:125:0x88:0x8C
 
-# Trap/Door Destruction
-K:215:0x86/0x8F
+#  & Set~ of Gauntlets
+K:126:0x88:0x8D
 
-# Stone to Mud
-K:216:0x86/0x8F
+#  & Set~ of Cesti
+K:127:0x88:0x8E
 
-# Light
-K:217:0x86/0x8F
+#  & Wooden Torch~
+K:128:0x8B:0x86
 
-# Sleep Monster
-K:218:0x86/0x8F
+#  & Brass Lantern~
+K:129:0x8B:0x85
 
-# Slow Monster
-K:219:0x86/0x8F
+#  DOOM
+K:130:182:128
 
-# Confuse Monster
-K:220:0x86/0x8F
+#  Teleportation
+K:131:182:129
 
-# Scare Monster
-K:221:0x86/0x90
+#  Adornment
+K:132:182:130
 
-# Drain Life
-K:222:0x86/0x91
+#  Slow Digestion
+K:133:182:133
 
-# Polymorph
-K:223:0x86/0x8F
+#  Resist Acid
+K:134:182:134
 
-# Stinking Cloud
-K:224:0x86/0x8F
+#  Searching
+K:135:182:135
 
-# Magic Missile
-K:225:0x86/0x8F
+#  Wisdom
+K:136:182:131
 
-# Acid Bolts
-K:226:0x86/0x90
+#  Charisma
+K:137:182:132
 
-# Lightning Bolts
-K:227:0x86/0x8F
+#  the Magi
+K:138:182:136
 
-# Fire Bolts
-K:228:0x86/0x90
+#  Sustenance
+K:139:182:137
 
-# Frost Bolts
-K:229:0x86/0x8F
+#  ESP
+K:140:182:138
 
-# Acid Balls
-K:230:0x86/0x91
+#  Resistance
+K:141:182:139
 
-# Lightning Balls
-K:231:0x86/0x90
+#  Regeneration
+K:142:182:140
 
-# Fire Balls
-K:232:0x86/0x91
+#  Devotion
+K:143:182:141
 
-# Cold Balls
-K:233:0x86/0x90
+#  Weaponmastery
+K:144:182:143
 
-# Wonder
-K:234:0x86/0x8F
+#  Trickery
+K:145:182:144
 
-# Annihilation
-K:235:0x86/0x91
+#  Infravision
+K:146:182:146
 
-# Dragon's Flame
-K:236:0x86/0x91
+#  Resist Lightning
+K:147:182:145
 
-# Dragon's Frost
-K:237:0x86/0x91
+#  Woe
+K:148:0x82:0x82
 
-# Dragon's Breath
-K:238:0x86/0x91
-# -------------------- RODS
-# Trap Location
-K:239:0x86/0x94
+#  Aggravate Monster
+K:149:0x82:0x80
 
-# Door/Stair Location
-K:240:0x86/0x94
+#  Weakness
+K:150:0x82:0x80
 
-# Perception
-K:241:0x86/0x96
+#  Stupidity
+K:151:0x82:0x80
 
-# Recall
-K:242:0x86/0x96
+#  Teleportation
+K:152:0x82:0x80
 
-# Illumination
-K:243:0x86/0x95
+#  Slow Digestion
+K:153:0x82:0x80
 
-# Magic Mapping
-K:244:0x86/0x97
+#  Feather Falling
+K:154:0x82:0x80
 
-# Detection
-K:245:0x86/0x95
+#  Resist Fire
+K:155:0x82:0x80
 
-# Probing
-K:246:0x86/0x97
+#  Resist Cold
+K:156:0x82:0x80
 
-# Curing
-K:247:0x86/0x97
+#  Sustain Strength
+K:157:0x82:0x81
 
-# Healing
-K:248:0x86/0x97
+#  Sustain Intelligence
+K:158:0x82:0x81
 
-# Restoration
-K:249:0x86/0x97
+#  Sustain Wisdom
+K:159:0x82:0x81
 
-# Speed
-K:250:0x86/0x97
+#  Sustain Constitution
+K:160:0x82:0x81
 
-# Stone to Mud
-K:251:0x86/0x8F
+#  Sustain Dexterity
+K:161:0x82:0x81
 
-# Teleport Other
-K:252:0x86/0x96
+#  Sustain Charisma
+K:162:0x82:0x81
 
-# Disarming
-K:253:0x86/0x95
+#  Protection
+K:163:0x82:0x80
 
-# Light
-K:254:0x86/0x94
+#  Acid
+K:164:0x82:0x82
 
-# Sleep Monster
-K:255:0x86/0x95
+#  Flames
+K:165:0x82:0x82
 
-# Slow Monster
-K:256:0x86/0x95
+#  Ice
+K:166:0x82:0x82
 
-# Drain Life
-K:257:0x86/0x97
+#  Resist Poison
+K:167:0x82:0x82
 
-# Polymorph
-K:258:0x86/0x95
+#  Resist Nether
+K:168:0x82:0x81
 
-# Acid Bolts
-K:259:0x86/0x95
+#  Free Action
+K:169:0x82:0x80
 
-# Lightning Bolts
-K:260:0x86/0x94
+#  See Invisible
+K:170:0x82:0x81
 
-# Fire Bolts
-K:261:0x86/0x95
+#  Searching
+K:171:0x82:0x80
 
-# Frost Bolts
-K:262:0x86/0x95
+#  Strength
+K:172:0x82:0x81
 
-# Acid Balls
-K:263:0x86/0x97
+#  Intelligence
+K:173:0x82:0x81
 
-# Lightning Balls
-K:264:0x86/0x96
+#  Dexterity
+K:174:0x82:0x81
 
-# Fire Balls
-K:265:0x86/0x97
+#  Constitution
+K:175:0x82:0x81
 
-# Cold Balls
-K:266:0x86/0x96
-#  -------------------- SCROLLS
-# Darkness
-K:267:214/131
+#  Accuracy
+K:176:0x82:0x81
 
-# Aggravate Monster
-K:268:214/135
+#  Damage
+K:177:0x82:0x81
 
-# Curse Armor
-K:269:214/135
+#  Slaying
+K:178:0x82:0x81
 
-# Curse Weapon
-K:270:214/135
+#  Speed
+K:179:0x82:0x83
 
-# Summon Monster
-K:271:214/133
+#  Lightning
+K:180:0xB5:0x81
 
-# Summon Undead
-K:272:214/133
+#  Darkness
+K:181:0x86:0x99
 
-# Summon Unique
-K:273:214/133
+#  Slowness
+K:182:0x86:0x99
 
-# Trap Creation
-K:274:214/135
+#  Haste Monsters
+K:183:0x86:0x99
 
-# Phase Door
-K:275:214/132
+#  Summoning
+K:184:0x86:0x99
 
-# Teleportation
-K:276:214/132
+#  Teleportation
+K:185:0x86:0x99
 
-# Teleport Level
-K:277:214/132
+#  Perception
+K:186:0x86:0x99
 
-# Word of Recall
-K:278:214/132
+#  Starlight
+K:187:0x86:0x99
 
-# Identify
-K:279:214/128
+#  Light
+K:188:0x86:0x99
 
-# *Identify*
-K:280:214/128
+#  Magic Mapping
+K:189:0x86:0x9A
 
-# Remove Curse
-K:281:214/138
+#  Treasure Location
+K:190:0x86:0x99
 
-# *Remove Curse*
-K:282:214/138
+#  Object Location
+K:191:0x86:0x99
 
-# Enchant Armor
-K:283:214/137
+#  Trap Location
+K:192:0x86:0x99
 
-# Enchant Weapon To-Hit
-K:284:214/137
+#  Door/Stair Location
+K:193:0x86:0x99
 
-# Enchant Weapon To-Dam
-K:285:214/137
+#  Detect Invisible
+K:194:0x86:0x99
 
-# *Enchant Armor*
-K:286:214/137
+#  Detect Evil
+K:195:0x86:0x99
 
-# *Enchant Weapon*
-K:287:214/137
+#  Cure Light Wounds
+K:196:0x86:0x99
 
-# Recharging
-K:288:214/134
+#  Curing
+K:197:0x86:0x9A
 
-# *Recharging*
-K:289:214/134
+#  Healing
+K:198:0x86:0x9C
 
-# Light
-K:290:214/131
+#  the Magi
+K:199:0x86:0x9C
 
-# Magic Mapping
-K:291:214/131
+#  Sleep Monsters
+K:200:0x86:0x99
 
-# Treasure Detection
-K:292:214/135
+#  Slow Monsters
+K:201:0x86:0x99
 
-# Object Detection
-K:293:214/135
+#  Speed
+K:202:0x86:0x9A
 
-# Trap Detection
-K:294:214/135
+#  Probing
+K:203:0x86:0x9A
 
-# Door/Stair Location
-K:295:214/135
+#  Dispel Evil
+K:204:0x86:0x9B
 
-# Detect Invisible
-K:296:214/135
+#  Power
+K:205:0x86:0x9C
 
-# Satisfy Hunger
-K:297:214/130
+#  Holiness
+K:206:0x86:0x9C
 
-# Blessing
-K:298:214/130
+#  Banishment
+K:207:0x86:0x9B
 
-# Holy Chant
-K:299:214/130
+#  Earthquakes
+K:208:0x86:0x9A
 
-# Holy Prayer
-K:300:214/130
+#  *Destruction*
+K:209:0x86:0x9B
 
-# Monster Confusion
-K:301:214/136
+#  Heal Monster
+K:210:0x86:0x8F
 
-# Protection from Evil
-K:302:214/136
+#  Haste Monster
+K:211:0x86:0x8F
 
-# Rune of Protection
-K:303:214/136
+#  Clone Monster
+K:212:0x86:0x90
 
-# Trap/Door Destruction
-K:304:214/135
+#  Teleport Other
+K:213:0x86:0x8F
 
-# Create Monster Trap
-K:305:214/136
+#  Disarming
+K:214:0x86:0x8F
 
-# *Destruction*
-K:306:214/129
+#  Trap/Door Destruction
+K:215:0x86:0x8F
 
-# Dispel Undead
-K:307:214/136
+#  Stone to Mud
+K:216:0x86:0x8F
 
-# Create Artifact
-K:308:214/139
+#  Light
+K:217:0x86:0x8F
 
-# Banishment
-K:309:214/129
+#  Sleep Monster
+K:218:0x86:0x8F
 
-# Mass Banishment
-K:310:214/129
+#  Slow Monster
+K:219:0x86:0x8F
 
-# Acquirement
-K:311:214/139
+#  Confuse Monster
+K:220:0x86:0x8F
 
-# *Acquirement*
-K:312:214/139
-# --------------------- POTIONS
-# Water
-K:313:0x86/0x85
+#  Scare Monster
+K:221:0x86:0x90
 
-# Apple Juice
-K:314:0x86/0x85
+#  Drain Life
+K:222:0x86:0x91
 
-# Slime Mold Juice
-K:315:0x86/0x85
+#  Polymorph
+K:223:0x86:0x8F
 
-# Slowness
-K:316:0x86/0x85
+#  Stinking Cloud
+K:224:0x86:0x8F
 
-# Salt Water
-K:317:0x86/0x85
+#  Magic Missile
+K:225:0x86:0x8F
 
-# Poison
-K:318:0x86/0x85
+#  Acid Bolts
+K:226:0x86:0x90
 
-# Blindness
-K:319:0x86/0x85
+#  Lightning Bolts
+K:227:0x86:0x8F
 
-# Confusion
-K:320:0x86/0x85
+#  Fire Bolts
+K:228:0x86:0x90
 
-# Sleep
-K:321:0x86/0x85
+#  Frost Bolts
+K:229:0x86:0x8F
 
-# Lose Memories
-K:322:0x86/0x85
+#  Acid Balls
+K:230:0x86:0x91
 
-# Drain Mana
-K:323:0x86/0x85
+#  Lightning Balls
+K:231:0x86:0x90
 
-# Ruination
-K:324:0x86/0x87
+#  Fire Balls
+K:232:0x86:0x91
 
-# Weakness
-K:325:0x86/0x85
+#  Cold Balls
+K:233:0x86:0x90
 
-# Stupidity
-K:326:0x86/0x85
+#  Wonder
+K:234:0x86:0x8F
 
-# Naivety
-K:327:0x86/0x85
+#  Annihilation
+K:235:0x86:0x91
 
-# Clumsiness
-K:328:0x86/0x85
+#  Dragon's Flame
+K:236:0x86:0x91
 
-# Sickliness
-K:329:0x86/0x85
+#  Dragon's Frost
+K:237:0x86:0x91
 
-# Ugliness
-K:330:0x86/0x86
+#  Dragon's Breath
+K:238:0x86:0x91
 
-# Detonations
-K:331:0x86/0x87
+#  Trap Location
+K:239:0x86:0x94
 
-# Death
-K:332:0x86/0x88
+#  Door/Stair Location
+K:240:0x86:0x94
 
-# Infravision
-K:333:0x86/0x85
+#  Perception
+K:241:0x86:0x96
 
-# Detect Invisible
-K:334:0x86/0x85
+#  Recall
+K:242:0x86:0x96
 
-# Slow Poison
-K:335:0x86/0x85
+#  Illumination
+K:243:0x86:0x95
 
-# Neutralize Poison
-K:336:0x86/0x85
+#  Magic Mapping
+K:244:0x86:0x97
 
-# Boldness
-K:337:0x86/0x85
+#  Detection
+K:245:0x86:0x95
 
-# Speed
-K:338:0x86/0x86
+#  Probing
+K:246:0x86:0x97
 
-# Resist Heat
-K:339:0x86/0x85
+#  Curing
+K:247:0x86:0x97
 
-# Resist Cold
-K:340:0x86/0x85
+#  Healing
+K:248:0x86:0x97
 
-# Heroism
-K:341:0x86/0x85
+#  Restoration
+K:249:0x86:0x97
 
-# Berserk Strength
-K:342:0x86/0x85
+#  Speed
+K:250:0x86:0x97
 
-# Cure Light Wounds
-K:343:0x86/0x85
+#  Stone to Mud
+K:251:0x86:0x8F
 
-# Cure Serious Wounds
-K:344:0x86/0x85
+#  Teleport Other
+K:252:0x86:0x96
 
-# Cure Critical Wounds
-K:345:0x86/0x85
+#  Disarming
+K:253:0x86:0x95
 
-# Healing
-K:346:0x86/0x85
+#  Light
+K:254:0x86:0x94
 
-# *Healing*
-K:347:0x86/0x87
+#  Sleep Monster
+K:255:0x86:0x95
 
-# Life
-K:348:0x86/0x88
+#  Slow Monster
+K:256:0x86:0x95
 
-# Restore Mana
-K:349:0x86/0x86
+#  Drain Life
+K:257:0x86:0x97
 
-# Restore Life Levels
-K:350:0x86/0x87
+#  Polymorph
+K:258:0x86:0x95
 
-# Restore Strength
-K:351:0x86/0x86
+#  Acid Bolts
+K:259:0x86:0x95
 
-# Restore Intelligence
-K:352:0x86/0x86
+#  Lightning Bolts
+K:260:0x86:0x94
 
-# Restore Wisdom
-K:353:0x86/0x86
+#  Fire Bolts
+K:261:0x86:0x95
 
-# Restore Dexterity
-K:354:0x86/0x86
+#  Frost Bolts
+K:262:0x86:0x95
 
-# Restore Constitution
-K:355:0x86/0x86
+#  Acid Balls
+K:263:0x86:0x97
 
-# Restore Charisma
-K:356:0x86/0x86
+#  Lightning Balls
+K:264:0x86:0x96
 
-# Strength
-K:357:0x86/0x86
+#  Fire Balls
+K:265:0x86:0x97
 
-# Intelligence
-K:358:0x86/0x86
+#  Cold Balls
+K:266:0x86:0x96
 
-# Wisdom
-K:359:0x86/0x86
+#  Darkness
+K:267:214:131
 
-# Dexterity
-K:360:0x86/0x86
+#  Aggravate Monster
+K:268:214:135
 
-# Constitution
-K:361:0x86/0x86
+#  Curse Armor
+K:269:214:135
 
-# Charisma
-K:362:0x86/0x86
+#  Curse Weapon
+K:270:214:135
 
-# Augmentation
-K:363:0x86/0x87
+#  Summon Monster
+K:271:214:133
 
-# Enlightenment
-K:364:0x86/0x85
+#  Summon Undead
+K:272:214:133
 
-# *Enlightenment*
-K:365:0x86/0x88
+#  Summon Unique
+K:273:214:133
 
-# Self Knowledge
-K:366:0x86/0x87
+#  Trap Creation
+K:274:214:135
 
-# Experience
-K:367:0x86/0x87
+#  Phase Door
+K:275:214:132
 
-# Resist Acid
-K:368:0x82/0x82
-# Resist Electricity
-K:369:0x82/0x82
-# Resist Poison
-K:370:0x82/0x82
-# Resistance
-K:371:0x82/0x82
-# ---------------------------CHESTS
-# & Small wooden chest~
-K:372:0x80/0x96
+#  Teleportation
+K:276:214:132
 
-# & Small iron chest~
-K:373:0x80/0x98
+#  Teleport Level
+K:277:214:132
 
-# & Small steel chest~
-K:374:0x80/0x9A
+#  Word of Recall
+K:278:214:132
 
-# & Large wooden chest~
-K:375:0x80/0x97
+#  Identify
+K:279:214:128
 
-# & Large iron chest~
-K:376:0x80/0x99
+#  *Identify*
+K:280:214:128
 
-# & Large steel chest~
-K:377:0x80/0x9B
+#  Remove Curse
+K:281:214:138
 
-# & Large Jeweled chest~
-K:378:0x80/0x9C
-# ------------------------- MUSHROOMS
-# Poison
-K:379:0x8B/0x81
+#  *Remove Curse*
+K:282:214:138
 
-# Blindness
-K:380:0x8B/0x81
+#  Enchant Armor
+K:283:214:137
 
-# Paranoia
-K:381:0x8B/0x81
+#  Enchant Weapon To-Hit
+K:284:214:137
 
-# Confusion
-K:382:0x8B/0x81
+#  Enchant Weapon To-Dam
+K:285:214:137
 
-# Hallucination
-K:383:0x8B/0x81
+#  *Enchant Armor*
+K:286:214:137
 
-# Paralysis
-K:384:0x8B/0x81
+#  *Enchant Weapon*
+K:287:214:137
 
-# Weakness
-K:385:0x8B/0x81
+#  Recharging
+K:288:214:134
 
-# Sickness
-K:386:0x8B/0x81
+#  *Recharging*
+K:289:214:134
 
-# Stupidity
-K:387:0x8B/0x81
+#  Light
+K:290:214:131
 
-# Naivety
-K:388:0x8B/0x81
+#  Magic Mapping
+K:291:214:131
 
-# Unhealth
-K:389:0x8B/0x81
+#  Treasure Detection
+K:292:214:135
 
-# Disease
-K:390:0x8B/0x81
+#  Object Detection
+K:293:214:135
 
-# Cure Poison
-K:391:0x8B/0x81
+#  Trap Detection
+K:294:214:135
 
-# Cure Blindness
-K:392:0x8B/0x81
+#  Door/Stair Location
+K:295:214:135
 
-# Cure Paranoia
-K:393:0x8B/0x81
+#  Detect Invisible
+K:296:214:135
 
-# Cure Confusion
-K:394:0x8B/0x81
+#  Satisfy Hunger
+K:297:214:130
 
-# Cure Serious Wounds
-K:395:0x8B/0x81
+#  Blessing
+K:298:214:130
 
-# Restore Strength
-K:396:0x8B/0x81
+#  Holy Chant
+K:299:214:130
 
-# Restore Constitution
-K:397:0x8B/0x81
+#  Holy Prayer
+K:300:214:130
 
-# Restoring
-K:398:0x8B/0x81
+#  Monster Confusion
+K:301:214:136
 
-# & Ration~ of Food
-K:399:0x8B/0x82
+#  Protection from Evil
+K:302:214:136
 
-# & Slime Mold~
-K:400:0x8A/0x9F
+#  Rune of Protection
+K:303:214:136
 
-# & Piece~ of Elvish Waybread
-K:401:0x8B/0x80
+#  Trap/Door Destruction
+K:304:214:135
 
-# & Flask~ of oil
-K:402:0x8A/0x9A
+#  Create Monster Trap
+K:305:214:136
 
-# & Iron Spike~
-K:403:0x8B/0x84
-# ------------------
-# copper
-K:404:0x80/0x89
+#  *Destruction*
+K:306:214:129
 
-# copper
-K:405:0x80/0x8A
+#  Dispel Undead
+K:307:214:136
 
-# copper
-K:406:0x80/0x8B
+#  Create Artifact
+K:308:214:139
 
-# silver
-K:407:0x80/0x8C
+#  Banishment
+K:309:214:129
 
-# silver
-K:408:0x80/0x8C
+#  Mass Banishment
+K:310:214:129
 
-# silver
-K:409:0x80/0x8C
+#  Acquirement
+K:311:214:139
 
-# garnets
-K:410:0x80/0x8F
+#  *Acquirement*
+K:312:214:139
 
-# garnets
-K:411:0x80/0x8F
+#  Water
+K:313:0x86:0x85
 
-# gold
-K:412:0x80/0x8D
+#  Apple Juice
+K:314:0x86:0x85
 
-# gold
-K:413:0x80/0x8D
+#  Slime Mold Juice
+K:315:0x86:0x85
 
-# gold
-K:414:0x80/0x8D
+#  Slowness
+K:316:0x86:0x85
 
-# opals
-K:415:0x80/0x90
+#  Salt Water
+K:317:0x86:0x85
 
-# sapphires
-K:416:0x80/0x91
+#  Poison
+K:318:0x86:0x85
 
-# rubies
-K:417:0x80/0x92
+#  Blindness
+K:319:0x86:0x85
 
-# diamonds
-K:418:0x80/0x93
+#  Confusion
+K:320:0x86:0x85
 
-# emeralds
-K:419:0x80/0x94
+#  Sleep
+K:321:0x86:0x85
 
-# mithril
-K:420:0x80/0x8E
+#  Lose Memories
+K:322:0x86:0x85
 
-# adamantite
-K:421:0x80/0x8F
-# ------------------------------- Mage Books    OK
-# [Magic for Beginners]
-K:422:138/131
+#  Drain Mana
+K:323:0x86:0x85
 
-# [Conjurings and Tricks]
-K:423:138/131
+#  Ruination
+K:324:0x86:0x87
 
-# [Incantations and Illusions]
-K:424:138/131
+#  Weakness
+K:325:0x86:0x85
 
-# [Sorcery and Evocations]
-K:425:138/131
+#  Stupidity
+K:326:0x86:0x85
 
-# [Resistances of Scarabtarices]
-K:426:0x8A/0x84
+#  Naivety
+K:327:0x86:0x85
 
-# [Raal's Tome of Destruction]
-K:427:0x8A/0x88
+#  Clumsiness
+K:328:0x86:0x85
 
-# [Mordenkainen's Escapes]
-K:428:0x8A/0x85
+#  Sickliness
+K:329:0x86:0x85
 
-# [Tenser's Transformations]
-K:429:0x8A/0x87
+#  Ugliness
+K:330:0x86:0x86
 
-# [Kelek's Grimoire of Power]
-K:430:0x8A/0x86
-# ----------------------------- Priest Books   OK
-# [Beginners Handbook]
-K:431:138/140
+#  Detonations
+K:331:0x86:0x87
 
-# [Words of Wisdom]
-K:432:138/140
+#  Death
+K:332:0x86:0x88
 
-# [Chants and Blessings]
-K:433:138/140
+#  Infravision
+K:333:0x86:0x85
 
-# [Exorcism and Dispelling]
-K:434:138/140
+#  Detect Invisible
+K:334:0x86:0x85
 
-# [Ethereal Openings]
-K:435:0x8A/0x8D
+#  Slow Poison
+K:335:0x86:0x85
 
-# [Godly Insights]
-K:436:0x8A/0x8E
+#  Neutralize Poison
+K:336:0x86:0x85
 
-# [Purifications and Healing]
-K:437:0x8A/0x8F
+#  Boldness
+K:337:0x86:0x85
 
-# [Holy Infusions]
-K:438:0x8A/0x90
+#  Speed
+K:338:0x86:0x86
 
-# [Wrath of God]
-K:439:0x8A/0x91
+#  Resist Heat
+K:339:0x86:0x85
 
-# & Broken Bone~
-K:440:0x8B/0x8B
+#  Resist Cold
+K:340:0x86:0x85
 
-# Mass Identify
-K:441:0x86/0x99
+#  Heroism
+K:341:0x86:0x85
 
-# *Identify*
-K:442:0x86/0x96
+#  Berserk Strength
+K:342:0x86:0x85
 
-# Mass Identify
-K:443:0x86/0x96
+#  Cure Light Wounds
+K:343:0x86:0x85
 
-# ----------------- Druid Books -------------   OK
-# [Call of the Wild]
-K:444:138/129
+#  Cure Serious Wounds
+K:344:0x86:0x85
 
-# [Environmental Adjurations]
-K:445:138/129
+#  Cure Critical Wounds
+K:345:0x86:0x85
 
-# [Commanding Nature]
-K:446:138/129
+#  Healing
+K:346:0x86:0x85
 
-# [Lore of Engagement]
-K:447:138/129
+#  *Healing*
+K:347:0x86:0x87
 
-# [Radagast's Protections]
-K:448:138/130
+#  Life
+K:348:0x86:0x88
 
-# [Melian's Reformations]
-K:449:138/137
+#  Restore Mana
+K:349:0x86:0x86
 
-# [Arda's Habitats]
-K:450:138/138
+#  Restore Life Levels
+K:350:0x86:0x87
 
-# [Natural Infusions]
-K:451:138/139
+#  Restore Strength
+K:351:0x86:0x86
 
-# [Nature's Fury]
-K:452:138/146
+#  Restore Intelligence
+K:352:0x86:0x86
+
+#  Restore Wisdom
+K:353:0x86:0x86
+
+#  Restore Dexterity
+K:354:0x86:0x86
+
+#  Restore Constitution
+K:355:0x86:0x86
+
+#  Restore Charisma
+K:356:0x86:0x86
+
+#  Strength
+K:357:0x86:0x86
+
+#  Intelligence
+K:358:0x86:0x86
+
+#  Wisdom
+K:359:0x86:0x86
+
+#  Dexterity
+K:360:0x86:0x86
+
+#  Constitution
+K:361:0x86:0x86
+
+#  Charisma
+K:362:0x86:0x86
+
+#  Augmentation
+K:363:0x86:0x87
+
+#  Enlightenment
+K:364:0x86:0x85
+
+#  *Enlightenment*
+K:365:0x86:0x88
+
+#  Self Knowledge
+K:366:0x86:0x87
+
+#  Experience
+K:367:0x86:0x87
+
+#  Resist Acid
+K:368:0x82:0x82
+
+#  Resist Electricity
+K:369:0x82:0x82
+
+#  Resist Poison
+K:370:0x82:0x82
+
+#  Resistance
+K:371:0x82:0x82
+
+#  & Small wooden chest~
+K:372:0x80:0x96
+
+#  & Small iron chest~
+K:373:0x80:0x98
+
+#  & Small steel chest~
+K:374:0x80:0x9A
+
+#  & Large wooden chest~
+K:375:0x80:0x97
+
+#  & Large iron chest~
+K:376:0x80:0x99
+
+#  & Large steel chest~
+K:377:0x80:0x9B
+
+#  & Large Jeweled chest~
+K:378:0x80:0x9C
+
+#  Poison
+K:379:0x8B:0x81
+
+#  Blindness
+K:380:0x8B:0x81
+
+#  Paranoia
+K:381:0x8B:0x81
+
+#  Confusion
+K:382:0x8B:0x81
+
+#  Hallucination
+K:383:0x8B:0x81
+
+#  Paralysis
+K:384:0x8B:0x81
+
+#  Weakness
+K:385:0x8B:0x81
+
+#  Sickness
+K:386:0x8B:0x81
+
+#  Stupidity
+K:387:0x8B:0x81
+
+#  Naivety
+K:388:0x8B:0x81
+
+#  Unhealth
+K:389:0x8B:0x81
+
+#  Disease
+K:390:0x8B:0x81
+
+#  Cure Poison
+K:391:0x8B:0x81
+
+#  Cure Blindness
+K:392:0x8B:0x81
+
+#  Cure Paranoia
+K:393:0x8B:0x81
+
+#  Cure Confusion
+K:394:0x8B:0x81
+
+#  Cure Serious Wounds
+K:395:0x8B:0x81
+
+#  Restore Strength
+K:396:0x8B:0x81
+
+#  Restore Constitution
+K:397:0x8B:0x81
+
+#  Restoring
+K:398:0x8B:0x81
+
+#  & Ration~ of Food
+K:399:0x8B:0x82
+
+#  & Slime Mold~
+K:400:0x8A:0x9F
+
+#  & Piece~ of Elvish Waybread
+K:401:0x8B:0x80
+
+#  & Flask~ of oil
+K:402:0x8A:0x9A
+
+#  & Iron Spike~
+K:403:0x8B:0x84
+
+#  copper
+K:404:0x80:0x89
+
+#  copper
+K:405:0x80:0x8A
+
+#  copper
+K:406:0x80:0x8B
+
+#  silver
+K:407:0x80:0x8C
+
+#  silver
+K:408:0x80:0x8C
+
+#  silver
+K:409:0x80:0x8C
+
+#  garnets
+K:410:0x80:0x8F
+
+#  garnets
+K:411:0x80:0x8F
+
+#  gold
+K:412:0x80:0x8D
+
+#  gold
+K:413:0x80:0x8D
+
+#  gold
+K:414:0x80:0x8D
+
+#  opals
+K:415:0x80:0x90
+
+#  sapphires
+K:416:0x80:0x91
+
+#  rubies
+K:417:0x80:0x92
+
+#  diamonds
+K:418:0x80:0x93
+
+#  emeralds
+K:419:0x80:0x94
+
+#  mithril
+K:420:0x80:0x8E
+
+#  adamantite
+K:421:0x80:0x8F
+
+#  [Magic for Beginners]
+K:422:138:131
+
+#  [Conjurings and Tricks]
+K:423:138:131
+
+#  [Incantations and Illusions]
+K:424:138:131
+
+#  [Sorcery and Evocations]
+K:425:138:131
+
+#  [Resistances of Scarabtarices]
+K:426:0x8A:0x84
+
+#  [Raal's Tome of Destruction]
+K:427:0x8A:0x88
+
+#  [Mordenkainen's Escapes]
+K:428:0x8A:0x85
+
+#  [Tenser's Transformations]
+K:429:0x8A:0x87
+
+#  [Kelek's Grimoire of Power]
+K:430:0x8A:0x86
+
+#  [Beginners Handbook]
+K:431:138:140
+
+#  [Words of Wisdom]
+K:432:138:140
+
+#  [Chants and Blessings]
+K:433:138:140
+
+#  [Exorcism and Dispelling]
+K:434:138:140
+
+#  [Ethereal Openings]
+K:435:0x8A:0x8D
+
+#  [Godly Insights]
+K:436:0x8A:0x8E
+
+#  [Purifications and Healing]
+K:437:0x8A:0x8F
+
+#  [Holy Infusions]
+K:438:0x8A:0x90
+
+#  [Wrath of God]
+K:439:0x8A:0x91
+
+#  & Broken Bone~
+K:440:0x8B:0x8B
+
+#  Mass Identify
+K:441:0x86:0x99
+
+#  *Identify*
+K:442:0x86:0x96
+
+#  Mass Identify
+K:443:0x86:0x96
+
+#  [Call of the Wild]
+K:444:138:129
+
+#  [Environmental Adjurations]
+K:445:138:129
+
+#  [Commanding Nature]
+K:446:138:129
+
+#  [Lore of Engagement]
+K:447:138:129
+
+#  [Radagast's Protections]
+K:448:138:130
+
+#  [Melian's Reformations]
+K:449:138:137
+
+#  [Arda's Habitats]
+K:450:138:138
+
+#  [Natural Infusions]
+K:451:138:139
+
+#  [Nature's Fury]
+K:452:138:146
 
 
 ##### Monster attr/char definitions #####
