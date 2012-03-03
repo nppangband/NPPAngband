@@ -2,10 +2,12 @@
 
 #
 # This file has been modified for use with Buzzkill's Universal 32x32 Tileset (UT32).
+# UT32 is a modified version of David Gervais's 32x32 tileset.
+# Additional tiles by provided by Rob Fiala, Jeff Greene, Thapper(@oook.cz) and others.
 #
-# This file defines special attr/char mappings for use in "graphics" mode
-# with David Gervais's 32x32 tiles.
+# This file has been specifically modified for use with NPP Angband 0.5.4 beta2 and later.
 #
+# This file defines special attr/char mappings for use in "graphics" mode.
 # See "lib/help/command.txt" and "src/files.c" for more information.
 #
 
@@ -330,7 +332,7 @@ F:104:0x98:0xbe
 F:105:0x98:0xe5
 
 # storm cloud
-F:106:0x98:0xed
+F:106:0x9A:0xCD
 
 # wet floor
 F:107:0x97:0x84
@@ -381,22 +383,22 @@ F:121:0x98:0xdf
 # F:122:0x00:0x00
 
 # crest of a wave over sand
-# F:123:0x00:0x00
+F:123:0x98:0xEE
 
 # crest of a wave over water
-# F:124:0x00:0x00
+F:124:0x98:0xF1
 
 # crest of a wave over deep water (hidden)
-# F:125:0x00:0x00
+F:125:0x98:0xF4
 
 # wave over water
-# F:126:0x00:0x00
+F:126:0x98:0xF7
 
 # wave over deep water (hidden)
-# F:127:0x00:0x00
+F:127:0x98:0xFA
 
 # wave over sand
-# F:128:0x00:0x00
+F:128:0x98:0xFD
 
 # wave breaking over a stone bridge
 # F:129:0x00:0x00
@@ -450,10 +452,10 @@ F:144:0x98:0xaf
 F:145:0x97:0xb7
 
 # crest of a wave over deep water
-# F:146:0x00:0x00
+F:146:0x98:0xF4
 
 # wave over deep water
-# F:147:0x00:0x00
+F:147:0x98:0xFA
 
 # pile of rubble (hidden)
 F:148:0x97:0xe1
@@ -585,7 +587,7 @@ F:189:0x98:0x86
 # F:190:0x00:0x00
 
 # cloud of drain life
-F:191:0x98:0xee
+F:191:0x9A:0xCE
 
 # glacier
 F:192:0x98:0xe8
@@ -597,7 +599,7 @@ F:193:0x97:0x9c
 F:194:0x97:0xd5
 
 # tree branch covered with snow
-F:195:0x98:0xd7
+F:195:0x98:0xd6
 
 # cracked wall over boiling water
 F:196:0x97:0xf6
@@ -621,10 +623,10 @@ F:201:0x97:0x9f
 F:202:0x97:0xa8
 
 # shard cloud
-F:203:0x98:0xef
+F:203:0x9A:0xCF
 
 # meteor strike
-F:204:0x98:0xf0
+F:204:0x9A:0xD0
 
 # cracked wall over acid
 F:205:0x97:0xf9
@@ -689,7 +691,7 @@ R:16:0x8e:0xD5
 R:17:0x8e:0xCE
 
 # Giant white mouse
-R:18:0x8d:0x98
+R:18:0x8D:0x98
 
 # Floating eye
 R:19:0x92:0xC1
@@ -848,7 +850,7 @@ R:69:0x8F:0xDE
 R:70:0x8f:0xBC
 
 # Giant white rat
-R:71:0x8d:0x9A
+R:71:0x99:0xE0
 
 # Silver mouse
 R:72:0x99:0xcb
@@ -4070,8 +4072,8 @@ S:3:0x81:0xB7:0x81:0xA8
 #  TERM_RED
 S:4:0x81:0xB0:0x81:0x8C
 
-#  TERM_GREEN
-S:5:0x81:0xB1:0x81:0x90
+#  TERM_GREEN (trap detection border)
+S:5:0x9A:0xCB:0x81:0x90
 
 #  TERM_BLUE
 S:6:0x81:0xB2:0x81:0x94
@@ -4209,4 +4211,5 @@ S:47:0x9A:0xBD:0x81:0x9C
 
 # Load the flavored objects
 %:flvr-dvg.prf
+
 

@@ -53,7 +53,7 @@
 /*
  * Current version string
  */
-#define VERSION_STRING	"0.5.4-BETA-2"
+#define VERSION_STRING	"0.5.4-BETA-3"
 
 
 /*

@@ -28,6 +28,7 @@ Additional mapping for the 8x8 and 16x16 tilesets.
 Modify the colors for the drawn target path inside the targeting menu.
 Firing cursed ammo now has a 70% chance to hurt the player.
 Added buzzkill as a shopkeeper in the black market.
+Changes to how compact objects works.
 Bugfix: Equipment and itemlist windows were not updating properly when the player was in a store.
 Bugfix: There was a playtesting message when examining a store service.
 Bugfix: Player ghost templates were not saving properly when a player died.
