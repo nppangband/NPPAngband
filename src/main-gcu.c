@@ -1023,6 +1023,18 @@ errr init_gcu(int argc, char **argv)
 		quit("Angband needs at least an 80x24 'curses' screen");
 	}
 
+#ifdef USE_GRAPHICS
+
+	/* Set graphics */
+	if (arg_graphics)
+	{
+		use_graphics = GRAPHICS_PSEUDO;
+		ANGBAND_GRAF = "pseudo";
+	}
+
+
+#endif /* USE_GRAPHICS */
+
 
 #ifdef A_COLOR
 
