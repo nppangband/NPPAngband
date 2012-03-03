@@ -1310,7 +1310,7 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 			c = f_ptr->x_char;
 
 			/* Special lighting effects */
-			if ((view_special_light) && (f_ptr->f_flags2 & (FF2_ATTR_LIGHT)))
+			if (view_special_light)
 			{
 				special_lighting_floor(&a, &c, info);
 			}
