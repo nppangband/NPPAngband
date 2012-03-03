@@ -2365,7 +2365,7 @@ static void dungeon(void)
 		if (o_cnt + 32 > z_info->o_max) compact_objects(64);
 
 		/* Hack -- Compress the object list occasionally */
-		if (o_cnt + 32 < o_max) compact_objects(0);
+		else if (o_cnt + 32 < o_max) compact_objects(0);
 
 		/* Do any necessary animations */
 		do_animation();

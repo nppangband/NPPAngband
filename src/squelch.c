@@ -664,6 +664,30 @@ void rearrange_stack(int y, int x)
 	}
 }
 
+bool squelch_item_ok(const object_type *o_ptr)
+{
+	object_kind *k_ptr = k_ptr = &k_info[o_ptr->k_idx];
+
+	/* Always delete "nothings" */
+	if (!o_ptr->k_idx) return (TRUE);
+
+	/* Ignore inscribed objects, artifacts or quest objects */
+	if (o_ptr->obj_note || artifact_p(o_ptr) || (o_ptr->ident & IDENT_QUEST))
+	{
+		return (FALSE);
+	}
+
+	/* Object kind is set to be always squelched */
+	if ((k_ptr->squelch == SQUELCH_ALWAYS) && k_ptr->aware) return (TRUE);
+
+	/* Apply quality squelch if possible */
+	if (object_known_p(o_ptr) && (squelch_itemp(o_ptr, 0, TRUE) == SQUELCH_YES)) return TRUE;
+
+	/* Don't squelch */
+	return (FALSE);
+
+}
+
 
 /* Attempt to squelch every object in a pile. */
 void do_squelch_pile(int y, int x)
@@ -681,36 +705,8 @@ void do_squelch_pile(int y, int x)
 		/* Point to the next object */
 		next_o_idx = o_ptr->next_o_idx;
 
-		/* Get the object kind */
-		k_ptr = &k_info[o_ptr->k_idx];
-
-		/* Always delete "nothings" */
-		if (!o_ptr->k_idx) sq_flag = TRUE;
-
-		/* Ignore inscribed objects, artifacts or quest objects */
-		else if (o_ptr->obj_note || artifact_p(o_ptr) || (o_ptr->ident & IDENT_QUEST))
-		{
-			sq_flag = FALSE;
-		}
-
-		/* Object kind is set to be always squelched */
-		else if ((k_ptr->squelch == SQUELCH_ALWAYS) && k_ptr->aware)
-		{
-			sq_flag = TRUE;
-		}
-
-		/* Apply quality squelch if possible */
-		else if (object_known_p(o_ptr) &&
-			(squelch_itemp(o_ptr, 0, TRUE) == SQUELCH_YES))
-		{
-			sq_flag = TRUE;
-		}
-
-		/* Default */
-		else sq_flag = FALSE;
-
 		/* Destroy the object? */
-		if (sq_flag)
+		if (squelch_item_ok(o_ptr))
 		{
 			/* Delete */
 			delete_object_idx(o_idx);

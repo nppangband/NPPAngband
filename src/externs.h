@@ -1209,6 +1209,7 @@ extern byte get_squelch_status(int k_idx);
 extern int squelch_itemp(object_type *o_ptr, byte feeling, bool fullid);
 extern int do_squelch_item(int squelch, int item, object_type *o_ptr);
 extern void rearrange_stack(int y, int x);
+extern bool squelch_item_ok(const object_type *o_ptr);
 extern void do_squelch_pile(int y, int x);
 extern void change_squelch_setting(s16b k_idx, int change);
 extern void do_cmd_squelch_autoinsc(void *unused, cptr title);

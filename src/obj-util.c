@@ -1481,6 +1481,47 @@ void compact_objects(int size)
 
 	}
 
+	/* First do squelchable objects */
+	for (i = 1; (i < o_max) && (size); i++)
+	{
+		object_type *o_ptr = &(o_list[i]);
+
+		/* Nuke gold or squelched items */
+		if (squelch_item_ok(o_ptr))
+		{
+			delete_object_idx(i);
+			size--;
+		}
+	}
+
+	/* Now try to combine objects instead (backwards) */
+	for (i = o_max - 1; i >= 2 && (size); i--)
+	{
+		object_type *o_ptr =&(o_list[i]);
+		int j;
+
+		/* Skip dead objects */
+		if (!o_ptr->k_idx) continue;
+
+		for (j = i - 1; j >= 1; j--)
+		{
+			object_type *j_ptr =&(o_list[j]);
+
+			/* Skip dead objects */
+			if (!j_ptr->k_idx) continue;
+
+			if (object_similar(j_ptr, o_ptr))
+			{
+				/* Combine the items */
+				object_absorb(j_ptr, o_ptr);
+
+				/* Delete the object */
+				delete_object_idx(i);
+				size--;
+				break;
+			}
+		}
+	}
 
 	/* Compact at least 'size' objects */
 	for (num = 0, cnt = 1; num < size; cnt++)
@@ -1534,9 +1575,6 @@ void compact_objects(int size)
 
 			/* Saving throw */
 			chance = 90;
-
-			/* Squelched items get compacted */
-			if ((k_ptr->aware) && (k_ptr->squelch == SQUELCH_ALWAYS)) chance = 0;
 
  			/* Hack -- only compact artifacts in emergencies */
 			if (artifact_p(o_ptr) && (cnt < 1000)) chance = 100;
@@ -2201,12 +2239,6 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 		{
 			/* Never okay */
 			return (0);
-		}
-
-		/* Gold */
-		case TV_GOLD:
-		{
-			return (1);
 		}
 
 		/* Food and Potions and Scrolls */
