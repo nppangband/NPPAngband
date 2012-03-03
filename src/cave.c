@@ -711,17 +711,59 @@ static u16b image_random(bool use_default)
 	}
 }
 
+/*
+ * Specify which of the 32x32 tiles support lighting
+ */
+bool feat_supports_lighting_dvg(u16b feat)
+{
+	/* ALl the walls and floor support lighting*/
+	if (f_info[feat].f_flags1 & (FF1_WALL | FF1_FLOOR))
+	{
+		return TRUE;
+	}
+	/* All water, lava, ice, acid, oil, forest, sand, mud and terrains support lighting*/
+	if (f_info[feat].f_flags3 & (FF3_WATER | FF3_LAVA | FF3_ICE | FF3_ACID | \
+								 FF3_OIL | FF3_FOREST | FF3_SAND | FF3_MUD | FF3_FIRE))
+	{
+		return TRUE;
+	}
+
+	/* A couple others */
+	switch (feat)
+	{
+		case FEAT_RUBBLE:
+		case FEAT_L_ROCK:
+		case FEAT_FLOOR_EARTH:
+		case FEAT_BURNT_S:
+		case FEAT_GLACIER:
+		case FEAT_RUBBLE_OBJ:
+		case FEAT_ROCK:
+		case FEAT_WALL_INSCRIPTION:
+		case FEAT_EARTH:
+		case FEAT_PEBBLES:
+		return (TRUE);
+	}
+
+	return (FALSE);
+}
 
 /*
- * The 16x16 tile of the terrain supports lighting
+ * Determine whether a tile of the terrain supports lighting
  */
 bool feat_supports_lighting(u16b feat)
 {
-	/* Pseudo graphics don't support lighting */
+	/* Pseudo graphics and 8x8 doesn't support lighting */
 	if (use_graphics == GRAPHICS_PSEUDO) return FALSE;
+	if (use_graphics == GRAPHICS_ORIGINAL) return FALSE;
 
-	if ((use_graphics != GRAPHICS_DAVID_GERVAIS) &&
-		(f_info[feat].f_flags1 & (FF1_TRAP)))
+	else if (use_graphics == GRAPHICS_DAVID_GERVAIS) return feat_supports_lighting_dvg(feat);
+
+	/* GRAPHICS_ADAM_BOLT */
+	if (f_info[feat].f_flags1 & (FF1_TRAP))
+	{
+		return TRUE;
+	}
+	if (f_info[feat].f_flags1 & (FF1_STAIRS))
 	{
 		return TRUE;
 	}
@@ -741,6 +783,34 @@ bool feat_supports_lighting(u16b feat)
 		case FEAT_PERM_INNER:
 		case FEAT_PERM_OUTER:
 		case FEAT_PERM_SOLID:
+		case FEAT_GLYPH:
+		case FEAT_RUBBLE:
+		case FEAT_RUBBLE_OBJ:
+		case FEAT_GRANITE_C:
+		case FEAT_ICE_WALL_C:
+		case FEAT_EARTH_WALL:
+		case FEAT_LIMESTONE:
+		case FEAT_SANDSTONE:
+		case FEAT_SCORCHED_WALL:
+		case FEAT_ELVISH_WALL:
+		case FEAT_VINES:
+		case FEAT_WAVE:
+		case FEAT_WAVE_S:
+		case FEAT_FLOOR_WET:
+		case FEAT_WATER:
+		case FEAT_WATER_H:
+		case FEAT_WATER_H_D:
+		case FEAT_BMUD:
+		case FEAT_MUD:
+		case FEAT_MUD_H:
+		case FEAT_ICE:
+		case FEAT_THICKET:
+		case FEAT_TREE:
+		case FEAT_BURNING_TREE:
+		case FEAT_BUSH:
+		case FEAT_BRANCH:
+		case FEAT_GLACIER:
+		case FEAT_COBBLESTONE_FLOOR:
 			return TRUE;
 		default:
 			return FALSE;
@@ -988,8 +1058,8 @@ static void get_dtrap_edge_char(byte *a, char *c)
 	if (use_graphics)
 	{
 		{
-			*a = color_to_attr[TILE_BALL_INFO][TERM_GREEN];;
-			*c = color_to_char[TILE_BALL_INFO][TERM_GREEN];
+			*a = (byte)0x9A;
+			*c = (char)0xC5;
 		}
 	}
 	else
@@ -1521,7 +1591,7 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 				u16b feat2 = cave_feat[y][x];
 
 				/* Not boring floor? */
-				if ((feat2 != FEAT_FLOOR) && (feat2 != FEAT_TOWN_FLOOR))
+				if ((feat2 != FEAT_FLOOR) && (feat2 != FEAT_COBBLESTONE_FLOOR))
 				{
 					/* Get mimiced feature */
 					feat2 = f_info[feat2].f_mimic;
@@ -4867,7 +4937,7 @@ void town_illuminate(bool daytime)
 			bool always_lit = FALSE;
 
 			/* Obvious */
-			if (cave_feat[y][x] != FEAT_TOWN_FLOOR) always_lit = TRUE;
+			if (cave_feat[y][x] != FEAT_COBBLESTONE_FLOOR) always_lit = TRUE;
 
 			/* Glyphs and visible traps */
 			else if (cave_any_trap_bold(y, x) &&

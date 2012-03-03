@@ -226,16 +226,20 @@
 #define FEAT_CREST_H	125
 #define FEAT_WAVE	126
 #define FEAT_WAVE_H	127
+#define FEAT_WAVE_S	128
 
 #define FEAT_DUNE	130
+#define FEAT_BRANCH	133
 #define FEAT_FSOIL	134
 #define FEAT_FSOIL_D	135
 
 #define FEAT_GEYSER	137
 #define FEAT_LAVA_W	138
 #define FEAT_BURNT_S	139
+#define FEAT_WATER_H_D  140
 
 #define FEAT_RUBBLE_H	148
+#define FEAT_RUBBLE_OBJ	149
 #define FEAT_FROST_CLOUD   173
 #define FEAT_INERTIA   174
 #define FEAT_SMOKE	175
@@ -259,6 +263,7 @@
 
 #define FEAT_WALL_INSCRIPTION          193
 #define FEAT_PUTRID_FLOWER             194
+#define FEAT_BRANCH_SNOW			   195
 #define FEAT_BWATER_WALL               196
 #define FEAT_BMUD_WALL                 197
 #define FEAT_SCORCHED_WALL             198
@@ -269,7 +274,7 @@
 #define FEAT_SHARD                     203
 #define FEAT_METEOR_BURST              204
 #define FEAT_ACID_WALL                 205
-#define FEAT_TOWN_FLOOR				206
+#define FEAT_COBBLESTONE_FLOOR			206
 
 
 /* Level flags - extracted from feature flags */

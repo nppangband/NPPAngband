@@ -10480,7 +10480,7 @@ static void town_gen(void)
 		for (x = 1; x < p_ptr->cur_map_wid-1; x++)
 		{
 			/* Create empty floor */
-			cave_set_feat(y, x, FEAT_TOWN_FLOOR);
+			cave_set_feat(y, x, FEAT_COBBLESTONE_FLOOR);
 		}
 	}
 
