@@ -1206,7 +1206,7 @@ extern void autoinscribe_pack(void);
 extern char *squelch_to_label(int squelch);
 extern bool squelch_tval(int tval);
 extern byte get_squelch_status(int k_idx);
-extern int squelch_itemp(object_type *o_ptr, byte feeling, bool fullid);
+extern int squelch_itemp(const object_type *o_ptr, byte feeling, bool fullid);
 extern int do_squelch_item(int squelch, int item, object_type *o_ptr);
 extern void rearrange_stack(int y, int x);
 extern bool squelch_item_ok(const object_type *o_ptr);

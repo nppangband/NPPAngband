@@ -470,7 +470,7 @@ static squelch_type_t squelch_type_of(const object_type *o_ptr)
  * Output: One of the three above values.
  */
 
-int squelch_itemp(object_type *o_ptr, byte feelings, bool fullid)
+int squelch_itemp(const object_type *o_ptr, byte feelings, bool fullid)
 {
 	int num, result;
 	byte feel;
@@ -694,8 +694,6 @@ void do_squelch_pile(int y, int x)
 {
 	s16b o_idx, next_o_idx;
 	object_type *o_ptr;
-	object_kind *k_ptr;
-	bool sq_flag = FALSE;
 
 	for(o_idx = cave_o_idx[y][x]; o_idx; o_idx = next_o_idx)
 	{

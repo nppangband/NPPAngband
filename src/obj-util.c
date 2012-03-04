@@ -1486,7 +1486,7 @@ void compact_objects(int size)
 	{
 		object_type *o_ptr = &(o_list[i]);
 
-		/* Nuke gold or squelched items */
+		/* Nuke squelched items */
 		if (squelch_item_ok(o_ptr))
 		{
 			delete_object_idx(i);
