@@ -694,16 +694,16 @@ static errr Term_xtra_gcu_react(void)
 		set_256color_table(TERM_DARK, 0);
 		set_256color_table(TERM_WHITE, 15);
 		set_256color_table(TERM_SLATE, 145);
-		set_256color_table(TERM_ORANGE, 214);
+		set_256color_table(TERM_ORANGE, 166);
 		set_256color_table(TERM_RED, 160);
 		set_256color_table(TERM_GREEN, 35);
 		set_256color_table(TERM_BLUE, 27);
-		set_256color_table(TERM_UMBER, 130);
+		set_256color_table(TERM_UMBER, 94);
 		set_256color_table(TERM_L_DARK, 102);
 		set_256color_table(TERM_L_WHITE, 188);
 		set_256color_table(TERM_VIOLET, 201);
 		set_256color_table(TERM_YELLOW, 226);
-		set_256color_table(TERM_L_RED, 203);
+		set_256color_table(TERM_L_RED, 204);
 		set_256color_table(TERM_L_GREEN, 46);
 		set_256color_table(TERM_L_BLUE, 51);
 		set_256color_table(TERM_L_UMBER, 179);
@@ -1100,7 +1100,7 @@ errr init_gcu(int argc, char **argv)
 		colortable[TERM_DARK]     = (COLOR_PAIR(PAIR_BLACK));
 		colortable[TERM_WHITE]    = (COLOR_PAIR(PAIR_WHITE) | A_BRIGHT);
 		colortable[TERM_SLATE]    = (COLOR_PAIR(PAIR_WHITE));
-		colortable[TERM_ORANGE]   = (COLOR_PAIR(PAIR_RED) | A_BRIGHT);
+		colortable[TERM_ORANGE]   = (COLOR_PAIR(PAIR_YELLOW) | A_BRIGHT);
 		colortable[TERM_RED]      = (COLOR_PAIR(PAIR_RED));
 		colortable[TERM_GREEN]    = (COLOR_PAIR(PAIR_GREEN));
 		colortable[TERM_BLUE]     = (COLOR_PAIR(PAIR_BLUE));
@@ -1115,7 +1115,7 @@ errr init_gcu(int argc, char **argv)
 		colortable[TERM_L_UMBER]  = (COLOR_PAIR(PAIR_YELLOW));
 		colortable[TERM_SNOW_WHITE] = (COLOR_PAIR(PAIR_WHITE) | A_BRIGHT);
 		colortable[TERM_SLATE_GRAY] = (COLOR_PAIR(PAIR_WHITE));
-		colortable[TERM_ORANGE_PEEL]  = (COLOR_PAIR(PAIR_RED) | A_BRIGHT);
+		colortable[TERM_ORANGE_PEEL]  = (COLOR_PAIR(PAIR_YELLOW) | A_BRIGHT);
 		colortable[TERM_RED_LAVA]      = (COLOR_PAIR(PAIR_RED));
 		colortable[TERM_JUNGLE_GREEN]    = (COLOR_PAIR(PAIR_GREEN));
 		colortable[TERM_NAVY_BLUE]     = (COLOR_PAIR(PAIR_BLUE));
