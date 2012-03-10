@@ -1096,7 +1096,7 @@ void do_cmd_open(cmd_code code, cmd_arg args[])
 	else
 	{
 		/* Open the door */
-		more = do_cmd_open_aux(y, x);
+		more = do_cmd_open_aux(cy, cx);
 	}
 
 	/* Cancel repeat unless we may continue */
@@ -1698,7 +1698,7 @@ void do_cmd_disarm(cmd_code code, cmd_arg args[])
 	else
 	{
 		/* Disarm the trap */
-		more = do_cmd_disarm_aux(y, x, TRUE);
+		more = do_cmd_disarm_aux(cy, cx, TRUE);
 	}
 
 	/* Cancel repeat unless told not to */
