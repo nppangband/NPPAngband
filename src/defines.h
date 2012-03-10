@@ -1359,7 +1359,7 @@ enum
 #define SCAN_MACRO 45
 
 
-#define MAX_ITEMLIST 256
+#define MAX_ITEMLIST 1024
 
 
 

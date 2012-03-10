@@ -1469,7 +1469,6 @@ void compact_objects(int size)
 
 	int cur_lev, cur_dis, chance;
 
-
 	/* Compact */
 	if (size)
 	{
@@ -1494,7 +1493,7 @@ void compact_objects(int size)
 		}
 	}
 
-	/* Now try to combine objects instead (backwards) */
+	/* Now try to combine objects and gold instead (backwards) */
 	for (i = o_max - 1; i >= 2 && (size); i--)
 	{
 		object_type *o_ptr =&(o_list[i]);
@@ -4918,7 +4917,7 @@ void display_itemlist(void)
 {
 	int max;
 	int mx, my;
-	unsigned num;
+	unsigned num_player;
 	int line = 1, x = 0;
 	int cur_x;
 	int py = p_ptr->py;
@@ -4929,12 +4928,9 @@ void display_itemlist(void)
 	char c;
 
 	object_type *types[MAX_ITEMLIST];
-	object_type *standing_types[MAX_ITEMLIST];
 	int counts[MAX_ITEMLIST];
-	int standing_counts[MAX_ITEMLIST];
 	int dx[MAX_ITEMLIST], dy[MAX_ITEMLIST];
 	unsigned counter = 0;
-	unsigned standing_counter = 0;
 
 	int dungeon_hgt = p_ptr->cur_map_hgt;
 	int dungeon_wid = p_ptr->cur_map_wid;
@@ -4942,8 +4938,7 @@ void display_itemlist(void)
 	byte attr;
 	char buf[80];
 
-	int floor_list[MAX_FLOOR_STACK];
-
+	int floor_list_player[MAX_FLOOR_STACK];
 	bool in_term = (Term != angband_term[0]);
 
 	/* Hallucination is weird */
@@ -4970,39 +4965,26 @@ void display_itemlist(void)
 	}
 
 	/* Player gets special treatment */
-	num = scan_floor(floor_list, MAX_FLOOR_STACK, py, px, 0x02);
-
-	if (num)
-	{
-		for (i = 0; i < num; i++)
-		{
-			object_type *o_ptr = &o_list[floor_list[i]];
-			/* Skip gold/squelched */
-			if ((o_ptr->tval == TV_GOLD) ||
-				((k_info[o_ptr->k_idx].squelch == SQUELCH_ALWAYS) && (k_info[o_ptr->k_idx].aware)))
-				continue;
-
-			standing_types[standing_counter] = o_ptr;
-			standing_counts[standing_counter] = o_ptr->number;
-			standing_counter++;
-		}
-	}
+	num_player = scan_floor(floor_list_player, MAX_FLOOR_STACK, py, px, 0x02);
 
 	/* Look at each square of the dungeon for items */
 	for (my = 0; my < dungeon_hgt; my++)
 	{
 		for (mx = 0; mx < dungeon_wid; mx++)
 		{
+			unsigned num_square;
+			int floor_list_stack[MAX_FLOOR_STACK];
+
 			/* No objects here, or it is the player square */
 			if (!cave_o_idx[my][mx]) continue;
 			if ((my == py) && (mx == px)) continue;
 
-			num = scan_floor(floor_list, MAX_FLOOR_STACK, my, mx, 0x02);
+			num_square = scan_floor(floor_list_stack, MAX_FLOOR_STACK, my, mx, 0x02);
 
 			/* Iterate over all the items found on this square */
-			for (i = 0; i < num; i++)
+			for (i = 0; i < num_square; i++)
 			{
-				object_type *o_ptr = &o_list[floor_list[i]];
+				object_type *o_ptr = &o_list[floor_list_stack[i]];
 				unsigned j;
 
 				/* Skip gold/squelched */
@@ -5061,7 +5043,7 @@ void display_itemlist(void)
 	}
 
 	/* Note no visible items */
-	if ((!counter) && (!standing_counter))
+	if ((!counter) && (!num_player))
 	{
 		/* Clear display and print note */
 		c_prt(TERM_SLATE, "You see no items.", 0, 0);
@@ -5072,30 +5054,30 @@ void display_itemlist(void)
 	}
 
 	/* First print the items the player is standing on */
-	if (standing_counter)
+	if (num_player)
 	{
 		/* Reprint Message */
 		prt(format("You are standing on %d item%s:",
-						   standing_counter, (standing_counter > 1 ? "s" : "")), 0, 0);
+				num_player, (num_player > 1 ? "s" : "")), 0, 0);
 	}
 
-	for (i = 0; i < standing_counter; i++)
+	for (i = 0; i < num_player; i++)
 	{
 		/* o_name will hold the object_desc() name for the object. */
 		/* o_desc will also need to put a (x4) behind it. */
 		char o_name[80];
 		char o_desc[86];
 
-		object_type *o_ptr = standing_types[i];
+		object_type *o_ptr = &o_list[floor_list_player[i]];
 
 		/* We shouldn't list coins or squelched items */
 		if ((o_ptr->tval == TV_GOLD) ||
 			((k_info[o_ptr->k_idx].squelch == SQUELCH_ALWAYS) && (k_info[o_ptr->k_idx].aware)))
 						continue;
 		object_desc(o_name, sizeof(o_name), o_ptr, ODESC_FULL);
-		if (standing_counts[i] > 1)
+		if (o_ptr->number > 1)
 		{
-			strnfmt(o_desc, sizeof(o_desc), "%s (x%d)", o_name, standing_counts[i]);
+			strnfmt(o_desc, sizeof(o_desc), "%s (x%d)", o_name, o_ptr->number);
 		}
 		else
 		{
@@ -5106,7 +5088,7 @@ void display_itemlist(void)
 		cur_x = x;
 
 		/* See if we need to scroll or not */
-		if ((!in_term) && (line == max) && (disp_count != (counter + standing_counter + 2)))
+		if ((!in_term) && (line == max) && (disp_count != (counter + num_player + 2)))
 		{
 			prt("-- more --", line, x);
 			anykey();
@@ -5117,7 +5099,7 @@ void display_itemlist(void)
 
 			/* Reprint Message */
 			prt(format("You can see %d item%s:",
-					standing_counter, (standing_counter > 1 ? "s" : "")), 0, 0);
+					num_player, (num_player > 1 ? "s" : "")), 0, 0);
 
 			/* Reset */
 			line = 1;
@@ -5156,10 +5138,10 @@ void display_itemlist(void)
 		line++;
 	}
 
-	if (disp_count != (standing_counter))
+	if (disp_count != (num_player))
 	{
 		/* Print "and others" message if we've run out of space */
-		strnfmt(buf, sizeof buf, "  ...and %d others.", counter  + standing_counter - disp_count);
+		strnfmt(buf, sizeof buf, "  ...and %d others.", counter  + num_player - disp_count);
 		c_prt(TERM_WHITE, buf, line, x);
 		line ++;
 	}
@@ -5173,10 +5155,10 @@ void display_itemlist(void)
 	if (counter)
 	{
 		/* Reprint Message */
-		prt(format("You can see %d %sitem%s:", counter, (standing_counter ? "other " : ""),
+		prt(format("You can see %d %sitem%s:", counter, (num_player ? "other " : ""),
 				(counter > 1 ? "s" : "")),
-				(standing_counter ? line : 0), 0);
-		if (standing_counter) line++;
+				(num_player ? line : 0), 0);
+		if (num_player) line++;
 	}
 
 	for (i = 0; i < counter; i++)
@@ -5208,7 +5190,7 @@ void display_itemlist(void)
 		cur_x = x;
 
 		/* See if we need to scroll or not */
-		if ((!in_term) && (line == max) && (disp_count != counter + standing_counter + 2))
+		if ((!in_term) && (line == max) && (disp_count != counter + num_player + 2))
 		{
 			prt("-- more --", line, x);
 			anykey();
@@ -5258,10 +5240,10 @@ void display_itemlist(void)
 		line++;
 	}
 
-	if (disp_count != (counter + standing_counter))
+	if (disp_count != (counter + num_player))
 	{
 		/* Print "and others" message if we've run out of space */
-		strnfmt(buf, sizeof buf, "  ...and %d others.", counter + standing_counter - disp_count);
+		strnfmt(buf, sizeof buf, "  ...and %d others.", counter + num_player - disp_count);
 		c_prt(TERM_WHITE, buf, line, x);
 	}
 	else
