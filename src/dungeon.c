@@ -2009,8 +2009,6 @@ void process_player(void)
 				}
 			}
 		}
-
-
 		/* Repair "show" flags */
 		if (repair_mflag_show)
 		{

@@ -1660,13 +1660,6 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 					break;
 				}
 
-				/* Allow player to "refuse" certain actions */
-				if (!get_item_allow(k, TRUE))
-				{
-					done = TRUE;
-					break;
-				}
-
 				/* Accept that choice */
 				(*cp) = k;
 				done = TRUE;
@@ -1741,13 +1734,6 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 				{
 					done = TRUE;
 					evt.type = EVT_ESCAPE;
-					break;
-				}
-
-				/* Allow player to "refuse" certain actions */
-				if (!get_item_allow(k, TRUE))
-				{
-					done = TRUE;
 					break;
 				}
 

@@ -423,6 +423,7 @@ void do_cmd_pickup_from_pile(bool pickup, bool message)
 
 		/* FLoor items are returned as negative numbers */
 		item = -item;
+
 		o_ptr = &o_list[item];
 
 		/* Pick up the object */

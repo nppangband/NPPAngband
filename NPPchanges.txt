@@ -43,6 +43,8 @@ Bugfix: In the object knowledge menu, a section has been added for chests.
 Bugfix: The druid spell "create elements" now creates native terrain below the player as well.
 Bugfix: Stunned and confused monsters were prevented from walking into terrain that caused them damage.
 Bugfix: Keyboard navigation in the windows submenu was broken.
+Bugfix: The tombstone screen was not centered properly.
+Bugfix: The game could crash with more than 256 objects laying on the floor.
 Bugfix: When opening or disarming 2 chests in a stack, the first one was automatically picked instead of giving the player a choice.
 
 NPP 0.5.3 changes:

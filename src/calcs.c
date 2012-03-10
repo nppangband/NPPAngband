@@ -1849,7 +1849,10 @@ void redraw_stuff(void)
 		const struct flag_event_trigger *hnd = &redraw_events[i];
 
 		if (p_ptr->redraw & (hnd->flag))
+		{
 			event_signal(hnd->event);
+		}
+
 	}
 
 	/* Then the ones that require parameters to be supplied. */
