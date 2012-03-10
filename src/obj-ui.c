@@ -1108,7 +1108,16 @@ static void item_menu_hook(int oid, void *db, const region *loc)
 	bool started = FALSE;
 
 	/* Get the object */
-	object_type *o_ptr = &inventory[idx];
+	object_type *o_ptr;
+
+	/* Get the object, handle whether in Inventory or on floor */
+	if (p_ptr->command_wrk == (USE_FLOOR)) o_ptr = &o_list[idx];
+	else o_ptr = &inventory[idx];
+
+	prt("", loc->row + loc->page_rows, loc->col);
+	prt("", loc->row + loc->page_rows + 1, loc->col);
+	prt("", loc->row + loc->page_rows + 2, loc->col);
+	prt("", loc->row + loc->page_rows + 3, loc->col);
 
 	/* No info until they know about the item */
 	if (!object_is_known(o_ptr)) return;
@@ -1156,13 +1165,8 @@ static void item_menu_hook(int oid, void *db, const region *loc)
 	}
 
 	/* Now (crudely) terminate it so it doesn't go any longer than four lines, */
-	max_output = ((text_out_wrap - text_out_indent) * 4) - 10;
+	max_output = ((text_out_wrap - text_out_indent) * 4) - 30;
 	out_val[max_output] = '\0';
-
-	prt("", loc->row + loc->page_rows, loc->col);
-	prt("", loc->row + loc->page_rows + 1, loc->col);
-	prt("", loc->row + loc->page_rows + 2, loc->col);
-	prt("", loc->row + loc->page_rows + 3, loc->col);
 
 	Term_gotoxy(loc->col, loc->row + loc->page_rows);
 
@@ -1520,6 +1524,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 				continue;
 			}
 		}
+
 		switch (evt.key)
 		{
 			case '*':case ' ':
