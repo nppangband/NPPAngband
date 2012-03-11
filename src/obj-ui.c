@@ -2036,6 +2036,17 @@ static void handle_command(cmd_code command_line, int item)
 
 	args[0].item = item;
 
+	/* Set up for verification of inscriptions */
+	p_ptr->command_cmd = command_actions[command_line].key;
+
+	/* Allow player to "refuse" certain actions, then clear afterwards. */
+	if (!get_item_allow(item, TRUE))
+	{
+		p_ptr->command_cmd = 0;
+		return;
+	}
+	else p_ptr->command_cmd = 0;
+
 	/* Mark it as the item to be used */
 	o_ptr->obj_in_use = TRUE;
 

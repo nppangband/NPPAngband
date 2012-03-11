@@ -2857,6 +2857,7 @@ bool get_check(cptr prompt)
 	event_signal(EVENT_MOUSEBUTTONS);
 
 	/* Prompt for it */
+	prt("", 0, 0);
 	prt(buf, 0, 0);
 
 	/* Get an acceptable answer */
