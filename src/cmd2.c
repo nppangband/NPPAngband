@@ -2617,7 +2617,7 @@ void do_cmd_hold(cmd_code code, cmd_arg args[])
 	}
 
 	/* Handle "objects" */
-	py_pickup(TRUE);
+	py_pickup(always_pickup);
 
 	/* Hack -- enter a store if we are on one */
 	if (cave_shop_bold(p_ptr->py,p_ptr->px))

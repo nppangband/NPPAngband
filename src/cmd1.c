@@ -616,7 +616,6 @@ void py_pickup(bool pickup)
 	/* Next, pick up items that are marked for auto-pickup.  */
 	for (this_o_idx = cave_o_idx[py][px]; this_o_idx; this_o_idx = next_o_idx)
 	{
-		char o_name[80];
 		bool do_continue = TRUE;
 
 		/* We are done */
@@ -627,9 +626,6 @@ void py_pickup(bool pickup)
 
 		/* Get the next object */
 		next_o_idx = o_ptr->next_o_idx;
-
-		/* Describe the object */
-		object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
 
 		/* Object is marked to always pickup */
 		if ((k_info[o_ptr->k_idx].squelch == NO_SQUELCH_ALWAYS_PICKUP)  &&
@@ -649,7 +645,6 @@ void py_pickup(bool pickup)
 
 	/* Nothing left */
 	if (!cave_o_idx[py][px]) return;
-
 
 	if (pickup)
 	{
