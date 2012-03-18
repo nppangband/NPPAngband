@@ -295,36 +295,6 @@ bool put_object_in_inventory(object_type *o_ptr)
 }
 
 
-/* Helper function for do_cmd_pickup_from_pile */
-static int get_first_item_for_pickup(void)
-{
-	int y = p_ptr->py;
-	int x = p_ptr->px;
-
-	s16b this_o_idx, next_o_idx = 0;
-	object_type *o_ptr;
-
-	/* First, find the item */
-	for (this_o_idx = cave_o_idx[y][x]; this_o_idx; this_o_idx = next_o_idx)
-	{
-		/* Get the object */
-		o_ptr = &o_list[this_o_idx];
-
-		/* Get the next object */
-		next_o_idx = o_ptr->next_o_idx;
-
-		/* Test for auto-pickup */
-		if (inven_carry_okay(o_ptr))
-		{
-			return (this_o_idx);
-		}
-	}
-
-	/* Not found */
-	return (-1);
-}
-
-
 /*
  * Allow the player to sort through items in a pile and
  * pickup what they want.  This command does not use
@@ -387,26 +357,6 @@ void do_cmd_pickup_from_pile(bool pickup, bool message)
 
 			msg_print("You do not have any room for these items.");
 			break;
-		}
-
-		/* Auto-pickup if only one item */
-		else if ((!floor_query_flag) && (cycles < 2) &&
-				(want_pickup_num == 1))
-		{
-			item = get_first_item_for_pickup();
-
-			/* paranoia */
-			if (item == -1) break;
-
-			o_ptr = &o_list[item];
-
-			/* Pick up the object */
-			if (put_object_in_inventory(o_ptr))
-			{
-				/* Delete the gold */
-				delete_object_idx(item);
-				break;
-			}
 		}
 
 		/*clear the restriction*/
