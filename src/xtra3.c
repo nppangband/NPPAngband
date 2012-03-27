@@ -557,8 +557,8 @@ static void prt_feeling(int row, int col)
 	else if (feeling ==  3) {attr = TERM_ORANGE;	my_strcpy(feel, "F:Excellent", sizeof(feel));}
 	else if (feeling ==  4) {attr = TERM_ORANGE;	my_strcpy(feel, "F:Very Good", sizeof(feel));}
 	else if (feeling ==  5) {attr = TERM_YELLOW;	my_strcpy(feel, "F:Good", sizeof(feel));}
-	else if (feeling ==  6) {attr = TERM_YELLOW;	my_strcpy(feel, "F:Very Lucky", sizeof(feel));}
-	else if (feeling ==  7) {attr = TERM_YELLOW;	my_strcpy(feel, "F:Lucky", sizeof(feel));}
+	else if (feeling ==  6) {attr = TERM_YELLOW;	my_strcpy(feel, "F:Lucky", sizeof(feel));}
+	else if (feeling ==  7) {attr = TERM_YELLOW;	my_strcpy(feel, "F:LuckTurning", sizeof(feel));}
 	else if (feeling ==  8) {attr = TERM_WHITE;		my_strcpy(feel, "F:Like Looks", sizeof(feel));}
 	else if (feeling ==  9) {attr = TERM_WHITE;		my_strcpy(feel, "F:Not All Bad", sizeof(feel));}
 	else if (feeling == 10) {attr = TERM_L_WHITE;	my_strcpy(feel, "F:Boring", sizeof(feel));}
