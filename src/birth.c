@@ -646,7 +646,6 @@ static void player_outfit(void)
 	object_aware(i_ptr);
 	object_known(i_ptr);
 	k_info[i_ptr->k_idx].everseen = TRUE;
-	(void)inven_carry(i_ptr);
 	apply_autoinscription(i_ptr);
 	/* Remember history */
 	object_history(i_ptr, ORIGIN_BIRTH, 0);
@@ -662,7 +661,6 @@ static void player_outfit(void)
 	object_aware(i_ptr);
 	object_known(i_ptr);
 	k_info[i_ptr->k_idx].everseen = TRUE;
-	(void)inven_carry(i_ptr);
 	apply_autoinscription(i_ptr);
 	/* Remember history */
 	object_history(i_ptr, ORIGIN_BIRTH, 0);
