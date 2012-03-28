@@ -1681,7 +1681,7 @@ void py_steal(int y, int x)
 		else
 		{
 
-			/*the town gets aggravated right away, and the shops close*/
+			/*the town gets aggravated right away*/
 			mass_aggravate_monsters(SOURCE_PLAYER);
 
 			msg_print("The furious townspeople search for the notorious burglar!");

@@ -285,6 +285,8 @@ void object_prep(object_type *o_ptr, int k_idx)
 
 	/* Hack -- cursed items are always "cursed" */
 	if (k_ptr->k_flags3 & (TR3_LIGHT_CURSE)) o_ptr->ident |= (IDENT_CURSED);
+	if (k_ptr->k_flags3 & (TR3_HEAVY_CURSE)) o_ptr->ident |= (IDENT_CURSED);
+	if (k_ptr->k_flags3 & (TR3_PERMA_CURSE)) o_ptr->ident |= (IDENT_CURSED);
 
 	/* Hack -- extract the perfect_balance flag */
 	if (k_ptr->k_flags3 & (TR3_PERFECT_BALANCE)) o_ptr->ident |= (IDENT_PERFECT_BALANCE);
@@ -1492,6 +1494,8 @@ void object_into_artifact(object_type *o_ptr, artifact_type *a_ptr)
 
 	/* Hack -- extract the "cursed" flag */
 	if (a_ptr->a_flags3 & (TR3_LIGHT_CURSE)) o_ptr->ident |= (IDENT_CURSED);
+	if (a_ptr->a_flags3 & (TR3_HEAVY_CURSE)) o_ptr->ident |= (IDENT_CURSED);
+	if (a_ptr->a_flags3 & (TR3_PERMA_CURSE)) o_ptr->ident |= (IDENT_CURSED);
 
 	/* Hack -- extract the "perfect balance" flag */
 	if (a_ptr->a_flags3 & (TR3_PERFECT_BALANCE)) o_ptr->ident |= (IDENT_PERFECT_BALANCE);
@@ -1898,6 +1902,8 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 
 		/* Hack -- acquire "cursed" flag */
 		if (e_ptr->flags3 & (TR3_LIGHT_CURSE)) o_ptr->ident |= (IDENT_CURSED);
+		if (e_ptr->flags3 & (TR3_HEAVY_CURSE)) o_ptr->ident |= (IDENT_CURSED);
+		if (e_ptr->flags3 & (TR3_PERMA_CURSE)) o_ptr->ident |= (IDENT_CURSED);
 
 		/* Hack -- apply extra penalties if needed */
 		if (cursed_p(o_ptr) || broken_p(o_ptr))
@@ -1961,6 +1967,8 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 
 		/* Hack -- acquire "cursed" flag */
 		if (k_ptr->k_flags3 & (TR3_LIGHT_CURSE)) o_ptr->ident |= (IDENT_CURSED);
+		if (k_ptr->k_flags3 & (TR3_HEAVY_CURSE)) o_ptr->ident |= (IDENT_CURSED);
+		if (k_ptr->k_flags3 & (TR3_PERMA_CURSE)) o_ptr->ident |= (IDENT_CURSED);
 	}
 }
 
