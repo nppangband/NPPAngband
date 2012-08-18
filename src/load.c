@@ -499,10 +499,10 @@ static void rd_monster(monster_type *m_ptr)
 	/* Find the number of monster timed effects */
 	rd_byte(&num);
 
-	if (num == TMD_MAX)
+	if (num == MON_TMD_MAX)
 	{
 		/* Read all the effects */
-		for (i = 0; i < num; i++) rd_s16b(&p_ptr->timed[i]);
+		for (i = 0; i < num; i++) rd_s16b(&m_ptr->m_timed[i]);
 	}
 	else
 	{
@@ -510,7 +510,7 @@ static void rd_monster(monster_type *m_ptr)
 		/* Probably in trouble anyway */
 		for (i = 0; i < num; i++) rd_s16b(&dummy);
 
-		note("Discarded unsupported timed effects");
+		note("Discarding unsupported monster timed effects");
 	}
 
 	rd_u32b(&m_ptr->mflag);
@@ -1157,15 +1157,12 @@ static errr rd_extra(void)
 	/* Read the stat info */
 	for (i = 0; i < A_MAX; i++) rd_s16b(&p_ptr->stat_max[i]);
 	for (i = 0; i < A_MAX; i++) rd_s16b(&p_ptr->stat_cur[i]);
-	if (!older_than(0,5,1))
-	{
-		for (i = 0; i < A_MAX; i++) rd_s16b(&p_ptr->stat_birth[i]);
+	for (i = 0; i < A_MAX; i++) rd_s16b(&p_ptr->stat_birth[i]);
 
-		rd_s16b(&p_ptr->ht_birth);
-		rd_s16b(&p_ptr->wt_birth);
-		rd_s16b(&p_ptr->sc_birth);
-		rd_s32b(&p_ptr->au_birth);
-	}
+	rd_s16b(&p_ptr->ht_birth);
+	rd_s16b(&p_ptr->wt_birth);
+	rd_s16b(&p_ptr->sc_birth);
+	rd_s32b(&p_ptr->au_birth);
 
 	strip_bytes(24);	/* oops */
 
@@ -1227,6 +1224,7 @@ static errr rd_extra(void)
 	/* Read the flags */
 	strip_bytes(2);	/* Old "rest" */
 	rd_s16b(&p_ptr->food);
+
 	strip_bytes(4);	/* Old "food_digested" / "protection" */
 	rd_s16b(&p_ptr->p_energy);
 	rd_s16b(&p_ptr->word_recall);
@@ -1255,7 +1253,7 @@ static errr rd_extra(void)
 		for (i = 0; i < TMD_MAX; i++) rd_s16b(&dummy2);
 
 		/* Discard unused entries */
-		note("Discarded unsupported timed effects");
+		note("Discarding unsupported timed effects");
 	}
 
 	rd_s16b(&p_ptr->base_wakeup_chance);

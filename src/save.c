@@ -196,15 +196,14 @@ static void wr_monster(const monster_type *m_ptr)
 	wr_byte(m_ptr->fx);
 	wr_s16b(m_ptr->hp);
 	wr_s16b(m_ptr->maxhp);
+	wr_byte(m_ptr->mspeed);
+	wr_s16b(m_ptr->m_energy);
 
 	/* Find the number of monster timed effects */
 	wr_byte(MON_TMD_MAX);
 
 	/* Write all the monster timed effects, in a loop */
 	for (i = 0; i < MON_TMD_MAX; i++) wr_s16b(m_ptr->m_timed[i]);
-
-	wr_byte(m_ptr->mspeed);
-	wr_s16b(m_ptr->m_energy);
 
 	/*save the temporary flags*/
 	tmp32u = m_ptr->mflag & (SAVE_MON_FLAGS);
@@ -610,6 +609,7 @@ static void wr_extra(void)
 
 	wr_s16b(0);		/* old "rest" */
 	wr_s16b(p_ptr->food);
+
 	wr_s16b(0);	/* old "food_digested" */
 	wr_s16b(0);	/* old "protection" */
 	wr_s16b(p_ptr->p_energy);
@@ -617,6 +617,7 @@ static void wr_extra(void)
 	wr_s16b(p_ptr->state.see_infra);
 
 	wr_byte(p_ptr->confusing);
+	wr_byte(0);	/* oops */
 	wr_byte(p_ptr->searching);
 	wr_byte(0);	/* oops */
 	wr_byte(0);	/* oops */
@@ -625,7 +626,7 @@ static void wr_extra(void)
 	/* Find the number of timed effects */
 	wr_byte(TMD_MAX);
 
-	/* Read all the effects, in a loop */
+	/* Write all the effects, in a loop */
 	for (i = 0; i < TMD_MAX; i++) wr_s16b(p_ptr->timed[i]);
 
 	/* 4gai use */

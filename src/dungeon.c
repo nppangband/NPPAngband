@@ -2410,8 +2410,6 @@ static void dungeon(void)
 	/* Reset the object generation level */
 	object_level = effective_depth(p_ptr->depth);
 
-	my_strcpy(p_ptr->history, "You are Bilbo's favorite nephew.  Using the recent gift he gave you, all of Middle Earth is at your mercy.  They can have your precious when they pry it from your cold, dead hands.", sizeof(p_ptr->history));
-
 	/* Main loop */
 	while (TRUE)
 	{
