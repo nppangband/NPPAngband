@@ -1231,7 +1231,7 @@ static void vault_monsters(int y1, int x1, int num)
 			if (!cave_empty_bold(y, x)) continue;
 
 			/* Place the monster (allow groups) */
-			(void)place_monster(y, x, TRUE, TRUE);
+			(void)place_monster(y, x, (MPLACE_SLEEP | MPLACE_GROUP));
 
 			break;
 		}
@@ -2648,7 +2648,7 @@ static void build_type_nest(int y0, int x0)
 	{
 		/* Get a (hard) monster type */
 		what[i] = get_mon_num(effective_depth(p_ptr->depth) +
-							  (is_quest_level ? PIT_NEST_QUEST_BOOST : NEST_LEVEL_BOOST), y1, x1);
+							  (is_quest_level ? PIT_NEST_QUEST_BOOST : NEST_LEVEL_BOOST), y1, x1, 0L);
 
 		/* Notice failure */
 		if (!what[i]) empty = TRUE;
@@ -2731,7 +2731,7 @@ static void build_type_nest(int y0, int x0)
 			int r_idx = what[rand_int(64)];
 
 			/* Place that "random" monster (no groups) */
-			(void)place_monster_aux(y, x, r_idx, FALSE, FALSE);
+			(void)place_monster_aux(y, x, r_idx, MPLACE_MIMIC);
 		}
 	}
 
@@ -2894,7 +2894,7 @@ static void build_type_pit(int y0, int x0)
 	{
 		/* Get a (hard) monster type */
 		what[i] = get_mon_num(effective_depth(p_ptr->depth) +
-							  (is_quest_level ? PIT_NEST_QUEST_BOOST : PIT_LEVEL_BOOST), y1, x1);
+							  (is_quest_level ? PIT_NEST_QUEST_BOOST : PIT_LEVEL_BOOST), y1, x1, 0L);
 
 		/* Notice failure */
 		if (!what[i]) empty = TRUE;
@@ -2985,51 +2985,51 @@ static void build_type_pit(int y0, int x0)
 	/* Top and bottom rows */
 	for (x = x0 - 9; x <= x0 + 9; x++)
 	{
-		place_monster_aux(y0 - 2, x, what[0], FALSE, FALSE);
-		place_monster_aux(y0 + 2, x, what[0], FALSE, FALSE);
+		place_monster_aux(y0 - 2, x, what[0], MPLACE_MIMIC);
+		place_monster_aux(y0 + 2, x, what[0], MPLACE_MIMIC);
 	}
 
 	/* Middle columns */
 	for (y = y0 - 1; y <= y0 + 1; y++)
 	{
-		place_monster_aux(y, x0 - 9, what[0], FALSE, FALSE);
-		place_monster_aux(y, x0 + 9, what[0], FALSE, FALSE);
+		place_monster_aux(y, x0 - 9, what[0], MPLACE_MIMIC);
+		place_monster_aux(y, x0 + 9, what[0], MPLACE_MIMIC);
 
-		place_monster_aux(y, x0 - 8, what[1], FALSE, FALSE);
-		place_monster_aux(y, x0 + 8, what[1], FALSE, FALSE);
+		place_monster_aux(y, x0 - 8, what[1], MPLACE_MIMIC);
+		place_monster_aux(y, x0 + 8, what[1], MPLACE_MIMIC);
 
-		place_monster_aux(y, x0 - 7, what[1], FALSE, FALSE);
-		place_monster_aux(y, x0 + 7, what[1], FALSE, FALSE);
+		place_monster_aux(y, x0 - 7, what[1], MPLACE_MIMIC);
+		place_monster_aux(y, x0 + 7, what[1], MPLACE_MIMIC);
 
-		place_monster_aux(y, x0 - 6, what[2], FALSE, FALSE);
-		place_monster_aux(y, x0 + 6, what[2], FALSE, FALSE);
+		place_monster_aux(y, x0 - 6, what[2], MPLACE_MIMIC);
+		place_monster_aux(y, x0 + 6, what[2], MPLACE_MIMIC);
 
-		place_monster_aux(y, x0 - 5, what[2], FALSE, FALSE);
-		place_monster_aux(y, x0 + 5, what[2], FALSE, FALSE);
+		place_monster_aux(y, x0 - 5, what[2], MPLACE_MIMIC);
+		place_monster_aux(y, x0 + 5, what[2], MPLACE_MIMIC);
 
-		place_monster_aux(y, x0 - 4, what[3], FALSE, FALSE);
-		place_monster_aux(y, x0 + 4, what[3], FALSE, FALSE);
+		place_monster_aux(y, x0 - 4, what[3], MPLACE_MIMIC);
+		place_monster_aux(y, x0 + 4, what[3], MPLACE_MIMIC);
 
-		place_monster_aux(y, x0 - 3, what[3], FALSE, FALSE);
-		place_monster_aux(y, x0 + 3, what[3], FALSE, FALSE);
+		place_monster_aux(y, x0 - 3, what[3], MPLACE_MIMIC);
+		place_monster_aux(y, x0 + 3, what[3], MPLACE_MIMIC);
 
-		place_monster_aux(y, x0 - 2, what[4], FALSE, FALSE);
-		place_monster_aux(y, x0 + 2, what[4], FALSE, FALSE);
+		place_monster_aux(y, x0 - 2, what[4], MPLACE_MIMIC);
+		place_monster_aux(y, x0 + 2, what[4], MPLACE_MIMIC);
 	}
 
 	/* Above/Below the center monster */
 	for (x = x0 - 1; x <= x0 + 1; x++)
 	{
-		place_monster_aux(y0 + 1, x, what[5], FALSE, FALSE);
-		place_monster_aux(y0 - 1, x, what[5], FALSE, FALSE);
+		place_monster_aux(y0 + 1, x, what[5], MPLACE_MIMIC);
+		place_monster_aux(y0 - 1, x, what[5], MPLACE_MIMIC);
 	}
 
 	/* Next to the center monster */
-	place_monster_aux(y0, x0 + 1, what[6], FALSE, FALSE);
-	place_monster_aux(y0, x0 - 1, what[6], FALSE, FALSE);
+	place_monster_aux(y0, x0 + 1, what[6], MPLACE_MIMIC);
+	place_monster_aux(y0, x0 - 1, what[6], MPLACE_MIMIC);
 
 	/* Center monster */
-	place_monster_aux(y0, x0, what[7], FALSE, FALSE);
+	place_monster_aux(y0, x0, what[7], MPLACE_MIMIC);
 
 	/* No teleporting inside pits/nests*/
 	for (y = y0 - 2; y <= y0 + 2; y++)
@@ -3221,7 +3221,7 @@ static void build_vault(int y0, int x0, int ymax, int xmax, cptr data, bool ques
 				case '&':
 				{
 					monster_level = effective_depth(p_ptr->depth) + 4;
-					place_monster(y, x, TRUE, TRUE);
+					place_monster(y, x, (MPLACE_SLEEP | MPLACE_GROUP));
 					monster_level = effective_depth(p_ptr->depth);
 					break;
 				}
@@ -3230,7 +3230,7 @@ static void build_vault(int y0, int x0, int ymax, int xmax, cptr data, bool ques
 				case '@':
 				{
 					monster_level = effective_depth(p_ptr->depth) + 8;
-					place_monster(y, x, TRUE, TRUE);
+					place_monster(y, x, (MPLACE_SLEEP | MPLACE_GROUP));
 					monster_level = effective_depth(p_ptr->depth);
 					break;
 				}
@@ -3239,7 +3239,7 @@ static void build_vault(int y0, int x0, int ymax, int xmax, cptr data, bool ques
 				case '9':
 				{
 					monster_level = effective_depth(p_ptr->depth) + 7;
-					place_monster(y, x, TRUE, TRUE);
+					place_monster(y, x, (MPLACE_SLEEP | MPLACE_GROUP));
 					monster_level = effective_depth(p_ptr->depth);
 					object_level = effective_depth(p_ptr->depth) + 7;
 					place_object(y, x, TRUE, FALSE, DROP_TYPE_UNTHEMED);
@@ -3251,7 +3251,7 @@ static void build_vault(int y0, int x0, int ymax, int xmax, cptr data, bool ques
 				case '8':
 				{
 					monster_level = effective_depth(p_ptr->depth) + 20;
-					place_monster(y, x, TRUE, TRUE);
+					place_monster(y, x, (MPLACE_SLEEP | MPLACE_GROUP));
 					monster_level = effective_depth(p_ptr->depth);
 					object_level = effective_depth(p_ptr->depth) + 15;
 					place_object(y, x, TRUE, TRUE, DROP_TYPE_UNTHEMED);
@@ -3263,7 +3263,7 @@ static void build_vault(int y0, int x0, int ymax, int xmax, cptr data, bool ques
 				case '~':
 				{
 					monster_level = effective_depth(p_ptr->depth) + 20;
-					place_monster(y, x, TRUE, TRUE);
+					place_monster(y, x, (MPLACE_SLEEP | MPLACE_GROUP));
 					monster_level = effective_depth(p_ptr->depth);
 					object_level = effective_depth(p_ptr->depth) + 15;
 					place_object(y, x, FALSE, FALSE, DROP_TYPE_CHEST);
@@ -3275,7 +3275,7 @@ static void build_vault(int y0, int x0, int ymax, int xmax, cptr data, bool ques
 				case 'Q':
 				{
 					monster_level = p_ptr->depth + 10;
-					place_monster(y, x, TRUE, TRUE);
+					place_monster(y, x, (MPLACE_SLEEP | MPLACE_GROUP));
 					monster_level = p_ptr->depth;
 
 					/*randomly pick from several quest artifacts spots to place the artifact*/
@@ -3306,7 +3306,7 @@ static void build_vault(int y0, int x0, int ymax, int xmax, cptr data, bool ques
 					if (one_in_(2))
 					{
 						monster_level = effective_depth(p_ptr->depth) + 3;
-						place_monster(y, x, TRUE, TRUE);
+						place_monster(y, x, (MPLACE_SLEEP | MPLACE_GROUP));
 						monster_level = effective_depth(p_ptr->depth);
 					}
 					if (one_in_(2))
@@ -7819,18 +7819,14 @@ static bool build_themed_level(void)
 		}
 
 		/* Attempt to place the monster, allow sleeping, don't allow groups*/
-		if (!place_monster_aux(y, x, r_idx, TRUE, FALSE)) continue;
+		if (!place_monster_aux(y, x, r_idx, MPLACE_SLEEP)) continue;
 
 		if (r_ptr->flags1 & (RF1_UNIQUE)) max_uniques--;
 
-		/*Don't bother with mimics, mark 1 in 10 monsters for a bonus item */
+		/* Mark 1 in 10 monsters for a bonus item */
 		if (cave_m_idx[y][x] > 0)
 		{
 			monster_type *m_ptr = &mon_list[cave_m_idx[y][x]];
-
-			/*Clear the mimic flag*/
-			m_ptr->mimic_k_idx = 0;
-			m_ptr->mflag &= ~(MFLAG_MIMIC);
 
 			if ((mon_cnt % 15) == 0) m_ptr->mflag |= (MFLAG_BONUS_ITEM);
 		}
@@ -9420,7 +9416,7 @@ static bool place_monsters_objects(void)
 	/* Put some monsters in the dungeon */
 	for (i = mon_gen; i > 0; i--)
 	{
-		(void)alloc_monster(0, TRUE);
+		(void)alloc_monster(0, MPLACE_GHOST);
 	}
 
 	/* Ensure quest monsters */
@@ -9452,7 +9448,7 @@ static bool place_monsters_objects(void)
 					if (!pick_monster_location(r_ptr, &y, &x)) return FALSE;
 
 					/* Place the questor */
-					place_monster_aux(y, x, q_ptr->mon_idx, TRUE, TRUE);
+					place_monster_aux(y, x, q_ptr->mon_idx, (MPLACE_SLEEP | MPLACE_GROUP));
 				}
 
 				/* Process the monsters (backwards) */
@@ -9475,7 +9471,7 @@ static bool place_monsters_objects(void)
 				if (!pick_monster_location(r_ptr, &y, &x)) return FALSE;
 
 				/* Place the questor */
-				place_monster_aux(y, x, q_ptr->mon_idx, TRUE, TRUE);
+				place_monster_aux(y, x, q_ptr->mon_idx, (MPLACE_SLEEP | MPLACE_GROUP));
 
 				/*Is there a monster here?*/
 				if (cave_m_idx[y][x] > 0)
@@ -10494,7 +10490,7 @@ static void town_gen(void)
 	for (i = 0; i < residents; i++)
 	{
 		/* Make a resident */
-		(void)alloc_monster(3, TRUE);
+		(void)alloc_monster(3, 0L);
 	}
 }
 

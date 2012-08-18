@@ -2777,21 +2777,19 @@ static int project_m_y;
 
 
 /*reveal a mimic, re-light the spot, and print a message if asked for*/
-void reveal_mimic(int y, int x, bool message)
+void reveal_mimic(int o_idx, bool message)
 {
-	monster_type *m_ptr = &mon_list[cave_m_idx[y][x]];
+	/* Get the object */
+	object_type *o_ptr = &o_list[o_idx];
 
-	/*no longer a mimic*/
-	m_ptr->mimic_k_idx = 0;
+	/* Paranoia */
+	if (!o_ptr->mimic_r_idx) return;
 
-	/* Mimic no longer acts as a detected object */
-	m_ptr->mflag &= ~(MFLAG_MIMIC);
+	/* If we fail to to place the mimic, return */
+	if (!place_mimic_near(o_ptr->iy, o_ptr->ix, o_ptr->mimic_r_idx, message)) return;
 
-	/* Message  XXX */
-	if (message) msg_print("There is a mimic!");
-
-	/* Redraw */
-	light_spot(y, x);
+	/* Delete the object */
+	delete_object_idx(o_idx);
 
 	/* Disturb */
 	disturb(0, 0);
@@ -4141,6 +4139,12 @@ static bool project_o(int who, int y, int x, int dam, int typ)
 				}
 			}
 
+			/* The mimics cover is blown */
+			else if (o_ptr->mimic_r_idx)
+			{
+				reveal_mimic(this_o_idx, o_ptr->marked);
+			}
+
 			/* Kill it */
 			else
 			{
@@ -4304,15 +4308,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 		monster_type *m2_ptr = &mon_list[who];
 		monster_race *r2_ptr = &r_info[m2_ptr->r_idx];
 
-		/* Reveal if a mimic */
-		if ((m_ptr->mimic_k_idx) && (seen))
-		{
-			/* Reveal it */
-			reveal_mimic(m_ptr->fy, m_ptr->fx, seen);
-		}
-
 		monster_desc(m_name, sizeof(m_name), m_ptr, 0);
-
 
 		/* Monsters are same race, or uniques suffer no damage */
 		if ((m_ptr->r_idx == m2_ptr->r_idx) || (r_ptr->flags1 & (RF1_UNIQUE)) ||
@@ -5449,13 +5445,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 	/* "Unique" monsters or quest monsters cannot be polymorphed */
 	if ((r_ptr->flags1 & (RF1_UNIQUE)) || (m_ptr->mflag & (MFLAG_QUEST))) do_poly = FALSE;
 
-	/* Reveal mimics */
-	if (m_ptr->mimic_k_idx)
-	{
-		/* Reveal it */
-		reveal_mimic(m_ptr->fy, m_ptr->fx, seen);
-	}
-
 	/* Get the actual monster name */
 	monster_desc(m_name, sizeof(m_name), m_ptr, 0);
 
@@ -5497,7 +5486,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			delete_monster_idx(mon_idx);
 
 			/* Create a new monster (no groups) */
-			(void)place_monster_aux(y, x, tmp, FALSE, FALSE);
+			(void)place_monster_aux(y, x, tmp, 0L);
 
 			/* Hack -- Assume success XXX XXX XXX */
 

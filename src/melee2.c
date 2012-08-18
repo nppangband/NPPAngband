@@ -3501,7 +3501,7 @@ static bool get_move(monster_type *m_ptr, int *ty, int *tx, bool *fear,
 		/* Hack -- memorize lack of moves after a while. */
 		if (!(l_ptr->r_l_flags1 & (RF1_NEVER_MOVE)))
 		{
-			if ((mon_fully_visible(m_ptr)) && (one_in_(20)))
+			if ((m_ptr->ml) && (one_in_(20)))
 			{
 				l_ptr->r_l_flags1 |= (RF1_NEVER_MOVE);
 			}
@@ -3517,7 +3517,7 @@ static bool get_move(monster_type *m_ptr, int *ty, int *tx, bool *fear,
 				/* Hack -- memorize lack of attacks after a while */
 				if (!(l_ptr->r_l_flags1 & (RF1_NEVER_BLOW)))
 				{
-					if ((mon_fully_visible(m_ptr)) && (one_in_(10)))
+					if ((m_ptr->ml) && (one_in_(10)))
 					{
 						l_ptr->r_l_flags1 |= (RF1_NEVER_BLOW);
 					}
@@ -3637,7 +3637,7 @@ static bool get_move(monster_type *m_ptr, int *ty, int *tx, bool *fear,
 			/* Hack -- memorize lack of attacks after a while */
 			if (!(l_ptr->r_l_flags1 & (RF1_NEVER_BLOW)))
 			{
-				if ((mon_fully_visible(m_ptr)) && (one_in_(10)))
+				if ((m_ptr->ml) && (one_in_(10)))
 				{
 					l_ptr->r_l_flags1 |= (RF1_NEVER_BLOW);
 				}
@@ -5023,13 +5023,6 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 		/* Monster is visible and not cloaked */
 		if (m_ptr->ml)
 		{
-			/* Reveal minics */
-			if (m_ptr->mimic_k_idx)
-			{
-				/* Reveal it */
-				reveal_mimic(m_ptr->fy, m_ptr->fx, TRUE);
-
-			}
 
 			/* Player will always be disturbed if monster moves adjacent */
 			if (m_ptr->cdis == 1) disturb(1, 0);
@@ -5200,7 +5193,7 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 	}
 
 	/* Learn things from observable monster */
-	if ((mon_fully_visible(m_ptr)) && player_can_observe())
+	if ((m_ptr->ml) && player_can_observe())
 	{
 		const feature_type *f_ptr = &f_info[cave_feat[m_ptr->fy][m_ptr->fx]];
 		feature_lore *f_l_ptr = &f_l_list[cave_feat[m_ptr->fy][m_ptr->fx]];
@@ -5472,7 +5465,7 @@ static s16b process_monster(monster_type *m_ptr)
 				sound(MSG_MULTIPLY);
 
 				/* Take note if visible */
-				if (mon_fully_visible(m_ptr))
+				if (m_ptr->ml)
 				{
 					l_ptr->r_l_flags2 |= (RF2_MULTIPLY);
 				}
@@ -5599,12 +5592,12 @@ static s16b process_monster(monster_type *m_ptr)
 		if (r_ptr->flags1 & (RF1_RAND_25))
 		{
 			chance += 25;
-			if (mon_fully_visible(m_ptr)) l_ptr->r_l_flags1 |= (RF1_RAND_25);
+			if (m_ptr->ml) l_ptr->r_l_flags1 |= (RF1_RAND_25);
 		}
 		if (r_ptr->flags1 & (RF1_RAND_50))
 		{
 			chance += 50;
-			if (mon_fully_visible(m_ptr)) l_ptr->r_l_flags1 |= (RF1_RAND_50);
+			if (m_ptr->ml) l_ptr->r_l_flags1 |= (RF1_RAND_50);
 		}
 
 		/* Chance of moving randomly */
@@ -5822,7 +5815,7 @@ static void recover_monster(monster_type *m_ptr)
 			mon_clear_timed(m_idx, MON_TMD_SLEEP , MON_TMD_FLG_NOMESSAGE);
 
 			/* Notice the "waking up" */
-			if ((visible) && (!(m_ptr->mimic_k_idx)))
+			if (visible)
 			{
 				char m_name[80];
 
@@ -5866,7 +5859,7 @@ static void recover_monster(monster_type *m_ptr)
 					}
 
 					/* We are making a substantial amount of extra noise */
-					if ((add_wakeup_chance >= 1000) &&  (!(m_ptr->mimic_k_idx)))
+					if (add_wakeup_chance >= 1000)
 					{
 						char m_name[80];
 
@@ -5886,7 +5879,7 @@ static void recover_monster(monster_type *m_ptr)
 				mon_clear_timed(m_idx, MON_TMD_SLEEP, MON_TMD_FLG_NOMESSAGE);
 
 				/* Notice the "waking up" */
-				if ((visible) && (!(m_ptr->mimic_k_idx)))
+				if (visible)
 				{
 					char m_name[80];
 

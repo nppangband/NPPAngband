@@ -239,6 +239,9 @@ void wield_item(object_type *o_ptr, int item, int slot)
 		return;
 	}
 
+	/* Hack - Don't wield mimic objects */
+	if (o_ptr->mimic_r_idx) return;
+
 	/* Get local object */
 	i_ptr = &object_type_body;
 

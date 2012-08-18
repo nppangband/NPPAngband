@@ -132,6 +132,8 @@ static void wr_item(const object_type *o_ptr)
 
 	wr_byte(o_ptr->marked);
 
+	wr_s16b(o_ptr->mimic_r_idx);
+
 	/* Old flags */
 	wr_u32b(0L);
 	wr_u32b(0L);
@@ -173,7 +175,7 @@ static void wr_item(const object_type *o_ptr)
 /*
  * Special monster flags that get saved in the savefile
  */
-#define SAVE_MON_FLAGS (MFLAG_MIMIC | MFLAG_STERILE | MFLAG_ACTV | MFLAG_TOWN | MFLAG_WARY | \
+#define SAVE_MON_FLAGS (MFLAG_STERILE | MFLAG_ACTV | MFLAG_TOWN | MFLAG_WARY | \
 						MFLAG_SLOWER | MFLAG_FASTER | MFLAG_ALWAYS_CAST | \
 						MFLAG_AGGRESSIVE | MFLAG_ATTACKED_BAD | MFLAG_BONUS_ITEM | \
 						MFLAG_HIT_BY_RANGED | MFLAG_HIT_BY_MELEE | MFLAG_QUEST | MFLAG_DESPERATE | \
@@ -186,6 +188,7 @@ static void wr_item(const object_type *o_ptr)
 static void wr_monster(const monster_type *m_ptr)
 {
 	u32b tmp32u;
+	int i;
 
 	wr_s16b(m_ptr->r_idx);
 
@@ -193,14 +196,15 @@ static void wr_monster(const monster_type *m_ptr)
 	wr_byte(m_ptr->fx);
 	wr_s16b(m_ptr->hp);
 	wr_s16b(m_ptr->maxhp);
-	wr_s16b(m_ptr->m_timed[MON_TMD_SLEEP]);
+
+	/* Find the number of monster timed effects */
+	wr_byte(MON_TMD_MAX);
+
+	/* Write all the monster timed effects, in a loop */
+	for (i = 0; i < MON_TMD_MAX; i++) wr_s16b(m_ptr->m_timed[i]);
+
 	wr_byte(m_ptr->mspeed);
 	wr_s16b(m_ptr->m_energy);
-	wr_s16b(m_ptr->m_timed[MON_TMD_STUN]);
-	wr_s16b(m_ptr->m_timed[MON_TMD_CONF]);
-	wr_s16b(m_ptr->m_timed[MON_TMD_FEAR]);
-	wr_s16b(m_ptr->m_timed[MON_TMD_FAST]);
-	wr_s16b(m_ptr->m_timed[MON_TMD_SLOW]);
 
 	/*save the temporary flags*/
 	tmp32u = m_ptr->mflag & (SAVE_MON_FLAGS);
@@ -209,7 +213,6 @@ static void wr_monster(const monster_type *m_ptr)
 	wr_byte(m_ptr->target_y);
 	wr_byte(m_ptr->target_x);
 	wr_byte(m_ptr->mana);
-	wr_s16b(m_ptr->mimic_k_idx);
 	wr_byte(0);
 }
 
@@ -606,50 +609,24 @@ static void wr_extra(void)
 	wr_s16b(0);	/* oops */
 
 	wr_s16b(0);		/* old "rest" */
-	wr_s16b(p_ptr->timed[TMD_BLIND]);
-	wr_s16b(p_ptr->timed[TMD_PARALYZED]);
-	wr_s16b(p_ptr->timed[TMD_CONFUSED]);
 	wr_s16b(p_ptr->food);
 	wr_s16b(0);	/* old "food_digested" */
 	wr_s16b(0);	/* old "protection" */
 	wr_s16b(p_ptr->p_energy);
-	wr_s16b(p_ptr->timed[TMD_FAST]);
-	wr_s16b(p_ptr->timed[TMD_SLOW]);
-	wr_s16b(p_ptr->timed[TMD_AFRAID]);
-	wr_s16b(p_ptr->timed[TMD_CUT]);
-	wr_s16b(p_ptr->timed[TMD_STUN]);
-	wr_s16b(p_ptr->timed[TMD_POISONED]);
-	wr_s16b(p_ptr->timed[TMD_IMAGE]);
-	wr_s16b(p_ptr->timed[TMD_PROTEVIL]);
-	wr_s16b(p_ptr->timed[TMD_INVULN]);
-	wr_s16b(p_ptr->timed[TMD_HERO]);
-	wr_s16b(p_ptr->timed[TMD_SHERO]);
-	wr_s16b(p_ptr->timed[TMD_SHIELD]);
-	wr_s16b(p_ptr->timed[TMD_BLESSED]);
-	wr_s16b(p_ptr->timed[TMD_SINVIS]);
 	wr_s16b(p_ptr->word_recall);
 	wr_s16b(p_ptr->state.see_infra);
-	wr_s16b(p_ptr->timed[TMD_SINFRA]);
-	wr_s16b(p_ptr->timed[TMD_OPP_FIRE]);
-	wr_s16b(p_ptr->timed[TMD_OPP_COLD]);
-	wr_s16b(p_ptr->timed[TMD_OPP_ACID]);
-	wr_s16b(p_ptr->timed[TMD_OPP_ELEC]);
-	wr_s16b(p_ptr->timed[TMD_OPP_POIS]);
-
-	wr_s16b(p_ptr->timed[TMD_NAT_LAVA]);
-	wr_s16b(p_ptr->timed[TMD_NAT_OIL]);
-	wr_s16b(p_ptr->timed[TMD_NAT_SAND]);
-	wr_s16b(p_ptr->timed[TMD_NAT_TREE]);
-	wr_s16b(p_ptr->timed[TMD_NAT_WATER]);
-	wr_s16b(p_ptr->timed[TMD_NAT_MUD]);
 
 	wr_byte(p_ptr->confusing);
-	wr_s16b(p_ptr->timed[TMD_SLAY_ELEM]);
-	wr_byte(p_ptr->timed[TMD_FLYING]);
 	wr_byte(p_ptr->searching);
 	wr_byte(0);	/* oops */
 	wr_byte(0);	/* oops */
 	wr_byte(0);
+
+	/* Find the number of timed effects */
+	wr_byte(TMD_MAX);
+
+	/* Read all the effects, in a loop */
+	for (i = 0; i < TMD_MAX; i++) wr_s16b(p_ptr->timed[i]);
 
 	/* 4gai use */
 	wr_s16b(p_ptr->base_wakeup_chance);

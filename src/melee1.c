@@ -234,13 +234,6 @@ bool make_attack_normal(monster_type *m_ptr)
 	/* Extract the effective monster level */
 	rlev = MAX(r_ptr->level, 1);
 
-	if ((m_ptr->mimic_k_idx) && (m_ptr->ml))
-	{
-		/* Reveal it */
-		reveal_mimic(m_ptr->fy, m_ptr->fx, TRUE);
-
-	}
-
 	/* Get the monster name (or "it") */
 	monster_desc(m_name, sizeof(m_name), m_ptr, 0);
 
@@ -2217,27 +2210,6 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 
 	/* Hack -- Get the "died from" name */
 	monster_desc(ddesc, sizeof(m_name), m_ptr, 0x88);
-
-	/* Hack -- a visible monster loses any hidden mimic status */
-	if ((m_ptr->ml) && (m_ptr->mimic_k_idx))
-	{
-
-		/* Reveal it */
-		reveal_mimic(m_ptr->fy, m_ptr->fx, TRUE);
-
-		/* Get monster name */
-		monster_desc(m_name, sizeof(m_name), m_ptr, 0x08);
-
-		/* Notice monster */
-		msg_format("%^s appears.", m_name);
-
-		/* Focus on this monster, unless otherwise occupied */
-		if (!p_ptr->health_who)
-		{
-			p_ptr->health_who = cave_m_idx[m_ptr->fy][m_ptr->fx];
-			p_ptr->redraw |= (PR_HEALTH | PR_MON_MANA);
-		}
-	}
 
 	/* Get the summon level */
 	if (r_ptr->d_char == 'Q') summon_lev = r_ptr->level + 3;

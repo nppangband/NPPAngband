@@ -1658,22 +1658,8 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 			/* Desired char */
 			dc = r_ptr->x_char;
 
-			/*make mimics look like an object*/
-			if (m_ptr->mimic_k_idx)
-			{
-				/* Make sure it is seen, if it imitates an object. */
-				m_ptr->mflag |= (MFLAG_MIMIC);
-
-				/* Normal attr */
-				a = da = object_type_attr(m_ptr->mimic_k_idx);
-
-				/* Normal char */
-				c = dc = object_type_char(m_ptr->mimic_k_idx);
-
-			}
-
 			/* Hack -- monster hallucination */
-			else if (image)
+			if (image)
 			{
 				int i = image_monster(FALSE);
 
@@ -1738,8 +1724,7 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 			/* Hack -- hidden monsters */
 			/* TODO -- pick a tile for graphics mode */
 			/* Note that we keep the original looks if the monster is being detected */
-			if (((m_ptr->mflag & (MFLAG_MARK | MFLAG_HIDE)) == (MFLAG_HIDE)) &&
-				!(m_ptr->mimic_k_idx) && !image)
+			if (((m_ptr->mflag & (MFLAG_MARK | MFLAG_HIDE)) == (MFLAG_HIDE)) && (!image))
 			{
 				map_hidden_monster(m_ptr, &a, &c);
 			}
@@ -2498,8 +2483,8 @@ void display_map(int *cy, int *cx)
 				/* Notice dangerous monsters */
 				tp = MAX(20, (int)r_ptr->level - (2 * p_ptr->lev / 3) + 20);
 
-				/* Ignore invisible monsters and mimics*/
-				if ((!m_ptr->ml) || (m_ptr->mimic_k_idx)) tp = 20;
+				/* Ignore invisible monsters */
+				if (!m_ptr->ml) tp = 20;
 			}
 
 			/* Save "best" */
@@ -4582,8 +4567,6 @@ static void update_flows_full_prep(void)
 
 void update_flows(bool full)
 {
-
-
 	/*First check if we need a full update*/
 	if (!full)
 	{

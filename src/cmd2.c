@@ -853,6 +853,9 @@ int count_chests(int *y, int *x, bool trapped)
 		/* Grab the object */
 		o_ptr = &o_list[o_idx];
 
+		/* Hack - Don't open mimic chests */
+		if (o_ptr->mimic_r_idx) continue;
+
 		/* No (known) traps here */
 		if (trapped &&
 		    (!object_known_p(o_ptr) ||

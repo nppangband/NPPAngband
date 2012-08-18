@@ -1,3 +1,6 @@
+NPP 0.6.0. Changes:
+
+
 NPP 0.5.4 changes:
 The edges of the detected trap areas now show up onscreen.
 DVG tileset - added tiles for many objects, flavors, terrains, monsters, allspells, and bolt spells (by Buzzkill, Jeff Greene, and Thacker).

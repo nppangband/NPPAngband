@@ -753,7 +753,7 @@
  * Special object flags
  */
 #define IDENT_SENSE     		0x00000001	/* Item has been "sensed" */
-#define IDENT_UNUSED_XXXXXXX2	0x00000002
+#define IDENT_UNUSED_XXXXXXX2	0x00000002	/* Object is a mimic */
 #define IDENT_EMPTY     		0x00000004	/* Item charges are known */
 #define IDENT_KNOWN     		0x00000008	/* Item abilities are known */
 #define IDENT_STORE     		0x00000010	/* Item is in the inventory of a store */

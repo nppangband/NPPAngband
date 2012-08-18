@@ -121,6 +121,18 @@
 #define MDESC_SHOW		0x80	/* Assume the monster is visible */
 
 
+/*
+ * Bit flags for the "place_monster" functions
+ */
+#define MPLACE_SLEEP	0x01	/* Create sleeping monster, if possible */
+#define MPLACE_GROUP	0x02	/* Create group monsters, if possible */
+#define MPLACE_MIMIC	0x04	/* Create a mimic */
+#define MPLACE_GHOST	0x08	/* Allow player ghosts */
+#define MPLACE_XXX2		0x10	/* Unused */
+#define MPLACE_XXX3		0x20	/* Unused */
+#define MPLACE_XXX4		0x40	/* Unused */
+#define MPLACE_XXX5		0x80	/* Unused */
+
 
 #define MONSTER_BLOW_MAX 4
 
@@ -216,7 +228,7 @@
  */
 #define MFLAG_VIEW      	0x00000001L  /* Monster is in line of sight */
 #define MFLAG_STERILE		0x00000002L  /* Sterilized Monster */
-#define MFLAG_MIMIC  		0x00000004L  /* A mimic detected as an object */
+#define MFLAG_XXXX  		0x00000004L  /* Unused */
 #define MFLAG_ACTV      	0x00000008L  /* Monster is in active mode */
 #define MFLAG_HIDE			0x00000010L  /* Monster is hiding in terrain */
 #define MFLAG_TOWN      	0x00000020L  /* Monster is using "townsman" AI */
@@ -847,12 +859,6 @@
 
 
 /*
- * Determine if the monster is fully visible.
- */
-#define mon_fully_visible(M) \
-(((M)->ml) && !((M)->mflag & (MFLAG_MIMIC)))
-
-/*
  * Make sure the game doesn't crash if the monster is set to NEED_FLOW
  * and the game calls the flow array.
  */
@@ -993,6 +999,7 @@ enum {
 	MON_MSG_DISENTEGRATES,
 	MON_MSG_FREEZE_SHATTER,
 	MON_MSG_MANA_DRAIN,
+	MON_MSG_APPEARS,
 
 
 

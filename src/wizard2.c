@@ -1481,6 +1481,10 @@ static void do_cmd_wiz_named(int r_idx, bool slp)
 
 	int i, x, y;
 
+	/* Prepare the place_monster flags */
+	byte mp_flags = MPLACE_GROUP;
+	if (slp) mp_flags |= MPLACE_SLEEP;
+
 	/* Paranoia */
 	if (!r_idx) return;
 	if (r_idx >= z_info->r_max-1) return;
@@ -1497,7 +1501,7 @@ static void do_cmd_wiz_named(int r_idx, bool slp)
 		if (!cave_empty_bold(y, x)) continue;
 
 		/* Place it (allow groups) */
-		if (place_monster_aux(y, x, r_idx, slp, TRUE)) break;
+		if (place_monster_aux(y, x, r_idx, mp_flags)) break;
 	}
 }
 
@@ -1680,7 +1684,7 @@ static void wiz_create_items(void)
 	}
 }
 
-/* Create a specific terrain grid given its feature number or query a grid */
+/* Create a specific monster grid */
 static void do_cmd_wiz_monster(void)
 {
 
@@ -1733,7 +1737,7 @@ static void do_cmd_wiz_monster(void)
 	}
 
 	/* Place the monster */
-	if(!place_monster_aux(y, x, r_idx, FALSE, FALSE))
+	if(!place_monster_aux(y, x, r_idx, 0L))
 	{
 		msg_print("Monster placement failed");
 	}

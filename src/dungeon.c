@@ -19,6 +19,7 @@
 #include "angband.h"
 #include "game-event.h"
 
+
 /*
  * Change dungeon level.
  * Aside from setting the player depth at the beginning of the game,
@@ -426,6 +427,63 @@ static void recharged_notice(object_type *o_ptr, bool all)
 
 		/* Keep looking for '!'s */
 		s = strchr(s + 1, '!');
+	}
+}
+
+static void process_mimics(void)
+{
+	s16b i;
+	int dist;
+	int obj_y, obj_x;
+	int chance;
+
+	for (i = 1; i < o_max; i++)
+	{
+		object_type *o_ptr = &o_list[i];
+
+		/* Skip non-objects */
+		if (!o_ptr->k_idx) continue;
+
+		/* Only work with the mimic objects */
+		if (!o_ptr->mimic_r_idx) continue;
+
+		/* Determine object location */
+		/* Held by a monster */
+		if (o_ptr->held_m_idx)
+		{
+			monster_type *m_ptr;
+
+			/* Get the monster */
+			m_ptr = &mon_list[o_ptr->held_m_idx];
+
+			/* Get the location */
+			obj_y = m_ptr->fy;
+			obj_x = m_ptr->fx;
+		}
+		/* On the ground */
+		else
+		{
+			obj_y = o_ptr->iy;
+			obj_x = o_ptr->ix;
+		}
+
+		/* get the distance to player */
+		dist = distance(obj_y, obj_x, p_ptr->py, p_ptr->px);
+
+		/* Must be in line of fire from the player */
+		if (!player_can_fire_bold(obj_y, obj_x)) continue;
+
+		/* paranoia */
+		if (dist > MAX_SIGHT) continue;
+
+		/* Chance to be revealed gets bigger as the player gets closer */
+		chance = (MAX_SIGHT - dist) * (MAX_SIGHT/4)  + 10;
+
+		/* Reveal the mimic if test is passed*/
+		if (randint0(MAX_SIGHT * 5) < chance)
+		{
+			reveal_mimic(i, o_ptr->marked);
+		}
 	}
 }
 
@@ -859,7 +917,7 @@ static void process_world(void)
 					/* 10 chances to get the strongest monster possible */
 					else for (i = 0; i < 10; i++)
 					{
-						r_idx = get_mon_num(monster_level, y, x);
+						r_idx = get_mon_num(monster_level, y, x, 0L);
 
 						if (!best_r_idx)
 						{
@@ -882,7 +940,7 @@ static void process_world(void)
 					}
 				}
 
-				if (place_monster_aux(y, x, best_r_idx, TRUE, FALSE))
+				if (place_monster_aux(y, x, best_r_idx, MPLACE_SLEEP))
 				{
 
 					/* Scan the monster list */
@@ -1009,7 +1067,7 @@ static void process_world(void)
 	if (one_in_(MAX_M_ALLOC_CHANCE))
 	{
 		/* Make a new monster, but not on themed levels */
-		if (feeling < LEV_THEME_HEAD) (void)alloc_monster(MAX_SIGHT + 5, FALSE);
+		if (feeling < LEV_THEME_HEAD) (void)alloc_monster(MAX_SIGHT + 5, 0L);
 	}
 
 	/* Hack - if there is a ghost now, and there was not before,
@@ -1391,6 +1449,9 @@ static void process_world(void)
 		}
 	}
 
+	/* Process mimic objects */
+	process_mimics();
+
 	/* Recharge activatable objects and rods */
 	recharge_objects();
 
@@ -1484,7 +1545,7 @@ static void process_world(void)
 static bool enter_wizard_mode(void)
 {
 	/* Ask first time - unless resurrecting a dead character */
-	if (!(p_ptr->noscore & 0x0002) && !(p_ptr->is_dead))
+	if (!(p_ptr->noscore & (NOSCORE_WIZARD | NOSCORE_DEBUG)) && !(p_ptr->is_dead))
 	{
 		/* Mention effects */
 		msg_print("You are about to enter 'wizard' mode for the very first time!");
@@ -1499,7 +1560,7 @@ static bool enter_wizard_mode(void)
 	}
 
 	/* Mark savefile */
-	p_ptr->noscore |= 0x0002;
+	p_ptr->noscore |= (NOSCORE_WIZARD | NOSCORE_DEBUG);
 
 	/* Success */
 	return (TRUE);
@@ -2348,6 +2409,8 @@ static void dungeon(void)
 
 	/* Reset the object generation level */
 	object_level = effective_depth(p_ptr->depth);
+
+	my_strcpy(p_ptr->history, "You are Bilbo's favorite nephew.  Using the recent gift he gave you, all of Middle Earth is at your mercy.  They can have your precious when they pry it from your cold, dead hands.", sizeof(p_ptr->history));
 
 	/* Main loop */
 	while (TRUE)

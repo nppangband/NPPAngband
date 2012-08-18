@@ -645,6 +645,8 @@ struct object_type
 	s16b origin_dlvl;	/* Depth */
 	s16b origin_r_idx;	/* Monster race */
 	s16b origin_m_name;	/* Index of monster name quark. Used only for player ghosts */
+
+	s16b mimic_r_idx;	/* Object is a mimic */
 };
 
 
@@ -691,8 +693,6 @@ struct monster_type
 	byte best_range;	/* How close do we want to be? */  /* Not saved */
 
 	byte mana;          /* Current mana level */
-
-	s16b mimic_k_idx;	/*type of mimic code*/
 
 	byte using_flow;	/*Which movement flow is the creature using?*/
 

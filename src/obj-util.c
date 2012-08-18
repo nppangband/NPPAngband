@@ -753,6 +753,9 @@ s16b wield_slot_ammo(const object_type *o_ptr)
 	s16b i, open = 0;
 	object_type *j_ptr;
 
+	/* Never pick up mimics */
+	if (o_ptr->mimic_r_idx) return (QUIVER_END);
+
 	/* If the ammo is inscribed with a slot number, we'll try to put it in */
 	/* that slot, if possible. */
 	i = get_inscribed_ammo_slot(o_ptr);
@@ -790,6 +793,9 @@ s16b wield_slot(const object_type *o_ptr)
 {
 	/*Hack - don't allow quest items to be worn*/
 	if(o_ptr->ident & (IDENT_QUEST)) return (-1);
+
+	/* Hack - Don't wield mimic objects */
+	if (o_ptr->mimic_r_idx) return (-1);
 
 	/* Slot for equipment */
 	switch (o_ptr->tval)
@@ -1544,6 +1550,9 @@ void compact_objects(int size)
 			/* Hack -- High level objects start out "immune" */
 			if ((k_ptr->k_level > cur_lev) && (k_ptr->squelch != SQUELCH_ALWAYS)) continue;
 
+			/* Hack - don't compact mimics */
+			if (o_ptr->mimic_r_idx) continue;
+
 			/* Monster */
 			if (o_ptr->held_m_idx)
 			{
@@ -2230,6 +2239,10 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 	/* Require identical object types */
 	if (o_ptr->k_idx != j_ptr->k_idx) return (0);
 
+	/* Hack - mimic objects aren't similar*/
+	if (o_ptr->mimic_r_idx) return (0);
+	if (j_ptr->mimic_r_idx) return (0);
+
 	/* Analyze the items */
 	switch (o_ptr->tval)
 	{
@@ -2377,6 +2390,11 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 		return (0);
 	}
 
+	/* Hack -- Mimics never stack */
+	if ((o_ptr->mimic_r_idx) || (j_ptr->mimic_r_idx))
+	{
+		return (0);
+	}
 
 	/* Hack -- Require compatible inscriptions */
 	if (o_ptr->obj_note != j_ptr->obj_note)
@@ -2669,7 +2687,7 @@ static bool find_similar_object_or_empty_grid(object_type *j_ptr, int *oy, int *
 	int d_empty = max_dist * 2;
 	int y_empty = 0, x_empty = 0;
 
-	/* Scan a square of lenght = max_dist * 2 + 1 */
+	/* Scan a square of length = max_dist * 2 + 1 */
 	for (dy = -max_dist; dy <= max_dist; dy++)
 	{
 		for (dx = -max_dist; dx <= max_dist; dx++)
@@ -2807,8 +2825,10 @@ static bool find_similar_object_or_empty_grid(object_type *j_ptr, int *oy, int *
  * We check several locations to see if we can find a location at which
  * the object can combine, stack, or be placed.  Artifacts will try very
  * hard to be placed, including "teleporting" to a useful grid if needed.
+ *
+ * Returns true if the object was dropped, false if it failed or was destroyed.
  */
-void drop_near(object_type *j_ptr, int chance, int y, int x)
+bool drop_near(object_type *j_ptr, int chance, int y, int x)
 {
 	int i, k, d, s;
 
@@ -2844,7 +2864,7 @@ void drop_near(object_type *j_ptr, int chance, int y, int x)
 		p_ptr->redraw |= (PR_ITEMLIST);
 
 		/* Failure */
-		return;
+		return (FALSE);
 	}
 
 	/* Score */
@@ -2959,7 +2979,7 @@ void drop_near(object_type *j_ptr, int chance, int y, int x)
 		p_ptr->redraw |= (PR_ITEMLIST);
 
 		/* Failure */
-		return;
+		return (FALSE);
 	}
 
 
@@ -3008,7 +3028,7 @@ void drop_near(object_type *j_ptr, int chance, int y, int x)
 		p_ptr->redraw |= (PR_ITEMLIST);
 
 		/* Failure */
-		return;
+		return (FALSE);
 	}
 
 	/* Sound */
@@ -3033,6 +3053,8 @@ void drop_near(object_type *j_ptr, int chance, int y, int x)
 	}
 
 	p_ptr->redraw |= (PR_ITEMLIST);
+
+	return (TRUE);
 }
 
 
@@ -3889,6 +3911,9 @@ s16b quiver_carry(object_type *o_ptr)
 	/*paranoia, don't pick up "&nothings"*/
 	if (!o_ptr->k_idx) return (-1);
 
+	/* Hack - Don't pick up mimic objects */
+	if (o_ptr->mimic_r_idx) return (-1);
+
 	/* Must be ammo. */
 	if (!ammo_p(o_ptr) && !is_throwing_weapon(o_ptr)) return (-1);
 
@@ -4067,6 +4092,9 @@ s16b inven_carry(object_type *o_ptr)
 	int n = -1;
 
 	object_type *j_ptr;
+
+	/* Never pick up mimics */
+	if (o_ptr->mimic_r_idx) return (-1);
 
 	/* Check for combining */
 	for (j = 0; j < INVEN_PACK; j++)
