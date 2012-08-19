@@ -806,7 +806,7 @@ extern void monster_hide(monster_type *m_ptr);
 extern void monster_unhide(monster_type *m_ptr);
 extern s16b monster_place(int y, int x, monster_type *n_ptr);
 extern void calc_monster_speed(int y, int x);
-extern bool place_mimic_near(int y, int x, int r_idx, bool message);
+extern void reveal_mimic(int o_idx, bool message);
 extern bool place_monster_aux(int y, int x, int r_idx, byte mp_flags);
 extern bool place_monster(int y, int x, byte mp_flags);
 extern bool alloc_monster(int dis, byte mp_flags);
@@ -1066,7 +1066,6 @@ extern bool dec_stat(int stat, int amount, bool permanent);
 extern bool res_stat(int stat);
 extern void disease(int *damage);
 extern bool apply_disenchant(int mode);
-extern void reveal_mimic(int o_idx, bool message);
 extern bool project_m(int who, int y, int x, int dam, int typ, u32b flg);
 extern bool project_p(int who, int y, int x, int dam, int typ, cptr msg);
 extern bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,

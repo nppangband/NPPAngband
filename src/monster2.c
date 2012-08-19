@@ -734,16 +734,23 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 			if ((level > 0) && (table[i].level < mindepth) &&
 				(!(r_ptr->flags1 & (RF1_UNIQUE)))) continue;
 
+			/* Hack - sometimes prevent mimics*/
+			if (r_ptr->flags1 & (RF1_CHAR_MIMIC))
+			{
+				if (mp_flags & (MPLACE_NO_MIMIC)) continue;
+			}
+
 			/* Hack -- "unique" monsters must be "unique" */
 			if (r_ptr->flags1 & (RF1_UNIQUE))
 			{
 				bool do_continue = FALSE;
 
 				/*No player ghosts if the option is set, or not called for*/
-				if ((r_ptr->flags2 & RF2_PLAYER_GHOST) &&
-					(adult_no_player_ghosts)) continue;
-				if ((r_ptr->flags2 & RF2_PLAYER_GHOST) &&
-					!(mp_flags & (MPLACE_GHOST))) continue;
+				if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
+				{
+					if (mp_flags & (MPLACE_NO_GHOST)) continue;
+					if (adult_no_player_ghosts) continue;
+				}
 
 				/* Check quests for uniques*/
 				for (k = 0; k < z_info->q_max; k++)
@@ -2113,7 +2120,7 @@ static s16b get_mimic_k_idx(int r_idx)
 	monster_race *r_ptr = &r_info[r_idx];
 
 	/* Hack - look at default character */
-	switch (r_idx)
+	switch (r_ptr->d_char)
 	{
 
 		case '$':
@@ -2422,14 +2429,28 @@ static bool place_mimic_object(int y, int x, int r_idx)
 	object_type object_type_body;
 	object_type *o_ptr = &object_type_body;
 
+	if (!k_idx)
+	{
+		monster_race *r_ptr = &r_info[r_idx];
+		playtesting("mimic creation failed");
+		playtesting (format("tried to make a %s ", r_name + r_ptr->name));
+	}
+
 	/* Failure */
 	if (!k_idx) return (FALSE);
 
 	/* Wipe the object */
 	object_wipe(o_ptr);
 
-	/* Create the object */
-	object_prep(o_ptr, k_idx);
+	/* Create either a gold mimic or an object mimic */
+	if (k_info[o_ptr->k_idx].tval == TV_GOLD) make_gold(o_ptr);
+	else
+	{
+		object_prep(o_ptr, k_idx);
+
+		/* Apply magic (allow artifacts) */
+		apply_magic(o_ptr, object_level, FALSE, TRUE, TRUE, FALSE);
+	}
 
 	/* Mark it as a mimic */
 	o_ptr->mimic_r_idx = r_idx;
@@ -3034,7 +3055,14 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 
 	if ((feeling >= LEV_THEME_HEAD) && (character_dungeon == TRUE)) return (FALSE);
 
-	if ((mp_flags & (MPLACE_MIMIC)) && (r_ptr->flags2 & (RF1_CHAR_MIMIC))) return (place_mimic_object(y, x, r_idx));
+	/*
+	 * Place a mimic object rather than a monster if called for
+	 */
+	if (!(mp_flags & (MPLACE_NO_MIMIC)) &&
+		(r_ptr->flags1 & (RF1_CHAR_MIMIC)))
+	{
+		return (place_mimic_object(y, x, r_idx));
+	}
 
 	/* Require empty space */
 	if (!cave_empty_bold(y, x)) return (FALSE);
@@ -3270,15 +3298,15 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
  *
  * Put a message in the queue if requested to do so.
  */
-bool place_mimic_near(int y, int x, int r_idx, bool message)
+static bool place_mimic_near(int y, int x, int r_idx, bool message, bool questor)
 {
 	bool success = FALSE;
 	int i, y1, x1;
-	int final_x = 0;
-	int final_y = 0;
+	int final_x = x;
+	int final_y = y;
 
 	/* Initially try the spot the mimic is on */
-	if (place_monster_one(y, x, r_idx, MPLACE_MIMIC)) success = TRUE;
+	if (place_monster_one(y, x, r_idx, MPLACE_NO_MIMIC)) success = TRUE;
 
 	/* Now search around the space, one layer at a time */
 	else for (i = 1; ((i <= 5) && (!success)); i++)
@@ -3297,7 +3325,7 @@ bool place_mimic_near(int y, int x, int r_idx, bool message)
 				if (!los(y1, x1, y, x)) continue;
 
 				/* Try to place a monster on this spot */
-				if (!place_monster_one(y1, x1, r_idx, 0L)) continue;
+				if (!place_monster_one(y1, x1, r_idx, (MPLACE_NO_MIMIC))) continue;
 
 				/* We are done */
 				success = TRUE;
@@ -3307,22 +3335,53 @@ bool place_mimic_near(int y, int x, int r_idx, bool message)
 		}
 	}
 
-	/* Message  XXX */
-	if ((message) && (success))
+	/* Make it appear with a sudden attack. */
+	if (success)
 	{
 		s16b m_idx = cave_m_idx[final_y][final_x];
 		monster_type *m_ptr = &mon_list[m_idx];
 
-		char m_name[80];
+		m_ptr->m_energy = ENERGY_TO_MOVE;
+		m_ptr->mflag |= (MFLAG_ALWAYS_CAST);
 
-		/* Get the monster name */
-		monster_desc(m_name, sizeof(m_name), m_ptr, 0);
+		/* Mark it as a quest monster if necessary */
+		if (questor) m_ptr->mflag |= (MFLAG_QUEST);
 
-		/* Finally, handle the message */
-		add_monster_message(m_name, m_idx, MON_MSG_APPEARS);
+		if (message)
+		{
+			char m_name[80];
+
+			/* Get the monster name */
+			monster_desc(m_name, sizeof(m_name), m_ptr, 0x88);
+
+			/* Finally, handle the message */
+			add_monster_message(NULL, m_idx, MON_MSG_MIMIC_REVEAL);
+			add_monster_message(m_name, m_idx, MON_MSG_MIMIC_APPEARS);
+		}
 	}
 
 	return (success);
+}
+
+/*reveal a mimic, re-light the spot, and print a message if asked for*/
+void reveal_mimic(int o_idx, bool message)
+{
+	/* Get the object */
+	object_type *o_ptr = &o_list[o_idx];
+
+	bool questor = ((o_ptr->ident & (IDENT_QUEST)) ? TRUE : FALSE);
+
+	/* Paranoia */
+	if (!o_ptr->mimic_r_idx) return;
+
+	/* If we fail to to place the mimic, return */
+	if (!place_mimic_near(o_ptr->iy, o_ptr->ix, o_ptr->mimic_r_idx, message, questor)) return;
+
+	/* Delete the object */
+	delete_object_idx(o_idx);
+
+	/* Disturb */
+	disturb(0, 0);
 }
 
 
@@ -3478,13 +3537,13 @@ static void place_monster_escort(int y, int x, int leader_idx, bool slp)
 	get_mon_num_prep();
 
 	/* Build monster table, get index of first escort */
-	escort_idx = get_mon_num(escort_monster_level, y, x, 0L);
+	escort_idx = get_mon_num(escort_monster_level, y, x, (MPLACE_NO_MIMIC | MPLACE_NO_GHOST));
 
 
 	while (!escort_idx)
 	{
 		/* Build monster table, get index of first escort */
-		escort_idx = get_mon_num(escort_monster_level, y, x, 0L);
+		escort_idx = get_mon_num(escort_monster_level, y, x, (MPLACE_NO_MIMIC | MPLACE_NO_GHOST));
 
 		/* No eligible escorts.  Try a slightly deeper depth if monster is out-of-depth */
 		if ((!escort_idx) && (escort_monster_level < r_ptr->level)) escort_monster_level++;
@@ -3541,7 +3600,7 @@ static void place_monster_escort(int y, int x, int leader_idx, bool slp)
 			hack_n++;
 
 			/* Get index of the next escort */
-			escort_idx = get_mon_num(escort_monster_level, y, x, 0L);
+			escort_idx = get_mon_num(escort_monster_level, y, x, (MPLACE_NO_MIMIC | MPLACE_NO_GHOST));
 		}
 	}
 
@@ -3936,7 +3995,7 @@ bool summon_specific(int y1, int x1, int lev, int type)
 	get_mon_num_prep();
 
 	/* Pick a monster, using the given level */
-	r_idx = get_mon_num(lev, y, x, 0L);
+	r_idx = get_mon_num(lev, y, x, MPLACE_NO_GHOST);
 
 	/* Remove restriction */
 	get_mon_num_hook = NULL;
@@ -3948,7 +4007,7 @@ bool summon_specific(int y1, int x1, int lev, int type)
 	if (!r_idx) return (FALSE);
 
 	/* Attempt to place the monster (awake, allow groups) */
-	if (!place_monster_aux(y, x, r_idx, MPLACE_GROUP)) return (FALSE);
+	if (!place_monster_aux(y, x, r_idx, MPLACE_GROUP | MPLACE_NO_MIMIC)) return (FALSE);
 
 	/*hack - summoned monsters don't try to mimic*/
 	m_ptr = &mon_list[cave_m_idx[y][x]];
@@ -4128,7 +4187,8 @@ static char *msg_repository[MAX_MON_MSG + 1] =
 	"disintegrates!",		/* MON_MSG_DISENTEGRATES */
 	"freeze[s] and shatter[s].",  /* MON_MSG_FREEZE_SHATTER */
 	"lose[s] some mana!",		/* MON_MSG_MANA_DRAIN */
-	"appear[s]",				/* MON_MSG_APPEARS */
+	"~There [is|are] [a|several] mimic[|s]!",		/* MON_MSG_MIMIC_REVEAL */
+	"appear[s]!",				/* MON_MSG_MIMIC_APPEARS */
 
 
 	NULL						/* MAX_MON_MSG */

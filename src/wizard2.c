@@ -410,6 +410,22 @@ static void do_cmd_wiz_change_aux(void)
 
 	/* Update */
 	check_experience();
+
+	/* Default */
+	sprintf(tmp_val, "%ld", (long)(p_ptr->fame));
+
+	/* Query */
+	if (!get_string("Fame: ", tmp_val, 10)) return;
+
+	/* Extract */
+	tmp_long = atol(tmp_val);
+
+	/* Verify */
+	if (tmp_long < 0) tmp_long = 0L;
+
+	/* Save */
+	p_ptr->fame = tmp_long;
+
 }
 
 

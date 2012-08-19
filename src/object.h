@@ -760,7 +760,7 @@
 #define IDENT_MENTAL    		0x00000020	/* Item information is known */
 #define IDENT_CURSED    		0x00000040	/* Item is temporarily cursed */
 #define IDENT_BROKEN    		0x00000080	/* Item is permanently worthless */
-#define IDENT_QUEST     		0x00000100	/* Item is a quest artifact */
+#define IDENT_QUEST     		0x00000100	/* Item is a quest object (quest artifact or mimicing quest monster */
 #define IDENT_PERFECT_BALANCE   0x00000200	/* Item has perfect balance */
 #define IDENT_HIDE_CARRY		0x00000400	/* Don't reveal the object is being carried by a creature*/
 #define IDENT_EFFECT 			0x00000800	/* Know item activation/effect */

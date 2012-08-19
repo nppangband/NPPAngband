@@ -126,8 +126,8 @@
  */
 #define MPLACE_SLEEP	0x01	/* Create sleeping monster, if possible */
 #define MPLACE_GROUP	0x02	/* Create group monsters, if possible */
-#define MPLACE_MIMIC	0x04	/* Create a mimic */
-#define MPLACE_GHOST	0x08	/* Allow player ghosts */
+#define MPLACE_NO_MIMIC	0x04	/* Prevent mimics from being created */
+#define MPLACE_NO_GHOST	0x08	/* Prevent player ghosts from being created*/
 #define MPLACE_XXX2		0x10	/* Unused */
 #define MPLACE_XXX3		0x20	/* Unused */
 #define MPLACE_XXX4		0x40	/* Unused */
@@ -280,7 +280,7 @@
 #define RF1_MALE			0x00000004	/* Male gender */
 #define RF1_FEMALE			0x00000008	/* Female gender */
 #define RF1_CHAR_CLEAR		0x00000010	/* Absorbs symbol */
-#define RF1_CHAR_MIMIC		0x00000020	/* Monster can mimic a symbol */
+#define RF1_CHAR_MIMIC		0x00000020	/* Monster can mimic an object */
 #define RF1_ATTR_CLEAR		0x00000040	/* Absorbs color */
 #define RF1_ATTR_MULTI		0x00000080	/* Changes color */
 #define RF1_FORCE_DEPTH		0x00000100	/* Start at "correct" depth */
@@ -999,9 +999,8 @@ enum {
 	MON_MSG_DISENTEGRATES,
 	MON_MSG_FREEZE_SHATTER,
 	MON_MSG_MANA_DRAIN,
-	MON_MSG_APPEARS,
-
-
+	MON_MSG_MIMIC_REVEAL,
+	MON_MSG_MIMIC_APPEARS,
 
 	/* Always leave this at the end */
 	MAX_MON_MSG

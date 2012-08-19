@@ -5096,8 +5096,8 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 				if (f1 & (TR1_SLAY_ANIMAL))  flg3 |= (RF3_ANIMAL);
 				if (f1 & (TR1_SLAY_EVIL))    flg3 |= (RF3_EVIL);
 
-				/* The object cannot be picked up by the monster */
-				if (artifact_p(o_ptr) || (r_ptr->flags3 & flg3) ||
+				/* The object (or quest related mimic) cannot be picked up by the monster */
+				if (artifact_p(o_ptr) || (r_ptr->flags3 & flg3) || (o_ptr->ident & (IDENT_QUEST)) ||
  				   (f3 & (TR3_NEVER_PICKUP)))
 				{
 					/* Only give a message for "take_item" */

@@ -859,6 +859,30 @@ static void process_world(void)
 				if (m_ptr->mflag & (MFLAG_QUEST)) cur_quest_monsters++;
 			}
 
+			/* Count hiding mimics if they are part of the quest */
+			  /* check for monster quests where the mimic is the quest monster */
+			if ( ((r_info[q_ptr->mon_idx].flags1 & (RF1_CHAR_MIMIC)) &&
+					((q_ptr->q_type == QUEST_MONSTER) || (q_ptr->q_type == QUEST_UNIQUE) ||
+					 (q_ptr->q_type == QUEST_GUARDIAN))) ||
+				/* Check for pit/next quests quests involving mimics */
+				(((q_ptr->q_type == QUEST_PIT) || (q_ptr->q_type == QUEST_NEST)) &&
+				 (q_ptr->theme == LEV_THEME_CREEPING_COIN)))
+			{
+				for (j = 1; j < o_max; j++)
+				{
+					object_type *o_ptr = &o_list[j];
+
+					/* Skip non-objects */
+					if (!o_ptr->k_idx) continue;
+
+					/* Only work with the mimic objects */
+					if (!o_ptr->mimic_r_idx) continue;
+
+					/* Mimic is waiting to turn into a quest monster */
+					if (o_ptr->ident & (IDENT_QUEST)) cur_quest_monsters++;
+				}
+			}
+
 			if ((q_ptr->max_num - q_ptr->cur_num) > cur_quest_monsters)
 			{
 				int old_feeling = feeling;
@@ -1067,7 +1091,7 @@ static void process_world(void)
 	if (one_in_(MAX_M_ALLOC_CHANCE))
 	{
 		/* Make a new monster, but not on themed levels */
-		if (feeling < LEV_THEME_HEAD) (void)alloc_monster(MAX_SIGHT + 5, 0L);
+		if (feeling < LEV_THEME_HEAD) (void)alloc_monster(MAX_SIGHT + 5, (MPLACE_NO_MIMIC | MPLACE_NO_GHOST));
 	}
 
 	/* Hack - if there is a ghost now, and there was not before,

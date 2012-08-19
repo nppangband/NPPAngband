@@ -2776,25 +2776,6 @@ static int project_m_x;
 static int project_m_y;
 
 
-/*reveal a mimic, re-light the spot, and print a message if asked for*/
-void reveal_mimic(int o_idx, bool message)
-{
-	/* Get the object */
-	object_type *o_ptr = &o_list[o_idx];
-
-	/* Paranoia */
-	if (!o_ptr->mimic_r_idx) return;
-
-	/* If we fail to to place the mimic, return */
-	if (!place_mimic_near(o_ptr->iy, o_ptr->ix, o_ptr->mimic_r_idx, message)) return;
-
-	/* Delete the object */
-	delete_object_idx(o_idx);
-
-	/* Disturb */
-	disturb(0, 0);
-}
-
 /*
  * Temporarily light a grid.
  *

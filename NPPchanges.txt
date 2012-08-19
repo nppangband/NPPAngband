@@ -1,8 +1,9 @@
-NPP 0.6.0. Changes: (Note: NPP 060 is still an unstable Beta)
+NPP 0.6.0. BETA 1 Changes: 
 Broke savecompatibility with NPP 0.5.4.
 Revised Mimic Code
 Changes to the savefile structure.
 Player ghosts can only appear at dungeon creation.
+In Wizard mode, editing a character now gives lets the player to edit player fame as well.
 
 NPP 0.5.4 changes:
 The edges of the detected trap areas now show up onscreen.
