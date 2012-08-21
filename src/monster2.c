@@ -2443,7 +2443,12 @@ static bool place_mimic_object(int y, int x, int r_idx)
 	object_wipe(o_ptr);
 
 	/* Create either a gold mimic or an object mimic */
-	if (k_info[o_ptr->k_idx].tval == TV_GOLD) make_gold(o_ptr);
+	if (k_info[k_idx].tval == TV_GOLD)
+	{
+		coin_type = k_info[k_idx].sval;
+		make_gold(o_ptr);
+		coin_type = 0;
+	}
 	else
 	{
 		object_prep(o_ptr, k_idx);

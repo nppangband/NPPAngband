@@ -9442,7 +9442,7 @@ static bool place_monsters_objects(void)
 	/* Put some monsters in the dungeon */
 	for (i = mon_gen; i > 0; i--)
 	{
-		(void)alloc_monster(0, 0L);
+		(void)alloc_monster(0, (MPLACE_SLEEP | MPLACE_GROUP));
 	}
 
 	/* Ensure quest monsters */
@@ -10516,7 +10516,7 @@ static void town_gen(void)
 	for (i = 0; i < residents; i++)
 	{
 		/* Make a resident */
-		(void)alloc_monster(3, 0L);
+		(void)alloc_monster(3, (MPLACE_SLEEP | MPLACE_GROUP));
 	}
 }
 

@@ -440,12 +440,15 @@ static void process_mimics(void)
 	for (i = 1; i < o_max; i++)
 	{
 		object_type *o_ptr = &o_list[i];
+		monster_race *r_ptr;
 
 		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
 		/* Only work with the mimic objects */
 		if (!o_ptr->mimic_r_idx) continue;
+
+		r_ptr = &r_info[o_ptr->mimic_r_idx];
 
 		/* Determine object location */
 		/* Held by a monster */
@@ -465,6 +468,20 @@ static void process_mimics(void)
 		{
 			obj_y = o_ptr->iy;
 			obj_x = o_ptr->ix;
+		}
+
+		/*
+		 * If the mimic can't cast, wait until the player is right next to it to come out of hiding
+		 * Hack - make an exception for creeping coins (so pits/nests are still dangerous)
+		 *
+		 */
+		if ((!r_ptr->freq_ranged) && (o_ptr->tval != TV_GOLD))
+		{
+			if ((ABS(obj_y - p_ptr->py) <= 1)  && (ABS(obj_x - p_ptr->px) <= 1))
+			{
+				reveal_mimic(i, o_ptr->marked);
+			}
+			continue;
 		}
 
 		/* get the distance to player */
@@ -964,7 +981,7 @@ static void process_world(void)
 					}
 				}
 
-				if (place_monster_aux(y, x, best_r_idx, MPLACE_SLEEP))
+				if (place_monster_aux(y, x, best_r_idx, (MPLACE_SLEEP | MPLACE_GROUP)))
 				{
 
 					/* Scan the monster list */
@@ -1091,7 +1108,7 @@ static void process_world(void)
 	if (one_in_(MAX_M_ALLOC_CHANCE))
 	{
 		/* Make a new monster, but not on themed levels */
-		if (feeling < LEV_THEME_HEAD) (void)alloc_monster(MAX_SIGHT + 5, (MPLACE_NO_MIMIC | MPLACE_NO_GHOST));
+		if (feeling < LEV_THEME_HEAD) (void)alloc_monster(MAX_SIGHT + 5, (MPLACE_SLEEP | MPLACE_GROUP | MPLACE_NO_MIMIC | MPLACE_NO_GHOST));
 	}
 
 	/* Hack - if there is a ghost now, and there was not before,
