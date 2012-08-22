@@ -1002,6 +1002,7 @@ void display_monlist(void)
 	for (i = 1; i < mon_max; i++)
 	{
 		m_ptr = &mon_list[i];
+		r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Ignore dead monsters */
 		if (!m_ptr->r_idx) continue;
@@ -1009,12 +1010,14 @@ void display_monlist(void)
 		/* Only consider visible monsters */
 		if (!m_ptr->ml) continue;
 
+		/* Hack - ignore lurkers and trappers */
+		if (r_ptr->d_char == '.') continue;
+
 		/* If this is the first one of this type, count the type */
 		if (!list[m_ptr->r_idx].count) type_count++;
 		if (!list[m_ptr->r_idx].s_attr)
 		{
-			/* Get the monster info */
-			r_ptr = &r_info[m_ptr->r_idx];
+
 
 			list[m_ptr->r_idx].s_attr = m_ptr->m_attr ? m_ptr->m_attr : r_ptr->x_attr;
 		}
