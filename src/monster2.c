@@ -1011,7 +1011,7 @@ void display_monlist(void)
 		if (!m_ptr->ml) continue;
 
 		/* Hack - ignore lurkers and trappers */
-		if (r_ptr->d_char == '.') continue;
+		if (r_ptr->d_char == ".") continue;
 
 		/* If this is the first one of this type, count the type */
 		if (!list[m_ptr->r_idx].count) type_count++;
