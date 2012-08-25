@@ -2158,7 +2158,7 @@ static s16b get_mimic_k_idx(int r_idx)
 			cptr name = (r_name + r_ptr->name);
 
 			/* 	Handle scrolls first */
-			if (strstr(name, "scroll"))
+			if (strstr(name, "Scroll"))
 			{
 
 				/* Analyze every object */

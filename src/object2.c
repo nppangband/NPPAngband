@@ -2728,10 +2728,42 @@ static bool kind_is_headgear(int k_idx)
 }
 
 /*
- * Hack -- determine if a template is armor.
+ * Hack -- determine if a template is wearable armor (all types).
  *
  */
 static bool kind_is_armor(int k_idx)
+{
+	object_kind *k_ptr = &k_info[k_idx];
+
+	/* Analyze the item type */
+	switch (k_ptr->tval)
+	{
+		/* Armor -- suitable  unless damaged */
+		case TV_HARD_ARMOR:
+		case TV_SOFT_ARMOR:
+		case TV_DRAG_ARMOR:
+		case TV_DRAG_SHIELD:
+		case TV_SHIELD:
+		case TV_CLOAK:
+		case TV_BOOTS:
+		case TV_GLOVES:
+		case TV_HELM:
+		case TV_CROWN:
+		{
+			if (k_ptr->to_a < 0) return (FALSE);
+			return (TRUE);
+		}
+	}
+
+	/* Assume not armor */
+	return (FALSE);
+}
+
+/*
+ * Hack -- determine if a template is armor.
+ *
+ */
+static bool kind_is_body_armor(int k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -3401,7 +3433,7 @@ bool make_object(object_type *j_ptr, bool good, bool great, int objecttype, bool
 			else if (objecttype == DROP_TYPE_SCROLL) 				get_obj_num_hook = kind_is_scroll;
 			else if (objecttype == DROP_TYPE_SHIELD) 				get_obj_num_hook = kind_is_shield;
 			else if (objecttype == DROP_TYPE_WEAPON) 				get_obj_num_hook = kind_is_weapon;
-			else if (objecttype == DROP_TYPE_ARMOR) 				get_obj_num_hook = kind_is_armor;
+			else if (objecttype == DROP_TYPE_ARMOR) 				get_obj_num_hook = kind_is_body_armor;
 			else if (objecttype == DROP_TYPE_BOOTS) 				get_obj_num_hook = kind_is_boots;
 			else if (objecttype == DROP_TYPE_BOW) 					get_obj_num_hook = kind_is_bow;
 			else if (objecttype == DROP_TYPE_CLOAK)					get_obj_num_hook = kind_is_cloak;
@@ -3591,7 +3623,7 @@ bool prep_object_theme(int themetype)
 		}
 		case DROP_TYPE_ARMOR:
 		{
-			get_obj_num_hook = kind_is_armor;
+			get_obj_num_hook = kind_is_body_armor;
 			break;
 		}
 		case DROP_TYPE_BOOTS:
@@ -3654,7 +3686,7 @@ int get_object_mimic_k_idx(const monster_race *r_ptr)
 {
 	int k_idx = 0;
 
-	if (r_ptr->d_char == ')') get_obj_num_hook = kind_is_shield;
+	if (r_ptr->d_char == ')') get_obj_num_hook = kind_is_armor;
 	else if (r_ptr->d_char == '|') get_obj_num_hook = kind_is_weapon;
 	else if (r_ptr->d_char == '?') get_obj_num_hook = kind_is_dungeon_spellbook;
 	else if (r_ptr->d_char == '[') get_obj_num_hook = kind_is_dragarmor;
