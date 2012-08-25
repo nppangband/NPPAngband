@@ -1231,7 +1231,7 @@ static void vault_monsters(int y1, int x1, int num)
 			if (!cave_empty_bold(y, x)) continue;
 
 			/* Place the monster (allow groups) */
-			(void)place_monster(y, x, (MPLACE_SLEEP | MPLACE_GROUP | MPLACE_NO_MIMIC | MPLACE_NO_GHOST));
+			(void)place_monster(y, x, (MPLACE_SLEEP | MPLACE_GROUP));
 
 			break;
 		}
@@ -2062,6 +2062,7 @@ static bool vault_aux_undead(int r_idx)
 	return (TRUE);
 }
 
+
 /*
  * Helper function for "monster pit (orc)"
  */
@@ -2240,6 +2241,28 @@ static bool vault_aux_dragon(int r_idx)
 	/* Okay */
 	return (TRUE);
 }
+
+/*
+ * Helper function for "monster pit (servants of the valar)"
+ */
+static bool vault_aux_valar_servant(int r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Decline unique monsters if a nest or pit*/
+	if ((!allow_uniques) &&
+		(r_ptr->flags1 & (RF1_UNIQUE))) return (FALSE);
+
+	/* Hack -- Require "A" monsters */
+	if (!strchr("A", r_ptr->d_char)) return (FALSE);
+
+	/*no player ghosts*/
+	if (r_ptr->flags2 & (RF2_PLAYER_GHOST)) return (FALSE);
+
+	/* Okay */
+	return (TRUE);
+}
+
 
 /*
  * Helper function for "monster pit (dragon)"
@@ -2427,6 +2450,7 @@ void get_mon_hook(byte theme)
 	else if (theme == LEV_THEME_DEMON_MAJOR)	get_mon_num_hook = vault_aux_major_demon;
 	else if (theme == LEV_THEME_CAVE_DWELLER)	get_mon_num_hook = vault_aux_orc_ogre_troll_giant;
 	else if (theme == LEV_THEME_UNDEAD)			get_mon_num_hook = vault_aux_undead;
+	else if (theme == LEV_THEME_VALAR_SERVANTS)	get_mon_num_hook = vault_aux_valar_servant;
 }
 
 /*return a theme for a monster nest*/
@@ -2467,7 +2491,7 @@ byte get_nest_theme(int nestlevel, bool quest_theme)
 	else if (whatnest <= 50)
 	{
 		if (one_in_(2))			return LEV_THEME_CAVE_DWELLER;
-		else 				return LEV_THEME_DRAGON_YOUNG;
+		else 					return LEV_THEME_DRAGON_YOUNG;
 	}
 
 	/*Animals or humanoids*/
@@ -2478,7 +2502,11 @@ byte get_nest_theme(int nestlevel, bool quest_theme)
 	}
 
 	/*Monster nest (undead) */
-	else if (whatnest <=95)		return LEV_THEME_UNDEAD;
+	else if (whatnest <=95)
+	{
+		if (one_in_(2))			return LEV_THEME_VALAR_SERVANTS;
+		else 					return LEV_THEME_UNDEAD;
+	}
 
 	/*Ancient Dragon Nest*/
 	else						return LEV_THEME_DRAGON_ANCIENT;
@@ -2531,7 +2559,11 @@ byte get_pit_theme(int pitlevel, bool quest_theme)
 	}
 
 	/* Giant pit */
-	else if ((whatpit <= 60) && (effective_depth(p_ptr->depth) <= 80))	return LEV_THEME_GIANT;
+	else if ((whatpit <= 60) && (effective_depth(p_ptr->depth) <= 80))
+	{
+		if (one_in_(2))		return LEV_THEME_VALAR_SERVANTS;
+		else 				return LEV_THEME_GIANT;
+	}
 
 	/* Dragon pit */
 	else if (whatpit <= 80)
@@ -2554,11 +2586,17 @@ byte get_pit_theme(int pitlevel, bool quest_theme)
 		}
 	}
 
-	/* Ancient Dragon pit */
-	else if (whatpit <= 90)	return LEV_THEME_DRAGON_ANCIENT;
-
-	/* Demon pit */
-	else					return LEV_THEME_DEMON_MAJOR;
+	/* Either ancient Dragon pit, Major Demon pit, or Servant of the Valar Pit */
+	else
+	{
+		/* Pick dragon type */
+		switch (rand_int(3))
+		{
+			case 1: return LEV_THEME_DRAGON_ACID;
+			case 2: return LEV_THEME_DRAGON_ANCIENT;
+			default:return LEV_THEME_VALAR_SERVANTS;
+		}
+	}
 }
 
 
@@ -6657,8 +6695,8 @@ byte get_level_theme(s16b orig_theme_num, bool quest_level)
 	/* Giant, animal, or humanoid pit */
 	else if ((theme_depth <= 60) && (orig_theme_num <= 80))
 	{
-		/* Giant pit */
-		if (one_in_(4))			return (LEV_THEME_HUMANOID);
+		if (one_in_(5))			return (LEV_THEME_VALAR_SERVANTS);
+		else if (one_in_(4))	return (LEV_THEME_HUMANOID);
 		else if (one_in_(3))	return (LEV_THEME_UNDEAD);
 		else if (one_in_(2))	return (LEV_THEME_GIANT);
 		else 					return (LEV_THEME_ANIMAL);
@@ -6690,8 +6728,10 @@ byte get_level_theme(s16b orig_theme_num, bool quest_level)
 
 	else
 	{
+		if (one_in_(3))		return (LEV_THEME_VALAR_SERVANTS);
+
 		/* Ancient Dragon pit */
-	    if one_in_(2)	return (LEV_THEME_DRAGON_ANCIENT);
+		else if one_in_(2)	return (LEV_THEME_DRAGON_ANCIENT);
 
 		/* > 90 - Demon pit */
 		else			return (LEV_THEME_DEMON_MAJOR);

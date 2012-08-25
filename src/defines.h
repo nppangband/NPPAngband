@@ -654,7 +654,8 @@ enum
 #define LEV_THEME_CAVE_DWELLER		22	/*cave dweller*/
 #define LEV_THEME_UNDEAD			23	/*undead*/
 #define LEV_THEME_DRAGON_ELEMENTAL  24  /*Elemental Dragons*/
-#define LEV_THEME_TAIL				25
+#define LEV_THEME_VALAR_SERVANTS	25  /* Servants of the Valar*/
+#define LEV_THEME_TAIL				26
 
 #define PIT_LEVEL_BOOST				6
 #define NEST_LEVEL_BOOST			5
