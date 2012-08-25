@@ -1747,8 +1747,8 @@ cptr feeling_themed_level[LEV_THEME_TAIL] =
 	"major demon",
 	"cave dweller",
 	"undead",
-	"elemental dragons"
-	"servants of the valar"
+	"elemental dragons",
+	"servants of the Valar"
 };
 
 
