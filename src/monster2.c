@@ -1011,7 +1011,7 @@ void display_monlist(void)
 		if (!m_ptr->ml) continue;
 
 		/* Hack - ignore lurkers and trappers */
-		if (r_ptr->d_char == ".") continue;
+		if (r_ptr->d_char == '.') continue;
 
 		/* If this is the first one of this type, count the type */
 		if (!list[m_ptr->r_idx].count) type_count++;
@@ -2133,57 +2133,75 @@ static s16b get_mimic_k_idx(int r_idx)
 			/* Look for textual clues */
 			if (strstr(name, " copper "))     	return (lookup_kind(TV_GOLD, SV_GOLD_COPPER));
 			if (strstr(name, " silver "))     	return (lookup_kind(TV_GOLD, SV_GOLD_SILVER));
+			if (strstr(name, " garnet"))       	return (lookup_kind(TV_GOLD, SV_GOLD_GARNET));
 			if (strstr(name, " gold"))       	return (lookup_kind(TV_GOLD, SV_GOLD_GOLD));
 			if (strstr(name, " mithril"))    	return (lookup_kind(TV_GOLD, SV_GOLD_MITHRIL));
 			if (strstr(name, " opal"))    		return (lookup_kind(TV_GOLD, SV_GOLD_OPALS));
 			if (strstr(name, " sapphire"))    	return (lookup_kind(TV_GOLD, SV_GOLD_SAPPHIRES));
 			if (strstr(name, " ruby"))    		return (lookup_kind(TV_GOLD, SV_GOLD_RUBIES));
+			if (strstr(name, " emerald"))    	return (lookup_kind(TV_GOLD, SV_GOLD_EMERALD));
 			if (strstr(name, " diamond"))    	return (lookup_kind(TV_GOLD, SV_GOLD_DIAMOND));
 			if (strstr(name, " adamantite ")) 	return (lookup_kind(TV_GOLD, SV_GOLD_ADAMANTITE));
 			break;
 		}
 
-		/*assumes scroll, this would have to be altered for magic books*/
+		/*
+		 * Various mimics, such as weapon mimic, armor and dragon armor mimic, and dungeon spellbook.
+		 * Special handling for scrolls, since they share the same character as the
+		 * dungeon spellbook.
+		 */
+		case ')':
+		case '|':
 		case '?':
+		case '[':
 		{
-			/* Analyze every object */
-			for (i = 1; i < z_info->k_max; i++)
+			cptr name = (r_name + r_ptr->name);
+
+			/* 	Handle scrolls first */
+			if (strstr(name, "scroll"))
 			{
-				object_kind *k_ptr = &k_info[i];
 
-				/* Skip "empty" objects */
-				if (!k_ptr->name) continue;
-
-				/*skip all non-scrolls*/
-				if (k_ptr->tval != TV_SCROLL) continue;
-
-				/*don't mimic known items*/
-				if (k_ptr->aware) continue;
-
-				/*skip artifacts, let's not annoy the player*/
-				if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
-
-				/*we have a suitable object to mimic*/
-				if ((final_value == 0) || (one_in_(4))) final_value = i;
-
-			}
-
-			/* Mimic a powerful scroll if they are all identified */
-			if (!final_value)
-			{
-				i = randint(5);
-				switch (i)
+				/* Analyze every object */
+				for (i = 1; i < z_info->k_max; i++)
 				{
-					case (1): 	return (lookup_kind(TV_SCROLL, SV_SCROLL_RUNE_OF_PROTECTION));
-					case (2): 	return (lookup_kind(TV_SCROLL, SV_SCROLL_BANISHMENT));
-					case (3): 	return (lookup_kind(TV_SCROLL, SV_SCROLL_MASS_BANISHMENT));
-					case (4): 	return (lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT));
-					default:	return (lookup_kind(TV_SCROLL, SV_SCROLL_STAR_ACQUIREMENT));
+					object_kind *k_ptr = &k_info[i];
+
+					/* Skip "empty" objects */
+					if (!k_ptr->name) continue;
+
+					/*skip all non-scrolls*/
+					if (k_ptr->tval != TV_SCROLL) continue;
+
+					/*don't mimic known items*/
+					if (k_ptr->aware) continue;
+
+					/*skip artifacts, let's not annoy the player*/
+					if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
+
+					/*we have a suitable object to mimic*/
+					if ((final_value == 0) || (one_in_(4))) final_value = i;
+
 				}
+
+				/* Mimic a powerful scroll if they are all identified */
+				if (!final_value)
+				{
+					i = randint(5);
+					switch (i)
+					{
+						case (1): 	return (lookup_kind(TV_SCROLL, SV_SCROLL_RUNE_OF_PROTECTION));
+						case (2): 	return (lookup_kind(TV_SCROLL, SV_SCROLL_BANISHMENT));
+						case (3): 	return (lookup_kind(TV_SCROLL, SV_SCROLL_MASS_BANISHMENT));
+						case (4): 	return (lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT));
+						default:	return (lookup_kind(TV_SCROLL, SV_SCROLL_STAR_ACQUIREMENT));
+					}
+				}
+
+				return(final_value);
 			}
 
-
-			return(final_value);
+			/* Handle the armor, dragon armor, weapon, and dungeon spellbook mimics */
+			return get_object_mimic_k_idx(r_ptr);
 		}
 
 		case '!':
@@ -2206,7 +2224,7 @@ static s16b get_mimic_k_idx(int r_idx)
 				if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
 
 				/*we have a suitable object to mimic*/
-				if ((final_value == 0) || (one_in_(3))) final_value = i;
+				if ((final_value == 0) || (one_in_(10))) final_value = i;
 
 			}
 
@@ -2224,9 +2242,7 @@ static s16b get_mimic_k_idx(int r_idx)
 				}
 			}
 
-				return(final_value);
-
-
+			return(final_value);
 		}
 
 		case '=':
@@ -2249,7 +2265,7 @@ static s16b get_mimic_k_idx(int r_idx)
 				if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
 
 				/*we have a suitable object to mimic*/
-				if ((final_value == 0) || (one_in_(3))) final_value = i;
+				if ((final_value == 0) || (one_in_(5))) final_value = i;
 
 			}
 
@@ -2291,7 +2307,7 @@ static s16b get_mimic_k_idx(int r_idx)
 				if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
 
 				/*we have a suitable object to mimic*/
-				if ((final_value == 0) || (one_in_(3))) final_value = i;
+				if ((final_value == 0) || (one_in_(6))) final_value = i;
 
 			}
 
@@ -2306,6 +2322,49 @@ static s16b get_mimic_k_idx(int r_idx)
 					case (3): 	return (lookup_kind(TV_STAFF, SV_STAFF_HOLINESS));
 					case (4): 	return (lookup_kind(TV_STAFF, SV_STAFF_BANISHMENT));
 					default:	return (lookup_kind(TV_STAFF, SV_STAFF_MASS_IDENTIFY));
+				}
+			}
+
+			return(final_value);
+		}
+
+		/*mushrooms*/
+		case ',':
+		{
+			/* Analyze every object */
+			for (i = 1; i < z_info->k_max; i++)
+			{
+				object_kind *k_ptr = &k_info[i];
+
+				/* Skip "empty" objects */
+				if (!k_ptr->name) continue;
+
+				/*skip all non-mushrooms*/
+				if (k_ptr->tval != TV_FOOD) continue;
+				if (k_ptr->sval >= SV_FOOD_RATION) continue;
+
+				/*don't mimic known items*/
+				if (k_ptr->aware) continue;
+
+				/*skip artifacts, let's not annoy the player*/
+				if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
+
+				/*we have a suitable object to mimic*/
+				if ((final_value == 0) || (one_in_(5))) final_value = i;
+
+			}
+
+			/* Mimic a good mushroom if they are all identified */
+			if (!final_value)
+			{
+				i = randint(5);
+				switch (i)
+				{
+					case (1): 	return (lookup_kind(TV_FOOD, SV_FOOD_RESTORING));
+					case (2): 	return (lookup_kind(TV_FOOD, SV_FOOD_CURE_SERIOUS));
+					case (3): 	return (lookup_kind(TV_FOOD, SV_FOOD_BLINDNESS));
+					case (4): 	return (lookup_kind(TV_FOOD, SV_FOOD_RESTORE_STR));
+					default:	return (lookup_kind(TV_FOOD, SV_FOOD_RESTORE_CON));
 				}
 			}
 
@@ -2337,7 +2396,7 @@ static s16b get_mimic_k_idx(int r_idx)
 					if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
 
 					/*we have a suitable object to mimic*/
-					if ((final_value == 0) || (one_in_(3))) final_value = i;
+					if ((final_value == 0) || (one_in_(5))) final_value = i;
 
 				}
 
@@ -2378,7 +2437,7 @@ static s16b get_mimic_k_idx(int r_idx)
 					if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
 
 					/*we have a suitable object to mimic*/
-					if ((final_value == 0) || (one_in_(3))) final_value = i;
+					if ((final_value == 0) || (one_in_(5))) final_value = i;
 
 				}
 
@@ -2403,6 +2462,46 @@ static s16b get_mimic_k_idx(int r_idx)
 			return(final_value);
 		}
 
+		case '"':
+		{
+			/* Analyze every object */
+			for (i = 1; i < z_info->k_max; i++)
+			{
+				object_kind *k_ptr = &k_info[i];
+
+				/* Skip "empty" objects */
+				if (!k_ptr->name) continue;
+
+				/*skip all non-amulets*/
+				if (k_ptr->tval != TV_AMULET) continue;
+
+				/*don't mimic known items*/
+				if (k_ptr->aware) continue;
+
+				/*skip artifacts, let's not annoy the player*/
+				if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
+
+				/*we have a suitable object to mimic*/
+				if ((final_value == 0) || (one_in_(5))) final_value = i;
+
+			}
+
+			/* Mimic a good amulet if they are all identified */
+			if (!final_value)
+			{
+				i = randint(5);
+				switch (i)
+				{
+					case (1): 	return (lookup_kind(TV_AMULET, SV_AMULET_THE_MAGI));
+					case (2): 	return (lookup_kind(TV_AMULET, SV_AMULET_DEVOTION));
+					case (3): 	return (lookup_kind(TV_AMULET, SV_AMULET_WEAPONMASTERY));
+					case (4): 	return (lookup_kind(TV_AMULET, SV_AMULET_TRICKERY));
+					default:	return (lookup_kind(TV_AMULET, SV_AMULET_RESIST));
+				}
+			}
+
+			return(final_value);
+		}
 
 		/*chests*/
 		case '~':
@@ -2413,8 +2512,8 @@ static s16b get_mimic_k_idx(int r_idx)
 			if (i <  7) return (lookup_kind(TV_CHEST, (SV_CHEST_MIN_SMALL + rand_int (3))));
 			else if (i <  10) return (lookup_kind(TV_CHEST, (SV_CHEST_MIN_LARGE + rand_int (3))));
 			else return (lookup_kind(TV_CHEST, SV_CHEST_JEWELED_LARGE));
-
 		}
+
 		default: return (0);
 	}
 
@@ -2431,13 +2530,6 @@ static bool place_mimic_object(int y, int x, int r_idx)
 	s16b k_idx = get_mimic_k_idx(r_idx);
 	object_type object_type_body;
 	object_type *o_ptr = &object_type_body;
-
-	if (!k_idx)
-	{
-		monster_race *r_ptr = &r_info[r_idx];
-		playtesting("mimic creation failed");
-		playtesting (format("tried to make a %s ", r_name + r_ptr->name));
-	}
 
 	/* Failure */
 	if (!k_idx) return (FALSE);

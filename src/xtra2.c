@@ -201,22 +201,26 @@ int get_coin_type(const monster_race *r_ptr)
 		/* Look for textual clues */
 		if (strstr(name, " copper ")) return (SV_GOLD_COPPER);
 		if (strstr(name, " silver ")) return (SV_GOLD_SILVER);
+		if (strstr(name, " garnet ")) return (SV_GOLD_GARNET);
 		if (strstr(name, " gold ")) return (SV_GOLD_GOLD);
 		if (strstr(name, " mithril ")) return (SV_GOLD_MITHRIL);
 		if (strstr(name, " opal")) return (SV_GOLD_OPALS);
 		if (strstr(name, " sapphire")) return (SV_GOLD_SAPPHIRES);
 		if (strstr(name, " ruby")) return (SV_GOLD_RUBIES);
+		if (strstr(name, " emerald"))return (SV_GOLD_EMERALD);
 		if (strstr(name, " diamond")) return (SV_GOLD_DIAMOND);
 		if (strstr(name, " adamantite ")) return (SV_GOLD_ADAMANTITE);
 
 		/* Look for textual clues */
 		if (strstr(name, " Copper ")) return (SV_GOLD_COPPER);
 		if (strstr(name, " Silver ")) return (SV_GOLD_SILVER);
+		if (strstr(name, " Garnet ")) return (SV_GOLD_GARNET);
 		if (strstr(name, " Gold ")) return (SV_GOLD_GOLD);
 		if (strstr(name, " Mithril ")) return (SV_GOLD_MITHRIL);
 		if (strstr(name, " Opal")) return (SV_GOLD_OPALS);
 		if (strstr(name, " Sapphire")) return (SV_GOLD_SAPPHIRES);
 		if (strstr(name, " Ruby")) return (SV_GOLD_RUBIES);
+		if (strstr(name, " Emerald"))    return (SV_GOLD_EMERALD);
 		if (strstr(name, " Diamond")) return (SV_GOLD_DIAMOND);
 		if (strstr(name, " Adamantite ")) return (SV_GOLD_ADAMANTITE);
 	}

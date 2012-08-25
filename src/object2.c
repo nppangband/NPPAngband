@@ -2476,6 +2476,31 @@ static bool kind_is_bookshop(int k_idx)
 	return (FALSE);
 }
 
+/*
+ * Hack -- determine if a template is "a dungeon spellbook".
+ *
+ */
+bool kind_is_dungeon_spellbook(int k_idx)
+{
+	object_kind *k_ptr = &k_info[k_idx];
+
+	/* Analyze the item type */
+	switch (k_ptr->tval)
+	{
+		/* Books **/
+
+		case TV_MAGIC_BOOK:
+		case TV_DRUID_BOOK:
+		case TV_PRAYER_BOOK:
+		{
+			if (k_ptr->sval >= SV_BOOK_MIN_GOOD) return (TRUE);
+			return(FALSE);
+		}
+
+	}
+	return(FALSE);
+
+}
 
 /*
  * Hack -- determine if a template is "a priestly dungeon prayerbook".
@@ -2728,10 +2753,10 @@ static bool kind_is_armor(int k_idx)
 }
 
 /*
- * Hack -- determine if a template is Dragon Scale Mail.
+ * Hack -- determine if a template is Dragon Scale Mail or shield.
  *
  */
-static bool kind_is_dragarmor(int k_idx)
+bool kind_is_dragarmor(int k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -2802,7 +2827,7 @@ static bool kind_is_cloak(int k_idx)
  * Hack -- determine if a template is a shield.
  *
  */
-static bool kind_is_shield(int k_idx)
+bool kind_is_shield(int k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -2958,7 +2983,7 @@ static bool kind_is_polearm(int k_idx)
 /*
  * Hack -- determine if a template is a weapon.
  */
-static bool kind_is_weapon(int k_idx)
+bool kind_is_weapon(int k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -3618,6 +3643,37 @@ bool prep_object_theme(int themetype)
 	get_obj_num_prep();
 
 	return(TRUE);
+
+}
+
+
+/*
+ * Get the mimic k_idx for certain objects.
+ */
+int get_object_mimic_k_idx(const monster_race *r_ptr)
+{
+	int k_idx = 0;
+
+	if (r_ptr->d_char == ')') get_obj_num_hook = kind_is_shield;
+	else if (r_ptr->d_char == '|') get_obj_num_hook = kind_is_weapon;
+	else if (r_ptr->d_char == '?') get_obj_num_hook = kind_is_dungeon_spellbook;
+	else if (r_ptr->d_char == '[') get_obj_num_hook = kind_is_dragarmor;
+	/* Whoops! */
+	else return (0);
+
+	/* Prepare allocation table */
+	get_obj_num_prep();
+
+	/* Find an object to mimic */
+	while (!k_idx) k_idx = get_obj_num(effective_depth(p_ptr->depth));
+
+	/* Clear restriction */
+	get_obj_num_hook = NULL;
+
+	/* Prepare allocation table */
+	get_obj_num_prep();
+
+	return(k_idx);
 
 }
 

@@ -840,6 +840,7 @@ extern void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool 
 extern bool make_object(object_type *j_ptr, bool good, bool great, int objecttype, bool interesting);
 extern bool prep_store_object(int storetype);
 extern bool prep_object_theme(int themetype);
+extern int get_object_mimic_k_idx(const monster_race *r_ptr);
 extern bool make_gold(object_type *j_ptr);
 extern void place_object(int y, int x, bool good, bool great, int droptype);
 extern void place_quest_artifact(int y, int x);

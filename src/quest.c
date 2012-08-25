@@ -1891,6 +1891,9 @@ static bool place_mon_quest(int lev, bool fixed)
 		/*no player ghosts*/
 		if (r_ptr->flags2 & (RF2_PLAYER_GHOST)) continue;
 
+		/*no mimics */
+		if (r_ptr->flags1 & (RF1_CHAR_MIMIC)) continue;
+
 		/* Uniques only for unique quests*/
 		if (r_ptr->flags1 & (RF1_UNIQUE))
 		{
@@ -1910,11 +1913,6 @@ static bool place_mon_quest(int lev, bool fixed)
 			/*get the right difficulty*/
 			if (r_ptr->mon_power < min_diff) continue;
 			if (r_ptr->mon_power > max_diff) continue;
-
-			/*no quests for certain kinds of animals the guild wouldn't care about*/
-			/*lets see how this works without this for now
-			if ((strchr("BFIJKSabcejlrmw,", r_ptr->d_char)) &&
-			(!(r_ptr->flags2 & (RF2_SMART)))) continue;*/
 
 			/* Check if an immobile monster can still hurt the player from a distance */
 			if (r_ptr->flags1 & RF1_NEVER_MOVE)

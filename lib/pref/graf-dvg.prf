@@ -846,7 +846,7 @@ R:68:0x90:0x8D
 # Wolf, Farmer Maggot's dog
 R:69:0x8F:0xDE
 
-# Smeagol
+# Sm['e]agol
 R:70:0x8f:0xBC
 
 # Giant white rat
@@ -984,7 +984,7 @@ R:114:0x93:0x8F
 # Red naga
 R:115:0x90:0x8F
 
-# Mughash the Kobold Lord
+# Mugh[^a]sh the Kobold Lord
 R:116:0x95:0x81
 
 # Brown yeek
@@ -1113,7 +1113,7 @@ R:157:0x95:0x85
 # Pseudo-dragon
 R:158:0x8C:0xC7
 
-# Grishnakh, the Hill Orc
+# Grishn['a]kh, the Hill Orc
 R:159:0x95:0x86
 
 # Wormtongue, Agent of Saruman
@@ -1326,7 +1326,7 @@ R:228:0x92:0xAE
 # 2-headed hydra
 R:229:0x90:0xA1
 
-# Nar, the Dwarf
+# N['a]r, the Dwarf
 R:230:0x95:0x8B
 
 # Giant black dragon fly
@@ -1461,7 +1461,7 @@ R:273:0x8D:0xE0
 # Wyvern
 R:274:0x8C:0xC8
 
-# Ugluk, the Uruk
+# Ugl['u]k, the Uruk
 R:275:0x95:0x90
 
 # Black ooze
@@ -1488,7 +1488,7 @@ R:282:0x93:0x93
 # Master rogue
 R:283:0x84:0x94
 
-# Azog, King of the Uruk-Hai
+# Azog, King of the Uruk-hai
 R:284:0x95:0x91
 
 # Giant firefly
@@ -1512,16 +1512,16 @@ R:290:0x93:0xA1
 # Sangahyando of Umbar
 R:291:0x95:0x94
 
-# Angamaite of Umbar
+# Angamait["e] of Umbar
 R:292:0x95:0x95
 
 # 4-headed hydra
 R:293:0x90:0xA3
 
-# Ibun, Son of Mim
+# Ibun, Son of M[^i]m
 R:294:0x95:0x92
 
-# Khim, Son of Mim
+# Khim, Son of M[^i]m
 R:295:0x95:0x93
 
 # Giant brown tick
@@ -1545,7 +1545,7 @@ R:301:0x91:0x97
 # Dark elven druid
 R:302:0x8d:0x88
 
-# Pukelman
+# P['u]kel-man
 R:303:0x92:0x84
 
 # White wraith
@@ -1617,10 +1617,10 @@ R:325:0x93:0x9E
 # Colbran
 R:326:0x92:0x85
 
-# Mim, Betrayer of Turin
+# M[^i]m, Betrayer of T['u]rin
 R:327:0x95:0x97
 
-# Spirit Naga
+# Spirit naga
 R:328:0x90:0x91
 
 # Bat of Gorgoroth
@@ -1728,8 +1728,8 @@ R:362:0x8c:0x8C
 # Young gold dragon
 R:363:0x8c:0x89
 
-# Memory moss
-R:364:0x8e:0xDD
+# Creeping garnet gems
+R:364:0x85:0xde
 
 # Nexus quylthulg
 R:365:0x93:0x81
@@ -1875,7 +1875,7 @@ R:411:0x94:0x80
 # Silent watcher
 R:412:0x8E:0xDE
 
-# Mumak
+# M[^u]mak
 R:413:0x91:0xBD
 
 # Vorpal bunny
@@ -1974,7 +1974,7 @@ R:444:0x8c:0x91
 # Inertia drake
 R:445:0x8C:0xBA
 
-# Maglor, Son of Feanor
+# Maglor, Son of F["e]anor
 R:446:0x99:0xc4
 
 # The Queen Ant
@@ -2025,7 +2025,7 @@ R:461:0x94:0x87
 # 6-headed hydra
 R:462:0x90:0xA5
 
-# Maedhros, Son of Feanor
+# Maedhros, Son of F["e]anor
 R:463:0x99:0xc5
 
 # Night mare
@@ -2136,7 +2136,7 @@ R:498:0x95:0xA0
 # Chromatic hound
 R:499:0x90:0xcd
 
-# Mumak
+# M[^u]mak
 R:500:0x91:0xBF
 
 # Pallando the Blue
@@ -2187,7 +2187,7 @@ R:515:0x93:0x84
 # Nalfeshnee
 R:516:0x8d:0xA2
 
-# Radagast the brown
+# Radagast the Brown
 R:517:0x99:0xc6
 
 # Undead beholder
@@ -2244,7 +2244,7 @@ R:534:0x95:0xDF
 # Lesser Balrog
 R:535:0x8d:0xBA
 
-# Eol, the Dark Elf
+# E["o]l, the Dark Elf
 R:536:0x95:0xd6
 
 # Master mystic
@@ -2292,7 +2292,7 @@ R:550:0x95:0xBA
 # Barbazu
 R:551:0x8f:0xc3
 
-# Osse, Herald of Ulmo
+# Oss["e], Herald of Ulmo
 R:552:0x99:0xc9
 
 # 12-headed hydra
@@ -2301,7 +2301,7 @@ R:553:0x90:0xCF
 # Shelob, Spider of Darkness
 R:554:0x95:0x9B
 
-# Ar-Pharazon the Golden
+# Ar-Pharaz[^o]n the Golden
 R:555:0x95:0xd8
 
 # Lesser titan
@@ -2415,7 +2415,7 @@ R:591:0x8C:0xBE
 # Great Crystal Wyrm
 R:592:0x8c:0xc0
 
-# Great Inertia Wyrm
+# Great Wyrm of Inertia
 R:593:0x8c:0xc1
 
 # Beholder hive-mother
@@ -2463,7 +2463,7 @@ R:607:0x93:0x87
 # Horned Reaper
 R:608:0x8E:0x9B
 
-# Khamul, the Black Easterling
+# Kham[^u]l, the Black Easterling
 R:609:0x95:0xB9
 
 # Nightwalker
@@ -2571,37 +2571,37 @@ R:643:0x95:0xDA
 # Morgoth, Lord of Darkness
 R:644:0x95:0xDB
 
-# Skeleton (player ghost)
+# Skeleton
 R:645:0x94:0xc1
 
-# Zombie (player ghost)
+# Zombie
 R:646:0x94:0xc2
 
-# Spirit (player ghost)
+# Spirit
 R:647:0x94:0xc3
 
-# Mummy (player ghost)
+# Mummy
 R:648:0x94:0xc4
 
-# Wight (player ghost)
+# Wight
 R:649:0x94:0xc5
 
-# Ghost (player ghost)
+# Ghost
 R:650:0x94:0xc6
 
-# Vampire (player ghost)
+# Vampire
 R:651:0x94:0xc7
 
-# Phantom (player ghost)
+# Phantom
 R:652:0x94:0xc8
 
-# Lich (player ghost)
+# Lich
 R:653:0x94:0xc9
 
-# Nether Wraith (player ghost)
+# Nether Wraith
 R:654:0x94:0xca
 
-# Deathlord (player ghost)
+# Deathlord
 R:655:0x94:0xcb
 
 # Spawn of Ungoliant
@@ -2610,8 +2610,8 @@ R:656:0x99:0xc2
 # Descendant of Ungoliant
 R:657:0x99:0xc3
 
-# Lesser Servant of Manwe 
-R:658:0x99:0xa4 
+# Lesser Servant of Manw["e]
+R:658:0x99:0xa4
 
 # Lesser Servant of Varda
 R:659:0x99:0xa5
@@ -2622,10 +2622,10 @@ R:660:0x99:0xa6
 # Lesser Servant of Morgoth
 R:661:0x99:0xa7
 
-# Lesser Servant of Aule
+# Lesser Servant of Aul["e]
 R:662:0x99:0xa8
 
-# Lesser Servant of Orome 
+# Lesser Servant of Orom["e]
 R:663:0x99:0xa9
 
 # Lesser Servant of Mandos
@@ -2640,7 +2640,7 @@ R:666:0x99:0xac
 # Lesser Servant of Tulkas
 R:667:0x99:0xad
 
-# Servant of Manwe 
+# Servant of Manw["e]
 R:668:0x99:0xae
 
 # Servant of Varda
@@ -2652,10 +2652,10 @@ R:670:0x99:0xb0
 # Servant of Morgoth
 R:671:0x99:0xb1
 
-# Servant of Aule 
+# Servant of Aul["e]
 R:672:0x99:0xb2
 
-# Servant of Orome
+# Servant of Orom["e]
 R:673:0x99:0xb3
 
 # Servant of Mandos
@@ -2670,7 +2670,7 @@ R:676:0x99:0xb6
 # Servant of Tulkas
 R:677:0x99:0xb7
 
-# Greater Servant of Manwe
+# Greater Servant of Manw["e]
 R:678:0x99:0xb8
 
 # Greater Servant of Varda
@@ -2682,10 +2682,10 @@ R:680:0x99:0xba
 # Greater Servant of Morgoth
 R:681:0x99:0xbb
 
-# Greater Servant of Aule 
+# Greater Servant of Aul["e]
 R:682:0x99:0xbc
 
-# Greater Servant of Orome
+# Greater Servant of Orom["e]
 R:683:0x99:0xbd
 
 # Greater Servant of Mandos
@@ -2697,8 +2697,31 @@ R:685:0x99:0xbf
 # Greater Servant of Irmo
 R:686:0x99:0xc0
 
-# Greater Servant of Tulkas 
+# Greater Servant of Tulkas
 R:687:0x99:0xc1
+
+# Creeping emerald gems
+R:688:0x85:0xe3
+
+# Mushroom mimic
+R:689:0x85:0xed
+
+# Armor mimic
+R:690:0x85:0xee
+
+# Sword mimic
+R:691:0x85:0xf0
+
+# Amulet Mimic
+R:692:0x85:0xeb
+
+# Dungeon spellbook mimic
+R:693:0x85:0xec
+
+# Dragon armor Mimic
+R:694:0x85:0xf1
+
+
 
 # Object attr/char definitions
 

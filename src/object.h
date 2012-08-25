@@ -633,11 +633,13 @@
 
 #define SV_GOLD_COPPER			3
 #define SV_GOLD_SILVER			6
+#define SV_GOLD_GARNET			8
 #define SV_GOLD_GOLD			11
 #define SV_GOLD_OPALS			12
 #define SV_GOLD_SAPPHIRES		13
 #define SV_GOLD_RUBIES			14
 #define SV_GOLD_DIAMOND			15
+#define SV_GOLD_EMERALD			16
 #define SV_GOLD_MITHRIL			17
 #define SV_GOLD_ADAMANTITE		18
 

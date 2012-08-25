@@ -113,7 +113,7 @@ static struct
 	{ "k",        "Kobolds" },
 	{ "L",        "Lichs" },
 	{ "tp",		  "Men" },
-	{ "'$!?=._-",  "Mimics" },
+	{ "'$!?=._-"")[|,",  "Mimics" },
 	{ "m",        "Molds" },
 	{ ",",        "Mushroom Patches" },
 	{ "n",        "Nagas" },
