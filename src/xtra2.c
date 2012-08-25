@@ -745,7 +745,7 @@ void monster_death(int m_idx, int who)
 		/* Build magical stairs */
 		build_quest_stairs(y, x);
 
-		p_ptr->fame += 20;
+		p_ptr->fame += 150;
 		altered_inventory_counter += 50;
 	}
 
@@ -759,7 +759,7 @@ void monster_death(int m_idx, int who)
  		/* Redraw the "title" */
  		p_ptr->redraw |= (PR_TITLE);
 
-		p_ptr->fame += 50;
+		p_ptr->fame += 500;
 		altered_inventory_counter += 200;
 
 		/* Build magical stairs */
@@ -996,7 +996,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note, int who)
 			/* reputation bonus, except for the town unique */
 	    	if ((who == SOURCE_PLAYER) || (who == SOURCE_TRAP))
 	    	{
-	    		if ((r_ptr->level >= p_ptr->lev) || one_in_(2)) p_ptr->fame++;
+	    		if (r_ptr->level >= p_ptr->lev)p_ptr->fame += 5;
 	    		altered_inventory_counter += 2;
 	    	}
 		}
@@ -1007,8 +1007,8 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note, int who)
 		if ((r_ptr->flags2 & (RF2_PLAYER_GHOST)) &&
 			((who == SOURCE_PLAYER) || (who == SOURCE_TRAP)))
 		{
-			/*Another point of player fame*/
-			p_ptr->fame++;
+			/* fame boost*/
+			p_ptr->fame += 7;
 			altered_inventory_counter += 5;
 
 		}

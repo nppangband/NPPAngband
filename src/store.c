@@ -714,7 +714,7 @@ static u32b price_services(int store_num, int choice)
 	/*Guild price factoring*/
 	else
 	{
-		if (p_ptr->fame < 100) price += price * (100 - p_ptr->fame) / 100;
+		if (p_ptr->fame < 1000) price += price * (1000 - p_ptr->fame) / 1000;
 	}
 
 	return(price);
@@ -1194,7 +1194,7 @@ static bool store_service_aux(int store_num, s16b choice)
 
 			/*re-use the o_value variable for a completely different purpose*/
 			/*extra power bonus for expensive items and high player fame*/
-			o_value = p_ptr->fame / 2 + MAX((k_ptr->cost / 2000), p_ptr->fame / 5);
+			o_value = p_ptr->fame / 20 + MAX((k_ptr->cost / 2000), p_ptr->fame / 50);
 
 		   	/*Hack - add in any to-hit and to-value, since they will be erased*/
 			o_value += (o_ptr->to_h + o_ptr->to_d + o_ptr->to_a / 2);

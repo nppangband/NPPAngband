@@ -539,7 +539,7 @@ static void grant_reward_gold(void)
 	object_generation_mode = OB_GEN_MODE_QUEST;
 
     /*base amount of gold on fame*/
-	repeats = p_ptr->fame / 4;
+	repeats = p_ptr->fame / 40;
 
 	/*but put in a minimum*/
 	if (repeats < 3) repeats = 3;
@@ -616,19 +616,19 @@ void get_title(char *buf, size_t max)
 {
 
 	/* Player's title */
-	if (p_ptr->fame > 150) my_strcpy(buf, "oh glorious one", max);
-	else if (p_ptr->fame > 110) my_strcpy(buf, "oh great one", max);
-	else if (p_ptr->fame > 80)
+	if (p_ptr->fame > 1500) my_strcpy(buf, "oh glorious one", max);
+	else if (p_ptr->fame > 1100) my_strcpy(buf, "oh great one", max);
+	else if (p_ptr->fame > 800)
 	{
 		if (p_ptr->psex == SEX_MALE) my_strcpy(buf, "my lord", max);
 		else my_strcpy(buf, "my lady", max);
 	}
-	else if (p_ptr->fame > 50)
+	else if (p_ptr->fame > 500)
 	{
 		if (p_ptr->psex == SEX_MALE) my_strcpy(buf, "sir", max);
 		else my_strcpy(buf, "madam", max);
 	}
-	else if (p_ptr->fame > 20)
+	else if (p_ptr->fame > 200)
 	{
 		if (!op_ptr->full_name[0])
 		{
@@ -658,7 +658,7 @@ void prt_rep_guild(int rep_y, int rep_x)
 	rep_x += strlen(message);
 
 	/* Player's reputation */
-	switch (p_ptr->fame / 5)
+	switch (p_ptr->fame / 50)
 	{
 		case 0:
 		{
@@ -933,7 +933,7 @@ static void grant_reward_object(byte depth, byte type)
 		message_flush();
 
 		/*actually create the Randart, mark it if so, if not, make a tailored reward*/
-		if (make_one_randart(i_ptr, ((((p_ptr->fame * 8) / 10)  + q_ptr->base_level) / 2), TRUE))
+		if (make_one_randart(i_ptr, ((((p_ptr->fame * 80) / 100)  + q_ptr->base_level) / 2), TRUE))
 		{
 			got_item = TRUE;
 		}
@@ -1038,7 +1038,7 @@ static void grant_reward_object(byte depth, byte type)
 			}
 
 			/* Maybe give the ironman book as a reward? */
-			if ((!got_item) && ((randint(100) + 100) < p_ptr->fame))
+			if ((!got_item) && ((randint(1000) + 1000) < p_ptr->fame))
 			{
 
 				/* Now, make the spells accessable. */
@@ -1433,13 +1433,13 @@ static void grant_reward_object(byte depth, byte type)
 		{
 			case REWARD_TAILORED:
 			{
-				repeats = p_ptr->fame / 8;
+				repeats = p_ptr->fame / 80;
 				if (repeats < 3) repeats = 3;
 				break;
 			}
 			case REWARD_GREAT_ITEM:
 			{
-				repeats = p_ptr->fame / 10;
+				repeats = p_ptr->fame / 100;
 				if (repeats < 2) repeats = 2;
 				break;
 			}
@@ -1447,7 +1447,7 @@ static void grant_reward_object(byte depth, byte type)
 			/*good reward*/
 			default:
 			{
-				repeats = p_ptr->fame / 13;
+				repeats = p_ptr->fame / 130;
 				if (repeats < 1) repeats = 1;
 				break;
 			}
@@ -1493,7 +1493,7 @@ static void grant_reward_object(byte depth, byte type)
 			/*sometimes make good counter true to give 4 artifact rarity rolls*/
 			if (type == REWARD_TAILORED)
 			{
-				if (randint(125) < p_ptr->fame) do_great = TRUE;
+				if (randint(1250) < p_ptr->fame) do_great = TRUE;
 			}
 			else if (type == REWARD_GREAT_ITEM) do_great = TRUE;
 
@@ -1779,7 +1779,7 @@ static bool custom_randart_reward(int chance, int dice)
 	if (!adult_no_artifacts) return FALSE;
 	if (!adult_no_xtra_artifacts) return FALSE;
 
-	if (chance + damroll(dice,25) > p_ptr->fame) return (FALSE);
+	if (chance + damroll(dice,250) > p_ptr->fame) return (FALSE);
 	if (!one_in_(3)) return (FALSE);
 
 	return (TRUE);
@@ -2002,7 +2002,7 @@ static bool place_mon_quest(int lev, bool fixed)
 		num = ((min_diff + max_diff) * 5) / r_ptr->mon_power;
 
 		/*higher number of monsters based on player fame*/
-		num += p_ptr->fame / 10;
+		num += p_ptr->fame / 100;
 
 		/*boundry control*/
 		if (num < 4) num = 4;
@@ -2027,15 +2027,15 @@ static bool place_mon_quest(int lev, bool fixed)
 	if (custom_randart_reward(75, 8))	q_ptr->reward = REWARD_RANDART;
 
 	/* Next, a chance to simply increase the player's hp lifeline*/
-	else if (extra_hp_reward(50)) q_ptr->reward = REWARD_INC_HP;
+	else if (extra_hp_reward(500)) q_ptr->reward = REWARD_INC_HP;
 
 	/* Then, a try for a tailored award */
-	else if (25 + damroll(5,20) < p_ptr->fame) q_ptr->reward = REWARD_TAILORED;
+	else if (25 + damroll(50,20) < p_ptr->fame) q_ptr->reward = REWARD_TAILORED;
 
 	else
 	{
 		/* Chance of good item reward */
-		int chance = 95 - (p_ptr->fame * 2) - (lev *  2);
+		int chance = 95 - (p_ptr->fame / 5) - (lev *  2);
 
 		/* Better rewards for unique or fixed quests */
 		if (r_ptr->flags1 & (RF1_UNIQUE)) chance -= 10;
@@ -2270,9 +2270,9 @@ static bool place_pit_nest_quest(int lev)
 	if (custom_randart_reward(75, 6)) q_ptr->reward = REWARD_RANDART;
 
 	/* A chance to simply increase the player's hp lifeline*/
-	else if (extra_hp_reward(40)) q_ptr->reward = REWARD_INC_HP;
+	else if (extra_hp_reward(400)) q_ptr->reward = REWARD_INC_HP;
 
-	else if (30 + damroll(3,25) < p_ptr->fame) q_ptr->reward = REWARD_TAILORED;
+	else if (30 + damroll(30,25) < p_ptr->fame) q_ptr->reward = REWARD_TAILORED;
 
 	else q_ptr->reward = REWARD_GREAT_ITEM;
 
@@ -2358,9 +2358,9 @@ static bool place_level_quest(int lev)
 	if (custom_randart_reward(60, 6))  q_ptr->reward = REWARD_RANDART;
 
 	/* A chance to simply increase the player's hp lifeline*/
-	else if (extra_hp_reward(30)) q_ptr->reward = REWARD_INC_HP;
+	else if (extra_hp_reward(300)) q_ptr->reward = REWARD_INC_HP;
 
-	else if (25 + damroll(3,25) < p_ptr->fame) q_ptr->reward = REWARD_TAILORED;
+	else if (25 + damroll(30,25) < p_ptr->fame) q_ptr->reward = REWARD_TAILORED;
 
 	else q_ptr->reward = REWARD_GREAT_ITEM;
 
@@ -2415,9 +2415,9 @@ static bool place_vault_quest(int lev)
 	if (custom_randart_reward(60, 5)) q_ptr->reward = REWARD_RANDART;
 
 	/* A chance to simply increase the player's hp lifeline*/
-	else if (extra_hp_reward(15)) q_ptr->reward = REWARD_INC_HP;
+	else if (extra_hp_reward(150)) q_ptr->reward = REWARD_INC_HP;
 
-	else if (20 + damroll(3,25) < p_ptr->fame) q_ptr->reward = REWARD_TAILORED;
+	else if (20 + damroll(30,25) < p_ptr->fame) q_ptr->reward = REWARD_TAILORED;
 
 	else q_ptr->reward = REWARD_GREAT_ITEM;
 
@@ -2436,7 +2436,7 @@ bool quest_allowed(byte j)
 	/*quest vaults not always offered*/
 	if (j == QUEST_SLOT_VAULT)
 	{
-		if (p_ptr->fame < 10)return (FALSE);
+		if (p_ptr->fame < 100)return (FALSE);
 		if (!(q_info[GUILD_QUEST_SLOT].q_flags & (QFLAG_VAULT_QUEST))) return (FALSE);
 	}
 	else if (j == QUEST_SLOT_PIT_NEST)
@@ -2540,12 +2540,12 @@ void do_reward(void)
 		(q_ptr->q_type == QUEST_GUARDIAN))
 	{
 		/* Grant fame bonus */
-		p_ptr->fame += 1;
+		p_ptr->fame += 10;
 
 		/* Fixed quests sometimes get a better fame boost */
 		if (q_ptr->q_type == QUEST_GUARDIAN)
 		{
-			if (one_in_(2)) p_ptr->fame += 1;
+			p_ptr->fame += 5;
 		}
 		altered_inventory_counter += 3;
 
@@ -2595,10 +2595,10 @@ void do_reward(void)
 		/*We owe the player a reward*/
 		if ((!q_ptr->active_level) && (q_ptr->reward))
 		{
-			if (q_ptr->q_type == QUEST_THEMED_LEVEL)	p_ptr->fame += 1;
+			if (q_ptr->q_type == QUEST_THEMED_LEVEL)	p_ptr->fame += 10;
 
 			/* Slightly random fame bonus for these harder quests*/
-			p_ptr->fame += randint(2);
+			p_ptr->fame += damroll(10,2);
 			altered_inventory_counter += 4;
 
 			/*The note has already been written*/
@@ -2878,12 +2878,12 @@ void quest_fail(void)
 
 		else if ((quest == QUEST_NEST) ||
 			     (quest == QUEST_PIT) ||
-				 (quest == QUEST_THEMED_LEVEL))	p_ptr->fame = (p_ptr->fame * 6 / 10);
+				 (quest == QUEST_THEMED_LEVEL))	p_ptr->fame = (p_ptr->fame * 65 / 100);
 
 		else
 		{
 			/* Monster quests */
-			p_ptr->fame = (p_ptr->fame * 4 / 10);
+			p_ptr->fame = (p_ptr->fame * 45 / 100);
 		}
 	}
 

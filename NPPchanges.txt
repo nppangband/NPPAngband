@@ -5,6 +5,8 @@ Changes to the savefile structure.
 Player ghosts can only appear at dungeon creation.
 In Wizard mode, editing a character now gives lets the player to edit player fame as well.
 New mimic monsters.
+Changed some of morgoth's flags : removed teleport_to, added teleport_away and native_water.
+Multiplied the scale of player fame by a factor of 10.
 
 NPP 0.5.4 changes:
 The edges of the detected trap areas now show up onscreen.
