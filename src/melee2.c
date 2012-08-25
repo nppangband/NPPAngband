@@ -5822,8 +5822,7 @@ static void recover_monster(monster_type *m_ptr)
 				/* Acquire the monster name */
 				monster_desc(m_name, sizeof(m_name), m_ptr, 0);
 
-				/* Dump a message */
-				msg_format("%^s wakes up.", m_name);
+				add_monster_message(m_name, m_idx, MON_MSG_WAKES_UP);
 			}
 		}
 
@@ -5867,7 +5866,7 @@ static void recover_monster(monster_type *m_ptr)
 						monster_desc(m_name, sizeof(m_name), m_ptr, 0);
 
 						/* Warning */
-						msg_format("%^s stirs.", m_name);
+						add_monster_message(m_name, m_idx, MON_MSG_STIRS);
 					}
 				}
 			}
@@ -5886,8 +5885,7 @@ static void recover_monster(monster_type *m_ptr)
 					/* Acquire the monster name */
 					monster_desc(m_name, sizeof(m_name), m_ptr, 0);
 
-					/* Dump a message */
-					msg_format("%^s wakes up.", m_name);
+					add_monster_message(m_name, m_idx, MON_MSG_WAKES_UP);
 
 					/* Hack -- Count the wakings */
 					if (l_ptr->wake < MAX_UCHAR)

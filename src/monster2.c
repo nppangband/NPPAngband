@@ -4255,6 +4255,7 @@ static char *msg_repository[MAX_MON_MSG + 1] =
 	"look[s] healthier.",		/* MON_MSG_HEALTHIER */
 	"fall[s] asleep!",			/* MON_MSG_FALL_ASLEEP */
 	"wake[s] up.",				/* MON_MSG_WAKES_UP */
+	"stir[s].",					/* MON_MSG_STIRS */
 	"cringe[s] from the light!",/* MON_MSG_CRINGE_LIGHT */
 	"shrivel[s] away in the light!",	/* MON_MSG_SHRIVEL_LIGHT */
 	"lose[s] some skin!",		/* MON_MSG_LOSE_SKIN */
