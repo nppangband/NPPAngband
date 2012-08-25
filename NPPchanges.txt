@@ -8,6 +8,8 @@ New mimic monsters.
 Changed some of morgoth's flags : removed teleport_to, added teleport_away and native_water.
 Multiplied the scale of player fame by a factor of 10.
 Added Servants of the valar pits, nests, and themed levels.
+Made "wakes up" and "stirs a blended monster message.
+Removed redundant save of the "call hourns" timer to the savefile.
 
 NPP 0.5.4 changes:
 The edges of the detected trap areas now show up onscreen.

@@ -563,32 +563,6 @@ static errr rd_unknown_extension(void)
 
 
 /*
- * Read the call huorns extension.
- */
-static errr rd_call_huorns_extension(void)
-{
-	byte tmp8u;
-	u16b temp;
-
-	/* Read and validate field type of the spell timer */
-	rd_byte(&tmp8u);
-	if (tmp8u != EXTENSION_TYPE_U16B) return (-1);
-
-	/* Read timer value */
-	rd_u16b(&temp);
-
-	p_ptr->timed[TMD_CALL_HOURNS] = temp;
-
-	/* Read and validate end mark of fields */
-	rd_byte(&tmp8u);
-	if (tmp8u != EXTENSION_TYPE_END) return (-1);
-
-	/* Success */
-	return (0);
-}
-
-
-/*
  * Process variable extensions.
  */
 static errr rd_extensions(void)
@@ -608,13 +582,6 @@ static errr rd_extensions(void)
 		/* Process extensions */
 		switch (extension)
 		{
-			/* Call huorns */
-			case EXTENSION_CALL_HUORNS:
-			{
-				if (rd_call_huorns_extension()) return (-1);
-				break;
-			}
-
 			/* Unknown. Discard */
 			default:
 			{

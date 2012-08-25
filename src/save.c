@@ -871,19 +871,6 @@ static void wr_notes(void)
  */
 static void wr_extensions(void)
 {
-	/* Write call huorns time if present */
-	if (p_ptr->timed[TMD_CALL_HOURNS] > 0)
-	{
-		/* Write extension id */
-		wr_s16b(EXTENSION_CALL_HUORNS);
-		/* Write field type */
-		wr_byte(EXTENSION_TYPE_U16B);
-		/* Write field value */
-		wr_u16b(p_ptr->timed[TMD_CALL_HOURNS]);
-		/* Write end mark for fields */
-		wr_byte(EXTENSION_TYPE_END);
-	}
-
 	/* Write end mark for extensions */
 	wr_s16b(END_EXTENSIONS);
 }
