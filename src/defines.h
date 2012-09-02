@@ -1329,12 +1329,6 @@ enum
 #define QUEST_INDICATOR_COMPLETE_BIT 0x8000
 
 
-/*
- * This is not used any more, and should be deleted if savfile compatibility is broken.
- */
-
-/* Recognized extensions */
-#define EXTENSION_CALL_HUORNS 501
 /* A savefile must have at least this value inserted at the end of the extension
  * management section */
 #define END_EXTENSIONS 438

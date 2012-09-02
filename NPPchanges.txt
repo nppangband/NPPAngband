@@ -10,6 +10,11 @@ Multiplied the scale of player fame by a factor of 10.
 Added Servants of the valar pits, nests, and themed levels.
 Made "wakes up" and "stirs a blended monster message.
 Removed redundant save of the "call hourns" timer to the savefile.
+Completey revised player ghost code - should eliminate the savefile issue with Macintosh savefiles with an active player ghost.
+Added Rob Fiala as a permanent player ghost template (drew countless NPP unique tiles for the 32x32 tileset).
+Fixed bug where player ghost name was cut short to 3 letters.
+
+
 
 NPP 0.5.4 changes:
 The edges of the detected trap areas now show up onscreen.

@@ -1557,7 +1557,7 @@ static bool thrown_potion_effects(object_type *o_ptr, bool *is_dead, bool *fear,
 	monster_desc(m_name, sizeof(m_name), m_ptr, 0);
 
 	/* Get the monster possessive ("his"/"her"/"its") */
-	monster_desc(m_poss, sizeof(m_name), m_ptr, 0x22);
+	monster_desc(m_poss, sizeof(m_poss), m_ptr, 0x22);
 
 	/* Analyze the potion */
 	switch (o_ptr->sval)

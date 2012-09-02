@@ -691,7 +691,7 @@ void monster_death(int m_idx, int who)
 		/*write note for player ghosts*/
 		if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
 		{
-			my_strcpy(note2, format("Destroyed %^s, the %^s", ghost_name, r_name + r_ptr->name), sizeof (note2));
+			my_strcpy(note2, format("Destroyed %^s", player_ghost_name), sizeof (note2));
 		}
 
 		/*All other uniques*/
@@ -1001,8 +1001,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note, int who)
 	    	}
 		}
 
-		/* When the player kills a player ghost, the bones file that
-		 * it used is (often) deleted.
+		/* When the player kills a player ghost, the template needs to be deleted.
 		 */
 		if ((r_ptr->flags2 & (RF2_PLAYER_GHOST)) &&
 			((who == SOURCE_PLAYER) || (who == SOURCE_TRAP)))
@@ -1010,7 +1009,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note, int who)
 			/* fame boost*/
 			p_ptr->fame += 7;
 			altered_inventory_counter += 5;
-
+			delete_player_ghost_entry();
 		}
 
 		/* Recall even invisible uniques or winners */

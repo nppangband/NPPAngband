@@ -1057,7 +1057,11 @@ static void display_monster(int col, int row, bool cursor, int oid)
 	byte c = r_ptr->x_char;
 
 	/* Display the name */
-	c_prt(attr, r_name + r_ptr->name, row, col);
+	if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
+	{
+		c_prt(attr, player_ghost_name, row, col);
+	}
+	else c_prt(attr, r_name + r_ptr->name, row, col);
 
 	/* Display symbol */
 	big_pad(66, row, a, c);

@@ -2042,26 +2042,26 @@ errr parse_t_info(char *buf, header *head)
 		t_ptr = (ghost_template*)head->info_ptr + i;
 
 		/* Store the name */
-		if (!(t_ptr->t_name = add_name(head, s)))
-			return (PARSE_ERROR_OUT_OF_MEMORY);
+		my_strcpy(t_ptr->t_name, s, MAX_GHOST_NAME_LEN);
 	}
 
 	/* Process 'I' for "Info" (one line only) */
 	else if (buf[0] == 'I')
 	{
-		int t_gender, t_race, t_class;
+		int t_gender, t_race, t_class, t_depth;
 
 		/* There better be a current k_ptr */
 		if (!t_ptr) return (PARSE_ERROR_MISSING_RECORD_HEADER);
 
 		/* Scan for the values */
-		if (3 != sscanf(buf+2, "%d:%d:%d",
-			            &t_gender, &t_race, &t_class)) return (PARSE_ERROR_GENERIC);
+		if (4 != sscanf(buf+2, "%d:%d:%d:%d",
+			            &t_gender, &t_race, &t_class, &t_depth)) return (PARSE_ERROR_GENERIC);
 
 		/* Save the values */
 		t_ptr->t_gender = t_gender;
 		t_ptr->t_race = t_race;
 		t_ptr->t_class = t_class;
+		t_ptr->t_depth = t_depth;
 	}
 
 	else

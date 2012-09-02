@@ -2206,10 +2206,10 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 	monster_desc(m_name, sizeof(m_name), m_ptr, 0x00);
 
 	/* Get the monster possessive ("his"/"her"/"its") */
-	monster_desc(m_poss, sizeof(m_name), m_ptr, 0x22);
+	monster_desc(m_poss, sizeof(m_poss), m_ptr, 0x22);
 
 	/* Hack -- Get the "died from" name */
-	monster_desc(ddesc, sizeof(m_name), m_ptr, 0x88);
+	monster_desc(ddesc, sizeof(ddesc), m_ptr, 0x88);
 
 	/* Get the summon level */
 	if (r_ptr->d_char == 'Q') summon_lev = r_ptr->level + 3;

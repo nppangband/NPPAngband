@@ -1479,8 +1479,6 @@ void cleanup_angband(void)
 {
 	int i;
 
-	delete_current_bones_file();
-
     delete_notes_file();
 
 	/* Free the macros */

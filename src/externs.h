@@ -126,6 +126,7 @@ extern s16b character_xtra;
 extern u32b seed_randart;
 extern u32b seed_flavor;
 extern u32b seed_town;
+extern u32b seed_ghost;
 extern s16b num_repro;
 extern s16b object_level;
 extern s16b monster_level;
@@ -337,9 +338,9 @@ extern byte recent_failed_thefts;
 extern autoinscription* inscriptions;
 extern u16b inscriptionsCount;
 extern byte num_trap_on_level;
-extern byte bones_selector;
-extern int r_ghost;
-extern char ghost_name[80];
+extern s16b player_ghost_num;
+extern s16b ghost_r_idx;
+extern char player_ghost_name[80];
 extern char g_vault_name[80];
 extern u16b altered_inventory_counter;
 extern bool allow_altered_inventory;
@@ -778,9 +779,13 @@ extern void screen_roff(int r_idx);
 extern void display_roff(int r_idx);
 extern void get_closest_los_monster(int n, int y0, int x0, int *ty, int *tx,
    bool require_visible);
-extern bool prepare_ghost(int r_idx, bool from_savefile);
-
-
+extern void prepare_ghost_name(void);
+extern bool prepare_ghost(int r_idx);
+extern void remove_player_ghost(void);
+extern void delete_player_ghost_entry(void);
+extern void add_player_ghost_entry(void);
+extern void load_player_ghost_file(void);
+extern void save_player_ghost_file(void);
 
 /* monster2.c */
 extern s16b poly_r_idx(const monster_type *m_ptr);
@@ -816,7 +821,7 @@ extern void message_pain(int m_idx, int dam);
 extern bool add_monster_message(char *mon_name, int m_idx, int msg_code);
 extern void flush_monster_messages(void);
 extern void update_smart_learn(int m_idx, int what);
-extern void delete_current_bones_file(void);
+
 
 
 /* object1.c */

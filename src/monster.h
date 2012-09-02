@@ -1036,5 +1036,10 @@ enum
 #define MON_TMD_FLG_NOFAIL		0x0020	/*  Never Fail the Tests. */
 /* XXX */
 
+/*
+ * Maximum length of artifact names
+ */
+#define MAX_GHOST_NAME_LEN 32
+
 #endif  /* INCLUDED_MONSTER_H */
 

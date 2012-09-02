@@ -139,8 +139,6 @@ void delete_monster_idx(int i)
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	monster_lore *l_ptr = &l_list[m_ptr->r_idx];
-
 	s16b this_o_idx, next_o_idx = 0;
 
 	/* Get location */
@@ -179,19 +177,8 @@ void delete_monster_idx(int i)
 	/* Monster is gone */
 	cave_m_idx[y][x] = 0;
 
-	/* Total Hack -- If the monster was a player ghost, remove it from
-	 * the monster memory, ensure that it never appears again, and clear
-	 * its bones file selector.
-	 */
-	if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
-	{
-		l_ptr->sights = 0;
-		l_ptr->pkills = 1;
-		l_ptr->tkills = 0;
-		/* Remove the bones file too */
-		delete_current_bones_file();
-		bones_selector = 0;
-	}
+	/* If the monster was a player ghost, the unique player ghost info. */
+	if (r_ptr->flags2 & (RF2_PLAYER_GHOST)) remove_player_ghost();
 
 	/* Delete objects */
 	for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
@@ -455,27 +442,11 @@ void wipe_mon_list(void)
 
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-		monster_lore *l_ptr = &l_list[m_ptr->r_idx];
-
 		/* Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
 
-		/* Total Hack -- Clear player ghost information. */
-		if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
-		{
-			l_ptr->sights = 0;
-			l_ptr->pkills = 1;
-			l_ptr->tkills = 0;
-			/* Remove the bones file too */
-			delete_current_bones_file();
-			bones_selector = 0;
-
-			/* Hack -
-			 * if player is just leaving the level, but not quitting the game,
-			 * we don't want the ghost to appear again
-			 */
-			if ((p_ptr->playing) && (p_ptr->leaving)) r_ptr->max_num = 0;
-		}
+		/* If the monster was a player ghost, the unique player ghost info. */
+		if (r_ptr->flags2 & (RF2_PLAYER_GHOST)) remove_player_ghost();
 
 		/* Hack -- Reduce the racial counter */
 		r_ptr->cur_num--;
@@ -514,8 +485,6 @@ void wipe_mon_list(void)
 	/* Hack -- no more tracking */
 	health_track(0);
 
-	/* Hack -- make sure there is no player ghost */
-	bones_selector = 0;
 }
 
 
@@ -750,6 +719,13 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 				{
 					if (mp_flags & (MPLACE_NO_GHOST)) continue;
 					if (adult_no_player_ghosts) continue;
+
+					/* Already a player ghost on the level */
+					if (ghost_r_idx) continue;
+
+					/* Hack -- No easy player ghosts. */
+					if (((p_ptr->depth - r_ptr->level) > 6) &&
+						 (r_ptr->level < 60))	continue;
 				}
 
 				/* Check quests for uniques*/
@@ -903,17 +879,8 @@ static void get_mon_name(char *output_name, size_t max, int r_idx, int in_los)
 	/* Player ghosts get special markings */
 	if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
 	{
-		char racial_name[80];
-
 		/* Get the ghost name. */
-		my_strcpy(race_name, ghost_name, sizeof(race_name));
-
-		/* Get the racial name. */
-		my_strcpy(racial_name, r_name + r_ptr->name, sizeof(race_name));
-
-		/* Build the ghost name. */
-		my_strcat(race_name, ", the ", sizeof(race_name));
-		my_strcat(race_name, racial_name, sizeof(race_name));
+		my_strcpy(race_name, player_ghost_name, sizeof(race_name));
 
 		my_strcpy(output_name, "[G] ", max);
 	}
@@ -1373,8 +1340,6 @@ void monster_desc(char *desc, size_t max, const monster_type *m_ptr, int mode)
 
 	cptr name = (r_name + r_ptr->name);
 
-	char racial_name[40] = "oops";
-
 	bool seen, pron;
 
 	/*
@@ -1460,14 +1425,7 @@ void monster_desc(char *desc, size_t max, const monster_type *m_ptr, int mode)
 		if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
 		{
 			/* Get the ghost name. */
-			my_strcpy(desc, ghost_name, sizeof(desc));
-
-			/* Get the racial name. */
-			my_strcpy(racial_name, r_name + r_ptr->name, sizeof(racial_name));
-
-			/* Build the ghost name. */
-			my_strcat(desc, ", the ", sizeof(desc));
-			my_strcat(desc, racial_name, sizeof(desc));
+			my_strcpy(desc, player_ghost_name, max);
 		}
 
 		/* It could be a Unique */
@@ -3209,7 +3167,7 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	}
 
 	/* Hack -- only 1 player ghost at a time */
-	if ((r_ptr->flags2 & (RF2_PLAYER_GHOST)) && bones_selector)
+	if ((r_ptr->flags2 & (RF2_PLAYER_GHOST)) && ghost_r_idx)
 	{
 		/* Cannot create */
 		return (FALSE);
@@ -3239,12 +3197,12 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
 	{
 
-		if (!prepare_ghost(r_idx, FALSE))
+		if (!prepare_ghost(r_idx))
 		{
 			return (FALSE);
 		}
 
-		name = format("%s, the %s", ghost_name, name);
+		name = player_ghost_name;
 	}
 
 	/* Town level has some special rules */
@@ -4058,8 +4016,6 @@ bool summon_specific(int y1, int x1, int lev, int type)
 {
 	int i, x, y, r_idx;
 
-	monster_type *m_ptr;
-
 	/*hack - no summoning on themed levels*/
 	if (feeling >= LEV_THEME_HEAD) return (FALSE);
 
@@ -4108,9 +4064,6 @@ bool summon_specific(int y1, int x1, int lev, int type)
 
 	/* Attempt to place the monster (awake, allow groups) */
 	if (!place_monster_aux(y, x, r_idx, MPLACE_GROUP | MPLACE_NO_MIMIC)) return (FALSE);
-
-	/*hack - summoned monsters don't try to mimic*/
-	m_ptr = &mon_list[cave_m_idx[y][x]];
 
 	/* Success */
 	return (TRUE);
@@ -4810,7 +4763,7 @@ void flush_monster_messages(void)
 				 * Note that we can use the ghost name even if the ghost
 				 * was already destroyed
 				 */
-				strnfmt(buf, sizeof(buf), "%s, the %s", ghost_name, race_name);
+				strnfmt(buf, sizeof(buf), player_ghost_name);
 			}
 			/* Uniques */
 			else if (r_ptr->flags1 & (RF1_UNIQUE))
@@ -5226,33 +5179,3 @@ void flush_monster_messages(void)
 		}
 	}
 }
-
-
-/*
- * Remove the bones file of the current player ghost from the file system.
- * The bones_selector variable is cleared too.
- */
-void delete_current_bones_file(void)
-{
-	/*
-	 * Remove the ghost template.
-	 */
-	if ((bones_selector > 0) && (bones_selector < MAX_DEPTH))
-	{
-		char name[80];
-		char path[1024];
-
-		/* Format the name */
-		strnfmt(name, sizeof(name), "bone.%03d", bones_selector);
-
-		/* Format the whole path */
-		path_build(path, sizeof(path), ANGBAND_DIR_BONE, name);
-
-		remove(path);
-
-		/* The bones selector is not valid anymore */
-		bones_selector = 0;
-	}
-}
-
-

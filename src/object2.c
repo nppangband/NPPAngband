@@ -4122,7 +4122,7 @@ void object_history(object_type *o_ptr, byte origin, s16b r_idx)
 			if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
 			{
 				/* Format the ghost name */
-				char *name = format("%^s, the %^s", ghost_name, r_name + r_ptr->name);
+				char *name = player_ghost_name;
 
 				/* Store the name */
 				o_ptr->origin_m_name = quark_add(name);

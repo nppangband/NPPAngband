@@ -9714,7 +9714,7 @@ D: defiance as he strides towards you to crush you to a pulp!
 N:645:Skeleton
 G:s:w
 I:110:10d10:20:40:0
-W:6:3:35:75
+W:6:1:35:75
 B:HIT:HURT:3d5
 B:HIT:HURT:3d5
 F:UNIQUE | FORCE_MAXHP | ONLY_ITEM | DROP_60 | DROP_90
@@ -9728,7 +9728,7 @@ D:An animated skeleton, creaking as it advances.
 N:646:Zombie
 G:z:s1
 I:110:20d10:20:25:0
-W:12:4:53:150
+W:12:1:53:150
 B:HIT:HURT:4d7
 B:HIT:POISON:4d7
 F:UNIQUE | FORCE_MAXHP | ONLY_ITEM | DROP_90 | DROP_GOOD
@@ -9744,7 +9744,7 @@ D: chunks as it shambles forward.
 N:647:Spirit
 G:G:w1
 I:115:20d20:20:55:0
-W:18:4:67:240
+W:18:1:67:240
 B:TOUCH:HURT:4d6
 B:TOUCH:TERRIFY:1d4
 B:TOUCH:LOSE_DEX:1d4
@@ -9761,7 +9761,7 @@ D:A ghostly apparition that shrieks horribly.
 N:648:Mummy
 G:z:s1
 I:115:15d50:20:35:0
-W:24:4:67:800
+W:24:1:67:800
 B:HIT:HURT:2d10
 B:HIT:HURT:2d10
 B:HIT:POISON:3d10
@@ -9780,7 +9780,7 @@ D: its head.
 N:649:Wight
 G:W:s1
 I:115:15d65:20:45:0
-W:30:5:80:1000
+W:30:1:80:1000
 B:WAIL:TERRIFY:1d5
 B:TOUCH:HURT:1d14
 B:TOUCH:EXP_40:2d5
@@ -9799,7 +9799,7 @@ D: out towards you, your panicked soul cowers away.
 N:650:Ghost
 G:G:W
 I:115:15d80:20:45:0
-W:36:5:83:1250
+W:36:1:83:1250
 B:WAIL:TERRIFY:1d6
 B:TOUCH:EXP_20:2d6
 B:CLAW:LOSE_INT:4d7
@@ -9818,7 +9818,7 @@ D: illuminates nothing.
 N:651:Vampire
 G:V:v
 I:120:15d90:20:55:0
-W:42:5:92:6000
+W:42:1:92:6000
 B:HIT:HURT:6d9
 B:HIT:HURT:6d9
 B:BITE:EXP_20:3d9
@@ -9838,7 +9838,7 @@ D: teeth.
 N:652:Phantom
 G:G:v
 I:120:20d90:30:45:20
-W:46:6:101:15000
+W:46:1:101:15000
 B:TOUCH:EXP_80:2d10
 B:TOUCH:EXP_80:2d10
 B:CLAW:LOSE_INT:4d8
@@ -9857,7 +9857,7 @@ D: your very soul.
 N:653:Lich
 G:L:o1
 I:125:32d95:20:75:0
-W:56:6:109:25000
+W:56:1:109:25000
 B:TOUCH:EXP_40:2d9
 B:TOUCH:UN_POWER:2d9
 B:TOUCH:LOSE_DEX:5d9
@@ -9877,7 +9877,7 @@ D:A skeletal form dressed in robes, radiating vastly evil power.
 N:654:Nether Wraith
 G:W:G
 I:125:45d100:20:75:0
-W:65:6:120:32000
+W:65:1:120:32000
 B:HIT:HURT:6d15
 B:HIT:HURT:6d15
 B:TOUCH:EXP_80:4d9
@@ -9897,7 +9897,7 @@ D: dreadful chill invades your bones.
 N:655:Deathlord
 G:W:W1
 I:125:55d100:20:110:0
-W:74:6:155:34000
+W:74:1:155:34000
 B:HIT:HURT:10d12
 B:HIT:UN_BONUS:6d9
 B:WAIL:PARALYZE:6d9

@@ -1273,55 +1273,13 @@ static errr rd_extra(void)
 		inscriptions[i].inscriptionIdx = quark_add(tmp);
 	}
 
-	/* The number of the bone file (if any) that player ghosts should use to
-	 * reacquire a name, sex, class, and race.
+	/*
+	 * The number of the bone file (if any) that player ghosts should use to
+	 * derive the ghost name, sex, class, race, and level.
 	 */
-	rd_byte(&bones_selector);
+	rd_s16b(&player_ghost_num);
 
-	/*if an active player ghost, read and then write the savefile*/
-	if (bones_selector)
-	{
-		ang_file *fp = FALSE;
-		char	path[1024];
-		byte ghost_sex, ghost_race, ghost_class;
-		char temp_name[80];
-		char esc_name[80];
-
-		rd_string(temp_name, sizeof(temp_name));
-		rd_byte(&ghost_sex);
-		rd_byte(&ghost_race);
-		rd_byte(&ghost_class);
-
-		/*make the path*/
-		sprintf(path, "%s/bone.%03d", ANGBAND_DIR_BONE, bones_selector);
-
-		/* Try to write a new "Bones File" */
-		fp = file_open(path, MODE_WRITE, FTYPE_SAVE);
-
-		/*paranoia*/
-		if (fp)
-		{
-			/* Get the canonical form of the name */
-			escape_latin1(esc_name, sizeof(esc_name), temp_name);
-
-			/*now save the new file*/
-			/* Save the info */
-			file_putf(fp, "%s\n", esc_name);
-			file_putf(fp, "%d\n", ghost_sex);
-			file_putf(fp, "%d\n", ghost_race);
-			file_putf(fp, "%d\n", ghost_class);
-
-			/*Mark end of file*/
-			file_putf(fp, "\n");
-
-			/* Close and save the Bones file */
-			(void)file_close(fp);
-		}
-
-		/*done*/
-	}
-
-	/* Find out how many thefts have recently occured. */
+	/* Find out how many thefts have recently occurred. */
 	rd_byte(&recent_failed_thefts);
 
 	/* Read number of monster traps on level. */
@@ -1339,9 +1297,11 @@ static errr rd_extra(void)
 	/* Skip the flags */
 	strip_bytes(12);
 
-	/* Hack -- the two "special seeds" */
+	/* Hack -- the three "special seeds" */
 	rd_u32b(&seed_flavor);
 	rd_u32b(&seed_town);
+	rd_u32b(&seed_ghost);
+
 
 
 	/* Special stuff */
@@ -2011,7 +1971,7 @@ static errr rd_dungeon(void)
 		/* If a player ghost, some special features need to be added. */
 		if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
 		{
-			(void)prepare_ghost(n_ptr->r_idx, TRUE);
+			(void)prepare_ghost(n_ptr->r_idx);
 		}
 
 		/* Place monster in dungeon */
@@ -2437,6 +2397,8 @@ bool load_player(void)
 
 	/* Paranoia */
 	p_ptr->is_dead = FALSE;
+
+	load_player_ghost_file();
 
 	/* Allow empty savefile name */
 	if (!savefile[0]) return (TRUE);

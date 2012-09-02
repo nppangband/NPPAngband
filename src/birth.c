@@ -502,8 +502,8 @@ static void player_wipe(void)
 	}
 
 	/*No current player ghosts*/
-	bones_selector = 0;
-
+	player_ghost_num = -1;
+	ghost_r_idx = 0;
 
 	/* Hack -- Well fed player */
 	p_ptr->food = PY_FOOD_FULL - 1;

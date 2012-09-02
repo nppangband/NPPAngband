@@ -827,8 +827,6 @@ static void process_world(void)
 
 	object_type *o_ptr;
 
-	bool was_ghost = FALSE;
-
 	/* We decrease noise slightly every game turn */
 	total_wakeup_chance -= 400;
 
@@ -1101,9 +1099,6 @@ static void process_world(void)
 
 	/*** Process the monsters ***/
 
-	/* Hack - see if there is already a player ghost on the level */
-	if (bones_selector) was_ghost=TRUE;
-
 	/* Check for creature generation */
 	if (one_in_(MAX_M_ALLOC_CHANCE))
 	{
@@ -1113,7 +1108,7 @@ static void process_world(void)
 
 	/* Hack - if there is a ghost now, and there was not before,
 	 * give a challenge */
-	if ((bones_selector) && (!(was_ghost))) ghost_challenge();
+	if ((player_ghost_num > -1) && (one_in_(30))) ghost_challenge();
 
 	/* Put out fire if necessary */
 	if ((level_flag & (LF1_FIRE)) && !(turn % 1000)) put_out_fires();
@@ -2439,9 +2434,8 @@ static void dungeon(void)
 	/* Announce (or repeat) the feeling */
 	if ((effective_depth(p_ptr->depth)) && (do_feeling)) do_cmd_feeling();
 
-
 	/* Announce a player ghost challenge. -LM- */
-	if (bones_selector) ghost_challenge();
+	if (player_ghost_num > -1) ghost_challenge();
 
 	/*** Process this dungeon level ***/
 
@@ -2672,6 +2666,8 @@ void play_game(void)
 		/* Hack -- seed for random artifacts */
 		seed_randart = rand_int(0x10000000);
 
+		seed_ghost = rand_int(0x10000000);
+
 		/* Roll up a new character. Quickstart is allowed if ht_birth is set */
 		player_birth(p_ptr->ht_birth ? TRUE : FALSE);
 
@@ -2799,6 +2795,11 @@ void play_game(void)
 		wipe_mon_list();
 		wipe_x_list();
 		count_feat_everseen();
+
+		/* Reset player ghost info */
+		player_ghost_num = -1;
+		ghost_r_idx = 0;
+		player_ghost_name[0] = '\0';
 
 		/* Delete any pending monster message */
 		size_mon_msg = 0;

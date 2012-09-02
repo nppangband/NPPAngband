@@ -3421,12 +3421,12 @@ void do_cmd_feeling(void)
 	p_ptr->redraw |= (PR_FEELING);
 }
 
-
+#define NUM_GHOST_CHALLENGES	15
 
 /*
  * Array of feeling strings
  */
-static cptr do_cmd_challenge_text[14] =
+static cptr do_cmd_challenge_text[NUM_GHOST_CHALLENGES] =
 {
 	"challenges you from beyond the grave!",
 	"thunders 'Prove worthy of your traditions - or die ashamed!'.",
@@ -3441,30 +3441,31 @@ static cptr do_cmd_challenge_text[14] =
 	"walks Middle-Earth once more!",
 	"challenges you to demonstrate your prowess!",
 	"demands you prove yourself here and now!",
-	"asks 'Can ye face the best of those who came before?'."
+	"asks 'Can ye face the best of those who came before?'.",
+	"challenges you to a fight to the death!"
+
 };
 
 
 
 
 /*
- * Personalize, randomize, and announce the challenge of a player ghost. -LM-
+ * Personalize, randomize, and announce the challenge of a player ghost.
  */
 void ghost_challenge(void)
 {
-	monster_race *r_ptr = &r_info[r_ghost];
+	/* No active player ghost template */
+	if (player_ghost_num < 0) return;
 
 	/*paranoia*/
 	/* Check there is a name/ghost first */
-	if (ghost_name[0] == '\0')
+	if (player_ghost_name[0] == '\0')
 	{
-		/*there wasn't a ghost*/
-		bones_selector = 0;
-		return;
+		/*Make sure the name has been created*/
+		prepare_ghost_name();
 	}
 
-	msg_format("%^s, the %^s %s", ghost_name, r_name + r_ptr->name,
-		do_cmd_challenge_text[rand_int(14)]);
+	msg_format("%^s %s", player_ghost_name, do_cmd_challenge_text[rand_int(NUM_GHOST_CHALLENGES)]);
 
 	message_flush();
 }

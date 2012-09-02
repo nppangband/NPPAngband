@@ -665,42 +665,7 @@ static void wr_extra(void)
 	}
 
 	/* Store the bones file selector, if the player is not dead. -LM- */
-	wr_byte(bones_selector);
-
-	/*save the bones template as part of the savefile*/
-	if (bones_selector)
-	{
-		ang_file	*fp = FALSE;
-		char	path[1024];
-
-		sprintf(path, "%s/bone.%03d", ANGBAND_DIR_BONE, bones_selector);
-
-		/* Attempt to open the bones file. */
-		fp = file_open(path, MODE_WRITE, FTYPE_TEXT);
-
-		/*something would have to be very strange for this not to be true*/
-		if (fp)
-		{
-			byte ghost_sex = 0, ghost_race = 0, ghost_class = 0;
-
-			/* Ghost name is a global variable and is not needed */
-			char dummy[80];
-
-			/* XXX XXX XXX Scan the file to get the basic info of the ghost  */
-			file_getl(fp, dummy, sizeof(dummy));
-			next_line_to_number(fp, &ghost_sex);
-			next_line_to_number(fp, &ghost_race);
-			next_line_to_number(fp, &ghost_class);
-
-			/* Close the file */
-			(void)file_close(fp);
-
-			wr_string(ghost_name);
-			wr_byte(ghost_sex);
-			wr_byte(ghost_race);
-			wr_byte(ghost_class);
-		}
-	}
+	wr_s16b(player_ghost_num);
 
 	/* Store the number of thefts on the level. -LM- */
 	wr_byte(recent_failed_thefts);
@@ -724,16 +689,15 @@ static void wr_extra(void)
 	wr_u32b(0L);	/* oops */
 
 
-	/* Write the "object seeds" */
+	/* Write the "special seeds" */
 	wr_u32b(seed_flavor);
 	wr_u32b(seed_town);
-
+	wr_u32b(seed_ghost);
 
 	/* Special stuff */
 	wr_u16b(p_ptr->panic_save);
 	wr_u16b(p_ptr->total_winner);
 	wr_u16b(p_ptr->noscore);
-
 
 	/* Write death */
 	wr_byte(p_ptr->is_dead);
@@ -1336,6 +1300,8 @@ bool save_player(void)
 	int result = FALSE;
 
 	char safe[1024];
+
+	save_player_ghost_file();
 
 	/* New savefile */
 	my_strcpy(safe, savefile, sizeof(safe));

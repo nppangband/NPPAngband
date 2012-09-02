@@ -381,11 +381,11 @@ struct ego_item_type
  */
 struct ghost_template
 {
-	u32b t_name;	/* Ghost Name */
-	u32b t_text;	/* Ghost Text */
+	char t_name[MAX_GHOST_NAME_LEN];	/* Ghost Text */
 	byte t_gender;	/* Ghost gender (0 = male  1 = female) */
 	byte t_race;	/* Ghost race */
 	byte t_class; 	/* Ghost class */
+	byte t_depth; 	/* Ghost native depth */
 };
 
 
