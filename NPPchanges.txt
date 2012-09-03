@@ -14,6 +14,8 @@ Completey revised player ghost code - should eliminate the savefile issue with M
 Added Rob Fiala as a permanent player ghost template (drew countless NPP unique tiles for the 32x32 tileset).
 Fixed bug where player ghost name was cut short to 3 letters.
 Scrolls names are now made by the random name generator rather than the old "scroll syllable" table.
+Added new wizard mode command to know everything about every object kind, monster race, and feature.
+
 
 
 

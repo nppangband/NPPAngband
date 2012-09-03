@@ -64,7 +64,6 @@ Command Summary -- Original keyset
      \  (special - bypass keymap)            !  Port Specific preferences
      `  (special - escape)                   ~  Check knowledge
      /  Identify symbol                      ?  Help
-                                             |  Use Item
 
 
 ------
@@ -132,7 +131,7 @@ Command Summary -- Roguelike keyset
      <  Go up staircase                     ^X  Save and quit
      .  Stay still for one turn             ^Y  (alter - north west)
      >  Go down staircase                   ^Z  (special - borg command)
-     \  (special - bypass keymap)            |  Use Item
+     \  (special - bypass keymap)            |  (unused)
      `  (special - escape)                   ~  Check knowledge
      /  Identify symbol                      ?  Help
 
@@ -159,6 +158,7 @@ h    recalculate hitpoints
 i    mass identify witha  radius of 3
 j    jump to another dungeon level of the players choice
 k    self knowledge
+K    Know everything about every monster, object, terrain, and ego item.
 l    identify and locate all objects in the dungeon
 m    magic map the dungeon
 M    create 15 random normal items
