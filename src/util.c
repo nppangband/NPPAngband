@@ -2599,7 +2599,7 @@ static bool get_name_keypress(char *buf, size_t buflen, size_t *curs, size_t *le
 	{
 		case '*':
 		{
-			make_random_name(buf, 12);
+			make_random_name(buf, 4, 12);
 			buf[0] = toupper((unsigned char) buf[0]);
 			*curs = 0;
 			result = FALSE;

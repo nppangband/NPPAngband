@@ -1490,7 +1490,7 @@ object_aware_p(o_ptr) && \
  * Max sizes of the following arrays.
  */
 #define MAX_TITLES     50       /* Used with scrolls (min 48) */
-#define MAX_SYLLABLES 158       /* Used with scrolls (see below) */
+
 
 /** The titles of scrolls, ordered by sval. */
 extern char scroll_adj[MAX_TITLES][16];

@@ -1025,7 +1025,7 @@ extern void quest_monster_update(void);
 
 
 /* randart.c */
-extern void make_random_name(char *random_name, size_t max);
+extern void make_random_name(char *random_name, byte min, byte max);
 extern s32b artifact_power(int a_idx);
 extern void build_randart_tables(void);
 extern void free_randart_tables(void);

@@ -22,36 +22,6 @@
 
 
 /*
- * Syllables for scrolls (must be 1-4 letters each).
- */
-
-static cptr syllables[MAX_SYLLABLES] =
-{
-	"a", "ab", "ag", "aks", "ala", "an", "ankh", "app",
-	"arg", "arze", "ash", "aus", "ban", "bar", "bat", "bek",
-	"bie", "bin", "bit", "bjor", "blu", "bot", "bu",
-	"byt", "comp", "con", "cos", "cre", "dalf", "dan",
-	"den", "der", "doe", "dok", "eep", "el", "eng", "er", "ere", "erk",
-	"esh", "evs", "fa", "fid", "flit", "for", "fri", "fu", "gan",
-	"gar", "glen", "gop", "gre", "ha", "he", "hyd", "i",
-	"ing", "ion", "ip", "ish", "it", "ite", "iv", "jo",
-	"kho", "kli", "klis", "la", "lech", "man", "mar",
-	"me", "mi", "mic", "mik", "mon", "mung", "mur", "nag", "nej",
-	"nelg", "nep", "ner", "nes", "nis", "nih", "nin", "o",
-	"od", "ood", "org", "orn", "ox", "oxy", "pay", "pet",
-	"ple", "plu", "po", "pot", "prok", "re", "rea", "rhov",
-	"ri", "ro", "rog", "rok", "rol", "sa", "san", "sat",
-	"see", "sef", "seh", "shu", "ski", "sna", "sne", "snik",
-	"sno", "so", "sol", "sri", "sta", "sun", "ta", "tab",
-	"tem", "ther", "ti", "tox", "trol", "tue", "turs", "u",
-	"ulk", "um", "un", "uni", "ur", "val", "viv", "vly",
-	"vom", "wah", "wed", "werg", "wex", "whon", "wun", "x",
-	"yerg", "yp", "zun", "tri", "blaa"
-};
-
-
-
-/*
  * Hold the titles of scrolls, 6 to 14 characters each.
  */
 char scroll_adj[MAX_TITLES][16];
@@ -224,8 +194,30 @@ void flavor_init(void)
 				/* Add a one or two syllable word */
 				for (q = 0; q < s; q++)
 				{
+					char syllable[12];
+					byte min;
+					byte max;
+
+					/* Different syllable lengths for 1 and two syllable words */
+					if (s == 1)
+					{
+						min = 4;
+						max = 10;
+					}
+					else /* (s == 2) */
+					{
+						min = 2;
+						max = 6;
+					}
+
+					/* Make random_syllable */
+					make_random_name(syllable, min, max);
+
+					/* Make second syllable lowercase */
+					if (q) syllable[0] = tolower(syllable[0]);
+
 					/* Add the syllable */
-					my_strcat(tmp, syllables[rand_int(MAX_SYLLABLES)], sizeof(tmp));
+					my_strcat(tmp, syllable, sizeof(tmp));
 				}
 
 				/* Stop before getting too long */
