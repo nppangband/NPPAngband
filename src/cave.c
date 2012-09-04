@@ -24,7 +24,7 @@
  */
 
 /*
- * Hack -- function hook to piont to the right "get_energy_*flow*" function
+ * Hack -- function hook to point to the right "get_energy_*flow*" function
  */
 static int (*get_energy_to_move)(int y, int x, byte which_flow, u32b elem_flag);
 
@@ -731,6 +731,12 @@ bool feat_supports_lighting_dvg(u16b feat)
 	/* A couple others */
 	switch (feat)
 	{
+		case FEAT_LESS:
+		case FEAT_MORE:
+		case FEAT_CLOSED_DOOR_WOODEN:
+		case FEAT_OPEN_DOOR_WOODEN:
+		case FEAT_OPEN_DOOR_STEEL:
+		case FEAT_OPEN_DOOR_IRON:
 		case FEAT_RUBBLE:
 		case FEAT_L_ROCK:
 		case FEAT_FLOOR_EARTH:
@@ -1474,7 +1480,7 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 				if ((use_graphics) && (arg_graphics == GRAPHICS_DAVID_GERVAIS))
 				{
 					a = (byte)0x87;
-					c = (char)0xB6;
+					c = (char)0xB7;
 				}
 
 				else
