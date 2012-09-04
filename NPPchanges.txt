@@ -16,7 +16,7 @@ Fixed bug where player ghost name was cut short to 3 letters.
 Scrolls names are now made by the random name generator rather than the old "scroll syllable" table.
 Added new wizard mode command to know everything about every object kind, monster race, and feature.
 Updated DVG tileset to Rob Fiala (buzzkill)'s U32 Tileset.
-
+Sorted flavors.txt, along with the corresponding flvr pref files.
 
 
 NPP 0.5.4 changes:
