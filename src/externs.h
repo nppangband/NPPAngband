@@ -1332,7 +1332,6 @@ extern void grid_queue_destroy(grid_queue_type *q);
 extern bool grid_queue_push(grid_queue_type *q, byte y, byte x);
 extern void grid_queue_pop(grid_queue_type *q);
 extern int pick_random_item(int chance_values[], int max);
-extern errr next_line_to_number(ang_file *fff, byte *dest);
 
 
 

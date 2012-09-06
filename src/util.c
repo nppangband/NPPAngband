@@ -4070,33 +4070,6 @@ int pick_random_item(int chance_values[], int max)
 	return (i);
 }
 
-
-/*
- * Read a whole line from fff and try to get a number from it.
- * The number is stored in dest.
- * Return FALSE on error.
- */
-errr next_line_to_number(ang_file *fff, byte *dest)
-{
-	char buf[1024], *end;
-	byte number;
-
-	/* Read the line */
-	if (!file_getl(fff, buf, sizeof(buf))) return (FALSE);
-
-	/* Convert to number */
-	number = (byte)strtol(buf, &end, 10);
-
-	/* Check success */
-	if (end == buf) return (FALSE);
-
-	/* Store the number */
-	*dest = number;
-
-	/* Done */
-	return (TRUE);
-}
-
 int effective_depth(int depth)
 {
 	/* in Quickband this is different */
