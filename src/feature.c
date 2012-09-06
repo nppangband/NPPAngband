@@ -1643,7 +1643,10 @@ s16b get_feat_num(int level)
 		/* Mega-Hack -- No summoning traps in themed levels */
 		if (feat_ff2_match(f_idx, FF2_TRAP_PASSIVE) &&
 			(f_info[f_idx].f_power == 5) &&
-			(feeling >= LEV_THEME_HEAD)) continue;
+			(p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL)) /* Also includes DUNGEON_TYPE_WILDERNESS */
+			{
+				continue;
+			}
 
 
 		/* Hack -- no up stairs on certain levels */

@@ -196,9 +196,10 @@ static cptr quest_title[QUEST_SLOT_MAX] =
 {
 	"Monster or Unique Quest",	/*QUEST_MONSTER*/
 	"Pit or Nest Quest",		/*QUEST_PIT*/
-  	"Level Quest",				/*QUEST_LEVEL*/
+  	"Level Quest",				/*QUEST_THEMED_LEVEL*/
 	"Vault Quest",				/*QUEST_VAULT*/
-  	"Guardian Quest"			/*QUEST_FIXED */
+  	"Guardian Quest",			/*QUEST_GUARDIAN */
+	"Wilderness Quest"			/*QUEST_WILDERNESS */
 };
 
 
@@ -658,6 +659,7 @@ static void init_services_and_quests(int store_num)
 			if (q_ptr->q_type == QUEST_PIT) continue;
 			if (q_ptr->q_type == QUEST_NEST) continue;
 			if (q_ptr->q_type == QUEST_THEMED_LEVEL) continue;
+			if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL) continue;
 		}
 
 		/* Offer this service. */

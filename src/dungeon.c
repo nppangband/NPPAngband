@@ -430,6 +430,209 @@ static void recharged_notice(object_type *o_ptr, bool all)
 	}
 }
 
+/*
+ * Helper function for process_guild_quests
+ * Count the number of quest monsters hiding as mimic objects
+ * Simply return zero if inapplicable
+ */
+static int count_quest_mimics(const quest_type *q_ptr)
+{
+	int hidden_quest_mimics = 0;
+	int j;
+
+	if ((q_ptr->q_type == QUEST_PIT) || (q_ptr->q_type == QUEST_NEST))
+	{
+		if (q_ptr->theme != LEV_THEME_CREEPING_COIN) return (0);
+	}
+	/* Monster quests, but they don't involve involving a mimic */
+	else if ((q_ptr->q_type == QUEST_MONSTER) || (q_ptr->q_type == QUEST_UNIQUE) ||
+		     (q_ptr->q_type == QUEST_GUARDIAN))
+	{
+		if (!(r_info[q_ptr->mon_idx].flags1 & (RF1_CHAR_MIMIC))) return (0);
+	}
+
+	else if (q_ptr->q_type != QUEST_WILDERNESS_LEVEL) return (0);
+
+	/* Count and return the mimics */
+	for (j = 1; j < o_max; j++)
+	{
+		object_type *o_ptr = &o_list[j];
+
+		/* Skip non-objects */
+		if (!o_ptr->k_idx) continue;
+
+		/* Only work with the mimic objects */
+		if (!o_ptr->mimic_r_idx) continue;
+
+		/* Mimic is waiting to turn into a quest monster */
+		if (o_ptr->ident & (IDENT_QUEST)) hidden_quest_mimics++;
+	}
+
+	return (hidden_quest_mimics);
+}
+
+/* Check for quest failure or missing monsters */
+static void process_guild_quests(void)
+{
+	quest_type *q_ptr = &q_info[quest_num(p_ptr->cur_quest)];
+	int cur_quest_monsters = 0;
+	int j, i, y, x;
+	int old_feeling = feeling;
+	int best_r_idx = 0;
+	int r_idx;
+	int attempts_left = 10000;
+
+	/* No need to process vault quests or fixed Unique quests */
+	if (q_ptr->q_type == QUEST_FIXED_U) return;
+	if (q_ptr->q_type == QUEST_FIXED) return;
+	if (q_ptr->q_type == QUEST_VAULT) return;
+
+	/* Check for failure if we are not on the level for an active quest */
+	if (p_ptr->cur_quest != p_ptr->depth)
+	{
+		/* Check if quest is in progress */
+		if ((q_ptr->q_flags & (QFLAG_STARTED)) && q_ptr->active_level &&
+			((q_ptr->q_type == QUEST_MONSTER) || (q_ptr->q_type == QUEST_UNIQUE)))
+		{
+			if (one_in_(20)) quest_fail();
+		}
+
+		/* Since we are not on the level, we are done */
+		return;
+	}
+
+	/* Make sure the current quest has enough monsters on the level */
+
+	/* Count the quest monsters */
+	for (j = 1; j < mon_max; j++)
+	{
+		monster_type *m_ptr = &mon_list[j];
+
+		/* Paranoia -- Skip dead monsters */
+		if (!m_ptr->r_idx) continue;
+
+		/* Count Quest monsters */
+		if (m_ptr->mflag & (MFLAG_QUEST)) cur_quest_monsters++;
+	}
+
+	/* Count hiding mimics if they are part of the quest */
+	cur_quest_monsters += count_quest_mimics(q_ptr);
+
+	/* We have enough monsters, we are done */
+	if ((q_ptr->max_num - q_ptr->cur_num) <= cur_quest_monsters) return;
+
+	/* Find a legal, distant, unoccupied, space */
+	while (attempts_left)
+	{
+		--attempts_left;
+
+		/* Pick a location */
+		y = rand_int(p_ptr->cur_map_hgt);
+		x = rand_int(p_ptr->cur_map_wid);
+
+		/* Require a grid that all monsters can exist in. */
+		if (!cave_empty_bold(y, x)) continue;
+
+		/* Accept far away grids */
+		if (distance(y, x, p_ptr->py, p_ptr->px) >  MAX_SIGHT) break;
+	}
+
+	/* Couldn't find a spot */
+	if (!attempts_left) return;
+
+	/* Find the right type of monster to put on the level, and right degree of difficulty */
+	/* Very simple for quests for a specific monster */
+	if ((q_ptr->q_type == QUEST_MONSTER) || (q_ptr->q_type == QUEST_UNIQUE) ||
+		(q_ptr->q_type == QUEST_GUARDIAN))
+	{
+		best_r_idx = q_ptr->mon_idx;
+	}
+
+	else if (q_ptr->q_type == QUEST_THEMED_LEVEL)
+	{
+		monster_level = effective_depth(p_ptr->depth) + THEMED_LEVEL_QUEST_BOOST;
+	}
+
+	/* QUEST_PIT and QUEST_NEST */
+	else  if ((q_ptr->q_type == QUEST_PIT) || (q_ptr->q_type == QUEST_NEST))
+	{
+		monster_level = effective_depth(p_ptr->depth) + PIT_NEST_QUEST_BOOST;
+	}
+	/* No change for QUEST_WILDERNESS_LEVELs */
+
+	/* Get the theme, if needed */
+	if ((q_ptr->q_type == QUEST_PIT) || (q_ptr->q_type == QUEST_NEST) ||
+		(q_ptr->q_type == QUEST_THEMED_LEVEL))
+	{
+		get_mon_hook(q_ptr->theme);
+	}
+
+	/* Prepare allocation table */
+	get_mon_num_prep();
+
+	/* mega-hack - undo feeling so monster can be generated */
+	feeling = 0;
+
+	if (!best_r_idx)
+	{
+		monster_race *r_ptr;
+		monster_race *r2_ptr = &r_info[best_r_idx];
+
+		/* Quests where the monster is specified (monster quests, unique quests*/
+		if (q_ptr->mon_idx) best_r_idx = q_ptr->mon_idx;
+
+		/* 10 chances to get the strongest monster possible */
+		else for (i = 0; i < 10; i++)
+		{
+			r_idx = get_mon_num(monster_level, y, x, 0L);
+
+			if (!best_r_idx)
+			{
+				best_r_idx = r_idx;
+				r2_ptr = &r_info[best_r_idx];
+				continue;
+			}
+
+			r_ptr = &r_info[r_idx];
+
+			/* Don't use a unique as a replacement */
+			if (r_ptr->flags1 & (RF1_UNIQUE)) continue;
+
+			/* Weaker monster.  Don't use it */
+			if (r_ptr->mon_power < r2_ptr->mon_power) continue;
+
+			best_r_idx = r_idx;
+			r2_ptr = &r_info[best_r_idx];
+
+		}
+	}
+
+	if (place_monster_aux(y, x, best_r_idx, (MPLACE_SLEEP | MPLACE_GROUP)))
+	{
+		/* Scan the monster list */
+		for (i = 1; i < mon_max; i++)
+		{
+			monster_type *m_ptr = &mon_list[i];
+
+			/* Ignore dead monsters */
+			if (!m_ptr->r_idx) continue;
+
+			/* Make sure we have the right monster race */
+			if (m_ptr->r_idx != best_r_idx) continue;
+
+			/*mark it as a quest monster*/
+			m_ptr->mflag |= (MFLAG_QUEST);
+		}
+	}
+
+	/* Reset everything */
+	feeling = old_feeling;
+	monster_level = effective_depth(p_ptr->depth);
+	get_mon_num_hook = NULL;
+	get_mon_num_prep();
+}
+
+
 static void process_mimics(void)
 {
 	s16b i;
@@ -840,175 +1043,7 @@ static void process_world(void)
 	/*** Update quests ***/
 	if ((p_ptr->cur_quest) && !(turn % QUEST_TURNS))
 	{
-		bool fail_quest = FALSE;
-
-		quest_type *q_ptr = &q_info[quest_num(p_ptr->cur_quest)];
-
-		/* Check for failure */
-		if ((p_ptr->cur_quest != p_ptr->depth) && (one_in_(20)))
-		{
-			/* Check if quest is in progress */
-			if ((q_ptr->q_flags & (QFLAG_STARTED)) && q_ptr->active_level &&
-				((q_ptr->q_type == QUEST_MONSTER) || (q_ptr->q_type == QUEST_UNIQUE)))
-			{
-				quest_fail();
-				fail_quest = TRUE;
-			}
-		}
-
-		if ((!fail_quest) && (p_ptr->cur_quest == p_ptr->depth) &&
-			(q_ptr->q_type != QUEST_FIXED_U) && (q_ptr->q_type != QUEST_VAULT))
-		{
-			int cur_quest_monsters = 0;
-			int j;
-
-			/* Make sure there are enough quest monsters */
-			for (j = 1; j < mon_max; j++)
-			{
-				monster_type *m_ptr = &mon_list[j];
-
-				/* Paranoia -- Skip dead monsters */
-				if (!m_ptr->r_idx) continue;
-
-				/* Count Quest monsters */
-				if (m_ptr->mflag & (MFLAG_QUEST)) cur_quest_monsters++;
-			}
-
-			/* Count hiding mimics if they are part of the quest */
-			  /* check for monster quests where the mimic is the quest monster */
-			if ( ((r_info[q_ptr->mon_idx].flags1 & (RF1_CHAR_MIMIC)) &&
-					((q_ptr->q_type == QUEST_MONSTER) || (q_ptr->q_type == QUEST_UNIQUE) ||
-					 (q_ptr->q_type == QUEST_GUARDIAN))) ||
-				/* Check for pit/next quests quests involving mimics */
-				(((q_ptr->q_type == QUEST_PIT) || (q_ptr->q_type == QUEST_NEST)) &&
-				 (q_ptr->theme == LEV_THEME_CREEPING_COIN)))
-			{
-				for (j = 1; j < o_max; j++)
-				{
-					object_type *o_ptr = &o_list[j];
-
-					/* Skip non-objects */
-					if (!o_ptr->k_idx) continue;
-
-					/* Only work with the mimic objects */
-					if (!o_ptr->mimic_r_idx) continue;
-
-					/* Mimic is waiting to turn into a quest monster */
-					if (o_ptr->ident & (IDENT_QUEST)) cur_quest_monsters++;
-				}
-			}
-
-			if ((q_ptr->max_num - q_ptr->cur_num) > cur_quest_monsters)
-			{
-				int old_feeling = feeling;
-				int i, y, x;
-				int best_r_idx = 0;
-				int r_idx;
-				int attempts_left = 10000;
-
-				if (q_ptr->q_type == QUEST_THEMED_LEVEL)
-				{
-					monster_level = effective_depth(p_ptr->depth) + THEMED_LEVEL_QUEST_BOOST;
-				}
-				/* For Monster/unique quests the best_r_idx is already known */
-				else if ((q_ptr->q_type == QUEST_MONSTER) ||
-						 (q_ptr->q_type == QUEST_GUARDIAN) ||
-						 (q_ptr->q_type == QUEST_UNIQUE))
-				{
-					best_r_idx = q_ptr->mon_idx;
-				}
-				/* QUEST_PIT and QUEST_NEST */
-				else  monster_level = effective_depth(p_ptr->depth) + PIT_NEST_QUEST_BOOST;
-
-				/* make a monster */
-				get_mon_hook(q_ptr->theme);
-
-				/* Prepare allocation table */
-				get_mon_num_prep();
-
-				/* mega-hack - undo feeling so monster can be generated */
-				feeling = 0;
-
-				/* Find a legal, distant, unoccupied, space */
-				while (attempts_left)
-				{
-					--attempts_left;
-
-					/* Pick a location */
-					y = rand_int(p_ptr->cur_map_hgt);
-					x = rand_int(p_ptr->cur_map_wid);
-
-					/* Require a grid that all monsters can exist in. */
-					if (!cave_empty_bold(y, x)) continue;
-
-					/* Accept far away grids */
-					if (distance(y, x, p_ptr->py, p_ptr->px) >  MAX_SIGHT) break;
-				}
-
-				if ((attempts_left) && (!best_r_idx))
-				{
-					monster_race *r_ptr;
-					monster_race *r2_ptr = &r_info[best_r_idx];
-
-					/* Quests where the monster is specified (monster quests, unique quests*/
-					if (q_ptr->mon_idx) best_r_idx = q_ptr->mon_idx;
-
-					/* 10 chances to get the strongest monster possible */
-					else for (i = 0; i < 10; i++)
-					{
-						r_idx = get_mon_num(monster_level, y, x, 0L);
-
-						if (!best_r_idx)
-						{
-							best_r_idx = r_idx;
-							r2_ptr = &r_info[best_r_idx];
-							continue;
-						}
-
-						r_ptr = &r_info[r_idx];
-
-						/* Don't use a unique as a replacement */
-						if (r_ptr->flags1 & (RF1_UNIQUE)) continue;
-
-						/* Weaker monster.  Don't use it */
-						if (r_ptr->mon_power < r2_ptr->mon_power) continue;
-
-						best_r_idx = r_idx;
-						r2_ptr = &r_info[best_r_idx];
-
-					}
-				}
-
-				if (place_monster_aux(y, x, best_r_idx, (MPLACE_SLEEP | MPLACE_GROUP)))
-				{
-
-					/* Scan the monster list */
-					for (i = 1; i < mon_max; i++)
-					{
-						monster_type *m_ptr = &mon_list[i];
-
-						/* Ignore dead monsters */
-						if (!m_ptr->r_idx) continue;
-
-						/* Make sure we have the right monster race */
-						if (m_ptr->r_idx != best_r_idx) continue;
-
-						/*mark it as a quest monster*/
-						m_ptr->mflag |= (MFLAG_QUEST);
-					}
-				}
-
-				feeling = old_feeling;
-
-				monster_level = effective_depth(p_ptr->depth);
-
-				/* Remove restriction */
-				get_mon_num_hook = NULL;
-
-				/* Prepare allocation table */
-				get_mon_num_prep();
-			}
-		}
+		process_guild_quests();
 	}
 
 	/* Play an ambient sound at regular intervals. */
@@ -1102,8 +1137,11 @@ static void process_world(void)
 	/* Check for creature generation */
 	if (one_in_(MAX_M_ALLOC_CHANCE))
 	{
-		/* Make a new monster, but not on themed levels */
-		if (feeling < LEV_THEME_HEAD) (void)alloc_monster(MAX_SIGHT + 5, (MPLACE_SLEEP | MPLACE_GROUP | MPLACE_NO_MIMIC | MPLACE_NO_GHOST));
+		/* Make a new monster, but not on themed or wilderness levels */
+		if (p_ptr->dungeon_type < DUNGEON_TYPE_THEMED_LEVEL) /* Also no new monsteers on DUNGEON_TYPE_WILDERNESS */
+		{
+			(void)alloc_monster(MAX_SIGHT + 5, (MPLACE_SLEEP | MPLACE_GROUP | MPLACE_NO_MIMIC | MPLACE_NO_GHOST));
+		}
 	}
 
 	/* Hack - if there is a ghost now, and there was not before,
@@ -1549,7 +1587,10 @@ static void process_world(void)
 		int chance;
 
 		/*players notice strongholds sooner*/
-		if (feeling < LEV_THEME_HEAD) chance = 80;
+		if (p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL) /* Also includes DUNGEON_TYPE_WILDERNESS */
+		{
+			chance = 80;
+		}
 		else chance = 40;
 
 		/* After sufficient time, can learn about the level */
@@ -2834,7 +2875,7 @@ void play_game(void)
 				}
 			}
 			else if ((quest_info == QUEST_NEST) || (quest_info == QUEST_PIT) ||
-					 (quest_info == QUEST_THEMED_LEVEL))
+					 (quest_info == QUEST_THEMED_LEVEL)  || (quest_info == QUEST_WILDERNESS_LEVEL))
 			{
 				/*You can't leave this level*/
 				if ((q_ptr->q_flags & (QFLAG_STARTED)) && (q_ptr->active_level)) quest_fail();

@@ -1287,8 +1287,8 @@ enum
 
 /* Level types */
 #define DUNGEON_TYPE_DEFAULT		1	/* Vanilla-like levels */
-#define DUNGEON_TYPE_THEMED_LEVEL	2
-#define DUNGEON_TYPE_TOWN			3
+#define DUNGEON_TYPE_TOWN			2
+#define DUNGEON_TYPE_THEMED_LEVEL	3
 #define DUNGEON_TYPE_WILDERNESS		4
 
 

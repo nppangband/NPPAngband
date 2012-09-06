@@ -3396,8 +3396,13 @@ void do_cmd_feeling(void)
 		return;
 	}
 
+	if (p_ptr->dungeon_type == DUNGEON_TYPE_WILDERNESS)
+	{
+		msg_print("You have entered an area of near pristine wilderness.");
+	}
+
 	/* Verify the feeling */
-	if (feeling >= LEV_THEME_HEAD)
+	else if (feeling >= LEV_THEME_HEAD)
 	{
 
 		/*print out a message about a themed level*/

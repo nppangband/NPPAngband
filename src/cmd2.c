@@ -138,7 +138,8 @@ void do_cmd_go_up(cmd_code code, cmd_arg args[])
 	/* Verify leaving normal quest level */
 	if ((verify_leave_quest) &&
         (((quest == QUEST_VAULT) && (quest_item_slot() == -1)) ||
-		 (quest == QUEST_PIT) || quest == QUEST_NEST || (quest == QUEST_THEMED_LEVEL)))
+		 (quest == QUEST_PIT) || quest == QUEST_NEST ||
+		 (quest == QUEST_THEMED_LEVEL) || (quest == QUEST_WILDERNESS_LEVEL)))
 	{
 		sprintf(out_val, "Really fail your quest? ");
 		if (!get_check(out_val)) return;
@@ -207,7 +208,8 @@ void do_cmd_go_down(cmd_code code, cmd_arg args[])
 	/* Verify leaving normal quest level */
 	if ((verify_leave_quest) &&
         (((quest == QUEST_VAULT) && (quest_item_slot() == -1)) ||
-		 (quest == QUEST_PIT) || quest == QUEST_NEST || (quest == QUEST_THEMED_LEVEL)))
+		 (quest == QUEST_PIT) || quest == QUEST_NEST ||
+		 (quest == QUEST_THEMED_LEVEL) || (quest == QUEST_WILDERNESS_LEVEL)))
 	{
 		sprintf(out_val, "Really fail your quest? ");
 		if (!get_check(out_val)) return;

@@ -552,7 +552,11 @@ static void prt_feeling(int row, int col)
 	}
 
 	/* Get color of level based on feeling  -JSV- */
-	if (feeling ==  1) 		{attr = TERM_RED;		my_strcpy(feel, "F:Special", sizeof(feel));}
+	if (p_ptr->dungeon_type == DUNGEON_TYPE_WILDERNESS)
+	{
+		{attr = TERM_GREEN;		my_strcpy(feel, "F:Wilderness", sizeof(feel));}
+	}
+	else if (feeling ==  1) 		{attr = TERM_RED;		my_strcpy(feel, "F:Special", sizeof(feel));}
 	else if (feeling ==  2) {attr = TERM_L_RED;		my_strcpy(feel, "F:Superb", sizeof(feel));}
 	else if (feeling ==  3) {attr = TERM_ORANGE;	my_strcpy(feel, "F:Excellent", sizeof(feel));}
 	else if (feeling ==  4) {attr = TERM_ORANGE;	my_strcpy(feel, "F:Very Good", sizeof(feel));}
@@ -562,6 +566,7 @@ static void prt_feeling(int row, int col)
 	else if (feeling ==  8) {attr = TERM_WHITE;		my_strcpy(feel, "F:Like Looks", sizeof(feel));}
 	else if (feeling ==  9) {attr = TERM_WHITE;		my_strcpy(feel, "F:Not All Bad", sizeof(feel));}
 	else if (feeling == 10) {attr = TERM_L_WHITE;	my_strcpy(feel, "F:Boring", sizeof(feel));}
+
 	/* (feeling >= LEV_THEME_HEAD) */
 	else  					{attr = TERM_BLUE;		my_strcpy(feel, "F:Themed", sizeof(feel));}
 

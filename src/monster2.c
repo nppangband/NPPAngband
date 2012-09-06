@@ -3111,7 +3111,9 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	/* Paranoia */
 	if (!in_bounds(y, x)) return (FALSE);
 
-	if ((feeling >= LEV_THEME_HEAD) && (character_dungeon == TRUE)) return (FALSE);
+	/* No new monsters on themed and wilderness levels */
+	if ((p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL) && /* Also includes DUNGEON_TYPE_WILDERNESS */
+		(character_dungeon == TRUE)) return (FALSE);
 
 	/*
 	 * Place a mimic object rather than a monster if called for
@@ -4016,8 +4018,11 @@ bool summon_specific(int y1, int x1, int lev, int type)
 {
 	int i, x, y, r_idx;
 
-	/*hack - no summoning on themed levels*/
-	if (feeling >= LEV_THEME_HEAD) return (FALSE);
+	/*hack - no summoning on themed or wilderness levels*/
+	if (p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL) /* Also includes DUNGEON_TYPE_WILDERNESS */
+	{
+		return (FALSE);
+	}
 
 	/* Look for a location */
 	for (i = 0; i < 20; ++i)

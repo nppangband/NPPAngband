@@ -714,21 +714,23 @@ enum
 #define QUEST_SLOT_PIT_NEST		1
 #define QUEST_SLOT_LEVEL		2
 #define QUEST_SLOT_VAULT		3
-#define QUEST_SLOT_FIXED		4
-#define QUEST_SLOT_MAX			5
+#define QUEST_SLOT_GUARDIAN		4
+#define QUEST_SLOT_WILDERNESS	5
+#define QUEST_SLOT_MAX			6
 
 /*
  * Quest types
  */
-#define QUEST_FIXED			1	/* A fixed quest from quest.txt for a non-unique*/
-#define QUEST_FIXED_U		2	/* A fixed quest from quest.txt for a unique*/
-#define QUEST_MONSTER		3	/* Kill a non-unique*/
-#define QUEST_UNIQUE		4	/* Kill a unique*/
-#define QUEST_VAULT			5	/* retrieve a artifact from a vault and return it to the guild*/
-#define QUEST_PIT			6	/* clear out an entire monster pit*/
-#define QUEST_NEST			7	/* clear out a monster next*/
-#define QUEST_THEMED_LEVEL	8	/* clear out an entire level of creatures*/
-#define QUEST_GUARDIAN		9  	/* A fixed monster quest from the guild */
+#define QUEST_FIXED				1	/* A fixed quest from quest.txt for a non-unique*/
+#define QUEST_FIXED_U			2	/* A fixed quest from quest.txt for a unique*/
+#define QUEST_MONSTER			3	/* Kill a non-unique*/
+#define QUEST_UNIQUE			4	/* Kill a unique*/
+#define QUEST_VAULT				5	/* retrieve a artifact from a vault and return it to the guild*/
+#define QUEST_PIT				6	/* clear out an entire monster pit*/
+#define QUEST_NEST				7	/* clear out a monster next*/
+#define QUEST_THEMED_LEVEL		8	/* clear out an entire level of creatures*/
+#define QUEST_GUARDIAN			9  	/* A fixed monster quest from the guild */
+#define QUEST_WILDERNESS_LEVEL	10  /* Clear out an entire wilderness level */
 
 #define MON_RARE_FREQ	15
 #define MON_LESS_FREQ	50

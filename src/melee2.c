@@ -1716,8 +1716,8 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 	*tar_y = p_ptr->py;
 	*tar_x = p_ptr->px;
 
-	/*hack - some spells are unfair on themed levels*/
-	if (feeling >= LEV_THEME_HEAD)
+	/*hack - some spells are unfair on themed and wilderness levels*/
+	if (p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL) /* Also includes DUNGEON_TYPE_WILDERNESS */
 	{
 		f6 &= ~(RF6_TELE_TO | RF6_TELE_LEVEL | RF6_TELE_AWAY);
 		f7 &= ~(RF7_SUMMON_MASK);

@@ -7626,7 +7626,7 @@ static bool build_themed_level(void)
 		else if (room_build(by, bx, 1)) continue;
 	}
 
-	/*start over on all themed levels with less than 6 rooms due to inevitable crash*/
+	/*start over on all themed levels with less than 4 rooms due to inevitable crash*/
 	if (dun->cent_n < 4)
 	{
 		if (cheat_room) msg_format("not enough rooms");
@@ -7889,52 +7889,52 @@ static bool build_themed_level(void)
 
 		if (r_ptr->flags1 & (RF1_UNIQUE)) max_uniques--;
 
-		/* Mark 1 in 10 monsters for a bonus item */
+		/* Mark 1 in 17 monsters for a bonus item */
 		if (cave_m_idx[y][x] > 0)
 		{
 			monster_type *m_ptr = &mon_list[cave_m_idx[y][x]];
 
-			if ((mon_cnt % 15) == 0) m_ptr->mflag |= (MFLAG_BONUS_ITEM);
+			if ((mon_cnt % 17) == 0) m_ptr->mflag |= (MFLAG_BONUS_ITEM);
 		}
 	}
 
 	/*final preps if this is a quest level*/
 	if (is_quest_level)
 	{
-		int y, x;
-
 		q_ptr->cur_num = 0;
 		q_ptr->max_num = 0;
 
-		/* Square-by-square grid search for monsters */
-		for (y = 0; y < p_ptr->cur_map_hgt; y++)
+		/*
+		 * Go through every monster, and mark them as a questor,
+		 * then make them slightly faster, and light sleepers
+		 */
+		/* Process the monsters */
+		for (i = 1; i < mon_max; i++)
 		{
-			for (x = 0; x < p_ptr->cur_map_wid; x++)
+			monster_type *m_ptr = &mon_list[i];
+			monster_race *r_ptr;
+
+			/* Ignore non-existant monsters */
+			if (!m_ptr->r_idx) continue;
+
+			r_ptr = &r_info[m_ptr->r_idx];
+
+			/*mark it as a quest monster*/
+			m_ptr->mflag |= (MFLAG_QUEST);
+
+			if (!(r_ptr->flags1 & RF1_UNIQUE))
 			{
-				/*Is there a monster here?*/
-				if (cave_m_idx[y][x] > 0)
-				{
-					monster_type *m_ptr = &mon_list[cave_m_idx[y][x]];
-					monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-					/*mark it as a quest monster*/
-					m_ptr->mflag |= (MFLAG_QUEST);
-
-					if (!(r_ptr->flags1 & RF1_UNIQUE))
-					{
-						m_ptr->mflag &= ~(MFLAG_SLOWER);
-						m_ptr->mflag |= (MFLAG_FASTER);
-						calc_monster_speed(m_ptr->fy, m_ptr->fx);
-					}
-
-					/*increase the max_num counter*/
-					q_ptr->max_num ++;
-
-					/*Not many of them sleeping, others lightly sleeping*/
-					if (one_in_(2)) m_ptr->m_timed[MON_TMD_SLEEP] = 0;
-					else m_ptr->m_timed[MON_TMD_SLEEP] /= 2;
-				}
+				m_ptr->mflag &= ~(MFLAG_SLOWER);
+				m_ptr->mflag |= (MFLAG_FASTER);
+				calc_monster_speed(m_ptr->fy, m_ptr->fx);
 			}
+
+			/*increase the max_num counter*/
+			q_ptr->max_num ++;
+
+			/*Not many of them sleeping, others lightly sleeping*/
+			if (one_in_(2)) m_ptr->m_timed[MON_TMD_SLEEP] = 0;
+			else m_ptr->m_timed[MON_TMD_SLEEP] /= 2;
 		}
 	}
 
@@ -9851,9 +9851,11 @@ static void light_elements(bool show_objects)
  */
 static bool build_wilderness_level(void)
 {
-	int y, x;
+	int y, x, i;
 	dun_data dun_body;
 	bool done_ice = FALSE;
+	bool is_quest_level = FALSE;
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 
 	/* Global data */
 	dun = &dun_body;
@@ -9870,6 +9872,12 @@ static bool build_wilderness_level(void)
 	/* Leave the player in the air for now */
 	p_ptr->py = p_ptr->px = 0;
 
+	/*check if we need a quest*/
+	if (quest_check(p_ptr->depth) == QUEST_WILDERNESS_LEVEL)
+	{
+		is_quest_level = TRUE;
+	}
+
 	/* Try with a forest */
 	if ((effective_depth(p_ptr->depth) < 35) || one_in_(2))
 	{
@@ -9881,7 +9889,7 @@ static bool build_wilderness_level(void)
 		}
 	}
 	/* Or try with an ice level */
-        else
+	else
 	{	if (!build_ice_level())
 		{
 			if (cheat_room) msg_format("failed to build an ice level");
@@ -9893,7 +9901,7 @@ static bool build_wilderness_level(void)
 	}
 
 	/* Irregular borders */
-	build_wilderness_borders(FEAT_WALL_EXTRA);
+	build_wilderness_borders(FEAT_PERM_EXTRA);
 
 	/* Mandatory dungeon borders */
 	set_perm_boundry();
@@ -9964,6 +9972,50 @@ static bool build_wilderness_level(void)
 
 	/* Special illumination for ice levels */
 	if (done_ice && ((effective_depth(p_ptr->depth) < 50) || one_in_(4))) light_elements(TRUE);
+
+	/*final preps if this is a quest level*/
+	if (is_quest_level)
+	{
+		q_ptr->cur_num = 0;
+		q_ptr->max_num = 0;
+
+		/*
+		 * Go through every monster, and mark them as a questor,
+		 * then make them slightly faster, and light sleepers
+		 */
+		/* Process the monsters */
+		for (i = 1; i < mon_max; i++)
+		{
+			monster_type *m_ptr = &mon_list[i];
+			monster_race *r_ptr;
+
+			/* Ignore non-existant monsters */
+			if (!m_ptr->r_idx) continue;
+
+			r_ptr = &r_info[m_ptr->r_idx];
+
+			/*mark it as a quest monster*/
+			m_ptr->mflag |= (MFLAG_QUEST);
+
+			if (!(r_ptr->flags1 & RF1_UNIQUE))
+			{
+				m_ptr->mflag &= ~(MFLAG_SLOWER);
+				m_ptr->mflag |= (MFLAG_FASTER);
+				calc_monster_speed(m_ptr->fy, m_ptr->fx);
+			}
+
+			/*increase the max_num counter*/
+			q_ptr->max_num ++;
+
+			/*Not many of them sleeping, others lightly sleeping*/
+			if (one_in_(2)) m_ptr->m_timed[MON_TMD_SLEEP] = 0;
+			else m_ptr->m_timed[MON_TMD_SLEEP] /= 2;
+
+			/* One in 20 generate a bonus item */
+			if ((mon_max % 20) == 0) m_ptr->mflag |= (MFLAG_BONUS_ITEM);
+		}
+	}
+
 
 	/* Success */
 	return (TRUE);
@@ -10577,6 +10629,12 @@ int pick_dungeon_type(void)
 	if (quest_check(p_ptr->depth) == QUEST_THEMED_LEVEL)
 	{
 		return DUNGEON_TYPE_THEMED_LEVEL;
+	}
+
+	/* Themed level quest */
+	if (quest_check(p_ptr->depth) == QUEST_WILDERNESS_LEVEL)
+	{
+		return DUNGEON_TYPE_WILDERNESS;
 	}
 
 	/* Random themed level */

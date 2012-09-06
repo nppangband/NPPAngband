@@ -17,6 +17,8 @@ Scrolls names are now made by the random name generator rather than the old "scr
 Added new wizard mode command to know everything about every object kind, monster race, and feature.
 Updated DVG tileset to Rob Fiala (buzzkill)'s U32 Tileset.
 Sorted flavors.txt, along with the corresponding flvr pref files.
+Eliminated function from util.c that did not work properly on the MAC port.
+Wilderness level quests.
 
 
 NPP 0.5.4 changes:

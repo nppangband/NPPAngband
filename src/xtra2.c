@@ -624,6 +624,7 @@ void monster_death(int m_idx, int who)
 			/*quest monster from a themed level, nest, or pit*/
 			else if ((m_ptr->mflag & (MFLAG_QUEST)) &&
 					 ((q_ptr->q_type ==  QUEST_THEMED_LEVEL) ||
+					  (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) ||
 			 		  (q_ptr->q_type == QUEST_PIT) ||
 				  	  (q_ptr->q_type == QUEST_NEST)))
 			{
@@ -656,8 +657,9 @@ void monster_death(int m_idx, int who)
 						if (my_is_vowel(mon_theme[0])) my_strcat(note, "an ", sizeof(note));
 						else my_strcat(note, "a ", sizeof(note));
 
+						if (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) my_strcat(note, " wilderness level.", sizeof(note));
 						/*dump the monster theme*/
-						my_strcat(note, mon_theme, sizeof(note));
+						else my_strcat(note, mon_theme, sizeof(note));
 
 						/*Finish off the line*/
 						if  (q_ptr->q_type ==  QUEST_THEMED_LEVEL) 	my_strcat(note, " stronghold.", sizeof(note));

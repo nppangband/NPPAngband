@@ -525,6 +525,7 @@ void teleport_player_level(int who)
 		 (kind_of_quest == QUEST_UNIQUE) ||
 		 (kind_of_quest == QUEST_PIT) ||
 		 (kind_of_quest == QUEST_NEST) ||
+		 (kind_of_quest ==  QUEST_WILDERNESS_LEVEL) ||
 		 (kind_of_quest == QUEST_THEMED_LEVEL)))
 	{
 		/*de-activate the quest*/

@@ -357,7 +357,7 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 
 	/* Vault, pit or nest quests */
 	if  ((q_ptr->q_type == QUEST_THEMED_LEVEL) ||
-		 (q_ptr->q_type == QUEST_PIT) ||
+		 (q_ptr->q_type == QUEST_PIT) || (q_ptr->q_type == QUEST_WILDERNESS_LEVEL) ||
 		 (q_ptr->q_type == QUEST_NEST))
 	{
 		/*print out a message about a themed level*/
@@ -395,6 +395,10 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 		if (q_ptr->q_type ==  QUEST_THEMED_LEVEL)
 		{
 			my_strcat(intro, format("%s stronghold", mon_theme), sizeof(intro));
+		}
+		else if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL)
+		{
+			my_strcat(intro, format("wilderness level "), sizeof(intro));
 		}
 		else if (q_ptr->q_type == QUEST_PIT)
 		{
@@ -1779,7 +1783,7 @@ static bool custom_randart_reward(int chance, int dice)
 	if (!adult_no_artifacts) return FALSE;
 	if (!adult_no_xtra_artifacts) return FALSE;
 
-	if (chance + damroll(dice,250) > p_ptr->fame) return (FALSE);
+	if (chance + damroll(dice,225) > p_ptr->fame) return (FALSE);
 	if (!one_in_(3)) return (FALSE);
 
 	return (TRUE);
@@ -2336,7 +2340,7 @@ static int check_level_quest(void)
 }
 
 /*
- * Actually give the character a vault quest
+ * Actually give the character a themed level quest
  */
 static bool place_level_quest(int lev)
 {
@@ -2401,6 +2405,32 @@ static bool place_level_quest(int lev)
 }
 
 /*
+ * Actually give the character a wilderness quest
+ */
+static bool place_wilderness_quest(int lev)
+{
+
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+
+	/* Actually write the quest */
+	q_ptr->q_type = QUEST_WILDERNESS_LEVEL;
+	q_ptr->base_level = lev;
+	q_ptr->active_level = lev;
+	if (custom_randart_reward(45, 6))  q_ptr->reward = REWARD_RANDART;
+
+	/* A chance to simply increase the player's hp lifeline*/
+	else if (extra_hp_reward(275)) q_ptr->reward = REWARD_INC_HP;
+
+	else if (25 + damroll(25,25) < p_ptr->fame) q_ptr->reward = REWARD_TAILORED;
+
+	else q_ptr->reward = REWARD_GREAT_ITEM;
+
+	/*success*/
+	return (TRUE);
+}
+
+
+/*
  * Actually give the character a vault quest
  */
 static bool place_vault_quest(int lev)
@@ -2448,12 +2478,15 @@ bool quest_allowed(byte j)
 		if (p_ptr->max_depth < 14) return (FALSE);
 		if (!check_level_quest()) return (FALSE);
 	}
-	else if (j == QUEST_SLOT_FIXED)
+	else if (j == QUEST_SLOT_GUARDIAN)
 	{
 		if (p_ptr->max_depth < 3) return (FALSE);
 		if (p_ptr->quest_depth > MAX_MIN_DEPTH) return (FALSE);
 	}
-
+	else if (j == QUEST_SLOT_WILDERNESS)
+	{
+		if (p_ptr->max_depth < 20) return (FALSE);
+	}
 	/* Allowable */
 	return (TRUE);
 
@@ -2513,6 +2546,7 @@ bool check_reward(void)
 	}
 
 	else if  ((q_ptr->q_type ==  QUEST_THEMED_LEVEL) ||
+			  (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) ||
 			  (q_ptr->q_type == QUEST_PIT) ||
 			  (q_ptr->q_type == QUEST_NEST))
 	{
@@ -2590,12 +2624,13 @@ void do_reward(void)
 	}
 
 	else if  ((q_ptr->q_type ==  QUEST_THEMED_LEVEL) || (q_ptr->q_type == QUEST_PIT) ||
-			  (q_ptr->q_type == QUEST_NEST))
+			  (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) || (q_ptr->q_type == QUEST_NEST))
 	{
 		/*We owe the player a reward*/
 		if ((!q_ptr->active_level) && (q_ptr->reward))
 		{
-			if (q_ptr->q_type == QUEST_THEMED_LEVEL)	p_ptr->fame += 10;
+			if ((q_ptr->q_type == QUEST_THEMED_LEVEL) ||
+				(q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL))	p_ptr->fame += 10;
 
 			/* Slightly random fame bonus for these harder quests*/
 			p_ptr->fame += damroll(10,2);
@@ -2720,6 +2755,14 @@ bool guild_purchase(int choice)
 			quest_placed = FALSE;
 		}
 	}
+	else if (choice == QUEST_SLOT_WILDERNESS)
+	{
+		if (!place_wilderness_quest(qlev))
+		{
+			guild_quest_wipe();
+			quest_placed = FALSE;
+		}
+	}
 	/*Nest or Pit quests*/
 	else if (choice == QUEST_SLOT_PIT_NEST)
 	{
@@ -2730,7 +2773,7 @@ bool guild_purchase(int choice)
 		}
 	}
 	/*place a monster quest*/
-	else if (choice == QUEST_SLOT_FIXED)
+	else if (choice == QUEST_SLOT_GUARDIAN)
 	{
 		if (!place_mon_quest(qlev, TRUE))
 		{
@@ -2876,7 +2919,7 @@ void quest_fail(void)
 		/*special quests cut the player fame in half*/
 		if (quest == QUEST_VAULT)	p_ptr->fame /= 2;
 
-		else if ((quest == QUEST_NEST) ||
+		else if ((quest == QUEST_NEST) || (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) ||
 			     (quest == QUEST_PIT) ||
 				 (quest == QUEST_THEMED_LEVEL))	p_ptr->fame = (p_ptr->fame * 65 / 100);
 
@@ -2915,7 +2958,7 @@ void quest_fail(void)
 			artifact_wipe(QUEST_ART_SLOT, TRUE);
 		}
 
-		else if ((quest == QUEST_THEMED_LEVEL) ||
+		else if ((quest == QUEST_THEMED_LEVEL) || (quest ==  QUEST_WILDERNESS_LEVEL) ||
 			 	 (quest == QUEST_PIT) ||
 				 (quest == QUEST_NEST))
 		{
@@ -2926,17 +2969,22 @@ void quest_fail(void)
 
 			my_strcpy(note, "Quest: Failed to clear out ", sizeof(note));
 
-			/*make the grammar proper*/
-			if (my_is_vowel(mon_theme[0])) my_strcat(note, "an ", sizeof(note));
-			else my_strcat(note, "a ", sizeof(note));
+			if (quest ==  QUEST_WILDERNESS_LEVEL) my_strcat(note, "a wilderness level.", sizeof(note));
+			else
+			{
 
-			/*dump the monster theme*/
-			my_strcat(note, mon_theme, sizeof(note));
+				/*make the grammar proper*/
+				if (my_is_vowel(mon_theme[0])) my_strcat(note, "an ", sizeof(note));
+				else my_strcat(note, "a ", sizeof(note));
 
-			/*Finish off the line*/
-			if  (quest == QUEST_THEMED_LEVEL) 	my_strcat(note, " stronghold.", sizeof(note));
-			else if (quest == QUEST_PIT)	my_strcat(note, " pit.", sizeof(note));
-			else if (quest == QUEST_NEST)	my_strcat(note, " nest.", sizeof(note));
+				/*dump the monster theme*/
+				my_strcat(note, mon_theme, sizeof(note));
+
+				/*Finish off the line*/
+				if  (quest == QUEST_THEMED_LEVEL) 	my_strcat(note, " stronghold.", sizeof(note));
+				else if (quest == QUEST_PIT)	my_strcat(note, " pit.", sizeof(note));
+				else if (quest == QUEST_NEST)	my_strcat(note, " nest.", sizeof(note));
+			}
 
    		}
 
@@ -3085,16 +3133,19 @@ void quest_monster_update(void)
 	/*nothing left, notification already printed in monster_death */
 	if (!remaining) return;
 
-	if (((q_ptr->q_type ==  QUEST_THEMED_LEVEL) ||
-         (q_ptr->q_type == QUEST_PIT) ||
-		 (q_ptr->q_type == QUEST_NEST)))
+	if ((q_ptr->q_type ==  QUEST_THEMED_LEVEL) ||
+		(q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) ||
+        (q_ptr->q_type == QUEST_PIT) ||
+		(q_ptr->q_type == QUEST_NEST))
 	{
 		if (remaining > 1)
 		{
 			my_strcpy(note, format("There are %d creatures remaining ", remaining), sizeof(note));
 		}
 		else my_strcpy(note, "There is one creature remaining ", sizeof(note));
-		my_strcat(note, format("from the %s", feeling_themed_level[q_ptr->theme]),
+		if (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) my_strcat(note, " from the wilderness level.", sizeof(note));
+
+		else my_strcat(note, format("from the %s", feeling_themed_level[q_ptr->theme]),
 						sizeof(note));
 		if  (q_ptr->q_type ==  QUEST_THEMED_LEVEL) 	my_strcat(note, " stronghold.", sizeof(note));
 		else if (q_ptr->q_type == QUEST_PIT)	my_strcat(note, " pit.", sizeof(note));

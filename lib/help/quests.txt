@@ -124,6 +124,17 @@ increases your player fame by the greatest amount, and offers the most lucrative
 rewards.  Voluntarily leaving a themed level results in immediate 
 quest failure.
 
+***** <Wilderness Quest>
+WILDERNESS QUEST:
+This quest is a different version of the Themed level quests.  An entire level
+of unthemed randomly chosen creatures in a wilderness level.  Since there are so 
+many like creatures bunched so closely together, a creature from inside one of 
+these wilderness levels will not attempt to summon more creatures to the battle.  
+This tends to be adifficult type of quest, depending on the most difficult
+to kill creature on the level, increases your player fame by the greatest amount
+(tied with Level Quests), and offers the most lucrative rewards.  Voluntarily 
+leaving a wilderness level results in immediate quest failure.
+
 
 REWARD:
 
