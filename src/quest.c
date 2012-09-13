@@ -355,10 +355,8 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 		return;
 	}
 
-	/* Vault, pit or nest quests */
-	if  ((q_ptr->q_type == QUEST_THEMED_LEVEL) ||
-		 (q_ptr->q_type == QUEST_PIT) || (q_ptr->q_type == QUEST_WILDERNESS_LEVEL) ||
-		 (q_ptr->q_type == QUEST_NEST))
+	/* Vault, wilderness. pit or nest quests */
+	if  (quest_multiple_r_idx(q_ptr))
 	{
 		/*print out a message about a themed level*/
 		char mon_theme[80];
@@ -377,7 +375,7 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 			/* Still active */
 			else
 			{
-		    	int remaining = q_ptr->max_num - q_ptr->cur_num;
+		    	int remaining = q_ptr->q_max_num - q_ptr->q_num_killed;
 
 				if (remaining > 1)
 				{
@@ -388,25 +386,32 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 			}
 		}
 
-		my_strcpy(mon_theme, feeling_themed_level[q_ptr->theme], sizeof(mon_theme));
-		if (my_is_vowel(mon_theme[0])) my_strcat(intro, "an ", sizeof(intro));
-		else my_strcat(intro, "a ", sizeof(intro));
+		if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL)
+		{
+			my_strcat(intro, format("a wilderness level"), sizeof(intro));
+		}
+		else if (q_ptr->q_type == QUEST_ARENA_LEVEL)
+		{
+			my_strcat(intro, format("an arena level"), sizeof(intro));
+		}
+		else
+		{
+			my_strcpy(mon_theme, feeling_themed_level[q_ptr->theme], sizeof(mon_theme));
+			if (my_is_vowel(mon_theme[0])) my_strcat(intro, "an ", sizeof(intro));
+			else my_strcat(intro, "a ", sizeof(intro));
 
-		if (q_ptr->q_type ==  QUEST_THEMED_LEVEL)
-		{
-			my_strcat(intro, format("%s stronghold", mon_theme), sizeof(intro));
-		}
-		else if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL)
-		{
-			my_strcat(intro, format("wilderness level "), sizeof(intro));
-		}
-		else if (q_ptr->q_type == QUEST_PIT)
-		{
-			my_strcat(intro, format("%s pit", mon_theme), sizeof(intro));
-		}
-		else if (q_ptr->q_type == QUEST_NEST)
-		{
-			my_strcat(intro, format("%s nest", mon_theme), sizeof(intro));
+			if (q_ptr->q_type ==  QUEST_THEMED_LEVEL)
+			{
+				my_strcat(intro, format("%s stronghold", mon_theme), sizeof(intro));
+			}
+			else if (q_ptr->q_type == QUEST_PIT)
+			{
+				my_strcat(intro, format("%s pit", mon_theme), sizeof(intro));
+			}
+			else if (q_ptr->q_type == QUEST_NEST)
+			{
+				my_strcat(intro, format("%s nest", mon_theme), sizeof(intro));
+			}
 		}
 
 		/* The location of the quest */
@@ -431,9 +436,8 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 	/* Not a vault quest, so get the monster race name (singular)*/
 	monster_desc_race(race_name, sizeof(race_name), q_ptr->mon_idx);
 
-	if ((q_ptr->q_type == QUEST_UNIQUE) || (q_ptr->q_type == QUEST_FIXED_U))
+	if (quest_fixed(q_ptr))
 	{
-
 		/* Monster quests */
 		my_strcpy(targets, race_name, sizeof(targets));
 		my_strcpy(intro, "To fulfill your quest, ", sizeof(intro));
@@ -444,11 +448,11 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 		my_strcpy(name, race_name, sizeof(name));
 
 		/* Multiple quest monsters */
-		if ((q_ptr->max_num - q_ptr->cur_num) > 1)
+		if ((q_ptr->q_max_num - q_ptr->q_num_killed) > 1)
 		{
 			plural_aux(name, sizeof(name));
 			my_strcpy(targets,
-				format("%d %s",(q_ptr->max_num - q_ptr->cur_num), name), sizeof(targets));
+				format("%d %s",(q_ptr->q_max_num - q_ptr->q_num_killed), name), sizeof(targets));
 		}
 
 		/* One quest monster */
@@ -463,8 +467,7 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 	else my_strcpy(what, "kill", sizeof(what));
 
 	/* The type of the quest */
-	if (q_ptr->q_type == QUEST_FIXED) my_strcpy(intro, "For eternal glory, ", sizeof(intro));
-	else if (q_ptr->q_type == QUEST_FIXED_U) my_strcpy(intro, "For eternal glory, ", sizeof(intro));
+	if (quest_fixed(q_ptr)) my_strcpy(intro, "For eternal glory, ", sizeof(intro));
 	else if ((q_ptr->q_type == QUEST_MONSTER) || (q_ptr->q_type == QUEST_GUARDIAN))
 	{
 		my_strcpy(intro, "To complete your ", sizeof(intro));
@@ -491,17 +494,14 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 void show_quest_mon(int y, int x)
 {
 
-	int i = quest_check(p_ptr->cur_quest);
+	quest_type *q_ptr = &q_info[quest_num(p_ptr->cur_quest)];
 
 	/* Reset the cursor */
 	Term_gotoxy(x, y);
 
 	/*display the monster character if applicable*/
-	if ((i == QUEST_MONSTER) || (i == QUEST_UNIQUE) ||
-		(i == QUEST_FIXED)   || (i == QUEST_FIXED_U) ||
-		(i == QUEST_GUARDIAN))
+	if ((quest_fixed(q_ptr)) || (quest_single_r_idx(q_ptr)))
 	{
-		quest_type *q_ptr = &q_info[quest_num(p_ptr->cur_quest)];
 		monster_race *r_ptr = &r_info[q_ptr->mon_idx];
 
 		/* Get the char */
@@ -1261,7 +1261,7 @@ static void grant_reward_object(byte depth, byte type)
 				case A_WIS: {sval = SV_POTION_INC_WIS; break;}
 				case A_DEX: {sval = SV_POTION_INC_DEX; break;}
 				case A_CON: {sval = SV_POTION_INC_CON; break;}
-				default: sval = SV_POTION_INC_CHR;
+				default: 	{sval = SV_POTION_INC_CHR; break;}
 			}
 
 			/* Get local object */
@@ -1978,7 +1978,7 @@ static bool place_mon_quest(int lev, bool fixed)
 
 	/* Set up the quest */
 	q_ptr->mon_idx = table[i].index;
-	q_ptr->cur_num = 0;
+	q_ptr->q_num_killed = 0;
 	q_ptr->base_level = lev;
 	q_ptr->active_level = lev;
 
@@ -1995,8 +1995,8 @@ static bool place_mon_quest(int lev, bool fixed)
 	 */
 	if (r_ptr->flags1 & (RF1_UNIQUE))
 	{
-		q_ptr->max_num = 1;
-		q_ptr->q_type	= QUEST_UNIQUE;
+		q_ptr->q_max_num = 1;
+		q_ptr->q_type = QUEST_MONSTER;
 	}
 	else
 	{
@@ -2019,10 +2019,10 @@ static bool place_mon_quest(int lev, bool fixed)
 		if (fixed) num += 3 + randint1(2) + randint1(2);
 
 		/*assign the number*/
-		q_ptr->max_num = num;
+		q_ptr->q_max_num = num;
 
 		/*assign the quest type*/
-		if (fixed) q_ptr->q_type	= QUEST_GUARDIAN;
+		if (fixed) q_ptr->q_type = QUEST_GUARDIAN;
 		else q_ptr->q_type	= QUEST_MONSTER;
 
 	}
@@ -2429,6 +2429,31 @@ static bool place_wilderness_quest(int lev)
 	return (TRUE);
 }
 
+/*
+ * Actually give the character a wilderness quest
+ */
+static bool place_arena_quest(int lev)
+{
+
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+
+	/* Actually write the quest */
+	q_ptr->q_type = QUEST_ARENA_LEVEL;
+	q_ptr->base_level = lev;
+	q_ptr->active_level = lev;
+	q_ptr->q_max_num = ARENA_MAX_MON;
+	if (custom_randart_reward(20, 6))  q_ptr->reward = REWARD_RANDART;
+
+	/* A chance to simply increase the player's hp lifeline*/
+	else if (extra_hp_reward(175)) q_ptr->reward = REWARD_INC_HP;
+
+	else if (25 + damroll(15,15) < p_ptr->fame) q_ptr->reward = REWARD_TAILORED;
+
+	else q_ptr->reward = REWARD_GREAT_ITEM;
+
+	/*success*/
+	return (TRUE);
+}
 
 /*
  * Actually give the character a vault quest
@@ -2485,7 +2510,13 @@ bool quest_allowed(byte j)
 	}
 	else if (j == QUEST_SLOT_WILDERNESS)
 	{
+		if (p_ptr->max_depth < 17) return (FALSE);
+	}
+	else if (j == QUEST_SLOT_ARENA)
+	{
 		if (p_ptr->max_depth < 20) return (FALSE);
+		if (p_ptr->fame < 100) return (FALSE);
+		if (!(q_info[GUILD_QUEST_SLOT].q_flags & (QFLAG_ARENA_QUEST))) return (FALSE);
 	}
 	/* Allowable */
 	return (TRUE);
@@ -2506,10 +2537,12 @@ bool can_quest_at_level(void)
 	/* Make sure there is no fixed quest on the same level of quests */
 	for (i = 0; i < z_info->q_max; i++)
 	{
+		quest_type *q_ptr = &q_info[i];
+
 		/* check fixed quests to see that they're not on the same level*/
-		if ((q_info[i].q_type == QUEST_FIXED) || (q_info[i].q_type == QUEST_FIXED_U))
+		if (quest_fixed(q_ptr))
 		{
-			if (q_info[i].base_level == guild_quest_level())
+			if (q_ptr->base_level == guild_quest_level())
 			{
 				return (FALSE);
 			}
@@ -2527,8 +2560,7 @@ bool check_reward(void)
 	/* Check for outstanding rewards */
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 
-	if ((q_ptr->q_type == QUEST_MONSTER) || (q_ptr->q_type == QUEST_UNIQUE) ||
-		(q_ptr->q_type == QUEST_GUARDIAN))
+	if (quest_single_r_idx(q_ptr) || quest_multiple_r_idx(q_ptr))
 	{
 		/*We owe the player a reward*/
 		if ((!q_ptr->active_level) && (q_ptr->reward))
@@ -2541,21 +2573,7 @@ bool check_reward(void)
 	{
 		/* Find quest item in the inventory*/
 		if (quest_item_slot() > -1) return (TRUE);
-		else return (FALSE);
-
 	}
-
-	else if  ((q_ptr->q_type ==  QUEST_THEMED_LEVEL) ||
-			  (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) ||
-			  (q_ptr->q_type == QUEST_PIT) ||
-			  (q_ptr->q_type == QUEST_NEST))
-	{
-		/*We owe the player a reward*/
-		if ((!q_ptr->active_level) && (q_ptr->reward))
-		{
-			return (TRUE);
-		}
-  	}
 
 	return (FALSE);
 }
@@ -2570,8 +2588,7 @@ void do_reward(void)
 	/* Sanity check. */
 	if (!check_reward()) return;
 
-	if ((q_ptr->q_type == QUEST_MONSTER) || (q_ptr->q_type == QUEST_UNIQUE) ||
-		(q_ptr->q_type == QUEST_GUARDIAN))
+	if (quest_single_r_idx(q_ptr))
 	{
 		/* Grant fame bonus */
 		p_ptr->fame += 10;
@@ -2588,8 +2605,6 @@ void do_reward(void)
 
 	else if (q_ptr->q_type == QUEST_VAULT)
 	{
-		char note[120];
-
 		object_type *o_ptr;
 
 		/* Find quest item in the inventory*/
@@ -2598,24 +2613,11 @@ void do_reward(void)
 		o_ptr = &inventory[j];
 
 		/* Grant fame bonus */
-		p_ptr->fame += 5;
+		p_ptr->fame += 50;
 		altered_inventory_counter += 5;
 
 		/*if using notes file, make a note*/
-		if (adult_take_notes)
-		{
-			char o_name[80];
-
-			/* Get a shorter description to fit the notes file */
-			object_desc(o_name, sizeof(o_name), o_ptr, ODESC_BASE);
-
-			/*Create the note*/
-			sprintf(note, "Returned %s to the Adventurer's Guild.", o_name);
-
-			/*write note*/
- 			do_cmd_note(note, q_ptr->active_level);
-		}
-
+		write_quest_note(TRUE);
 		artifact_wipe(o_ptr->art_num, TRUE);
 
 		/* Destroy the quest item in the pack */
@@ -2623,14 +2625,15 @@ void do_reward(void)
 		inven_item_optimize(j);
 	}
 
-	else if  ((q_ptr->q_type ==  QUEST_THEMED_LEVEL) || (q_ptr->q_type == QUEST_PIT) ||
-			  (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) || (q_ptr->q_type == QUEST_NEST))
+	else if (quest_multiple_r_idx(q_ptr))
 	{
 		/*We owe the player a reward*/
 		if ((!q_ptr->active_level) && (q_ptr->reward))
 		{
 			if ((q_ptr->q_type == QUEST_THEMED_LEVEL) ||
 				(q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL))	p_ptr->fame += 10;
+
+			else if (q_ptr->q_type == QUEST_ARENA_LEVEL) p_ptr->fame += 15;
 
 			/* Slightly random fame bonus for these harder quests*/
 			p_ptr->fame += damroll(10,2);
@@ -2678,9 +2681,7 @@ void display_quest(void)
 	Term_addstr(-1, TERM_WHITE, q_out);
 
 	/*display the monster character if applicable*/
-	if ((quest_check(p_ptr->cur_quest) == QUEST_MONSTER) ||
-		(quest_check(p_ptr->cur_quest) == QUEST_UNIQUE) ||
-		(quest_check(p_ptr->cur_quest) == QUEST_GUARDIAN))
+	if (quest_slot_single_r_idx(quest_num(p_ptr->cur_quest)))
 	{
 		quest_type *q_ptr = &q_info[quest_num(p_ptr->cur_quest)];
 		monster_race *r_ptr = &r_info[q_ptr->mon_idx];
@@ -2718,7 +2719,7 @@ bool guild_purchase(int choice)
 	for (i = 0; i < z_info->q_max; i++)
 	{
 		/* check fixed quests to see that they're not on the same level*/
-		if ((q_info[i].q_type == QUEST_FIXED) || (q_info[i].q_type == QUEST_FIXED_U))
+		if (quest_slot_fixed(i))
 		{
 			if (q_info[i].base_level == qlev)
 			{
@@ -2763,6 +2764,14 @@ bool guild_purchase(int choice)
 			quest_placed = FALSE;
 		}
 	}
+	else if (choice == QUEST_SLOT_ARENA)
+	{
+		if (!place_arena_quest(qlev))
+		{
+			guild_quest_wipe();
+			quest_placed = FALSE;
+		}
+	}
 	/*Nest or Pit quests*/
 	else if (choice == QUEST_SLOT_PIT_NEST)
 	{
@@ -2801,6 +2810,10 @@ bool guild_purchase(int choice)
 	/* Vault quest allowed 1/3 of the time */
 	if (one_in_(3)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_VAULT_QUEST);
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_VAULT_QUEST);
+
+	/* Arena quest allowed 1/3 of the time */
+	if (one_in_(3)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_ARENA_QUEST);
+	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_ARENA_QUEST);
 
 	return (TRUE);
 }
@@ -2865,7 +2878,7 @@ int quest_item_slot(void)
 	}
 
 	/* No quest item */
-	return -1;
+	return (-1);
 }
 
 /*
@@ -2876,21 +2889,131 @@ void guild_quest_wipe(void)
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 	bool extra_level = FALSE;
 	bool vault_quest = FALSE;
+	bool arena_quest = FALSE;
 
 
 	/* Remember if there should be an extra level added to the next quest depth */
 	if (q_ptr->q_flags & (QFLAG_EXTRA_LEVEL)) extra_level = TRUE;
-	/* Remember if we should allow a vault quest */
+	/* Remember if we should allow a vault or arena quest */
 	if (q_ptr->q_flags & (QFLAG_VAULT_QUEST)) vault_quest = TRUE;
+	if (q_ptr->q_flags & (QFLAG_ARENA_QUEST)) arena_quest = TRUE;
 
 	/* Wipe the structure */
 	(void)WIPE(q_ptr, quest_type);
 
 	if (extra_level) q_ptr->q_flags |= QFLAG_EXTRA_LEVEL;
 	if (vault_quest) q_ptr->q_flags |= QFLAG_VAULT_QUEST;
+	if (arena_quest) q_ptr->q_flags |= QFLAG_ARENA_QUEST;
 
 	p_ptr->cur_quest = 0;
 
+}
+
+/*
+ * Write a note to the file when the quest is over.
+ * Success is true if the quest was completed.
+ * Success is false if the quest was failed.
+ */
+void write_quest_note(bool success)
+{
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+
+	char note[120];
+
+	if (!adult_take_notes) return;
+
+	if (q_ptr->q_type == QUEST_VAULT)
+	{
+		object_type *i_ptr;
+		object_type object_type_body;
+		char o_name[80];
+
+		/* Get local object */
+		i_ptr = &object_type_body;
+
+		/*create a "mock" quest artifact*/
+		create_quest_artifact(i_ptr);
+
+		/* Get a shorter description to fit the notes file */
+		object_desc(o_name, sizeof(o_name), i_ptr, ODESC_BASE);
+
+		/*create the note*/
+		if (success) sprintf(note, "Quest: Returned %s to the Adventurer's Guild.", o_name);
+		else sprintf(note, "Quest: Failed to return %s to the Guild.", o_name);
+
+		/*clear out the artifact*/
+		artifact_wipe(QUEST_ART_SLOT, TRUE);
+	}
+
+	else if (quest_multiple_r_idx(q_ptr))
+	{
+		if (success) my_strcpy(note, "Quest: Completed ", sizeof(note));
+		else my_strcpy(note, "Quest: Failed to complete ", sizeof(note));
+
+		if (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) my_strcat(note, "a wilderness quest.", sizeof(note));
+		else if (q_ptr->q_type ==  QUEST_ARENA_LEVEL) my_strcat(note, "an arena quest.", sizeof(note));
+		else
+		{
+			char mon_theme[80];
+
+			/*Get the theme*/
+			my_strcpy(mon_theme, feeling_themed_level[q_ptr->theme], sizeof(mon_theme));
+
+			if (success) my_strcpy(note, "Quest: Cleared out ", sizeof(note));
+			else my_strcpy(note, "Quest: Failed to clear out ", sizeof(note));
+
+			/*make the grammar proper*/
+			if (my_is_vowel(mon_theme[0])) my_strcat(note, "an ", sizeof(note));
+			else my_strcat(note, "a ", sizeof(note));
+
+			/*dump the monster theme*/
+			my_strcat(note, mon_theme, sizeof(note));
+
+			/*Finish off the line*/
+			if  (q_ptr->q_type == QUEST_THEMED_LEVEL) 	my_strcat(note, " stronghold.", sizeof(note));
+			else if (q_ptr->q_type == QUEST_PIT)	my_strcat(note, " pit.", sizeof(note));
+			else if (q_ptr->q_type == QUEST_NEST)	my_strcat(note, " nest.", sizeof(note));
+		}
+
+	}
+
+	else
+	{
+		monster_race *r_ptr = &r_info[q_ptr->mon_idx];
+		char race_name[80];
+
+		/* Get the monster race name (singular)*/
+		monster_desc_race(race_name, sizeof(race_name), q_ptr->mon_idx);
+
+		/* Multiple quest monsters */
+		if (q_ptr->q_max_num > 1)
+		{
+			plural_aux(race_name, sizeof(race_name));
+		}
+
+		if (r_ptr->flags1 == RF1_UNIQUE)
+		{
+			/*write note*/
+			if monster_nonliving(r_ptr)
+			{
+				sprintf(note, "Quest: Failed to destroy %s", race_name);
+			}
+			else sprintf(note, "Quest: Failed to kill %s", race_name);
+		}
+
+		else
+		{
+			/* Write note */
+			if monster_nonliving(r_ptr)
+			{
+	          	sprintf(note, "Quest: Failed to destroy %d %s", q_ptr->q_max_num, race_name);
+			}
+			else sprintf(note, "Quest: Failed to kill %d %s", q_ptr->q_max_num, race_name);
+		}
+	}
+
+	/*write the note*/
+	do_cmd_note(note, q_ptr->base_level);
 }
 
 /*
@@ -2899,8 +3022,6 @@ void guild_quest_wipe(void)
 void quest_fail(void)
 {
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
-	monster_race *r_ptr = &r_info[q_ptr->mon_idx];
-	byte quest;
 
 	/* Message */
 	msg_print("You have failed in your quest!");
@@ -2910,18 +3031,14 @@ void quest_fail(void)
 	quest_indicator_complete = FALSE;
 	if (!character_icky) p_ptr->redraw |= (PR_QUEST_ST);
 
-	/*find out the type of quest*/
-	quest = quest_check(q_ptr->base_level);
-
 	/* Reputation penalty */
 	if (p_ptr->fame)
 	{
 		/*special quests cut the player fame in half*/
-		if (quest == QUEST_VAULT)	p_ptr->fame /= 2;
+		if (q_ptr->q_type == QUEST_VAULT)	p_ptr->fame /= 2;
 
-		else if ((quest == QUEST_NEST) || (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) ||
-			     (quest == QUEST_PIT) ||
-				 (quest == QUEST_THEMED_LEVEL))	p_ptr->fame = (p_ptr->fame * 65 / 100);
+		/* Failing a pit, nest, wilderness, or themed level quests isn't as bad */
+		else if (quest_multiple_r_idx(q_ptr)) p_ptr->fame = (p_ptr->fame * 65 / 100);
 
 		else
 		{
@@ -2931,98 +3048,7 @@ void quest_fail(void)
 	}
 
 	/*make a note of the failed quest */
-	if (adult_take_notes)
-	{
-
-		char note[120];
-
-		if (quest == QUEST_VAULT)
-		{
-			object_type *i_ptr;
-			object_type object_type_body;
-			char o_name[80];
-
-			/* Get local object */
-			i_ptr = &object_type_body;
-
-			/*create a "mock" quest artifact*/
-			create_quest_artifact(i_ptr);
-
-			/* Get a shorter description to fit the notes file */
-			object_desc(o_name, sizeof(o_name), i_ptr, ODESC_BASE);
-
-			/*create the note*/
-			sprintf(note, "Quest: Failed to return %s to the Guild", o_name);
-
-			/*clear out the artifact*/
-			artifact_wipe(QUEST_ART_SLOT, TRUE);
-		}
-
-		else if ((quest == QUEST_THEMED_LEVEL) || (quest ==  QUEST_WILDERNESS_LEVEL) ||
-			 	 (quest == QUEST_PIT) ||
-				 (quest == QUEST_NEST))
-		{
-			char mon_theme[80];
-
-			/*Get the theme*/
-			my_strcpy(mon_theme, feeling_themed_level[q_ptr->theme], sizeof(mon_theme));
-
-			my_strcpy(note, "Quest: Failed to clear out ", sizeof(note));
-
-			if (quest ==  QUEST_WILDERNESS_LEVEL) my_strcat(note, "a wilderness level.", sizeof(note));
-			else
-			{
-
-				/*make the grammar proper*/
-				if (my_is_vowel(mon_theme[0])) my_strcat(note, "an ", sizeof(note));
-				else my_strcat(note, "a ", sizeof(note));
-
-				/*dump the monster theme*/
-				my_strcat(note, mon_theme, sizeof(note));
-
-				/*Finish off the line*/
-				if  (quest == QUEST_THEMED_LEVEL) 	my_strcat(note, " stronghold.", sizeof(note));
-				else if (quest == QUEST_PIT)	my_strcat(note, " pit.", sizeof(note));
-				else if (quest == QUEST_NEST)	my_strcat(note, " nest.", sizeof(note));
-			}
-
-   		}
-
-		else
-		{
-			char race_name[80];
-
-			/* Get the monster race name (singular)*/
-			monster_desc_race(race_name, sizeof(race_name), q_ptr->mon_idx);
-
-			/* Multiple quest monsters */
-			if (q_ptr->max_num > 1)
-			{
-				plural_aux(race_name, sizeof(race_name));
-			}
-
-			if (q_ptr->q_type == QUEST_UNIQUE)
-			{
-				/*write note*/
-				if monster_nonliving(r_ptr)
-				sprintf(note, "Quest: Failed to destroy %s", race_name);
-				else sprintf(note, "Quest: Failed to kill %s", race_name);
-			}
-
-			else
-			{
-				/* Write note */
-				if monster_nonliving(r_ptr)
-            		sprintf(note, "Quest: Failed to destroy %d %s", q_ptr->max_num, race_name);
-				else sprintf(note, "Quest: Failed to kill %d %s", q_ptr->max_num, race_name);
-			}
-
- 		}
-
-		/*write the note*/
-		do_cmd_note(note, q_ptr->base_level);
-
-	}
+	write_quest_note(FALSE);
 
 	/*wipe the quest*/
 	guild_quest_wipe();
@@ -3114,7 +3140,7 @@ void format_quest_indicator(char dest[], int max, byte *attr)
 	else
 	{
 		/* Show the remaining number of monsters */
-		strnfmt(dest, max, "Qst:%d" , q_ptr->max_num - q_ptr->cur_num);
+		strnfmt(dest, max, "Qst:%d" , q_ptr->q_max_num - q_ptr->q_num_killed);
 		*attr = TERM_L_RED;
 	}
 
@@ -3128,28 +3154,28 @@ void quest_monster_update(void)
 	char race_name[80];
 	char note[120];
 
-	int remaining = q_ptr->max_num - q_ptr->cur_num;
+	int remaining = q_ptr->q_max_num - q_ptr->q_num_killed;
 
 	/*nothing left, notification already printed in monster_death */
 	if (!remaining) return;
 
-	if ((q_ptr->q_type ==  QUEST_THEMED_LEVEL) ||
-		(q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) ||
-        (q_ptr->q_type == QUEST_PIT) ||
-		(q_ptr->q_type == QUEST_NEST))
+	if (quest_multiple_r_idx(q_ptr))
 	{
 		if (remaining > 1)
 		{
 			my_strcpy(note, format("There are %d creatures remaining ", remaining), sizeof(note));
 		}
 		else my_strcpy(note, "There is one creature remaining ", sizeof(note));
-		if (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) my_strcat(note, " from the wilderness level.", sizeof(note));
+		if (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) my_strcat(note, "in the wilderness level.", sizeof(note));
+		else if (q_ptr->q_type ==  QUEST_ARENA_LEVEL) my_strcat(note, "to kill in the arena.", sizeof(note));
+		else
+		{
+			my_strcat(note, format("from the %s", feeling_themed_level[q_ptr->theme]), sizeof(note));
 
-		else my_strcat(note, format("from the %s", feeling_themed_level[q_ptr->theme]),
-						sizeof(note));
-		if  (q_ptr->q_type ==  QUEST_THEMED_LEVEL) 	my_strcat(note, " stronghold.", sizeof(note));
-		else if (q_ptr->q_type == QUEST_PIT)	my_strcat(note, " pit.", sizeof(note));
-		else if (q_ptr->q_type == QUEST_NEST)	my_strcat(note, " nest.", sizeof(note));
+			if  (q_ptr->q_type ==  QUEST_THEMED_LEVEL) 	my_strcat(note, " stronghold.", sizeof(note));
+			else if (q_ptr->q_type == QUEST_PIT)	my_strcat(note, " pit.", sizeof(note));
+			else if (q_ptr->q_type == QUEST_NEST)	my_strcat(note, " nest.", sizeof(note));
+		}
 
 		/*dump the final note*/
 		msg_format(note);
@@ -3183,4 +3209,166 @@ void quest_monster_update(void)
 	}
 }
 
+/* Verify if the quest if a fixed quest found in quest.txt */
+bool quest_fixed(const quest_type *q_ptr)
+{
+	if (q_ptr->q_type == QUEST_PERMANENT) return (TRUE);
+	return (FALSE);
+}
+
+/* Verify if the quest slot is a fixed quest found in quest.txt */
+bool quest_slot_fixed(int quest_num)
+{
+	quest_type *q_ptr;
+
+	/* Boundry control, then get the quest */
+	if (quest_num >= z_info->q_max) return (FALSE);
+	if (quest_num < 0) return (FALSE);
+	q_ptr = &q_info[quest_num];
+
+	return (quest_fixed(q_ptr));
+}
+
+/* Verify if the quest involves clearing multiple races on a single level */
+bool quest_multiple_r_idx(const quest_type *q_ptr)
+{
+	if (q_ptr->q_type == QUEST_THEMED_LEVEL) return (TRUE);
+	if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL) return (TRUE);
+	if (q_ptr->q_type == QUEST_PIT) return (TRUE);
+	if (q_ptr->q_type == QUEST_NEST) return (TRUE);
+	if (q_ptr->q_type == QUEST_ARENA_LEVEL) return (TRUE);
+
+	return (FALSE);
+}
+
+/* Verify if the quest slot involves clearing multiple races on a single level */
+bool quest_slot_multiple_r_idx(int quest_num)
+{
+	quest_type *q_ptr;
+
+	/* Boundry control, then get the quest */
+	if (quest_num >= z_info->q_max) return (FALSE);
+	if (quest_num < 0) return (FALSE);
+	q_ptr = &q_info[quest_num];
+
+	return (quest_multiple_r_idx(q_ptr));
+}
+
+/* Verify if the quest involves clearing multiple races on a single level */
+bool quest_single_r_idx(const quest_type *q_ptr)
+{
+	if (q_ptr->q_type == QUEST_MONSTER) return (TRUE);
+	if (q_ptr->q_type == QUEST_GUARDIAN) return (TRUE);
+
+	return (FALSE);
+}
+
+/* Verify if the quest involves clearing multiple races on a single level */
+bool quest_slot_single_r_idx(int quest_num)
+{
+	quest_type *q_ptr;
+
+	/* Boundry control, then get the quest */
+	if (quest_num >= z_info->q_max) return (FALSE);
+	if (quest_num < 0) return (FALSE);
+	q_ptr = &q_info[quest_num];
+
+	return (quest_single_r_idx(q_ptr));
+}
+
+/* Verify if the quest is for a monster theme */
+bool quest_themed(const quest_type *q_ptr)
+{
+	if (q_ptr->q_type == QUEST_THEMED_LEVEL) return (TRUE);
+	if (q_ptr->q_type == QUEST_PIT) return (TRUE);
+	if (q_ptr->q_type == QUEST_NEST) return (TRUE);
+
+	return (FALSE);
+}
+
+/* Verify if the quest is for a monster theme */
+bool quest_slot_themed(int quest_num)
+{
+	quest_type *q_ptr;
+
+	/* Boundry control, then get the quest */
+	if (quest_num >= z_info->q_max) return (FALSE);
+	if (quest_num < 0) return (FALSE);
+	q_ptr = &q_info[quest_num];
+
+	return (quest_themed(q_ptr));
+}
+
+/* Verify if no down stairs should be generated until the quest is completed */
+bool quest_no_down_stairs(const quest_type *q_ptr)
+{
+	if (q_ptr->q_type == QUEST_PERMANENT) return (TRUE);
+	if (q_ptr->q_type == QUEST_GUARDIAN) return (TRUE);
+	if (q_ptr->q_type == QUEST_ARENA_LEVEL) return (TRUE);
+	return (FALSE);
+}
+
+/* Verify if no down stairs should be generated on the current levevl due to quests */
+bool no_down_stairs(s16b check_depth)
+{
+	int i;
+
+	/* Always false in the town */
+	if (!check_depth) return (FALSE);
+
+	/* Count incomplete quests */
+	for (i = 0; i < z_info->q_max; i++)
+	{
+		quest_type *q_ptr = &q_info[i];
+
+		/* Dont count finished quests */
+		if (q_ptr->active_level != check_depth) continue;
+
+		if (quest_no_down_stairs(q_ptr)) return (TRUE);
+	}
+
+	return (FALSE);
+}
+
+/* Confirm that the player shall fail the quest immediately if they leave the current level */
+bool quest_shall_fail_if_leave_level(void)
+{
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+
+	/* Not on an active quild quest */
+	if (!p_ptr->cur_quest) return (FALSE);
+
+	/* Quest has not started, or quest is complete */
+	if (!(q_ptr->q_flags & (QFLAG_STARTED))) return (FALSE);
+	if (!q_ptr->active_level) return (FALSE);
+
+	if (q_ptr->q_type == QUEST_THEMED_LEVEL) return (TRUE);
+	if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL) return (TRUE);
+	if (q_ptr->q_type == QUEST_PIT) return (TRUE);
+	if (q_ptr->q_type == QUEST_NEST) return (TRUE);
+	if (q_ptr->q_type == QUEST_ARENA_LEVEL) return (TRUE);
+	if (q_ptr->q_type == QUEST_VAULT)
+	{
+		if (quest_item_slot() == -1) return (TRUE);
+	}
+
+	return (FALSE);
+}
+
+/* Confirm that the player might fail the quest if they leave the current level */
+bool quest_might_fail_if_leave_level(void)
+{
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+
+	/* Not on an active quild quest */
+	if (!p_ptr->cur_quest) return (FALSE);
+
+	/* Quest has not started, or quest is complete */
+	if (!(q_ptr->q_flags & (QFLAG_STARTED))) return (FALSE);
+	if (!q_ptr->active_level) return (FALSE);
+
+	if (q_ptr->q_type == QUEST_MONSTER) return (TRUE);
+
+	return (FALSE);
+}
 

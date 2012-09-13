@@ -19,6 +19,9 @@ Updated DVG tileset to Rob Fiala (buzzkill)'s U32 Tileset.
 Sorted flavors.txt, along with the corresponding flvr pref files.
 Eliminated function from util.c that did not work properly on the MAC port.
 Wilderness level quests.
+Arena Level quests.
+Major cleanup of the quest code.
+Potions, scrolls, and food, including mushrooms, now have a chance of appearing in multiple quantities.
 
 
 NPP 0.5.4 changes:

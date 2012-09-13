@@ -1640,10 +1640,11 @@ s16b get_feat_num(int level)
 			(f_info[f_idx].dam_non_native > (p_ptr->mhp / 2)))) continue;
 
 
-		/* Mega-Hack -- No summoning traps in themed levels */
+		/* Mega-Hack -- No summoning traps in themed levels, wilderness levels or arena levels */
 		if (feat_ff2_match(f_idx, FF2_TRAP_PASSIVE) &&
 			(f_info[f_idx].f_power == 5) &&
-			(p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL)) /* Also includes DUNGEON_TYPE_WILDERNESS */
+			/* Also includes DUNGEON_TYPE_WILDERNESS, DUNGEON_TYPE_ARENA */
+			(p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL))
 			{
 				continue;
 			}
@@ -1674,10 +1675,7 @@ s16b get_feat_num(int level)
 			/* Stairs have special rules */
 			if (feat_ff1_match(f_idx, FF1_STAIRS))
 			{
-				/* We don't allow any down stair in fixed quests */
-				if ((what_quest_type == QUEST_FIXED) ||
-				 	(what_quest_type == QUEST_FIXED_U) ||
-				 	(what_quest_type == QUEST_GUARDIAN)) continue;
+				if (no_down_stairs(p_ptr->depth)) continue;
 
 				/* Shafts shouldn't pierce quest levels */
 				if (is_shaft && quest_check(p_ptr->depth + 1)) continue;

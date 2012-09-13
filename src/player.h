@@ -716,21 +716,21 @@ enum
 #define QUEST_SLOT_VAULT		3
 #define QUEST_SLOT_GUARDIAN		4
 #define QUEST_SLOT_WILDERNESS	5
-#define QUEST_SLOT_MAX			6
+#define QUEST_SLOT_ARENA		6
+#define QUEST_SLOT_MAX			7
 
 /*
  * Quest types
  */
-#define QUEST_FIXED				1	/* A fixed quest from quest.txt for a non-unique*/
-#define QUEST_FIXED_U			2	/* A fixed quest from quest.txt for a unique*/
-#define QUEST_MONSTER			3	/* Kill a non-unique*/
-#define QUEST_UNIQUE			4	/* Kill a unique*/
-#define QUEST_VAULT				5	/* retrieve a artifact from a vault and return it to the guild*/
-#define QUEST_PIT				6	/* clear out an entire monster pit*/
-#define QUEST_NEST				7	/* clear out a monster next*/
-#define QUEST_THEMED_LEVEL		8	/* clear out an entire level of creatures*/
-#define QUEST_GUARDIAN			9  	/* A fixed monster quest from the guild */
-#define QUEST_WILDERNESS_LEVEL	10  /* Clear out an entire wilderness level */
+#define QUEST_PERMANENT			1	/* A fixed quest from quest.txt for specific monster race or unique */
+#define QUEST_MONSTER			2	/* Kill a specific monster race or unique*/
+#define QUEST_VAULT				3	/* retrieve a artifact from a vault and return it to the guild*/
+#define QUEST_PIT				4	/* clear out an entire monster pit*/
+#define QUEST_NEST				5	/* clear out a monster next*/
+#define QUEST_THEMED_LEVEL		6	/* clear out an entire level of creatures*/
+#define QUEST_GUARDIAN			7  	/* A fixed monster quest from the guild */
+#define QUEST_WILDERNESS_LEVEL	8  /* Clear out an entire wilderness level */
+#define QUEST_ARENA_LEVEL		9  /* Kill a given # of creatures in a closed arena with no escape */
 
 #define MON_RARE_FREQ	15
 #define MON_LESS_FREQ	50
@@ -738,6 +738,13 @@ enum
 #define QUEST_THEMED_LEVEL_NUM  275
 
 #define QUEST_LEVEL_BOOST	2
+
+#define ARENA_LEVEL_HGT		11
+#define ARENA_LEVEL_WID		25
+#define ARENA_STAGE_MON 	50
+#define ARENA_STAGE_LEV 	(ARENA_STAGE_MON * 4)
+#define ARENA_MAX_MON 		40
+#define ARENA_MAX_STAGES 	10
 
 /*
  * Quest reward types
@@ -769,6 +776,8 @@ enum
 #define QFLAG_STARTED   	0x01
 #define QFLAG_EXTRA_LEVEL   0x02
 #define QFLAG_VAULT_QUEST   0x04  /* Allow the player to choose a vault quest */
+#define QFLAG_ARENA_QUEST   0x08  /* Allow the player to choose a vault quest */
+
 
 #endif /*INCLUDED_PLAYER_H*/
 

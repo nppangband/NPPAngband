@@ -2178,18 +2178,13 @@ static errr rd_savefile_new_aux(void)
 		rd_byte(&q_info[i].base_level);
 		rd_byte(&q_info[i].theme);
 		rd_s16b(&q_info[i].mon_idx);
-		rd_s16b(&q_info[i].cur_num);
-		rd_s16b(&q_info[i].max_num);
+		rd_s32b(&q_info[i].start_turn);
+		rd_s16b(&q_info[i].q_num_killed);
+		rd_s16b(&q_info[i].q_max_num);
 		rd_byte(&q_info[i].q_flags);
-
-		/* Set current quest */
-		if ((q_info[i].active_level || q_info[i].reward) &&
-			(q_info[i].q_type != QUEST_FIXED) &&
-				(q_info[i].q_type != QUEST_FIXED_U))
-		{
-			p_ptr->cur_quest = q_info[i].base_level;
-		}
 	}
+
+	rd_u16b(&p_ptr->cur_quest);
 
 	if (arg_fiddle) note("Loaded Quests");
 

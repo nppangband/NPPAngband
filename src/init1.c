@@ -3719,18 +3719,9 @@ errr parse_q_info(char *buf, header *head)
 
 		if(r_idx)
 		{
-			monster_race *r_ptr = &r_info[r_idx];
+			q_ptr->q_type = QUEST_PERMANENT;
 
-			/*unique quest*/
-			if (r_ptr->flags1 & RF1_UNIQUE)
-			{
-				q_ptr->q_type = QUEST_FIXED_U;
-			}
-
-			/*fixed quest*/
-			else q_ptr->q_type = QUEST_FIXED;
-
-			q_ptr->max_num = max;
+			q_ptr->q_max_num = max;
 		}
 
 

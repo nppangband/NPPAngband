@@ -194,12 +194,13 @@ static byte quests_offered[QUEST_SLOT_MAX];
 /* Quest Titles*/
 static cptr quest_title[QUEST_SLOT_MAX] =
 {
-	"Monster or Unique Quest",	/*QUEST_MONSTER*/
-	"Pit or Nest Quest",		/*QUEST_PIT*/
-  	"Level Quest",				/*QUEST_THEMED_LEVEL*/
-	"Vault Quest",				/*QUEST_VAULT*/
-  	"Guardian Quest",			/*QUEST_GUARDIAN */
-	"Wilderness Quest"			/*QUEST_WILDERNESS */
+	"Monster or Unique Quest",	/* QUEST_MONSTER*/
+	"Pit or Nest Quest",		/* QUEST_PIT*/
+  	"Level Quest",				/* QUEST_THEMED_LEVEL*/
+	"Vault Quest",				/* QUEST_VAULT*/
+  	"Guardian Quest",			/* QUEST_GUARDIAN */
+	"Wilderness Quest",			/* QUEST_WILDERNESS */
+	"Arena Quest"				/* QUEST_ARENA_LEVEL */
 };
 
 
@@ -609,7 +610,7 @@ static void init_services_and_quests(int store_num)
 	quests_min = 0;
 	quests_max = 0;
 	for (i = 0; i < STORE_SERVICE_MAX; i++) services_offered[i] = -1;
-	for (i = 0;i < QUEST_SLOT_MAX; i++) quests_offered[i] = -1;
+	for (i = 0; i < QUEST_SLOT_MAX; i++) quests_offered[i] = -1;
 
 	/*Nothing in the store*/
 	if (store_num == STORE_HOME) return;
@@ -656,10 +657,7 @@ static void init_services_and_quests(int store_num)
 			if (quest_reward) continue;
 
 			if (q_ptr->q_type == QUEST_VAULT) continue;
-			if (q_ptr->q_type == QUEST_PIT) continue;
-			if (q_ptr->q_type == QUEST_NEST) continue;
-			if (q_ptr->q_type == QUEST_THEMED_LEVEL) continue;
-			if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL) continue;
+			if (quest_multiple_r_idx(q_ptr)) continue;
 		}
 
 		/* Offer this service. */
@@ -1230,10 +1228,7 @@ static bool store_service_aux(int store_num, s16b choice)
 			monster_race *r_ptr = &r_info[q_ptr->mon_idx];
 			monster_lore *l_ptr = &l_list[q_ptr->mon_idx];
 
-			if (((q_ptr->q_type != QUEST_MONSTER) &&
-			     (q_ptr->q_type != QUEST_UNIQUE) &&
-			     (q_ptr->q_type != QUEST_GUARDIAN)) ||
-				(q_ptr->mon_idx == 0))
+			if ((!quest_single_r_idx(q_ptr)) || (q_ptr->mon_idx == 0))
 			{
 				msg_print("You are not currently questing for a specific creature.");
 				return (FALSE);
@@ -1243,7 +1238,7 @@ static bool store_service_aux(int store_num, s16b choice)
 			monster_desc_race(race_name, sizeof(race_name), q_ptr->mon_idx);
 
 			/* Make it plural if necessary*/
-			if (q_ptr->max_num > 1) plural_aux(race_name, sizeof(race_name));
+			if (q_ptr->q_max_num > 1) plural_aux(race_name, sizeof(race_name));
 
 			price += r_ptr->level * 100;
 

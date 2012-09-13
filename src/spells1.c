@@ -486,8 +486,6 @@ void teleport_towards(int oy, int ox, int ny, int nx)
  */
 void teleport_player_level(int who)
 {
-	byte kind_of_quest = quest_check(p_ptr->depth);
-
 	quest_type *q_ptr = &q_info[quest_num(p_ptr->cur_quest)];
 
 	bool go_up = FALSE;
@@ -511,43 +509,19 @@ void teleport_player_level(int who)
 	 * Fixed quests where the player can't go lower until they finish the quest, or the
 	 * bottom of the dungeon.
 	 */
-	if ((kind_of_quest == QUEST_FIXED) ||
-	    (kind_of_quest == QUEST_FIXED_U) ||
-	    (kind_of_quest == QUEST_GUARDIAN) ||
-	    (p_ptr->depth >= MAX_DEPTH-1))
+	if (quest_no_down_stairs(q_ptr))
 	{
 		go_up = TRUE;
 	}
 
 	/*Not fair to fail the quest if the monster teleports the player off*/
 	if ((who >= SOURCE_MONSTER_START) &&
-		((kind_of_quest == QUEST_MONSTER) ||
-		 (kind_of_quest == QUEST_UNIQUE) ||
-		 (kind_of_quest == QUEST_PIT) ||
-		 (kind_of_quest == QUEST_NEST) ||
-		 (kind_of_quest ==  QUEST_WILDERNESS_LEVEL) ||
-		 (kind_of_quest == QUEST_THEMED_LEVEL)))
+			(quest_might_fail_if_leave_level() || quest_shall_fail_if_leave_level()))
 	{
 		/*de-activate the quest*/
 		q_ptr->q_flags &= ~(QFLAG_STARTED);
 
 		go_up = TRUE;
-
-	}
-
-	/* Same as above, but don't re-set the quest if the player already has the quest chest*/
-	if ((who >= SOURCE_MONSTER_START) && (kind_of_quest == QUEST_VAULT))
-	{
-		/* Player is holding the quest item?  If so, player can go up or down*/
-		if (quest_item_slot() == -1)
-		{
-			q_ptr->q_flags &= ~(QFLAG_STARTED);
-		}
-
-		/*
-		 * We found the item, but go up.
-		 */
-		else go_up = TRUE;
 	}
 
 	/*We don't have a direction yet, pick one at random*/
@@ -564,7 +538,6 @@ void teleport_player_level(int who)
 
 		/* New depth */
 		dungeon_change_level(p_ptr->depth - 1);
-
 	}
 
 	else

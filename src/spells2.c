@@ -5348,7 +5348,7 @@ bool mass_identify (int rad)
 	return (TRUE);
 }
 
-void identify_object (object_type *o_ptr, bool star_ident)
+void identify_object(object_type *o_ptr, bool star_ident)
 {
 	/* Identify it */
 	object_aware(o_ptr);

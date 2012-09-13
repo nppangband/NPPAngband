@@ -3382,6 +3382,35 @@ static bool kind_is_good(int k_idx)
 	return (FALSE);
 }
 
+void object_quantities(object_type *j_ptr)
+{
+	/* Hack -- generate multiple spikes/missiles */
+	switch (j_ptr->tval)
+	{
+		case TV_SPIKE:
+		case TV_SHOT:
+		case TV_ARROW:
+		case TV_BOLT:
+		{
+			j_ptr->number = damroll(6, 7);
+			return;
+		}
+		/* Occasionally do multiple potions, scrolls */
+		case TV_SCROLL:
+		case TV_POTION:
+		{
+			if (one_in_(10)) j_ptr->number = randint1(2);
+			return;
+		}
+		case TV_FOOD:
+		{
+			if (one_in_(3)) j_ptr->number = damroll(2,2);
+			return;
+		}
+
+	}
+}
+
 
 
 /*
@@ -3489,17 +3518,8 @@ bool make_object(object_type *j_ptr, bool good, bool great, int objecttype, bool
 	/* Apply magic (allow artifacts) */
 	apply_magic(j_ptr, object_level, TRUE, good, great, interesting);
 
-	/* Hack -- generate multiple spikes/missiles */
-	switch (j_ptr->tval)
-	{
-		case TV_SPIKE:
-		case TV_SHOT:
-		case TV_ARROW:
-		case TV_BOLT:
-		{
-			j_ptr->number = damroll(6, 7);
-		}
-	}
+	/* Hack -- generate multiple objects occasionally */
+	object_quantities(j_ptr);
 
 	/* Notice "okay" out-of-depth objects */
 	if (!cursed_p(j_ptr) && !broken_p(j_ptr) &&

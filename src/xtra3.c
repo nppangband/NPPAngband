@@ -551,10 +551,17 @@ static void prt_feeling(int row, int col)
 		return;
 	}
 
-	/* Get color of level based on feeling  -JSV- */
-	if (p_ptr->dungeon_type == DUNGEON_TYPE_WILDERNESS)
+	if (p_ptr->dungeon_type == DUNGEON_TYPE_ARENA)
 	{
-		{attr = TERM_GREEN;		my_strcpy(feel, "F:Wilderness", sizeof(feel));}
+		attr = TERM_RED_LAVA;
+		my_strcpy(feel, "F:Arena", sizeof(feel));
+	}
+
+	/* Get color of level based on feeling  -JSV- */
+	else if (p_ptr->dungeon_type == DUNGEON_TYPE_WILDERNESS)
+	{
+		attr = TERM_GREEN;
+		my_strcpy(feel, "F:Wilderness", sizeof(feel));
 	}
 	else if (feeling ==  1) 		{attr = TERM_RED;		my_strcpy(feel, "F:Special", sizeof(feel));}
 	else if (feeling ==  2) {attr = TERM_L_RED;		my_strcpy(feel, "F:Superb", sizeof(feel));}

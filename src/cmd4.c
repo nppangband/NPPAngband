@@ -3401,6 +3401,11 @@ void do_cmd_feeling(void)
 		msg_print("You have entered an area of near pristine wilderness.");
 	}
 
+	else if (p_ptr->dungeon_type == DUNGEON_TYPE_ARENA)
+	{
+		msg_print("You are in an arena fighting for your life.");
+	}
+
 	/* Verify the feeling */
 	else if (feeling >= LEV_THEME_HEAD)
 	{

@@ -117,9 +117,6 @@ void do_cmd_go_up(cmd_code code, cmd_arg args[])
 		return;
 	}
 
-	/*find out of leaving a level*/
-	quest = quest_check(p_ptr->depth);
-
 	/* Ironman */
 	if (adult_ironman)
 	{
@@ -128,18 +125,14 @@ void do_cmd_go_up(cmd_code code, cmd_arg args[])
 	}
 
 	/* Verify leaving normal quest level */
-	if ((verify_leave_quest) &&
-		((quest == QUEST_MONSTER) || (quest == QUEST_UNIQUE)))
+	if ((verify_leave_quest) && quest_might_fail_if_leave_level())
 	{
 		sprintf(out_val, "Really risk failing your quest? ");
 		if (!get_check(out_val)) return;
 	}
 
 	/* Verify leaving normal quest level */
-	if ((verify_leave_quest) &&
-        (((quest == QUEST_VAULT) && (quest_item_slot() == -1)) ||
-		 (quest == QUEST_PIT) || quest == QUEST_NEST ||
-		 (quest == QUEST_THEMED_LEVEL) || (quest == QUEST_WILDERNESS_LEVEL)))
+	if ((verify_leave_quest) && quest_shall_fail_if_leave_level())
 	{
 		sprintf(out_val, "Really fail your quest? ");
 		if (!get_check(out_val)) return;
@@ -157,7 +150,7 @@ void do_cmd_go_up(cmd_code code, cmd_arg args[])
 	/* New depth */
 	decrease++;
 
-	/*find out of entering a quest level (should never happen going up)*/
+	/*find out of entering a quest level (unusual going up)*/
 	quest = quest_check(p_ptr->depth);
 
 	/*go up another level if it is a shaft*/
@@ -198,18 +191,14 @@ void do_cmd_go_down(cmd_code code, cmd_arg args[])
 	}
 
 	/* Verify leaving normal quest level */
-	if ((verify_leave_quest) &&
-		((quest == QUEST_MONSTER) || (quest == QUEST_UNIQUE)))
+	if ((verify_leave_quest) && quest_might_fail_if_leave_level())
 	{
 		sprintf(out_val, "Really risk failing your quest? ");
 		if (!get_check(out_val)) return;
 	}
 
 	/* Verify leaving normal quest level */
-	if ((verify_leave_quest) &&
-        (((quest == QUEST_VAULT) && (quest_item_slot() == -1)) ||
-		 (quest == QUEST_PIT) || quest == QUEST_NEST ||
-		 (quest == QUEST_THEMED_LEVEL) || (quest == QUEST_WILDERNESS_LEVEL)))
+	if ((verify_leave_quest) && quest_shall_fail_if_leave_level())
 	{
 		sprintf(out_val, "Really fail your quest? ");
 		if (!get_check(out_val)) return;

@@ -736,9 +736,10 @@ struct quest_type
 	byte base_level;	/* The dungeon level on which the quest was assigned*/
 
 	s16b mon_idx;		/* Monster race/unique */
+	s32b start_turn;	/* Mark when the quest began */
 
-	s16b cur_num;		/* Number killed */
-	s16b max_num;		/* Number required */
+	s16b q_num_killed;	/* Number killed */
+	s16b q_max_num;		/* Number required */
 
 	byte q_flags;		/* Various quest flags */
 };

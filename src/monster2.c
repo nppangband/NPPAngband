@@ -625,10 +625,7 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 	/*filter out non-terrain flags*/
 	native_flags &= TERRAIN_MASK;
 
-	if (((q_ptr->q_type == QUEST_THEMED_LEVEL) ||
-		 (q_ptr->q_type == QUEST_PIT) ||
-		 (q_ptr->q_type == QUEST_NEST)) &&
-		(p_ptr->cur_quest == p_ptr->depth)) quest_level = TRUE;
+	if (quest_themed(q_ptr) && (p_ptr->cur_quest == p_ptr->depth)) quest_level = TRUE;
 
 	/* Boost the level, but not for quest levels.  That has already been done */
 	if ((level > 0) && (!quest_level))
@@ -731,8 +728,7 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 				/* Check quests for uniques*/
 				for (k = 0; k < z_info->q_max; k++)
 				{
-					if ((q_info[k].q_type == QUEST_UNIQUE) ||
-						(q_info[k].q_type == QUEST_FIXED_U))
+					if (quest_slot_fixed(k))
 					{
 						/* Is this unique marked for a quest? */
 						if (q_info[k].mon_idx == table[i].index)
@@ -3112,7 +3108,8 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	if (!in_bounds(y, x)) return (FALSE);
 
 	/* No new monsters on themed and wilderness levels */
-	if ((p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL) && /* Also includes DUNGEON_TYPE_WILDERNESS */
+	if (((p_ptr->dungeon_type == DUNGEON_TYPE_THEMED_LEVEL) ||
+		 (p_ptr->dungeon_type == DUNGEON_TYPE_WILDERNESS)) &&
 		(character_dungeon == TRUE)) return (FALSE);
 
 	/*
@@ -3153,14 +3150,15 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 		/* Check quests for uniques*/
 		for (i = 0; i < z_info->q_max; i++)
 		{
-			if ((q_info[i].q_type == QUEST_UNIQUE) ||
-				(q_info[i].q_type == QUEST_FIXED_U))
+			quest_type *q_ptr = &q_info[i];
+
+			if (quest_fixed(q_ptr))
 			{
 				/*is this unique marked for a quest?*/
-				if (q_info[i].mon_idx == r_idx)
+				if (q_ptr->mon_idx == r_idx)
 				{
 					/*Is it at the proper depth?*/
-					if(p_ptr->depth != q_info[i].base_level)  return (FALSE);
+					if(p_ptr->depth != q_ptr->base_level)  return (FALSE);
 
 				}
 			}

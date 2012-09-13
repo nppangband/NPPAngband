@@ -4588,6 +4588,9 @@ void update_flows(bool full)
 						    MAX_DISTANCE_BETWEEN_UPDATES) full = TRUE;
 		/*We can't do any more partial updates*/
 		else if (cost_at_center[FLOW_NO_DOORS] < 500) full = TRUE;
+
+		/* Arena levels are too small to have partial updates */
+		else if (p_ptr->dungeon_type == DUNGEON_TYPE_ARENA) full = TRUE;
 	}
 
 	if (!full)

@@ -1105,10 +1105,13 @@ static bool wr_savefile_new(void)
 		wr_byte(q_info[i].base_level);
 		wr_byte(q_info[i].theme);
 		wr_s16b(q_info[i].mon_idx);
-		wr_s16b(q_info[i].cur_num);
-		wr_s16b(q_info[i].max_num);
+		wr_s32b(q_info[i].start_turn);
+		wr_s16b(q_info[i].q_num_killed);
+		wr_s16b(q_info[i].q_max_num);
 		wr_byte(q_info[i].q_flags);
 	}
+
+	wr_u16b(p_ptr->cur_quest);
 
 	/* Hack -- Dump the artifacts */
 	tmp16u = z_info->art_max;

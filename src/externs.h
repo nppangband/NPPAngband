@@ -95,6 +95,7 @@ extern const byte char_tables[256][CHAR_TABLE_SLOTS];
 extern const xchar_type latin1_encode[];
 extern cptr squelch_status[SQUELCH_OPT_MAX];
 extern const byte squelch_status_color[SQUELCH_OPT_MAX];
+extern const byte arena_level_map[ARENA_LEVEL_HGT][ARENA_LEVEL_WID];
 
 /* variable.c */
 extern cptr copyright;
@@ -710,6 +711,7 @@ extern byte get_pit_theme(int pitlevel, bool quest_theme);
 extern void build_terrain(int y, int x, int feat);
 extern byte get_level_theme(s16b orig_theme_num, bool quest_level);
 extern byte max_themed_monsters(const monster_race *r_ptr, u32b max_power);
+extern void update_arena_level(byte stage);
 extern void generate_cave(void);
 extern void set_dungeon_type(u16b dungeon_type);
 
@@ -842,6 +844,7 @@ extern s16b charge_wand(object_type *o_ptr, int percent);
 extern s16b charge_staff(object_type *o_ptr, int percent);
 extern void object_into_artifact(object_type *o_ptr, artifact_type *a_ptr);
 extern void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, bool interesting);
+extern void object_quantities(object_type *j_ptr);
 extern bool make_object(object_type *j_ptr, bool good, bool great, int objecttype, bool interesting);
 extern bool prep_store_object(int storetype);
 extern bool prep_object_theme(int themetype);
@@ -1019,10 +1022,22 @@ extern byte quest_check(int lev);
 extern int quest_num(int lev);
 extern int quest_item_slot(void);
 extern void guild_quest_wipe(void);
+extern void write_quest_note(bool success);
 extern void quest_fail(void);
 extern void format_quest_indicator(char dest[], int max, byte *attr);
 extern void quest_monster_update(void);
-
+extern bool quest_fixed(const quest_type *q_ptr);
+extern bool quest_slot_fixed(int quest_num);
+extern bool quest_multiple_r_idx(const quest_type *q_ptr);
+extern bool quest_slot__r_idx(int quest_num);
+extern bool quest_single_r_idx(const quest_type *q_ptr);
+extern bool quest_slot_single_r_idx(int quest_num);
+extern bool quest_themed(const quest_type *q_ptr);
+extern bool quest_slot_themed(int quest_num);
+extern bool quest_no_down_stairs(const quest_type *q_ptr);
+extern bool no_down_stairs(s16b check_depth);
+extern bool quest_shall_fail_if_leave_level(void);
+extern bool quest_might_fail_if_leave_level(void);
 
 /* randart.c */
 extern void make_random_name(char *random_name, byte min, byte max);
@@ -1189,7 +1204,7 @@ extern bool brand_bolts(bool enchant);
 extern void ring_of_power(int dir);
 extern void identify_and_squelch_pack(void);
 extern bool mass_identify(int rad);
-extern void identify_object (object_type *o_ptr, bool star_ident);
+extern void identify_object(object_type *o_ptr, bool star_ident);
 extern int do_ident_item(int item, object_type *o_ptr);
 extern void get_spell_type_from_feature(int f_idx, int *gf_type, cptr *action);
 extern bool is_player_immune(int gf_type);
