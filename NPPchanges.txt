@@ -27,7 +27,7 @@ New wizard command to give information on quest status (more info than cheat).
 Quest rewards are now generated at startup, and the player chooses their quest reward, 
 rather than the game trying to figure out the best reward for the player.
 The player may defer their quest reward if they don't see anything good, and instead enhance thier next quest reward.
-
+Bugfix: The character screen was not properly showing object resistance and immunitiy flags for the player equipment and home.
 
 
 
