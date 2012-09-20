@@ -821,7 +821,7 @@ static void process_arena_level(void)
  */
 static void process_guild_quests(void)
 {
-	quest_type *q_ptr = &q_info[quest_num(p_ptr->cur_quest)];
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 	int cur_quest_monsters;
 	int i, y, x;
 	int old_feeling = feeling;
@@ -1355,12 +1355,12 @@ static void process_world(void)
 	if (turn % 10) return;
 
 	/*** Update quests ***/
-	if (p_ptr->cur_quest)
+	if (guild_quest_level())
 	{
-		quest_type *q_ptr = &q_info[quest_num(p_ptr->cur_quest)];
+		quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 
 		/* Check for failure */
-		if (p_ptr->cur_quest != p_ptr->depth)
+		if (guild_quest_level() != p_ptr->depth)
 		{
 			if (one_in_(20))
 			{
@@ -2795,18 +2795,19 @@ static void dungeon(void)
 	/* Handle delayed death */
 	if (p_ptr->is_dead) return;
 
-	/* Mark quest as started */
-	if ((p_ptr->cur_quest > 0) && (p_ptr->cur_quest == p_ptr->depth))
+	/* Check quests */
+	for (i = 0; i < z_info->q_max; i++)
 	{
-		/* Check quests */
-		for (i = 0; i < z_info->q_max; i++)
+		quest_type *q_ptr = &q_info[i];
+
+		/* Already complete */
+		if (is_quest_complete(i)) continue;
+
+		/* Check for quest */
+		if (q_ptr->base_level == p_ptr->depth)
 		{
-			/* Check for quest */
-			if (q_info[i].base_level == p_ptr->depth)
-			{
-				q_info[i].q_flags |= (QFLAG_STARTED);
-				break;
-			}
+			q_info[i].q_flags |= (QFLAG_STARTED);
+			break;
 		}
 	}
 
@@ -3186,7 +3187,7 @@ void play_game(void)
 		size_mon_hist = 0;
 
 		/* Check for quest_failure */
-		if (p_ptr->cur_quest)
+		if (guild_quest_level())
 		{
 			if (quest_shall_fail_if_leave_level()) quest_fail();
 

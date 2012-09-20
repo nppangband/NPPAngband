@@ -486,7 +486,7 @@ void teleport_towards(int oy, int ox, int ny, int nx)
  */
 void teleport_player_level(int who)
 {
-	quest_type *q_ptr = &q_info[quest_num(p_ptr->cur_quest)];
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 
 	bool go_up = FALSE;
 	bool go_down = FALSE;
@@ -509,7 +509,7 @@ void teleport_player_level(int who)
 	 * Fixed quests where the player can't go lower until they finish the quest, or the
 	 * bottom of the dungeon.
 	 */
-	if (quest_no_down_stairs(q_ptr))
+	if (no_down_stairs(p_ptr->depth))
 	{
 		go_up = TRUE;
 	}

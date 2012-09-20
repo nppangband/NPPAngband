@@ -956,8 +956,8 @@ void display_player_stat_info(int row, int col)
 		cnv_stat(p_ptr->stat_max[i], buf, sizeof(buf));
 		c_put_str(TERM_L_GREEN, buf, row+i, col+5);
 
-		/* Race Bonus */
-		strnfmt(buf, sizeof(buf), "%+3d", rp_ptr->r_adj[i]);
+		/* Race Bonus add in permanent stat bonus here */
+		strnfmt(buf, sizeof(buf), "%+3d", (rp_ptr->r_adj[i] + p_ptr->stat_quest_add[i]));
 		c_put_str(TERM_L_BLUE, buf, row+i, col+11);
 
 		/* Class Bonus */
@@ -2363,19 +2363,19 @@ errr file_character(const char *path, bool full)
 	else file_putf(fff, "[Your Home Is Empty]\n\n");
 
 	/* Check if in quest */
-	if (p_ptr->cur_quest > 0)
+	if (guild_quest_level())
 	{
-		quest_type *q_ptr = &q_info[quest_num(p_ptr->cur_quest)];
+		quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 
 		/* Skip completed quest */
-		if (q_ptr->active_level)
+		if (!(q_ptr->q_flags & (QFLAG_COMPLETED)))
 		{
 			char q_out[160];
 
 			x_file_putf(fff, encoding, "  [Current Quest]\n\n");
 
 			/*get the quest description*/
-			describe_quest(q_out, sizeof(q_out), p_ptr->cur_quest, QMODE_FULL);
+			describe_quest(q_out, sizeof(q_out), guild_quest_level(), QMODE_FULL);
 
 			/* Describe quest */
 			x_file_putf(fff, encoding, "%s\n", q_out);

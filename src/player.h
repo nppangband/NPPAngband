@@ -749,14 +749,14 @@ enum
 /*
  * Quest reward types
  */
-#define REWARD_GOLD			1
-#define REWARD_GOOD_ITEM	2
-#define REWARD_GREAT_ITEM	3
-#define REWARD_TAILORED		4
-#define REWARD_RANDART		5
-#define REWARD_INC_HP		6
-#define REWARD_INC_SPEED	7
-
+#define REWARD_GOLD			0x0001
+#define REWARD_GOOD_ITEM	0x0002
+#define REWARD_GREAT_ITEM	0x0004
+#define REWARD_TAILORED		0x0008
+#define REWARD_INC_HP		0x0010
+#define REWARD_INC_STAT		0x0020
+#define REWARD_RANDART		0x0040
+#define REWARD_AUGMENTATION	0x0080
 
 /*Quest description Modes*/
 #define QMODE_HALF_1 1
@@ -775,9 +775,21 @@ enum
 /* flags for q_flags */
 #define QFLAG_STARTED   	0x01
 #define QFLAG_EXTRA_LEVEL   0x02
-#define QFLAG_VAULT_QUEST   0x04  /* Allow the player to choose a vault quest */
-#define QFLAG_ARENA_QUEST   0x08  /* Allow the player to choose a vault quest */
+#define QFLAG_VAULT_QUEST   0x04  	/* Allow the player to choose a vault quest */
+#define QFLAG_ARENA_QUEST   0x08  	/* Allow the player to choose an arena quest */
+#define QFLAG_COMPLETED		0x10	/* Current quest is completed, go get reward */
 
+/*
+ * Return true if the guild quest is not completed.
+ */
+#define guild_quest_complete() \
+       (q_info[GUILD_QUEST_SLOT].q_flags & (QFLAG_COMPLETED))
+
+#define is_quest_complete(T) \
+       (q_info[T].q_flags & (QFLAG_COMPLETED))
+
+#define guild_quest_level() \
+       (q_info[GUILD_QUEST_SLOT].base_level)
 
 #endif /*INCLUDED_PLAYER_H*/
 

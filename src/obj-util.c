@@ -5353,6 +5353,28 @@ bool chest_requires_disarming(const object_type *o_ptr)
 	return (TRUE);
 }
 
+/**
+ * Determine whether an object is a weapon
+ *
+ * \param o_ptr is the object to check
+ */
+bool obj_is_weapon(const object_type *o_ptr)
+{
+	/* Ignore empty objects */
+	if (!o_ptr->k_idx) return (FALSE);
+
+	switch (o_ptr->tval)
+	{
+		case TV_HAFTED:
+		case TV_POLEARM:
+		case TV_SWORD:
+		case TV_DIGGING:
+			return TRUE;
+		default:
+			return FALSE;
+	}
+}
+
 
 /**
  * Determine whether an object is ammo

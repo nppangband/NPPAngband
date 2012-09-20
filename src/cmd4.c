@@ -3488,28 +3488,26 @@ void do_cmd_quest(void)
 {
 	char q_out[120];
 
-	quest_type *q_ptr = &q_info[quest_num(p_ptr->cur_quest)];
-
 	/* Check if you're on a quest */
-	if (p_ptr->cur_quest > 0)
+	if (guild_quest_level() > 0)
 	{
+
 		/* Completed quest */
-		if (!q_ptr->active_level)
+		if (guild_quest_complete())
 		{
 			msg_print("Collect your reward at the guild!");
 		}
-
 		else
 		{
-			describe_quest(q_out, sizeof(q_out), p_ptr->cur_quest, QMODE_FULL);
+			describe_quest(q_out, sizeof(q_out), guild_quest_level(), QMODE_FULL);
 
 			/* Break into two lines if necessary */
 			if (strlen(q_out) < 70) msg_print(q_out);
 			else
 			{
-				describe_quest(q_out, sizeof(q_out), p_ptr->cur_quest, QMODE_HALF_1);
+				describe_quest(q_out, sizeof(q_out), guild_quest_level(), QMODE_HALF_1);
 				msg_format(q_out);
-				describe_quest(q_out, sizeof(q_out), p_ptr->cur_quest, QMODE_HALF_2);
+				describe_quest(q_out, sizeof(q_out), guild_quest_level(), QMODE_HALF_2);
 				msg_format(q_out);
 			}
 		}

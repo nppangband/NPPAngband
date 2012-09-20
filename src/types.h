@@ -729,11 +729,11 @@ struct quest_type
 {
 	u32b name;			/* Name (offset) */
 	byte q_type;		/* Quest Type */
-	byte reward;		/* Quest Reward */
+	u16b q_reward;		/* Quest Reward */
+	u16b q_fame_inc;	/* Amount fame will be increased when the quest is finished */
 	byte theme;			/* Monster Theme for themed levels and nests/pits*/
 
-	byte active_level;	/* Equals dungeon level if not completed, 0 if completed */
-	byte base_level;	/* The dungeon level on which the quest was assigned*/
+	byte base_level;	/* The dungeon level on which the quest is assigned*/
 
 	s16b mon_idx;		/* Monster race/unique */
 	s32b start_turn;	/* Mark when the quest began */
@@ -1049,7 +1049,8 @@ struct player_type
 	s16b wt;			/* Weight */
 	s16b sc;			/* Social Class */
 
-	u16b fame;			/* Fame - used for quests */
+	u16b q_fame;		/* Fame - used for quests */
+	u16b deferred_rewards; /* Quest reward points deferred for future use */
 
 	s32b au;			/* Current Gold */
 
@@ -1075,6 +1076,7 @@ struct player_type
 
 	s16b stat_max[A_MAX];	/* Current "maximal" stat values */
 	s16b stat_cur[A_MAX];	/* Current "natural" stat values */
+	s16b stat_quest_add[A_MAX];	/* Quest reward bonuses */
 
 	s16b timed[TMD_MAX];	/* Timed effects */
 
@@ -1205,7 +1207,6 @@ struct player_type
 
 	byte vulnerability;	/* Used to make animal packs charge and retreat */
 
-	u16b cur_quest;		/* Current quest */
 	u16b next_quest;
 
 	u16b cumulative_terrain_damage; /* How much damage we are taking from

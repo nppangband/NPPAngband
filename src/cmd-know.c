@@ -1420,7 +1420,7 @@ static int art2gid(int oid) { return obj_group_order[a_info[oid].tval]; }
 static bool artifact_is_known(int a_idx)
 {
 	int i;
-
+	store_type *st_ptr = &store[STORE_GUILD];
 	artifact_type *a_ptr = &a_info[a_idx];
 
 	/* Artifact doesn't exist at all, we are in wizard mode, or not created yet */
@@ -1453,6 +1453,14 @@ static bool artifact_is_known(int a_idx)
 		{
 			return FALSE;
 		}
+	}
+
+	/* Check guild to see if it is waiting as a quest reward */
+	for (i = 0; i < st_ptr->stock_num; i++)
+	{
+		object_type *o_ptr = &st_ptr->stock[i];
+
+		if (o_ptr->art_num == a_idx) return (FALSE);
 	}
 
 	return TRUE;

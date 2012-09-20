@@ -453,7 +453,7 @@ static void player_wipe(void)
 	}
 
 	/* Wipe the quest */
-	guild_quest_wipe();
+	guild_quest_wipe(TRUE);
 
 	/* Reset the fixed quests */
 	for (i = 0; i < z_info->q_max; i++)
@@ -463,7 +463,7 @@ static void player_wipe(void)
 		/* Reset level */
 		if (quest_fixed(q_ptr))
 		{
-			q_ptr->active_level = q_ptr->base_level;
+			q_info[i].q_flags = 0L;
 			q_ptr->q_num_killed = 0;
 		}
 	}

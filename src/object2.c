@@ -2480,7 +2480,7 @@ static bool kind_is_bookshop(int k_idx)
  * Hack -- determine if a template is "a dungeon spellbook".
  *
  */
-bool kind_is_dungeon_spellbook(int k_idx)
+static bool kind_is_dungeon_spellbook(int k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -2788,7 +2788,7 @@ static bool kind_is_body_armor(int k_idx)
  * Hack -- determine if a template is Dragon Scale Mail or shield.
  *
  */
-bool kind_is_dragarmor(int k_idx)
+static bool kind_is_dragarmor(int k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -2859,7 +2859,7 @@ static bool kind_is_cloak(int k_idx)
  * Hack -- determine if a template is a shield.
  *
  */
-bool kind_is_shield(int k_idx)
+static bool kind_is_shield(int k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 

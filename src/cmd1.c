@@ -732,9 +732,7 @@ void py_pickup(bool pickup)
 		/* Get the object */
 		o_ptr = &o_list[cave_o_idx[py][px]];
 
-		/* Describe the object, fully if identified */
-		if (object_known_p(o_ptr)) object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
-		else object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_BASE);
+		object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
 
 		msg_c_format(msgt, "You see %s.", o_name);
 	}

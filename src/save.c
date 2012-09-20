@@ -568,6 +568,7 @@ static void wr_extra(void)
 	for (i = 0; i < A_MAX; ++i) wr_s16b(p_ptr->stat_max[i]);
 	for (i = 0; i < A_MAX; ++i) wr_s16b(p_ptr->stat_cur[i]);
 	for (i = 0; i < A_MAX; ++i) wr_s16b(p_ptr->stat_birth[i]);
+	for (i = 0; i < A_MAX; ++i) wr_s16b(p_ptr->stat_quest_add[i]);
 
 	wr_s16b(p_ptr->ht_birth);
 	wr_s16b(p_ptr->wt_birth);
@@ -577,7 +578,8 @@ static void wr_extra(void)
 	/* Ignore the transient stats */
 	for (i = 0; i < 12; ++i) wr_s16b(0);
 
-	wr_u16b(p_ptr->fame);
+	wr_u16b(p_ptr->q_fame);
+	wr_u16b(p_ptr->deferred_rewards);
 
 	wr_u32b(p_ptr->au);
 
@@ -1099,19 +1101,28 @@ static bool wr_savefile_new(void)
 	wr_u16b(tmp16u);
 	for (i = 0; i < tmp16u; i++)
 	{
-		wr_byte(q_info[i].q_type);
-		wr_byte(q_info[i].reward);
-		wr_byte(q_info[i].active_level);
-		wr_byte(q_info[i].base_level);
-		wr_byte(q_info[i].theme);
-		wr_s16b(q_info[i].mon_idx);
-		wr_s32b(q_info[i].start_turn);
-		wr_s16b(q_info[i].q_num_killed);
-		wr_s16b(q_info[i].q_max_num);
-		wr_byte(q_info[i].q_flags);
-	}
+		quest_type *q_ptr = &q_info[i];
 
-	wr_u16b(p_ptr->cur_quest);
+		wr_byte(q_ptr->q_type);
+
+		/* Only limited info for permanent quests.  The rest is detailed in quest.txt */
+		if (q_ptr->q_type == QUEST_PERMANENT)
+		{
+			wr_byte(q_ptr->q_flags);
+			wr_s16b(q_ptr->q_num_killed);
+			continue;
+		}
+
+		wr_u16b(q_ptr->q_reward);
+		wr_u16b(q_ptr->q_fame_inc);
+		wr_byte(q_ptr->base_level);
+		wr_byte(q_ptr->theme);
+		wr_s16b(q_ptr->mon_idx);
+		wr_s32b(q_ptr->start_turn);
+		wr_s16b(q_ptr->q_num_killed);
+		wr_s16b(q_ptr->q_max_num);
+		wr_byte(q_ptr->q_flags);
+	}
 
 	/* Hack -- Dump the artifacts */
 	tmp16u = z_info->art_max;

@@ -3391,7 +3391,7 @@ static void scramble_artifact(int a_idx)
 	}
 
 	/*randomize the name*/
-	make_random_name(buf, 6, MAX_LEN_ART_NAME);
+	make_random_name(buf, 5, 11);
 
 	if (!one_in_(3))
 	{
@@ -3894,7 +3894,7 @@ bool make_one_randart(object_type *o_ptr, int art_power, bool tailored)
 		char buf[MAX_LEN_ART_NAME];
 
 		/*randomize the name*/
-		make_random_name(buf, 6, MAX_LEN_ART_NAME);
+		make_random_name(buf, 5, 11);
 
 		/*Capitalize the name*/
 		buf[0] = toupper((unsigned char)buf[0]);
@@ -4082,7 +4082,7 @@ void make_quest_artifact(int lev)
 	artifact_prep(k_idx, a_idx);
 
 	/*randomize the name*/
-	make_random_name(buf, 6, MAX_LEN_ART_NAME);
+	make_random_name(buf, 5, 11);
 
 	/*Capitalize the name*/
 	buf[0] = toupper((unsigned char)buf[0]);

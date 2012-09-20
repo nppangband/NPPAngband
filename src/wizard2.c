@@ -412,7 +412,7 @@ static void do_cmd_wiz_change_aux(void)
 	check_experience();
 
 	/* Default */
-	sprintf(tmp_val, "%ld", (long)(p_ptr->fame));
+	sprintf(tmp_val, "%ld", (long)(p_ptr->q_fame));
 
 	/* Query */
 	if (!get_string("Fame: ", tmp_val, 10)) return;
@@ -424,7 +424,7 @@ static void do_cmd_wiz_change_aux(void)
 	if (tmp_long < 0) tmp_long = 0L;
 
 	/* Save */
-	p_ptr->fame = tmp_long;
+	p_ptr->q_fame = tmp_long;
 
 }
 
@@ -1792,6 +1792,25 @@ static void wiz_create_items(void)
 	}
 }
 
+/* More informative than spoiler information */
+static void do_cmd_wiz_know_quests(void)
+{
+	int i;
+
+	msg_print(format("p_ptr->cur_quest is %d", guild_quest_level()));
+
+	for (i = 0; i < z_info->q_max; i++)
+	{
+		quest_type *q_ptr = &q_info[i];
+
+		msg_print(format("quest #%d, name is %s, type is %d", i, q_name + q_ptr->name, q_ptr->q_type));
+		msg_print(format("quest #%d, level is %d, mon_race is %d, theme is %d", i, q_ptr->base_level, q_ptr->mon_idx, q_ptr->theme));
+		msg_print(format("quest #%d, max num is is %d, num killed is %d, ", i, q_ptr->q_max_num, q_ptr->q_num_killed));
+		if (q_ptr->q_flags & (QFLAG_STARTED)) msg_print(format("quest #%d is started", i));
+		if (q_ptr->q_flags & (QFLAG_COMPLETED)) msg_print(format("quest #%d is completed", i));
+	}
+}
+
 /* Create a specific monster grid */
 static void do_cmd_wiz_monster(void)
 {
@@ -2126,6 +2145,13 @@ void do_cmd_debug(void)
 		case 'p':
 		{
 			teleport_player(10);
+			break;
+		}
+
+		/* Query the dungeon */
+		case 'Q':
+		{
+			do_cmd_wiz_know_quests();
 			break;
 		}
 

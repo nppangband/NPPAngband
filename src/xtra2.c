@@ -230,39 +230,6 @@ int get_coin_type(const monster_race *r_ptr)
 }
 
 
-/*
- * Create magical stairs after finishing a quest monster.
- */
-static void build_quest_stairs(int y, int x)
-{
-	int ny, nx;
-
-	/* Stagger around */
-	while (!cave_clean_bold(y, x))
-	{
-
-		/* Pick a location */
-		scatter(&ny, &nx, y, x, 5, 1);
-
-		/* Stagger */
-		y = ny; x = nx;
-	}
-
-	/* Destroy any objects */
-	delete_object(y, x);
-
-	/* Explain the staircase */
-	msg_print("A magical staircase appears...");
-
-	/* Create stairs down */
-	cave_set_feat(y, x, FEAT_MORE);
-
-	light_spot(y, x);
-
-	/* Update the visuals */
-	p_ptr->update |= (PU_UPDATE_VIEW | PU_MONSTERS);
-
-}
 
 /* Helper function for monster_death - drop any objects the monster is holding */
 static void mon_drop_held_objects(monster_type *m_ptr)
@@ -521,7 +488,7 @@ static void mon_drop_loot(int m_idx)
  * Helper function for monster-death.
  * Process the death of a quest monster.
  */
-static void process_quest_monster_death(int i, int m_idx, bool *writenote, bool *completed)
+static void process_quest_monster_death(int i, int m_idx, bool *writenote)
 {
 	quest_type *q_ptr = &q_info[i];
 	monster_type *m_ptr = &mon_list[m_idx];
@@ -547,8 +514,7 @@ static void process_quest_monster_death(int i, int m_idx, bool *writenote, bool 
 	if (q_ptr->q_num_killed == q_ptr->q_max_num)
 	{
 		/* Mark complete */
-		q_ptr->active_level = 0;
-		*completed = TRUE;
+		quest_finished(q_ptr);
 
 		/*
 		 * Make a note of the completed quest, but not for fixed quests.
@@ -562,7 +528,10 @@ static void process_quest_monster_death(int i, int m_idx, bool *writenote, bool 
 	}
 
 	/*not done yet*/
-	if (!*completed) p_ptr->notice |= PN_QUEST_REMAIN;
+	if (!(q_ptr->q_flags & (QFLAG_COMPLETED))) p_ptr->notice |= PN_QUEST_REMAIN;
+
+	/* Update the quest status */
+	p_ptr->redraw |= (PR_QUEST_ST);
 }
 
 /*
@@ -580,21 +549,16 @@ static void process_quest_monster_death(int i, int m_idx, bool *writenote, bool 
  */
 void monster_death(int m_idx, int who)
 {
-	int i, y, x;
+	int i;
 	int total = 0;
 	bool questlevel = FALSE;
 	bool completed = FALSE;
 	bool fixedquest = FALSE;
 	bool writenote = TRUE;
-	bool need_stairs = FALSE;
 
 	monster_type *m_ptr = &mon_list[m_idx];
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-	/* Get the location */
-	y = m_ptr->fy;
-	x = m_ptr->fx;
 
 	/* Drop any objects the monster is carrying */
 	if (m_ptr->hold_o_idx)
@@ -626,7 +590,7 @@ void monster_death(int m_idx, int who)
 		if (((who != SOURCE_PLAYER) && (who != SOURCE_TRAP)) || (!p_ptr->depth)) continue;
 
 		/* Quest level? */
-		if ((q_ptr->active_level == p_ptr->depth) && (p_ptr->depth > 0))
+		if ((q_ptr->base_level == p_ptr->depth) && !is_quest_complete(i))
 		{
 			/* We are on a quest level */
 			questlevel = TRUE;
@@ -634,15 +598,16 @@ void monster_death(int m_idx, int who)
 			/* Mark fixed quests */
 			if (quest_fixed(q_ptr)) fixedquest = TRUE;
 
-			process_quest_monster_death(i, m_idx, &writenote, &completed);
+			process_quest_monster_death(i, m_idx, &writenote);
 
-			if (completed && (quest_no_down_stairs(q_ptr))) need_stairs = TRUE;
+			/* We just completed the quest */
+			if (q_ptr->q_flags & (QFLAG_COMPLETED))
+			{
+				completed = TRUE;
+
+				if (fixedquest) total++;
+			}
 		}
-
-		p_ptr->redraw |= (PR_QUEST_ST);
-
-		/* Count incomplete fixed quests */
-		if (q_ptr->active_level && (fixedquest)) total++;
 	}
 
 	/* If the player kills a Unique, and the notes option is on, write a note.
@@ -695,22 +660,13 @@ void monster_death(int m_idx, int who)
 		/* Redraw the status */
 		p_ptr->redraw |= (PR_QUEST_ST);
 
-		/* If fixed monster quest, build magical stairs */
-		if (need_stairs)
-		{
-			build_quest_stairs(y, x);
-		}
-
 		return;
 	}
 
 	/* Need some stairs */
 	else if (total)
 	{
-		/* Build magical stairs */
-		build_quest_stairs(y, x);
-
-		p_ptr->fame += 150;
+		p_ptr->q_fame += 150;
 		altered_inventory_counter += 50;
 	}
 
@@ -724,11 +680,8 @@ void monster_death(int m_idx, int who)
  		/* Redraw the "title" */
  		p_ptr->redraw |= (PR_TITLE);
 
-		p_ptr->fame += 500;
+		p_ptr->q_fame += 500;
 		altered_inventory_counter += 200;
-
-		/* Build magical stairs */
-		build_quest_stairs(y, x);
 
  		/* Congratulations */
  		msg_print("*** CONGRATULATIONS ***");
@@ -961,7 +914,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note, int who)
 			/* reputation bonus, except for the town unique */
 	    	if ((who == SOURCE_PLAYER) || (who == SOURCE_TRAP))
 	    	{
-	    		if (r_ptr->level >= p_ptr->lev)p_ptr->fame += 5;
+	    		if (r_ptr->level >= p_ptr->lev)p_ptr->q_fame += 5;
 	    		altered_inventory_counter += 2;
 	    	}
 		}
@@ -972,7 +925,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note, int who)
 			((who == SOURCE_PLAYER) || (who == SOURCE_TRAP)))
 		{
 			/* fame boost*/
-			p_ptr->fame += 7;
+			p_ptr->q_fame += 7;
 			altered_inventory_counter += 5;
 			delete_player_ghost_entry();
 		}

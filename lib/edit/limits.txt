@@ -63,7 +63,7 @@ M:H:165
 M:B:4
 
 # Maximum number of quests (including a slot for random quests)
-M:Q:4
+M:Q:3
 
 # Maximum number of flavors
 M:L:348

@@ -22,6 +22,13 @@ Wilderness level quests.
 Arena Level quests.
 Major cleanup of the quest code.
 Potions, scrolls, and food, including mushrooms, now have a chance of appearing in multiple quantities.
+Two new quest rewards - permanent stat increase and permanent stat augmentation.
+New wizard command to give information on quest status (more info than cheat).
+Quest rewards are now generated at startup, and the player chooses their quest reward, 
+rather than the game trying to figure out the best reward for the player.
+The player may defer their quest reward if they don't see anything good, and instead enhance thier next quest reward.
+
+
 
 
 NPP 0.5.4 changes:

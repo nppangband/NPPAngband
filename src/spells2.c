@@ -412,7 +412,7 @@ bool do_inc_stat(int stat)
 {
 	bool res;
 
-	/* Restore strength */
+	/* Restore stat first */
 	res = res_stat(stat);
 
 	/* Attempt to increase */
@@ -439,7 +439,26 @@ bool do_inc_stat(int stat)
 	return (FALSE);
 }
 
+/*
+ * Permanently gain a "point" in a stat
+ */
+void do_perm_stat_boost(int stat)
+{
+	/* Restore stat first */
+	(void)res_stat(stat);
 
+	/* Increase stat*/
+	p_ptr->stat_quest_add[stat]++;
+
+	/* Message */
+	msg_print(format("You feel very %s!", desc_stat_pos[stat]));
+
+	/* Recalculate bonuses */
+	p_ptr->update |= (PU_BONUS);
+
+	/* Redisplay the stats later */
+	p_ptr->redraw |= (PR_STATS);
+}
 
 /*
  * Identify everything being carried.

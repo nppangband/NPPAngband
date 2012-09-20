@@ -7377,7 +7377,7 @@ static void build_nature(void)
 		quest_type *q_ptr = &q_info[i];
 
 		/* Active quest? */
-		if (q_ptr->active_level != p_ptr->depth) continue;
+		if ((q_ptr->base_level == p_ptr->depth) && !is_quest_complete(i)) continue;
 
 		/* Monster quests */
 		if ((quest_fixed(q_ptr)) || (quest_single_r_idx(q_ptr)))
@@ -9484,7 +9484,7 @@ static bool place_monsters_objects(void)
 		quest_type *q_ptr = &q_info[i];
 
 		/* Quest levels */
-		if (q_ptr->active_level == p_ptr->depth)
+		if ((q_ptr->base_level == p_ptr->depth) && !is_quest_complete(i))
 		{
 			monster_race *r_ptr = &r_info[q_ptr->mon_idx];
 			int y, x;

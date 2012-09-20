@@ -150,19 +150,15 @@ level results in immediate quest failure.
 REWARD:
 
 The biggest reason to take on an optional quest is the reward.  The quality 
-of the reward depends on two factors. The first factor is the difficulty
+of the rewards offered depends on two factors. The first factor is the difficulty
 of the quest.  The second factor is the player's reputation at the guild. 
 The player's reputation at the guild is increased by completing quests 
 and by killing uniques. When the advanturer fails a quest, their 
 reputation at the guild is greatly decreased.
 
-Early in the game, the quest reward is usually gold.  As a player's reputation at
-the guild increases, the guild will choose to reward the player with stat gain
-potions, dungeon spellbooks, or guaranteed good or guaranteed great equipment.
-If a player's reputation at the guild is high enough, the guild may attempt 
-to tailor a great item to the player's biggest need, based on an evaluation 
-of the equipment the player is wearing, as well as the equipment in the 
-player's backpack and home.  The player can also receive permanent increases
-to their speed or maximum hit points.  The ultimate reward is for the guild to 
-create an artifact specifically as a quest reward.  The player will even be given 
-a chance to name the artifact.
+Early in the game, the rewards areusually gold or objects.  As a player's 
+reputation increases, the guild will offer to reward the player with stat gain
+increases, dungeon spellbooks, or permanent hp increases.  The ultimate reward 
+is for the guild to offer to create an artifact specifically as a quest reward.  
+The player will even be given a chance to choose the object to be made into an 
+artifact and name it.

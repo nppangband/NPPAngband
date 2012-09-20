@@ -1125,6 +1125,7 @@ static errr rd_extra(void)
 	for (i = 0; i < A_MAX; i++) rd_s16b(&p_ptr->stat_max[i]);
 	for (i = 0; i < A_MAX; i++) rd_s16b(&p_ptr->stat_cur[i]);
 	for (i = 0; i < A_MAX; i++) rd_s16b(&p_ptr->stat_birth[i]);
+	for (i = 0; i < A_MAX; ++i) rd_s16b(&p_ptr->stat_quest_add[i]);
 
 	rd_s16b(&p_ptr->ht_birth);
 	rd_s16b(&p_ptr->wt_birth);
@@ -1133,7 +1134,8 @@ static errr rd_extra(void)
 
 	strip_bytes(24);	/* oops */
 
-	rd_u16b(&p_ptr->fame);
+	rd_u16b(&p_ptr->q_fame);
+	rd_u16b(&p_ptr->deferred_rewards);
 
 	rd_s32b(&p_ptr->au);
 
@@ -2172,19 +2174,27 @@ static errr rd_savefile_new_aux(void)
 	/* Load the Quests */
 	for (i = 0; i < tmp16u; i++)
 	{
-		rd_byte(&q_info[i].q_type);
-		rd_byte(&q_info[i].reward);
-		rd_byte(&q_info[i].active_level);
-		rd_byte(&q_info[i].base_level);
-		rd_byte(&q_info[i].theme);
-		rd_s16b(&q_info[i].mon_idx);
-		rd_s32b(&q_info[i].start_turn);
-		rd_s16b(&q_info[i].q_num_killed);
-		rd_s16b(&q_info[i].q_max_num);
-		rd_byte(&q_info[i].q_flags);
-	}
+		quest_type *q_ptr = &q_info[i];
 
-	rd_u16b(&p_ptr->cur_quest);
+		rd_byte(&q_ptr->q_type);
+		/* Only limited info for permanent quests.  The rest is detailed in quest.txt */
+		if (q_ptr->q_type == QUEST_PERMANENT)
+		{
+			rd_byte(&q_ptr->q_flags);
+			rd_s16b(&q_ptr->q_num_killed);
+			continue;
+		}
+
+		rd_u16b(&q_ptr->q_reward);
+		rd_u16b(&q_ptr->q_fame_inc);
+		rd_byte(&q_ptr->base_level);
+		rd_byte(&q_ptr->theme);
+		rd_s16b(&q_ptr->mon_idx);
+		rd_s32b(&q_ptr->start_turn);
+		rd_s16b(&q_ptr->q_num_killed);
+		rd_s16b(&q_ptr->q_max_num);
+		rd_byte(&q_ptr->q_flags);
+	}
 
 	if (arg_fiddle) note("Loaded Quests");
 

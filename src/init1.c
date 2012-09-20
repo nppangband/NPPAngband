@@ -3713,7 +3713,7 @@ errr parse_q_info(char *buf, header *head)
 		}
 
 		/* Save the values */
-		prev_lev = q_ptr->base_level = q_ptr->active_level = lev;
+		prev_lev = q_ptr->base_level = lev;
 
 		q_ptr->mon_idx = r_idx;
 

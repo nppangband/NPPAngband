@@ -625,7 +625,7 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 	/*filter out non-terrain flags*/
 	native_flags &= TERRAIN_MASK;
 
-	if (quest_themed(q_ptr) && (p_ptr->cur_quest == p_ptr->depth)) quest_level = TRUE;
+	if (quest_themed(q_ptr) && (guild_quest_level() == p_ptr->depth)) quest_level = TRUE;
 
 	/* Boost the level, but not for quest levels.  That has already been done */
 	if ((level > 0) && (!quest_level))
