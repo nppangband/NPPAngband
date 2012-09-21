@@ -986,22 +986,22 @@ static void create_reward_objects(quest_type *q_ptr, byte reward_type)
 	{
 		case REWARD_TAILORED:
 		{
-			repeats = p_ptr->q_fame / 80;
-			if (repeats < 3) repeats = 4;
+			repeats = (p_ptr->q_fame + p_ptr->deferred_rewards) / 65;
+			if (repeats <= 3) repeats = 3;
 			break;
 		}
 		case REWARD_GREAT_ITEM:
 		{
-			repeats = p_ptr->q_fame / 100;
-			if (repeats < 2) repeats = 3;
+			repeats = (p_ptr->q_fame + p_ptr->deferred_rewards) / 80;
+			if (repeats <= 2) repeats = 2;
 			break;
 		}
 
 		/*good reward*/
 		default:
 		{
-			repeats = p_ptr->q_fame / 130;
-			if (repeats < 1) repeats = 2;
+			repeats = (p_ptr->q_fame + p_ptr->deferred_rewards) / 100;
+			if (repeats <= 5) repeats = 5;
 			break;
 		}
 	}
@@ -1014,7 +1014,6 @@ static void create_reward_objects(quest_type *q_ptr, byte reward_type)
 	{
 		bool do_great = FALSE;
 		bool do_good = FALSE;
-		bool interesting = FALSE;
 
 		/* Wipe the object */
 		object_wipe(o_ptr);
@@ -1026,16 +1025,18 @@ static void create_reward_objects(quest_type *q_ptr, byte reward_type)
 		{
 			do_great = TRUE;
 			if (one_in_(3)) do_good = TRUE;
-			if (one_in_(10)) interesting = TRUE;
+			if (one_in_(5)) object_level += 5;
 		}
 		else if (reward_type == REWARD_GREAT_ITEM)
 		{
 			do_great = TRUE;
 			if (one_in_(5)) do_good = TRUE;
 		}
+		/* (reward_type == REWARD_GOOD_ITEM) */
+		else do_good = TRUE;
 
 		/* Valid item exists?  If not, don't count it*/
-		if (!make_object(o_ptr, do_good, do_great, 0, interesting)) continue;
+		if (!make_object(o_ptr, do_good, do_great, 0, TRUE)) continue;
 
 		/*
 		 * Catch_all if we never found anything.  Should never happen.
@@ -1082,6 +1083,18 @@ static void create_reward_objects(quest_type *q_ptr, byte reward_type)
 			if (o_ptr->to_a) o_ptr->to_a += 2 + randint0(3);
 			if (o_ptr->to_h) o_ptr->to_h += 2 + randint0(5);
 			if (o_ptr->to_d) o_ptr->to_d += 2 + randint0(4);
+
+			if (obj_is_weapon(o_ptr))
+			{
+				if (one_in_(2)) o_ptr->dd++;
+				else o_ptr->ds++;
+				while(one_in_(4)) o_ptr->dd++;
+				while(one_in_(3)) o_ptr->ds++;
+			}
+			else if (o_ptr->ac)
+			{
+				while(one_in_(3)) o_ptr->ac++;
+			}
 		}
 
 		/* Identify it fully */
@@ -1114,7 +1127,7 @@ static void check_reward_extra_hp(quest_type *q_ptr, int chance)
 
 	if (randint(chance) > (p_ptr->q_fame + p_ptr->deferred_rewards)) return;
 
-	if (one_in_(2)) return;
+	if (one_in_(3)) return;
 
 	if (randint1(hp_left) < p_ptr->hitdie) return;
 
@@ -1129,7 +1142,7 @@ static void check_reward_stat_increase(quest_type *q_ptr, int chance)
 	/*clear the counter*/
 	x = 0;
 
-	if (one_in_(2)) return;
+	if (one_in_(3)) return;
 
 	if (randint0(chance) > p_ptr->q_fame) return;
 
@@ -1140,13 +1153,12 @@ static void check_reward_stat_increase(quest_type *q_ptr, int chance)
 		x += p_ptr->stat_quest_add[i];
 	}
 
-	/* We have already given out plenty of stat bonuses */
-	if (randint0(10) < x ) return;
-
 	/* Small chance of augmentation as a reward */
-	if (one_in_(7)) q_ptr->q_reward |= (REWARD_AUGMENTATION);
+	if ((randint1(7) < x ) && (one_in_(5))) q_ptr->q_reward |= (REWARD_AUGMENTATION);
 
-	else q_ptr->q_reward |= (REWARD_INC_STAT);
+	else if (randint0(10) < x ) q_ptr->q_reward |= (REWARD_INC_STAT);
+
+	return;
 }
 
 /* Helper function to decide if the player should have a custom quest reward */
@@ -1157,7 +1169,7 @@ static void check_reward_custom_randart(quest_type *q_ptr, int chance, int dice)
 
 	if (chance + damroll(dice,225) > (p_ptr->q_fame + p_ptr->deferred_rewards)) return;
 
-	if (one_in_(2)) return;
+	if (one_in_(3)) return;
 
 	q_ptr->q_reward |= (REWARD_RANDART);
 }
@@ -1408,12 +1420,12 @@ static bool place_mon_quest(int lev, bool fixed)
 	}
 
 	/* Add various possible rewards */
-	check_reward_custom_randart(q_ptr, 75, 8);
-	check_reward_extra_hp(q_ptr, 600);
+	check_reward_custom_randart(q_ptr, 200, 8);
+	check_reward_extra_hp(q_ptr, 500);
 	check_reward_stat_increase(q_ptr, 500);
 
 	/* Try for a tailored award */
-	if (25 + damroll(50,20) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
+	if (25 + damroll(40,20) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
 
 	else
 	{
@@ -1636,7 +1648,7 @@ static bool place_pit_nest_quest(int lev)
 {
 
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
-
+	int chance = ((p_ptr->q_fame + p_ptr->deferred_rewards) / 5) - (lev *  2);
 	int tries = 0;
 	int i;
 
@@ -1653,13 +1665,14 @@ static bool place_pit_nest_quest(int lev)
 	q_ptr->q_fame_inc += damroll(10,2);
 
 	/* Decide what types of reward to offer */
-	check_reward_custom_randart(q_ptr, 75, 6);
+	check_reward_custom_randart(q_ptr, 150, 8);
 	check_reward_extra_hp(q_ptr, 400);
-	check_reward_stat_increase(q_ptr, 500);
+	check_reward_stat_increase(q_ptr, 400);
 
 	if (30 + damroll(30,25) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
 
-	else q_ptr->q_reward |= REWARD_GREAT_ITEM;
+	else if (randint(100 < chance)) q_ptr->q_reward |= REWARD_GREAT_ITEM;
+	else q_ptr->q_reward |= REWARD_GOOD_ITEM;
 
 	while (TRUE)
 	{
@@ -1739,14 +1752,14 @@ static bool place_level_quest(int lev)
 	/* Actually write the quest */
 	q_ptr->q_type = QUEST_THEMED_LEVEL;
 	q_ptr->base_level = lev;
-	q_ptr->q_fame_inc = 10;
+	q_ptr->q_fame_inc = 15;
 	q_ptr->q_fame_inc += damroll(10,2);
 
 	/* Decide on what type of reward to give the player */
-	check_reward_custom_randart(q_ptr, 60, 6);
-	check_reward_extra_hp(q_ptr, 300);
-	check_reward_stat_increase(q_ptr, 500);
-	if (25 + damroll(30,25) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
+	check_reward_custom_randart(q_ptr, 150, 6);
+	check_reward_extra_hp(q_ptr, 350);
+	check_reward_stat_increase(q_ptr, 350);
+	if (25 + damroll(25,25) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
 	else q_ptr->q_reward |= REWARD_GREAT_ITEM;
 
 	while (TRUE)
@@ -1796,11 +1809,13 @@ static bool place_wilderness_quest(int lev)
 	/* Actually write the quest */
 	q_ptr->q_type = QUEST_WILDERNESS_LEVEL;
 	q_ptr->base_level = lev;
+	q_ptr->q_fame_inc = 15;
+	q_ptr->q_fame_inc += damroll(10,2);
 
 	/* Decide which rewards to offer the player */
-	check_reward_custom_randart(q_ptr, 45, 6);
-	check_reward_extra_hp(q_ptr, 275);
-	check_reward_stat_increase(q_ptr, 400);
+	check_reward_custom_randart(q_ptr, 150, 6);
+	check_reward_extra_hp(q_ptr, 350);
+	check_reward_stat_increase(q_ptr, 350);
 	if (25 + damroll(25,25) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
 	else q_ptr->q_reward |= REWARD_GREAT_ITEM;
 
@@ -1820,13 +1835,13 @@ static bool place_arena_quest(int lev)
 	q_ptr->q_type = QUEST_ARENA_LEVEL;
 	q_ptr->base_level = lev;
 	q_ptr->q_max_num = ARENA_MAX_MON;
-	q_ptr->q_fame_inc = 50;
+	q_ptr->q_fame_inc = 40;
 	q_ptr->q_fame_inc += damroll(10,2);
 
 	/* Decide on what types of rewards to offer the player */
-	check_reward_custom_randart(q_ptr, 20, 5);
-	check_reward_stat_increase(q_ptr, 350);
-	check_reward_extra_hp(q_ptr, 175);
+	check_reward_custom_randart(q_ptr, 75, 4);
+	check_reward_stat_increase(q_ptr, 225);
+	check_reward_extra_hp(q_ptr, 225);
 	if (25 + damroll(15,15) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
 	else q_ptr->q_reward |= REWARD_GREAT_ITEM;
 
@@ -1849,9 +1864,9 @@ static bool place_vault_quest(int lev)
 
 	/* Decide what types of rewards to give */
 	check_reward_custom_randart(q_ptr, 60, 5);
-	check_reward_extra_hp(q_ptr, 150);
-	check_reward_stat_increase(q_ptr, 400);
-	if (20 + damroll(30,25) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
+	check_reward_extra_hp(q_ptr, 250);
+	check_reward_stat_increase(q_ptr, 250);
+	if (20 + damroll(25,20) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
 	else q_ptr->q_reward |= (REWARD_GREAT_ITEM);
 
 	/*generate a quest artifact*/
@@ -2433,8 +2448,9 @@ void quest_fail(void)
 	/* Reputation penalty */
 	if (p_ptr->q_fame)
 	{
-		/*special quests cut the player fame in half*/
-		if (q_ptr->q_type == QUEST_VAULT)	p_ptr->q_fame /= 2;
+		/*Arena quests are only a small decrease, special quests cut the player fame in half*/
+		if (q_ptr->q_type == QUEST_ARENA_LEVEL)	p_ptr->q_fame = (p_ptr->q_fame * 8 / 10);
+		else if (q_ptr->q_type == QUEST_VAULT)	p_ptr->q_fame /= 2;
 
 		/* Failing a pit, nest, wilderness, or themed level quests isn't as bad */
 		else if (quest_multiple_r_idx(q_ptr)) p_ptr->q_fame = (p_ptr->q_fame * 65 / 100);

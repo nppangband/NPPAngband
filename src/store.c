@@ -409,7 +409,7 @@ static int stats_menu(int service)
 		/* must be SERVICE_QUEST_REWARD_INC_STAT*/
 		else
 		{
-			if (p_ptr->stat_quest_add[i] < 3) stats[count++] = i;
+			if (p_ptr->stat_quest_add[i] <= 2) stats[count++] = i;
 		}
 
 	}

@@ -1695,7 +1695,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 		case TV_RING:
 		case TV_AMULET:
 		{
-			if (!power && !interesting && (one_in_(2) < 50)) power = -1;
+			if (!power && !interesting && (one_in_(2))) power = -1;
 			a_m_aux_3(o_ptr, lev, power);
 			break;
 		}

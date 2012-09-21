@@ -9181,8 +9181,8 @@ static bool build_forest_level(void)
 	int hgt, wid, wid2;
 
 	/* Make it full size */
-	hgt = p_ptr->cur_map_hgt = MAX_DUNGEON_HGT;
-	wid = p_ptr->cur_map_wid = MAX_DUNGEON_WID;
+	hgt = p_ptr->cur_map_hgt = MAX_DUNGEON_HGT  * 5 / 6;
+	wid = p_ptr->cur_map_wid = MAX_DUNGEON_WID  * 8 / 9;
 
 	 /* Actual maximum number of rooms on this level */
 	dun->row_rooms = p_ptr->cur_map_hgt / BLOCK_HGT;
@@ -9981,8 +9981,8 @@ static bool build_wilderness_level(void)
 			if (one_in_(2)) m_ptr->m_timed[MON_TMD_SLEEP] = 0;
 			else m_ptr->m_timed[MON_TMD_SLEEP] /= 2;
 
-			/* One in 20 generate a bonus item */
-			if ((mon_max % 20) == 0) m_ptr->mflag |= (MFLAG_BONUS_ITEM);
+			/* One in 25 generate a bonus item */
+			if ((mon_max % 25) == 0) m_ptr->mflag |= (MFLAG_BONUS_ITEM);
 		}
 	}
 
