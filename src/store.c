@@ -222,11 +222,11 @@ static byte quests_offered[QUEST_SLOT_MAX];
 static cptr quest_title[QUEST_SLOT_MAX] =
 {
 	"Monster or Unique Quest",	/* QUEST_MONSTER*/
+  	"Guardian Quest",			/* QUEST_GUARDIAN */
 	"Pit or Nest Quest",		/* QUEST_PIT*/
+	"Wilderness Quest",			/* QUEST_WILDERNESS */
   	"Level Quest",				/* QUEST_THEMED_LEVEL*/
 	"Vault Quest",				/* QUEST_VAULT*/
-  	"Guardian Quest",			/* QUEST_GUARDIAN */
-	"Wilderness Quest",			/* QUEST_WILDERNESS */
 	"Arena Quest"				/* QUEST_ARENA_LEVEL */
 };
 
@@ -1234,6 +1234,7 @@ static bool store_service_aux(int store_num, s16b choice)
 			/* must be SERVICE_QUEST_REWARD_INC_STAT*/
 			else
 			{
+				Term_gotoxy(0, 0);
 				do_perm_stat_boost(result);
 				guild_quest_wipe(TRUE);
 			}

@@ -9181,8 +9181,8 @@ static bool build_forest_level(void)
 	int hgt, wid, wid2;
 
 	/* Make it full size */
-	hgt = p_ptr->cur_map_hgt = MAX_DUNGEON_HGT  * 5 / 6;
-	wid = p_ptr->cur_map_wid = MAX_DUNGEON_WID  * 8 / 9;
+	hgt = p_ptr->cur_map_hgt = MAX_DUNGEON_HGT;
+	wid = p_ptr->cur_map_wid = MAX_DUNGEON_WID;
 
 	 /* Actual maximum number of rooms on this level */
 	dun->row_rooms = p_ptr->cur_map_hgt / BLOCK_HGT;

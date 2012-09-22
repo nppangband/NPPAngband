@@ -986,14 +986,14 @@ static void create_reward_objects(quest_type *q_ptr, byte reward_type)
 	{
 		case REWARD_TAILORED:
 		{
-			repeats = (p_ptr->q_fame + p_ptr->deferred_rewards) / 65;
-			if (repeats <= 3) repeats = 3;
+			repeats = (p_ptr->q_fame + p_ptr->deferred_rewards) / 75;
+			if (repeats < 3) repeats = 3;
 			break;
 		}
 		case REWARD_GREAT_ITEM:
 		{
-			repeats = (p_ptr->q_fame + p_ptr->deferred_rewards) / 80;
-			if (repeats <= 2) repeats = 2;
+			repeats = (p_ptr->q_fame + p_ptr->deferred_rewards) / 90;
+			if (repeats < 2) repeats = 2;
 			break;
 		}
 
@@ -1001,7 +1001,7 @@ static void create_reward_objects(quest_type *q_ptr, byte reward_type)
 		default:
 		{
 			repeats = (p_ptr->q_fame + p_ptr->deferred_rewards) / 100;
-			if (repeats <= 5) repeats = 5;
+			if (repeats < 5) repeats = 5;
 			break;
 		}
 	}
@@ -1083,18 +1083,6 @@ static void create_reward_objects(quest_type *q_ptr, byte reward_type)
 			if (o_ptr->to_a) o_ptr->to_a += 2 + randint0(3);
 			if (o_ptr->to_h) o_ptr->to_h += 2 + randint0(5);
 			if (o_ptr->to_d) o_ptr->to_d += 2 + randint0(4);
-
-			if (obj_is_weapon(o_ptr))
-			{
-				if (one_in_(2)) o_ptr->dd++;
-				else o_ptr->ds++;
-				while(one_in_(4)) o_ptr->dd++;
-				while(one_in_(3)) o_ptr->ds++;
-			}
-			else if (o_ptr->ac)
-			{
-				while(one_in_(3)) o_ptr->ac++;
-			}
 		}
 
 		/* Identify it fully */
@@ -1907,6 +1895,7 @@ bool quest_allowed(byte j)
 	}
 	else if (j == QUEST_SLOT_ARENA)
 	{
+		return (TRUE);
 		if (p_ptr->max_depth < 20) return (FALSE);
 		if (p_ptr->q_fame < 100) return (FALSE);
 		if (!(q_info[GUILD_QUEST_SLOT].q_flags & (QFLAG_ARENA_QUEST))) return (FALSE);

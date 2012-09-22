@@ -555,6 +555,10 @@ static bool make_artifact(object_type *o_ptr)
 	if ((can_be_randart(o_ptr)) && (!adult_no_xtra_artifacts))
 	{
 		int chance = depth_check;
+
+		/* Hack - harder for quest objects because so many of them are generated */
+		if (object_generation_mode == OB_GEN_MODE_QUEST) if (chance < 20) chance = 20;
+
 		chance += (MAX_DEPTH + depth_check) / 10;
 
 		/*occasionally make a randart*/
@@ -1587,7 +1591,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 	 */
 	if ((good) && (great))
 	{
-		if (object_generation_mode == OB_GEN_MODE_QUEST) rolls = 2;
+		if (object_generation_mode == OB_GEN_MODE_QUEST) rolls = 1;
 		else rolls = 4;
 	}
 

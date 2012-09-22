@@ -444,7 +444,7 @@ static void mon_drop_loot(int m_idx)
 		if (one_in_(5)) this_good = TRUE;
 		if ((!this_good) && (!this_great) && (!this_chest))
 		{
-			object_level += 5;
+			object_level += 2;
 			if (object_level > MAX_DEPTH) object_level = MAX_DEPTH;
 			interesting = TRUE;
 		}
@@ -604,9 +604,13 @@ void monster_death(int m_idx, int who)
 			if (q_ptr->q_flags & (QFLAG_COMPLETED))
 			{
 				completed = TRUE;
-
-				if (fixedquest) total++;
 			}
+		}
+
+		/* Count remaining permanent quests */
+		if (quest_fixed(q_ptr))
+		{
+			if (!is_quest_complete(i)) total++;
 		}
 	}
 

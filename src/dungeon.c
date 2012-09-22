@@ -748,6 +748,87 @@ static void add_arena_object(byte stage)
 }
 
 /*
+ * Hack - the last couple monsters on a wilderness level are too hard to find.
+ * Teleport them to the player, one every 10 normal game turns.
+ * Don't teleport if there is one in line of sight
+ */
+static void process_wilderness_quests(void)
+{
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+	int cur_quest_monsters = q_info->q_max_num - count_quest_monsters(q_ptr);
+	u16b tele_mon_idx[10];
+	u16b mon_count = 0;
+	u16b actual_mon_count = 0;
+	u16b i;
+	monster_type *m_ptr;
+	char ddesc[80];
+
+	/* Don't start teleporting them yet */
+	if (cur_quest_monsters > 10) return;
+
+	for (i = 1; i < z_info->m_max; i++)
+	{
+		m_ptr = &mon_list[i];
+
+		/* Skip dead monsters */
+		if (!m_ptr->r_idx) continue;
+
+		/* Count the real monsters */
+		actual_mon_count++;
+
+		/* Can we already see a monster, or is it in line of sight? */
+		if (m_ptr->project) continue;
+		if (m_ptr->ml) continue;
+
+		tele_mon_idx[mon_count++] = i;
+	}
+
+	/* No monsters to be revealed */
+	if (!mon_count)
+	{
+		/* There are monsters in line of sight or are already visible */
+		if (actual_mon_count)return;
+
+		/* Only mimics left.  Reveal them so the player can complete the quest */
+		for (i = 1; i < o_max; i++)
+		{
+			object_type *o_ptr = &o_list[i];
+
+			/* Skip non-objects */
+			if (!o_ptr->k_idx) continue;
+
+			/* Only work with the mimic objects */
+			if (!o_ptr->mimic_r_idx) continue;
+
+			/* Mimic is waiting to turn into a quest monster */
+			reveal_mimic(i, FALSE);
+
+			break;
+		}
+
+		return;
+	}
+
+	/* Pick one monster at random and teleport them to the player */
+	i = randint0(mon_count);
+	m_ptr = &mon_list[tele_mon_idx[i]];
+
+	/* Move monster near player (also updates "m_ptr->ml"). */
+	teleport_towards(m_ptr->fy, m_ptr->fx, p_ptr->py, p_ptr->px);
+
+	/* Get the "died from" name */
+	monster_desc(ddesc, sizeof(ddesc), m_ptr, 0x88);
+
+	/* Monster is now visible. */
+	if (m_ptr->ml)
+	{
+		disturb(1, 0);
+		/* Message */
+		msg_format("%^s suddenly appears.", ddesc);
+	}
+}
+
+/*
  * This function assumes it is called every 10 game turns during an arena level.
  */
 static void process_arena_level(void)
@@ -1355,7 +1436,7 @@ static void process_world(void)
 	if (turn % 10) return;
 
 	/*** Update quests ***/
-	if (guild_quest_level())
+	if (guild_quest_active())
 	{
 		quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 
@@ -1373,10 +1454,16 @@ static void process_world(void)
 				}
 			}
 		}
-
 		/* We are on the level */
-		else if (q_ptr->q_type == QUEST_ARENA_LEVEL) process_arena_level();
-		else if (!(turn % QUEST_TURNS)) process_guild_quests();
+		else
+		{
+			if (q_ptr->q_type == QUEST_ARENA_LEVEL) process_arena_level();
+			else if (!(turn % QUEST_TURNS)) process_guild_quests();
+			if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL)
+			{
+				if (!(turn % 100)) process_wilderness_quests();
+			}
+		}
 	}
 
 	/* Play an ambient sound at regular intervals. */
