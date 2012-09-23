@@ -2398,22 +2398,46 @@ void write_quest_note(bool success)
 
 		if (r_ptr->flags1 == RF1_UNIQUE)
 		{
-			/*write note*/
-			if monster_nonliving(r_ptr)
+			if (success)
 			{
-				sprintf(note, "Quest: Failed to destroy %s", race_name);
+				/*write note*/
+				if monster_nonliving(r_ptr)
+				{
+					sprintf(note, "Quest: Destroyed %s", race_name);
+				}
+				else sprintf(note, "Quest: Killed %s", race_name);
 			}
-			else sprintf(note, "Quest: Failed to kill %s", race_name);
+			else
+			{
+				/*write note*/
+				if monster_nonliving(r_ptr)
+				{
+					sprintf(note, "Quest: Failed to destroy %s", race_name);
+				}
+				else sprintf(note, "Quest: Failed to kill %s", race_name);
+			}
 		}
 
 		else
 		{
-			/* Write note */
-			if monster_nonliving(r_ptr)
+			if (success)
 			{
-	          	sprintf(note, "Quest: Failed to destroy %d %s", q_ptr->q_max_num, race_name);
+				/* Write note */
+				if monster_nonliving(r_ptr)
+				{
+				   	sprintf(note, "Quest: Destroyed %d %s", q_ptr->q_max_num, race_name);
+				}
+				else sprintf(note, "Quest: Killed %d %s", q_ptr->q_max_num, race_name);
 			}
-			else sprintf(note, "Quest: Failed to kill %d %s", q_ptr->q_max_num, race_name);
+			else
+			{
+				/* Write note */
+				if monster_nonliving(r_ptr)
+				{
+					sprintf(note, "Quest: Failed to destroy %d %s", q_ptr->q_max_num, race_name);
+				}
+				else sprintf(note, "Quest: Failed to kill %d %s", q_ptr->q_max_num, race_name);
+			}
 		}
 	}
 
