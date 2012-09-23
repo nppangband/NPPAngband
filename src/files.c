@@ -703,10 +703,10 @@ static void display_player_flag_info(void)
 			player_flags(&f1, &f2, &f3, &fn);
 
 			/* get the flag */
-			if 		(pfr_ptr->set == 0) flag_used = f1;
-			else if (pfr_ptr->set == 1) flag_used = f2;
-			else if (pfr_ptr->set == 2) flag_used = f3;
-			else if (pfr_ptr->set == 3) flag_used = fn;
+			if 		(pfr_ptr->set == 1) flag_used = f1;
+			else if (pfr_ptr->set == 2) flag_used = f2;
+			else if (pfr_ptr->set == 3) flag_used = f3;
+			else /*(pfr_ptr->set == 4)*/flag_used = fn;
 
 			/* Default */
 			c_put_str(TERM_SLATE, ".", row, col+n);
