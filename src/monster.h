@@ -51,7 +51,7 @@
 #define SM_OPP_FIRE		0x00000004
 #define SM_OPP_COLD		0x00000008
 #define SM_OPP_POIS		0x00000010
-#define SM_OPP_XXX1		0x00000020
+#define SM_NAT_LAVA		0x00000020
 #define SM_OPP_XXX2		0x00000040
 #define SM_GOOD_SAVE	0x00000080
 #define SM_PERF_SAVE	0x00000100
@@ -456,7 +456,7 @@
 #define RF5_BALL_CONFU     0x00000080  /* Confusion Ball -> Conf Storm */
 #define RF5_BALL_SOUND     0x00000100  /* Sound Ball -> Sound Storm */
 #define RF5_BALL_SHARD     0x00000200  /* Shard Ball -> Shard Storm */
-#define RF5_RF5_XXX2       0x00000400  /* Unused */
+#define RF5_BALL_METEOR    0x00000400  /* Meteor Ball */
 #define RF5_BALL_STORM     0x00000800  /* Storm Ball -> Tempest */
 #define RF5_BALL_NETHR     0x00001000  /* Nether Ball -> Nether Storm */
 #define RF5_BALL_CHAOS     0x00002000  /* Chaos Ball -> Chaos Storm */
@@ -472,11 +472,11 @@
 #define RF5_BOLT_WATER     0x00800000  /* Water Bolt */
 #define RF5_BOLT_NETHR     0x01000000  /* Nether Bolt */
 #define RF5_BOLT_MANA      0x02000000  /* Magic Missile -> Mana Bolt */
-#define RF5_RF5_XXX3       0x04000000  /* Unused */
+#define RF5_BOLT_GRAV      0x04000000  /* Gravity Bolt */
 #define RF5_BEAM_ELEC      0x08000000  /* Electric spark */
 #define RF5_BEAM_ICE       0x10000000  /* Ice Lance */
 #define RF5_BEAM_NETHR     0x20000000  /* Spear of Nether */
-#define RF5_RF5_XXX4	   0x40000000  /* Unused */
+#define RF5_BEAM_LAVA	   0x40000000  /* Lava Beam */
 #define RF5_HOLY_ORB       0x80000000  /* Orb of Draining */
 
 
@@ -587,8 +587,9 @@
 #define RF5_BALL_MASK \
 	(RF5_BALL_ACID | RF5_BALL_ELEC | RF5_BALL_FIRE | RF5_BALL_COLD | \
 	 RF5_BALL_POIS | RF5_BALL_LIGHT | RF5_BALL_DARK | RF5_BALL_CONFU | \
-	 RF5_BALL_SOUND | RF5_BALL_SHARD | RF5_BALL_STORM | RF5_BALL_NETHR | \
-	 RF5_BALL_CHAOS | RF5_BALL_MANA | RF5_BALL_WATER | RF5_HOLY_ORB)
+	 RF5_BALL_SOUND | RF5_BALL_SHARD | RF5_BALL_METEOR | RF5_BALL_STORM | \
+	 RF5_BALL_NETHR | RF5_BALL_CHAOS | RF5_BALL_MANA | RF5_BALL_WATER | \
+	 RF5_HOLY_ORB)
 
 #define RF6_BALL_MASK (0L)
 
@@ -604,7 +605,7 @@
 #define RF5_BOLT_MASK \
 	(RF5_BOLT_ACID | RF5_BOLT_ELEC | RF5_BOLT_FIRE | RF5_BOLT_COLD | \
 	 RF5_BOLT_POIS | RF5_BOLT_NETHR | RF5_BOLT_WATER | RF5_BOLT_MANA | \
-	 RF5_BOLT_PLAS | RF5_BOLT_ICE)
+	 RF5_BOLT_GRAV | RF5_BOLT_PLAS | RF5_BOLT_ICE)
 
 #define RF6_BOLT_MASK \
    0L
@@ -618,7 +619,7 @@
  */
 #define RF4_BEAM_MASK   (0L)
 
-#define RF5_BEAM_MASK 	(RF5_BEAM_ELEC | RF5_BEAM_ICE | RF5_BEAM_NETHR)
+#define RF5_BEAM_MASK 	(RF5_BEAM_ELEC | RF5_BEAM_ICE | RF5_BEAM_NETHR | RF5_BEAM_LAVA)
 
 #define RF6_BEAM_MASK 	(0L)
 

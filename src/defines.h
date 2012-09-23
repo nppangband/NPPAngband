@@ -486,8 +486,9 @@
 #define LRN_CONFU_SAVE    49 /* Both resist Confusion and Saves apply */
 #define LRN_DARK_SAVE     50
 #define LRN_HOLY_SAVE     51
+#define LRN_LAVA  		  62
 
-#define LRN_MAX           60
+#define LRN_MAX           63
 
 
 

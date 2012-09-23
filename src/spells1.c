@@ -2201,10 +2201,10 @@ static void lava_dam(int dam, cptr kb_str, bool player_native)
 	int inv = (dam < 30) ? 2 : (dam < 60) ? 3 : 4;
 	bool double_resist = FALSE;
 
-	/* Resist most of the damage */
+	/* Resist most of the damage, equipment is spared */
 	if (player_native)
 	{
-		dam /= 9;
+		dam /= 3;
 		double_resist = TRUE;
 	}
 
@@ -4063,7 +4063,7 @@ static bool project_o(int who, int y, int x, int dam, int typ)
 
 			case GF_LAVA:
 			{
-				if (hates_lava(o_ptr) && dam > rand_int(50))
+				if (hates_lava(o_ptr) && dam > rand_int(150))
 				{
 					do_kill = TRUE;
 					note_kill = (plural ? " are destroyed!" : " is destroyed!");
@@ -5373,7 +5373,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			if (r_ptr->r_native & (FF3_LAVA))
 			{
 				m_note = MON_MSG_RESIST;
-				damage /= 30;
+				damage /= 9;
 				if (seen) l_ptr->r_l_native |= (ELEMENT_LAVA);
 			}
 

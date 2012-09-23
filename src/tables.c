@@ -2331,7 +2331,7 @@ byte spell_info_RF5[32][5]=
 	{6,     3,     1,     6,     6},        /* RF5_BALL_CONFU */
 	{4,     2,     1,     6,     6},        /* RF5_BALL_SOUND */
 	{4,     3,     1,     6,     6},        /* RF5_BALL_SHARD */
-	{0,     0,     0,     0,     0},        /* RF5_XXX2 */
+	{6,     5,     2,     6,     6},        /* RF5_BALL_METEOR */
 	{5,     3,     1,     4,     4},        /* RF5_BALL_STORM */
 	{6,     3,     1,     6,     6},        /* RF5_BALL_NETHR */
 	{7,     3,     1,     4,     4},        /* RF5_BALL_CHAOS */
@@ -2347,12 +2347,12 @@ byte spell_info_RF5[32][5]=
 	{5,     3,     1,     6,     6},        /* RF5_BOLT_WATER */
 	{5,     3,     1,     6,     6},        /* RF5_BOLT_NETHR */
 	{5,     2,     1,     6,     6},        /* RF5_BOLT_MANA */
-	{0,     0,     0,     0,     0},        /* RF5_XXX3 */
+	{5,     2,     1,     6,     6},        /* RF5_BOLT_GRAV */
 	{6,     3,     1,     6,     6},        /* RF5_BEAM_ELEC */
 	{6,     4,     1,     6,     6},        /* RF5_BEAM_ICE */
-	{6,     3,     1,     6,     6},        /* RF5_BEAM_NETHER */
-	{0,     0,     0,     0,     0},        /* RF5_XXX4 */
-	{5,     5,     2,     8,     8}        /* RF5_HOLY_ORB */
+	{6,     3,     1,     6,     6},        /* RF5_BEAM_NETHR */
+	{6,     5,     2,     0,     0},        /* RF5_BEAM_LAVA */
+	{5,     5,     2,     8,     8}         /* RF5_HOLY_ORB */
 };
 
  /*{Mana_cost,dam_mult,dam_div,dam_var,best_range}*/
@@ -2499,7 +2499,7 @@ byte spell_desire_RF5[32][8] =
 	{ 40,  0,   0,   0,	0,   0, LRN_CONFU ,  100}, /* RF5_BALL_CONFU*/
 	{ 40,  0,   0,   0,	0,   0, LRN_SOUND ,  100}, /* RF5_BALL_SOUND*/
 	{ 40,  0,   0,   0,	0,   0, LRN_SHARD ,  100}, /* RF5_BALL_SHARD*/
-	{ 40,  0,   0,   0,	0,   0,	   0	  ,  100}, /* RF5_XXX1 */
+	{ 40,  0,   0,   0,	0,   0, 	0     ,  100}, /* RF5_BALL_METEOR */
 	{ 40,  0,   0,   0,	0,   0, LRN_STORM ,  100}, /* RF5_BALL_STORM*/
 	{ 40,  0,   0,   0,	0,   0, LRN_NETHR ,  100}, /* RF5_BALL_NETHR*/
 	{ 40,  0,   0,   0,	0,   0, LRN_CHAOS ,  100}, /* RF5_BALL_CHAOS*/
@@ -2515,12 +2515,12 @@ byte spell_desire_RF5[32][8] =
 	{ 35,  0,   0,   0,	0,   0, LRN_WATER ,  100}, /* RF5_BOLT_WATER*/
 	{ 35,  0,   0,   0,	0,   0, LRN_NETHR ,  100}, /* RF5_BOLT_NETHR*/
 	{ 30,  0,   0,   0,	0,   0,	   0	  ,  100}, /* RF5_BOLT_MANA */
-	{ 0,  0,   0,   0,	0,   0,    0  	  ,  100}, /* RF5_XXX3*/
+	{ 45,  0,   0,   0,	0,   0,    0  	  ,  100}, /* RF5_BOLT_GRAV */
 	{ 50,  0,   0,   0,	0,   0, LRN_ELEC  ,   90}, /* RF5_BEAM_ELEC */
 	{ 50,  0,   0,   0,	0,   0, LRN_ICE	  ,   90}, /* RF5_BEAM_ICE  */
 	{ 50,  0,   0,   0,	0,   0, LRN_NETHR ,   90}, /* RF5_BEAM_NETHR*/
-	{ 0,  0,   0,   0,	0,   0,	   0	  ,  100},  /* RF5_XXX4*/
-	{ 60,  0,   0,   0,	0,   0,	   0	  ,  100} 	/* RF5_HOLY_ORB */
+	{ 0,   0,   0,   0,	0,   0,	 LRN_LAVA ,  100}, /* RF5_BEAM_LAVA*/
+	{ 60,  0,   0,   0,	0,   0,	   0	  ,  100}  /* RF5_HOLY_ORB */
 };
 
 

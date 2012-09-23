@@ -1329,6 +1329,12 @@ static int find_resist(int m_idx, int spell_lrn)
 			if (smart & (SM_RES_NETHR)) return (30);
 			else return (0);
 		}
+		/* Nether Spells */
+		case LRN_LAVA:
+		{
+			if (smart & (SM_NAT_LAVA)) return (70);
+			else return (0);
+		}
 		/* Chaos Spells */
 		case LRN_CHAOS:
 		{

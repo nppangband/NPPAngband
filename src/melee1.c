@@ -1879,6 +1879,12 @@ int get_breath_dam(s16b hit_points, int gf_type, bool powerful)
 			max_dam = 500;
 			break;
 		}
+		case GF_LAVA:
+		{
+			dam = hit_points / 3;
+			max_dam = 500;
+			break;
+		}
 		case GF_INERTIA:
 		{
 			if (powerful)
@@ -3104,9 +3110,29 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			break;
 		}
 
-		/* RF5_Unused */
+		/* RF5_BALL_METEOR */
 		case 128+10:
 		{
+			disturb(1, 0);
+			if (spower < 10)
+			{
+				if (blind) msg_format("%^s mumbles.", m_name);
+				else msg_format("%^s produces a meteor shower.", m_name);
+				rad = 1;
+			}
+			else if (spower < 40)
+			{
+				if (blind) msg_format("%^s murmurs deeply.", m_name);
+				else msg_format("%^s produces a meteor storm.", m_name);
+				rad = 2;
+			}
+			else
+			{
+				if (blind) msg_format("%^s murmurs strongly.", m_name);
+				else msg_format("%^s produces a violent meteor storm.", m_name);
+				rad = 3;
+			}
+			mon_ball(m_idx, GF_METEOR, get_dam(m_ptr, attack), rad, py, px);
 			break;
 		}
 
@@ -3426,9 +3452,22 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			break;
 		}
 
-		/* RF5_RF5_XXX3 */
+		/* RF5_BOLT_GRAV */
 		case 128+26:
 		{
+			disturb(1, 0);
+			if ((spower < 5) || (spower <= rlev / 10))
+			{
+				if (blind) msg_format("%^s mumbles.", m_name);
+				else msg_format("%^s fires a gravity bolt.", m_name);
+			}
+			else
+			{
+				if (blind) msg_format("%^s murmurs deeply.", m_name);
+				else msg_format("%^s casts a powerful bolt of gravity.", m_name);
+			}
+			mon_bolt(m_idx, GF_GRAVITY, get_dam(m_ptr, attack), 0L);
+			break;
 			break;
 		}
 
@@ -3484,9 +3523,26 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			break;
 		}
 
-		/* RF5_RF5XXX4 */
+		/* RF5_BEAM_LAVA */
 		case 128+30:
 		{
+			disturb(1, 0);
+			if (spower < 25)
+			{
+				if (blind) msg_format("%^s begins murmuring.", m_name);
+				else msg_format("%^s shoots a beam of molten magma.", m_name);
+			}
+			else if (spower < 50)
+			{
+				if (blind) msg_format("%^s mubles something.", m_name);
+				else msg_format("%^s shoots a jet of lava.", m_name);
+			}
+			else
+			{
+				if (blind) msg_format("%^s mubles something.", m_name);
+				else msg_format("%^s shoots a searing jet of lava.", m_name);
+			}
+			mon_beam(m_idx, GF_LAVA, get_dam(m_ptr, attack), 10);
 			break;
 		}
 

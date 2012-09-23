@@ -762,6 +762,12 @@ static void describe_monster_spells(int r_idx, const monster_lore *l_ptr)
 		else if (spower < 50) vp[vn++] = "produce whirlwinds of shards";
 		else vp[vn++] = "call up storms of knives";
 	}
+	if (l_ptr->r_l_flags5 & (RF5_BALL_METEOR))
+	{
+		if (spower < 10) vp[vn++] = "produce meteor showers";
+		else if (spower < 50) vp[vn++] = "produce meteor storms";
+		else vp[vn++] = "produce violent meteor storms";
+	}
 
 	if (l_ptr->r_l_flags5 & (RF5_BALL_STORM))
 	{
@@ -824,6 +830,11 @@ static void describe_monster_spells(int r_idx, const monster_lore *l_ptr)
 		if (spower < 5) vp[vn++] = "casts magic missiles";
 		else vp[vn++] = "cast mana bolts";
 	}
+	if (l_ptr->r_l_flags5 & (RF5_BOLT_GRAV))
+	{
+		if (spower < 5) vp[vn++] = "fires gravity bolts";
+		else vp[vn++] = "casts powerful bolts of gravity";
+	}
 
 	if (l_ptr->r_l_flags5 & (RF5_BEAM_ELEC))	vp[vn++] = "shoot sparks of lightning";
 	if (l_ptr->r_l_flags5 & (RF5_BEAM_ICE))		vp[vn++] = "cast lances of ice";
@@ -833,6 +844,12 @@ static void describe_monster_spells(int r_idx, const monster_lore *l_ptr)
 		if (spower < 25) vp[vn++] = "cast beams of nether";
 		else if (spower < 50) vp[vn++] = "hurl lances of nether";
 		else vp[vn++] = "shoot rays of death";
+	}
+	if (l_ptr->r_l_flags5 & (RF5_BEAM_LAVA))
+	{
+		if (spower < 25) vp[vn++] = "shoots beams of molten magma";
+		else if (spower < 50) vp[vn++] = "shoots jets of lava";
+		else vp[vn++] = "shoots searing jets of lava";
 	}
 
 	if (l_ptr->r_l_flags6 & RF6_HASTE)       vp[vn++] = "haste-self";
