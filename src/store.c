@@ -1225,7 +1225,7 @@ static bool store_service_aux(int store_num, s16b choice)
 										stat_names_full[result]);
 
 			}
-			else if (choice == SERVICE_RESTORE_STAT)
+			else if (choice == SERVICE_INCREASE_STAT)
 			{
 				if (do_inc_stat(result)) p_ptr->au -= price;
 				else msg_format("Your %s cannot be increased any further.",

@@ -24,11 +24,11 @@ Major cleanup of the quest code.
 Potions, scrolls, and food, including mushrooms, now have a chance of appearing in multiple quantities.
 Two new quest rewards - permanent stat increase and permanent stat augmentation.
 New wizard command to give information on quest status (more info than cheat).
-Quest rewards are now generated at startup, and the player chooses their quest reward, 
-rather than the game trying to figure out the best reward for the player.
-The player may defer their quest reward if they don't see anything good, and instead enhance thier next quest reward.
+Quest rewards are now generated when the quest is chosen in the guild, and the player chooses their quest reward from a menu after they complete the quest, rather than the game trying to figure out the best reward for the player.
+The player may defer their quest reward if they don't see anything good, and instead enhance thier next quest reward choices.
 Bugfix: The character screen was not properly showing object resistance and immunitiy flags for the player equipment and home.
-
+Bugfix: Normally rings and amulets were cursed too frequently.
+Added 3 new spells:  Meteor ball, Gravity bolt, and Lava Beam.
 
 
 NPP 0.5.4 changes:
