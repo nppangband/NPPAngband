@@ -1113,6 +1113,9 @@ static void check_reward_extra_hp(quest_type *q_ptr, int chance)
 	int max_hp = ((PY_MAX_LEVEL * (p_ptr->hitdie - 1) * 5) / 8) + PY_MAX_LEVEL + (p_ptr->hitdie * 3);
 	int hp_left = max_hp - cur_hp;
 
+	/* Hp rewards are maxed out */
+	if (hp_left < 1) return;
+
 	if (randint(chance) > (p_ptr->q_fame + p_ptr->deferred_rewards)) return;
 
 	if (one_in_(3)) return;
@@ -1830,6 +1833,7 @@ static bool place_arena_quest(int lev)
 	check_reward_custom_randart(q_ptr, 75, 4);
 	check_reward_stat_increase(q_ptr, 225);
 	check_reward_extra_hp(q_ptr, 225);
+
 	if (25 + damroll(15,15) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
 	else q_ptr->q_reward |= REWARD_GREAT_ITEM;
 
