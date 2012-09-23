@@ -536,7 +536,7 @@ static s16b get_arena_obj_num(void)
 			else 					sval = SV_AMMO_HEAVY;
 
 			/* Hack - the svals for shots are slightly different than bows and bolts */
-			if ((tval == TV_ARROW || tval == TV_BOLT) sval++;
+			if ((tval == TV_ARROW || tval == TV_BOLT)) sval++;
 
 			k_idx = lookup_kind(tval, sval);
 		}

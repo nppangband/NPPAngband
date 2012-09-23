@@ -4047,8 +4047,8 @@ void do_cmd_reward(cmd_code code, cmd_arg args[])
 	handle_stuff();
 
 	/* Remove the item from the guild before we wipe everything */
-	store_item_increase(STORE_HOME, item, -amt);
-	store_item_optimize(STORE_HOME, item);
+	store_item_increase(STORE_GUILD, item, -amt);
+	store_item_optimize(STORE_GUILD, item);
 
 	/* The quest is over */
 	guild_quest_wipe(TRUE);

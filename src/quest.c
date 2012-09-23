@@ -1113,7 +1113,7 @@ static void check_reward_extra_hp(quest_type *q_ptr, int chance)
 	int max_hp = ((PY_MAX_LEVEL * (p_ptr->hitdie - 1) * 5) / 8) + PY_MAX_LEVEL + (p_ptr->hitdie * 3);
 	int hp_left = max_hp - cur_hp;
 
-	/* Hp rewards are maxed out */
+	/* HP rewards are maxed out */
 	if (hp_left < 1) return;
 
 	if (randint(chance) > (p_ptr->q_fame + p_ptr->deferred_rewards)) return;
@@ -2284,9 +2284,9 @@ void guild_quest_wipe(bool reset_defer)
 	bool arena_quest = FALSE;
 	int i;
 
-
 	/* Remember if there should be an extra level added to the next quest depth */
 	if (q_ptr->q_flags & (QFLAG_EXTRA_LEVEL)) extra_level = TRUE;
+
 	/* Remember if we should allow a vault or arena quest */
 	if (q_ptr->q_flags & (QFLAG_VAULT_QUEST)) vault_quest = TRUE;
 	if (q_ptr->q_flags & (QFLAG_ARENA_QUEST)) arena_quest = TRUE;
@@ -2311,9 +2311,7 @@ void guild_quest_wipe(bool reset_defer)
 		if (o_ptr->art_num) a_info[o_ptr->art_num].a_cur_num = 0;
 
 		store_delete_index(STORE_GUILD, i);
-
 	}
-
 }
 
 /*

@@ -4141,8 +4141,8 @@ void create_quest_artifact(object_type *o_ptr)
 
 
 /*
- * Wipe an artifact clean.  Rebuild the names string to delete the name.
- * Check first to make sure it is a randart
+ * Wipe an artifact clean.
+ * Check first to make sure it is a randart.
  */
 void artifact_wipe(int a_idx, bool quest_art_wipe)
 {
