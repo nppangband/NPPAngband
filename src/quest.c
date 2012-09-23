@@ -1899,7 +1899,6 @@ bool quest_allowed(byte j)
 	}
 	else if (j == QUEST_SLOT_ARENA)
 	{
-		return (TRUE);
 		if (p_ptr->max_depth < 20) return (FALSE);
 		if (p_ptr->q_fame < 100) return (FALSE);
 		if (!(q_info[GUILD_QUEST_SLOT].q_flags & (QFLAG_ARENA_QUEST))) return (FALSE);
