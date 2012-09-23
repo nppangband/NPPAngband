@@ -755,7 +755,7 @@ static void add_arena_object(byte stage)
 static void process_wilderness_quests(void)
 {
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
-	int cur_quest_monsters = q_info->q_max_num - count_quest_monsters(q_ptr);
+	int cur_quest_monsters = count_quest_monsters(q_ptr);
 	u16b tele_mon_idx[10];
 	u16b mon_count = 0;
 	u16b actual_mon_count = 0;
