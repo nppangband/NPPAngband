@@ -142,7 +142,7 @@ static byte service_store[STORE_SERVICE_MAX] =
 	STORE_BOOKSHOP,		/*	SERVICE_FIREPROOF_BOOK		*/
 	STORE_GUILD,		/*	SERVICE_QUEST_DEFER_REWARD	*/
 	STORE_GUILD,		/*	SERVICE_ABANDON_QUEST		*/
-	STORE_GUILD,		/*	SERVICE_QUEST_RANDART	*/
+	STORE_GUILD,		/*	SERVICE_QUEST_REWARD_RANDART	*/
 	STORE_GUILD,		/*	SERVICE_QUEST_REWARD_INC_HP		*/
 	STORE_GUILD,		/*	SERVICE_QUEST_REWARD_INC_STAT	*/
 	STORE_GUILD			/*	SERVICE_QUEST_REWARD_AUGMENTATION	*/
@@ -174,7 +174,7 @@ static u32b service_price[STORE_SERVICE_MAX] =
 	100000L,			/*  SERVICE_FIREPROOF_BOOK 		*/
 	0,					/*	SERVICE_QUEST_DEFER_REWARD	*/
 	0,					/*  SERVICE_ABANDON_QUEST 		*/
-	0,					/*	SERVICE_QUEST_RANDART	*/
+	0,					/*	SERVICE_QUEST_REWARD_RANDART	*/
 	0,					/*	SERVICE_QUEST_REWARD_INC_HP		*/
 	0,					/*	SERVICE_QUEST_REWARD_INC_STAT	*/
 	0					/*	SERVICE_QUEST_REWARD_AUGMENTATION	*/
@@ -208,7 +208,7 @@ static cptr service_names[STORE_SERVICE_MAX] =
 	"Make Spell Book Fireproof[price varies]",	/*  SERVICE_FIREPROOF_BOOK */
 	"Defer Quest Reward",						/*	SERVICE_QUEST_DEFER_REWARD	*/
 	"Abandon Your Quest",						/*  SERVICE_ABANDON_QUEST 		*/
-	"Create Artifact Quest Reward",				/*	SERVICE_QUEST_RANDART	*/
+	"Create Artifact Quest Reward",				/*	SERVICE_QUEST_REWARD_RANDART	*/
 	"Permanent Hit Point Increase Reward",		/*	SERVICE_QUEST_REWARD_INC_HP		*/
 	"Permanent Stat Increase Reward",			/*	SERVICE_QUEST_REWARD_INC_STAT	*/
 	"Permanent Stats Augmentation Reward"		/*	SERVICE_QUEST_REWARD_AUGMENTATION	*/
@@ -1284,10 +1284,10 @@ static bool store_service_aux(int store_num, s16b choice)
 
 			/*re-use the o_value variable for a completely different purpose*/
 			/*extra power bonus for expensive items and high player fame*/
-			o_value = p_ptr->q_fame / 2 + MAX((k_ptr->cost / 2000), p_ptr->q_fame / 5);
+			o_value = p_ptr->q_fame / 20 + MAX((k_ptr->cost / 2000), p_ptr->q_fame / 50);
 
 			/*Hack - add in any to-hit and to-value, since they will be erased*/
-			o_value += (o_ptr->to_h + o_ptr->to_d + o_ptr->to_a / 2);
+			o_value += (o_ptr->to_h + o_ptr->to_d + o_ptr->to_a) / 2;
 
 			/*actually create the Randart, or handle failure*/
 			if (make_one_randart(o_ptr, o_value, TRUE))
@@ -1344,10 +1344,10 @@ static bool store_service_aux(int store_num, s16b choice)
 			if (!get_check(prompt)) return (FALSE);
 
 			/* extra power bonus for expensive items and high player fame*/
-			rand_power = p_ptr->q_fame / 2 + MAX((k_ptr->cost / 2000), p_ptr->q_fame / 5);
+			rand_power = (p_ptr->q_fame + p_ptr->deferred_rewards) / 20 + MAX((k_ptr->cost / 2000), p_ptr->q_fame / 50);
 
 			/*Hack - add in any to-hit and to-value, since they will be erased*/
-			rand_power += (o_ptr->to_h + o_ptr->to_d + o_ptr->to_a / 2);
+			rand_power += (o_ptr->to_h + o_ptr->to_d + o_ptr->to_a) / 2;
 
 			/*actually create the Randart, or handle failure*/
 			if (make_one_randart(o_ptr, rand_power, TRUE))
