@@ -3110,7 +3110,12 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	/* No new monsters on themed and wilderness levels */
 	if (((p_ptr->dungeon_type == DUNGEON_TYPE_THEMED_LEVEL) ||
 		 (p_ptr->dungeon_type == DUNGEON_TYPE_WILDERNESS)) &&
-		(character_dungeon == TRUE)) return (FALSE);
+		(character_dungeon == TRUE))
+	{
+
+		/* Unless we are revealing a mimic */
+		if (!(mp_flags & (MPLACE_MIMIC_REVEAL))) return (FALSE);
+	}
 
 	/*
 	 * Place a mimic object rather than a monster if called for
@@ -3364,7 +3369,7 @@ static bool place_mimic_near(int y, int x, int r_idx, bool message, bool questor
 	int final_y = y;
 
 	/* Initially try the spot the mimic is on */
-	if (place_monster_one(y, x, r_idx, MPLACE_NO_MIMIC)) success = TRUE;
+	if (place_monster_one(y, x, r_idx, MPLACE_NO_MIMIC | MPLACE_MIMIC_REVEAL)) success = TRUE;
 
 	/* Now search around the space, one layer at a time */
 	else for (i = 1; ((i <= 5) && (!success)); i++)
@@ -3383,7 +3388,7 @@ static bool place_mimic_near(int y, int x, int r_idx, bool message, bool questor
 				if (!los(y1, x1, y, x)) continue;
 
 				/* Try to place a monster on this spot */
-				if (!place_monster_one(y1, x1, r_idx, (MPLACE_NO_MIMIC))) continue;
+				if (!place_monster_one(y1, x1, r_idx, (MPLACE_NO_MIMIC | MPLACE_MIMIC_REVEAL))) continue;
 
 				/* We are done */
 				success = TRUE;

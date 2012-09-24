@@ -128,7 +128,7 @@
 #define MPLACE_GROUP	0x02	/* Create group monsters, if possible */
 #define MPLACE_NO_MIMIC	0x04	/* Prevent mimics from being created */
 #define MPLACE_NO_GHOST	0x08	/* Prevent player ghosts from being created*/
-#define MPLACE_XXX2		0x10	/* Unused */
+#define MPLACE_MIMIC_REVEAL	0x10	/* Placing a mimic */
 #define MPLACE_XXX3		0x20	/* Unused */
 #define MPLACE_XXX4		0x40	/* Unused */
 #define MPLACE_XXX5		0x80	/* Unused */
