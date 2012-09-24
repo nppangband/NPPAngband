@@ -1298,6 +1298,13 @@ static bool store_service_aux(int store_num, s16b choice)
 				object_aware(o_ptr);
 				object_known(o_ptr);
 
+				/* Mark the history */
+				o_ptr->origin_nature = ORIGIN_ACQUIRE;
+				o_ptr->origin_r_idx = 0;
+				o_ptr->origin_dlvl = 0;
+
+
+
 				/* Mark the item as fully known */
 				o_ptr->ident |= (IDENT_MENTAL);
 
@@ -1355,6 +1362,11 @@ static bool store_service_aux(int store_num, s16b choice)
 				/* Identify it fully */
 				object_aware(o_ptr);
 				object_known(o_ptr);
+
+				/* Mark the history */
+				o_ptr->origin_nature = ORIGIN_REWARD;
+				o_ptr->origin_r_idx = 0;
+				o_ptr->origin_dlvl = q_ptr->base_level;
 
 				/* Mark the item as fully known */
 				o_ptr->ident |= (IDENT_MENTAL);
@@ -3916,6 +3928,7 @@ void do_cmd_buy(cmd_code code, cmd_arg args[])
  */
 void do_cmd_reward(cmd_code code, cmd_arg args[])
 {
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 	int item = args[0].item;
 	int amt = args[1].number;
 	char title[40];
@@ -3947,6 +3960,11 @@ void do_cmd_reward(cmd_code code, cmd_arg args[])
 	/* Get the actual object */
 	o_ptr = &st_ptr->stock[item];
 	k_ptr = &k_info[o_ptr->k_idx];
+
+	/* Mark the history */
+	o_ptr->origin_nature = ORIGIN_REWARD;
+	o_ptr->origin_r_idx = 0;
+	o_ptr->origin_dlvl = q_ptr->base_level;
 
 	/* Get desired object */
 	object_copy_amt(&picked_item, o_ptr, amt);
