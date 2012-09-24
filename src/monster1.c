@@ -2540,13 +2540,11 @@ static void process_ghost_race(int ghost_race, int r_idx)
 	{
 
 		r_ptr->freq_ranged += ((100 - r_ptr->freq_ranged) / 6);
-		r_ptr->spell_power += r_ptr->spell_power / 5;
 
 		/* Sometimes make it extra tough */
 		if (one_in_(3))
 		{
 			r_ptr->freq_ranged += ((100 - r_ptr->freq_ranged) / 6);
-			r_ptr->spell_power += r_ptr->spell_power / 5;
 		}
 
 		if (dun_level > 54)
@@ -2592,30 +2590,28 @@ static void process_ghost_class(int ghost_class, int r_idx)
 	if (c_info[ghost_class].spell_book)
 	{
 
-		r_ptr->freq_ranged += (100 - r_ptr->freq_ranged) / 6;
-		r_ptr->spell_power += r_ptr->spell_power / 5;
+		r_ptr->freq_ranged += (100 - r_ptr->freq_ranged) / 8;
+		r_ptr->mana += r_ptr->mana / 5;
 
 		/* Sometimes make it extra tough */
 		if (one_in_(3))
 		{
-			r_ptr->freq_ranged += (100 - r_ptr->freq_ranged) / 6;
-			r_ptr->spell_power += r_ptr->spell_power / 5;
+			r_ptr->freq_ranged += (100 - r_ptr->freq_ranged) / 8;
+			r_ptr->mana += r_ptr->mana / 5;
 		}
 	}
 
 	/*pure spellcasters get even more magic ability*/
 	if (c_info[ghost_class].flags & CF_ZERO_FAIL)
 	{
-		r_ptr->freq_ranged += (100 - r_ptr->freq_ranged) / 5;
-		r_ptr->spell_power += r_ptr->spell_power / 4;
-		r_ptr->mana += r_ptr->mana / 2;
+		r_ptr->freq_ranged += (100 - r_ptr->freq_ranged) / 8;
+		r_ptr->mana += r_ptr->mana / 5;
 
 		/* Sometimes make it extra tough */
 		if (one_in_(4))
 		{
-			r_ptr->freq_ranged += (100 - r_ptr->freq_ranged) / 6;
-			r_ptr->spell_power += r_ptr->spell_power / 5;
-			r_ptr->mana += r_ptr->mana / 3;
+			r_ptr->freq_ranged += (100 - r_ptr->freq_ranged) / 8;
+			r_ptr->mana += r_ptr->mana / 5;
 		}
 	}
 
@@ -2701,7 +2697,7 @@ static void process_ghost_class(int ghost_class, int r_idx)
 
 		if (c_info[ghost_class].flags & CF_ZERO_FAIL)
 		{
-			r_ptr->spell_power += r_ptr->spell_power / 4;
+			r_ptr->mana += r_ptr->mana / 4;
 
 			if ((level_adj > 25) && one_in_(2)) r_ptr->flags5 |= (RF5_BALL_FIRE);
 			if ((level_adj > 35) && one_in_(2)) r_ptr->flags5 |= (RF5_BALL_COLD);
@@ -2855,13 +2851,11 @@ static void process_ghost_class(int ghost_class, int r_idx)
 	{
 
 		r_ptr->freq_ranged += ((100 - r_ptr->freq_ranged) / 6);
-		r_ptr->spell_power += r_ptr->spell_power / 5;
 
 		/* Sometimes make it extra tough */
 		if (one_in_(3))
 		{
 			r_ptr->freq_ranged += ((100 - r_ptr->freq_ranged) / 7);
-			r_ptr->spell_power += r_ptr->spell_power / 6;
 		}
 
 		if (dun_level > 54)
