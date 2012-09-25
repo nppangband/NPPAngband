@@ -1110,6 +1110,12 @@ static void item_menu_hook(int oid, void *db, const region *loc)
 	/* Get the object */
 	object_type *o_ptr;
 
+	/* Make sure the player has drop down lists turned on */
+	if (!p_ptr->command_see) return;
+
+	/* Not displaying full menu */
+	if (loc->page_rows == 1) return;
+
 	/* Get the object, handle whether in Inventory or on floor */
 	if (p_ptr->command_wrk == (USE_FLOOR)) o_ptr = &o_list[idx];
 	else o_ptr = &inventory[idx];
@@ -1121,9 +1127,6 @@ static void item_menu_hook(int oid, void *db, const region *loc)
 
 	/* No info until they know about the item */
 	if (!object_is_known(o_ptr)) return;
-
-	/* Not displaying full menu */
-	if (loc->page_rows == 1) return;
 
 	/* Output to the screen */
 	text_out_hook = text_out_to_screen;
