@@ -1641,13 +1641,13 @@ bool target_set_interactive(int mode, int x, int y)
 	/* Interact */
 	while (!done)
 	{
-		button_kill('l');
+		button_kill('f');
 		button_kill('?');
 		if (list_floor_objects)
 		{
-			button_add("[HIDE_OBJLIST]", 'l');
+			button_add("[HIDE_OBJLIST]", 'f');
 		}
-		else button_add("[SHOW_OBJLIST]", 'l');
+		else button_add("[SHOW_OBJLIST]", 'f');
 		if (help)
 		{
 			button_add("[HIDE_HELP]", '?');
@@ -1680,13 +1680,13 @@ bool target_set_interactive(int mode, int x, int y)
 			if (((cave_m_idx[y][x] > 0) && target_able(cave_m_idx[y][x])) ||
 				((mode & (TARGET_TRAP)) && target_able_trap(y, x)))
 			{
-				strcpy(info, "q,t,r,l,p,o,+,-,<dir>");
+				strcpy(info, "q,t,r,f,p,o,+,-,<dir>");
 			}
 
 			/* Dis-allow target */
 			else
 			{
-				strcpy(info, "q,p,l,o,+,-,<dir>");
+				strcpy(info, "q,p,f,o,+,-,<dir>");
 			}
 
 			/* Adjust panel if needed */
@@ -1813,7 +1813,7 @@ bool target_set_interactive(int mode, int x, int y)
 					break;
 				}
 
-				case 'l':
+				case 'f':
 				{
 					list_floor_objects = (!list_floor_objects);
 					break;
@@ -1908,13 +1908,13 @@ bool target_set_interactive(int mode, int x, int y)
 			/* Default prompt */
 			if (!(mode & (TARGET_GRID)))
 			{
-				strcpy(info, "q,t,l,p,m,+,-,<dir>");
+				strcpy(info, "q,t,f,p,m,+,-,<dir>");
 			}
 
 			/* Disable monster selection */
 			else
 			{
-				strcpy(info, "q,t,l.p,+,-,<dir>");
+				strcpy(info, "q,t,f.p,+,-,<dir>");
 			}
 
 			/* Find the path. */
@@ -2058,7 +2058,7 @@ bool target_set_interactive(int mode, int x, int y)
 					break;
 				}
 
-				case 'l':
+				case 'f':
 				{
 					list_floor_objects = (!list_floor_objects);
 				}
