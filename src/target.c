@@ -1816,6 +1816,7 @@ bool target_set_interactive(int mode, int x, int y)
 				case 'l':
 				{
 					list_floor_objects = (!list_floor_objects);
+					break;
 				}
 
 				case '?':

@@ -359,6 +359,10 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 		}
 
 		/* One quest monster */
+		else if (r_ptr->flags1 & (RF1_UNIQUE))
+		{
+			my_strcpy(targets, format("%s", name), sizeof(targets));
+		}
 		else
 		{
 			if (my_is_vowel(name[0])) my_strcpy(targets, format("an %s", name), sizeof(targets));

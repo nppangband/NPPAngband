@@ -2665,7 +2665,7 @@ void process_player(void)
 /*
  * Checks if multi-color monsters onscreen.
  */
-void do_animation(void)
+static void do_animation(void)
 {
 	int i;
 
