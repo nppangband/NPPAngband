@@ -2837,8 +2837,6 @@ static void build_type_nest(int y0, int x0)
 			}
 		}
 	}
-
-
 }
 
 
@@ -2849,21 +2847,11 @@ static void build_type_nest(int y0, int x0)
  * A monster pit is a "big" room, with an "inner" room, containing
  * a "collection" of monsters of a given type organized in the room.
  *
- *
- * The inside room in a monster pit appears as shown below, where the
- * actual monsters in each location depend on the type of the pit
- *
- *   #####################
- *   #0000000000000000000#
- *   #0112233455543322110#
- *   #0112233467643322110#
- *   #0112233455543322110#
- *   #0000000000000000000#
- *   #####################
+ * The inside room in a monster pit appears as shown in tables.c.
  *
  * Note that the monsters in the pit are now chosen by using "get_mon_num()"
  * to request 16 "appropriate" monsters, sorting them by level, and using
- * the "even" entries in this sorted list for the contents of the pit.
+ * half of the entries in this sorted list for the contents of the pit.
  *
  * Hack -- all of the "dragons" in a "dragon" pit must be the same "color",
  * which is handled by requiring a specific "breath" attack for all of the
@@ -2884,7 +2872,7 @@ static void build_type_pit(int y0, int x0)
 {
 	int what[16], harder_pit_check;
 
-	int i, j, y, x, y1, x1, y2, x2;
+	int i, j, y, x, y1, x1, y2, x2, row, col;
 
 	bool empty = FALSE;
 
@@ -2895,6 +2883,9 @@ static void build_type_pit(int y0, int x0)
 	byte is_quest_level = FALSE;
 
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+
+	/* Pick one of the pit patterns */
+	byte which_pit = randint0(MAX_PIT_PATTERNS);
 
 	/*no uniques in nests/pits*/
 	allow_uniques = FALSE;
@@ -3013,15 +3004,12 @@ static void build_type_pit(int y0, int x0)
 		}
 	}
 
-
-
 	/* Message */
 	if (cheat_room)
 	{
 		/* Room type */
 		msg_format("Monster pit (%s)", feeling_themed_level[pit_theme]);
 	}
-
 
 	/* Increase the level rating */
 	rating += 10;
@@ -3033,54 +3021,17 @@ static void build_type_pit(int y0, int x0)
 		good_item_flag = TRUE;
 	}
 
-	/* Top and bottom rows */
-	for (x = x0 - 9; x <= x0 + 9; x++)
+	/* Place the monsters in one of the patterns in tables.c */
+	for (row = 0, y = y0 - 2; y <= y0 + 2; y++, row++)
 	{
-		place_monster_aux(y0 - 2, x, what[0], 0L);
-		place_monster_aux(y0 + 2, x, what[0], 0L);
+		for (col = 0, x = x0 - 9; x <= x0 + 9; x++, col++)
+		{
+			int r_idx = what[pit_room_maps[which_pit][row][col]];
+
+			/* Place that "random" monster (no groups) */
+			(void)place_monster_aux(y, x, r_idx, 0L);
+		}
 	}
-
-	/* Middle columns */
-	for (y = y0 - 1; y <= y0 + 1; y++)
-	{
-		place_monster_aux(y, x0 - 9, what[0], 0L);
-		place_monster_aux(y, x0 + 9, what[0], 0L);
-
-		place_monster_aux(y, x0 - 8, what[1], 0L);
-		place_monster_aux(y, x0 + 8, what[1], 0L);
-
-		place_monster_aux(y, x0 - 7, what[1], 0L);
-		place_monster_aux(y, x0 + 7, what[1], 0L);
-
-		place_monster_aux(y, x0 - 6, what[2], 0L);
-		place_monster_aux(y, x0 + 6, what[2], 0L);
-
-		place_monster_aux(y, x0 - 5, what[2], 0L);
-		place_monster_aux(y, x0 + 5, what[2], 0L);
-
-		place_monster_aux(y, x0 - 4, what[3], 0L);
-		place_monster_aux(y, x0 + 4, what[3], 0L);
-
-		place_monster_aux(y, x0 - 3, what[3], 0L);
-		place_monster_aux(y, x0 + 3, what[3], 0L);
-
-		place_monster_aux(y, x0 - 2, what[4], 0L);
-		place_monster_aux(y, x0 + 2, what[4], 0L);
-	}
-
-	/* Above/Below the center monster */
-	for (x = x0 - 1; x <= x0 + 1; x++)
-	{
-		place_monster_aux(y0 + 1, x, what[5], 0L);
-		place_monster_aux(y0 - 1, x, what[5], 0L);
-	}
-
-	/* Next to the center monster */
-	place_monster_aux(y0, x0 + 1, what[6], 0L);
-	place_monster_aux(y0, x0 - 1, what[6], 0L);
-
-	/* Center monster */
-	place_monster_aux(y0, x0, what[7], 0L);
 
 	/* No teleporting inside pits/nests*/
 	for (y = y0 - 2; y <= y0 + 2; y++)

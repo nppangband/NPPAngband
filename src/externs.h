@@ -96,6 +96,7 @@ extern const xchar_type latin1_encode[];
 extern cptr squelch_status[SQUELCH_OPT_MAX];
 extern const byte squelch_status_color[SQUELCH_OPT_MAX];
 extern const byte arena_level_map[ARENA_LEVEL_HGT][ARENA_LEVEL_WID];
+extern const byte pit_room_maps[MAX_PIT_PATTERNS][PIT_HEIGHT][PIT_WIDTH];
 
 /* variable.c */
 extern cptr copyright;

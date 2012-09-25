@@ -1293,6 +1293,11 @@ enum
 #define DUNGEON_TYPE_WILDERNESS		4
 #define DUNGEON_TYPE_ARENA			5
 
+/** Constants for the various patterns of pits */
+#define MAX_PIT_PATTERNS	3
+#define PIT_WIDTH			19
+#define PIT_HEIGHT			5
+
 
 /*
  * The last row of the main window

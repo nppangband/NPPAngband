@@ -30,7 +30,7 @@ Bugfix: The character screen was not properly showing object resistance and immu
 Bugfix: Normally rings and amulets were cursed too frequently.
 Added 3 new spells:  Meteor ball, Gravity bolt, and Lava Beam.
 Added 8x8 tiles for all servants of the valar, adamantite, and a half-dozen mimic coins.
-
+Added two more patterns for the monster in the "pit" rooms.
 
 NPP 0.5.4 changes:
 The edges of the detected trap areas now show up onscreen.
