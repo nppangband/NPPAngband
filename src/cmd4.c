@@ -205,7 +205,7 @@ void do_cmd_change_name(void)
 		button_add("|PREV", ARROW_LEFT);
 
 		/* Display the player */
-		display_player(mode);
+		display_player(mode, TRUE);
 
 		event_signal(EVENT_MOUSEBUTTONS);
 

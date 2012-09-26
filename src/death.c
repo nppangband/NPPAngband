@@ -230,7 +230,7 @@ static void death_info(void *unused, const char *title)
 	screen_save();
 
 	/* Display player */
-	display_player(0);
+	display_player(0, TRUE);
 
 	/* Prompt for inventory */
 	prt("Hit any key to see more information (esc to abort): ", 0, 0);

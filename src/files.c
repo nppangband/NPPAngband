@@ -108,7 +108,7 @@ static cptr likert(int x, int y, byte *attr)
 /*
  * Equippy chars
  */
-static void display_player_equippy(int y, int x)
+static void display_player_equippy(int y, int x, bool onscreen)
 {
 	int i;
 
@@ -127,9 +127,18 @@ static void display_player_equippy(int y, int x)
 		/* Skip empty objects */
 		if (!o_ptr->k_idx) continue;
 
-		/* Get attr/char for display */
-		a = object_attr(o_ptr);
-		c = object_char(o_ptr);
+		if (onscreen)
+		{
+			/* Get attr/char for display */
+			a = object_attr(o_ptr);
+			c = object_char(o_ptr);
+		}
+		else
+		{
+			/* Get attr/char for display */
+			a = object_attr_default(o_ptr);
+			c = object_char_default(o_ptr);
+		}
 
 		/* Dump */
 		Term_putch(x+i-INVEN_WIELD, y, a, c);
@@ -141,7 +150,7 @@ static void display_player_equippy(int y, int x)
 /*
  * Equippy chars
  */
-static void display_home_equippy(int y, int x)
+static void display_home_equippy(int y, int x, bool onscreen)
 {
 	int i;
 
@@ -161,9 +170,19 @@ static void display_home_equippy(int y, int x)
 		/* Skip empty objects */
 		if (!o_ptr->k_idx) continue;
 
-		/* Get attr/char for display */
-		a = object_attr(o_ptr);
-		c = object_char(o_ptr);
+		if (onscreen)
+		{
+			/* Get attr/char for display */
+			a = object_attr(o_ptr);
+			c = object_char(o_ptr);
+		}
+		else
+		{
+			/* Get attr/char for display */
+			a = object_attr_default(o_ptr);
+			c = object_char_default(o_ptr);
+		}
+
 
 		/* Dump */
 		Term_putch(x+i, y, a, c);
@@ -624,7 +643,7 @@ static const struct player_flag_record player_flag_table[RES_ROWS*4] =
 /*
  * Special display, part 1
  */
-static void display_player_flag_info(void)
+static void display_player_flag_info(bool onscreen)
 {
 	int x, y, i, n;
 
@@ -736,7 +755,7 @@ static void display_player_flag_info(void)
 		c_put_str(TERM_WHITE, "abcdefghijkl@", row++, col+8);
 
 		/* Equippy */
-		display_player_equippy(row++, col+8);
+		display_player_equippy(row++, col+8, onscreen);
 	}
 }
 
@@ -899,7 +918,7 @@ void display_player_stat_info(int row, int col)
  * Huge mods (>9), like from MICoMorgoth, will be a '*'
  * No mod, no sustain, will be a slate '.'
  */
-static void display_player_sust_info(void)
+static void display_player_sust_info(bool onscreen)
 {
 	int i, row, col, stats;
 
@@ -1017,7 +1036,7 @@ static void display_player_sust_info(void)
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row+6, col);
 
 	/* Equippy */
-	display_player_equippy(row+7, col);
+	display_player_equippy(row+7, col, onscreen);
 }
 
 /*
@@ -1033,7 +1052,7 @@ static void display_player_sust_info(void)
  * This is followed by the home equipment
  *
  */
-static void display_home_equipment_info(int mode)
+static void display_home_equipment_info(int mode, bool onscreen)
 {
 	int x, y, n, xmax, xmin;
 
@@ -1055,7 +1074,7 @@ static void display_home_equipment_info(int mode)
 	col = 7;
 
 	/* Equippy */
-	display_home_equippy(row-2, col);
+	display_home_equippy(row-2, col, onscreen);
 
 	/* Header */
 	c_put_str(TERM_WHITE, "abcdefghijklmnopqrstuvwx", row-1, col);
@@ -1166,10 +1185,10 @@ static void display_home_equipment_info(int mode)
 	c_put_str(TERM_WHITE, "abcdefghijklmnopqrstuvwx", row+8, col + MAX_INVENTORY_HOME + 8);
 
 	/* 3rd Equippy */
-	display_home_equippy(row+9, col);
+	display_home_equippy(row+9, col, onscreen);
 
 	/* 4th Equippy */
-	display_home_equippy(row+9,col+ MAX_INVENTORY_HOME + 8);
+	display_home_equippy(row+9,col+ MAX_INVENTORY_HOME + 8, onscreen);
 
 	/* Two Rows, alternating depending upon the mode */
 	for (x = 0; xmin < xmax; ++xmin, ++x)
@@ -1545,8 +1564,12 @@ static void display_special_abilities(int row, int col)
  * Mode 2 = Home equiment Stat Flags and 1st part of Resists
  * Mode 3 = Home equiment Stat Flags and 2st part of Resists
  * Mode 4 = Special abilities (nativity) and temporary bonuses
+ *
+ * The boolean onscreen specifies if this is to display onscreen
+ * or to be written to a file.  To make sure the equppy is displalyed properly
+ * in a file while in tile mode.
  */
-void display_player(int mode)
+void display_player(int mode, bool onscreen)
 {
 	/* Erase screen */
 	clear_from(0);
@@ -1577,10 +1600,10 @@ void display_player(int mode)
 			c_put_str(TERM_L_BLUE, format("%d", p_ptr->lev), 9, 8);
 
 			/* Stat/Sustain flags */
-			display_player_sust_info();
+			display_player_sust_info(onscreen);
 
 			/* Other flags */
-			display_player_flag_info();
+			display_player_flag_info(onscreen);
 		}
 
 		/* Standard */
@@ -1600,7 +1623,7 @@ void display_player(int mode)
 		display_special_abilities(1, 1);
 	}
 
-	else display_home_equipment_info(mode);
+	else display_home_equipment_info(mode, onscreen);
 }
 
 
@@ -1692,7 +1715,7 @@ static void dump_player_stat_info(ang_file *fff)
 		}
 
 		/* Get attr/char for display */
-		else equippy[x] = object_char(o_ptr);
+		else equippy[x] = object_char_default(o_ptr);
 	}
 
 	/*finish off the string*/
@@ -1890,7 +1913,7 @@ static void dump_home_stat_info(ang_file *fff)
 		}
 
 		/* Get attr/char for display */
-		else equippy[i] = object_char(o_ptr);
+		else equippy[i] = object_char_default(o_ptr);
 	}
 
 	/*finish off the string*/
@@ -2033,7 +2056,7 @@ errr file_character(const char *path, bool full)
 
 
 	/* Display player */
-	display_player(0);
+	display_player(0, FALSE);
 
 	/* Dump part of the screen */
 	for (y = 1; y < 23; y++)
@@ -2082,7 +2105,7 @@ errr file_character(const char *path, bool full)
 	dump_player_stat_info(fff);
 
 	/* Display player */
-	display_player(1);
+	display_player(1, FALSE);
 
 	/* Dump flags, but in two separate rows */
 	for (w = 0; w < 2; w ++)
@@ -2191,7 +2214,7 @@ errr file_character(const char *path, bool full)
 		for (i =2; i <4; ++i)
 		{
 			/* Display player */
-			display_player(i);
+			display_player(i, FALSE);
 
 			/* Dump part of the screen */
 			for (y = (i + 7); y < (i + 17); y++)
@@ -2218,7 +2241,7 @@ errr file_character(const char *path, bool full)
 		}
 
 		/* Display player */
-		display_player(0);
+		display_player(0, FALSE);
 
 		/* End the row */
 		file_putf(fff, "\n");

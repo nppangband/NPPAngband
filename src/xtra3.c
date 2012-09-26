@@ -1629,7 +1629,7 @@ static void update_player0_subwindow(game_event_type type, game_event_data *data
 	Term_activate(inv_term);
 
 	/* Display flags */
-	display_player(0);
+	display_player(0, TRUE);
 
 	Term_fresh();
 
@@ -1649,7 +1649,7 @@ static void update_player1_subwindow(game_event_type type, game_event_data *data
 	Term_activate(inv_term);
 
 	/* Display flags */
-	display_player(1);
+	display_player(1, TRUE);
 
 	Term_fresh();
 

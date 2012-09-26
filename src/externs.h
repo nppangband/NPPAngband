@@ -691,7 +691,7 @@ extern void debug_all_level_flags(u32b flags);
 extern void display_player_xtra_info(void);
 extern void player_flags(u32b *f1, u32b *f2, u32b *f3, u32b *fn);
 extern void display_player_stat_info(int row, int col);
-extern void display_player(int mode);
+extern void display_player(int mode, bool onscreen);
 extern errr file_character(cptr name, bool full);
 extern bool show_file(cptr name, cptr what, int line, int mode);
 extern void do_cmd_help(void);
