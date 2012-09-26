@@ -1205,9 +1205,9 @@ static void display_home_equipment_info(int mode)
 				object_flags_known(o_ptr, &f1, &f2, &f3, &fn);
 
 				/* get the flag */
-				if 		(pfr_ptr->set == 0) flag_used = f1;
-				else if (pfr_ptr->set == 1) flag_used = f2;
-				else if (pfr_ptr->set == 2) flag_used = f3;
+				if 		(pfr_ptr->set == 1) flag_used = f1;
+				else if (pfr_ptr->set == 2) flag_used = f2;
+				else if (pfr_ptr->set == 3) flag_used = f3;
 				else/*(pfr_ptr->set == 3)*/ flag_used = fn;
 
 				/* First check immunities */
