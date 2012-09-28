@@ -1047,6 +1047,15 @@ static void create_reward_objects(quest_type *q_ptr, byte reward_type)
 		 */
 		if (!o_ptr->k_idx) continue;
 
+		/* If a dungeon spellbook was created, make sure it is the right type */
+		if (obj_is_spellbook(o_ptr))
+		{
+			object_kind *k_ptr = &k_info[o_ptr->k_idx];
+
+			/*Not the right kind of spellbook*/
+			if (cp_ptr->spell_book != k_ptr->tval) continue;
+		}
+
 		/* Make sure the weapon makes sense for the class */
 		if (obj_is_weapon(o_ptr))
 		{
