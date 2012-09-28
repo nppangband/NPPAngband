@@ -838,7 +838,7 @@ static void create_reward_spellbook(void)
 	if (randint0(100) >= i) return;
 
 	if (cp_ptr->spell_book == TV_MAGIC_BOOK) which_realm = DROP_TYPE_DUNGEON_MAGIC_BOOK;
-	else if (cp_ptr->spell_book == TV_MAGIC_BOOK) which_realm = DROP_TYPE_DUNGEON_PRAYER_BOOK;
+	else if (cp_ptr->spell_book == TV_PRAYER_BOOK) which_realm = DROP_TYPE_DUNGEON_PRAYER_BOOK;
 	else  /* TV_DRUID_BOOK */ which_realm = DROP_TYPE_DUNGEON_DRUID_BOOK;
 
 	/*200 tries at a book*/
