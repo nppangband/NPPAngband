@@ -970,7 +970,7 @@ static ui_event_data inkey_aux(int scan_cutoff)
 	/* Initialize the no return */
 	ke0.type = EVT_NONE;
 	ke0.key = 0;
-	ke0.index = 0; /* To fix GCC warnings on X11 */
+	ke0.index = 0; 
 	ke0.mousey = 0;
 	ke0.mousex = 0;
 

@@ -1827,7 +1827,7 @@ static const struct flag_event_trigger redraw_events[] =
 	{ PR_FEATURE, EVENT_FEATURE},
 
 };
-
+X11
 
 /*
  * Handle "p_ptr->redraw"

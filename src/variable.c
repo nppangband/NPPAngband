@@ -236,8 +236,6 @@ byte angband_color_table[256][4] =
 
 	/*
 	 * Values for shades at compile time, taken from shades.prf
-	 * Hack -- TERM_WHITE (Shade 1) comes from font-x11.prf, because
-	 * we must ensure that all colors are different.
 	 */
 	{0x00, 0x00, 0x00, 0x00},	/* 	16 - Unused */
 	{0x00, 0xFF, 0xFA, 0xFA},	/* TERM_SNOW_WHITE 	(Shade 1 - w1) */
