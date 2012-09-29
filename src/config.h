@@ -106,6 +106,9 @@
  */
 #define MAINTAINER	"nppangbanddev@verizon.net"
 
-
+/*
+ * OPTION: Gamma correct colours
+ */
+#define SUPPORT_GAMMA
 
 #endif /* !INCLUDED_CONFIG_H */
