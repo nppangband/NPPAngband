@@ -2886,7 +2886,7 @@ void prepare_ghost_name(void)
 	ghost_template *t_ptr;
 
 	/* Paranoia */
-	if ((player_ghost_num < 1) || (player_ghost_num >= z_info->ghost_template_max))
+	if ((player_ghost_num < 0) || (player_ghost_num >= z_info->ghost_template_max))
 	{
 		my_strcpy(player_ghost_name, "Nobody", sizeof(player_ghost_name));
 		return;
