@@ -146,6 +146,29 @@ static void display_player_equippy(int y, int x, bool onscreen)
 }
 
 
+/*
+ * Equippy chars
+ */
+static void display_home_inven_letters(int y, int x, bool onscreen)
+{
+	int i;
+
+	cptr which_set;
+
+	if (!onscreen) which_set = "abcdefghijklmnopqrstuvwxyz";
+	else if (rogue_like_commands) which_set = roguelike_home_letters;
+	else which_set = standard_home_letters;
+
+	/* Dump equippy chars */
+	for (i = 0; i < MAX_INVENTORY_HOME; ++i)
+	{
+		char c = which_set[i];
+
+		/* Dump */
+		Term_putch(x+i, y, TERM_WHITE, c);
+	}
+}
+
 
 /*
  * Equippy chars
@@ -154,7 +177,7 @@ static void display_home_equippy(int y, int x, bool onscreen)
 {
 	int i;
 
-	byte a;
+	byte a ;
 	char c;
 
 	object_type *o_ptr;
@@ -1077,10 +1100,10 @@ static void display_home_equipment_info(int mode, bool onscreen)
 	display_home_equippy(row-2, col, onscreen);
 
 	/* Header */
-	c_put_str(TERM_WHITE, "abcdefghijklmnopqrstuvwx", row-1, col);
+	display_home_inven_letters(row-1, col, onscreen);
 
 	/* Footer */
-	c_put_str(TERM_WHITE, "abcdefghijklmnopqrstuvwx", row+6, col);
+	display_home_inven_letters(row+6, col, onscreen);
 
 	/* Process home stats */
 	for (i = 0; i < MAX_INVENTORY_HOME; ++i)
@@ -1176,13 +1199,13 @@ static void display_home_equipment_info(int mode, bool onscreen)
 	col = 7;
 
 	/* 2nd Header */
-	c_put_str(TERM_WHITE, "abcdefghijklmnopqrstuvwx", row-1, col + MAX_INVENTORY_HOME + 8);
+	display_home_inven_letters((row-1), (col + MAX_INVENTORY_HOME + 8), onscreen);
 
 	/* Footer */
-	c_put_str(TERM_WHITE, "abcdefghijklmnopqrstuvwx", row+8, col);
+	display_home_inven_letters((row+8), col, onscreen);
 
 	/* 2nd Footer */
-	c_put_str(TERM_WHITE, "abcdefghijklmnopqrstuvwx", row+8, col + MAX_INVENTORY_HOME + 8);
+	display_home_inven_letters((row+8), (col + MAX_INVENTORY_HOME + 8), onscreen);
 
 	/* 3rd Equippy */
 	display_home_equippy(row+9, col, onscreen);

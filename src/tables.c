@@ -2997,3 +2997,9 @@ const byte pit_room_maps[MAX_PIT_PATTERNS][PIT_HEIGHT][PIT_WIDTH] =
 
 };
 
+/* Some useful constants */
+cptr standard_home_letters =   "abcfmnoqrtuvyz13456790AB";
+cptr roguelike_home_letters =  "acfhmnoqruvyz13456790ABD";
+cptr standard_equip_letters =  "abcdefghijklmnopqrstuvw";
+cptr roguelike_equip_letters = "acdefgimopqrstuwvxzABCD";
+

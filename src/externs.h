@@ -347,6 +347,12 @@ extern char g_vault_name[80];
 extern u16b altered_inventory_counter;
 extern bool allow_altered_inventory;
 
+/* Some useful constants */
+extern cptr  standard_home_letters;
+extern cptr  roguelike_home_letters;
+extern cptr  standard_equip_letters;
+extern cptr  roguelike_equip_letters;
+
 
 /* attack.c */
 extern bool test_hit(int chance, int ac, int vis);

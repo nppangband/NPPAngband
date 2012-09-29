@@ -2361,7 +2361,7 @@ static void do_cmd_knowledge_home(void *obj, const char *name)
 	ang_file *fff;
 
 	char o_name[120];
-
+	cptr which_set;
 	char file_name[1024];
 
 	(void)obj;
@@ -2377,6 +2377,9 @@ static void do_cmd_knowledge_home(void *obj, const char *name)
 	/* Failure */
 	if (!fff) return;
 
+	if (rogue_like_commands) which_set = roguelike_home_letters;
+	else which_set = standard_home_letters;
+
 	/* Home -- if anything there */
 	if (st_ptr->stock_num)
 	{
@@ -2385,7 +2388,7 @@ static void do_cmd_knowledge_home(void *obj, const char *name)
 		{
 
 			object_desc(o_name, sizeof(o_name), &st_ptr->stock[k], ODESC_PREFIX | ODESC_FULL);
-			file_putf(fff, "%c) %s\n", I2A(k), o_name);
+			file_putf(fff, "%c) %s\n", which_set[k], o_name);
 
 			/* Describe random object attributes*/
 			identify_random_gen(&st_ptr->stock[k]);

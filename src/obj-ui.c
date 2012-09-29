@@ -1035,11 +1035,7 @@ static void item_prompt(menu_type *menu, int mode, cptr pmt)
  */
 static char get_item_tag(menu_type *menu, int oid)
 {
-	const int *choice = menu->menu_data;
-	int idx = choice[oid];
-
-	if (p_ptr->command_wrk == USE_FLOOR)  return I2A(oid);
-	else return index_to_label(idx);
+	return menu->selections[oid];
 }
 
 static void get_item_display(menu_type *menu, int oid, bool cursor, int row, int col, int width)
@@ -1088,8 +1084,8 @@ static void get_item_display(menu_type *menu, int oid, bool cursor, int row, int
 	o_name[width - 3] = '\0';
 
 	/* Hack - re-print the label with the right color, code taken from get_item_tag above*/
-	if (p_ptr->command_wrk == USE_FLOOR)  label = I2A(oid);
-	else label = index_to_label(idx);
+	label = get_item_tag(menu, oid);
+
 	c_put_str(attr, format("%c)",label), row, (col-3));
 
 	/* Now print the object  */
@@ -1387,8 +1383,23 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 
 	/* Set up the menu */
 	WIPE(&menu, menu);
-	menu.cmd_keys = "\n\r";
 	menu.browse_hook = item_menu_hook;
+	menu.flags = MN_DBL_TAP;
+
+	/*
+	 * Get the tag list
+	 */
+	if (rogue_like_commands)
+	{
+		/* Letters must not intersect! */
+		menu.cmd_keys = "\n\rbhjklnuy";
+		menu.selections = roguelike_equip_letters;
+	}
+	else
+	{
+		menu.cmd_keys = "\n\r";
+		menu.selections = standard_equip_letters;
+	}
 
 	/* Clear space */
 	area.width = len;
