@@ -3431,12 +3431,10 @@ void do_cmd_feeling(void)
 	p_ptr->redraw |= (PR_FEELING);
 }
 
-#define NUM_GHOST_CHALLENGES	15
-
 /*
  * Array of feeling strings
  */
-static cptr do_cmd_challenge_text[NUM_GHOST_CHALLENGES] =
+static cptr do_cmd_challenge_text[] =
 {
 	"challenges you from beyond the grave!",
 	"thunders 'Prove worthy of your traditions - or die ashamed!'.",
@@ -3452,8 +3450,18 @@ static cptr do_cmd_challenge_text[NUM_GHOST_CHALLENGES] =
 	"challenges you to demonstrate your prowess!",
 	"demands you prove yourself here and now!",
 	"asks 'Can ye face the best of those who came before?'.",
-	"challenges you to a fight to the death!"
-
+	"challenges you to a fight to the death!",
+	"wails 'These halls shall claim your life as well!'",
+	"begs you 'Free me from this cursed form!'.",
+	"whispers 'Those who perish here shall find no rest'.",
+	"boasts 'You won't leave this level alive!",
+	"wishes to claim your soul!",
+	"declares 'You will join me in this tortured afterlife!'",
+	"proclaims 'Prepare to fight your last battle'",
+	"bellows 'Your adventures will end here!'",
+	"dares you to proceed further!",
+	"wants to collect your bones!",
+	"yells 'Now you shall meet your undoing!'"
 };
 
 
@@ -3464,6 +3472,8 @@ static cptr do_cmd_challenge_text[NUM_GHOST_CHALLENGES] =
  */
 void ghost_challenge(void)
 {
+	size_t i;
+
 	/* No active player ghost template */
 	if (player_ghost_num < 0) return;
 
@@ -3475,7 +3485,9 @@ void ghost_challenge(void)
 		prepare_ghost_name();
 	}
 
-	msg_format("%^s %s", player_ghost_name, do_cmd_challenge_text[rand_int(NUM_GHOST_CHALLENGES)]);
+	i = randint0(N_ELEMENTS(do_cmd_challenge_text));
+
+	msg_format("%^s %s", player_ghost_name, do_cmd_challenge_text[i]);
 
 	message_flush();
 }
