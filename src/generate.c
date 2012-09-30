@@ -130,6 +130,7 @@
 #define SMALL_LEVEL 10	/* 1/chance of smaller size */
 #define THEMED_LEVEL_CHANCE	75	/* 1/chance of being a themed level */
 #define WILDERNESS_LEVEL_CHANCE	60 /* 1/chance of being a pseudo-wilderness level */
+#define LABRYNTH_LEVEL_CHANCE	50 /* 1/chance of being a labrynth level */
 
 #define DUN_MAX_LAKES   3       /* Maximum number of lakes/rivers */
 #define DUN_FEAT_RNG    2       /* Width of lake */
@@ -9942,6 +9943,317 @@ static bool build_wilderness_level(void)
 	return (TRUE);
 }
 
+/**
+ * Used to convert (x, y) into an array index (i) in build_labrynth_level().
+ */
+static int lab_toi(int y, int x, int w)
+{
+	return y * w + x;
+}
+
+/**
+ * Used to convert an array index (i) into (x, y) in labyrinth_gen().
+ */
+static void lab_toyx(int i, int w, int *y, int *x)
+{
+	*y = i / w;
+	*x = i % w;
+}
+
+/**
+ * Given an adjoining wall (a wall which separates two labyrinth cells)
+ * set a and b to point to the cell indices which are separated. Used by
+ * labyrinth_gen().
+ */
+static void lab_get_adjoin(int i, int w, int *a, int *b)
+{
+	int y, x;
+	lab_toyx(i, w, &y, &x);
+	if (x % 2 == 0)
+	{
+		*a = lab_toi(y - 1, x, w);
+		*b = lab_toi(y + 1, x, w);
+	}
+	else
+	{
+		*a = lab_toi(y, x - 1, w);
+		*b = lab_toi(y, x + 1, w);
+	}
+}
+
+/**
+ * Shuffle an array using Knuth's shuffle.
+ */
+static void shuffle(int *arr, int n)
+{
+	int i, j, k;
+	for (i = 0; i < n; i++)
+	{
+		j = randint0(n - i) + i;
+		k = arr[j];
+		arr[j] = arr[i];
+		arr[i] = k;
+	}
+}
+
+/**
+ * Return whether (x, y) is in a tunnel.
+ *
+ * For our purposes a tunnel is a horizontal or vertical path, not an
+ * intersection. Thus, we want the squares on either side to walls in one
+ * case (e.g. up/down) and open in the other case (e.g. left/right). We don't
+ * want a square that represents an intersection point.
+ *
+ * The high-level idea is that these are squares which can't be avoided (by
+ * walking diagonally around them).
+ */
+static bool lab_is_tunnel(int y, int x)
+{
+	bool west = cave_naked_bold(y, x - 1);
+	bool east = cave_naked_bold(y, x + 1);
+	bool north = cave_naked_bold(y - 1, x);
+	bool south = cave_naked_bold(y + 1, x);
+
+	return ((north == south) && (west == east) && (north != west));
+}
+
+#define LABRYNTH_HGT (15 + ((MAX_DUNGEON_HGT * 4) / 6))
+#define LABRYNTH_WID (51 + ((MAX_DUNGEON_WID * 4) / 9))
+#define LABRYNTH_AREA (LABRYNTH_WID * LABRYNTH_HGT)
+
+/**
+ * Build a labyrinth level.
+ *
+ * Note that if the function returns FALSE, a level wasn't generated.
+ * Labyrinths use the dungeon level's number to determine whether to generate
+ * themselves (which means certain level numbers are more likely to generate
+ * labyrinths than others).  Taken from Angband 3.3.
+ */
+static bool build_labrynth_level(void)
+{
+	int i, j, k, y, x;
+	bool is_quest_level = FALSE;
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+	int cave_squares_x[LABRYNTH_AREA];
+	int cave_squares_y[LABRYNTH_AREA];
+	int cave_squares_max = 0;
+
+	/*
+	 * Size of the actual labyrinth part must be odd.
+	 * NOTE: these are not the actual dungeon size, but rather the size of the
+	 * area we're generating a labyrinth in (which doesn't count the enclosing
+	 * outer walls.
+	 */
+
+	int hgt = LABRYNTH_HGT;
+	int wid = LABRYNTH_WID;
+	int area = hgt * wid;
+
+	/* NOTE: 'sets' and 'walls' are too large... we only need to use about
+	 * 1/4 as much memory. However, in that case, the addressing math becomes
+	 * a lot more complicated, so let's just stick with this because it's
+	 * easier to read. */
+
+	/* 'sets' tracks connectedness; if sets[i] == sets[j] then cells i and j
+	 * are connected to each other in the maze. */
+	int sets[LABRYNTH_AREA];
+
+	/* 'walls' is a list of wall coordinates which we will randomize */
+	int walls[LABRYNTH_AREA];
+
+	/* Most labyrinths are lit */
+	bool lit = ((randint0(p_ptr->depth) < 25) || (one_in_(2)));
+
+	/* Many labyrinths are known */
+	bool known = (lit && (randint0(p_ptr->depth) < 25));
+
+	/* Most labyrinths have soft (diggable) walls */
+	bool soft = ((randint0(p_ptr->depth) < 35) || (!one_in_(3)));
+
+	p_ptr->cur_map_hgt = hgt + 2;
+	p_ptr->cur_map_wid = wid + 2;
+
+	/* Set level type */
+	set_dungeon_type(DUNGEON_TYPE_LABRYNTH);
+
+	/* Reset terrain flags */
+	level_flag = 0;
+
+	/* Leave the player in the air for now */
+	p_ptr->py = p_ptr->px = 0;
+
+	/*
+	 * Build permanent walls.
+	 */
+	for (y = 0; y < p_ptr->cur_map_hgt; y++)
+	{
+		for (x = 0; x < p_ptr->cur_map_wid; x++)
+		{
+			/* Create permanent wall */
+			cave_set_feat(y, x, FEAT_PERM_SOLID);
+		}
+	}
+
+	/*
+	 * Start with solid wall everywhere.
+	 */
+	for (y = 1; y < p_ptr->cur_map_hgt - 1; y++)
+	{
+		for (x = 1; x < p_ptr->cur_map_wid - 1; x++)
+		{
+			/* Either soft or permanent walls */
+			cave_set_feat(y, x, soft ? FEAT_WALL_SOLID : FEAT_PERM_SOLID);
+		}
+	}
+
+	/* Initialize each wall. */
+	for (i = 0; i < area; i++)
+	{
+		walls[i] = i;
+		sets[i] = -1;
+	}
+
+	/* Cut out a grid of 1x1 rooms which we will call "cells" */
+	for (y = 0; y < hgt; y += 2)
+	{
+		for (x = 0; x < wid; x += 2)
+		{
+			int k = lab_toi(y, x, wid);
+			sets[k] = k;
+			cave_set_feat(y + 1, x + 1, FEAT_FLOOR);
+			cave_info[y + 1][x + 1] |= (CAVE_ROOM);
+			if (lit) cave_info[y + 1][x + 1] |= (CAVE_GLOW);
+		}
+	}
+
+	/* Shuffle the walls, using Knuth's shuffle. */
+	shuffle(walls, area);
+
+	/*
+	 * For each adjoining wall, look at the cells it divides. If they aren't
+	 * in the same set, remove the wall and join their sets.
+	 *
+	 * This is a randomized version of Kruskal's algorithm.
+	  */
+	for (i = 0; i < area; i++)
+	{
+		int a, b, x, y;
+
+		j = walls[i];
+
+		/* If this cell isn't an adjoining wall, skip it */
+		lab_toyx(j, wid, &y, &x);
+		if ((x < 1 && y < 1) || (x > wid - 2 && y > hgt - 2)) continue;
+		if (x % 2 == y % 2) continue;
+
+		/* Figure out which cells are separated by this wall */
+		lab_get_adjoin(j, wid, &a, &b);
+
+		/* If the cells aren't connected, kill the wall and join the sets */
+		if (sets[a] != sets[b])
+		{
+			int sa = sets[a];
+			int sb = sets[b];
+			cave_set_feat(y + 1, x + 1, FEAT_FLOOR);
+			if (lit) cave_info[y + 1][x + 1] |= (CAVE_GLOW);
+
+			for (k = 0; k < area; k++)
+			{
+				if (sets[k] == sb) sets[k] = sa;
+			}
+		}
+	}
+
+	/* Place 1 or 2 down stairs  */
+	if (!alloc_stairs(FEAT_MORE, (randint1(2))))
+	{
+		if (cheat_room) msg_format("failed to place down stairs");
+
+		return (FALSE);
+	}
+
+	/* Place 1 or 2 up stairs */
+	if (!alloc_stairs(FEAT_LESS, (randint1(2))))
+	{
+		if (cheat_room) msg_format("failed to place down stairs");
+		return (FALSE);
+	}
+
+	/* Test each square in (random) order for openness */
+	for (y = 1; y < p_ptr->cur_map_hgt - 1; y++)
+	{
+		for (x = 1; x < p_ptr->cur_map_wid - 1; x++)
+		{
+			if (cave_naked_bold(y, x))
+			{
+				/* Not in the rooms */
+				if (!lab_is_tunnel(y, x)) continue;
+
+				cave_squares_y[cave_squares_max] = y;
+				cave_squares_x[cave_squares_max] = x;
+				cave_squares_max++;
+			}
+		}
+	}
+
+	/* Paranoia */
+	if (!cave_squares_max)
+	{
+		if (cheat_room) msg_format("failed to place doors");
+		return (FALSE);
+	}
+
+	/* Generate a door for every 100 squares in the labyrinth */
+	for (i = area / 100; i > 0; i--)
+	{
+		/* Paranoia */
+		if (!cave_squares_max) break;
+
+		x = randint0(cave_squares_max);
+
+		/* Place same doors */
+		place_random_door(cave_squares_y[x], cave_squares_x[x]);
+
+		/* Replace the current with the top one */
+		cave_squares_max--;
+		cave_squares_y[x] = cave_squares_y[cave_squares_max];
+		cave_squares_x[x] = cave_squares_x[cave_squares_max];
+	}
+
+	/* Place some traps and rubble */
+	x = MAX(MIN(p_ptr->depth / 3, 10), 2);
+	x = (3 * x * (hgt * wid)) / (MAX_DUNGEON_HGT * MAX_DUNGEON_WID);
+	alloc_object(ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint(x));
+	alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_TRAP, randint(x));
+
+	/* Determine the character location, if it is needed */
+	if (!new_player_spot_old())
+	{
+		if (cheat_room) msg_format("failed to place player");
+
+		return (FALSE);
+	}
+
+	/* Place some things */
+	if (!place_monsters_objects())
+	{
+		if (cheat_room) msg_format("failed to place monsters and objects");
+		return FALSE;
+	}
+	/*check if we need a quest
+	if (quest_check(p_ptr->depth) == QUEST_LABRYNTH_LEVEL)
+	{
+		is_quest_level = TRUE;
+	}*/
+
+	/* If we want the players to see the maze layout, do that now */
+	if (known) wiz_light();
+
+	/* Success */
+	return (TRUE);
+}
+
+
 /*
  * Helper function for building and updating arena levels.
  * Also called from cave.c to have the walls gradually disappear
@@ -10731,6 +11043,9 @@ static int pick_dungeon_type(void)
 		return DUNGEON_TYPE_TOWN;
 	}
 
+	/* Playtesting() */
+	return DUNGEON_TYPE_LABRYNTH;
+
 	/* Themed level quest */
 	if (quest_check(p_ptr->depth) == QUEST_THEMED_LEVEL)
 	{
@@ -10749,18 +11064,27 @@ static int pick_dungeon_type(void)
 		return DUNGEON_TYPE_WILDERNESS;
 	}
 
-	/* Random themed level */
-	if (allow_themed_levels && (effective_depth(p_ptr->depth) >= 10) && (!adult_simple_dungeons) &&
-		!quest_check(effective_depth(p_ptr->depth)) && one_in_(THEMED_LEVEL_CHANCE))
+	if (!quest_check(effective_depth(p_ptr->depth)))
 	{
-		return DUNGEON_TYPE_THEMED_LEVEL;
-	}
+		/* Random themed level */
+		if (allow_themed_levels && (effective_depth(p_ptr->depth) >= 10) && (!adult_simple_dungeons) &&
+			one_in_(THEMED_LEVEL_CHANCE))
+		{
+			return DUNGEON_TYPE_THEMED_LEVEL;
+		}
 
-	/* Random wilderness level */
-	if ((effective_depth(p_ptr->depth) > 10) && !quest_check(effective_depth(p_ptr->depth)) &&
-			(!adult_simple_dungeons) && one_in_(WILDERNESS_LEVEL_CHANCE))
-	{
-		return DUNGEON_TYPE_WILDERNESS;
+		/* Random wilderness level */
+		if ((effective_depth(p_ptr->depth) > 10) && (!adult_simple_dungeons) &&
+			one_in_(WILDERNESS_LEVEL_CHANCE))
+		{
+			return DUNGEON_TYPE_WILDERNESS;
+		}
+
+		/* Random labrynth level */
+		if ((effective_depth(p_ptr->depth) > 15) && one_in_(LABRYNTH_LEVEL_CHANCE))
+		{
+			return DUNGEON_TYPE_LABRYNTH;
+		}
 	}
 
 	/* Classic level */
@@ -10912,6 +11236,13 @@ void generate_cave(void)
 			{
 				/* Make a wilderness level */
 				okay = build_arena_level();
+
+				break;
+			}
+			case DUNGEON_TYPE_LABRYNTH:
+			{
+				/* Make a wilderness level */
+				okay = build_labrynth_level();
 
 				break;
 			}
@@ -11300,6 +11631,85 @@ static dungeon_capabilities_type dun_cap_body_wild = {
 	get_extra_object_count_wild,
 };
 
+/*
+ * Dungeon can be transformed
+ */
+static bool can_be_transformed_labrynth(void)
+{
+	return (FALSE);
+}
+
+/*
+ * Non native monsters in elemental terrain
+ */
+static bool can_place_non_native_monsters_labrynth(void)
+{
+	return (TRUE);
+}
+
+/*
+ * Monsters in level
+ */
+static int get_monster_count_labrynth(void)
+{
+	int count = 0;
+	int y, x;
+	u32b ff1 = (FF1_MOVE | FF1_PLACE);
+
+	/* Count the grids that allow monsters in them */
+	for (y = 0; y < p_ptr->cur_map_hgt; y++)
+	{
+		for (x = 0; x < p_ptr->cur_map_wid; x++)
+		{
+			/* Found one? Increment the count */
+			if (cave_ff1_match(y, x, ff1) == ff1) ++count;
+		}
+	}
+
+	/* Calculate the monster ratio */
+	count = (count / 80);
+
+	/* Paranoia */
+	return (MAX(MIN_M_ALLOC_LEVEL, count));
+}
+
+/*
+ * Objects in rooms
+ */
+static int get_object_count_labrynth(void)
+{
+	return (Rand_normal(30, 20));
+}
+
+/*
+ * Gold in both rooms and corridors
+ */
+static int get_gold_count_labrynth(void)
+{
+	return (Rand_normal(10, 10));
+}
+
+
+
+/*
+ * Dungeon capabilities for wilderness levels
+ */
+static dungeon_capabilities_type dun_cap_body_labrynth = {
+	can_place_escorts_default,
+	can_place_player_in_rooms_default,
+	can_place_stairs_default,
+	adjust_stairs_number_wild,
+	can_place_fog_in_rooms_default,
+	can_target_feature_default,
+	can_be_transformed_labrynth,
+	can_place_non_native_monsters_labrynth,
+	get_monster_count_labrynth,
+	get_object_count_labrynth,
+	get_gold_count_labrynth,
+	get_extra_object_count_default,
+};
+
+
 
 /*
  * Get the proper dungeon capabilities based on the given dungeon type
@@ -11316,6 +11726,12 @@ void set_dungeon_type(u16b dungeon_type)
 		case DUNGEON_TYPE_WILDERNESS:
 		{
 			dun_cap = &dun_cap_body_wild;
+			break;
+		}
+		/* Special rules for wilderness levels */
+		case DUNGEON_TYPE_LABRYNTH:
+		{
+			dun_cap = &dun_cap_body_labrynth;
 			break;
 		}
 		/* Classic dungeons */
