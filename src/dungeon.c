@@ -634,26 +634,32 @@ static bool add_arena_monster(bool new_squares, byte stage, s32b cur_quest_monst
 	get_mon_num_hook = monster_arena_okay;
 	get_mon_num_prep();
 
-	/* Give then a little breathing room every couple monsters */
-	if (stage < (ARENA_MAX_STAGES - 1))
+	if (((cur_quest_monsters % 5) == 2) ||
+		((cur_quest_monsters % 5) == 4))
 	{
-		if ((cur_quest_monsters % 5) == 4)
-		{
-			mon_lev = (mon_lev * 3) / 4;
-		}
+		mon_lev = (mon_lev * 3) / 4;
 	}
 
 	/* Pick a monster, using the given level */
 	r_idx = get_mon_num(mon_lev, y, x, 0L);
 
 	/* One out of 10 monsters, make sure they are a little harder */
-	if ((cur_quest_monsters % 10) == 9)
+	if ((cur_quest_monsters % 5) == 3)
 	{
 		s16b r2_idx = get_mon_num(mon_lev, y, x, 0L);
 		monster_race *r_ptr = &r_info[r_idx];
 		monster_race *r2_ptr = &r_info[r2_idx];
 
 		/* If we found a tougher monster, use it */
+		if (r_ptr->mon_power < r2_ptr->mon_power)
+		{
+			r_idx = r2_idx;
+			r_ptr = &r_info[r_idx];
+		}
+
+		/* Try twice */
+		r2_idx = get_mon_num(mon_lev, y, x, 0L);
+		r2_ptr = &r_info[r2_idx];
 		if (r_ptr->mon_power < r2_ptr->mon_power)
 		{
 			r_idx = r2_idx;
