@@ -403,7 +403,7 @@ extern bool cave_valid_bold(int y, int x);
 extern byte multi_hued_attr(monster_race *r_ptr);
 extern bool feat_supports_lighting(u16b feat);
 extern bool dtrap_edge(int y, int x);
-extern void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp);
+extern void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp, bool use_default);
 extern void move_cursor_relative(int y, int x);
 extern void print_rel(char c, byte a, int y, int x);
 extern void note_spot(int y, int x);

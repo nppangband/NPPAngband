@@ -2894,7 +2894,7 @@ bool quest_fail_immediately(void)
 	return (FALSE);
 }
 
-/* Confirm that the player might fail the quest in thier current situation */
+/* Confirm that the player might fail the quest in their current situation */
 bool quest_might_fail_now(void)
 {
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];

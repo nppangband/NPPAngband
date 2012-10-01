@@ -1347,7 +1347,7 @@ static void update_maps(game_event_type type, game_event_data *data, void *user)
 
 		/* Redraw the grid spot */
 		/* Determine what is there */
-		map_info(vy, vx, &a, &c, &ta, &tc);
+		map_info(vy, vx, &a, &c, &ta, &tc, FALSE);
 		Term_queue_char(t, vx, vy, a, c, ta, tc);
 
 		if (use_bigtile)
