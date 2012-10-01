@@ -2346,30 +2346,14 @@ void guild_quest_wipe(bool reset_defer)
 {
 	store_type *st_ptr = &store[STORE_GUILD];
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
-	bool extra_level = FALSE;
-	bool vault_quest = FALSE;
-	bool arena_quest = FALSE;
-	bool wilderness_quest = FALSE;
-	bool labyrinth_quest = FALSE;
+	byte preserve_mask = (q_ptr->q_flags & (QFLAG_PRESERVE_MASK));
 	int i;
-
-	/* Remember if there should be an extra level added to the next quest depth */
-	if (q_ptr->q_flags & (QFLAG_EXTRA_LEVEL)) extra_level = TRUE;
-
-	/* Remember if we should allow a vault or arena quest */
-	if (q_ptr->q_flags & (QFLAG_VAULT_QUEST)) vault_quest = TRUE;
-	if (q_ptr->q_flags & (QFLAG_ARENA_QUEST)) arena_quest = TRUE;
-	if (q_ptr->q_flags & (QFLAG_WILDERNESS_QUEST)) wilderness_quest = TRUE;
-	if (q_ptr->q_flags & (QFLAG_LABYRINTH_QUEST)) labyrinth_quest = TRUE;
 
 	/* Wipe the structure */
 	(void)WIPE(q_ptr, quest_type);
 
-	if (extra_level) q_ptr->q_flags |= QFLAG_EXTRA_LEVEL;
-	if (vault_quest) q_ptr->q_flags |= QFLAG_VAULT_QUEST;
-	if (arena_quest) q_ptr->q_flags |= QFLAG_ARENA_QUEST;
-	if (labyrinth_quest) q_ptr->q_flags |= QFLAG_LABYRINTH_QUEST;
-	if (wilderness_quest) q_ptr->q_flags |= QFLAG_WILDERNESS_QUEST;
+	/* Bring back the flags we didn't want to wipe */
+	q_ptr->q_flags |= preserve_mask;
 
 	if (reset_defer) p_ptr->deferred_rewards = 0;
 
@@ -2846,9 +2830,11 @@ bool quest_shall_fail_if_leave_level(void)
 
 	/* Quest has not started, or quest is complete */
 	if (!(q_ptr->q_flags & (QFLAG_STARTED))) return (FALSE);
+
 	if (q_ptr->q_flags & (QFLAG_COMPLETED)) return (FALSE);
 
-	if (q_ptr->base_level != p_ptr->depth) return (FALSE);
+	/* Not the right level */
+	if (p_ptr->depth != q_ptr->base_level) return (FALSE);
 
 	if (q_ptr->q_type == QUEST_THEMED_LEVEL) return (TRUE);
 	if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL) return (TRUE);
@@ -2869,8 +2855,8 @@ bool quest_might_fail_if_leave_level(void)
 {
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 
-	/* Not on the level right now */
-	if (q_ptr->base_level != p_ptr->depth) return (FALSE);
+	/* Not the right level */
+	if (p_ptr->depth != q_ptr->base_level) return (FALSE);
 
 	/* Quest has not started, or quest is complete */
 	if (!(q_ptr->q_flags & (QFLAG_STARTED))) return (FALSE);
@@ -2880,3 +2866,48 @@ bool quest_might_fail_if_leave_level(void)
 
 	return (FALSE);
 }
+
+/* Confirm that the player should fail the quest immediately */
+bool quest_fail_immediately(void)
+{
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+
+	/* Quest has not started, or quest is complete */
+	if (!(q_ptr->q_flags & (QFLAG_STARTED))) return (FALSE);
+
+	if (q_ptr->q_flags & (QFLAG_COMPLETED)) return (FALSE);
+
+	/* Currently on the quest level */
+	if (p_ptr->depth == q_ptr->base_level) return (FALSE);
+
+	if (q_ptr->q_type == QUEST_THEMED_LEVEL) return (TRUE);
+	if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL) return (TRUE);
+	if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL) return (TRUE);
+	if (q_ptr->q_type == QUEST_PIT) return (TRUE);
+	if (q_ptr->q_type == QUEST_NEST) return (TRUE);
+	if (q_ptr->q_type == QUEST_ARENA_LEVEL) return (TRUE);
+	if (q_ptr->q_type == QUEST_VAULT)
+	{
+		if (quest_item_slot() == -1) return (TRUE);
+	}
+
+	return (FALSE);
+}
+
+/* Confirm that the player might fail the quest in thier current situation */
+bool quest_might_fail_now(void)
+{
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+
+	/* Currently on the quest level */
+	if (p_ptr->depth == q_ptr->base_level) return (FALSE);
+
+	/* Quest has not started, or quest is complete */
+	if (!(q_ptr->q_flags & (QFLAG_STARTED))) return (FALSE);
+	if (q_ptr->q_flags & (QFLAG_COMPLETED)) return (FALSE);
+
+	if (q_ptr->q_type == QUEST_MONSTER) return (TRUE);
+
+	return (FALSE);
+}
+

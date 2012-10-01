@@ -783,6 +783,9 @@ enum
 #define QFLAG_LABYRINTH_QUEST   0x20  	/* Allow the player to choose an labrynth quest */
 #define QFLAG_WILDERNESS_QUEST  0x40  	/* Allow the player to choose an wilderness quest */
 
+#define QFLAG_PRESERVE_MASK  (QFLAG_EXTRA_LEVEL | QFLAG_VAULT_QUEST | QFLAG_ARENA_QUEST | \
+							  QFLAG_LABYRINTH_QUEST | QFLAG_WILDERNESS_QUEST)
+
 /*
  * Return true if the guild quest is not completed.
  */
@@ -800,6 +803,10 @@ enum
 
 #define guild_quest_level() \
        (q_info[GUILD_QUEST_SLOT].base_level)
+
+#define player_on_guild_quest_level() \
+       ((q_info[GUILD_QUEST_SLOT].base_level == p_ptr->depth) && \
+    	(guild_quest_level()))
 
 #endif /*INCLUDED_PLAYER_H*/
 

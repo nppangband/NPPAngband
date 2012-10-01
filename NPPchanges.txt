@@ -33,6 +33,7 @@ Added 8x8 tiles for all servants of the valar, adamantite, and all mimics.
 Added two more patterns for the monster in the "pit" rooms.
 Eliminate GTK and X11 ports
 Added labrynth levels (from Angband 3.4).
+Added labrynth quests.
 
 NPP 0.5.4 changes:
 The edges of the detected trap areas now show up onscreen.

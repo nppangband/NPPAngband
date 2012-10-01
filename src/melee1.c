@@ -3872,7 +3872,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			}
 			else
 			{
-				teleport_player_level(m_idx);
+				(void)teleport_player_level(m_idx);
 			}
 			break;
 		}

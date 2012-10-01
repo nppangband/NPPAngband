@@ -1444,7 +1444,7 @@ static void process_world(void)
 			{
 				if (!(turn % QUEST_TURNS))
 				{
-					if (quest_might_fail_if_leave_level())
+					if (quest_might_fail_now())
 					{
 						quest_fail();
 					}
@@ -3272,11 +3272,11 @@ void play_game(void)
 		size_mon_hist = 0;
 
 		/* Check for quest_failure */
-		if (guild_quest_level())
+		if (guild_quest_active())
 		{
-			if (quest_shall_fail_if_leave_level()) quest_fail();
+			if (quest_fail_immediately()) quest_fail();
 
-			else if (quest_might_fail_if_leave_level())
+			else if (quest_might_fail_now())
 			{
 				/* Have a chance to fail if the quest is in progress */
 				if (one_in_(10)) quest_fail();

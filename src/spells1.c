@@ -483,8 +483,9 @@ void teleport_towards(int oy, int ox, int ny, int nx)
 
 /*
  * Teleport the player one level up or down (random when legal)
+ * Returns false if the player chooses to stay on a quest level
  */
-void teleport_player_level(int who)
+bool teleport_player_level(int who)
 {
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 
@@ -495,12 +496,12 @@ void teleport_player_level(int who)
 	process_player_terrain_damage();
 
 	/* Dead player? */
-	if (p_ptr->is_dead) return;
+	if (p_ptr->is_dead) return (FALSE);
 
 	if (adult_ironman)
 	{
 		msg_print("Nothing happens.");
-		return;
+		return(TRUE);
 	}
 
 	if (!p_ptr->depth) go_down = TRUE;
@@ -518,10 +519,31 @@ void teleport_player_level(int who)
 	if ((who >= SOURCE_MONSTER_START) &&
 			(quest_might_fail_if_leave_level() || quest_shall_fail_if_leave_level()))
 	{
+
 		/*de-activate the quest*/
 		q_ptr->q_flags &= ~(QFLAG_STARTED);
 
 		go_up = TRUE;
+	}
+
+	/* Verify leaving normal quest level */
+	if ((who == SOURCE_PLAYER) && (verify_leave_quest))
+	{
+		char out_val[160];
+
+		if (quest_might_fail_if_leave_level())
+		{
+			sprintf(out_val, "Really risk failing your quest? ");
+			if (!get_check(out_val)) return(FALSE);
+		}
+
+		/* Verify leaving normal quest level */
+		else if (quest_shall_fail_if_leave_level())
+
+		{
+			sprintf(out_val, "Really fail your quest? ");
+			if (!get_check(out_val)) return(FALSE);
+		}
 	}
 
 	/*We don't have a direction yet, pick one at random*/
@@ -547,6 +569,8 @@ void teleport_player_level(int who)
 		/* New depth */
 		dungeon_change_level(p_ptr->depth + 1);
 	}
+
+	return (TRUE);
 
 }
 
@@ -2706,7 +2730,7 @@ static void apply_nexus(int who)
 			}
 
 			/* Teleport Level */
-			teleport_player_level(who);
+			(void)teleport_player_level(who);
 			break;
 		}
 

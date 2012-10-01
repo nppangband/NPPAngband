@@ -1397,7 +1397,7 @@ static bool read_scroll(object_type *o_ptr, bool *ident)
 
 		case SV_SCROLL_TELEPORT_LEVEL:
 		{
-			(void)teleport_player_level(SOURCE_PLAYER);
+			if (!teleport_player_level(SOURCE_PLAYER)) used_up = FALSE;
 			*ident = TRUE;
 			break;
 		}

@@ -1047,6 +1047,8 @@ extern bool quest_no_down_stairs(const quest_type *q_ptr);
 extern bool no_down_stairs(s16b check_depth);
 extern bool quest_shall_fail_if_leave_level(void);
 extern bool quest_might_fail_if_leave_level(void);
+extern bool quest_fail_immediately(void);
+extern bool quest_might_fail_now(void);
 
 
 /* randart.c */
@@ -1082,7 +1084,7 @@ extern bool native_teleport_player(int dis);
 extern void teleport_player(int dis);
 extern void teleport_player_to(int ny, int nx);
 extern void teleport_towards(int oy, int ox, int ny, int nx);
-extern void teleport_player_level(int who);
+extern bool teleport_player_level(int who);
 extern byte gf_color(int type);
 extern u16b bolt_pict(int y, int x, int ny, int nx, int typ, u32b flg);
 extern void take_terrain_hit(int dam, int feat, cptr kb_str);
