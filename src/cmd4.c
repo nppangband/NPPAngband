@@ -3401,6 +3401,11 @@ void do_cmd_feeling(void)
 		msg_print("You have entered an area of near pristine wilderness.");
 	}
 
+	else if (p_ptr->dungeon_type == DUNGEON_TYPE_LABYRINTH)
+	{
+		msg_print("You have entered a complex labyrinth of dungeon hallways.");
+	}
+
 	else if (p_ptr->dungeon_type == DUNGEON_TYPE_ARENA)
 	{
 		msg_print("You are in an arena fighting for your life.");
@@ -3431,10 +3436,12 @@ void do_cmd_feeling(void)
 	p_ptr->redraw |= (PR_FEELING);
 }
 
+#define NUM_GHOST_CHALLENGES	26
+
 /*
  * Array of feeling strings
  */
-static cptr do_cmd_challenge_text[] =
+static cptr do_cmd_challenge_text[NUM_GHOST_CHALLENGES] =
 {
 	"challenges you from beyond the grave!",
 	"thunders 'Prove worthy of your traditions - or die ashamed!'.",
@@ -3485,7 +3492,7 @@ void ghost_challenge(void)
 		prepare_ghost_name();
 	}
 
-	i = randint0(N_ELEMENTS(do_cmd_challenge_text));
+	i = randint0(NUM_GHOST_CHALLENGES);
 
 	msg_format("%^s %s", player_ghost_name, do_cmd_challenge_text[i]);
 

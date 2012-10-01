@@ -765,9 +765,10 @@ static void process_wilderness_quests(void)
 	u16b i;
 	monster_type *m_ptr;
 	char ddesc[80];
+	int remaining = q_ptr->q_max_num - cur_quest_monsters;
 
 	/* Don't start teleporting them yet */
-	if (cur_quest_monsters > 10) return;
+	if (remaining > 10) return;
 
 	for (i = 1; i < z_info->m_max; i++)
 	{
@@ -906,9 +907,9 @@ static void process_arena_level(void)
 static void process_guild_quests(void)
 {
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
-	int cur_quest_monsters;
+	int cur_quest_monsters = count_quest_monsters(q_ptr);
+	int remaining = cur_quest_monsters - q_ptr->q_num_killed;
 	int i, y, x;
-	int old_feeling = feeling;
 	int best_r_idx = 0;
 	int r_idx;
 	int attempts_left = 10000;
@@ -917,11 +918,8 @@ static void process_guild_quests(void)
 	if (quest_fixed(q_ptr)) return;
 	if (q_ptr->q_type == QUEST_VAULT) return;
 
-	/* Make sure the current quest has enough monsters on the level */
-	cur_quest_monsters = count_quest_monsters(q_ptr);
-
 	/* We have enough monsters, we are done */
-	if ((q_ptr->q_max_num - q_ptr->q_num_killed) <= cur_quest_monsters) return;
+	if (remaining >= (q_ptr->q_max_num - q_ptr->q_num_killed)) return;
 
 	/* Find a legal, distant, unoccupied, space */
 	while (attempts_left)
@@ -968,9 +966,6 @@ static void process_guild_quests(void)
 	/* Prepare allocation table */
 	get_mon_num_prep();
 
-	/* mega-hack - undo feeling so monster can be generated */
-	feeling = 0;
-
 	if (!best_r_idx)
 	{
 		monster_race *r_ptr;
@@ -1005,7 +1000,7 @@ static void process_guild_quests(void)
 		}
 	}
 
-	if (place_monster_aux(y, x, best_r_idx, (MPLACE_SLEEP | MPLACE_GROUP)))
+	if (place_monster_aux(y, x, best_r_idx, (MPLACE_SLEEP | MPLACE_GROUP | MPLACE_OVERRIDE)))
 	{
 		/* Scan the monster list */
 		for (i = 1; i < mon_max; i++)
@@ -1024,7 +1019,6 @@ static void process_guild_quests(void)
 	}
 
 	/* Reset everything */
-	feeling = old_feeling;
 	monster_level = effective_depth(p_ptr->depth);
 	get_mon_num_hook = NULL;
 	get_mon_num_prep();
@@ -1562,7 +1556,7 @@ static void process_world(void)
 	{
 		/*
 		 * Make a new monster, but not on arena levels DUNGEON_TYPE_ARENA,
-		 * themed levels or wilderness levels DUNGEON_TYPE_WILDERNESS
+		 * labyrinth, DUNGEON_TYPE_LABYRINTH, themed levels or wilderness levels. DUNGEON_TYPE_WILDERNESS
 		 */
 		if (p_ptr->dungeon_type < DUNGEON_TYPE_THEMED_LEVEL)
 		{
@@ -2015,8 +2009,9 @@ static void process_world(void)
 		/*players notice arena levels almost instantly */
 		if (p_ptr->dungeon_type== DUNGEON_TYPE_ARENA) chance = 2;
 
-		/*players notice wilderness levels almost as quickly */
+		/*players notice wilderness and labyrinth levels almost as quickly */
 		else if (p_ptr->dungeon_type== DUNGEON_TYPE_WILDERNESS) chance = 10;
+		else if (p_ptr->dungeon_type== DUNGEON_TYPE_LABYRINTH) chance = 10;
 
 		/* Players notice themed levels quickly as well */
 		else if (p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL) chance = 20;

@@ -717,7 +717,8 @@ enum
 #define QUEST_SLOT_LEVEL		4
 #define QUEST_SLOT_VAULT		5
 #define QUEST_SLOT_ARENA		6
-#define QUEST_SLOT_MAX			7
+#define QUEST_SLOT_LABYRINTH		7
+#define QUEST_SLOT_MAX			8
 
 /*
  * Quest types
@@ -731,6 +732,7 @@ enum
 #define QUEST_WILDERNESS_LEVEL	7	/* Clear out an entire wilderness level */
 #define QUEST_VAULT				8	/* retrieve a artifact from a vault and return it to the guild*/
 #define QUEST_ARENA_LEVEL		9	/* Kill a given # of creatures in a closed arena with no escape */
+#define QUEST_LABYRINTH_LEVEL   10   /* Clear out an entire labrynth level */
 
 #define MON_RARE_FREQ	15
 #define MON_LESS_FREQ	50
@@ -778,6 +780,8 @@ enum
 #define QFLAG_VAULT_QUEST   0x04  	/* Allow the player to choose a vault quest */
 #define QFLAG_ARENA_QUEST   0x08  	/* Allow the player to choose an arena quest */
 #define QFLAG_COMPLETED		0x10	/* Current quest is completed, go get reward */
+#define QFLAG_LABYRINTH_QUEST   0x20  	/* Allow the player to choose an labrynth quest */
+#define QFLAG_WILDERNESS_QUEST  0x40  	/* Allow the player to choose an wilderness quest */
 
 /*
  * Return true if the guild quest is not completed.

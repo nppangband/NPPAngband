@@ -1292,7 +1292,7 @@ enum
 #define DUNGEON_TYPE_THEMED_LEVEL	3
 #define DUNGEON_TYPE_WILDERNESS		4
 #define DUNGEON_TYPE_ARENA			5
-#define DUNGEON_TYPE_LABRYNTH		6
+#define DUNGEON_TYPE_LABYRINTH		6
 
 /** Constants for the various patterns of pits */
 #define MAX_PIT_PATTERNS	3

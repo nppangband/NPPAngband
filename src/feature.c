@@ -1640,10 +1640,13 @@ s16b get_feat_num(int level)
 			(f_info[f_idx].dam_non_native > (p_ptr->mhp / 2)))) continue;
 
 
-		/* Mega-Hack -- No summoning traps in themed levels, wilderness levels or arena levels */
+		/*
+		 * Mega-Hack -- No summoning traps in themed levels,
+		 * labyrinth levels, wilderness levels or arena levels
+		 */
 		if (feat_ff2_match(f_idx, FF2_TRAP_PASSIVE) &&
 			(f_info[f_idx].f_power == 5) &&
-			/* Also includes DUNGEON_TYPE_WILDERNESS, DUNGEON_TYPE_ARENA */
+			/* Also includes DUNGEON_TYPE_WILDERNESS, DUNGEON_TYPE_ARENA DUNGEON_TYLE_LABYRINTH*/
 			(p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL))
 			{
 				continue;

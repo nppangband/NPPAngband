@@ -558,6 +558,13 @@ static void prt_feeling(int row, int col)
 	}
 
 	/* Get color of level based on feeling  -JSV- */
+	else if (p_ptr->dungeon_type == DUNGEON_TYPE_LABYRINTH)
+	{
+		attr = TERM_L_BLUE;
+		my_strcpy(feel, "F:Labyrinth", sizeof(feel));
+	}
+
+	/* Get color of level based on feeling  -JSV- */
 	else if (p_ptr->dungeon_type == DUNGEON_TYPE_WILDERNESS)
 	{
 		attr = TERM_GREEN;

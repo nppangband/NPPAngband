@@ -1728,6 +1728,12 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 		f6 &= ~(RF6_TELE_LEVEL | RF6_TELE_AWAY);
 		f7 &= ~(RF7_SUMMON_MASK);
 	}
+	/*hack - some spells are pointless or unfair on labyrinth levels*/
+	else if (p_ptr->dungeon_type == DUNGEON_TYPE_LABYRINTH)
+	{
+		f6 &= ~(RF6_TELE_LEVEL);
+		f7 &= ~(RF7_SUMMON_MASK);
+	}
 	/*hack - some spells are unfair on themed and wilderness levels*/
 	/* Also includes DUNGEON_TYPE_WILDERNESS */
 	else if (p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL)
@@ -1735,6 +1741,7 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 		f6 &= ~(RF6_TELE_TO | RF6_TELE_LEVEL | RF6_TELE_AWAY);
 		f7 &= ~(RF7_SUMMON_MASK);
 	}
+
 
 	/* Check what kinds of spells can hit player */
 	path = projectable(fy, fx, p_ptr->py, p_ptr->px, PROJECT_CHCK);

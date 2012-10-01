@@ -3107,14 +3107,15 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	/* Paranoia */
 	if (!in_bounds(y, x)) return (FALSE);
 
-	/* No new monsters on themed and wilderness levels */
+	/* No new monsters on labyrinth, themed and wilderness levels */
 	if (((p_ptr->dungeon_type == DUNGEON_TYPE_THEMED_LEVEL) ||
+		 (p_ptr->dungeon_type == DUNGEON_TYPE_LABYRINTH) ||
 		 (p_ptr->dungeon_type == DUNGEON_TYPE_WILDERNESS)) &&
 		(character_dungeon == TRUE))
 	{
 
-		/* Unless we are revealing a mimic */
-		if (!(mp_flags & (MPLACE_MIMIC_REVEAL))) return (FALSE);
+		/* Unless we are revealing a mimic or replacing a missing quest monster */
+		if (!(mp_flags & (MPLACE_OVERRIDE))) return (FALSE);
 	}
 
 	/*
@@ -3369,7 +3370,7 @@ static bool place_mimic_near(int y, int x, int r_idx, bool message, bool questor
 	int final_y = y;
 
 	/* Initially try the spot the mimic is on */
-	if (place_monster_one(y, x, r_idx, MPLACE_NO_MIMIC | MPLACE_MIMIC_REVEAL)) success = TRUE;
+	if (place_monster_one(y, x, r_idx, MPLACE_NO_MIMIC | MPLACE_OVERRIDE)) success = TRUE;
 
 	/* Now search around the space, one layer at a time */
 	else for (i = 1; ((i <= 5) && (!success)); i++)
@@ -3388,7 +3389,7 @@ static bool place_mimic_near(int y, int x, int r_idx, bool message, bool questor
 				if (!los(y1, x1, y, x)) continue;
 
 				/* Try to place a monster on this spot */
-				if (!place_monster_one(y1, x1, r_idx, (MPLACE_NO_MIMIC | MPLACE_MIMIC_REVEAL))) continue;
+				if (!place_monster_one(y1, x1, r_idx, (MPLACE_NO_MIMIC | MPLACE_OVERRIDE))) continue;
 
 				/* We are done */
 				success = TRUE;
@@ -4021,8 +4022,9 @@ bool summon_specific(int y1, int x1, int lev, int type)
 {
 	int i, x, y, r_idx;
 
-	/*hack - no summoning on themed or wilderness levels*/
-	if (p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL) /* Also includes DUNGEON_TYPE_WILDERNESS */
+	/*hack - no summoning on labyrinth, arena, themed or wilderness levels*/
+	/* Also includes DUNGEON_TYPE_WILDERNESS DUNGEON_TYPE_LABYRINTH DUNGEON_TYPE_ARENA*/
+	if (p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL)
 	{
 		return (FALSE);
 	}

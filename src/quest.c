@@ -293,6 +293,10 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 		{
 			my_strcat(intro, format("a wilderness level"), sizeof(intro));
 		}
+		else if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL)
+		{
+			my_strcat(intro, format("a labyrinth level"), sizeof(intro));
+		}
 		else if (q_ptr->q_type == QUEST_ARENA_LEVEL)
 		{
 			my_strcat(intro, format("an arena level"), sizeof(intro));
@@ -1828,6 +1832,32 @@ static bool place_wilderness_quest(int lev)
 }
 
 /*
+ * Actually give the character a labyrinth quest
+ */
+static bool place_labyrinth_quest(int lev)
+{
+
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+
+	/* Actually write the quest */
+	q_ptr->q_type = QUEST_LABYRINTH_LEVEL;
+	q_ptr->base_level = lev;
+	q_ptr->q_fame_inc = 15;
+	q_ptr->q_fame_inc += damroll(10,2);
+
+	/* Decide which rewards to offer the player */
+	check_reward_custom_randart(q_ptr, 150, 6);
+	check_reward_extra_hp(q_ptr, 350);
+	check_reward_stat_increase(q_ptr, 350);
+	if (25 + damroll(25,25) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
+	else q_ptr->q_reward |= REWARD_GREAT_ITEM;
+
+	/*success*/
+	return (TRUE);
+}
+
+
+/*
  * Actually give the character a wilderness quest
  */
 static bool place_arena_quest(int lev)
@@ -1898,6 +1928,8 @@ bool quest_allowed(byte j)
 	}
 	else if (j == QUEST_SLOT_LEVEL)
 	{
+		if (adult_simple_dungeons) return (FALSE);
+		if (!allow_themed_levels) return (FALSE);
 		if (p_ptr->max_depth < 14) return (FALSE);
 		if (!check_level_quest()) return (FALSE);
 	}
@@ -1908,7 +1940,14 @@ bool quest_allowed(byte j)
 	}
 	else if (j == QUEST_SLOT_WILDERNESS)
 	{
+		if (adult_simple_dungeons) return (FALSE);
 		if (p_ptr->max_depth < 17) return (FALSE);
+		if (!(q_info[GUILD_QUEST_SLOT].q_flags & (QFLAG_WILDERNESS_QUEST))) return (FALSE);
+	}
+	else if (j == QUEST_SLOT_LABYRINTH)
+	{
+		if (p_ptr->max_depth < 20) return (FALSE);
+		if (!(q_info[GUILD_QUEST_SLOT].q_flags & (QFLAG_LABYRINTH_QUEST))) return (FALSE);
 	}
 	else if (j == QUEST_SLOT_ARENA)
 	{
@@ -2151,6 +2190,14 @@ bool guild_purchase(int choice)
 			quest_placed = FALSE;
 		}
 	}
+	else if (choice == QUEST_SLOT_LABYRINTH)
+	{
+		if (!place_labyrinth_quest(qlev))
+		{
+			guild_quest_wipe(FALSE);
+			quest_placed = FALSE;
+		}
+	}
 	/*Nest or Pit quests*/
 	else if (choice == QUEST_SLOT_PIT_NEST)
 	{
@@ -2211,6 +2258,14 @@ bool guild_purchase(int choice)
 	/* Arena quest allowed 1/3 of the time */
 	if (one_in_(3)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_ARENA_QUEST);
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_ARENA_QUEST);
+
+	/* Wilderness quests allowed 1/2 of the time */
+	if (one_in_(2)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_WILDERNESS_QUEST);
+	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_WILDERNESS_QUEST);
+
+	/* Labyrinth quests allowed 1/2 of the time */
+	if (one_in_(2)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_LABYRINTH_QUEST);
+	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_LABYRINTH_QUEST);
 
 	return (TRUE);
 }
@@ -2294,6 +2349,8 @@ void guild_quest_wipe(bool reset_defer)
 	bool extra_level = FALSE;
 	bool vault_quest = FALSE;
 	bool arena_quest = FALSE;
+	bool wilderness_quest = FALSE;
+	bool labyrinth_quest = FALSE;
 	int i;
 
 	/* Remember if there should be an extra level added to the next quest depth */
@@ -2302,6 +2359,8 @@ void guild_quest_wipe(bool reset_defer)
 	/* Remember if we should allow a vault or arena quest */
 	if (q_ptr->q_flags & (QFLAG_VAULT_QUEST)) vault_quest = TRUE;
 	if (q_ptr->q_flags & (QFLAG_ARENA_QUEST)) arena_quest = TRUE;
+	if (q_ptr->q_flags & (QFLAG_WILDERNESS_QUEST)) wilderness_quest = TRUE;
+	if (q_ptr->q_flags & (QFLAG_LABYRINTH_QUEST)) labyrinth_quest = TRUE;
 
 	/* Wipe the structure */
 	(void)WIPE(q_ptr, quest_type);
@@ -2309,6 +2368,8 @@ void guild_quest_wipe(bool reset_defer)
 	if (extra_level) q_ptr->q_flags |= QFLAG_EXTRA_LEVEL;
 	if (vault_quest) q_ptr->q_flags |= QFLAG_VAULT_QUEST;
 	if (arena_quest) q_ptr->q_flags |= QFLAG_ARENA_QUEST;
+	if (labyrinth_quest) q_ptr->q_flags |= QFLAG_LABYRINTH_QUEST;
+	if (wilderness_quest) q_ptr->q_flags |= QFLAG_WILDERNESS_QUEST;
 
 	if (reset_defer) p_ptr->deferred_rewards = 0;
 
@@ -2368,6 +2429,7 @@ void write_quest_note(bool success)
 		else my_strcpy(note, "Quest: Failed to complete ", sizeof(note));
 
 		if (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) my_strcat(note, "a wilderness quest.", sizeof(note));
+		else if (q_ptr->q_type ==  QUEST_LABYRINTH_LEVEL) my_strcat(note, "a labyrinth quest.", sizeof(note));
 		else if (q_ptr->q_type ==  QUEST_ARENA_LEVEL) my_strcat(note, "an arena quest.", sizeof(note));
 		else
 		{
@@ -2609,6 +2671,7 @@ void quest_monster_update(void)
 		}
 		else my_strcpy(note, "There is one creature remaining ", sizeof(note));
 		if (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) my_strcat(note, "in the wilderness level.", sizeof(note));
+		else if (q_ptr->q_type ==  QUEST_LABYRINTH_LEVEL) my_strcat(note, "in the labyrinth level.", sizeof(note));
 		else if (q_ptr->q_type ==  QUEST_ARENA_LEVEL) my_strcat(note, "to kill in the arena.", sizeof(note));
 		else
 		{
@@ -2676,6 +2739,7 @@ bool quest_multiple_r_idx(const quest_type *q_ptr)
 {
 	if (q_ptr->q_type == QUEST_THEMED_LEVEL) return (TRUE);
 	if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL) return (TRUE);
+	if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL) return (TRUE);
 	if (q_ptr->q_type == QUEST_PIT) return (TRUE);
 	if (q_ptr->q_type == QUEST_NEST) return (TRUE);
 	if (q_ptr->q_type == QUEST_ARENA_LEVEL) return (TRUE);
@@ -2788,6 +2852,7 @@ bool quest_shall_fail_if_leave_level(void)
 
 	if (q_ptr->q_type == QUEST_THEMED_LEVEL) return (TRUE);
 	if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL) return (TRUE);
+	if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL) return (TRUE);
 	if (q_ptr->q_type == QUEST_PIT) return (TRUE);
 	if (q_ptr->q_type == QUEST_NEST) return (TRUE);
 	if (q_ptr->q_type == QUEST_ARENA_LEVEL) return (TRUE);
