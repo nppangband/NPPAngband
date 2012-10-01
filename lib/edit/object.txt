@@ -2666,7 +2666,7 @@ W:25:0:15:2500
 P:0:1d1:0:0:0
 A:25/1
 F:EASY_KNOW
-D:It shoots a frost bolt that inflicts 10d8 points of damage, with a 10%
+D:It shoots a frost bolt that inflicts 10d8 points of damage, with a 10
 D: percent chance of getting a frost beam. 
 
 
