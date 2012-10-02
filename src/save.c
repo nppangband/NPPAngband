@@ -678,8 +678,8 @@ static void wr_extra(void)
 	/* Future use */
 	for (i = 0; i < 13; i++) wr_byte(0);
 
-	/* Unused space */
-	wr_u32b(0L);
+	/* Save the current dungeon summon mask */
+	wr_u32b (dungeon_summon_mask_f7);
 
 	/* Random artifact seed */
 	wr_u32b(seed_randart);

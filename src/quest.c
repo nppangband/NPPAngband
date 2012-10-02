@@ -125,7 +125,7 @@ void plural_aux(char *name, size_t max)
 	else if (strstr(name, "Spawn of"))
 	{
 		char dummy[80];
-		strcpy (dummy, "Spawn of ");
+		strcpy (dummy, "Spawns of ");
 		my_strcat (dummy, &(name[1]), sizeof(dummy));
 		my_strcpy (name, dummy, max);
 		return;
@@ -133,7 +133,7 @@ void plural_aux(char *name, size_t max)
 	else if (strstr(name, "Descendant of"))
 	{
 		char dummy[80];
-		strcpy (dummy, "Descendant of ");
+		strcpy (dummy, "Descendants of ");
 		my_strcat (dummy, &(name[1]), sizeof(dummy));
 		my_strcpy (name, dummy, max);
 		return;
@@ -442,8 +442,9 @@ static bool guild_object_similar(const object_type *o_ptr, const object_type *j_
 	/* They are different objects */
 	if (o_ptr->k_idx != j_ptr->k_idx) return (0);
 
-	/* Require identical "artifact" names */
-	if (o_ptr->art_num != j_ptr->art_num) return (0);
+	/* Artifacts are nevers similar*/
+	if (o_ptr->art_num) return (0);
+	if (j_ptr->art_num) return (0);
 
 	/* Require identical "ego-item" names */
 	if (o_ptr->ego_num != j_ptr->ego_num) return (0);
@@ -489,9 +490,6 @@ static bool guild_carry(object_type *o_ptr)
 				/* Keep the more valuable of the two */
 				if (o_value > j_value)
 				{
-					/* Not fair to lose an artifact this way */
-					if (o_ptr->art_num) a_info[o_ptr->art_num].a_cur_num = 0;
-
 					store_delete_index(STORE_GUILD, slot);
 
 					found_slot = TRUE;
@@ -515,11 +513,13 @@ static bool guild_carry(object_type *o_ptr)
 			 * everything in the guild is more expensive than
 			 * the new object.
 			 */
-			if (o_value <= cheapest_object) return (FALSE);
-
-			/* Wipe the cheapest item, and put the new on in it's place */
-			/* Not fair to lose an artifact this way */
-			if (o_ptr->art_num) a_info[o_ptr->art_num].a_cur_num = 0;
+			if (o_value <= cheapest_object)
+			{
+				/* Wipe the cheapest item, and put the new on in it's place */
+				/* Not fair to lose an artifact this way */
+				if (o_ptr->art_num) a_info[o_ptr->art_num].a_cur_num = 0;
+				return (FALSE);
+			}
 
 			store_delete_index(STORE_GUILD, cheapest_slot);
 		}
@@ -2369,6 +2369,13 @@ void guild_quest_wipe(bool reset_defer)
 
 		store_delete_index(STORE_GUILD, i);
 	}
+
+	/* Paranoia - Wipe the guild inventory */
+	st_ptr->stock_num = 0;
+	for (i = 0; i < st_ptr->stock_size; i--)
+	{
+		object_wipe(&st_ptr->stock[i]);
+	}
 }
 
 /*
@@ -2537,6 +2544,9 @@ void quest_fail(void)
 
 	/*make a note of the failed quest */
 	write_quest_note(FALSE);
+
+	/* No special quests next time */
+	q_ptr->q_flags &= ~(QFLAG_PRESERVE_MASK);
 
 	/*wipe the quest*/
 	guild_quest_wipe(TRUE);

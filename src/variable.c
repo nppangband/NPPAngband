@@ -977,6 +977,11 @@ u16b altered_inventory_counter;
 bool allow_altered_inventory;
 
 
+/*
+ * For summon spells, which summon spells have failed on levels where summoning is restricted
+ * to current level monsters and respawning is prohibited.
+ */
+u32b dungeon_summon_mask_f7;
 
 autoinscription* inscriptions = 0;
 u16b inscriptionsCount = 0;

@@ -11335,6 +11335,13 @@ void generate_cave(void)
 
 				/* Hack -- no feeling in the town */
 				if (!p_ptr->depth) feeling = 0;
+
+				/* We always want the wilderness, arena, labyrinth, and themed levels */
+				if ((dungeon_type == DUNGEON_TYPE_WILDERNESS) ||
+					(dungeon_type == DUNGEON_TYPE_THEMED_LEVEL) ||
+					(dungeon_type == DUNGEON_TYPE_ARENA) ||
+					(dungeon_type == DUNGEON_TYPE_LABYRINTH)) feeling = 2;
+
 			}
 
 			/* Prevent object over-flow */
@@ -11407,6 +11414,9 @@ void generate_cave(void)
 
 	/* Reset the number of traps on the level. */
 	num_trap_on_level = 0;
+
+	/* Clear the summon mask */
+	dungeon_summon_mask_f7 = 0L;
 
 	/*All of Angband knows about a thief*/
 	if ((recent_failed_thefts > 30) && (p_ptr->depth))

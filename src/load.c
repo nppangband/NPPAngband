@@ -1076,7 +1076,6 @@ static errr rd_extra(void)
 	byte tmp8u;
 	u16b tmp16u;
 	u16b file_e_max;
-	u32b extra_u32b;
 	byte num;
 
 
@@ -1290,8 +1289,8 @@ static errr rd_extra(void)
 	/* Future use */
 	strip_bytes(13);
 
-	/* Read the randart version */
-	rd_u32b(&extra_u32b);
+	/* Read the  */
+	rd_u32b(&dungeon_summon_mask_f7);
 
 	/* Read the randart seed */
 	rd_u32b(&seed_randart);
