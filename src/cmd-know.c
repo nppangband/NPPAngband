@@ -113,7 +113,8 @@ static struct
 	{ "k",        "Kobolds" },
 	{ "L",        "Lichs" },
 	{ "tp",		  "Men" },
-	{ "'$!?=._-"")[|,",  "Mimics" },
+/* Note some special handling of mimics in the code below since there are so many different symbols */
+	{ "$!?",  	  "Mimics" },
 	{ "m",        "Molds" },
 	{ ",",        "Mushroom Patches" },
 	{ "n",        "Nagas" },
@@ -1174,6 +1175,11 @@ static int count_known_monsters(void)
 		{
 			const char *pat = monster_group[j].chars;
 			if (strchr(pat, r_ptr->d_char)) m_count++;
+			/* Special hack to count all of the mimics */
+			else if (r_ptr->flags1 & (RF1_CHAR_MIMIC))
+			{
+				if (strchr(pat, '!')) m_count++;
+			}
 		}
 	}
 
@@ -1204,12 +1210,18 @@ static void do_cmd_knowledge_monsters(void *obj, const char *name)
 		if ((!cheat_know) && !l_list[i].sights) continue;
 		if (!r_ptr->name) continue;
 
-		if (r_ptr->flags1 & RF1_UNIQUE) m_count++;
+		if (r_ptr->flags1 & (RF1_UNIQUE)) m_count++;
 
 		for (j = 1; j < N_ELEMENTS(monster_group) - 1; j++)
 		{
 			const char *pat = monster_group[j].chars;
 			if (strchr(pat, r_ptr->d_char)) m_count++;
+
+			/* Special hack to count all of the mimics */
+			else if (r_ptr->flags1 & (RF1_CHAR_MIMIC))
+			{
+				if (strchr(pat, '!')) m_count++;
+			}
 		}
 	}
 
@@ -1226,10 +1238,16 @@ static void do_cmd_knowledge_monsters(void *obj, const char *name)
 		for (j = 0; j < N_ELEMENTS(monster_group)-1; j++)
 		{
 			const char *pat = monster_group[j].chars;
-			if (j == 0 && !(r_ptr->flags1 & RF1_UNIQUE))
-				continue;
-			else if (j > 0 && !strchr(pat, r_ptr->d_char))
-				continue;
+			if (j == 0 && !(r_ptr->flags1 & (RF1_UNIQUE))) continue;
+
+			else if (j > 0)
+			{
+				if (strchr(pat, '!'))
+				{
+					if (!(r_ptr->flags1 & (RF1_CHAR_MIMIC))) continue;
+				}
+				else if (!strchr(pat, r_ptr->d_char)) continue;
+			}
 
 			monsters[m_count] = m_count;
 			default_join[m_count].oid = i;
