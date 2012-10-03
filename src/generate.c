@@ -9132,9 +9132,9 @@ static bool build_forest_level(void)
 	int i, j;
 	int hgt, wid, wid2;
 
-	/* Make it full size */
-	hgt = p_ptr->cur_map_hgt = MAX_DUNGEON_HGT;
-	wid = p_ptr->cur_map_wid = MAX_DUNGEON_WID;
+	/* Make it smaller size */
+	hgt = p_ptr->cur_map_hgt = MAX_DUNGEON_HGT * 4 / 6;
+	wid = p_ptr->cur_map_wid = MAX_DUNGEON_WID * 4 / 6;
 
 	 /* Actual maximum number of rooms on this level */
 	dun->row_rooms = p_ptr->cur_map_hgt / BLOCK_HGT;
@@ -9550,9 +9550,9 @@ static bool build_ice_level(void)
 	int hgt, wid;
 	int hgt2;
 
-	/* Make it full size */
-	hgt = p_ptr->cur_map_hgt = MAX_DUNGEON_HGT;
-	wid = p_ptr->cur_map_wid = MAX_DUNGEON_WID;
+	/* Make it a smaller size */
+	hgt = p_ptr->cur_map_hgt = MAX_DUNGEON_HGT * 4 / 6;
+	wid = p_ptr->cur_map_wid = MAX_DUNGEON_WID * 4 / 6;
 
 	/* Actual maximum number of rooms on this level */
 	dun->row_rooms = p_ptr->cur_map_hgt / BLOCK_HGT;
@@ -9763,8 +9763,25 @@ static void light_elements(bool show_objects)
 			}
 		}
 	}
-
 }
+
+/*
+ * Determine if a monster is suitable for the arena"
+ */
+static bool monster_wilderness_labrynth_okay(int r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* No breeders */
+	if (r_ptr->flags2 & (RF2_MULTIPLY)) return (FALSE);
+
+	/*no mimics */
+	if (r_ptr->flags1 & (RF1_NEVER_MOVE)) return (FALSE);
+
+	/* Okay */
+	return (TRUE);
+}
+
 
 
 /*
@@ -9884,13 +9901,27 @@ static bool build_wilderness_level(void)
 	/* Additional features */
 	build_misc_features();
 
+	/*get the hook*/
+	get_mon_num_hook = monster_wilderness_labrynth_okay;
+
+	/* Prepare allocation table */
+	get_mon_num_prep();
+
 	/* Place some things */
 	if (!place_monsters_objects())
 	{
+		/* Reset the allocation table */
+		get_mon_num_hook = NULL;
+		get_mon_num_prep();
+
 		if (cheat_room) msg_format("failed to place monsters and objects");
 
 		return FALSE;
 	}
+
+	/* Reset the allocation table */
+	get_mon_num_hook = NULL;
+	get_mon_num_prep();
 
 	/* Special illumination for ice levels */
 	if (done_ice && ((effective_depth(p_ptr->depth) < 50) || one_in_(4))) light_elements(TRUE);
@@ -10017,8 +10048,9 @@ static bool lab_is_tunnel(int y, int x)
 	return ((north == south) && (west == east) && (north != west));
 }
 
-#define LABYRINTH_HGT (15 + ((MAX_DUNGEON_HGT * 4) / 6))
-#define LABYRINTH_WID (51 + ((MAX_DUNGEON_WID * 4) / 9))
+/* Note the height and width must be an odd number */
+#define LABYRINTH_HGT (15 + ((MAX_DUNGEON_HGT * 4 / 6)))
+#define LABYRINTH_WID (25 + ((MAX_DUNGEON_WID * 4 / 6)))
 #define LABYRINTH_AREA (LABYRINTH_WID * LABYRINTH_HGT)
 
 /**
@@ -10045,8 +10077,8 @@ static bool build_labyrinth_level(void)
 	 * outer walls.
 	 */
 
-	int hgt = LABYRINTH_HGT;
-	int wid = LABYRINTH_WID;
+	int hgt = (LABYRINTH_HGT / 2) * 2 + 1;
+	int wid = (LABYRINTH_WID / 2) * 2 + 1;
 	int area = hgt * wid;
 
 	/* NOTE: 'sets' and 'walls' are too large... we only need to use about
@@ -10243,12 +10275,27 @@ static bool build_labyrinth_level(void)
 		return (FALSE);
 	}
 
+	/*get the hook*/
+	get_mon_num_hook = monster_wilderness_labrynth_okay;
+
+	/* Prepare allocation table */
+	get_mon_num_prep();
+
 	/* Place some things */
 	if (!place_monsters_objects())
 	{
 		if (cheat_room) msg_format("failed to place monsters and objects");
+
+		/* Reset the allocation table */
+		get_mon_num_hook = NULL;
+		get_mon_num_prep();
+
 		return FALSE;
 	}
+
+	/* Reset the allocation table */
+	get_mon_num_hook = NULL;
+	get_mon_num_prep();
 
 	/* If we want the players to see the maze layout, do that now */
 	if (known) wiz_light();
