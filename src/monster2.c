@@ -3840,7 +3840,6 @@ static bool summon_specific_okay(int r_idx)
 	/* Hack -- no specific type specified */
 	if (!summon_specific_type) return (TRUE);
 
-
 	/* Check our requirements */
 	switch (summon_specific_type)
 	{
@@ -3999,6 +3998,84 @@ static bool summon_specific_okay(int r_idx)
 	return (okay);
 }
 
+/*
+ * Attempt to summon creatures who are already on the level.
+ *
+ */
+static bool summon_from_level(int y1, int x1, int lev, int type)
+{
+	int i, x, y;
+	u16b *monster_list;
+	u16b mon_count = 0;
+	monster_type *m_ptr;
+
+	monster_list = C_ZNEW(mon_max, u16b);
+
+	/* Look for a location */
+	for (i = 0; i < 75; ++i)
+	{
+		/* Pick a distance */
+		int d = (i / 15) + 1;
+
+		/* Pick a location */
+		scatter(&y, &x, y1, x1, d, 0);
+
+		/* Require "empty" floor grid */
+		if (!cave_empty_bold(y, x)) continue;
+
+		/* Hack -- no summon on glyph of warding */
+		if (cave_player_glyph_bold(y, x)) continue;
+
+		/* Okay */
+		break;
+	}
+
+	/* Failure */
+	if (i == 75)
+	{
+		FREE(monster_list);
+		return (FALSE);
+	}
+
+	/* Save the "summon" type */
+	summon_specific_type = type;
+
+	for (i = 1; i < mon_max; i++)
+	{
+		/* Check the i'th monster */
+		m_ptr = &mon_list[i];
+
+		/* Skip dead monsters */
+		if (!m_ptr->r_idx) continue;
+
+		if (!summon_specific_okay(m_ptr->r_idx)) continue;
+
+		/* Already in line of sight of the player */
+		if (m_ptr->project) continue;
+
+		/* Record this one */
+		monster_list[mon_count++] = i;
+	}
+
+	/* No eligible monsters */
+	if (!mon_count)
+	{
+		FREE(monster_list);
+		return (FALSE);
+	}
+
+	/* Select one, and summon it */
+	i = randint0(mon_count);
+	m_ptr = &mon_list[i];
+	monster_swap(m_ptr->fy, m_ptr->fx, y, x);
+
+	/* Give the player time to react */
+	m_ptr->m_energy = BASE_ENERGY_MOVE /2;
+
+	FREE(monster_list);
+	return (TRUE);
+}
+
 
 /*
  * Place a monster (of the specified "type") near the given
@@ -4017,6 +4094,7 @@ static bool summon_specific_okay(int r_idx)
  * monsters, making this function much faster and more reliable.
  *
  * Note that this function may not succeed, though this is very rare.
+ * For levels that forbid summoning, we try to bring over other monsters from the same level.
  */
 bool summon_specific(int y1, int x1, int lev, int type)
 {
@@ -4026,7 +4104,7 @@ bool summon_specific(int y1, int x1, int lev, int type)
 	/* Also includes DUNGEON_TYPE_WILDERNESS DUNGEON_TYPE_LABYRINTH DUNGEON_TYPE_ARENA*/
 	if (p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL)
 	{
-		return (FALSE);
+		return (summon_from_level(y1, x1, lev, type));
 	}
 
 	/* Look for a location */
@@ -4070,7 +4148,11 @@ bool summon_specific(int y1, int x1, int lev, int type)
 	get_mon_num_prep();
 
 	/* Handle failure */
-	if (!r_idx) return (FALSE);
+	if (!r_idx)
+	{
+		/* First try to call other creatures on the same level */
+		return (summon_from_level(y1, x1, lev, type));
+	}
 
 	/* Attempt to place the monster (awake, allow groups) */
 	if (!place_monster_aux(y, x, r_idx, MPLACE_GROUP | MPLACE_NO_MIMIC)) return (FALSE);

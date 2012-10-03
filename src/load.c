@@ -1289,7 +1289,7 @@ static errr rd_extra(void)
 	/* Future use */
 	strip_bytes(13);
 
-	/* Read the  */
+	/* Read the summon spells that have already failed on the level */
 	rd_u32b(&dungeon_summon_mask_f7);
 
 	/* Read the randart seed */

@@ -4303,6 +4303,9 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 					summon_lev, SUMMON_KIN);
 			}
 
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_KIN);
+
 			if (blind && count)
 			{
 				msg_print("You hear many things appear nearby.");
@@ -4326,6 +4329,10 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx, summon_lev, 0);
 			}
+
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_MONSTER);
+
 			if (blind && count) msg_print("You hear something appear nearby.");
 			break;
 		}
@@ -4341,6 +4348,9 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx, summon_lev, 0);
 			}
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_MONSTERS);
+
 			if (blind && count) msg_print("You hear many things appear nearby.");
 			break;
 		}
@@ -4361,6 +4371,9 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
 					summon_lev, SUMMON_ANT);
 			}
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_ANT);
+
 			if (blind && count) msg_print("You hear chittering and skittering.");
 			break;
 		}
@@ -4377,6 +4390,9 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
 					summon_lev, SUMMON_SPIDER);
 			}
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_SPIDER);
+
 			if (blind && count) msg_print("You hear many things appear nearby.");
 			break;
 		}
@@ -4393,6 +4409,9 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
 					summon_lev, SUMMON_HOUND);
 			}
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_HOUND);
+
 			if (blind && count) msg_print("You hear snarling.");
 			break;
 		}
@@ -4409,6 +4428,9 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
 					summon_lev, SUMMON_ANIMAL);
 			}
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_ANIMAL);
+
 			if (blind && count) msg_print("You hear many things appear nearby.");
 			break;
 		}
@@ -4424,6 +4446,9 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx, rlev, SUMMON_HYDRA);
 			}
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_HYDRA);
+
 			if (blind && count)
 			{
 				msg_print("You hear hissing and slithering.");
@@ -4445,6 +4470,9 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
 					summon_lev, SUMMON_THIEF);
 			}
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_THIEF);
+
 			if (blind && count) msg_print("You hear footsteps and the whetting of knives.");
 			break;
 		}
@@ -4459,6 +4487,9 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
 					summon_lev + 5, SUMMON_BERTBILLTOM);
 			}
+
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_BERTBILLTOM);
 
 			/* No messages unless successful */
 			if (count)
@@ -4483,6 +4514,9 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx, summon_lev, SUMMON_AINU);
 			}
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_AINU);
+
 			if (blind && count) msg_print("Majestic songs of the Ainur fill the dungeon!");
 			break;
 		}
@@ -4502,6 +4536,9 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
 					summon_lev, SUMMON_DRAGON);
 			}
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_DRAGON);
+
 			if (blind && count) msg_print("You feel something breathing on you...");
 			break;
 		}
@@ -4518,6 +4555,9 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
 					summon_lev, SUMMON_HI_DRAGON);
 			}
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_HI_DRAGON);
+
 			if (blind && count)
 			{
 				msg_print("You feel the breath of great wyrms.");
@@ -4542,6 +4582,9 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 				{
 					count += summon_specific(m_ptr->fy, m_ptr->fx, summon_lev, SUMMON_DEMON);
 				}
+				/* No suitable matches, don't try this spell again */
+				if (!count) dungeon_summon_mask_f7 |= (RF7_S_DEMON);
+
 				if (blind && count) msg_print("You smell fire and brimstone.");
 			}
 			break;
@@ -4554,11 +4597,13 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_SUM_HI_DEMON);
 			if (blind) msg_format("%^s mumbles.", m_name);
 			else msg_format("%^s magically summons greater demons!", m_name);
-			for (k = 0; k < 4
-		; k++)
+			for (k = 0; k < 4; k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx, summon_lev, SUMMON_HI_DEMON);
 			}
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_HI_DEMON);
+
 			if (blind && count)
 			{
 				msg_print("You hear many evil things appear nearby.");
@@ -4590,9 +4635,11 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			}
 			else
 			{
+				/* No suitable matches, don't try this spell again */
+				dungeon_summon_mask_f7 |= (RF7_S_UNIQUE);
+
 				if (!blind)
-					msg_format("%^s gestures imperiously ... and looks puzzled for a moment.",
-						m_name);
+					msg_format("%^s gestures imperiously ... and looks puzzled for a moment.", m_name);
 			}
 			break;
 		}
@@ -4618,6 +4665,9 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			}
 			else
 			{
+				/* No suitable matches, don't try this spell again */
+				dungeon_summon_mask_f7 |= (RF7_S_HI_UNIQUE);
+
 				if (!blind)
 					msg_format("%^s gestures imperiously ... and looks puzzled for a moment.",
 						m_name);
@@ -4637,6 +4687,9 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
 					summon_lev, SUMMON_UNDEAD);
 			}
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_UNDEAD);
+
 			if (blind && count) msg_print("You hear something creepy appear nearby.");
 			break;
 		}
@@ -4653,6 +4706,10 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
 					summon_lev, SUMMON_HI_UNDEAD);
 			}
+
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_HI_UNDEAD);
+
 			if (blind && count)
 			{
 				msg_print("You hear many creepy things appear nearby.");
@@ -4665,6 +4722,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 		/* RF7_S_WRAITH */
 		case 192 + 31:
 		{
+			int old_count;
 			disturb(1, 0);
 			sound(MSG_SUM_WRAITH);
 			if (blind) msg_format("%^s mumbles.", m_name);
@@ -4674,10 +4732,18 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
 					summon_lev, SUMMON_WRAITH);
 			}
+			/* No suitable matches, don't try this spell again */
+			if (!count) dungeon_summon_mask_f7 |= (RF7_S_WRAITH);
+			old_count = count;
 			for (k = 0; (k < 6) && (count < 6); k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
 							 summon_lev, SUMMON_HI_UNDEAD);
+			}
+			if (count == old_count)
+			{
+				/* No suitable matches, don't try this spell again */
+				dungeon_summon_mask_f7 |= (RF7_S_HI_UNDEAD);
 			}
 			if (blind && count)
 			{
