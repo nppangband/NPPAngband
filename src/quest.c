@@ -2372,7 +2372,7 @@ void guild_quest_wipe(bool reset_defer)
 
 	/* Paranoia - Wipe the guild inventory */
 	st_ptr->stock_num = 0;
-	for (i = 0; i < st_ptr->stock_size; i--)
+	for (i = 0; i < st_ptr->stock_size; i++)
 	{
 		object_wipe(&st_ptr->stock[i]);
 	}
