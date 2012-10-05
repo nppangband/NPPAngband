@@ -34,6 +34,12 @@ Added two more patterns for the monster in the "pit" rooms.
 Eliminate GTK and X11 ports
 Added labrynth levels (from Angband 3.4).
 Added labrynth quests.
+Bugfix: Fix html screenshots so they wrint default ASCII when when in tiles mode.
+Monsters now can be summoned on levels where it was previously restricted, but limited to monsters on the level.
+Added greater vault levels.
+Added greater vault quests.
+New makefile.osx.
+
 
 NPP 0.5.4 changes:
 The edges of the detected trap areas now show up onscreen.
