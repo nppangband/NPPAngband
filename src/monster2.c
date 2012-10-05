@@ -4092,15 +4092,16 @@ static bool summon_from_level(int y1, int x1, int lev, int type)
  * Note that this function may not succeed, though this is very rare.
  * For levels that forbid summoning, we try to bring over other monsters from the same level.
  */
-bool summon_specific(int y1, int x1, int lev, int type)
+bool summon_specific(int y1, int x1, int lev, int type, byte mp_flags)
 {
 	int i, x, y, r_idx;
 
-	/*hack - no summoning on labyrinth, arena, themed or wilderness levels*/
-	/* Also includes DUNGEON_TYPE_WILDERNESS DUNGEON_TYPE_LABYRINTH DUNGEON_TYPE_ARENA*/
+	/* No summoning on verious levels, unless the override flag is present
+	 * Override is used for actions such as for reading scrolls of summon monster or wands of polymorph
+	 */
 	if ((*dun_cap->limited_level_summoning)())
 	{
-		return (summon_from_level(y1, x1, lev, type));
+		if (!(mp_flags & (MPLACE_OVERRIDE))) return (summon_from_level(y1, x1, lev, type));
 	}
 
 	/* Look for a location */
@@ -4151,7 +4152,7 @@ bool summon_specific(int y1, int x1, int lev, int type)
 	}
 
 	/* Attempt to place the monster (awake, allow groups) */
-	if (!place_monster_aux(y, x, r_idx, MPLACE_GROUP | MPLACE_NO_MIMIC)) return (FALSE);
+	if (!place_monster_aux(y, x, r_idx, MPLACE_GROUP | MPLACE_NO_MIMIC | mp_flags)) return (FALSE);
 
 	/* Success */
 	return (TRUE);
