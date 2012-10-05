@@ -53,7 +53,7 @@
 /*
  * Current version string
  */
-#define VERSION_STRING	"0.6.0 WIP1"
+#define VERSION_STRING	"0.6.0 WIP2"
 
 
 /*
@@ -1293,6 +1293,7 @@ enum
 #define DUNGEON_TYPE_WILDERNESS		4
 #define DUNGEON_TYPE_ARENA			5
 #define DUNGEON_TYPE_LABYRINTH		6
+#define DUNGEON_TYPE_GREATER_VAULT	7
 
 /** Constants for the various patterns of pits */
 #define MAX_PIT_PATTERNS	3

@@ -499,12 +499,12 @@ static void process_quest_monster_death(int i, int m_idx, bool *writenote)
 		if (q_ptr->mon_idx != m_ptr->r_idx) return;
 	}
 
-	else if (quest_multiple_r_idx(q_ptr))
+	/* Not a quest that counts monster deaths */
+	else if ((quest_multiple_r_idx(q_ptr)) || (quest_timed(q_ptr)))
 	{
 		if (!(m_ptr->mflag & (MFLAG_QUEST))) return;
 	}
 
-	/* Not a quest that counts monster deaths */
 	else return;
 
 	/* Mark kills */

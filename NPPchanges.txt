@@ -35,7 +35,7 @@ Eliminate GTK and X11 ports
 Added labrynth levels (from Angband 3.4).
 Added labrynth quests.
 Bugfix: Fix html screenshots so they wrint default ASCII when when in tiles mode.
-Monsters now can be summoned on levels where it was previously restricted, but limited to monsters on the level.
+Monsters now can be summoned on levels where it was previously restricted, but limited to monsters currently on the level.
 Added greater vault levels.
 Added greater vault quests.
 New makefile.osx.

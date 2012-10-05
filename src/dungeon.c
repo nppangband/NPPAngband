@@ -757,6 +757,90 @@ static void add_arena_object(byte stage)
 }
 
 /*
+ * Check the time remaining on the quest.
+ */
+static void process_greater_vault_quests(void)
+{
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+	int i;
+
+	/* Update the turn count */
+	p_ptr->redraw |= (PR_QUEST_ST);
+
+	if (quest_time_remaining() >= 1)
+	{
+		/* Not much time left.  Warn the player */
+		if (quest_player_turns_remaining() <= 5) do_cmd_quest();
+
+		return;
+	}
+
+	/* If the player did not enter the vault, they fail the quest. */
+	if (g_vault_name[0] != '\0')
+	{
+		quest_fail();
+		g_vault_name[0] = '\0';
+
+		return;
+	}
+
+	/* Mark the quest as finished, write the note */
+	quest_finished(q_ptr);
+	write_quest_note(TRUE);
+
+	/*
+	 * Clear out all the remaining monsters.
+	 * First preserve any artifacts they held.
+	 */
+	for (i = mon_max - 1; i >= 1; i--)
+	{
+		/* Get this monster */
+		monster_type *m_ptr = &mon_list[i];
+
+		/* Skip real monsters */
+		if (!m_ptr->r_idx) continue;
+
+		/* Destroy anything they were holding */
+		if (m_ptr->hold_o_idx)
+		{
+			s16b this_o_idx, next_o_idx = 0;
+
+			/* Delete objects */
+			for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
+			{
+				object_type *o_ptr;
+
+				/* Get the object */
+				o_ptr = &o_list[this_o_idx];
+
+				/* Hack -- Preserve unknown artifacts */
+				if (artifact_p(o_ptr) && !object_known_p(o_ptr))
+				{
+					/* Mega-Hack -- Preserve the artifact */
+					a_info[o_ptr->art_num].a_cur_num = 0;
+				}
+
+				/* Get the next object */
+				next_o_idx = o_ptr->next_o_idx;
+
+				/* Hack -- efficiency */
+				o_ptr->held_m_idx = 0;
+
+				/* Delete the object */
+				delete_object_idx(this_o_idx);
+			}
+		}
+
+		/* Now delete the monster */
+		delete_monster_idx(i);
+
+		/* Update monster list window */
+		p_ptr->redraw |= PR_MONLIST;
+	}
+
+}
+
+/*
  * Hack - the last couple monsters on a wilderness level are too hard to find.
  * Teleport them to the player, one every 10 normal game turns.
  * Don't teleport if there is one in line of sight
@@ -845,7 +929,7 @@ static void process_arena_level(void)
 {
 	int i;
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
-	s32b turns_lapsed = turn - q_info->start_turn;
+	s32b turns_lapsed = turn - q_info->turn_counter;
 	bool new_squares = FALSE;
 
 	/* Each monster phase is 5 game turns at normal speed */
@@ -923,6 +1007,7 @@ static void process_guild_quests(void)
 	/* No need to process vault quests or fixed quests */
 	if (quest_fixed(q_ptr)) return;
 	if (q_ptr->q_type == QUEST_VAULT) return;
+	if (quest_timed(q_ptr)) return;
 
 	/* We have enough monsters, we are done */
 	if (remaining >= (q_ptr->q_max_num - q_ptr->q_num_killed)) return;
@@ -966,7 +1051,7 @@ static void process_guild_quests(void)
 			monster_level = effective_depth(p_ptr->depth) + PIT_NEST_QUEST_BOOST;
 		}
 
-		get_mon_hook(q_ptr->theme);
+		get_mon_hook(q_ptr->q_theme);
 	}
 
 	/* Prepare allocation table */
@@ -1466,6 +1551,10 @@ static void process_world(void)
 			{
 				if (!(turn % 100)) process_wilderness_quests();
 			}
+			if (q_ptr->q_type == QUEST_GREATER_VAULT)
+			{
+				process_greater_vault_quests();
+			}
 		}
 	}
 
@@ -1561,10 +1650,9 @@ static void process_world(void)
 	if (one_in_(MAX_M_ALLOC_CHANCE))
 	{
 		/*
-		 * Make a new monster, but not on arena levels DUNGEON_TYPE_ARENA,
-		 * labyrinth, DUNGEON_TYPE_LABYRINTH, themed levels or wilderness levels. DUNGEON_TYPE_WILDERNESS
+		 * Make a new monster where it is allowed
 		 */
-		if (p_ptr->dungeon_type < DUNGEON_TYPE_THEMED_LEVEL)
+		if ((*dun_cap->allow_level_repopulation)())
 		{
 			(void)alloc_monster(MAX_SIGHT + 5, (MPLACE_SLEEP | MPLACE_GROUP | MPLACE_NO_MIMIC | MPLACE_NO_GHOST));
 		}
@@ -2018,6 +2106,7 @@ static void process_world(void)
 		/*players notice wilderness and labyrinth levels almost as quickly */
 		else if (p_ptr->dungeon_type== DUNGEON_TYPE_WILDERNESS) chance = 10;
 		else if (p_ptr->dungeon_type== DUNGEON_TYPE_LABYRINTH) chance = 10;
+		else if (p_ptr->dungeon_type== DUNGEON_TYPE_GREATER_VAULT) chance = 10;
 
 		/* Players notice themed levels quickly as well */
 		else if (p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL) chance = 20;
@@ -2319,14 +2408,12 @@ void process_player(void)
 	if (cave_o_idx[py][px] > 0) button_add("[PICKUP]", 'g');
 	else button_kill('g');
 
-
-
-
 	/*** Handle actual user input ***/
 
 	/* Repeat until energy is reduced */
 	do
 	{
+
 		/* Notice stuff (if needed) */
 		if (p_ptr->notice) notice_stuff();
 
@@ -2644,6 +2731,12 @@ void process_player(void)
 	else
 	{
 		p_ptr->vulnerability = 0;
+	}
+
+
+	if (guild_quest_active())
+	{
+		if (quest_slot_timed(GUILD_QUEST_SLOT)) 	p_ptr->redraw |= (PR_QUEST_ST);
 	}
 
 	/* Notice stuff (if needed) */

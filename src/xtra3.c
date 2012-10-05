@@ -570,7 +570,12 @@ static void prt_feeling(int row, int col)
 		attr = TERM_GREEN;
 		my_strcpy(feel, "F:Wilderness", sizeof(feel));
 	}
-	else if (feeling ==  1) 		{attr = TERM_RED;		my_strcpy(feel, "F:Special", sizeof(feel));}
+	else if (p_ptr->dungeon_type == DUNGEON_TYPE_GREATER_VAULT)
+	{
+		attr = TERM_VIOLET;
+		my_strcpy(feel, "F:GreatVault", sizeof(feel));
+	}
+	else if (feeling ==  1) {attr = TERM_RED;		my_strcpy(feel, "F:Special", sizeof(feel));}
 	else if (feeling ==  2) {attr = TERM_L_RED;		my_strcpy(feel, "F:Superb", sizeof(feel));}
 	else if (feeling ==  3) {attr = TERM_ORANGE;	my_strcpy(feel, "F:Excellent", sizeof(feel));}
 	else if (feeling ==  4) {attr = TERM_ORANGE;	my_strcpy(feel, "F:Very Good", sizeof(feel));}

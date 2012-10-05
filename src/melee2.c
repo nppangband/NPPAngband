@@ -5479,7 +5479,7 @@ static s16b process_monster(monster_type *m_ptr)
 		if ((k < 4) && (!k || !rand_int(k * MON_MULT_ADJ)))
 		{
 			/* Try to multiply */
-			if (multiply_monster(cave_m_idx[m_ptr->fy][m_ptr->fx]))
+			if (multiply_monster(cave_m_idx[m_ptr->fy][m_ptr->fx], FALSE))
 			{
 				/* Make a sound */
 				sound(MSG_MULTIPLY);

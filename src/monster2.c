@@ -161,7 +161,6 @@ void delete_monster_idx(int i)
 		}
 	}
 
-
 	/* Hack -- Reduce the racial counter */
 	r_ptr->cur_num--;
 
@@ -2752,11 +2751,11 @@ void monster_swap(int y1, int x1, int y2, int x2)
 /*
  * Place the player in the dungeon XXX XXX
  */
-s16b player_place(int y, int x)
+bool player_place(int y, int x)
 {
 
 	/* Paranoia XXX XXX */
-	if (cave_m_idx[y][x] != 0) return (0);
+	if (cave_m_idx[y][x] != 0) return (FALSE);
 
 	/* Save player location */
 	p_ptr->py = y;
@@ -2772,7 +2771,7 @@ s16b player_place(int y, int x)
 	p_ptr->redraw |= (PR_FEATURE);
 
 	/* Success */
-	return (-1);
+	return (TRUE);
 }
 
 /*
@@ -3108,10 +3107,7 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	if (!in_bounds(y, x)) return (FALSE);
 
 	/* No new monsters on labyrinth, themed and wilderness levels */
-	if (((p_ptr->dungeon_type == DUNGEON_TYPE_THEMED_LEVEL) ||
-		 (p_ptr->dungeon_type == DUNGEON_TYPE_LABYRINTH) ||
-		 (p_ptr->dungeon_type == DUNGEON_TYPE_WILDERNESS)) &&
-		(character_dungeon == TRUE))
+	if ((!(*dun_cap->allow_level_repopulation)()) && (character_dungeon == TRUE))
 	{
 
 		/* Unless we are revealing a mimic or replacing a missing quest monster */
@@ -4102,7 +4098,7 @@ bool summon_specific(int y1, int x1, int lev, int type)
 
 	/*hack - no summoning on labyrinth, arena, themed or wilderness levels*/
 	/* Also includes DUNGEON_TYPE_WILDERNESS DUNGEON_TYPE_LABYRINTH DUNGEON_TYPE_ARENA*/
-	if (p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL)
+	if ((*dun_cap->limited_level_summoning)())
 	{
 		return (summon_from_level(y1, x1, lev, type));
 	}
@@ -4167,11 +4163,15 @@ bool summon_specific(int y1, int x1, int lev, int type)
  * Let the given monster attempt to reproduce.
  *
  * Note that "reproduction" REQUIRES empty space.
+ *
+ * Override is to ensure that the cloning happens on levels where multipication is restricted
  */
-bool multiply_monster(int m_idx)
+bool multiply_monster(int m_idx, bool override)
 {
 	monster_type *m_ptr = &mon_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+	byte mon_flags = 0L;
 
  	int i, y, x;
 
@@ -4207,8 +4207,11 @@ bool multiply_monster(int m_idx)
 	y = GRID_Y(grid[i]);
 	x = GRID_X(grid[i]);
 
+	if (override) mon_flags |= MPLACE_OVERRIDE;
+	else if ((*dun_cap->allow_monster_multiply)()) mon_flags |= MPLACE_OVERRIDE;
+
 	/* Create a new monster (awake, no groups) */
-	result = place_monster_aux(y, x, m_ptr->r_idx, 0L);
+	result = place_monster_aux(y, x, m_ptr->r_idx, mon_flags);
 
  	/* Result */
  	return (result);

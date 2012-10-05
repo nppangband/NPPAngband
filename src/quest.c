@@ -227,6 +227,13 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 		return;
 	}
 
+	/* Completed quest */
+	if (guild_quest_complete())
+	{
+		my_strcpy(buf, "Collect your reward!", max);
+		return;
+	}
+
 	/* Vault quests */
 	if (q_ptr->q_type == QUEST_VAULT)
 	{
@@ -248,6 +255,28 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 
 		/* The location of the quest */
 		my_strcpy(where, format("at a depth of %d feet and return to the Guild.", level * 50), sizeof(where));
+
+		if (mode == QMODE_SHORT) my_strcpy(buf, format("%s.", intro), max);
+		else if (mode == QMODE_FULL) my_strcpy(buf, format("%s %s", intro, where), max);
+		else if (mode == QMODE_HALF_1) my_strcpy(buf, format("%s", intro), max);
+		else if (mode == QMODE_HALF_2) my_strcpy(buf, format("%s", where), max);
+
+		/*we are done*/
+		return;
+	}
+
+	/* Vault quests */
+	else if (q_ptr->q_type == QUEST_GREATER_VAULT)
+	{
+		if (guild_quest_active())
+		{
+			my_strcpy(intro, format("At your current speed, you have %d turns remaining on this greater vault level", quest_player_turns_remaining()),sizeof(intro));
+		}
+
+		else my_strcpy(intro, format("Stay on a greater vault level for at least %d game turns", GREATER_VAULT_INITIAL_TIME), sizeof(intro));
+
+		/* The location of the quest */
+		my_strcpy(where, format("at a depth of %d feet.", level * 50), sizeof(where));
 
 		if (mode == QMODE_SHORT) my_strcpy(buf, format("%s.", intro), max);
 		else if (mode == QMODE_FULL) my_strcpy(buf, format("%s %s", intro, where), max);
@@ -303,7 +332,7 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 		}
 		else
 		{
-			my_strcpy(mon_theme, feeling_themed_level[q_ptr->theme], sizeof(mon_theme));
+			my_strcpy(mon_theme, feeling_themed_level[q_ptr->q_theme], sizeof(mon_theme));
 			if (my_is_vowel(mon_theme[0])) my_strcat(intro, "an ", sizeof(intro));
 			else my_strcat(intro, "a ", sizeof(intro));
 
@@ -333,12 +362,7 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 		return;
 	}
 
-	/* Completed quest */
-	if (guild_quest_complete())
-	{
-		my_strcpy(buf, "Collect your reward!", max);
-		return;
-	}
+
 
 	/* Not a vault quest, so get the monster race name (singular)*/
 	monster_desc_race(race_name, sizeof(race_name), q_ptr->mon_idx);
@@ -401,6 +425,8 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 	/* We are done */
 	return;
 }
+
+
 
 void show_quest_mon(int y, int x)
 {
@@ -1097,9 +1123,18 @@ static void create_reward_objects(quest_type *q_ptr, byte reward_type)
 		/* Help the good items a little bit */
 		if ((!o_ptr->art_num) && (!o_ptr->ego_num))
 		{
-			if (o_ptr->to_a) o_ptr->to_a += 2 + randint0(3);
-			if (o_ptr->to_h) o_ptr->to_h += 2 + randint0(5);
-			if (o_ptr->to_d) o_ptr->to_d += 2 + randint0(4);
+			if (o_ptr->to_a > 0)
+			{
+				o_ptr->to_a += 2 + randint0(3);
+			}
+			if (o_ptr->to_h > 0)
+			{
+				o_ptr->to_h += 2 + randint0(5);
+			}
+			if (o_ptr->to_d > 0)
+			{
+				o_ptr->to_d += 2 + randint0(4);
+			}
 		}
 
 		/* Identify it fully */
@@ -1135,7 +1170,7 @@ static void check_reward_extra_hp(quest_type *q_ptr, int chance)
 
 	if (randint(chance) > (p_ptr->q_fame + p_ptr->deferred_rewards)) return;
 
-	if (one_in_(3)) return;
+	if (!one_in_(3)) return;
 
 	if (randint1(hp_left) < p_ptr->hitdie) return;
 
@@ -1428,7 +1463,7 @@ static bool place_mon_quest(int lev, bool fixed)
 	}
 
 	/* Add various possible rewards */
-	check_reward_custom_randart(q_ptr, 200, 8);
+	check_reward_custom_randart(q_ptr, 200, 10);
 	check_reward_extra_hp(q_ptr, 500);
 	check_reward_stat_increase(q_ptr, 500);
 
@@ -1673,7 +1708,7 @@ static bool place_pit_nest_quest(int lev)
 	q_ptr->q_fame_inc += damroll(10,2);
 
 	/* Decide what types of reward to offer */
-	check_reward_custom_randart(q_ptr, 150, 8);
+	check_reward_custom_randart(q_ptr, 150, 10);
 	check_reward_extra_hp(q_ptr, 400);
 	check_reward_stat_increase(q_ptr, 400);
 
@@ -1691,20 +1726,20 @@ static bool place_pit_nest_quest(int lev)
 		if ((tries++) > 5000) return (FALSE);
 
 		/*Get the actual theme for either the pit or nest*/
-		if (q_ptr->q_type == QUEST_PIT) q_ptr->theme = get_pit_theme(lev + 3, TRUE);
-		else q_ptr->theme = get_nest_theme(lev + 3, TRUE);
+		if (q_ptr->q_type == QUEST_PIT) q_ptr->q_theme = get_pit_theme(lev + 3, TRUE);
+		else q_ptr->q_theme = get_nest_theme(lev + 3, TRUE);
 
 		/*hack - never do jelly quests*/
-		if (q_ptr->theme == LEV_THEME_JELLY) continue;
+		if (q_ptr->q_theme == LEV_THEME_JELLY) continue;
 
 		/*We don't want to run through check_theme_depth a bunch of times*/
-		if (checked_theme_yet[q_ptr->theme] == TRUE) continue;
+		if (checked_theme_yet[q_ptr->q_theme] == TRUE) continue;
 
 		/*make sure there are hard enough monsters*/
-		if (!check_pit_nest_depth(q_ptr->base_level, q_ptr->theme))
+		if (!check_pit_nest_depth(q_ptr->base_level, q_ptr->q_theme))
 		{
 			/*mark it as checked*/
-			checked_theme_yet[q_ptr->theme] = TRUE;
+			checked_theme_yet[q_ptr->q_theme] = TRUE;
 
 			/*next try*/
 			continue;
@@ -1764,7 +1799,7 @@ static bool place_level_quest(int lev)
 	q_ptr->q_fame_inc += damroll(10,2);
 
 	/* Decide on what type of reward to give the player */
-	check_reward_custom_randart(q_ptr, 150, 6);
+	check_reward_custom_randart(q_ptr, 150, 8);
 	check_reward_extra_hp(q_ptr, 350);
 	check_reward_stat_increase(q_ptr, 350);
 	if (25 + damroll(25,25) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
@@ -1779,19 +1814,19 @@ static bool place_level_quest(int lev)
 		if ((tries++) > 5000) return (FALSE);
 
 		/*Get the actual theme*/
-		q_ptr->theme = get_level_theme(lev + THEMED_LEVEL_QUEST_BOOST / 2, TRUE);
+		q_ptr->q_theme = get_level_theme(lev + THEMED_LEVEL_QUEST_BOOST / 2, TRUE);
 
 		/*hack - never do jelly quests*/
-		if (q_ptr->theme == LEV_THEME_JELLY) continue;
+		if (q_ptr->q_theme == LEV_THEME_JELLY) continue;
 
 		/*We don't want to run through check_theme_depth a bunch of times*/
-		if (checked_theme_yet[q_ptr->theme] == TRUE) continue;
+		if (checked_theme_yet[q_ptr->q_theme] == TRUE) continue;
 
 		/*make sure there are hard enough monsters*/
-		if (!check_theme_depth(lev, q_ptr->theme))
+		if (!check_theme_depth(lev, q_ptr->q_theme))
 		{
 			/*mark it as checked*/
-			checked_theme_yet[q_ptr->theme] = TRUE;
+			checked_theme_yet[q_ptr->q_theme] = TRUE;
 
 			/*next try*/
 			continue;
@@ -1821,7 +1856,7 @@ static bool place_wilderness_quest(int lev)
 	q_ptr->q_fame_inc += damroll(10,2);
 
 	/* Decide which rewards to offer the player */
-	check_reward_custom_randart(q_ptr, 150, 6);
+	check_reward_custom_randart(q_ptr, 150, 8);
 	check_reward_extra_hp(q_ptr, 350);
 	check_reward_stat_increase(q_ptr, 350);
 	if (25 + damroll(25,25) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
@@ -1846,7 +1881,7 @@ static bool place_labyrinth_quest(int lev)
 	q_ptr->q_fame_inc += damroll(10,2);
 
 	/* Decide which rewards to offer the player */
-	check_reward_custom_randart(q_ptr, 150, 6);
+	check_reward_custom_randart(q_ptr, 150, 8);
 	check_reward_extra_hp(q_ptr, 350);
 	check_reward_stat_increase(q_ptr, 350);
 	if (25 + damroll(25,25) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
@@ -1873,7 +1908,7 @@ static bool place_arena_quest(int lev)
 	q_ptr->q_fame_inc += damroll(10,2);
 
 	/* Decide on what types of rewards to offer the player */
-	check_reward_custom_randart(q_ptr, 75, 4);
+	check_reward_custom_randart(q_ptr, 75, 6);
 	check_reward_stat_increase(q_ptr, 225);
 	check_reward_extra_hp(q_ptr, 225);
 
@@ -1898,7 +1933,7 @@ static bool place_vault_quest(int lev)
 	q_ptr->q_fame_inc = 50;
 
 	/* Decide what types of rewards to give */
-	check_reward_custom_randart(q_ptr, 60, 5);
+	check_reward_custom_randart(q_ptr, 60, 7);
 	check_reward_extra_hp(q_ptr, 250);
 	check_reward_stat_increase(q_ptr, 250);
 	if (20 + damroll(25,20) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
@@ -1910,6 +1945,43 @@ static bool place_vault_quest(int lev)
 	/*success*/
 	return (TRUE);
 }
+
+/*
+ * Actually give the character a wilderness quest
+ */
+static bool place_greater_vault_quest(int lev)
+{
+	vault_type *v_ptr;
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+
+	/* Actually write the quest */
+	q_ptr->q_type = QUEST_GREATER_VAULT;
+	q_ptr->base_level = lev;
+	q_ptr->q_fame_inc = 10;
+
+	/* Pick a greater vault */
+	while (TRUE)
+	{
+		u16b vault_choice = randint0(z_info->v_max);
+
+		/* Get a random vault record */
+		v_ptr = &v_info[vault_choice];
+
+		/* Accept the first greater vault */
+		if (v_ptr->typ != 8) continue;
+
+		/* Found one */
+		q_ptr->q_theme = vault_choice;
+		break;
+	}
+
+	/* For vault quests, the reward is found in the greater vault */
+	q_ptr->q_reward |= REWARD_GOLD;
+
+	/*success*/
+	return (TRUE);
+}
+
 
 bool quest_allowed(byte j)
 {
@@ -1954,6 +2026,12 @@ bool quest_allowed(byte j)
 		if (p_ptr->max_depth < 20) return (FALSE);
 		if (p_ptr->q_fame < 100) return (FALSE);
 		if (!(q_info[GUILD_QUEST_SLOT].q_flags & (QFLAG_ARENA_QUEST))) return (FALSE);
+	}
+	else if (j == QUEST_SLOT_GREATER_VAULT)
+	{
+		if (p_ptr->max_depth < 30) return (FALSE);
+		if (p_ptr->q_fame < 200) return (FALSE);
+		if (!(q_info[GUILD_QUEST_SLOT].q_flags & (QFLAG_GREATER_VAULT_QUEST))) return (FALSE);
 	}
 	/* Allowable */
 	return (TRUE);
@@ -2036,6 +2114,7 @@ void quest_finished(quest_type *q_ptr)
 	int j;
 
 	q_ptr->q_flags |= (QFLAG_COMPLETED);
+	p_ptr->redraw |= (PR_QUEST_ST);
 
 	if (quest_no_down_stairs(q_ptr))
 	{
@@ -2043,7 +2122,13 @@ void quest_finished(quest_type *q_ptr)
 	}
 
 	/* For a fixed quest, we are done */
-	if (quest_fixed(q_ptr)) return;
+	if (quest_fixed(q_ptr))
+	{
+		/* Handle and handle stuff */
+		notice_stuff();
+		handle_stuff();
+		return;
+	}
 
 	p_ptr->q_fame += q_ptr->q_fame_inc;
 
@@ -2077,52 +2162,11 @@ void quest_finished(quest_type *q_ptr)
 		inven_item_optimize(j);
 	}
 
-	/* Handle and handle stuff */
 	notice_stuff();
 	handle_stuff();
 }
 
-/*
- * Display the "contents" of the adventurer's guild
- */
-void display_quest(void)
-{
-	char q_out[120];
 
-
-	put_str("Your current quest:", 8, 3);
-
-	/* Reset the cursor */
-	Term_gotoxy(3, 10);
-
-	/*break quest description into two lines*/
-	describe_quest(q_out, sizeof(q_out), guild_quest_level(), QMODE_HALF_1);
-	Term_addstr(-1, TERM_WHITE, q_out);
-
-	/*display the monster character if applicable*/
-	if (quest_slot_single_r_idx(GUILD_QUEST_SLOT))
-	{
-		quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
-		monster_race *r_ptr = &r_info[q_ptr->mon_idx];
-
-		/* Get the char */
-		byte a1 = r_ptr->d_attr;
-
-		/* Get the attr */
-		char c1 = r_ptr->d_char;
-
-		/* Append the "standard" attr/char info */
-		Term_addstr(-1, TERM_WHITE, " ('");
-		Term_addch(a1, c1);
-		Term_addstr(-1, TERM_WHITE, "')");
-	}
-
-	/* Reset the cursor */
-	Term_gotoxy(3, 11);
-	describe_quest(q_out, sizeof(q_out), guild_quest_level(), QMODE_HALF_2);
-	Term_addstr(-1, TERM_WHITE, q_out);
-
-}
 
 
 /*
@@ -2216,6 +2260,14 @@ bool guild_purchase(int choice)
 			quest_placed = FALSE;
 		}
 	}
+	else if (choice == QUEST_SLOT_GREATER_VAULT)
+	{
+		if (!place_greater_vault_quest(qlev))
+		{
+			guild_quest_wipe(FALSE);
+			quest_placed = FALSE;
+		}
+	}
 
 	/* Set current quest */
 	if (quest_placed)
@@ -2244,6 +2296,9 @@ bool guild_purchase(int choice)
 		}
 	}
 
+	/* No quest placed */
+	else return (FALSE);
+
 	/*
 	 * Have the next quest be either two or three levels above
 	 * this one.
@@ -2266,6 +2321,10 @@ bool guild_purchase(int choice)
 	/* Labyrinth quests allowed 1/2 of the time */
 	if (one_in_(2)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_LABYRINTH_QUEST);
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_LABYRINTH_QUEST);
+
+	/* Greater vault quests allowed 1/3 of the time */
+	if (one_in_(3)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_GREATER_VAULT_QUEST);
+	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_GREATER_VAULT_QUEST);
 
 	return (TRUE);
 }
@@ -2340,6 +2399,45 @@ int quest_item_slot(void)
 }
 
 /*
+ * Calculate the time remaining on a greater vault quest.
+ * Assumes the quest is currently active.
+ */
+s32b quest_time_remaining(void)
+{
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+	s32b turns_lapsed = turn - q_ptr->turn_counter;
+	s32b turns_allowed = GREATER_VAULT_INITIAL_TIME + (GREATER_VAULT_BONUS_TIME * q_ptr->q_num_killed);
+
+	/* Paranoia */
+	if (!quest_timed(q_ptr)) return 0;
+	if (turns_lapsed >= turns_allowed) return 0;
+
+	return (turns_allowed - turns_lapsed);
+}
+
+/*
+ * Calculate the time remaining on a greater vault quest.
+ * Assumes a timed quest is currently active.
+ */
+s32b quest_player_turns_remaining(void)
+{
+	s32b time_left = quest_time_remaining();
+
+	s32b turns_left;
+
+	/* Paranoia */
+	if (time_left <1) return 0;
+
+	turns_left = time_left * extract_energy[p_ptr->state.p_speed] / 100;
+
+	if (turns_left < 1) return 1;
+
+	return (turns_left);
+}
+
+
+
+/*
  * Wipe the quest clean.
  */
 void guild_quest_wipe(bool reset_defer)
@@ -2358,7 +2456,6 @@ void guild_quest_wipe(bool reset_defer)
 	if (reset_defer) p_ptr->deferred_rewards = 0;
 
 	/* Clean out the guild */
-	/* Wipe the guild inventory */
 	for (i = st_ptr->stock_num; i >= 0; i--)
 	{
 		/* Get the existing object */
@@ -2427,7 +2524,7 @@ void write_quest_note(bool success)
 			char mon_theme[80];
 
 			/*Get the theme*/
-			my_strcpy(mon_theme, feeling_themed_level[q_ptr->theme], sizeof(mon_theme));
+			my_strcpy(mon_theme, feeling_themed_level[q_ptr->q_theme], sizeof(mon_theme));
 
 			if (success) my_strcpy(note, "Quest: Cleared out ", sizeof(note));
 			else my_strcpy(note, "Quest: Failed to clear out ", sizeof(note));
@@ -2634,6 +2731,12 @@ void format_quest_indicator(char dest[], int max, byte *attr)
 		return;
 	}
 
+	/* Special case. Vault quests */
+	else if (q_ptr->q_type == QUEST_GREATER_VAULT)
+	{
+		strnfmt(dest, max, "Q:%4d turns", quest_player_turns_remaining());
+	}
+
 	/* Monster, pit/nest or themed level quests */
 	else
 	{
@@ -2657,7 +2760,20 @@ void quest_monster_update(void)
 	/*nothing left, notification already printed in monster_death */
 	if (!remaining) return;
 
-	if (quest_multiple_r_idx(q_ptr))
+	if (q_ptr->q_type == QUEST_GREATER_VAULT)
+	{
+		if (guild_quest_active())
+		{
+			my_strcpy(note, format("At your current speed, you have %d turns remaining on this greater vault level",
+						quest_player_turns_remaining()),sizeof(note));
+		}
+
+		/*dump the final note*/
+		msg_format(note);
+
+	}
+
+	else if (quest_multiple_r_idx(q_ptr))
 	{
 		if (remaining > 1)
 		{
@@ -2669,7 +2785,7 @@ void quest_monster_update(void)
 		else if (q_ptr->q_type ==  QUEST_ARENA_LEVEL) my_strcat(note, "to kill in the arena.", sizeof(note));
 		else
 		{
-			my_strcat(note, format("from the %s", feeling_themed_level[q_ptr->theme]), sizeof(note));
+			my_strcat(note, format("from the %s", feeling_themed_level[q_ptr->q_theme]), sizeof(note));
 
 			if  (q_ptr->q_type ==  QUEST_THEMED_LEVEL) 	my_strcat(note, " stronghold.", sizeof(note));
 			else if (q_ptr->q_type == QUEST_PIT)	my_strcat(note, " pit.", sizeof(note));
@@ -2703,8 +2819,6 @@ void quest_monster_update(void)
 
 		/*dump the final note*/
 		msg_format(note);
-
-
 	}
 }
 
@@ -2799,6 +2913,27 @@ bool quest_slot_themed(int quest_num)
 	return (quest_themed(q_ptr));
 }
 
+/* Verify if the quest has a time limit */
+bool quest_timed(const quest_type *q_ptr)
+{
+	if (q_ptr->q_type == QUEST_GREATER_VAULT) return (TRUE);
+
+	return (FALSE);
+}
+
+/* Verify if the quest is timed */
+bool quest_slot_timed(int quest_num)
+{
+	quest_type *q_ptr;
+
+	/* Boundry control, then get the quest */
+	if (quest_num >= z_info->q_max) return (FALSE);
+	if (quest_num < 0) return (FALSE);
+	q_ptr = &q_info[quest_num];
+
+	return (quest_timed(q_ptr));
+}
+
 /* Verify if no down stairs should be generated until the quest is completed */
 bool quest_no_down_stairs(const quest_type *q_ptr)
 {
@@ -2852,6 +2987,7 @@ bool quest_shall_fail_if_leave_level(void)
 	if (q_ptr->q_type == QUEST_PIT) return (TRUE);
 	if (q_ptr->q_type == QUEST_NEST) return (TRUE);
 	if (q_ptr->q_type == QUEST_ARENA_LEVEL) return (TRUE);
+	if (q_ptr->q_type == QUEST_GREATER_VAULT) return (TRUE);
 	if (q_ptr->q_type == QUEST_VAULT)
 	{
 		if (quest_item_slot() == -1) return (TRUE);
@@ -2896,6 +3032,7 @@ bool quest_fail_immediately(void)
 	if (q_ptr->q_type == QUEST_PIT) return (TRUE);
 	if (q_ptr->q_type == QUEST_NEST) return (TRUE);
 	if (q_ptr->q_type == QUEST_ARENA_LEVEL) return (TRUE);
+	if (q_ptr->q_type == QUEST_GREATER_VAULT) return (TRUE);
 	if (q_ptr->q_type == QUEST_VAULT)
 	{
 		if (quest_item_slot() == -1) return (TRUE);

@@ -3401,6 +3401,11 @@ void do_cmd_feeling(void)
 		msg_print("You have entered an area of near pristine wilderness.");
 	}
 
+	else if (p_ptr->dungeon_type == DUNGEON_TYPE_GREATER_VAULT)
+	{
+		msg_print("You have discovered a gigantic vault of great treasures guarded by dangerous creatures.");
+	}
+
 	else if (p_ptr->dungeon_type == DUNGEON_TYPE_LABYRINTH)
 	{
 		msg_print("You have entered a complex labyrinth of dungeon hallways.");

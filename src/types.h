@@ -731,12 +731,12 @@ struct quest_type
 	byte q_type;		/* Quest Type */
 	u16b q_reward;		/* Quest Reward */
 	u16b q_fame_inc;	/* Amount fame will be increased when the quest is finished */
-	byte theme;			/* Monster Theme for themed levels and nests/pits*/
+	byte q_theme;		/* Monster Theme for themed levels and nests/pits*/
 
 	byte base_level;	/* The dungeon level on which the quest is assigned*/
 
 	s16b mon_idx;		/* Monster race/unique */
-	s32b start_turn;	/* Mark when the quest began */
+	s32b turn_counter;	/* Mark when the quest began */
 
 	s16b q_num_killed;	/* Number killed */
 	s16b q_max_num;		/* Number required */
@@ -1409,6 +1409,26 @@ struct dungeon_capabilities_type
 	 * Used in get_mon_num
 	 */
 	bool (*can_place_non_native_monsters)(void);
+
+	/*
+	 * Check if monsters get re-populated while the player is on the level
+	 */
+	bool (*allow_level_repopulation)(void);
+
+	/*
+	 * Check if summoning is limited to creatures on the level
+	 */
+	bool (*limited_level_summoning)(void);
+
+	/*
+	 * Check if breeders are allowed to spread on the level
+	 */
+	bool (*allow_monster_multiply)(void);
+
+	/*
+	 * Check if earthquakes and destruction are allowed
+	 */
+	bool (*prevent_destruction)(void);
 
 	/*
 	 * Get the initial number of monsters in the level

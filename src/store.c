@@ -228,7 +228,8 @@ static cptr quest_title[QUEST_SLOT_MAX] =
   	"Level Quest",				/* QUEST_THEMED_LEVEL*/
 	"Vault Quest",				/* QUEST_VAULT*/
 	"Arena Quest",				/* QUEST_ARENA_LEVEL */
-	"Labyrinth Quest"			/* QUEST_LABYRINTH_LEVEL */
+	"Labyrinth Quest",			/* QUEST_LABYRINTH_LEVEL */
+	"Greater Vault Quest"		/* QUEST_SLOT_GREATER_VAULT */
 };
 
 

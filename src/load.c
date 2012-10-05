@@ -1708,9 +1708,9 @@ static errr rd_dungeon(void)
 
 	/* Header info */
 	rd_s16b(&depth);
-	rd_u16b(&tmp16u);
+	rd_u16b(&p_ptr->dungeon_type);
 	/* Get dungeon capabilities */
-	set_dungeon_type(tmp16u);
+	set_dungeon_type(p_ptr->dungeon_type);
 
 	rd_s16b(&py);
 	rd_s16b(&px);
@@ -2187,9 +2187,9 @@ static errr rd_savefile_new_aux(void)
 		rd_u16b(&q_ptr->q_reward);
 		rd_u16b(&q_ptr->q_fame_inc);
 		rd_byte(&q_ptr->base_level);
-		rd_byte(&q_ptr->theme);
+		rd_byte(&q_ptr->q_theme);
 		rd_s16b(&q_ptr->mon_idx);
-		rd_s32b(&q_ptr->start_turn);
+		rd_s32b(&q_ptr->turn_counter);
 		rd_s16b(&q_ptr->q_num_killed);
 		rd_s16b(&q_ptr->q_max_num);
 		rd_byte(&q_ptr->q_flags);

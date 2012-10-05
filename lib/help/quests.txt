@@ -16,12 +16,6 @@ go deeper in the dungeon. A player must kill Sauron at 4950 feet in order to be
 able to meet Morgoth. Defeating Morgoth, or completing both quests, wins the
 game. These quests are unchanged for every game.
 
-FIXED UNIQUE QUESTS:
-
-This is unchanged from Angband. The player always has two fixed quests,
-defeat Sauron and Morgoth, in order to win the game. The player cannot dive
-deeper than their native depths before completing these quests.
-
 FIXED QUESTS:
 
 While coding support exists in NPPAngband to add additional fixed quests to kill
@@ -35,12 +29,8 @@ OPTIONAL QUESTS:
 
 NPPAngband has a town building called the Adventurer's Guild.
 A player may choose to visit this building and receive a quest from the
-Guild. Initially, a player can choose only monster quest.  After the player has
-gone as deep as level 6 (300') they may choose a quest to clear out a pit or 
-nest.  After the player has gone as deep as level 14 (700') they may choose 
-a quest to clear an entire level of a particular type of monster.  Occasionally, 
-the player has the choice of a vault (artifact) quest. The guild will never 
-assign more than one optional quest at any time. Upon completion of an 
+Guild. Initially, a player can choose only monster quest.  The guild will 
+never assign more than one optional quest at any time. Upon completion of an 
 optional quest, the guild gives a reward to the player.
 
 At any given time, the status of the player's optional quest can be viewed by
@@ -66,8 +56,8 @@ a quest greatly tarnishes the player's reputation at the guild.
 FIXED MONSTER QUESTS:
 Similar to monster quests.  The player is assigned to go to a specified
 depth, based on the average difficulty of monsters 4-9 levels below the quest 
-level, and kill a certain number of monsters (usually around 15 creatures). 
-The depth of the quest and number of monsters varies.
+level, and kill a certain number of monsters (usually around 15 creatures), or
+a single unique. The depth of the quest and number of monsters varies.
 
 Unlike fixed quests, it is not mandatory to complete the quest in order to win
 the game.  Unlike a monster quest, a player cannot dive past the designated quest
@@ -78,16 +68,6 @@ die trying and to request to abandon the quest at the adventurer's guild.  A
 down staircase will appear when you complete this quest.
 
 
-UNIQUE QUESTS:
-When the player chooses a monster quest, the player can either get assigned a 
-monster quest or a unique quest.
-Unique quests are similar to guild quests, except the quest is always to kill
-one unique. The unique will be from several levels deeper than typical guild
-quest monsters. The unique will always appear at the specified quest depth until
-killed or the quest fails. Since Uniques tend to be more difficult to kill than
-regular creatures, this type of quest tends to be more difficult than monster
-quests.
-
 ***** <Vault Quest>
 VAULT, or ARTIFACT QUESTS:
 This quest is to go to a specified depth, retrieve an artifact and return 
@@ -97,8 +77,8 @@ weilded by the player. Returning the artifact to the adventurer's guild
 completes the quest. The difficulty of an artifact quest is dependent on 
 the monsters guarding the artifact.  You will most likely need some form 
 of tunneling, such as a digging tool or a magic source of stone-to-mud, 
-to gain access to the vault.   Voluntarily leaving a level with the quest
-vault results in immediate quest failure.
+to gain access to the vault.   Voluntarily leaving a level without the quest
+artifact results in immediate quest failure.
 
 ***** <Pit or Nest Quest>
 PIT, or NEST QUESTS:
@@ -117,22 +97,33 @@ THEMED LEVEL QUESTS:
 This quest is a more difficult version of the Monster Pit/Nest quests.  Instead 
 of 95 creatures in a pit or nest, the entire level is full of 200 or more
 monsters of a particular theme.  Since there are so many like creatures bunched 
-so closely together, a creature from inside one of these themed levels will not 
-attempt to summon more creatures to the battle.  This tends to be one of the more 
+so closely together, a creature from inside one of these themed levels only summon
+other creatures already on the level in battle.  This tends to be one of the more 
 difficult type of quest, increases your player fame by a large amount, and 
 offers lucrative rewards.  Voluntarily leaving a themed level results in immediate 
 quest failure.
 
 ***** <Wilderness Quest>
 WILDERNESS QUEST:
-This quest is a different version of the Themed level quests.  An entire level
+This quest is a variation of the Themed level quests.  An entire level
 of unthemed randomly chosen creatures in a wilderness level.  Since there are so 
 many like creatures bunched so closely together, a creature from inside one of 
-these wilderness levels will not attempt to summon more creatures to the battle.  
-This tends to be adifficult type of quest, depending on the most difficult
-to kill creature on the level, increases your player fame by a large amount
+these themed levels only summon other creatures already on the level in battle.   
+This tends to be a difficult type of quest, depending on the difficulty of 
+the creatures on the level, increases your player fame by a large amount
 (tied with Level Quests), and offers above average rewards and fame increase.
 Voluntarily leaving a wilderness level results in immediate quest failure.
+
+***** <Labyrinth Quest>
+LABYRINTH QUEST:
+This quest is a variation of the Themed level quests.  It is an entire labyrinth 
+level of unthemed randomly chosen creatures.  Since there are so many like 
+creatures bunched so closely together, a creature from inside one of 
+these themed levels only summon other creatures already on the level in battle.   
+This tends to be a difficult type of quest, depending on the difficulty of 
+the creatures on the level, increases your player fame by a large amount
+(tied with Level Quests), and offers above average rewards and fame increase.
+Voluntarily leaving a labyrinth level results in immediate quest failure.
 
 ***** <Arena Quest>
 ARENA QUEST:
@@ -140,10 +131,24 @@ The player starts in a small, empty room.  The quest is to kill 40 random
 creatures that appear in the room.  (Note that a group of monsters only
 counts as one).  The room will slowly expand, revealing items that will
 help the player survive.  This is one of the hardest quests, and therefore
-has the gretaest reward and fame potential.  Voluntarily leaving an arena 
-level results in immediate quest failure.
+has the gretaest reward and fame potential.  It also has only a small
+penalty for quest failure.  Voluntarily leaving an arena level results 
+in immediate quest failure.
 
-
+***** <Greater Vault Quest>
+GREATER VAULT QUEST:
+The player arrives on a small dungeon level that is a single greater vault.
+The goal is to enter the greater vault and survive on the level, and kill as 
+many creatures as possible in a limited amount of time.  A timer is displayed 
+showing how many player turns (at the current player speed) the player has.  
+Once the timer expires, all monsters disappear, including the vault objects 
+they are holding,  leaving the player to collect any loot remaining on the 
+ground before they leave.  This reward for this quest lies in the objects 
+collected from the greater vault.  The guild will offer very little in the 
+way of quest rewards, and only a small fame increase.    There is only a 
+small penalty for quest failure.  Voluntarily leaving the quest level 
+before the timer expires, or allowing the quest time to expire without 
+entering the greater  vault, result in immediate quest failure.
 
 
 REWARD:
@@ -156,8 +161,8 @@ and by killing uniques. When the advanturer fails a quest, their
 reputation at the guild is greatly decreased.
 
 Early in the game, the rewards areusually gold or objects.  As a player's 
-reputation increases, the guild will offer to reward the player with stat gain
-increases, dungeon spellbooks, or permanent hp increases.  The ultimate reward 
+reputation increases, the guild will offer to reward the player with permanent
+stat increases, dungeon spellbooks, or permanent hp increases.  The ultimate reward 
 is for the guild to offer to create an artifact specifically as a quest reward.  
 The player will even be given a chance to choose the object to be made into an 
 artifact and name it.

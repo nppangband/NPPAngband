@@ -1804,7 +1804,7 @@ static void do_cmd_wiz_know_quests(void)
 		quest_type *q_ptr = &q_info[i];
 
 		msg_print(format("quest #%d, name is %s, type is %d", i, q_name + q_ptr->name, q_ptr->q_type));
-		msg_print(format("quest #%d, level is %d, mon_race is %d, theme is %d", i, q_ptr->base_level, q_ptr->mon_idx, q_ptr->theme));
+		msg_print(format("quest #%d, level is %d, mon_race is %d, theme is %d", i, q_ptr->base_level, q_ptr->mon_idx, q_ptr->q_theme));
 		msg_print(format("quest #%d, max num is is %d, num killed is %d, ", i, q_ptr->q_max_num, q_ptr->q_num_killed));
 		if (q_ptr->q_flags & (QFLAG_STARTED)) msg_print(format("quest #%d is started", i));
 		if (q_ptr->q_flags & (QFLAG_COMPLETED)) msg_print(format("quest #%d is completed", i));

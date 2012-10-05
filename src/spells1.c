@@ -4833,7 +4833,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			do_haste = 25 + rand_int(25);
 
 			/* Attempt to clone. */
-			if (multiply_monster(mon_idx))
+			if (multiply_monster(mon_idx, TRUE))
 			{
 				m_note = MON_MSG_SPAWN;
 			}
@@ -5465,7 +5465,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			delete_monster_idx(mon_idx);
 
 			/* Create a new monster (no groups) */
-			(void)place_monster_aux(y, x, tmp, 0L);
+			(void)place_monster_aux(y, x, tmp, MPLACE_OVERRIDE);
 
 			/* Hack -- Assume success XXX XXX XXX */
 

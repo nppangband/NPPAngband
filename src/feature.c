@@ -1645,13 +1645,10 @@ s16b get_feat_num(int level)
 		 * labyrinth levels, wilderness levels or arena levels
 		 */
 		if (feat_ff2_match(f_idx, FF2_TRAP_PASSIVE) &&
-			(f_info[f_idx].f_power == 5) &&
-			/* Also includes DUNGEON_TYPE_WILDERNESS, DUNGEON_TYPE_ARENA DUNGEON_TYLE_LABYRINTH*/
-			(p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL))
-			{
-				continue;
-			}
-
+			(f_info[f_idx].f_power == 5) && (*dun_cap->limited_level_summoning)())
+		{
+			continue;
+		}
 
 		/* Hack -- no up stairs on certain levels */
 		if (feat_ff1_match(f_idx, FF1_LESS))
