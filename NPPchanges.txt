@@ -1,4 +1,4 @@
-NPP 0.6.0. BETA 1 Changes: 
+NPP 0.6.0. BETA 2 Changes: 
 Broke savecompatibility with NPP 0.5.4.
 Revised Mimic Code
 Changes to the savefile structure.
@@ -39,6 +39,7 @@ Monsters now can be summoned on levels where it was previously restricted, but l
 Added greater vault levels.
 Added greater vault quests.
 New makefile.osx.
+Made cloaks of aman more common (rarity of 16 to rarity of 8).
 
 
 NPP 0.5.4 changes:
