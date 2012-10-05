@@ -670,7 +670,7 @@ static bool add_arena_monster(bool new_squares, byte stage, s32b cur_quest_monst
 	get_mon_num_hook = NULL;
 	get_mon_num_prep();
 
-	if (!place_monster_aux(y, x, r_idx, (MPLACE_GROUP))) return (FALSE);
+	if (!place_monster_aux(y, x, r_idx, (MPLACE_GROUP | MPLACE_OVERRIDE))) return (FALSE);
 
 	/* Mark it as a questor */
 	if (!cave_m_idx[y][x])	return (FALSE); /* Paranoia - should never happen */

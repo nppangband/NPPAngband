@@ -1343,7 +1343,7 @@ static bool read_scroll(object_type *o_ptr, bool *ident)
 			sound(MSG_SUM_MONSTER);
 			for (k = 0; k < randint(3); k++)
 			{
-				if (summon_specific(py, px, p_ptr->depth, 0))
+				if (summon_specific(py, px, p_ptr->depth, 0, MPLACE_OVERRIDE))
 				{
 					*ident = TRUE;
 				}
@@ -1356,7 +1356,7 @@ static bool read_scroll(object_type *o_ptr, bool *ident)
 			sound(MSG_SUM_UNDEAD);
 			for (k = 0; k < randint(3); k++)
 			{
-				if (summon_specific(py, px, p_ptr->depth, SUMMON_UNDEAD))
+				if (summon_specific(py, px, p_ptr->depth, SUMMON_UNDEAD, MPLACE_OVERRIDE))
 				{
 					*ident = TRUE;
 				}
@@ -1367,7 +1367,7 @@ static bool read_scroll(object_type *o_ptr, bool *ident)
 		case SV_SCROLL_SUMMON_UNIQUE:
 		{
 
-			if (summon_specific(py, px, p_ptr->depth, SUMMON_UNIQUE))
+			if (summon_specific(py, px, p_ptr->depth, SUMMON_UNIQUE, MPLACE_OVERRIDE))
 			{
 				*ident = TRUE;
 			}
@@ -1730,7 +1730,7 @@ static bool use_staff(object_type *o_ptr, bool *ident)
 			sound(MSG_SUM_MONSTER);
 			for (k = 0; k < randint(4); k++)
 			{
-				if (summon_specific(py, px, p_ptr->depth, 0))
+				if (summon_specific(py, px, p_ptr->depth, 0, MPLACE_OVERRIDE))
 				{
 					*ident = TRUE;
 				}

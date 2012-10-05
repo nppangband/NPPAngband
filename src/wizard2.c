@@ -1572,7 +1572,7 @@ static void do_cmd_wiz_summon(int num)
 
 	for (i = 0; i < num; i++)
 	{
-		(void)summon_specific(py, px, p_ptr->depth, 0);
+		(void)summon_specific(py, px, p_ptr->depth, 0, 0L);
 	}
 }
 
@@ -1590,7 +1590,7 @@ static void do_cmd_wiz_named(int r_idx, bool slp)
 	int i, x, y;
 
 	/* Prepare the place_monster flags */
-	byte mp_flags = MPLACE_GROUP;
+	byte mp_flags = (MPLACE_GROUP | MPLACE_OVERRIDE);
 	if (slp) mp_flags |= MPLACE_SLEEP;
 
 	/* Paranoia */

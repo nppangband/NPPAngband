@@ -825,7 +825,7 @@ extern void reveal_mimic(int o_idx, bool message);
 extern bool place_monster_aux(int y, int x, int r_idx, byte mp_flags);
 extern bool place_monster(int y, int x, byte mp_flags);
 extern bool alloc_monster(int dis, byte mp_flags);
-extern bool summon_specific(int y1, int x1, int lev, int type);
+extern bool summon_specific(int y1, int x1, int lev, int type, byte mp_flags);
 extern bool multiply_monster(int m_idx, bool override);
 extern void message_pain(int m_idx, int dam);
 extern bool add_monster_message(char *mon_name, int m_idx, int msg_code);

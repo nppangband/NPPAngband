@@ -957,7 +957,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
 				num = sum_base + randint(sum_plus);
 				for (i = 0; i < num; i++)
 				{
-					(void)summon_specific(y, x, p_ptr->depth, 0);
+					(void)summon_specific(y, x, p_ptr->depth, 0, MPLACE_OVERRIDE);
 				}
 			}
 			break;

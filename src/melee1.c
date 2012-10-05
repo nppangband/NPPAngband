@@ -4300,7 +4300,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			for (k = 0; k < (r_ptr->level > 40 ? 4 : 3); k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
-					summon_lev, SUMMON_KIN);
+					summon_lev, SUMMON_KIN, 0L);
 			}
 
 			/* No suitable matches, don't try this spell again */
@@ -4327,7 +4327,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			else msg_format("%^s magically summons help!", m_name);
 			for (k = 0; k < 1; k++)
 			{
-				count += summon_specific(m_ptr->fy, m_ptr->fx, summon_lev, 0);
+				count += summon_specific(m_ptr->fy, m_ptr->fx, summon_lev, 0, 0L);
 			}
 
 			/* No suitable matches, don't try this spell again */
@@ -4346,7 +4346,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			else msg_format("%^s magically summons monsters!", m_name);
 			for (k = 0; k < 4; k++)
 			{
-				count += summon_specific(m_ptr->fy, m_ptr->fx, summon_lev, 0);
+				count += summon_specific(m_ptr->fy, m_ptr->fx, summon_lev, 0, 0L);
 			}
 			/* No suitable matches, don't try this spell again */
 			if (!count) dungeon_summon_mask_f7 |= (RF7_S_MONSTERS);
@@ -4369,7 +4369,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			for (k = 0; k < 4; k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
-					summon_lev, SUMMON_ANT);
+					summon_lev, SUMMON_ANT, 0L);
 			}
 			/* No suitable matches, don't try this spell again */
 			if (!count) dungeon_summon_mask_f7 |= (RF7_S_ANT);
@@ -4388,7 +4388,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			for (k = 0; k < 4; k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
-					summon_lev, SUMMON_SPIDER);
+					summon_lev, SUMMON_SPIDER, 0L);
 			}
 			/* No suitable matches, don't try this spell again */
 			if (!count) dungeon_summon_mask_f7 |= (RF7_S_SPIDER);
@@ -4407,7 +4407,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			for (k = 0; k < 2; k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
-					summon_lev, SUMMON_HOUND);
+					summon_lev, SUMMON_HOUND, 0L);
 			}
 			/* No suitable matches, don't try this spell again */
 			if (!count) dungeon_summon_mask_f7 |= (RF7_S_HOUND);
@@ -4426,7 +4426,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			for (k = 0; k < 4; k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
-					summon_lev, SUMMON_ANIMAL);
+					summon_lev, SUMMON_ANIMAL, 0L);
 			}
 			/* No suitable matches, don't try this spell again */
 			if (!count) dungeon_summon_mask_f7 |= (RF7_S_ANIMAL);
@@ -4444,7 +4444,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			else msg_format("%^s magically summons hydras.", m_name);
 			for (k = 0; k < 3; k++)
 			{
-				count += summon_specific(m_ptr->fy, m_ptr->fx, rlev, SUMMON_HYDRA);
+				count += summon_specific(m_ptr->fy, m_ptr->fx, rlev, SUMMON_HYDRA, 0L);
 			}
 			/* No suitable matches, don't try this spell again */
 			if (!count) dungeon_summon_mask_f7 |= (RF7_S_HYDRA);
@@ -4468,7 +4468,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			for (k = 0; k < 4; k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
-					summon_lev, SUMMON_THIEF);
+					summon_lev, SUMMON_THIEF, 0L);
 			}
 			/* No suitable matches, don't try this spell again */
 			if (!count) dungeon_summon_mask_f7 |= (RF7_S_THIEF);
@@ -4485,7 +4485,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			for (k = 0; k < 2; k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
-					summon_lev + 5, SUMMON_BERTBILLTOM);
+					summon_lev + 5, SUMMON_BERTBILLTOM, 0L);
 			}
 
 			/* No suitable matches, don't try this spell again */
@@ -4512,7 +4512,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			else msg_format("%^s magically summons a maia!", m_name);
 			for (k = 0; k < 1; k++)
 			{
-				count += summon_specific(m_ptr->fy, m_ptr->fx, summon_lev, SUMMON_AINU);
+				count += summon_specific(m_ptr->fy, m_ptr->fx, summon_lev, SUMMON_AINU, 0L);
 			}
 			/* No suitable matches, don't try this spell again */
 			if (!count) dungeon_summon_mask_f7 |= (RF7_S_AINU);
@@ -4534,7 +4534,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			for (k = 0; k < 1; k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
-					summon_lev, SUMMON_DRAGON);
+					summon_lev, SUMMON_DRAGON, 0L);
 			}
 			/* No suitable matches, don't try this spell again */
 			if (!count) dungeon_summon_mask_f7 |= (RF7_S_DRAGON);
@@ -4553,7 +4553,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			for (k = 0; k < 4; k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
-					summon_lev, SUMMON_HI_DRAGON);
+					summon_lev, SUMMON_HI_DRAGON, 0L);
 			}
 			/* No suitable matches, don't try this spell again */
 			if (!count) dungeon_summon_mask_f7 |= (RF7_S_HI_DRAGON);
@@ -4580,7 +4580,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 					("%^s magically summons a hellish adversary!", m_name);
 				for (k = 0; k < 1; k++)
 				{
-					count += summon_specific(m_ptr->fy, m_ptr->fx, summon_lev, SUMMON_DEMON);
+					count += summon_specific(m_ptr->fy, m_ptr->fx, summon_lev, SUMMON_DEMON, 0L);
 				}
 				/* No suitable matches, don't try this spell again */
 				if (!count) dungeon_summon_mask_f7 |= (RF7_S_DEMON);
@@ -4599,7 +4599,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			else msg_format("%^s magically summons greater demons!", m_name);
 			for (k = 0; k < 4; k++)
 			{
-				count += summon_specific(m_ptr->fy, m_ptr->fx, summon_lev, SUMMON_HI_DEMON);
+				count += summon_specific(m_ptr->fy, m_ptr->fx, summon_lev, SUMMON_HI_DEMON, 0L);
 			}
 			/* No suitable matches, don't try this spell again */
 			if (!count) dungeon_summon_mask_f7 |= (RF7_S_HI_DEMON);
@@ -4626,7 +4626,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			; k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
-					summon_lev, SUMMON_UNIQUE);
+					summon_lev, SUMMON_UNIQUE, 0L);
 			}
 			if (count)
 			{
@@ -4656,7 +4656,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			; k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
-					summon_lev, SUMMON_HI_UNIQUE);
+					summon_lev, SUMMON_HI_UNIQUE, 0L);
 			}
 			if (count)
 			{
@@ -4685,7 +4685,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			for (k = 0; k < 1; k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
-					summon_lev, SUMMON_UNDEAD);
+					summon_lev, SUMMON_UNDEAD, 0L);
 			}
 			/* No suitable matches, don't try this spell again */
 			if (!count) dungeon_summon_mask_f7 |= (RF7_S_UNDEAD);
@@ -4704,7 +4704,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			for (k = 0; k < 4; k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
-					summon_lev, SUMMON_HI_UNDEAD);
+					summon_lev, SUMMON_HI_UNDEAD, 0L);
 			}
 
 			/* No suitable matches, don't try this spell again */
@@ -4730,7 +4730,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			for (k = 0; k < 6; k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
-					summon_lev, SUMMON_WRAITH);
+					summon_lev, SUMMON_WRAITH, 0L);
 			}
 			/* No suitable matches, don't try this spell again */
 			if (!count) dungeon_summon_mask_f7 |= (RF7_S_WRAITH);
@@ -4738,7 +4738,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			for (k = 0; (k < 6) && (count < 6); k++)
 			{
 				count += summon_specific(m_ptr->fy, m_ptr->fx,
-							 summon_lev, SUMMON_HI_UNDEAD);
+							 summon_lev, SUMMON_HI_UNDEAD, 0L);
 			}
 			if (count == old_count)
 			{
