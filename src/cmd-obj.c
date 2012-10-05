@@ -3588,13 +3588,13 @@ static item_act_t item_actions[] =
 
 	  /* ACTION_STUDY */
 	{ obj_study, CMD_NULL, "study",
-	  "Study which book? ", "You have no books that you can read.",
-	  obj_can_browse, (USE_INVEN | USE_FLOOR), player_can_study },
+	  "Study which book? ", "You have no books that you can study.",
+	  obj_can_study, (USE_INVEN | USE_FLOOR), player_can_study },
 
 	  /* ACTION_CAST */
 	{ obj_cast, CMD_NULL, "cast",
-	  "Use which book? ", "You have no books that you can read.",
-	  obj_can_browse, (USE_INVEN | USE_FLOOR), player_can_cast },
+	  "Use which book? ", "You have no books that you can cast from.",
+	  obj_can_cast, (USE_INVEN | USE_FLOOR), player_can_cast },
 
 	/* ACTION_USE_STAFF */
 	{ NULL, CMD_USE_STAFF, "use",

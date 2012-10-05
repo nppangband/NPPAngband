@@ -40,6 +40,7 @@ Added greater vault levels.
 Added greater vault quests.
 New makefile.osx.
 Made cloaks of aman more common (rarity of 16 to rarity of 8).
+When studying or casting, the player is now only offered books with spells they can cast or study.
 
 
 NPP 0.5.4 changes:

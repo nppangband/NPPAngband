@@ -5478,6 +5478,43 @@ bool obj_can_browse(const object_type *o_ptr)
 	return TRUE;
 }
 
+bool obj_can_study(const object_type *o_ptr)
+{
+	int i;
+	if (o_ptr->tval != cp_ptr->spell_book) return FALSE;
+
+	for (i = 0;  i < SPELLS_PER_BOOK; i++)
+	{
+		int spell = get_spell_index(o_ptr, i);
+
+		/* Not a spell */
+		if (spell == -1) continue;
+
+		/* Is there a spell we can learn? */
+		if (spell_okay(spell, FALSE)) return (TRUE);
+	}
+	return (FALSE);
+
+}
+
+bool obj_can_cast(const object_type *o_ptr)
+{
+	int i;
+	if (o_ptr->tval != cp_ptr->spell_book) return FALSE;
+
+	for (i = 0;  i < SPELLS_PER_BOOK; i++)
+	{
+		int spell = get_spell_index(o_ptr, i);
+
+		/* Not a spell */
+		if (spell == -1) continue;
+
+		/* Is there a spell we can learn? */
+		if (spell_okay(spell, TRUE)) return (TRUE);
+	}
+	return (FALSE);
+}
+
 /* Can only take off non-cursed items */
 bool obj_can_takeoff(const object_type *o_ptr)
 {

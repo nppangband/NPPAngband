@@ -971,6 +971,8 @@ extern bool has_correct_ammo(void);
 extern bool obj_has_charges(const object_type *o_ptr);
 extern bool rod_can_zap(const object_type *o_ptr);
 extern bool obj_can_browse(const object_type *o_ptr);
+extern bool obj_can_study(const object_type *o_ptr);
+extern bool obj_can_cast(const object_type *o_ptr);
 extern bool obj_can_takeoff(const object_type *o_ptr);
 extern bool obj_can_wear(const object_type *o_ptr);
 extern bool obj_has_inscrip(const object_type *o_ptr);
