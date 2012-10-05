@@ -1734,11 +1734,22 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 		f6 &= ~(RF6_TELE_LEVEL);
 		f7 &= ~(dungeon_summon_mask_f7);
 	}
-	/*hack - some spells are unfair on themed and wilderness levels*/
-	/* Also includes DUNGEON_TYPE_WILDERNESS */
-	else if (p_ptr->dungeon_type >= DUNGEON_TYPE_THEMED_LEVEL)
+	/*hack - some spells are unfair on themed levels */
+	else if (p_ptr->dungeon_type == DUNGEON_TYPE_THEMED_LEVEL)
 	{
 		f6 &= ~(RF6_TELE_TO | RF6_TELE_LEVEL | RF6_TELE_AWAY);
+		f7 &= ~(dungeon_summon_mask_f7);
+	}
+	/*hack - some spells are unfair on wilderness levels */
+	else if (p_ptr->dungeon_type == DUNGEON_TYPE_WILDERNESS)
+	{
+		f6 &= ~(RF6_TELE_LEVEL);
+		f7 &= ~(dungeon_summon_mask_f7);
+	}
+	/*hack - some spells are unfair on greater_vault levels*/
+	else if (p_ptr->dungeon_type >= DUNGEON_TYPE_GREATER_VAULT)
+	{
+		f6 &= ~(RF6_TELE_LEVEL);
 		f7 &= ~(dungeon_summon_mask_f7);
 	}
 
