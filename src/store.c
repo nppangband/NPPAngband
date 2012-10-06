@@ -1646,7 +1646,7 @@ static bool store_service_aux(int store_num, s16b choice)
 			/* Ask confirmation */
 			if (!get_check(format("Really defer your reward, %s?", title))) return (FALSE);
 
-			p_ptr->deferred_rewards += (q_ptr->q_fame_inc / 2);
+			p_ptr->deferred_rewards += q_ptr->q_fame_inc;
 
 			guild_quest_wipe(FALSE);
 
