@@ -2632,6 +2632,9 @@ void quest_fail(void)
 		/* Failing a pit, nest, wilderness, or themed level quests isn't as bad */
 		else if (quest_multiple_r_idx(q_ptr)) p_ptr->q_fame = (p_ptr->q_fame * 65 / 100);
 
+		/* Minimal penalty for greater vaults */
+		else if (q_ptr->q_type == QUEST_GREATER_VAULT) p_ptr->q_fame = (p_ptr->q_fame * 9 / 10);
+
 		else
 		{
 			/* Monster quests */
