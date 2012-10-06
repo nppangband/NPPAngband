@@ -755,7 +755,9 @@ extern bool load_player(void);
 /* melee1.c */
 extern int drain_charges(object_type *o_ptr, u32b heal);
 extern bool make_attack_normal(monster_type *m_ptr);
+extern int get_dam(monster_race *r_ptr, int attack);
 extern int get_breath_dam(s16b hit_points, int gf_type, bool powerful);
+extern int get_ball_dam(monster_race *r_ptr, int attack, int gf_type, bool powerful);
 extern void mon_cloud(int m_idx, int typ, int dam, int rad);
 extern bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px);
 extern void cloud_surround(int r_idx, int *typ, int *dam, int *rad);

@@ -434,7 +434,7 @@ static long eval_max_dam(int r_idx)
 	u32b melee_dam, atk_dam, spell_dam;
 	byte rlev;
 	monster_race *r_ptr;
-	u32b flag, breath_mask, attack_mask;
+	u32b flag, breath_mask, attack_mask, ball_mask;
 	u32b flag_counter;
 
 	r_ptr = &r_info[r_idx];
@@ -460,6 +460,7 @@ static long eval_max_dam(int r_idx)
 		 		flag = r_ptr->flags4;
 				attack_mask = RF4_ATTACK_MASK;
 				breath_mask = RF4_BREATH_MASK;
+				ball_mask 	= RF4_BALL_MASK;
 				break;
 			}
 			case 1:
@@ -467,6 +468,7 @@ static long eval_max_dam(int r_idx)
 		 		flag = r_ptr->flags5;
 				attack_mask = RF5_ATTACK_MASK;
 				breath_mask = RF5_BREATH_MASK;
+				ball_mask 	= RF5_BALL_MASK;
 				break;
 			}
 			case 2:
@@ -474,6 +476,7 @@ static long eval_max_dam(int r_idx)
 		 		flag = r_ptr->flags6;
 				attack_mask = RF6_ATTACK_MASK;
 				breath_mask = RF6_BREATH_MASK;
+				ball_mask 	= RF6_BALL_MASK;
 				break;
 			}
 			case 3:
@@ -482,6 +485,7 @@ static long eval_max_dam(int r_idx)
 		 		flag = r_ptr->flags7;
 				attack_mask = RF7_ATTACK_MASK;
 				breath_mask = RF7_BREATH_MASK;
+				ball_mask 	= RF7_BALL_MASK;
 				break;
 			}
 		}
@@ -499,6 +503,8 @@ static long eval_max_dam(int r_idx)
 			/* First make sure monster has the flag*/
 			if (flag & flag_counter)
 			{
+				bool powerful = (r_ptr->flags2 & (RF2_POWERFUL) ? TRUE : FALSE);
+
 				/*Is it a breath? Should only be flag 4*/
 				if (breath_mask & flag_counter)
 				{
@@ -606,8 +612,7 @@ static long eval_max_dam(int r_idx)
 
 					if (which_gf)
 					{
-						this_dam = get_breath_dam(hp, which_gf,
-									(r_ptr->flags2 & (RF2_POWERFUL) ? TRUE : FALSE));
+						this_dam = get_breath_dam(hp, which_gf, powerful);
 
 						/* handle elemental breaths*/
 						switch (which_gf)
@@ -634,7 +639,57 @@ static long eval_max_dam(int r_idx)
 					}
 				}
 
-				/*Is it an arrow, bolt, beam, or ball?*/
+				/*Is it a ball spell? Should only be flag 5*/
+				else if (ball_mask & flag_counter)
+				{
+					int which_gf = 0;
+
+					if (flag_counter == RF5_BALL_ACID) 		which_gf = GF_ACID;
+					else if (flag_counter == RF5_BALL_ELEC) which_gf = GF_ELEC;
+					else if (flag_counter == RF5_BALL_FIRE) which_gf = GF_FIRE;
+					else if (flag_counter == RF5_BALL_COLD) which_gf = GF_COLD;
+					else if (flag_counter == RF5_BALL_POIS)	which_gf = GF_POIS;
+					else if (flag_counter == RF5_BALL_LIGHT)which_gf = GF_LIGHT;
+					else if (flag_counter == RF5_BALL_DARK) which_gf = GF_DARK;
+					else if (flag_counter == RF5_BALL_CONFU)which_gf = GF_CONFUSION;
+					else if (flag_counter == RF5_BALL_SOUND)which_gf = GF_SOUND;
+					else if (flag_counter == RF5_BALL_SHARD)which_gf = GF_SHARD;
+					else if (flag_counter == RF5_BALL_METEOR)which_gf = GF_METEOR;
+					else if (flag_counter == RF5_BALL_STORM) which_gf = GF_WATER;
+					else if (flag_counter == RF5_BALL_NETHR)which_gf = GF_NETHER;
+					else if (flag_counter == RF5_BALL_CHAOS)which_gf = GF_CHAOS;
+					else if (flag_counter == RF5_BALL_MANA) which_gf = GF_MANA;
+					else if (flag_counter == RF5_BALL_WATER)which_gf = GF_WATER;
+
+					if (which_gf)
+					{
+						int attack = 96 + (x * 32) + i;
+
+						this_dam = get_ball_dam(r_ptr, attack, which_gf, powerful);
+
+						/* handle elemental breaths*/
+						switch (which_gf)
+						{
+							case GF_ACID:
+							case GF_FIRE:
+							case GF_COLD:
+							case GF_ELEC:
+							case GF_POIS:
+							{
+								/* Lets just pretend the player has the right base resist*/
+								this_dam /= 3;
+								break;
+							}
+
+							default: break;
+						}
+
+						/*slight bonus for cloud_surround*/
+						if (r_ptr->flags2 & RF2_CLOUD_SURROUND) this_dam = this_dam * 11 / 10;
+					}
+				}
+
+				/*Is it an arrow, bolt, or beam?*/
 				else if (attack_mask & flag_counter)
 				{
 					switch (x)
