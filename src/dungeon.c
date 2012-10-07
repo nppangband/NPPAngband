@@ -848,14 +848,13 @@ static void process_greater_vault_quests(void)
 static void process_wilderness_quests(void)
 {
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
-	int cur_quest_monsters = count_quest_monsters(q_ptr);
 	u16b tele_mon_idx[10];
 	u16b mon_count = 0;
 	u16b actual_mon_count = 0;
 	u16b i;
 	monster_type *m_ptr;
 	char ddesc[80];
-	int remaining = q_ptr->q_max_num - cur_quest_monsters;
+	int remaining = q_ptr->q_max_num - q_ptr->q_num_killed;
 
 	/* Don't start teleporting them yet */
 	if (remaining > 10) return;
