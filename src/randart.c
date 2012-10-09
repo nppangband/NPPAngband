@@ -2178,11 +2178,11 @@ static bool add_slay(artifact_type *a_ptr)
 	{
 
 		/*hack - don't add a slay when we already have a more powerful flag*/
-		if ((a_ptr->a_flags1 && TR1_KILL_UNDEAD) &&
+		if ((a_ptr->a_flags1 & TR1_KILL_UNDEAD) &&
 			(flag_slay_add == TR1_SLAY_UNDEAD)) art_slay_freq[slay_counter] = 0;
-		else if ((a_ptr->a_flags1 && TR1_KILL_DEMON) &&
+		else if ((a_ptr->a_flags1 & TR1_KILL_DEMON) &&
 			(flag_slay_add == TR1_SLAY_DEMON)) art_slay_freq[slay_counter] = 0;
-		else if ((a_ptr->a_flags1 && TR1_KILL_DRAGON) &&
+		else if ((a_ptr->a_flags1 & TR1_KILL_DRAGON) &&
 			(flag_slay_add == TR1_SLAY_DRAGON)) art_slay_freq[slay_counter] = 0;
 
 		/*We already have this one*/
