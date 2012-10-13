@@ -3855,7 +3855,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 		{
 			disturb(1, 0);
 			msg_format("%^s teleports you away.", m_name);
-			teleport_player(100);
+			teleport_player(100, FALSE);
 			break;
 		}
 

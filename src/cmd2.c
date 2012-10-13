@@ -319,6 +319,9 @@ static s16b chest_check(int y, int x, bool check_locked)
 		/* Check for chest */
 		if (o_ptr->tval != TV_CHEST) continue;
 
+		/* Don't count special quest items */
+		if (o_ptr->ident & (IDENT_QUEST)) continue;
+
 		/* Handle the option to check if it is locked*/
 		if (check_locked)
 		{
@@ -585,6 +588,12 @@ static bool do_cmd_open_chest(int y, int x, s16b o_idx)
 		return (FALSE);
 	}
 
+	if (o_ptr->ident & (IDENT_QUEST))
+	{
+		msg_print("This chest cannot be opened!");
+		return (FALSE);
+	}
+
 	/* Attempt to unlock it */
 	if (o_ptr->pval > 0)
 	{
@@ -847,6 +856,9 @@ int count_chests(int *y, int *x, bool trapped)
 		/* Hack - Don't open mimic chests */
 		if (o_ptr->mimic_r_idx) continue;
 
+		/* Don't count special quest items */
+		if (o_ptr->ident & (IDENT_QUEST)) continue;
+
 		/* No (known) traps here */
 		if (trapped &&
 		    (!object_known_p(o_ptr) ||
@@ -1076,7 +1088,7 @@ void do_cmd_open(cmd_code code, cmd_arg args[])
 			s = "There are no chests in that direction!";
 
 			/*clear the restriction*/
-			item_tester_hook = obj_is_chest;
+			item_tester_hook = obj_is_openable_chest;
 
 			/*player chose escape*/
 			if (!get_item_beside(&o_idx, q, s, cy, cx)) more = 0;

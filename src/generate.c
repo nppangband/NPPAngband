@@ -7896,6 +7896,23 @@ static bool build_themed_level(void)
 			if (one_in_(2)) m_ptr->m_timed[MON_TMD_SLEEP] = 0;
 			else m_ptr->m_timed[MON_TMD_SLEEP] /= 2;
 		}
+
+		/* Process the mimic objects */
+		for (i = 1; i < o_max; i++)
+		{
+			object_type *o_ptr = &o_list[i];
+
+			/* Skip dead objects */
+			if (!o_ptr->k_idx) continue;
+
+			if (!o_ptr->mimic_r_idx) continue;
+
+			/* Mark it as a questor */
+			o_ptr->ident |= (IDENT_QUEST);
+
+			/*increase the max_num counter*/
+			q_ptr->q_max_num ++;
+		}
 	}
 
 	/* Remove restriction */
@@ -9986,6 +10003,23 @@ static bool build_wilderness_level(void)
 			/* One in 25 generate a bonus item */
 			if ((mon_max % 25) == 0) m_ptr->mflag |= (MFLAG_BONUS_ITEM);
 		}
+
+		/* Process the mimic objects */
+		for (i = 1; i < o_max; i++)
+		{
+			object_type *o_ptr = &o_list[i];
+
+			/* Skip dead objects */
+			if (!o_ptr->k_idx) continue;
+
+			if (!o_ptr->mimic_r_idx) continue;
+
+			/* Mark it as a questor */
+			o_ptr->ident |= (IDENT_QUEST);
+
+			/*increase the max_num counter*/
+			q_ptr->q_max_num ++;
+		}
 	}
 
 	/* Try hard to place this level */
@@ -10070,8 +10104,8 @@ static bool lab_is_tunnel(int y, int x)
 }
 
 /* Note the height and width must be an odd number */
-#define LABYRINTH_HGT (15 + (MAX_DUNGEON_HGT / 2 ))
-#define LABYRINTH_WID (25 + (MAX_DUNGEON_WID / 2 ))
+#define LABYRINTH_HGT 81
+#define LABYRINTH_WID 41
 #define LABYRINTH_AREA (LABYRINTH_WID * LABYRINTH_HGT)
 
 /**
@@ -10086,20 +10120,19 @@ static bool build_labyrinth_level(void)
 {
 	int i, j, k, y, x;
 	bool is_quest_level = FALSE;
-	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 	int cave_squares_x[LABYRINTH_AREA];
 	int cave_squares_y[LABYRINTH_AREA];
 	int cave_squares_max = 0;
 
 	/*
-	 * Size of the actual labrinth part must be odd.
+	 * Size of the actual labyrinth part must be odd.
 	 * NOTE: these are not the actual dungeon size, but rather the size of the
 	 * area we're generating a labyrinth in (which doesn't count the enclosing
 	 * outer walls.
 	 */
 
-	int hgt = (LABYRINTH_HGT / 2) * 2 + 1;
-	int wid = (LABYRINTH_WID / 2) * 2 + 1;
+	int hgt = LABYRINTH_HGT;
+	int wid = LABYRINTH_WID;
 	int area = hgt * wid;
 
 	/* NOTE: 'sets' and 'walls' are too large... we only need to use about
@@ -10127,9 +10160,14 @@ static bool build_labyrinth_level(void)
 	if (quest_check(p_ptr->depth) == QUEST_LABYRINTH_LEVEL)
 	{
 		is_quest_level = TRUE;
+		known = TRUE;
 
-		/* Soft walls for the quests */
-		soft = TRUE;
+		/* Permanent walls for the quests */
+		soft = FALSE;
+
+		/* Quest levels are much smaller */
+		wid = hgt = LABYRINTH_QUEST_DIMENSIONS;
+		area = LABYRINTH_QUEST_AREA;
 	}
 
 	p_ptr->cur_map_hgt = hgt + 2;
@@ -10241,52 +10279,59 @@ static bool build_labyrinth_level(void)
 		return (FALSE);
 	}
 
-	/* Test each square in (random) order for openness */
-	for (y = 1; y < p_ptr->cur_map_hgt - 1; y++)
+	/* No doors, traps or rubble in quest levels */
+	if (!is_quest_level)
 	{
-		for (x = 1; x < p_ptr->cur_map_wid - 1; x++)
-		{
-			if (cave_naked_bold(y, x))
-			{
-				/* Not in the rooms */
-				if (!lab_is_tunnel(y, x)) continue;
 
-				cave_squares_y[cave_squares_max] = y;
-				cave_squares_x[cave_squares_max] = x;
-				cave_squares_max++;
+		/* Test each square in (random) order for openness */
+		for (y = 1; y < p_ptr->cur_map_hgt - 1; y++)
+		{
+			for (x = 1; x < p_ptr->cur_map_wid - 1; x++)
+			{
+				if (cave_naked_bold(y, x))
+				{
+					/* Not in the rooms */
+					if (!lab_is_tunnel(y, x)) continue;
+
+					cave_squares_y[cave_squares_max] = y;
+					cave_squares_x[cave_squares_max] = x;
+					cave_squares_max++;
+				}
 			}
 		}
-	}
 
-	/* Paranoia */
-	if (!cave_squares_max)
-	{
-		if (cheat_room) msg_format("failed to place doors");
-		return (FALSE);
-	}
-
-	/* Generate a door for every 100 squares in the labyrinth */
-	for (i = area / 100; i > 0; i--)
-	{
 		/* Paranoia */
-		if (!cave_squares_max) break;
+		if (!cave_squares_max)
+		{
+			if (cheat_room) msg_format("failed to place doors");
+			return (FALSE);
+		}
 
-		x = randint0(cave_squares_max);
+		/* Generate a door for every 100 squares in the labyrinth */
+		for (i = area / 100; i > 0; i--)
+		{
+			/* Paranoia */
+			if (!cave_squares_max) break;
 
-		/* Place same doors */
-		place_random_door(cave_squares_y[x], cave_squares_x[x]);
+			x = randint0(cave_squares_max);
 
-		/* Replace the current with the top one */
-		cave_squares_max--;
-		cave_squares_y[x] = cave_squares_y[cave_squares_max];
-		cave_squares_x[x] = cave_squares_x[cave_squares_max];
+			/* Place same doors */
+			place_random_door(cave_squares_y[x], cave_squares_x[x]);
+
+			/* Replace the current with the top one */
+			cave_squares_max--;
+			cave_squares_y[x] = cave_squares_y[cave_squares_max];
+			cave_squares_x[x] = cave_squares_x[cave_squares_max];
+		}
+
+		/* Place some traps and rubble */
+		x = MAX(MIN(p_ptr->depth / 3, 10), 2);
+		x = (3 * x * (hgt * wid)) / (MAX_DUNGEON_HGT * MAX_DUNGEON_WID);
+		alloc_object(ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint(x));
+		alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_TRAP, randint(x));
 	}
 
-	/* Place some traps and rubble */
-	x = MAX(MIN(p_ptr->depth / 3, 10), 2);
-	x = (3 * x * (hgt * wid)) / (MAX_DUNGEON_HGT * MAX_DUNGEON_WID);
-	alloc_object(ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint(x));
-	alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_TRAP, randint(x));
+
 
 	/* Determine the character location, if it is needed */
 	if (!new_player_spot_old())
@@ -10296,73 +10341,36 @@ static bool build_labyrinth_level(void)
 		return (FALSE);
 	}
 
-	/*get the hook*/
-	get_mon_num_hook = monster_wilderness_labrynth_okay;
-
-	/* Prepare allocation table */
-	get_mon_num_prep();
-
-	/* Place some things */
-	if (!place_monsters_objects())
+	/* Only put monsters on non-quest levels */
+	if (!is_quest_level)
 	{
-		if (cheat_room) msg_format("failed to place monsters and objects");
+		/*get the hook*/
+		get_mon_num_hook = monster_wilderness_labrynth_okay;
+
+		/* Prepare allocation table */
+		get_mon_num_prep();
+
+		/* Place some things */
+		if (!place_monsters_objects())
+		{
+			if (cheat_room) msg_format("failed to place monsters and objects");
+
+			/* Reset the allocation table */
+			get_mon_num_hook = NULL;
+			get_mon_num_prep();
+
+			return FALSE;
+		}
 
 		/* Reset the allocation table */
 		get_mon_num_hook = NULL;
 		get_mon_num_prep();
-
-		return FALSE;
 	}
 
-	/* Reset the allocation table */
-	get_mon_num_hook = NULL;
-	get_mon_num_prep();
+	else q_info->turn_counter = (turn - 170);
 
 	/* If we want the players to see the maze layout, do that now */
 	if (known) wiz_light();
-
-	/*final preps if this is a quest level*/
-	if (is_quest_level)
-	{
-		q_ptr->q_num_killed = 0;
-		q_ptr->q_max_num = 0;
-
-		/*
-		 * Go through every monster, and mark them as a questor,
-		 * then make them slightly faster, and light sleepers
-		 */
-		/* Process the monsters */
-		for (i = 1; i < mon_max; i++)
-		{
-			monster_type *m_ptr = &mon_list[i];
-			monster_race *r_ptr;
-
-			/* Ignore non-existant monsters */
-			if (!m_ptr->r_idx) continue;
-
-			r_ptr = &r_info[m_ptr->r_idx];
-
-			/*mark it as a quest monster*/
-			m_ptr->mflag |= (MFLAG_QUEST);
-
-			if (!(r_ptr->flags1 & RF1_UNIQUE))
-			{
-				m_ptr->mflag &= ~(MFLAG_SLOWER);
-				m_ptr->mflag |= (MFLAG_FASTER);
-				calc_monster_speed(m_ptr->fy, m_ptr->fx);
-			}
-
-			/*increase the max_num counter*/
-			q_ptr->q_max_num ++;
-
-			/*Not many of them sleeping, others lightly sleeping*/
-			if (one_in_(2)) m_ptr->m_timed[MON_TMD_SLEEP] = 0;
-			else m_ptr->m_timed[MON_TMD_SLEEP] /= 2;
-
-			/* One in 25 generate a bonus item */
-			if ((mon_max % 25) == 0) m_ptr->mflag |= (MFLAG_BONUS_ITEM);
-		}
-	}
 
 	/* Try hard to place this level */
 	rating += 25;
@@ -10457,8 +10465,8 @@ void update_arena_level(byte stage)
  */
 static bool player_place_arena(void)
 {
-	u16b empty_squares_y[50];
-	u16b empty_squares_x[50];
+	u16b empty_squares_y[ARENA_LEVEL_AREA];
+	u16b empty_squares_x[ARENA_LEVEL_AREA];
 	byte empty_squares = 0;
 	byte slot, y, x;
 
@@ -10468,8 +10476,6 @@ static bool player_place_arena(void)
 	 */
 	for (y = 0; y < p_ptr->cur_map_hgt; y++)
 	{
-		if (empty_squares == 50) break;
-
 		for (x = 0; x < p_ptr->cur_map_wid; x++)
 		{
 			/* New, and open square */
@@ -12143,7 +12149,7 @@ static int get_object_count_labyrinth(void)
 static dungeon_capabilities_type dun_cap_body_labyrinth =
 {
 	can_place_escorts_true,
-	can_place_player_in_rooms_false,
+	can_place_player_in_rooms_true,
 	can_place_stairs_default,
 	adjust_stairs_number_unchanged,
 	can_place_fog_in_rooms_false,

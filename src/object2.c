@@ -2653,7 +2653,7 @@ static bool kind_is_great(int k_idx)
 			    (object_generation_mode == OB_GEN_MODE_RANDART))  return (FALSE);
 			return (TRUE);
 		}
-
+		default:  break;
 	}
 
 	/* Assume not great */
@@ -3364,14 +3364,28 @@ static bool kind_is_good(int k_idx)
 		/*the very powerful healing potions can be good*/
 		case TV_POTION:
 		{
-			if ((k_ptr->sval == SV_POTION_STAR_HEALING) ||
-				(k_ptr->sval == SV_POTION_LIFE))
-		   	{
-			    if (object_level > 85)
+			switch (k_ptr->sval)
+			{
+				case SV_POTION_STAR_HEALING:
+				case SV_POTION_LIFE:
+				{
+					if (object_level > 85) return (TRUE);
+					return (FALSE);
+				}
+				case SV_POTION_INC_STR:
+				case SV_POTION_INC_INT:
+				case SV_POTION_INC_WIS:
+				case SV_POTION_INC_CON:
+				case SV_POTION_INC_DEX:
+				case SV_POTION_AUGMENTATION:
+				{
+					if (object_level < (k_ptr->k_level - 5)) return (TRUE);
+					return (FALSE);
+				}
+				default: return (FALSE);
 
-				return (TRUE);
 			}
-			return (FALSE);
+			break;
 		}
 
 		/* Chests -- Chests are good. */

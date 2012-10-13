@@ -1719,7 +1719,7 @@ void notice_stuff(void)
 	{
 		p_ptr->notice &= ~(PN_QUEST_REMAIN);
 
-		quest_monster_update();
+		quest_status_update();
 	}
 
 	/* Clear all flags */

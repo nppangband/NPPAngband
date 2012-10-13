@@ -597,7 +597,7 @@ static const tval_desc tvals[] =
 	{ TV_SOFT_ARMOR,        "Soft Armor"           },
 	{ TV_RING,              "Ring"                 },
 	{ TV_AMULET,            "Amulet"               },
-	{ TV_LIGHT,              "Lite"                 },
+	{ TV_LIGHT,              "Lite"                },
 	{ TV_POTION,            "Potion"               },
 	{ TV_SCROLL,            "Scroll"               },
 	{ TV_WAND,              "Wand"                 },
@@ -2144,7 +2144,7 @@ void do_cmd_debug(void)
 		/* Phase Door */
 		case 'p':
 		{
-			teleport_player(10);
+			teleport_player(10, FALSE);
 			break;
 		}
 
@@ -2173,7 +2173,7 @@ void do_cmd_debug(void)
 		/* Teleport */
 		case 't':
 		{
-			teleport_player(100);
+			teleport_player(100, FALSE);
 			break;
 		}
 

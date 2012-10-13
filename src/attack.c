@@ -624,6 +624,7 @@ static int breakage_chance(const object_type *o_ptr)
 		/* Often break */
 		case TV_LIGHT:
 		case TV_SCROLL:
+		case TV_PARCHMENT:
 		case TV_SKELETON:
 		{
 			return (50);

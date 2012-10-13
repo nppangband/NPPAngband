@@ -472,8 +472,6 @@ static int count_quest_monsters(const quest_type *q_ptr)
 }
 
 
-#define ARENA_SQUARE_SLOTS  100
-
 /*
  * Helper function for process_arena_level and add arena object.
  * Determine which object to give to the player.
@@ -548,7 +546,7 @@ static s16b get_arena_obj_num(void)
 /*
  * Determine if a monster is suitable for the arena"
  */
-static bool monster_arena_okay(int r_idx)
+static bool monster_arena_labyrinth_okay(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -575,8 +573,8 @@ static bool monster_arena_okay(int r_idx)
  */
 static bool add_arena_monster(bool new_squares, byte stage, s32b cur_quest_monsters)
 {
-	u16b empty_squares_y[ARENA_SQUARE_SLOTS];
-	u16b empty_squares_x[ARENA_SQUARE_SLOTS];
+	u16b empty_squares_y[ARENA_LEVEL_AREA];
+	u16b empty_squares_x[ARENA_LEVEL_AREA];
 	byte empty_squares = 0;
 	byte y, x;
 	s16b r_idx;
@@ -603,18 +601,6 @@ static bool add_arena_monster(bool new_squares, byte stage, s32b cur_quest_monst
 			{
 				slot = empty_squares;
 
-				/*
-				 * Hack - continue to write new slots over random spaces
-				 * if we have more empty squares than slots
-				 */
-				if (empty_squares >= ARENA_SQUARE_SLOTS)
-				{
-					byte chance = randint0(empty_squares);
-
-					if (chance >= ARENA_SQUARE_SLOTS) continue;
-					else slot = chance;
-				}
-
 				empty_squares_y[slot] = y;
 				empty_squares_x[slot] = x;
 				empty_squares++;
@@ -626,12 +612,12 @@ static bool add_arena_monster(bool new_squares, byte stage, s32b cur_quest_monst
 	if (!empty_squares) return (FALSE);
 
 	/* Find a spot in the array */
-	slot = randint0(MIN(empty_squares, ARENA_SQUARE_SLOTS));
+	slot = randint0(empty_squares);
 	y = empty_squares_y[slot];
 	x = empty_squares_x[slot];
 
 	/* Prepare allocation table */
-	get_mon_num_hook = monster_arena_okay;
+	get_mon_num_hook = monster_arena_labyrinth_okay;
 	get_mon_num_prep();
 
 	if (((cur_quest_monsters % 5) == 2) ||
@@ -688,8 +674,8 @@ static bool add_arena_monster(bool new_squares, byte stage, s32b cur_quest_monst
  */
 static void add_arena_object(byte stage)
 {
-	u16b empty_squares_y[ARENA_SQUARE_SLOTS];
-	u16b empty_squares_x[ARENA_SQUARE_SLOTS];
+	u16b empty_squares_y[ARENA_LEVEL_AREA];
+	u16b empty_squares_x[ARENA_LEVEL_AREA];
 	byte empty_squares = 0;
 	byte slot;
 	byte y, x;
@@ -703,9 +689,6 @@ static void add_arena_object(byte stage)
 	 */
 	for (y = 0; y < p_ptr->cur_map_hgt; y++)
 	{
-		/* boundry control */
-		if (empty_squares == ARENA_SQUARE_SLOTS) break;
-
 		for (x = 0; x < p_ptr->cur_map_wid; x++)
 		{
 			/* Ignore the outer walls locations */
@@ -755,6 +738,286 @@ static void add_arena_object(byte stage)
 	/* Put it on the floor */
 	floor_carry(y, x, i_ptr);
 }
+
+
+/*
+ * This function assumes it is called every 10 game turns during an arena level.
+ */
+static void process_arena_level(void)
+{
+	int i;
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+	s32b turns_lapsed = turn - q_info->turn_counter;
+	bool new_squares = FALSE;
+
+	/* Each monster phase is 5 game turns at normal speed */
+	s32b current_mon_phase = turns_lapsed / ARENA_STAGE_MON + 1;
+
+	/* Each quest phase is 20 game turns at normal speed */
+	s32b current_lev_phase = turns_lapsed / ARENA_STAGE_LEV;
+	s32b prev_lev_phase = (turns_lapsed - 10) / ARENA_STAGE_LEV;
+
+	int cur_quest_monsters = count_quest_monsters(q_ptr);
+
+	/* Boundry Control */
+	if (current_mon_phase > q_ptr->q_max_num) current_mon_phase = q_ptr->q_max_num;
+	if (prev_lev_phase < 0) prev_lev_phase = 0;
+
+	/* First check if there is anything to do */
+	if ((cur_quest_monsters >= current_mon_phase) &&
+		((current_lev_phase == prev_lev_phase) || (current_lev_phase >= ARENA_MAX_STAGES)))
+	{
+		return;
+	}
+
+	/* Open up more of the dungeon  */
+	if (current_lev_phase > prev_lev_phase)
+	{
+		/* There are only 10 level phases */
+		if (current_lev_phase < ARENA_MAX_STAGES)
+		{
+			byte new_objects = MIN((1 + randint1(2)), current_lev_phase);
+
+			/* Open up more of the arena */
+			update_arena_level(current_lev_phase);
+
+			/* We are expanding the level */
+			new_squares = TRUE;
+
+			/* Add new more objects */
+			for (i = 0; i < new_objects; i++)
+			{
+				add_arena_object(current_lev_phase);
+			}
+		}
+	}
+
+	while (current_mon_phase > cur_quest_monsters)
+	{
+		/* Add monsters, unless there is no room or we have enough. */
+		if (!add_arena_monster(new_squares, current_lev_phase, cur_quest_monsters))
+		{
+			/* No room for new monsters? */
+			if (!new_squares)break;
+
+			/* All the new squares are full, try other blank squares */
+			new_squares  = FALSE;
+		}
+		else cur_quest_monsters++;
+	}
+}
+
+
+/*
+ * Helper function for process_labrynth_level.
+ * Count objects on the level, including the dungeon and player backpack.
+ * If
+ */
+static int count_labrynth_objects(void)
+{
+	int i;
+
+	/* First, count in the backpack */
+	int item_count = quest_item_count();
+
+	/* Count the object list (includes those held by monsters */
+	for (i = 1; i < o_max; i++)
+	{
+		object_type *o_ptr = &o_list[i];
+
+		/* Skip dead objects */
+		if (!o_ptr->k_idx) continue;
+
+		/* Count the quest objects */
+		if (o_ptr->ident & (IDENT_QUEST))
+		{
+			item_count += o_ptr->number;
+		}
+	}
+
+	return (item_count);
+}
+
+/*
+ * Helper function for process_arena_level.
+ * Add monsters to the recently added parts of the dungeon.
+ * If new spaces have been cleared, this function will first try to put them there.
+ */
+static bool add_labyrinth_monster_object(bool add_object)
+{
+	u16b empty_squares_y[LABYRINTH_QUEST_AREA];
+	u16b empty_squares_x[LABYRINTH_QUEST_AREA];
+	u16b empty_squares = 0;
+	u16b slot;
+	byte y, x;
+	s16b r_idx;
+	monster_type *m_ptr;
+	s16b mon_lev = p_ptr->depth;
+	object_type *i_ptr;
+	object_type object_type_body;
+	int k_idx;
+
+	i_ptr = &object_type_body;
+
+	/*
+	 * Start with add floor spaces where appropriate. */
+	for (y = 0; y < p_ptr->cur_map_hgt; y++)
+	{
+		for (x = 0; x < p_ptr->cur_map_wid; x++)
+		{
+			/* Ignore the outer walls locations */
+			if (!in_bounds_fully(y, x)) continue;
+
+			/*
+			 * We want them at least 7 squares away, based on the labyrinth.
+			 * Assumes energy to pass is 100.
+			 */
+			if ((cave_cost[FLOW_PASS_DOORS][y][x] - cost_at_center[FLOW_PASS_DOORS]) < 700) continue;
+
+			/* New, and open square */
+			if (cave_naked_bold(y, x))
+			{
+				empty_squares_y[empty_squares] = y;
+				empty_squares_x[empty_squares] = x;
+				empty_squares++;
+			}
+		}
+	}
+
+	/* Paranoia - shouldn't happen */
+	if (empty_squares < 2) return (FALSE);
+
+	/* Find a spot in the array */
+	slot = randint0(empty_squares);
+	y = empty_squares_y[slot];
+	x = empty_squares_x[slot];
+
+	/* Prepare allocation table */
+	get_mon_num_hook = monster_arena_labyrinth_okay;
+	get_mon_num_prep();
+
+	/* Pick a monster, using the given level */
+	r_idx = get_mon_num(mon_lev, y, x, 0L);
+
+	/* Remove restriction */
+	get_mon_num_hook = NULL;
+	get_mon_num_prep();
+
+	if (!place_monster_aux(y, x, r_idx, (MPLACE_GROUP | MPLACE_OVERRIDE))) return (FALSE);
+
+	/* Mark it as a questor */
+	if (!cave_m_idx[y][x])	return (FALSE); /* Paranoia - should never happen */
+	m_ptr = &mon_list[cave_m_idx[y][x]];
+	m_ptr->mflag |= (MFLAG_QUEST);
+
+	/* Now hand them an object if requested */
+	if (add_object)
+	{
+
+		/* Use a small wooden chest */
+		k_idx = lookup_kind(TV_PARCHMENT, SV_PARCHMENT_FRAGMENT);
+
+		/* Get a random chest */
+		object_wipe(i_ptr);
+		object_prep(i_ptr, k_idx);
+		apply_magic(i_ptr, p_ptr->depth, TRUE, FALSE, FALSE, TRUE);
+
+		/*Don't let the player see what the object it, and make it a quest item*/
+		i_ptr->ident |= (IDENT_HIDE_CARRY | IDENT_QUEST);
+
+		/* Undo the chest theme, and level */
+		i_ptr->xtra1 = i_ptr->pval = 0;
+
+		object_aware(i_ptr);
+		object_known(i_ptr);
+
+		(void)monster_carry(cave_m_idx[y][x], i_ptr);
+
+		/* Now select another square */
+		empty_squares_y[slot] = empty_squares_y[empty_squares];
+		empty_squares_x[slot] = empty_squares_x[empty_squares];
+		empty_squares--;
+		slot = randint0(empty_squares);
+		y = empty_squares_y[slot];
+		x = empty_squares_x[slot];
+
+		k_idx = get_arena_obj_num();
+
+		/* Prepare the object */
+		object_wipe(i_ptr);
+		object_prep(i_ptr, k_idx);
+
+		apply_magic(i_ptr, p_ptr->depth, TRUE, FALSE, FALSE, TRUE);
+
+		object_quantities(i_ptr);
+
+		/* But don't give out too much the ammo */
+		if (obj_is_ammo(i_ptr)) i_ptr->number /= 2;
+
+		/* Identify it */
+		object_aware(i_ptr);
+		object_known(i_ptr);
+
+		/* Put it on the floor */
+		floor_carry(y, x, i_ptr);
+
+		disturb(0,0);
+	}
+
+	return (TRUE);
+}
+
+
+
+/*
+ * This function assumes it is called every 10 game turns during a labrynth level.
+ */
+static void process_labyrinth_level(void)
+{
+	int i;
+	s32b turns_lapsed = turn - q_info->turn_counter;
+
+	/* Each wave is 20 game turns at normal speed */
+	s32b current_lab_wave = turns_lapsed / LABYRINTH_STAGE_LEN;
+	s32b prev_lab_wave = (turns_lapsed - 10) / LABYRINTH_STAGE_LEN;
+
+	/* First check if the quest is complete */
+	int num_objects = count_labrynth_objects();
+
+	/* There are enough objects on the level */
+	if (num_objects >= LABYRINTH_COLLECT) return;
+
+	/* Only add monsters/objects every 200 turns */
+	if (current_lab_wave == prev_lab_wave) return;
+
+	/*
+	 * Every 200 turns, add another 4 monsters to the labyrinth
+	 * One of them will hold the object.
+	 * Also, put one helpful object on the floor.
+	  */
+	if (current_lab_wave > prev_lab_wave)
+	{
+		int x = 4;
+		bool obj_added = FALSE;
+
+		for (i = 0; i < 4; i++)
+		{
+			bool add_obj = FALSE;
+
+			if (!obj_added)
+			{
+				if one_in_(x)
+				{
+					obj_added = add_obj = TRUE;
+				}
+			}
+
+			add_labyrinth_monster_object(add_obj);
+			x--;
+		}
+	}
+}
+
 
 /*
  * Check the time remaining on the quest.
@@ -859,7 +1122,7 @@ static void process_wilderness_quests(void)
 	/* Don't start teleporting them yet */
 	if (remaining > 10) return;
 
-	for (i = 1; i < z_info->m_max; i++)
+	for (i = 1; i < mon_max; i++)
 	{
 		m_ptr = &mon_list[i];
 
@@ -919,74 +1182,6 @@ static void process_wilderness_quests(void)
 		/* Message */
 		msg_format("%^s suddenly appears.", ddesc);
 	}
-}
-
-/*
- * This function assumes it is called every 10 game turns during an arena level.
- */
-static void process_arena_level(void)
-{
-	int i;
-	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
-	s32b turns_lapsed = turn - q_info->turn_counter;
-	bool new_squares = FALSE;
-
-	/* Each monster phase is 5 game turns at normal speed */
-	s32b current_mon_phase = turns_lapsed / ARENA_STAGE_MON + 1;
-
-	/* Each quest phase is 20 game turns at normal speed */
-	s32b current_lev_phase = turns_lapsed / ARENA_STAGE_LEV;
-	s32b prev_lev_phase = (turns_lapsed - 10) / ARENA_STAGE_LEV;
-
-	int cur_quest_monsters = count_quest_monsters(q_ptr);
-
-	/* Boundry Control */
-	if (current_mon_phase > q_ptr->q_max_num) current_mon_phase = q_ptr->q_max_num;
-	if (prev_lev_phase < 0) prev_lev_phase = 0;
-
-	/* First check if there is anything to do */
-	if ((cur_quest_monsters >= current_mon_phase) &&
-		((current_lev_phase == prev_lev_phase) || (current_lev_phase >= ARENA_MAX_STAGES)))
-	{
-		return;
-	}
-
-	/* Open up more of the dungeon  */
-	if (current_lev_phase > prev_lev_phase)
-	{
-		/* There are only 10 level phases */
-		if (current_lev_phase < ARENA_MAX_STAGES)
-		{
-			byte new_objects = MIN((1 + randint1(2)), current_lev_phase);
-
-			/* Open up more of the arena */
-			update_arena_level(current_lev_phase);
-
-			/* We are expanding the level */
-			new_squares = TRUE;
-
-			/* Add new more objects */
-			for (i = 0; i < new_objects; i++)
-			{
-				add_arena_object(current_lev_phase);
-			}
-		}
-	}
-
-	while (current_mon_phase > cur_quest_monsters)
-	{
-		/* Add monsters, unless there is no room or we have enough. */
-		if (!add_arena_monster(new_squares, current_lev_phase, cur_quest_monsters))
-		{
-			/* No room for new monsters? */
-			if (!new_squares)break;
-
-			/* All the new squares are full, try other balnk squares */
-			new_squares  = FALSE;
-		}
-		else cur_quest_monsters++;
-	}
-
 }
 
 
@@ -1545,6 +1740,7 @@ static void process_world(void)
 		else
 		{
 			if (q_ptr->q_type == QUEST_ARENA_LEVEL) process_arena_level();
+			else if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL) process_labyrinth_level();
 			else if (!(turn % QUEST_TURNS)) process_guild_quests();
 			if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL)
 			{
@@ -1657,9 +1853,11 @@ static void process_world(void)
 		}
 	}
 
-	/* Hack - if there is a ghost now, and there was not before,
-	 * give a challenge */
-	if ((player_ghost_num > -1) && (one_in_(30))) ghost_challenge();
+	/* Occasionally have the ghost give a challenge */
+	if ((player_ghost_num > -1) && (turn % 100))
+	{
+		if (one_in_(50)) ghost_challenge();
+	}
 
 	/* Put out fire if necessary */
 	if ((level_flag & (LF1_FIRE)) && !(turn % 1000)) put_out_fires();
@@ -2054,7 +2252,7 @@ static void process_world(void)
 	if ((p_ptr->state.teleport) && (rand_int(100) < 1))
 	{
 		/* Teleport player */
-		teleport_player(40);
+		teleport_player(40, FALSE);
 	}
 
 	/* Delayed Word-of-Recall */
@@ -2532,6 +2730,8 @@ void process_player(void)
 		if ((cave_info[p_ptr->py][p_ptr->px] & (CAVE_G_VAULT)) &&
 		    (g_vault_name[0] != '\0'))
 		{
+			msg_print(format("You have entered the %s", g_vault_name));
+
 			if (adult_take_notes)
 			{
 		    	char note[120];
@@ -2688,6 +2888,9 @@ void process_player(void)
 
 	}
 	while (!p_ptr->p_energy_use && !p_ptr->leaving);
+
+	/* Some quests aren't finished by killing monsters */
+	if (guild_quest_active()) check_quest_completion();
 
 	/* Get base noise increase -- less when resting */
 	if (p_ptr->resting)

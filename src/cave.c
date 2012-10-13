@@ -3458,7 +3458,7 @@ void update_view(void)
 	if (radius > 0) ++radius;
 
 	/* Scan monster list and add monster lites */
-	for ( k = 1; k < z_info->m_max; k++)
+	for ( k = 1; k < mon_max; k++)
 	{
 		/* Check the k'th monster */
 		monster_type *m_ptr = &mon_list[k];

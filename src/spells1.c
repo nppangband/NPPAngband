@@ -113,139 +113,18 @@ void teleport_away(int m_idx, int dis)
 	monster_swap(oy, ox, ny, nx);
 }
 
-
-/*
- * Teleport the player to a native grid matching the current grid occupied by the player.
- * Only elemental grids are considered.
- * Return TRUE if succeds.
- */
-bool native_teleport_player(int dis)
-{
-	byte x_location_tables[500];
-	byte y_location_tables[500];
-	int spot_counter = 0;
-
-	int py = p_ptr->py;
-	int px = p_ptr->px;
-
-	int d, i, min, y, x;
-
-	int tries = 0;
-
-	u32b flags = cave_ff3_match(py, px, TERRAIN_MASK);
-
-	/* Check terrain */
-	if (!flags || !is_player_native(py, px))
-	{
-		msg_print("You must be standing over native terrain!");
-		return (FALSE);
-	}
-
-	/* Minimum distance */
-	min = dis / 2;
-
-	/* Get the dungeon size */
-	d = distance(p_ptr->cur_map_hgt, p_ptr->cur_map_wid, 0, 0);
-
-	/* First start with a realistic range */
-	if (dis > d) dis = d;
-
-	/* Must have a realistic Minimum */
-	if (min > (d * 4 / 10))
-	{
-		min = (d * 4 / 10);
-	}
-
-	/* Find a suitable spot in dungeon */
-	while (++tries < 200)
-	{
-		/* Reset the spot counter */
-		spot_counter = 0;
-
-		/* Traverse the dungeon */
-		for (y = 1; y < (p_ptr->cur_map_hgt - 1); y++)
-		{
-			for (x = 1; x < (p_ptr->cur_map_wid - 1); x++)
-			{
-				/* Get the distance to the player */
-				d = distance(y, x, py, px);
-
-				/* Check bounds */
-				if ((d >= dis) || (d <= min)) continue;
-
-				/* Require "start" floor space */
-				if (!cave_teleport_bold(y, x)) continue;
-
-				/* No teleporting into vaults and such */
-				if (cave_info[y][x] & (CAVE_ICKY)) continue;
-
-				/* It must contain the same kind of element */
-				if (cave_ff3_match(y, x, TERRAIN_MASK) != flags) continue;
-
-				/* Don't go over size of array */
-				if (spot_counter < 500)
-				{
-					x_location_tables[spot_counter] = (byte)x;
-					y_location_tables[spot_counter] = (byte)y;
-
-					/*increase the counter*/
-					spot_counter++;
-				}
-
-				/* Array overflow */
-				else if (one_in_(2))
-				{
-					/* Overwrite a previous entry */
-					i = rand_int(spot_counter);
-
-					x_location_tables[i] = (byte)x;
-					y_location_tables[i] = (byte)y;
-				}
-			}
-		}
-
-		/* We found some grids */
-		if (spot_counter > 0)
-		{
-			i = rand_int(spot_counter);
-
-			/* Mark the location */
-			x = x_location_tables[i];
-			y = y_location_tables[i];
-
-			/* Sound */
-			sound(MSG_TELEPORT);
-
-			/* Move player */
-			monster_swap(py, px, y, x);
-
-			/* Handle stuff XXX XXX XXX */
-			handle_stuff();
-
-			return (TRUE);
-		}
-
-		/* Don't look any longer for native grids  */
-		if (min == 0) break;
-
-		/* Decrease the minimum distance */
-		min = min * 6 / 10;
-	}
-
-	msg_print("Failed to find a suitable spot for you!");
-	return (FALSE);
-}
-
 /*
  * Teleport the player to a location up to "dis" grids away.
  *
  * If no such spaces are readily available, the distance may increase.
  * Try very hard to move the player at least a quarter that distance.
+ *
+ * When native is true, player must be standing on native terrain, and land on native terrain.
  */
-void teleport_player(int dis)
+bool teleport_player(int dis, bool native)
 {
-	int x_location_tables [20];
-	int y_location_tables [20];
+	byte x_location_tables [MAX_DUNGEON_AREA];
+	byte y_location_tables [MAX_DUNGEON_AREA];
 	int spot_counter = 0;
 
 	int py = p_ptr->py;
@@ -253,13 +132,23 @@ void teleport_player(int dis)
 
 	int d, d1, i, min, y, x;
 
-	bool look = TRUE;
+	u32b flags = cave_ff3_match(py, px, TERRAIN_MASK);
 
 	/* First, take damage from terrain */
 	process_player_terrain_damage();
 
 	/* Player could have died. */
-	if (p_ptr->is_dead) return;
+	if (p_ptr->is_dead) return (FALSE);
+
+	if (native)
+	{
+		/* Check terrain */
+		if (!flags || !is_player_native(py, px))
+		{
+			msg_print("You must be standing over native terrain!");
+			return (FALSE);
+		}
+	}
 
 	/* Minimum distance */
 	min = dis / 2;
@@ -282,55 +171,66 @@ void teleport_player(int dis)
 		min = (d * 4 / 10);
 	}
 
-	/* Look until done */
-	while (look)
+	/* Look for a spot */
+	while (TRUE)
 	{
+		u32b min_squared = min * min;
+		u32b dis_squared = dis * dis;
+		int y_min = py - dis;
+		int y_max = py + dis;
+		int x_min = px - dis;
+		int x_max = px + dis;
 
-		/*find the allowable range*/
-		int min_y = MAX((py - dis), 0);
-		int min_x = MAX((px - dis), 0);
-		int max_y = MIN((py + dis), (p_ptr->cur_map_hgt - 1));
-		int max_x = MIN((px + dis), (p_ptr->cur_map_wid - 1));
+		/* Boundry control */
+		if (x_min < 0) x_min = 0;
+		if (y_min < 0) y_min = 0;
+		if (x_max > p_ptr->cur_map_wid) x_max = p_ptr->cur_map_wid;
+		if (y_max > p_ptr->cur_map_hgt) y_max = p_ptr->cur_map_hgt;
 
-		/* Try several locations */
-		for (i = 0; i < 10000; i++)
+		/* Analyze the actual map */
+		for (y = y_min; y < y_max; y++)
 		{
-			int dist;
-			/* Pick a location */
-			y = rand_range(min_y, max_y);
-			x = rand_range(min_x, max_x);
-			dist = distance(py, px, y, x);
-			if ((dist <= min) || (dist >= dis)) continue;
-
-			/* Require "start" floor space */
-			if (!cave_teleport_bold(y, x)) continue;
-
-			/* No teleporting into vaults and such */
-			if (cave_info[y][x] & (CAVE_ICKY)) continue;
-
-			/*don't go over size of array*/
-			if (spot_counter < 20)
+			for (x = x_min; x < x_max; x++)
 			{
+
+				u32b dist_squared;
+
+				/* Require "start" floor space */
+				if (!cave_teleport_bold(y, x)) continue;
+
+				/* No teleporting into vaults and such */
+				if (cave_info[y][x] & (CAVE_ICKY)) continue;
+
+				if (native)
+				{
+					/* It must contain the same kind of element */
+					if (cave_ff3_match(y, x, TERRAIN_MASK) != flags) continue;
+				}
+
+				/* Use pythagorean theorem to ensure the distance is right */
+				dist_squared = (((px - x) * (px - x)) +  ((py - y) * (py - y)));
+
+				/* Stay within the min and the max */
+				if (dist_squared <= min_squared) continue;
+				if (dist_squared >= dis_squared) continue;
+
 				x_location_tables[spot_counter] = x;
 				y_location_tables[spot_counter] = y;
 
 				/*increase the counter*/
 				spot_counter++;
 			}
-
-			/*we have enough spots, keep looking*/
-			if (spot_counter == 20)
-			{
-				/* This grid looks good */
-				look = FALSE;
-
-				/* Stop looking */
-				break;
-			}
 		}
 
-		/*we have enough random spots*/
-		if (spot_counter > 3) break;
+		/*we have at least one random spot*/
+		if (spot_counter) break;
+
+		/* Make sure we aren't trapped in an infinite loop */
+		if ((!min) && (dis == d))
+		{
+			msg_print("Failed to find a suitable spot for you!");
+			return (FALSE);
+		}
 
 		/* Increase the maximum distance */
 		dis = dis * 2;
@@ -341,7 +241,7 @@ void teleport_player(int dis)
 
 	}
 
-	i = rand_int(spot_counter);
+	i = randint0(spot_counter);
 
 	/* Mark the location */
 	x = x_location_tables[i];
@@ -355,6 +255,8 @@ void teleport_player(int dis)
 
 	/* Handle stuff XXX XXX XXX */
 	handle_stuff();
+
+	return (TRUE);
 }
 
 
@@ -1341,20 +1243,13 @@ static bool hates_acid(const object_type *o_ptr)
 		/* Staffs/Scrolls are wood/paper */
 		case TV_STAFF:
 		case TV_SCROLL:
+		case TV_PARCHMENT:
 		{
 			return (TRUE);
 		}
 
 		/* Ouch */
 		case TV_CHEST:
-		{
-			return (TRUE);
-		}
-
-		/* Junk is useless */
-		case TV_SKELETON:
-		case TV_BOTTLE:
-		case TV_JUNK:
 		{
 			return (TRUE);
 		}
@@ -1425,6 +1320,7 @@ static bool hates_fire(const object_type *o_ptr)
 		/* Staffs/Scrolls burn */
 		case TV_STAFF:
 		case TV_SCROLL:
+		case TV_PARCHMENT:
 		{
 			return (TRUE);
 		}
@@ -1496,6 +1392,7 @@ static bool hates_boiling_mud(const object_type *o_ptr)
 
 		/* Scrolls get destroyed */
 		case TV_SCROLL:
+		case TV_PARCHMENT:
 		{
 			return (TRUE);
 		}
@@ -1566,6 +1463,7 @@ static bool hates_lava(const object_type *o_ptr)
 		case TV_CHEST:
 		case TV_STAFF:
 		case TV_SCROLL:
+		case TV_PARCHMENT:
 		{
 			return (TRUE);
 		}
@@ -2674,6 +2572,8 @@ static void apply_nexus(int who)
 
 	int max1, cur1, max2, cur2, ii, jj;
 
+	bool is_quest_level = quest_check(p_ptr->depth);
+
 	if (who >= SOURCE_MONSTER_START)
 	{
 		/* Source monster */
@@ -2695,6 +2595,9 @@ static void apply_nexus(int who)
 	{
 		i = randint(7);
 
+		/* Don't teleport players off of quest levels */
+		if ((is_quest_level) && (i == 6)) continue;
+
 		/*This is a monster*/
 		if (who > SOURCE_MONSTER_START) break;
 
@@ -2710,7 +2613,7 @@ static void apply_nexus(int who)
 	{
 		case 1: case 2: case 3:
 		{
-			teleport_player(200);
+			teleport_player(200, FALSE);
 			break;
 		}
 
@@ -2721,6 +2624,7 @@ static void apply_nexus(int who)
 			break;
 		}
 
+		/* Note the exception above for quest levels */
 		case 6:
 		{
 			if (rand_int(100) < p_ptr->state.skills[SKILL_SAVE])
@@ -4003,8 +3907,8 @@ static bool project_o(int who, int y, int x, int dam, int typ)
 			case GF_KILL_TRAP:
 			case GF_KILL_DOOR:
 			{
-				/* Chests are noticed only if trapped or locked */
-				if (o_ptr->tval == TV_CHEST)
+				/* Chests are noticed only if trapped or locked, and not special ches items */
+				if ((o_ptr->tval == TV_CHEST) && !(o_ptr->ident & (IDENT_QUEST)))
 				{
 					/* Disarm/Unlock traps */
 					if (o_ptr->pval > 0)
@@ -6467,7 +6371,7 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 			msg_print("Gravity warps around you.");
 
 			/* Higher level players can resist the teleportation better */
-			if (randint(127) > p_ptr->lev) teleport_player(5);
+			if (randint(127) > p_ptr->lev) teleport_player(5, FALSE);
 
 			(void)inc_timed(TMD_SLOW, rand_int(4) + 4, TRUE);
 			if (!p_ptr->state.resist_sound)

@@ -839,7 +839,6 @@ extern void update_smart_learn(int m_idx, int what);
 /* object1.c */
 extern void strip_name(char *buf, int k_idx);
 extern size_t object_desc(char *buf, size_t max, const object_type *o_ptr, odesc_detail_t mode);
-extern void mimic_desc_object(char *buf, size_t max, s16b mimic_k_idx);
 extern void object_desc_spoil(char *buf, size_t max, const object_type *o_ptr, int pref, int mode);
 extern void identify_random_gen(const object_type *o_ptr);
 
@@ -961,10 +960,12 @@ extern bool obj_is_wand(const object_type *o_ptr);
 extern bool obj_is_rod(const object_type *o_ptr);
 extern bool obj_is_potion(const object_type *o_ptr);
 extern bool obj_is_scroll(const object_type *o_ptr);
+extern bool obj_is_parchment(const object_type *o_ptr);
 extern bool obj_is_food(const object_type *o_ptr);
 extern bool obj_is_light(const object_type *o_ptr);
 extern bool obj_is_ring(const object_type *o_ptr);
 extern bool obj_is_chest(const object_type *o_ptr);
+extern bool obj_is_openable_chest(const object_type *o_ptr);
 extern bool chest_requires_disarming(const object_type *o_ptr);
 extern bool obj_is_weapon(const object_type *o_ptr);
 extern bool obj_is_ammo(const object_type *o_ptr);
@@ -1035,13 +1036,15 @@ extern bool guild_purchase(int choice);
 extern byte quest_check(int lev);
 extern int quest_num(int lev);
 extern int quest_item_slot(void);
+extern int quest_item_count(void);
 extern s32b quest_time_remaining(void);
 extern s32b quest_player_turns_remaining(void);
 extern void guild_quest_wipe(bool reset_defer);
 extern void write_quest_note(bool success);
 extern void quest_fail(void);
 extern void format_quest_indicator(char dest[], int max, byte *attr);
-extern void quest_monster_update(void);
+extern void quest_status_update(void);
+extern void check_quest_completion(void);
 extern bool quest_fixed(const quest_type *q_ptr);
 extern bool quest_slot_fixed(int quest_num);
 extern bool quest_multiple_r_idx(const quest_type *q_ptr);
@@ -1089,8 +1092,7 @@ extern void signals_init(void);
 
 /* spells1.c */
 extern void teleport_away(int m_idx, int dis);
-extern bool native_teleport_player(int dis);
-extern void teleport_player(int dis);
+extern bool teleport_player(int dis, bool native);
 extern void teleport_player_to(int ny, int nx);
 extern void teleport_towards(int oy, int ox, int ny, int nx);
 extern bool teleport_player_level(int who);

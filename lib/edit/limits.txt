@@ -21,7 +21,7 @@ V:0.6.0
 M:F:207
 
 # Maximum number of object kinds
-M:K:453
+M:K:454
 
 # 
 # Maximum number of total artifacts (special + normal + pre-made random + in-game random)

@@ -286,8 +286,54 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 		/*we are done*/
 		return;
 	}
+	else if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL)
+	{
+		int remaining = LABYRINTH_COLLECT - quest_item_count();
 
-	/* Vault, wilderness. pit or nest quests */
+
+		/* Just needs to get the reward */
+		if ((!remaining) && (mode == QMODE_FULL))
+		{
+			my_strcpy(intro, "Collect your reward at the Guild!", sizeof(intro));
+		}
+		else
+		{
+			/*
+			 * Hack - get the description.  We need to make an object to make sure
+			 * the plural version works right.
+			 */
+			int k_idx = lookup_kind(TV_PARCHMENT, SV_PARCHMENT_FRAGMENT);
+			object_type *i_ptr;
+			object_type object_type_body;
+			char o_name[120];
+			i_ptr = &object_type_body;
+			object_wipe(i_ptr);
+			object_prep(i_ptr, k_idx);
+			apply_magic(i_ptr, p_ptr->depth, TRUE, FALSE, FALSE, TRUE);
+			i_ptr->number = remaining;
+			object_desc(o_name, sizeof(o_name), i_ptr, ODESC_BASE);
+
+			my_strcpy(intro, format("Retrieve %d ", remaining), sizeof(intro));
+
+			/* The player has some quest items in inventory */
+			if ((remaining > 0) && (remaining < LABYRINTH_COLLECT)) my_strcat(intro, "additional ", sizeof(intro));
+
+			my_strcat(intro, format("%s from a labyrinth level", o_name), sizeof(intro));
+
+			/* The location of the quest */
+			my_strcpy(where, format("at a depth of %d feet and return to the Guild.", level * 50), sizeof(where));
+		}
+
+		if (mode == QMODE_SHORT) my_strcpy(buf, format("%s.", intro), max);
+		else if (mode == QMODE_FULL) my_strcpy(buf, format("%s %s", intro, where), max);
+		else if (mode == QMODE_HALF_1) my_strcpy(buf, format("%s", intro), max);
+		else if (mode == QMODE_HALF_2) my_strcpy(buf, format("%s", where), max);
+
+		/*we are done*/
+		return;
+	}
+
+	/* Vault, pit or nest quests */
 	if  (quest_multiple_r_idx(q_ptr))
 	{
 		/*print out a message about a themed level*/
@@ -321,10 +367,6 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 		if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL)
 		{
 			my_strcat(intro, format("a wilderness level"), sizeof(intro));
-		}
-		else if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL)
-		{
-			my_strcat(intro, format("a labyrinth level"), sizeof(intro));
 		}
 		else if (q_ptr->q_type == QUEST_ARENA_LEVEL)
 		{
@@ -602,6 +644,8 @@ void add_reward_gold(void)
 	int i;
 	int repeats;
 
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+
 	object_type *i_ptr;
  	object_type object_type_body;
 
@@ -611,6 +655,9 @@ void add_reward_gold(void)
 
 	/*ugly, but effective hack - make extra gold, prevent chests & allow artifacts*/
 	object_generation_mode = OB_GEN_MODE_QUEST;
+
+	/* Base the gold on the quest level */
+	object_level = q_ptr->base_level;
 
 	/* Make initial gold */
 	while (!make_gold(i_ptr)) continue;
@@ -640,8 +687,9 @@ void add_reward_gold(void)
 		i_ptr->pval += j_ptr->pval;
 	}
 
-	/*undo special item level creation*/
+	/*undo special item creation*/
 	object_generation_mode = OB_GEN_MODE_NORMAL;
+	object_level = p_ptr->depth;
 
 	guild_carry(i_ptr);
 
@@ -1187,7 +1235,7 @@ static void check_reward_stat_increase(quest_type *q_ptr, int chance)
 
 	if (one_in_(3)) return;
 
-	if (randint0(chance) > p_ptr->q_fame) return;
+	if (randint0(chance) > (p_ptr->q_fame + p_ptr->deferred_rewards)) return;
 
 	/* Add up the total quest_stats given so far */
 	for (i = 0; i < A_MAX; i++)
@@ -1197,9 +1245,9 @@ static void check_reward_stat_increase(quest_type *q_ptr, int chance)
 	}
 
 	/* Small chance of augmentation as a reward */
-	if ((randint1(7) < x ) && (one_in_(5))) q_ptr->q_reward |= (REWARD_AUGMENTATION);
+	if ((randint1(8) > x ) && (one_in_(5))) q_ptr->q_reward |= (REWARD_AUGMENTATION);
 
-	else if (randint0(10) < x ) q_ptr->q_reward |= (REWARD_INC_STAT);
+	else if (randint1(10) > x ) q_ptr->q_reward |= (REWARD_INC_STAT);
 
 	return;
 }
@@ -1877,14 +1925,14 @@ static bool place_labyrinth_quest(int lev)
 	/* Actually write the quest */
 	q_ptr->q_type = QUEST_LABYRINTH_LEVEL;
 	q_ptr->base_level = lev;
-	q_ptr->q_fame_inc = 15;
+	q_ptr->q_fame_inc = 25;
 	q_ptr->q_fame_inc += damroll(10,2);
 
 	/* Decide which rewards to offer the player */
 	check_reward_custom_randart(q_ptr, 150, 8);
-	check_reward_extra_hp(q_ptr, 350);
-	check_reward_stat_increase(q_ptr, 350);
-	if (25 + damroll(25,25) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
+	check_reward_extra_hp(q_ptr, 250);
+	check_reward_stat_increase(q_ptr, 250);
+	if (25 + damroll(20,20) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
 	else q_ptr->q_reward |= REWARD_GREAT_ITEM;
 
 	/*success*/
@@ -2104,10 +2152,38 @@ static void build_quest_stairs(int y, int x)
 	p_ptr->update |= (PU_UPDATE_VIEW | PU_MONSTERS);
 }
 
+/*
+ * Get rid of inventory quest objects on a completed or failed quest.
+ * Not intended for VAULT_QUESTS and artifacts
+ */
+static void remove_quest_objects(void)
+{
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+	object_type *o_ptr;
+	int j;
+
+	if (q_ptr->q_type != QUEST_LABYRINTH_LEVEL) return;
+
+	/* Find quest items in the inventory*/
+	for (j = 0; j < INVEN_PACK; j++)
+	{
+		o_ptr = &inventory[j];
+
+		if (o_ptr->ident & (IDENT_QUEST))
+		{
+			/* Destroy the quest items in the pack */
+			inven_item_increase(j, -o_ptr->number);
+			inven_item_describe(j);
+			inven_item_optimize(j);
+		}
+	}
+}
+
+
 
 /*
  * Function to be called when a quest is finished.  Mark the quest complete,
- * Increase the fame.  The player will pick thier quest reward later.
+ * Increase the fame.  The player will pick their quest reward later.
  */
 void quest_finished(quest_type *q_ptr)
 {
@@ -2141,6 +2217,10 @@ void quest_finished(quest_type *q_ptr)
 	{
 		altered_inventory_counter += 4;
   	}
+	else if (q_ptr->q_type == QUEST_GREATER_VAULT)
+	{
+		altered_inventory_counter += 15;
+	}
 
 	else if (q_ptr->q_type == QUEST_VAULT)
 	{
@@ -2159,7 +2239,19 @@ void quest_finished(quest_type *q_ptr)
 
 		/* Destroy the quest item in the pack */
 		inven_item_increase(j, -255);
+		inven_item_describe(j);
 		inven_item_optimize(j);
+	}
+
+	else if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL)
+	{
+		altered_inventory_counter += 5;
+
+		remove_quest_objects();
+
+		/*if using notes file, make a note*/
+		write_quest_note(TRUE);
+
 	}
 
 	notice_stuff();
@@ -2399,6 +2491,30 @@ int quest_item_slot(void)
 }
 
 /*
+ * Return the number of a quest items held in the inventory
+ */
+int quest_item_count(void)
+{
+	int i;
+	object_type *o_ptr;
+	int item_count = 0;
+
+	for (i = 0; i < INVEN_PACK; i++)
+	{
+		o_ptr = &inventory[i];
+
+		if (o_ptr->ident & (IDENT_QUEST))
+		{
+			item_count += o_ptr->number;
+		}
+	}
+
+	return (item_count);
+}
+
+
+
+/*
  * Calculate the time remaining on a greater vault quest.
  * Assumes the quest is currently active.
  */
@@ -2511,13 +2627,46 @@ void write_quest_note(bool success)
 		artifact_wipe(QUEST_ART_SLOT, TRUE);
 	}
 
+	if (q_ptr->q_type == QUEST_GREATER_VAULT)
+	{
+		vault_type *v_ptr = &v_info[q_ptr->q_theme];
+
+		/*create the note*/
+		if (success) sprintf(note, "Quest: Explored the %s.", v_name + v_ptr->name);
+		else sprintf(note, "Quest: Failed to adequately explore the %s.", v_name + v_ptr->name);
+
+		g_vault_name[0] = '\0';
+	}
+
+	else if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL)
+	{
+		/*
+		 * Hack - get the description.  We need to make an object to make sure
+		 * the plural version works right.
+		 */
+		int k_idx = lookup_kind(TV_PARCHMENT, SV_PARCHMENT_FRAGMENT);
+		object_type *i_ptr;
+		object_type object_type_body;
+		char o_name[120];
+		i_ptr = &object_type_body;
+		object_wipe(i_ptr);
+		object_prep(i_ptr, k_idx);
+		apply_magic(i_ptr, p_ptr->depth, TRUE, FALSE, FALSE, TRUE);
+		i_ptr->number = LABYRINTH_COLLECT;
+		object_desc(o_name, sizeof(o_name), i_ptr, ODESC_BASE);
+
+		/*create the note*/
+		if (success) sprintf(note, "Quest: Returned %d %s to the Adventurer's Guild.", LABYRINTH_COLLECT, o_name);
+		else sprintf(note, "Quest: Failed to return %d %s to the Guild.", LABYRINTH_COLLECT, o_name);
+	}
+
+
 	else if (quest_multiple_r_idx(q_ptr))
 	{
 		if (success) my_strcpy(note, "Quest: Completed ", sizeof(note));
 		else my_strcpy(note, "Quest: Failed to complete ", sizeof(note));
 
 		if (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) my_strcat(note, "a wilderness quest.", sizeof(note));
-		else if (q_ptr->q_type ==  QUEST_LABYRINTH_LEVEL) my_strcat(note, "a labyrinth quest.", sizeof(note));
 		else if (q_ptr->q_type ==  QUEST_ARENA_LEVEL) my_strcat(note, "an arena quest.", sizeof(note));
 		else
 		{
@@ -2627,6 +2776,8 @@ void quest_fail(void)
 	{
 		/*Arena quests are only a small decrease, special quests cut the player fame in half*/
 		if (q_ptr->q_type == QUEST_ARENA_LEVEL)	p_ptr->q_fame = (p_ptr->q_fame * 8 / 10);
+		else if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL)	p_ptr->q_fame = (p_ptr->q_fame * 7 / 10);
+
 		else if (q_ptr->q_type == QUEST_VAULT)	p_ptr->q_fame /= 2;
 
 		/* Failing a pit, nest, wilderness, or themed level quests isn't as bad */
@@ -2641,6 +2792,8 @@ void quest_fail(void)
 			p_ptr->q_fame = (p_ptr->q_fame * 45 / 100);
 		}
 	}
+
+	if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL) remove_quest_objects();
 
 	/*make a note of the failed quest */
 	write_quest_note(FALSE);
@@ -2682,6 +2835,15 @@ void format_quest_indicator(char dest[], int max, byte *attr)
 		return;
 	}
 
+	if (q_ptr->base_level != p_ptr->depth)
+	{
+		strnfmt(dest, max, "Q:Goto %d'", q_ptr->base_level * 50);
+
+		if (quest_indicator_timer > 0) *attr = TERM_RED;
+		else *attr = TERM_BLUE;
+		return;
+	}
+
  	/* Special case. Vault quests */
 	if (q_ptr->q_type == QUEST_VAULT)
 	{
@@ -2703,13 +2865,6 @@ void format_quest_indicator(char dest[], int max, byte *attr)
 
 		}
 
-		else if (q_ptr->base_level != p_ptr->depth)
-		{
-			strnfmt(dest, max, "Q:Goto %d'", q_ptr->base_level * 50);
-			*attr = TERM_BLUE;
-			return;
-		}
-
 		/* Get the symbol of the artifact */
 		if (a_ptr->name[0])
 		{
@@ -2725,13 +2880,31 @@ void format_quest_indicator(char dest[], int max, byte *attr)
 		*attr = TERM_L_RED;
 	}
 
-	else if (q_ptr->base_level != p_ptr->depth)
+	/* Special case. Labyrinth levels */
+	else if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL)
 	{
-		strnfmt(dest, max, "Q:Goto %d'", q_ptr->base_level * 50);
+		int k_idx = lookup_kind(TV_PARCHMENT, SV_PARCHMENT_FRAGMENT);
+		object_kind *k_ptr = &k_info[k_idx];
 
-		if (quest_indicator_timer > 0) *attr = TERM_RED;
-		else *attr = TERM_BLUE;
-		return;
+		/* Default character */
+		char chr = k_ptr->d_char;
+
+		/* Player has the quest item */
+		if (q_ptr->q_flags & (QFLAG_STARTED))
+		{
+			if (quest_item_count() >= LABYRINTH_COLLECT)
+			{
+				my_strcpy(dest, "Q:GoTo Guild!", max);
+				*attr = TERM_GREEN;
+				return;
+			}
+		}
+
+		/* Format */
+		strnfmt(dest, max, "Qst:%c %d", chr, (LABYRINTH_COLLECT - quest_item_count()));
+
+		/* Color of the object */
+		*attr = k_ptr->d_attr;
 	}
 
 	/* Special case. Vault quests */
@@ -2752,7 +2925,7 @@ void format_quest_indicator(char dest[], int max, byte *attr)
 	return;
 }
 
-void quest_monster_update(void)
+void quest_status_update(void)
 {
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 	char race_name[80];
@@ -2761,19 +2934,54 @@ void quest_monster_update(void)
 	int remaining = q_ptr->q_max_num - q_ptr->q_num_killed;
 
 	/*nothing left, notification already printed in monster_death */
-	if (!remaining) return;
+	if (guild_quest_complete()) return;
+
+	/* No message */
+	if (q_ptr->q_type == QUEST_VAULT) return;
 
 	if (q_ptr->q_type == QUEST_GREATER_VAULT)
 	{
 		if (guild_quest_active())
 		{
-			my_strcpy(note, format("At your current speed, you have %d turns remaining on this greater vault level",
+			my_strcpy(note, format("At your current speed, you have %d turns remaining on this greater vault level.",
 						quest_player_turns_remaining()),sizeof(note));
 		}
 
 		/*dump the final note*/
 		msg_format(note);
 
+	}
+
+	else if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL)
+	{
+		remaining = LABYRINTH_COLLECT - quest_item_count();
+
+		if (remaining)
+		{
+			/*
+			 * Hack - get the description.  We need to make an object to make sure
+			 * the plural version works right.
+			 */
+			int k_idx = lookup_kind(TV_PARCHMENT, SV_PARCHMENT_FRAGMENT);
+			object_type *i_ptr;
+			object_type object_type_body;
+			char o_name[120];
+			i_ptr = &object_type_body;
+			object_wipe(i_ptr);
+			object_prep(i_ptr, k_idx);
+			apply_magic(i_ptr, p_ptr->depth, TRUE, FALSE, FALSE, TRUE);
+			i_ptr->number = remaining;
+			object_desc(o_name, sizeof(o_name), i_ptr, ODESC_BASE);
+
+			my_strcpy(note, format("You have %d remaining %s to collect from the labyrinth level.",
+									remaining, o_name),sizeof(note));
+
+		}
+		else my_strcpy(note, "Collect your reward at the Guild!", sizeof(note));
+
+
+		/*dump the final note*/
+		msg_format(note);
 	}
 
 	else if (quest_multiple_r_idx(q_ptr))
@@ -2783,9 +2991,7 @@ void quest_monster_update(void)
 			my_strcpy(note, format("There are %d creatures remaining ", remaining), sizeof(note));
 		}
 		else my_strcpy(note, "There is one creature remaining ", sizeof(note));
-		if (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) my_strcat(note, "in the wilderness level.", sizeof(note));
-		else if (q_ptr->q_type ==  QUEST_LABYRINTH_LEVEL) my_strcat(note, "in the labyrinth level.", sizeof(note));
-		else if (q_ptr->q_type ==  QUEST_ARENA_LEVEL) my_strcat(note, "to kill in the arena.", sizeof(note));
+		if (q_ptr->q_type ==  QUEST_ARENA_LEVEL) my_strcat(note, "to kill in the arena.", sizeof(note));
 		else
 		{
 			my_strcat(note, format("from the %s", feeling_themed_level[q_ptr->q_theme]), sizeof(note));
@@ -2825,6 +3031,43 @@ void quest_monster_update(void)
 	}
 }
 
+
+
+/*
+ * Check if quests that are not completed by killing monsters are finished.
+ */
+void check_quest_completion(void)
+{
+	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+
+	/* Not a current active guild quest */
+	if (!(q_ptr->q_flags & (QFLAG_STARTED))) return;
+	if (q_ptr->q_flags & (QFLAG_COMPLETED)) return;
+
+	/* So far, only Greater vault quests need this check */
+	if (q_ptr->q_type != QUEST_GREATER_VAULT) return;
+
+	/* Still time left */
+	if (quest_time_remaining() >= 1) return;
+
+	/* Update the turn count */
+	p_ptr->redraw |= (PR_QUEST_ST);
+
+	/* If the player did not enter the vault, they fail the quest. */
+	if (g_vault_name[0] != '\0')
+	{
+		quest_fail();
+		g_vault_name[0] = '\0';
+
+		return;
+	}
+
+	/* Mark the quest as finished, write the note */
+	quest_finished(q_ptr);
+	write_quest_note(TRUE);
+
+}
+
 /* Verify if the quest if a fixed quest found in quest.txt */
 bool quest_fixed(const quest_type *q_ptr)
 {
@@ -2850,7 +3093,6 @@ bool quest_multiple_r_idx(const quest_type *q_ptr)
 {
 	if (q_ptr->q_type == QUEST_THEMED_LEVEL) return (TRUE);
 	if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL) return (TRUE);
-	if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL) return (TRUE);
 	if (q_ptr->q_type == QUEST_PIT) return (TRUE);
 	if (q_ptr->q_type == QUEST_NEST) return (TRUE);
 	if (q_ptr->q_type == QUEST_ARENA_LEVEL) return (TRUE);
@@ -2971,7 +3213,10 @@ bool no_down_stairs(s16b check_depth)
 	return (FALSE);
 }
 
-/* Confirm that the player shall fail the quest immediately if they leave the current level */
+/*
+ * Confirm that the player shall fail the quest
+ * immediately if they leave the current level
+ */
 bool quest_shall_fail_if_leave_level(void)
 {
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
@@ -2985,8 +3230,11 @@ bool quest_shall_fail_if_leave_level(void)
 	if (p_ptr->depth != q_ptr->base_level) return (FALSE);
 
 	if (q_ptr->q_type == QUEST_THEMED_LEVEL) return (TRUE);
-	if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL) return (TRUE);
+	if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL)  return (TRUE);
 	if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL) return (TRUE);
+	{
+		if (quest_item_count() < LABYRINTH_COLLECT) return (TRUE);
+	}
 	if (q_ptr->q_type == QUEST_PIT) return (TRUE);
 	if (q_ptr->q_type == QUEST_NEST) return (TRUE);
 	if (q_ptr->q_type == QUEST_ARENA_LEVEL) return (TRUE);
@@ -3031,7 +3279,10 @@ bool quest_fail_immediately(void)
 
 	if (q_ptr->q_type == QUEST_THEMED_LEVEL) return (TRUE);
 	if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL) return (TRUE);
-	if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL) return (TRUE);
+	if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL)
+	{
+		if (quest_item_count() < LABYRINTH_COLLECT) return (TRUE);
+	}
 	if (q_ptr->q_type == QUEST_PIT) return (TRUE);
 	if (q_ptr->q_type == QUEST_NEST) return (TRUE);
 	if (q_ptr->q_type == QUEST_ARENA_LEVEL) return (TRUE);

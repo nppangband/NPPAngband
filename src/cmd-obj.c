@@ -1383,14 +1383,14 @@ static bool read_scroll(object_type *o_ptr, bool *ident)
 
 		case SV_SCROLL_PHASE_DOOR:
 		{
-			teleport_player(10);
+			teleport_player(10, FALSE);
 			*ident = TRUE;
 			break;
 		}
 
 		case SV_SCROLL_TELEPORT:
 		{
-			teleport_player(100);
+			teleport_player(100, FALSE);
 			*ident = TRUE;
 			break;
 		}
@@ -1740,7 +1740,7 @@ static bool use_staff(object_type *o_ptr, bool *ident)
 
 		case SV_STAFF_TELEPORTATION:
 		{
-			teleport_player(100);
+			teleport_player(100, FALSE);
 			*ident = TRUE;
 			break;
 		}
@@ -2615,7 +2615,7 @@ static bool activate_object(object_type *o_ptr, int dir)
 			case ACT_PHASE:
 			{
 				msg_format("Your %s twists space around you...", o_name);
-				teleport_player(10);
+				teleport_player(10, FALSE);
 				break;
 			}
 
@@ -2679,7 +2679,7 @@ static bool activate_object(object_type *o_ptr, int dir)
 			case ACT_TELEPORT:
 			{
 				msg_format("Your %s twists space around you...", o_name);
-				teleport_player(100);
+				teleport_player(100, FALSE);
 				break;
 			}
 

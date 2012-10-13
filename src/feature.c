@@ -976,7 +976,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
 			{
 
 				msg_print("You hit a teleport trap!");
-				teleport_player(dist);
+				teleport_player(dist, FALSE);
 			}
 			break;
 		}
@@ -4495,7 +4495,7 @@ bool hit_wall(int y, int x, bool do_action)
 			}
 
 			/* Teleport */
-			teleport_player(100 + rand_int(effective_depth(p_ptr->depth)));
+			teleport_player(100 + rand_int(effective_depth(p_ptr->depth)), FALSE);
 		}
 
 		return (TRUE);

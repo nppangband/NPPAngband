@@ -53,7 +53,7 @@
 /*
  * Current version string
  */
-#define VERSION_STRING	"0.6.0 WIP2a"
+#define VERSION_STRING	"0.6.0 WIP3"
 
 
 /*
@@ -135,6 +135,8 @@
  * Must be less or equal to 256
  */
 #define MAX_DUNGEON_WID		198
+
+#define MAX_DUNGEON_AREA	(MAX_DUNGEON_HGT * MAX_DUNGEON_WID)
 
 /*
  * Number of rooms to attempt to generate in dungeon.

@@ -1901,7 +1901,7 @@ static bool add_ability(artifact_type *a_ptr)
 		flag = flag << 1;
 	}
 
-	/*Wee have the flag to add*/
+	/*We have the flag to add*/
 	a_ptr->a_flags3 |= flag;
 
 	return (TRUE);
@@ -1973,7 +1973,7 @@ static bool add_sustain(artifact_type *a_ptr)
 		sust_flag = sust_flag << 1;
 	}
 
-	/*Wee have the flag to add*/
+	/*We have the flag to add*/
 	a_ptr->a_flags2 |= sust_flag;
 
 	return (TRUE);
@@ -2026,7 +2026,7 @@ static bool add_stat(artifact_type *a_ptr)
 		flag_sustain = flag_sustain << 1;
 	}
 
-	/*Wee have the flag to add*/
+	/*We have the flag to add*/
 	a_ptr->a_flags1 |= flag_stat_add;
 
 	/*50% of the time, add the sustain as well*/
@@ -2223,7 +2223,7 @@ static bool add_slay(artifact_type *a_ptr)
 		flag_slay_add = flag_slay_add << 1;
 	}
 
-	/*Wee have the flag to add*/
+	/*We have the flag to add*/
 	a_ptr->a_flags1 |= flag_slay_add;
 
 	/*try to add some of the complimentary pairs of slays*/

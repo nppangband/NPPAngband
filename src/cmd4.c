@@ -132,7 +132,6 @@ void do_cmd_redraw(void)
 	p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS);
 
 	/* Redraw everything */
-	/* Redraw everything */
 	p_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_MAP | PR_INVEN | PR_EQUIP |
 	                  PR_MESSAGE | PR_MONSTER | PR_OBJECT |
 					  PR_MONLIST | PR_ITEMLIST | PR_FEATURE);
@@ -3515,8 +3514,7 @@ void do_cmd_quest(void)
 	/* Check if you're on a quest */
 	if (guild_quest_level() > 0)
 	{
-
-		/* Completed quest */
+ 		/* Completed quest */
 		if (guild_quest_complete())
 		{
 			msg_print("Collect your reward at the guild!");
@@ -3538,7 +3536,6 @@ void do_cmd_quest(void)
 	}
 	/* No quest at all */
 	else msg_print("You are not currently undertaking a quest.");
-
 }
 /*
  * Encode the screen colors

@@ -348,7 +348,7 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			if (desc_short) return (format("range %d", dam));
 			if (cast)
 			{
-				teleport_player(dam);
+				teleport_player(dam, FALSE);
 			}
 
 			break;
@@ -527,7 +527,7 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			if (desc_short) return (format(""));
 			if (cast)
 			{
-				teleport_player(dam);
+				teleport_player(dam, FALSE);
 			}
 
 			break;
@@ -1568,7 +1568,7 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 			if (cast)
 			{
 				/* Teleport */
-				if (!native_teleport_player(dam)) return (NULL);
+				if (!teleport_player(dam, TRUE)) return (NULL);
 			}
 
 			break;
@@ -2140,7 +2140,7 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 			if (desc_short) return (format("range %d", dam));
 			if (cast)
 			{
-				teleport_player(dam);
+				teleport_player(dam, FALSE);
 			}
 
 			break;
@@ -2674,7 +2674,7 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 			if (desc_short) return (format("range %d", dam));
 			if (cast)
 			{
-				teleport_player(dam);
+				teleport_player(dam, FALSE);
 			}
 
 			break;
@@ -3355,7 +3355,7 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 			if (desc_short) return (format("range %d", dam));
 			if (cast)
 			{
-				teleport_player(dam);
+				teleport_player(dam, FALSE);
 			}
 
 			break;
@@ -3371,7 +3371,7 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 			if (desc_short) return (format("range %d", dam));
 			if (cast)
 			{
-				teleport_player(dam);
+				teleport_player(dam, FALSE);
 			}
 
 			break;

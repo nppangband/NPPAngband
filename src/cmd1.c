@@ -97,6 +97,8 @@ void search(void)
 					/* Skip non-trapped chests */
 					if (!chest_traps[o_ptr->pval]) continue;
 
+					if (o_ptr->ident & (IDENT_QUEST)) continue;
+
 					/* Identify once */
 					if (!object_known_p(o_ptr))
 					{
@@ -256,6 +258,8 @@ static bool put_object_in_quiver(object_type *o_ptr)
  * Assumes the decision to put in inventory or quiver has already been made.
  * Does NOT Delete the object afterwards.
  * Prints out a message.
+ * Assumes a check for mimic objects has already been made, and they
+ * have been revealed.
  */
 bool put_object_in_inventory(object_type *o_ptr)
 {
@@ -270,6 +274,13 @@ bool put_object_in_inventory(object_type *o_ptr)
 
 	/* Handle errors (paranoia) */
 	if (slot < 0) return (FALSE);
+
+	/* Update the quest counter */
+	if (o_ptr->ident & (IDENT_QUEST))
+	{
+		p_ptr->notice |= (PN_QUEST_REMAIN);
+		p_ptr->redraw |= (PR_QUEST_ST);
+	}
 
 	/* Get the object again */
 	o_ptr = &inventory[slot];
@@ -534,7 +545,12 @@ void py_pickup(bool pickup)
 	/* Are we allowed to pick up anything here? */
 	if (!(f_info[cave_feat[py][px]].f_flags1 & (FF1_DROP))) return;
 
-	/* As a precaution, first, check for mimics, and reveal them.  */
+	/*
+	 * As a precaution, first, check for mimics, and reveal them.
+	 * This is important, as IDENT_QUEST can be either a quest mimic monster,
+	 * or a quest object to be picked up.  o_ptr->mimic_r_idx distinguishes it
+	 * as a mimic.
+	 */
 	for (this_o_idx = cave_o_idx[py][px]; this_o_idx; this_o_idx = next_o_idx)
 	{
 

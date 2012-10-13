@@ -728,6 +728,8 @@ static void init_services_and_quests(int store_num)
 			if (guild_quest_complete()) continue;
 
 			if (q_ptr->q_type == QUEST_VAULT) continue;
+			if (q_ptr->q_type == QUEST_GREATER_VAULT) continue;
+			if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL) continue;
 			if (quest_multiple_r_idx(q_ptr)) continue;
 		}
 
@@ -5110,10 +5112,17 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
 	/* See if we are holding a quest item */
 	if (this_store == STORE_GUILD)
 	{
+
+
 		if ((q_ptr->q_type == QUEST_VAULT) && (!guild_quest_complete()))
 		{
 			/* The artifact has been returned, the quest is a success */
 			if (quest_item_slot() > -1) quest_finished(q_ptr);
+		}
+
+		if ((q_ptr->q_type == QUEST_LABYRINTH_LEVEL) && (!guild_quest_complete()))
+		{
+			if (quest_item_count() >= LABYRINTH_COLLECT) quest_finished(q_ptr);
 		}
 	}
 

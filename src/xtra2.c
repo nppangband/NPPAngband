@@ -520,7 +520,7 @@ static void process_quest_monster_death(int i, int m_idx, bool *writenote)
 		 * Make a note of the completed quest, but not for fixed quests.
 		 * That is a special note written later.
 		 */
-		if (!quest_fixed(q_ptr))
+		if ((!quest_fixed(q_ptr)) && (q_ptr->q_type != QUEST_GREATER_VAULT))
 		{
 			write_quest_note(TRUE);
 			*writenote = FALSE;

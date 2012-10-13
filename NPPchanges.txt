@@ -1,4 +1,4 @@
-NPP 0.6.0. BETA 2 Changes: 
+NPP 0.6.0. BETA 3 Changes: 
 Broke savecompatibility with NPP 0.5.4.
 Revised Mimic Code
 Changes to the savefile structure.
@@ -41,6 +41,9 @@ Added greater vault quests.
 New makefile.osx.
 Made cloaks of aman more common (rarity of 16 to rarity of 8).
 When studying or casting, the player is now only offered books with spells they can cast or study.
+Fix bugs in the randart code (found by "runningaway")
+New function for teleporting the player.
+Added new object, Faded Scroll Fragment, for use in labrynth quests. 
 
 
 NPP 0.5.4 changes:

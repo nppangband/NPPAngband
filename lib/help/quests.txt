@@ -116,12 +116,12 @@ Voluntarily leaving a wilderness level results in immediate quest failure.
 
 ***** <Labyrinth Quest>
 LABYRINTH QUEST:
-This quest is a variation of the Themed level quests.  It is an entire labyrinth 
-level of unthemed randomly chosen creatures.  Since there are so many like 
-creatures bunched so closely together, a creature from inside one of 
-these themed levels only summon other creatures already on the level in battle.   
-This tends to be a difficult type of quest, depending on the difficulty of 
-the creatures on the level, increases your player fame by a large amount
+This quest has a small labrynth level.  Monsters will appear every 20
+game turns, one of which has been chosen at random to hold a small
+scroll fragment, which they will drop when you kill them.  Your goal
+is to collect 10 of them and return them to the guild.  This tends 
+to be a difficult type of quest, depending on the difficulty of the 
+creatures on the level, increases your player fame by a large amount
 (tied with Level Quests), and offers above average rewards and fame increase.
 Voluntarily leaving a labyrinth level results in immediate quest failure.
 

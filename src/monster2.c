@@ -4066,7 +4066,7 @@ static bool summon_from_level(int y1, int x1, int lev, int type)
 	monster_swap(m_ptr->fy, m_ptr->fx, y, x);
 
 	/* Wake it up, make it active, and give the player time to react */
-	mon_clear_timed(mon_list[i], MON_TMD_SLEEP, MON_TMD_FLG_NOMESSAGE);
+	mon_clear_timed(get_mon_idx(m_ptr), MON_TMD_SLEEP, MON_TMD_FLG_NOMESSAGE);
 	m_ptr->m_energy = BASE_ENERGY_MOVE /2;
 	m_ptr->mflag |= (MFLAG_ACTV);
 

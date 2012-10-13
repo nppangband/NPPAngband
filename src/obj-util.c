@@ -2241,7 +2241,10 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 		/* Chests */
 		case TV_CHEST:
 		{
-			/* Never okay */
+			/* Quest chests are okay to stack */
+			if ((o_ptr->ident & (IDENT_QUEST)) && (j_ptr->ident & (IDENT_QUEST))) return (TRUE);
+
+			/* Otherwise, never okay */
 			return (0);
 		}
 
@@ -2249,6 +2252,7 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 		case TV_FOOD:
 		case TV_POTION:
 		case TV_SCROLL:
+		case TV_PARCHMENT:
 		{
 			/* Assume okay */
 			break;
@@ -2847,8 +2851,11 @@ bool drop_near(object_type *j_ptr, int chance, int y, int x)
 	if (!artifact_p(j_ptr) && (rand_int(100) < chance))
 	{
 		/* Message */
-		msg_format("The %s disappear%s.",
-		           o_name, (plural ? "" : "s"));
+		if (character_dungeon)
+		{
+			msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
+		}
+
 
 		/* Debug */
 		if (p_ptr->wizard) msg_print("Breakage (breakage).");
@@ -2962,8 +2969,10 @@ bool drop_near(object_type *j_ptr, int chance, int y, int x)
 	if (!flag && !artifact_p(j_ptr))
 	{
 		/* Message */
-		msg_format("The %s disappear%s.",
-		           o_name, (plural ? "" : "s"));
+		if (character_dungeon)
+		{
+			msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
+		}
 
 		/* Debug */
 		if (p_ptr->wizard) msg_print("Breakage (no floor space).");
@@ -3008,8 +3017,10 @@ bool drop_near(object_type *j_ptr, int chance, int y, int x)
 	if (!floor_carry(by, bx, j_ptr))
 	{
 		/* Message */
-		msg_format("The %s disappear%s.",
-		           o_name, (plural ? "" : "s"));
+		if (character_dungeon)
+		{
+			msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
+		}
 
 		/* Debug */
 		if (p_ptr->wizard) msg_print("Breakage (too many objects).");
@@ -5328,10 +5339,27 @@ bool obj_is_wand(const object_type *o_ptr)   { return o_ptr->tval == TV_WAND; }
 bool obj_is_rod(const object_type *o_ptr)    { return o_ptr->tval == TV_ROD; }
 bool obj_is_potion(const object_type *o_ptr) { return o_ptr->tval == TV_POTION; }
 bool obj_is_scroll(const object_type *o_ptr) { return o_ptr->tval == TV_SCROLL; }
+bool obj_is_parchment(const object_type *o_ptr) { return o_ptr->tval == TV_PARCHMENT; }
 bool obj_is_food(const object_type *o_ptr)   { return o_ptr->tval == TV_FOOD; }
 bool obj_is_light(const object_type *o_ptr)   { return o_ptr->tval == TV_LIGHT; }
 bool obj_is_ring(const object_type *o_ptr)   { return o_ptr->tval == TV_RING; }
 bool obj_is_chest(const object_type *o_ptr)   { return o_ptr->tval == TV_CHEST; }
+
+/**
+ * Determine whether an object is a chest
+ *
+ * \param o_ptr is the object to check
+ */
+bool obj_is_openable_chest(const object_type *o_ptr)
+{
+	if (!obj_is_chest(o_ptr)) return FALSE;
+
+	/* Don't open special quest items */
+	if (o_ptr->ident & (IDENT_QUEST)) return FALSE;
+
+	return (TRUE);
+}
+
 
 /**
  * Determine whether an object is a chest
@@ -5344,6 +5372,9 @@ bool chest_requires_disarming(const object_type *o_ptr)
 
 	/* We don't know if it is trapped or not */
 	if (!object_known_p(o_ptr)) return FALSE;
+
+	/* Don't count special quest items */
+	if (o_ptr->ident & (IDENT_QUEST)) return FALSE;
 
 	/* Already disarmed. */
 	if (o_ptr->pval <= 0) return FALSE;
