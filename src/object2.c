@@ -2646,6 +2646,31 @@ static bool kind_is_great(int k_idx)
 			return (FALSE);
 		}
 
+		/*
+		 * Stat gain potions can be great at the lower levels.
+		 */
+
+		case TV_POTION:
+		{
+			switch (k_ptr->sval)
+			{
+				case SV_POTION_INC_STR:
+				case SV_POTION_INC_INT:
+				case SV_POTION_INC_WIS:
+				case SV_POTION_INC_CON:
+				case SV_POTION_INC_DEX:
+				case SV_POTION_AUGMENTATION:
+				{
+					if (object_generation_mode != OB_GEN_MODE_QUEST) return (FALSE);
+
+					if (object_level < (k_ptr->k_level - 5)) return (TRUE);
+					return (FALSE);
+				}
+				default: break;
+			}
+			return (FALSE);
+		}
+
 		/* Chests -- Chests are great, except for quests.*/
 		case TV_CHEST:
 		{
@@ -3361,7 +3386,10 @@ static bool kind_is_good(int k_idx)
 			return (FALSE);
 		}
 
-		/*the very powerful healing potions can be good*/
+		/*
+		 * The very powerful healing potions can be good.
+		 * Stat gain potions can be good at the lower levels.
+		 */
 		case TV_POTION:
 		{
 			switch (k_ptr->sval)
@@ -3379,13 +3407,15 @@ static bool kind_is_good(int k_idx)
 				case SV_POTION_INC_DEX:
 				case SV_POTION_AUGMENTATION:
 				{
+					if (object_generation_mode != OB_GEN_MODE_QUEST) return (FALSE);
+
 					if (object_level < (k_ptr->k_level - 5)) return (TRUE);
 					return (FALSE);
 				}
-				default: return (FALSE);
+				default: break;
 
 			}
-			break;
+			return (FALSE);
 		}
 
 		/* Chests -- Chests are good. */
