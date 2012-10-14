@@ -3203,16 +3203,22 @@ static void add_feature_aux(artifact_type *a_ptr, int choice)
 				case TV_BOOTS:
 				case TV_GLOVES:
 				{
-					/* Hack -- Super-charge the damage sides */
+					int super = 0;
+
+					/* Hack -- Super-charge the armor class */
 					while ((a_ptr->ac > 0) &&
 					       (one_in_(15)))
 					{
 						/*extra bonus at higher values*/
-						a_ptr->ac += (1 + (a_ptr->ac / 10));
+						super += (1 + (a_ptr->ac / 10));
 					}
 
-					/* Hack -- Limit the damage sides to max of 9*/
-					if (a_ptr->ac > 9) a_ptr->ac = 9;
+					/* Hack -- Limit the ac supercharge to max of 9*/
+					if (super > 9) super = 9;
+
+					/* Supercharge the ac. */
+					a_ptr->ac += super;
+
 					break;
 				}
 				/* we are correcting reaching this by mistake*/

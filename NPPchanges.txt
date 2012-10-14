@@ -41,9 +41,10 @@ Added greater vault quests.
 New makefile.osx.
 Made cloaks of aman more common (rarity of 16 to rarity of 8).
 When studying or casting, the player is now only offered books with spells they can cast or study.
-Fix bugs in the randart code (found by "runningaway")
+Fix multiple bugs in the randart code (reported and fixed by "runningaway")
 New function for teleporting the player.
 Added new object, Faded Scroll Fragment, for use in labrynth quests. 
+Stat gain potions can be good or great quest rewards at the lower depths.
 
 
 NPP 0.5.4 changes:
