@@ -10104,8 +10104,8 @@ static bool lab_is_tunnel(int y, int x)
 }
 
 /* Note the height and width must be an odd number */
-#define LABYRINTH_HGT 81
-#define LABYRINTH_WID 41
+#define LABYRINTH_HGT 41
+#define LABYRINTH_WID 81
 #define LABYRINTH_AREA (LABYRINTH_WID * LABYRINTH_HGT)
 
 /**
