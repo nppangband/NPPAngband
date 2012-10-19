@@ -3201,6 +3201,9 @@ static void dungeon(void)
 		/* Already complete */
 		if (is_quest_complete(i)) continue;
 
+		/* No quest */
+		if (!q_ptr->base_level) continue;
+
 		/* Check for quest */
 		if (q_ptr->base_level == p_ptr->depth)
 		{
