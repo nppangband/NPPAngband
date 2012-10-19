@@ -1044,7 +1044,6 @@ extern void write_quest_note(bool success);
 extern void quest_fail(void);
 extern void format_quest_indicator(char dest[], int max, byte *attr);
 extern void quest_status_update(void);
-extern void check_quest_completion(void);
 extern bool quest_fixed(const quest_type *q_ptr);
 extern bool quest_slot_fixed(int quest_num);
 extern bool quest_multiple_r_idx(const quest_type *q_ptr);

@@ -2890,7 +2890,19 @@ void process_player(void)
 	while (!p_ptr->p_energy_use && !p_ptr->leaving);
 
 	/* Some quests aren't finished by killing monsters */
-	if (guild_quest_active()) check_quest_completion();
+	if (guild_quest_active())
+	{
+		quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+
+		/* See if the greater vault quest just finished, if so, complete it */
+		if (q_ptr->q_type == QUEST_GREATER_VAULT)
+		{
+			if (quest_time_remaining() < 1)
+			{
+				process_greater_vault_quests();
+			}
+		}
+	}
 
 	/* Get base noise increase -- less when resting */
 	if (p_ptr->resting)

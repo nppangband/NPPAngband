@@ -3031,43 +3031,6 @@ void quest_status_update(void)
 	}
 }
 
-
-
-/*
- * Check if quests that are not completed by killing monsters are finished.
- */
-void check_quest_completion(void)
-{
-	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
-
-	/* Not a current active guild quest */
-	if (!(q_ptr->q_flags & (QFLAG_STARTED))) return;
-	if (q_ptr->q_flags & (QFLAG_COMPLETED)) return;
-
-	/* So far, only Greater vault quests need this check */
-	if (q_ptr->q_type != QUEST_GREATER_VAULT) return;
-
-	/* Still time left */
-	if (quest_time_remaining() >= 1) return;
-
-	/* Update the turn count */
-	p_ptr->redraw |= (PR_QUEST_ST);
-
-	/* If the player did not enter the vault, they fail the quest. */
-	if (g_vault_name[0] != '\0')
-	{
-		quest_fail();
-		g_vault_name[0] = '\0';
-
-		return;
-	}
-
-	/* Mark the quest as finished, write the note */
-	quest_finished(q_ptr);
-	write_quest_note(TRUE);
-
-}
-
 /* Verify if the quest if a fixed quest found in quest.txt */
 bool quest_fixed(const quest_type *q_ptr)
 {
