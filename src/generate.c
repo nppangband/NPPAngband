@@ -7511,6 +7511,7 @@ static bool build_themed_level(void)
 	int max_depth;
 	u32b max_diff, max_diff_unique;
 	u32b highest_power = 0;
+	int total_mon_placed = 0;
 
 	int max_uniques = 3;
 
@@ -7751,7 +7752,7 @@ static bool build_themed_level(void)
 	}
 
  	/*place the monsters in the dungeon*/
-	while (mon_cnt < monster_number)
+	while (total_mon_placed < monster_number)
 	{
 		int y, x;
 		bool dont_use = FALSE;
@@ -7846,6 +7847,9 @@ static bool build_themed_level(void)
 
 		/* Attempt to place the monster, allow sleeping, don't allow groups*/
 		if (!place_monster_aux(y, x, r_idx, MPLACE_SLEEP)) continue;
+
+		/* Count it */
+		total_mon_placed++;
 
 		if (r_ptr->flags1 & (RF1_UNIQUE)) max_uniques--;
 
