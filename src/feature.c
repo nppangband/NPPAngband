@@ -3816,6 +3816,19 @@ void process_dynamic_terrain_aux(dynamic_grid_type *g_ptr)
 			f_l_ptr->f_l_flags3 |= (FF3_DYNAMIC);
 		}
 
+		/* Message for when the player can't see */
+		else
+		{
+			if (gf_type == GF_ARROW)
+			{
+				msg_print("It aims at you with spikes!");
+			}
+			else if (gf_type == GF_POIS)
+			{
+				msg_print("It spits poison in your face!");
+			}
+		}
+
 		/* Tell the player */
 		disturb(0, 0);
 

@@ -1,4 +1,4 @@
-NPP 0.6.0. BETA 3 Changes: 
+NPP 0.6.0. BETA 4 Changes: 
 Broke savecompatibility with NPP 0.5.4.
 Revised Mimic Code
 Changes to the savefile structure.
@@ -45,6 +45,7 @@ Fix multiple bugs in the randart code (reported and fixed by "runningaway")
 New function for teleporting the player.
 Added new object, Faded Scroll Fragment, for use in labrynth quests. 
 Stat gain potions can be good or great quest rewards at the lower depths.
+Added message for when a putrid flower the player cannot see fires at a player.
 
 
 NPP 0.5.4 changes:
