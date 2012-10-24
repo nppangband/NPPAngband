@@ -53,9 +53,12 @@ static void flavor_assign_fixed(void)
 
 static void flavor_assign_random(byte tval)
 {
-	int i, j;
-	int flavor_count = 0;
-	int choice;
+	u16b i, choice;
+	u16b flavor_count = 0;
+	u16b *flavor;
+
+	/* Allocate the "who" array */
+	flavor = C_ZNEW(z_info->flavor_max, u16b);
 
 	/* Count the random flavors for the given tval */
 	for (i = 0; i < z_info->flavor_max; i++)
@@ -63,6 +66,7 @@ static void flavor_assign_random(byte tval)
 		if ((flavor_info[i].tval == tval) &&
 		    (flavor_info[i].sval == SV_UNKNOWN))
 		{
+			flavor[flavor_count] = i;
 			flavor_count++;
 		}
 	}
@@ -79,37 +83,28 @@ static void flavor_assign_random(byte tval)
 		if ((tval == TV_FOOD) && (k_info[i].sval > SV_FOOD_MIN_FOOD))
 			continue;
 
-		if (!flavor_count) quit_fmt("Not enough flavors for tval %d.", tval);
+		if (!flavor_count)
+		{
+			FREE(flavor);
+			quit_fmt("Not enough flavors for tval %d.", tval);
+		}
 
 		/* Select a flavor */
-		choice = randint0(flavor_count);
+		choice = flavor[randint0(flavor_count)];
 
-		/* Find and store the flavor */
-		for (j = 0; j < z_info->flavor_max; j++)
-		{
-			/* Skip other tvals */
-			if (flavor_info[j].tval != tval) continue;
+		/* Store the flavor index */
+		k_info[i].flavor = choice;
 
-			/* Skip assigned svals */
-			if (flavor_info[j].sval != SV_UNKNOWN) continue;
+		/* Mark the flavor as used */
+		flavor_info[choice].sval = k_info[i].sval;
 
-			if (choice == 0)
-			{
-				/* Store the flavor index */
-				k_info[i].flavor = j;
-
-				/* Mark the flavor as used */
-				flavor_info[j].sval = k_info[i].sval;
-
-				/* One less flavor to choose from */
-				flavor_count--;
-
-				break;
-			}
-
-			choice--;
-		}
+		/* One less flavor to choose from */
+		flavor[choice] = flavor[flavor_count];
+		flavor_count--;
 	}
+
+	/* Free the array */
+	FREE(flavor);
 }
 
 
