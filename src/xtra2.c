@@ -625,6 +625,14 @@ void monster_death(int m_idx, int who)
 		/*write note for player ghosts*/
 		if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
 		{
+			/*paranoia*/
+			/* Check there is a name/ghost first */
+			if (player_ghost_name[0] == '\0')
+			{
+				/*Make sure the name has been created*/
+				prepare_ghost_name();
+			}
+
 			my_strcpy(note2, format("Destroyed %^s", player_ghost_name), sizeof (note2));
 		}
 
