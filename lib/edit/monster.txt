@@ -10327,7 +10327,7 @@ S:SPELL_PCT_20 | POW_40
 S:BOLT | HASTE | ADD_MANA | HEAL | CURE
 S:BLINK | TPORT | TELE_TO | DRAIN_MANA
 D:A more powerful Maia that serves Tulkas, the Champion of the Valar.
-D: Like Tulkas himself, this Ainu delights in tests of strenght and
+D: Like Tulkas himself, this Ainu delights in tests of strength and
 D: laughs ever, even in the face of Morgoth's wrath.
 
 
@@ -10568,7 +10568,7 @@ S:BOLT | HASTE | ADD_MANA | HEAL | CURE
 S:BLINK | TPORT | TELE_SELF_TO | TELE_TO | TELE_AWAY
 S:DRAIN_MANA | BRAIN_SMASH
 D:A more powerful Maia that serves Tulkas, the Champion of the Valar.
-D: Like Tulkas himself, this Ainu delights in tests of strenght and
+D: Like Tulkas himself, this Ainu delights in tests of strength and
 D: laughs ever, even in the face of Morgoth's wrath. The strongest among
 D: those that follow the Champion of Aman seek to disrupt their opponent
 D: with spells while pummeling them with mighty blows.
