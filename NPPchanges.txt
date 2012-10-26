@@ -47,6 +47,7 @@ Added new object, Faded Scroll Fragment, for use in labrynth quests.
 Stat gain potions can be good or great quest rewards at the lower depths.
 Added message for when a putrid flower the player cannot see fires at a player.
 Bugfix:  Fixed a misspelled word in the descriptions for the Servant of Tulkas and Greater Servant of Tulkas.
+Bugfix: Traps couldnt be disarmed if the player was standing on a disarmed chest.
 Bugfix:  Non-spellcasters were sometimes getting spellpoints.
 
 
