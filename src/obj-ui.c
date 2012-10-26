@@ -788,13 +788,15 @@ void show_floor(const int *floor_list, int floor_num, olist_detail_t mode)
  *
  * The item can be negative to mean "item on floor".
  */
-static bool verify_item(cptr prompt, int item)
+static bool verify_item(int item)
 {
 	char o_name[80];
-
+	cptr prompt;
 	char out_val[160];
 
 	object_type *o_ptr;
+
+
 
 	/* Inventory */
 	if (item >= 0)
@@ -806,6 +808,49 @@ static bool verify_item(cptr prompt, int item)
 	else
 	{
 		o_ptr = &o_list[0 - item];
+	}
+
+	/* Get the possible command prompts */
+	switch (p_ptr->command_cmd)
+	{
+		case 'a':	{prompt = "Really aim";		break;}
+		case 'A':	{prompt = "Really activate";break;}
+		case 'd':	{prompt = "Really drop";	break;}
+		case 'D':	{prompt = "Really disarm";	break;}
+		case 'E':	{prompt = "Really eat";		break;}
+		case 'f':	{prompt = "Really fire";	break;}
+		case 'F':	{prompt = "Really fuel";	break;}
+		case 'h':	{prompt = "Really fire";	break;}
+		case 'k':	{prompt = "Really destroy";	break;}
+		case 'o':	{prompt = "Really open";	break;}
+		case 'q':	{prompt = "Really quaff";	break;}
+		case 'r':	{prompt = "Really read";	break;}
+		case 't':	{prompt = "Really take off";break;}
+		case 'u':	{prompt = "Really use";		break;}
+		case 'v':	{prompt = "Really throw";	break;}
+		case 'w':
+		{
+			int slot = wield_slot(o_ptr);
+
+			/* Where would the item go? */
+			if (slot == INVEN_WIELD) 		prompt = "Really wield";
+			else if (slot == INVEN_BOW) 	prompt = "Really shoot with";
+			else if ((slot == INVEN_LIGHT)	|| (slot == INVEN_ARM))
+			{
+				prompt = "Really hold";
+			}
+			else if ((slot == INVEN_LEFT) || (slot == INVEN_RIGHT) || (slot == INVEN_NECK))
+			{
+				prompt = "Really put on";
+			}
+			else if (slot >= QUIVER_START) prompt = "Really place in quiver";
+			else prompt = "Really wear";
+
+			break;
+
+		}
+		case 'z':	{prompt = "Really zap";		break;}
+		default: 	{prompt = "Really try"; 	break;}
 	}
 
 	/* Describe */
@@ -849,7 +894,7 @@ static bool get_item_allow(int item, bool is_harmless)
 
 	while (n--)
 	{
-		if (!verify_item("Really try", item))
+		if (!verify_item(item))
 			return (FALSE);
 	}
 
@@ -1735,7 +1780,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 				}
 
 				/* Verify the item */
-				if (verify && !verify_item("Try", k))
+				if (verify && !verify_item(k))
 				{
 					done = TRUE;
 					evt.type = EVT_ESCAPE;
