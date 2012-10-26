@@ -49,6 +49,7 @@ Added message for when a putrid flower the player cannot see fires at a player.
 Bugfix:  Fixed a misspelled word in the descriptions for the Servant of Tulkas and Greater Servant of Tulkas.
 Bugfix: Traps couldnt be disarmed if the player was standing on a disarmed chest.
 Bugfix:  Non-spellcasters were sometimes getting spellpoints.
+The message verifying a command now specified the action (eg really quaff that potion?)
 
 
 NPP 0.5.4 changes:

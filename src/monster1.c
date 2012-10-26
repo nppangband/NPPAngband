@@ -2464,14 +2464,17 @@ static void process_ghost_race(int ghost_race, int r_idx)
 
 		for (n = 0; n < MONSTER_BLOW_MAX; n++)
 		{
-			r_ptr->blow[n].d_side = 4 * r_ptr->blow[n].d_side / 3;
-			r_ptr->blow[n].d_dice = 5 * r_ptr->blow[n].d_dice / 4;
+			/* Skip non-attacks */
+			if (!r_ptr->blow[n].method) continue;
+
+			if (one_in_(2)) r_ptr->blow[n].d_side += 1 + r_ptr->blow[n].d_side / 5;
+			else r_ptr->blow[n].d_dice += 1 * r_ptr->blow[n].d_dice / 6;
 
 			/* Sometimes make it extra tough */
-			if (one_in_(3))
+			if (one_in_(4))
 			{
-				r_ptr->blow[n].d_side = 4 * r_ptr->blow[n].d_side / 3;
-				r_ptr->blow[n].d_dice = 5 * r_ptr->blow[n].d_dice / 4;
+				if (one_in_(2)) r_ptr->blow[n].d_side += 1+ r_ptr->blow[n].d_side / 5;
+				else r_ptr->blow[n].d_dice += 1+ r_ptr->blow[n].d_dice / 6;
 			}
 		}
 
@@ -2484,15 +2487,17 @@ static void process_ghost_race(int ghost_race, int r_idx)
 	/*bottom quartile gets less fighting ability*/
 	else if(p_info[ghost_race].r_thn < race_min)
 	{
-
 		for (n = 0; n < MONSTER_BLOW_MAX; n++)
 		{
-			r_ptr->blow[n].d_side = 4 * r_ptr->blow[n].d_side / 5;
+			/* Skip non-attacks */
+			if (!r_ptr->blow[n].method) continue;
+
+			r_ptr->blow[n].d_side = 5 * r_ptr->blow[n].d_side / 6;
 
 			/* Sometimes make it extra weak */
-			if (one_in_(3))
+			if (one_in_(4))
 			{
-				r_ptr->blow[n].d_side = 4 * r_ptr->blow[n].d_side / 5;
+				r_ptr->blow[n].d_side = 5 * r_ptr->blow[n].d_side / 6;
 			}
 		}
 
@@ -2774,14 +2779,17 @@ static void process_ghost_class(int ghost_class, int r_idx)
 
 		for (n = 0; n < MONSTER_BLOW_MAX; n++)
 		{
-			r_ptr->blow[n].d_side = 4 * r_ptr->blow[n].d_side / 3;
-			r_ptr->blow[n].d_dice = 5 * r_ptr->blow[n].d_dice / 4;
+			/* Skip non-attacks */
+			if (!r_ptr->blow[n].method) continue;
+
+			if (one_in_(2)) r_ptr->blow[n].d_side += 1 + r_ptr->blow[n].d_side / 5;
+			else r_ptr->blow[n].d_dice += 1 + r_ptr->blow[n].d_dice / 6;
 
 			/* Sometimes make it extra tough */
-			if (one_in_(3))
+			if (one_in_(4))
 			{
-				r_ptr->blow[n].d_side = 5 * r_ptr->blow[n].d_side / 4;
-				r_ptr->blow[n].d_dice = 6 * r_ptr->blow[n].d_dice / 5;
+				if (one_in_(2)) r_ptr->blow[n].d_side += 1 + r_ptr->blow[n].d_side / 5;
+				else r_ptr->blow[n].d_dice += 1 + r_ptr->blow[n].d_dice / 6;
 			}
 		}
 
@@ -2797,12 +2805,15 @@ static void process_ghost_class(int ghost_class, int r_idx)
 
 		for (n = 0; n < MONSTER_BLOW_MAX; n++)
 		{
-			r_ptr->blow[n].d_side = 2 * r_ptr->blow[n].d_side / 3;
+			/* Skip non-attacks */
+			if (!r_ptr->blow[n].method) continue;
+
+			r_ptr->blow[n].d_side = 4 * r_ptr->blow[n].d_side / 5;
 
 			/* Sometimes make it extra weak */
-			if (one_in_(3))
+			if (one_in_(4))
 			{
-				r_ptr->blow[n].d_side = 3 * r_ptr->blow[n].d_side / 4;
+				r_ptr->blow[n].d_side = 4 * r_ptr->blow[n].d_side / 5;
 			}
 		}
 
@@ -3038,9 +3049,11 @@ bool prepare_ghost(int r_idx)
 	return (TRUE);
 }
 
+/* Remove the ghost. Make sure each one only shows up once per game */
 void remove_player_ghost(void)
 {
 	monster_lore *l_ptr;
+	monster_race *r_ptr;
 
 	/* Paranoia */
 	if ((player_ghost_num < 0) || (player_ghost_num >= z_info->ghost_template_max))
@@ -3058,6 +3071,8 @@ void remove_player_ghost(void)
 	l_ptr->tkills = 0;
 
 	/* No current player ghosts, set up a new random entry */
+	r_ptr = &r_info[ghost_r_idx];
+	r_ptr->max_num = 0;
 	player_ghost_num = -1;
 	ghost_r_idx = 0;
 	player_ghost_name[0] = '\0';
