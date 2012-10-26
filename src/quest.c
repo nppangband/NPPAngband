@@ -2627,7 +2627,7 @@ void write_quest_note(bool success)
 		artifact_wipe(QUEST_ART_SLOT, TRUE);
 	}
 
-	if (q_ptr->q_type == QUEST_GREATER_VAULT)
+	else if (q_ptr->q_type == QUEST_GREATER_VAULT)
 	{
 		vault_type *v_ptr = &v_info[q_ptr->q_theme];
 
