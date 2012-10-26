@@ -244,18 +244,23 @@ static void calc_mana(void)
 	bool old_cumber_armor = p_ptr->cumber_armor;
 
 	/* Hack -- Must be literate */
-	if (!cp_ptr->spell_book) return;
+	if (!cp_ptr->spell_book)
+	{
+		p_ptr->csp_frac = p_ptr->csp = p_ptr->msp = 0;
+		return;
+	}
 
 	/* Extract "effective" player level */
 	levels = (p_ptr->lev - cp_ptr->spell_first) + 1;
-
-	/* Hack -- no negative mana */
-	if (levels < 0) levels = 0;
-
-	msp = (long)adj_mag_mana[SPELL_STAT_SLOT] * levels / 100;
-
-	/* Hack -- usually add one mana */
-	if (msp) msp++;
+	if (levels > 0)
+	{
+		msp = 1 + (long)adj_mag_mana[SPELL_STAT_SLOT] * levels / 100;
+	}
+	else
+	{
+		levels = 0;
+		msp = 0;
+	}
 
 	/* Process gloves for those disturbed by them */
 	if (cp_ptr->flags & CF_CUMBER_GLOVE)
@@ -283,7 +288,6 @@ static void calc_mana(void)
 			msp = (3 * msp) / 4;
 		}
 	}
-
 
 	/* Assume player not encumbered by armor */
 	p_ptr->cumber_armor = FALSE;
