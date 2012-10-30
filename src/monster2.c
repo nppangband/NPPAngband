@@ -3109,7 +3109,6 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	/* No new monsters on labyrinth, themed and wilderness levels */
 	if ((!(*dun_cap->allow_level_repopulation)()) && (character_dungeon == TRUE))
 	{
-
 		/* Unless we are revealing a mimic or replacing a missing quest monster */
 		if (!(mp_flags & (MPLACE_OVERRIDE))) return (FALSE);
 	}
@@ -4105,6 +4104,9 @@ bool summon_specific(int y1, int x1, int lev, int type, byte mp_flags)
 	{
 		if (!(mp_flags & (MPLACE_OVERRIDE))) return (summon_from_level(y1, x1, lev, type));
 	}
+
+	/* Allow the monster to be placed */
+	else mp_flags |= MPLACE_OVERRIDE;
 
 	/* Look for a location */
 	for (i = 0; i < 20; ++i)

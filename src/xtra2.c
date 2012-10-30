@@ -444,7 +444,7 @@ static void mon_drop_loot(int m_idx)
 		if (one_in_(5)) this_good = TRUE;
 		if ((!this_good) && (!this_great) && (!this_chest))
 		{
-			object_level += 2;
+			object_level += 5;
 			if (object_level > MAX_DEPTH) object_level = MAX_DEPTH;
 			interesting = TRUE;
 		}
@@ -500,9 +500,20 @@ static void process_quest_monster_death(int i, int m_idx, bool *writenote)
 	}
 
 	/* Not a quest that counts monster deaths */
-	else if ((quest_multiple_r_idx(q_ptr)) || (quest_timed(q_ptr)))
+	else if (quest_multiple_r_idx(q_ptr))
 	{
 		if (!(m_ptr->mflag & (MFLAG_QUEST))) return;
+	}
+
+	else if (quest_timed(q_ptr))
+	{
+		if (m_ptr->mflag & (MFLAG_QUEST))
+		{
+			q_ptr->q_num_killed++;
+			p_ptr->redraw |= (PR_QUEST_ST);
+			p_ptr->notice |= PN_QUEST_REMAIN;
+		}
+		return;
 	}
 
 	else return;
@@ -511,7 +522,7 @@ static void process_quest_monster_death(int i, int m_idx, bool *writenote)
 	q_ptr->q_num_killed++;
 
 	/* Completed quest? */
-	if (q_ptr->q_num_killed == q_ptr->q_max_num)
+	if (q_ptr->q_num_killed >= q_ptr->q_max_num)
 	{
 		/* Mark complete */
 		quest_finished(q_ptr);
@@ -520,7 +531,7 @@ static void process_quest_monster_death(int i, int m_idx, bool *writenote)
 		 * Make a note of the completed quest, but not for fixed quests.
 		 * That is a special note written later.
 		 */
-		if ((!quest_fixed(q_ptr)) && (q_ptr->q_type != QUEST_GREATER_VAULT))
+		if (!quest_fixed(q_ptr))
 		{
 			write_quest_note(TRUE);
 			*writenote = FALSE;

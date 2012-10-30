@@ -776,7 +776,7 @@ static void process_arena_level(void)
 		/* There are only 10 level phases */
 		if (current_lev_phase < ARENA_MAX_STAGES)
 		{
-			byte new_objects = MIN((1 + randint1(2)), current_lev_phase);
+			byte new_objects = MIN((randint1(2)), current_lev_phase);
 
 			/* Open up more of the arena */
 			update_arena_level(current_lev_phase);
@@ -1000,6 +1000,10 @@ static void process_labyrinth_level(void)
 		int x = 4;
 		bool obj_added = FALSE;
 
+		/* No more than 5 objects added, one every other wave */
+		if (current_lab_wave > 10) obj_added = TRUE;
+		else if (current_lab_wave % 2) obj_added = TRUE;
+
 		for (i = 0; i < 4; i++)
 		{
 			bool add_obj = FALSE;
@@ -1035,7 +1039,22 @@ static void process_greater_vault_quests(void)
 		/* Not much time left.  Warn the player */
 		if (quest_player_turns_remaining() <= 5) do_cmd_quest();
 
-		return;
+		/*
+		 * Go through every monster, and return if we find a single questor,
+		 */
+		for (i = 1; i < mon_max; i++)
+		{
+			monster_type *m_ptr = &mon_list[i];
+
+			/* Ignore non-existant monsters */
+			if (!m_ptr->r_idx) continue;
+
+			/*
+			 * If we find a single quest monster, return.
+			 * If not, the quest is completed.
+			 */
+			if (m_ptr->mflag & (MFLAG_QUEST)) return;
+		}
 	}
 
 	/* If the player did not enter the vault, they fail the quest. */
@@ -1046,6 +1065,16 @@ static void process_greater_vault_quests(void)
 
 		return;
 	}
+
+	/* Handle completion of the quest */
+	msg_print("You have completed your quest - collect your reward at the guild!");
+
+	/* Turn on quest indicator */
+	quest_indicator_timer = 50;
+	quest_indicator_complete = TRUE;
+
+	/* Redraw the status */
+	p_ptr->redraw |= (PR_QUEST_ST);
 
 	/* Mark the quest as finished, write the note */
 	quest_finished(q_ptr);
@@ -2743,6 +2772,7 @@ void process_player(void)
 		  	}
 
 		  	g_vault_name[0] = '\0';
+		  	p_ptr->redraw |= (PR_QUEST_ST);
 		}
 
 		/* Significant */
@@ -2897,10 +2927,7 @@ void process_player(void)
 		/* See if the greater vault quest just finished, if so, complete it */
 		if (q_ptr->q_type == QUEST_GREATER_VAULT)
 		{
-			if (quest_time_remaining() < 1)
-			{
-				process_greater_vault_quests();
-			}
+			process_greater_vault_quests();
 		}
 	}
 

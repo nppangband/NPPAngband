@@ -270,7 +270,13 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 	{
 		if (guild_quest_active())
 		{
-			my_strcpy(intro, format("At your current speed, you have %d turns remaining on this greater vault level", quest_player_turns_remaining()),sizeof(intro));
+			my_strcpy(intro, format("At your current speed, you have %d turns remaining",
+									quest_player_turns_remaining()),sizeof(intro));
+			if (g_vault_name[0] != '\0')
+			{
+				my_strcat(intro, " to enter this greater vault.", sizeof(intro));
+			}
+			else my_strcat(intro, " on this greater vault level.", sizeof(intro));
 		}
 
 		else my_strcpy(intro, format("Stay on a greater vault level for at least %d game turns", GREATER_VAULT_INITIAL_TIME), sizeof(intro));
@@ -682,6 +688,13 @@ void add_reward_gold(void)
 
 		/* Make more gold */
 		while (!make_gold(j_ptr)) continue;
+
+		/* Hack - max out the gold, make sure we don't go over the max for s16b; */
+		if ((i_ptr->pval + j_ptr->pval) >= MAX_SHORT)
+		{
+			i_ptr->pval = MAX_SHORT;
+			break;
+		}
 
 		/* Combine the gold */
 		i_ptr->pval += j_ptr->pval;
@@ -1999,29 +2012,69 @@ static bool place_vault_quest(int lev)
  */
 static bool place_greater_vault_quest(int lev)
 {
-	vault_type *v_ptr;
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
+	u16b i;
+	u16b vault_choices = 0;
+	u16b *vaults;
+	u16b min_vault = p_ptr->q_fame;
+
+	vaults = C_ZNEW(z_info->v_max, u16b);
+
+	/* Boundry control */
+	if (min_vault > 1750) min_vault = 1750;
 
 	/* Actually write the quest */
 	q_ptr->q_type = QUEST_GREATER_VAULT;
 	q_ptr->base_level = lev;
 	q_ptr->q_fame_inc = 10;
 
-	/* Pick a greater vault */
-	while (TRUE)
+	/* Pick a greater vault, based on player fame */
+	for (i = 0; i < z_info->v_max; i++)
 	{
-		u16b vault_choice = randint0(z_info->v_max);
+		/* Analyze each vault, see if it is worthy of the player */
+		vault_type *v_ptr = &v_info[i];
+		int ymax = v_ptr->hgt;
+		int xmax = v_ptr->wid;
+		cptr t= v_text + v_ptr->text;
+		int dx, dy;
+		int rating = 0;
 
-		/* Get a random vault record */
-		v_ptr = &v_info[vault_choice];
-
-		/* Accept the first greater vault */
 		if (v_ptr->typ != 8) continue;
 
-		/* Found one */
-		q_ptr->q_theme = vault_choice;
-		break;
+		for (dy = 0; dy < ymax; dy++)
+		{
+			for (dx = 0; dx < xmax; dx++, t++)
+			{
+				switch (*t)
+				{
+					/* We are only factoring n good and great vaults */
+					case '9': {rating += 20; break;}
+					case '8': {rating += 40; break;}
+					default: break;
+				}
+			}
+		}
+
+		/* Make sure the vault is lucrative enough to be worth the player's time */
+		if (rating <= min_vault) continue;
+
+		/* Record this one */
+		vaults[vault_choices] = i;
+		vault_choices++;
 	}
+
+	/* Paranoia - should never happen unless somebody has messed up vaults.txt. */
+	if (!vault_choices)
+	{
+		FREE(vaults);
+		return (FALSE);
+	}
+
+	/* Select the vault */
+	i = randint0(vault_choices);
+	q_ptr->q_theme = vaults[i];
+
+	FREE(vaults);
 
 	/* For vault quests, the reward is found in the greater vault */
 	q_ptr->q_reward |= REWARD_GOLD;
@@ -2060,6 +2113,8 @@ bool quest_allowed(byte j)
 	}
 	else if (j == QUEST_SLOT_WILDERNESS)
 	{
+		/* playtesting()  temporary de-activation */
+		return (FALSE);
 		if (adult_simple_dungeons) return (FALSE);
 		if (p_ptr->max_depth < 17) return (FALSE);
 		if (!(q_info[GUILD_QUEST_SLOT].q_flags & (QFLAG_WILDERNESS_QUEST))) return (FALSE);
@@ -2219,6 +2274,7 @@ void quest_finished(quest_type *q_ptr)
   	}
 	else if (q_ptr->q_type == QUEST_GREATER_VAULT)
 	{
+		write_quest_note(TRUE);
 		altered_inventory_counter += 15;
 	}
 
@@ -2398,24 +2454,24 @@ bool guild_purchase(int choice)
 	if (one_in_(2)) q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_EXTRA_LEVEL);
 	else q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_EXTRA_LEVEL);
 
-	/* Vault quest allowed 1/3 of the time */
-	if (one_in_(3)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_VAULT_QUEST);
+	/* Vault quest allowed 1/5 of the time */
+	if (one_in_(5)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_VAULT_QUEST);
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_VAULT_QUEST);
 
-	/* Arena quest allowed 1/3 of the time */
-	if (one_in_(3)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_ARENA_QUEST);
+	/* Arena quest allowed 1/5 of the time */
+	if (one_in_(5)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_ARENA_QUEST);
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_ARENA_QUEST);
 
-	/* Wilderness quests allowed 1/2 of the time */
-	if (one_in_(2)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_WILDERNESS_QUEST);
+	/* Wilderness quests allowed 1/3 of the time */
+	if (one_in_(3)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_WILDERNESS_QUEST);
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_WILDERNESS_QUEST);
 
-	/* Labyrinth quests allowed 1/2 of the time */
-	if (one_in_(2)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_LABYRINTH_QUEST);
+	/* Labyrinth quests allowed 1/3 of the time */
+	if (one_in_(3)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_LABYRINTH_QUEST);
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_LABYRINTH_QUEST);
 
-	/* Greater vault quests allowed 1/3 of the time */
-	if (one_in_(3)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_GREATER_VAULT_QUEST);
+	/* Greater vault quests allowed 1/5 of the time */
+	if (one_in_(5)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_GREATER_VAULT_QUEST);
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_GREATER_VAULT_QUEST);
 
 	return (TRUE);
@@ -2623,8 +2679,6 @@ void write_quest_note(bool success)
 		if (success) sprintf(note, "Quest: Returned %s to the Adventurer's Guild.", o_name);
 		else sprintf(note, "Quest: Failed to return %s to the Guild.", o_name);
 
-		/*clear out the artifact*/
-		artifact_wipe(QUEST_ART_SLOT, TRUE);
 	}
 
 	else if (q_ptr->q_type == QUEST_GREATER_VAULT)
@@ -2910,7 +2964,8 @@ void format_quest_indicator(char dest[], int max, byte *attr)
 	/* Special case. Vault quests */
 	else if (q_ptr->q_type == QUEST_GREATER_VAULT)
 	{
-		strnfmt(dest, max, "Q:%4d turns", quest_player_turns_remaining());
+		if (g_vault_name[0] != '\0') my_strcpy(dest, "Q:Entervault", max);
+		else strnfmt(dest, max, "Q:%4d turns", quest_player_turns_remaining());
 	}
 
 	/* Monster, pit/nest or themed level quests */
@@ -2943,8 +2998,13 @@ void quest_status_update(void)
 	{
 		if (guild_quest_active())
 		{
-			my_strcpy(note, format("At your current speed, you have %d turns remaining on this greater vault level.",
+			my_strcpy(note, format("At your current speed, you have %d turns remaining",
 						quest_player_turns_remaining()),sizeof(note));
+			if (g_vault_name[0] != '\0')
+			{
+				my_strcat(note, " to enter this greater vault.", sizeof(note));
+			}
+			else my_strcat(note, " on this greater vault level.", sizeof(note));
 		}
 
 		/*dump the final note*/

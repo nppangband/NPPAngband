@@ -3447,7 +3447,7 @@ void destroy_area(int y1, int x1, int r)
 	bool flag = FALSE;
 
 	/* No effect in town */
-	if (!(*dun_cap->prevent_destruction)())
+	if ((*dun_cap->prevent_destruction)())
 	{
 		msg_print("The ground shakes for a moment.");
 		return;
@@ -3608,7 +3608,7 @@ void earthquake(int cy, int cx, int r, bool kill_vault)
 	bool map[32][32];
 
 	/* No effect in town */
-	if (!(*dun_cap->prevent_destruction)())
+	if ((*dun_cap->prevent_destruction)())
 	{
 		msg_print("The ground shakes for a moment.");
 		return;
