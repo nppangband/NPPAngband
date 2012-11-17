@@ -1022,6 +1022,7 @@ errr process_pref_file(cptr name);
 
 /* quest.c */
 extern void plural_aux(char *name, size_t max);
+extern int quest_collection_num(quest_type *q_ptr);
 extern void describe_quest(char *random_name, size_t max, s16b level, int mode);
 extern void show_quest_mon(int y, int x);
 extern void add_reward_gold(void);
@@ -1051,6 +1052,8 @@ extern bool quest_slot_multiple_r_idx(int quest_num);
 extern bool quest_single_r_idx(const quest_type *q_ptr);
 extern bool quest_slot_single_r_idx(int quest_num);
 extern bool quest_themed(const quest_type *q_ptr);
+extern bool quest_type_collection(const quest_type *q_ptr);
+extern bool quest_slot_collection(int quest_num);
 extern bool quest_slot_themed(int quest_num);
 extern bool quest_timed(const quest_type *q_ptr);
 extern bool quest_slot_timed(int quest_num);
@@ -1090,7 +1093,7 @@ extern void signals_init(void);
 
 
 /* spells1.c */
-extern void teleport_away(int m_idx, int dis);
+extern bool teleport_away(int m_idx, int dis);
 extern bool teleport_player(int dis, bool native);
 extern void teleport_player_to(int ny, int nx);
 extern void teleport_towards(int oy, int ox, int ny, int nx);

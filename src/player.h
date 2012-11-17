@@ -730,10 +730,10 @@ enum
 #define QUEST_PIT				4	/* clear out an entire monster pit*/
 #define QUEST_NEST				5	/* clear out a monster next*/
 #define QUEST_THEMED_LEVEL		6	/* clear out an entire level of creatures*/
-#define QUEST_WILDERNESS_LEVEL	7	/* Clear out an entire wilderness level */
+#define QUEST_WILDERNESS		7	/* Clear out an entire wilderness level */
 #define QUEST_VAULT				8	/* retrieve a artifact from a vault and return it to the guild*/
 #define QUEST_ARENA_LEVEL		9	/* Kill a given # of creatures in a closed arena  */
-#define QUEST_LABYRINTH_LEVEL   10   /* Clear out an entire labrynth level */
+#define QUEST_LABYRINTH   		10   /* Clear out an entire labrynth level */
 #define QUEST_GREATER_VAULT	    11   /* Go into a greater vault for a set amoutn of time */
 
 #define MON_RARE_FREQ	15
@@ -752,9 +752,12 @@ enum
 #define ARENA_MAX_STAGES 	10
 
 #define LABYRINTH_STAGE_LEN			200
-#define LABYRINTH_COLLECT 			10
+#define LABYRINTH_COLLECT	 		10
 #define LABYRINTH_QUEST_DIMENSIONS	17
 #define LABYRINTH_QUEST_AREA		(LABYRINTH_QUEST_DIMENSIONS * LABYRINTH_QUEST_DIMENSIONS)
+
+
+#define WILDERNESS_COLLECT			20
 
 /*
  * Quest reward types

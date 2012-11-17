@@ -721,12 +721,12 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 				if (mode == MODE_ACTION)
 				{
-
-					/*give message if in LOS*/
-					if (m_ptr->ml) msg_format("%^s is teleported.", m_name);
-
 					/*teleport the monster*/
-					teleport_away(cave_m_idx[y][x], 5 + (trap_power / 10));
+					if (teleport_away(cave_m_idx[y][x], 5 + (trap_power / 10)))
+					{
+						/*give message if in LOS*/
+						if (m_ptr->ml) msg_format("%^s is teleported.", m_name);
+					}
 				}
 
 				break;

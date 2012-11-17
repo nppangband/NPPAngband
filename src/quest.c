@@ -203,6 +203,13 @@ void plural_aux(char *name, size_t max)
 	}
 }
 
+int quest_collection_num(quest_type *q_ptr)
+{
+	if (q_ptr->q_type == QUEST_LABYRINTH) 		return (LABYRINTH_COLLECT);
+	else if (q_ptr->q_type == QUEST_WILDERNESS) return (WILDERNESS_COLLECT);
+	return (0);
+}
+
 /*
  * Provide a description of the quest
  */
@@ -292,10 +299,9 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 		/*we are done*/
 		return;
 	}
-	else if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL)
+	else if (quest_type_collection(q_ptr))
 	{
-		int remaining = LABYRINTH_COLLECT - quest_item_count();
-
+		int remaining = quest_collection_num(q_ptr) - quest_item_count();
 
 		/* Just needs to get the reward */
 		if ((!remaining) && (mode == QMODE_FULL))
@@ -322,9 +328,14 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 			my_strcpy(intro, format("Retrieve %d ", remaining), sizeof(intro));
 
 			/* The player has some quest items in inventory */
-			if ((remaining > 0) && (remaining < LABYRINTH_COLLECT)) my_strcat(intro, "additional ", sizeof(intro));
+			if ((remaining > 0) && (remaining < quest_collection_num(q_ptr))) my_strcat(intro, "additional ", sizeof(intro));
 
-			my_strcat(intro, format("%s from a labyrinth level", o_name), sizeof(intro));
+			if (q_ptr->q_type == QUEST_WILDERNESS)
+			{
+				my_strcat(intro, format("%s from a wilderness level", o_name), sizeof(intro));
+			}
+			/* (q_ptr->q_type == QUEST_LABYRINTH_LEVEL) */
+			else my_strcat(intro, format("%s from a labyrinth level", o_name), sizeof(intro));
 
 			/* The location of the quest */
 			my_strcpy(where, format("at a depth of %d feet and return to the Guild.", level * 50), sizeof(where));
@@ -370,10 +381,6 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 			}
 		}
 
-		if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL)
-		{
-			my_strcat(intro, format("a wilderness level"), sizeof(intro));
-		}
 		else if (q_ptr->q_type == QUEST_ARENA_LEVEL)
 		{
 			my_strcat(intro, format("an arena level"), sizeof(intro));
@@ -1911,16 +1918,16 @@ static bool place_wilderness_quest(int lev)
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 
 	/* Actually write the quest */
-	q_ptr->q_type = QUEST_WILDERNESS_LEVEL;
+	q_ptr->q_type = QUEST_WILDERNESS;
 	q_ptr->base_level = lev;
 	q_ptr->q_fame_inc = 15;
 	q_ptr->q_fame_inc += damroll(10,2);
 
 	/* Decide which rewards to offer the player */
-	check_reward_custom_randart(q_ptr, 150, 8);
-	check_reward_extra_hp(q_ptr, 350);
-	check_reward_stat_increase(q_ptr, 350);
-	if (25 + damroll(25,25) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
+	check_reward_custom_randart(q_ptr, 125, 8);
+	check_reward_extra_hp(q_ptr, 300);
+	check_reward_stat_increase(q_ptr, 300);
+	if (25 + damroll(25,20) < (p_ptr->q_fame + p_ptr->deferred_rewards)) q_ptr->q_reward |= REWARD_TAILORED;
 	else q_ptr->q_reward |= REWARD_GREAT_ITEM;
 
 	/*success*/
@@ -1936,7 +1943,7 @@ static bool place_labyrinth_quest(int lev)
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 
 	/* Actually write the quest */
-	q_ptr->q_type = QUEST_LABYRINTH_LEVEL;
+	q_ptr->q_type = QUEST_LABYRINTH;
 	q_ptr->base_level = lev;
 	q_ptr->q_fame_inc = 25;
 	q_ptr->q_fame_inc += damroll(10,2);
@@ -2113,7 +2120,7 @@ bool quest_allowed(byte j)
 	}
 	else if (j == QUEST_SLOT_WILDERNESS)
 	{
-		/* playtesting()  temporary de-activation */
+		/* playtesting()  */
 		return (FALSE);
 		if (adult_simple_dungeons) return (FALSE);
 		if (p_ptr->max_depth < 17) return (FALSE);
@@ -2217,7 +2224,7 @@ static void remove_quest_objects(void)
 	object_type *o_ptr;
 	int j;
 
-	if (q_ptr->q_type != QUEST_LABYRINTH_LEVEL) return;
+	if (!quest_type_collection(q_ptr)) return;
 
 	/* Find quest items in the inventory*/
 	for (j = 0; j < INVEN_PACK; j++)
@@ -2299,7 +2306,7 @@ void quest_finished(quest_type *q_ptr)
 		inven_item_optimize(j);
 	}
 
-	else if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL)
+	else if (q_ptr->q_type == QUEST_LABYRINTH)
 	{
 		altered_inventory_counter += 5;
 
@@ -2692,7 +2699,7 @@ void write_quest_note(bool success)
 		g_vault_name[0] = '\0';
 	}
 
-	else if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL)
+	else if (quest_type_collection(q_ptr))
 	{
 		/*
 		 * Hack - get the description.  We need to make an object to make sure
@@ -2706,12 +2713,20 @@ void write_quest_note(bool success)
 		object_wipe(i_ptr);
 		object_prep(i_ptr, k_idx);
 		apply_magic(i_ptr, p_ptr->depth, TRUE, FALSE, FALSE, TRUE);
-		i_ptr->number = LABYRINTH_COLLECT;
+		i_ptr->number = quest_collection_num(q_ptr);
 		object_desc(o_name, sizeof(o_name), i_ptr, ODESC_BASE);
 
 		/*create the note*/
-		if (success) sprintf(note, "Quest: Returned %d %s to the Adventurer's Guild.", LABYRINTH_COLLECT, o_name);
-		else sprintf(note, "Quest: Failed to return %d %s to the Guild.", LABYRINTH_COLLECT, o_name);
+		if (q_ptr->q_type == QUEST_LABYRINTH)
+		{
+			if (success) sprintf(note, "Quest: Returned %d %s from a labyrinth level to the Adventurer's Guild.", LABYRINTH_COLLECT, o_name);
+			else sprintf(note, "Quest: Failed to return %d %s from a labyrinth level to the Guild.", LABYRINTH_COLLECT, o_name);
+		}
+		else /* (q_ptr->q_type ==  QUEST_WILDERNESS) */
+		{
+			if (success) sprintf(note, "Quest: Returned %d %s from a burning wilderness to the Adventurer's Guild.", WILDERNESS_COLLECT, o_name);
+			else sprintf(note, "Quest: Failed to return %d %s from a burning wilderness to the Guild.", WILDERNESS_COLLECT, o_name);
+		}
 	}
 
 
@@ -2720,8 +2735,8 @@ void write_quest_note(bool success)
 		if (success) my_strcpy(note, "Quest: Completed ", sizeof(note));
 		else my_strcpy(note, "Quest: Failed to complete ", sizeof(note));
 
-		if (q_ptr->q_type ==  QUEST_WILDERNESS_LEVEL) my_strcat(note, "a wilderness quest.", sizeof(note));
-		else if (q_ptr->q_type ==  QUEST_ARENA_LEVEL) my_strcat(note, "an arena quest.", sizeof(note));
+
+		if (q_ptr->q_type ==  QUEST_ARENA_LEVEL) my_strcat(note, "an arena quest.", sizeof(note));
 		else
 		{
 			char mon_theme[80];
@@ -2830,7 +2845,7 @@ void quest_fail(void)
 	{
 		/*Arena quests are only a small decrease, special quests cut the player fame in half*/
 		if (q_ptr->q_type == QUEST_ARENA_LEVEL)	p_ptr->q_fame = (p_ptr->q_fame * 8 / 10);
-		else if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL)	p_ptr->q_fame = (p_ptr->q_fame * 7 / 10);
+		else if (quest_type_collection(q_ptr))	p_ptr->q_fame = (p_ptr->q_fame * 7 / 10);
 
 		else if (q_ptr->q_type == QUEST_VAULT)	p_ptr->q_fame /= 2;
 
@@ -2847,7 +2862,7 @@ void quest_fail(void)
 		}
 	}
 
-	if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL) remove_quest_objects();
+	if (quest_type_collection(q_ptr)) remove_quest_objects();
 
 	/*make a note of the failed quest */
 	write_quest_note(FALSE);
@@ -2935,10 +2950,11 @@ void format_quest_indicator(char dest[], int max, byte *attr)
 	}
 
 	/* Special case. Labyrinth levels */
-	else if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL)
+	else if (quest_type_collection(q_ptr))
 	{
 		int k_idx = lookup_kind(TV_PARCHMENT, SV_PARCHMENT_FRAGMENT);
 		object_kind *k_ptr = &k_info[k_idx];
+		int num = quest_collection_num(q_ptr);
 
 		/* Default character */
 		char chr = k_ptr->d_char;
@@ -2946,7 +2962,7 @@ void format_quest_indicator(char dest[], int max, byte *attr)
 		/* Player has the quest item */
 		if (q_ptr->q_flags & (QFLAG_STARTED))
 		{
-			if (quest_item_count() >= LABYRINTH_COLLECT)
+			if (quest_item_count() >= num)
 			{
 				my_strcpy(dest, "Q:GoTo Guild!", max);
 				*attr = TERM_GREEN;
@@ -2955,7 +2971,7 @@ void format_quest_indicator(char dest[], int max, byte *attr)
 		}
 
 		/* Format */
-		strnfmt(dest, max, "Qst:%c %d", chr, (LABYRINTH_COLLECT - quest_item_count()));
+		strnfmt(dest, max, "Qst:%c %d", chr, (num - quest_item_count()));
 
 		/* Color of the object */
 		*attr = k_ptr->d_attr;
@@ -3012,9 +3028,9 @@ void quest_status_update(void)
 
 	}
 
-	else if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL)
+	else if (quest_type_collection(q_ptr))
 	{
-		remaining = LABYRINTH_COLLECT - quest_item_count();
+		remaining = quest_collection_num(q_ptr) - quest_item_count();
 
 		if (remaining)
 		{
@@ -3033,9 +3049,16 @@ void quest_status_update(void)
 			i_ptr->number = remaining;
 			object_desc(o_name, sizeof(o_name), i_ptr, ODESC_BASE);
 
-			my_strcpy(note, format("You have %d remaining %s to collect from the labyrinth level.",
-									remaining, o_name),sizeof(note));
-
+			if (q_ptr->q_type == QUEST_LABYRINTH)
+			{
+				my_strcpy(note, format("You have %d remaining %s to collect from the wilderness level.",
+						remaining, o_name),sizeof(note));
+			}
+			else /* (q_ptr->q_type == QUEST_LABYRINTH_LEVEL) */
+			{
+				my_strcpy(note, format("You have %d remaining %s to collect from the labyrinth level.",
+							remaining, o_name),sizeof(note));
+			}
 		}
 		else my_strcpy(note, "Collect your reward at the Guild!", sizeof(note));
 
@@ -3115,7 +3138,6 @@ bool quest_slot_fixed(int quest_num)
 bool quest_multiple_r_idx(const quest_type *q_ptr)
 {
 	if (q_ptr->q_type == QUEST_THEMED_LEVEL) return (TRUE);
-	if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL) return (TRUE);
 	if (q_ptr->q_type == QUEST_PIT) return (TRUE);
 	if (q_ptr->q_type == QUEST_NEST) return (TRUE);
 	if (q_ptr->q_type == QUEST_ARENA_LEVEL) return (TRUE);
@@ -3179,6 +3201,28 @@ bool quest_slot_themed(int quest_num)
 	q_ptr = &q_info[quest_num];
 
 	return (quest_themed(q_ptr));
+}
+
+/* Verify if the quest involves clearing multiple races on a single level */
+bool quest_type_collection(const quest_type *q_ptr)
+{
+	if (q_ptr->q_type == QUEST_LABYRINTH) return (TRUE);
+	if (q_ptr->q_type == QUEST_WILDERNESS) return (TRUE);
+
+	return (FALSE);
+}
+
+/* Verify if the quest involves clearing multiple races on a single level */
+bool quest_slot_collection(int quest_num)
+{
+	quest_type *q_ptr;
+
+	/* Boundry control, then get the quest */
+	if (quest_num >= z_info->q_max) return (FALSE);
+	if (quest_num < 0) return (FALSE);
+	q_ptr = &q_info[quest_num];
+
+	return (quest_single_r_idx(q_ptr));
 }
 
 /* Verify if the quest has a time limit */
@@ -3253,10 +3297,9 @@ bool quest_shall_fail_if_leave_level(void)
 	if (p_ptr->depth != q_ptr->base_level) return (FALSE);
 
 	if (q_ptr->q_type == QUEST_THEMED_LEVEL) return (TRUE);
-	if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL)  return (TRUE);
-	if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL) return (TRUE);
+	if (quest_type_collection(q_ptr))
 	{
-		if (quest_item_count() < LABYRINTH_COLLECT) return (TRUE);
+		if (quest_item_count() < quest_collection_num(q_ptr)) return (TRUE);
 	}
 	if (q_ptr->q_type == QUEST_PIT) return (TRUE);
 	if (q_ptr->q_type == QUEST_NEST) return (TRUE);
@@ -3301,10 +3344,9 @@ bool quest_fail_immediately(void)
 	if (p_ptr->depth == q_ptr->base_level) return (FALSE);
 
 	if (q_ptr->q_type == QUEST_THEMED_LEVEL) return (TRUE);
-	if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL) return (TRUE);
-	if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL)
+	if (quest_type_collection(q_ptr))
 	{
-		if (quest_item_count() < LABYRINTH_COLLECT) return (TRUE);
+		if (quest_item_count() < quest_collection_num(q_ptr)) return (TRUE);
 	}
 	if (q_ptr->q_type == QUEST_PIT) return (TRUE);
 	if (q_ptr->q_type == QUEST_NEST) return (TRUE);

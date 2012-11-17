@@ -204,6 +204,7 @@ void delete_monster_idx(int i)
 	/* Count monsters */
 	mon_cnt--;
 
+	p_ptr->redraw |= PR_MONLIST;
 
 	/* Visual update */
 	light_spot(y, x);
@@ -4049,7 +4050,8 @@ static bool summon_from_level(int y1, int x1, int lev, int type)
 		if (m_ptr->project) continue;
 
 		/* Record this one */
-		monster_list[mon_count++] = i;
+		monster_list[mon_count] = i;
+		mon_count++;
 	}
 
 	/* No eligible monsters */
@@ -4061,7 +4063,7 @@ static bool summon_from_level(int y1, int x1, int lev, int type)
 
 	/* Select one, and summon it */
 	i = randint0(mon_count);
-	m_ptr = &mon_list[i];
+	m_ptr = &mon_list[monster_list[i]];
 	monster_swap(m_ptr->fy, m_ptr->fx, y, x);
 
 	/* Wake it up, make it active, and give the player time to react */

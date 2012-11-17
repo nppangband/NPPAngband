@@ -27,80 +27,112 @@
  * Teleport a monster, normally up to "dis" grids away.
  *
  * Attempt to move the monster at least "dis/2" grids away.
- *
- * But allow variation to prevent infinite loops.
  */
-void teleport_away(int m_idx, int dis)
+bool teleport_away(int m_idx, int dis)
 {
-	int ny, nx, oy, ox, d, i, min;
-
-	bool look = TRUE;
-
 	monster_type *m_ptr = &mon_list[m_idx];
 
-	/* Paranoia */
-	if (!m_ptr->r_idx) return;
+	int my = m_ptr->fy;
+	int mx = m_ptr->fx;
 
-	/* Save the old location */
-	oy = m_ptr->fy;
-	ox = m_ptr->fx;
+	byte x_location_tables [MAX_DUNGEON_AREA];
+	byte y_location_tables [MAX_DUNGEON_AREA];
+	int spot_counter = 0;
+
+	int d, d1, i, min, y, x;
+
+	/* Paranoia */
+	if (!m_ptr->r_idx) return (FALSE);
 
 	/* Minimum distance */
 	min = dis / 2;
 
-	/* Look until done */
-	while (look)
+	/* Gauge the distance from the player to the 4 corners of the dungeon, take the highest*/
+	d = distance(my, mx, 1, 1);
+	d1 = distance(my, mx, p_ptr->cur_map_hgt-1, 1);
+	if (d1 > d) d = d1;
+	d1 = distance(my, mx, 1, p_ptr->cur_map_wid-1);
+	if (d1 > d) d = d1;
+	d1 = distance(my, mx, p_ptr->cur_map_hgt-11, p_ptr->cur_map_wid-1);
+	if (d1 > d) d = d1;
+
+	/* start with a realistic range*/
+	if (dis > d) dis = d;
+
+	/*must have a realistic minimum*/
+	if (min > (d * 4 / 10))
 	{
-		/* Verify max distance */
-		if (dis > 200) dis = 200;
+		min = (d * 4 / 10);
+	}
 
-		/* Try several locations */
-		for (i = 0; i < 500; i++)
+	/* Look for a spot */
+	while (TRUE)
+	{
+		u32b min_squared = min * min;
+		u32b dis_squared = dis * dis;
+		int y_min = my - dis;
+		int y_max = my + dis;
+		int x_min = mx - dis;
+		int x_max = mx + dis;
+
+		/* Boundry control */
+		if (x_min < 0) x_min = 0;
+		if (y_min < 0) y_min = 0;
+		if (x_max > p_ptr->cur_map_wid) x_max = p_ptr->cur_map_wid;
+		if (y_max > p_ptr->cur_map_hgt) y_max = p_ptr->cur_map_hgt;
+
+		/* Analyze the actual map */
+		for (y = y_min; y < y_max; y++)
 		{
-			/* Pick a (possibly illegal) location */
-			while (1)
+			for (x = x_min; x < x_max; x++)
 			{
-				ny = rand_spread(oy, dis);
-				nx = rand_spread(ox, dis);
-				d = distance(oy, ox, ny, nx);
-				if ((d >= min) && (d <= dis)) break;
+
+				u32b dist_squared;
+
+				/* Require "start" floor space */
+				if (!cave_empty_bold(y, x)) continue;
+
+				/* No teleporting into vaults and such */
+				if (cave_info[y][x] & (CAVE_ICKY)) continue;
+
+				/* Use pythagorean theorem to ensure the distance is right */
+				dist_squared = (((mx - x) * (mx - x)) +  ((my - y) * (my - y)));
+
+				/* Stay within the min and the max */
+				if (dist_squared <= min_squared) continue;
+				if (dist_squared > dis_squared) continue;
+
+				x_location_tables[spot_counter] = x;
+				y_location_tables[spot_counter] = y;
+
+				/*increase the counter*/
+				spot_counter++;
 			}
+		}
 
-			/* Ignore illegal locations */
-			if (!in_bounds_fully(ny, nx)) continue;
+		/*we have at least one random spot*/
+		if (spot_counter) break;
 
-			/* Require "empty" floor space */
-			if (!cave_empty_bold(ny, nx)) continue;
-
-			/* Hack -- no teleport onto glyph of warding */
-			if (cave_ff1_match(ny, nx, FF1_GLYPH)) continue;
-
-			/* Require safe terrain */
-			if (f_info[cave_feat[ny][nx]].dam_non_native > 0)
-			{
-				/* Get the race */
-				monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-				/* Check nativity */
-				if (!is_monster_native(ny, nx, r_ptr)) continue;
-			}
-
-			/* No teleporting into vaults and such */
-			/* if (cave_info[ny][nx] & (CAVE_ICKY)) continue; */
-
-			/* This grid looks good */
-			look = FALSE;
-
-			/* Stop looking */
-			break;
+		/* Make sure we aren't trapped in an infinite loop */
+		if ((!min) && (dis == d))
+		{
+			return (FALSE);
 		}
 
 		/* Increase the maximum distance */
 		dis = dis * 2;
+		if (dis > d) dis = d;
 
 		/* Decrease the minimum distance */
-		min = min / 2;
+		min = min * 6 / 10;
+
 	}
+
+	i = randint0(spot_counter);
+
+	/* Mark the location */
+	x = x_location_tables[i];
+	y = y_location_tables[i];
 
 	/* Sound */
 	sound(MSG_TPOTHER);
@@ -110,7 +142,9 @@ void teleport_away(int m_idx, int dis)
 	m_ptr->target_x = 0;
 
 	/* Swap the monsters */
-	monster_swap(oy, ox, ny, nx);
+	monster_swap(my, mx, y, x);
+
+	return (TRUE);
 }
 
 /*
@@ -212,7 +246,7 @@ bool teleport_player(int dis, bool native)
 
 				/* Stay within the min and the max */
 				if (dist_squared <= min_squared) continue;
-				if (dist_squared >= dis_squared) continue;
+				if (dist_squared > dis_squared) continue;
 
 				x_location_tables[spot_counter] = x;
 				y_location_tables[spot_counter] = y;
@@ -258,8 +292,6 @@ bool teleport_player(int dis, bool native)
 
 	return (TRUE);
 }
-
-
 
 /*
  * Teleport player to a grid near the given location
@@ -5407,14 +5439,10 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			m_note = MON_MSG_RESIST;
 		}
 		/* Teleport the monster */
-		else
+		else if (teleport_away(cave_m_idx[y][x], do_dist))
 		{
-
 			/* Message */
 			m_note = MON_MSG_DISAPPEAR;
-
-			/* Teleport */
-			teleport_away(cave_m_idx[y][x], do_dist);
 
 			/* Hack -- get new location */
 			y = m_ptr->fy;

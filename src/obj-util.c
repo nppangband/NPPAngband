@@ -30,7 +30,7 @@ static void flavor_assign_fixed(void)
 {
 	int i, j;
 
-	for (i = 0; i < z_info->flavor_max; i++)
+	for (i = 1; i < z_info->flavor_max; i++)
 	{
 		flavor_type *flavor_ptr = &flavor_info[i];
 
@@ -73,13 +73,15 @@ static void flavor_assign_random(byte tval)
 
 	for (i = 0; i < z_info->k_max; i++)
 	{
+		u16b slot;
+
 		/* Skip other object types */
 		if (k_info[i].tval != tval) continue;
 
 		/* Skip objects that already are flavored */
 		if (k_info[i].flavor != 0) continue;
 
-		/* HACK - Ordinary food is "boring" */
+			/* HACK - Ordinary food is "boring" */
 		if ((tval == TV_FOOD) && (k_info[i].sval > SV_FOOD_MIN_FOOD))
 			continue;
 
@@ -90,7 +92,8 @@ static void flavor_assign_random(byte tval)
 		}
 
 		/* Select a flavor */
-		choice = flavor[randint0(flavor_count)];
+		slot = randint0(flavor_count);
+		choice = flavor[slot];
 
 		/* Store the flavor index */
 		k_info[i].flavor = choice;
@@ -99,8 +102,8 @@ static void flavor_assign_random(byte tval)
 		flavor_info[choice].sval = k_info[i].sval;
 
 		/* One less flavor to choose from */
-		flavor[choice] = flavor[flavor_count];
 		flavor_count--;
+		flavor[slot] = flavor[flavor_count];
 	}
 
 	/* Free the array */
@@ -327,7 +330,7 @@ void reset_visuals(bool unused)
 	}
 
 	/* Extract default attr/char code for flavors */
-	for (i = 0; i < z_info->flavor_max; i++)
+	for (i = 1; i < z_info->flavor_max; i++)
 	{
 		flavor_type *flavor_ptr = &flavor_info[i];
 
@@ -1355,6 +1358,8 @@ void delete_object(int y, int x)
 
 	/* Objects are gone */
 	cave_o_idx[y][x] = 0;
+
+	p_ptr->redraw |= PR_ITEMLIST;
 
 	/* Visual update */
 	light_spot(y, x);

@@ -1707,8 +1707,11 @@ bool make_attack_normal(monster_type *m_ptr)
 	/* Blink away */
 	if ((blinked) && (alive))
 	{
-		msg_print("There is a puff of smoke!");
-		teleport_away(m_idx, MAX_SIGHT * 2 + 5);
+
+		if (teleport_away(m_idx, MAX_SIGHT * 2 + 5))
+		{
+			msg_print("There is a puff of smoke!");
+		}
 	}
 
 	/* Assume we attacked */
@@ -3740,24 +3743,27 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 		/* RF6_BLINK */
 		case 160+4:
 		{
-			if (seen) disturb(1, 0);
-			teleport_away(m_idx, 10);
-
-			/*
-			 * If it comes into view from around a corner (unlikely)
-			 * give a message and learn about the casting
-			 */
-			if (!seen && m_ptr->ml)
+			if (teleport_away(m_idx, 10))
 			{
-				msg_format("%^s blinks into view.", ddesc);
-				disturb(1, 0);
-				seen = TRUE;
-			}
 
-			/* Normal message */
-			else
-			{
-				if (seen) msg_format("%^s blinks away.", m_name);
+				if (seen) disturb(1, 0);
+
+				/*
+				 * If it comes into view from around a corner (unlikely)
+				 * give a message and learn about the casting
+				 */
+				if (!seen && m_ptr->ml)
+				{
+					msg_format("%^s blinks into view.", ddesc);
+					disturb(1, 0);
+					seen = TRUE;
+				}
+
+				/* Normal message */
+				else
+				{
+					if (seen) msg_format("%^s blinks away.", m_name);
+				}
 			}
 			break;
 		}
@@ -3765,23 +3771,27 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 		/* RF6_TPORT */
 		case 160+5:
 		{
-			if (seen)
+			if (teleport_away(m_idx, MAX_SIGHT * 2 + 5))
 			{
-				disturb(1, 0);
-				msg_format("%^s teleports away.", m_name);
-			}
-			teleport_away(m_idx, MAX_SIGHT * 2 + 5);
 
-			/*
-			 * if it comes into view from around a corner (VERY unlikely)
-			 * give a message and learn about the casting
-			 */
-			if (!seen && m_ptr->ml)
-			{
-				msg_format("%^s teleports.", ddesc);
-				disturb(1, 0);
-				seen = TRUE;
+				if (seen)
+				{
+					disturb(1, 0);
+					msg_format("%^s teleports away.", m_name);
+				}
+
+				/*
+				 * if it comes into view from around a corner (VERY unlikely)
+				 * give a message and learn about the casting
+				 */
+				else if (m_ptr->ml)
+				{
+					msg_format("%^s teleports.", ddesc);
+					disturb(1, 0);
+					seen = TRUE;
+				}
 			}
+
 			break;
 		}
 

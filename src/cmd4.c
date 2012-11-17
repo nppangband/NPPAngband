@@ -3380,6 +3380,7 @@ static cptr do_cmd_feeling_text[LEV_THEME_HEAD] =
  */
 void do_cmd_feeling(void)
 {
+	bool is_quest_level = quest_check(p_ptr->depth);
 
 	/* No useful feeling in town */
 	if (!p_ptr->depth)
@@ -3397,7 +3398,8 @@ void do_cmd_feeling(void)
 
 	if (p_ptr->dungeon_type == DUNGEON_TYPE_WILDERNESS)
 	{
-		msg_print("You have entered an area of near pristine wilderness.");
+		if (is_quest_level) 	msg_print("You have entered a wilderness level on the verge of destruction!.");
+		else 					msg_print("You have entered an area of near pristine wilderness.");
 	}
 
 	else if (p_ptr->dungeon_type == DUNGEON_TYPE_GREATER_VAULT)
@@ -3407,7 +3409,8 @@ void do_cmd_feeling(void)
 
 	else if (p_ptr->dungeon_type == DUNGEON_TYPE_LABYRINTH)
 	{
-		msg_print("You have entered a complex labyrinth of dungeon hallways.");
+		if (is_quest_level) msg_print("You have entered a tony, closely guarded labyrinth.");
+		else msg_print("You have entered a complex labyrinth of dungeon hallways.");
 	}
 
 	else if (p_ptr->dungeon_type == DUNGEON_TYPE_ARENA)

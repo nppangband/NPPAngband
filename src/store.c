@@ -729,7 +729,7 @@ static void init_services_and_quests(int store_num)
 
 			if (q_ptr->q_type == QUEST_VAULT) continue;
 			if (q_ptr->q_type == QUEST_GREATER_VAULT) continue;
-			if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL) continue;
+			if (quest_type_collection(q_ptr)) continue;
 			if (quest_multiple_r_idx(q_ptr)) continue;
 		}
 
@@ -5120,9 +5120,9 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
 			if (quest_item_slot() > -1) quest_finished(q_ptr);
 		}
 
-		if ((q_ptr->q_type == QUEST_LABYRINTH_LEVEL) && (!guild_quest_complete()))
+		if ((quest_type_collection(q_ptr)) && (!guild_quest_complete()))
 		{
-			if (quest_item_count() >= LABYRINTH_COLLECT) quest_finished(q_ptr);
+			if (quest_item_count() >= quest_collection_num(q_ptr)) quest_finished(q_ptr);
 		}
 	}
 

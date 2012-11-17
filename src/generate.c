@@ -182,6 +182,8 @@
 #define ALLOC_TYP_TRAP		3	/* Trap */
 #define ALLOC_TYP_GOLD		4	/* Gold */
 #define ALLOC_TYP_OBJECT	5	/* Object */
+#define ALLOC_TYP_CHEST		6	/* Object */
+#define ALLOC_TYP_PARCHMENT 7	/* Special parchment, for collection quests */
 
 
 /*
@@ -655,22 +657,6 @@ static int next_to_stairs(int y, int x)
 }
 
 /*
- * Count the number of a specific feature adjacent to the given grid.
- *
- * Note -- Assumes "in_bounds_fully(y, x)"
- *
- */
-static bool next_to_feature(int y, int x, int feat)
-{
-	if (cave_feat[y + 1][x] == feat) return (TRUE);
-	if (cave_feat[y - 1][x] == feat) return (TRUE);
-	if (cave_feat[y][x + 1] == feat) return (TRUE);
-	if (cave_feat[y][x - 1] == feat) return (TRUE);
-	return (FALSE);
-}
-
-
-/*
  * Count the number of walls adjacent to the given grid.
  *
  * Note -- Assumes "in_bounds_fully(y, x)"
@@ -875,32 +861,42 @@ static void alloc_object(int set, int typ, int num)
 			y = rand_int(p_ptr->cur_map_hgt);
 			x = rand_int(p_ptr->cur_map_wid);
 
-			/* Some objects need specific terrain types */
-			if ((typ == ALLOC_TYP_GOLD) || (typ == ALLOC_TYP_OBJECT))
+			switch (typ)
 			{
-				/* Require "clean" grid */
-				if (!cave_clean_bold(y, x)) continue;
+				/* Some objects need specific terrain types */
+				case ALLOC_TYP_GOLD:
+				case ALLOC_TYP_OBJECT:
+				case ALLOC_TYP_CHEST:
+				case ALLOC_TYP_PARCHMENT:
+				{
+					/* Require "clean" grid */
+					if (!cave_clean_bold(y, x)) continue;
 
-				/* Hack -- Ensure object/gold creation */
-				if (f_info[cave_feat[y][x]].dam_non_native > 0) continue;
-			}
+					/* Hack -- Ensure object/gold creation */
+					if (f_info[cave_feat[y][x]].dam_non_native > 0) continue;
 
-			/* Traps */
- 			else if (typ == ALLOC_TYP_TRAP)
-			{
-				/* Require "trappable" floor grid */
- 				if (!cave_trappable_bold(y, x)) continue;
+					break;
+				}
+				/* Traps */
+				case ALLOC_TYP_TRAP:
+				{
+					/* Require "trappable" floor grid */
+					if (!cave_trappable_bold(y, x)) continue;
 
- 				/* Require "empty" grid */
- 				if (cave_m_idx[y][x]) continue;
- 			}
+					/* Require "empty" grid */
+					if (cave_m_idx[y][x]) continue;
 
-			/* Rubble */
-			else
-			{
+					break;
+				}
 
-				/* Require "naked" floor grid */
-				if (!cave_naked_bold(y, x)) continue;
+				/* ALLOC_TYP_RUBBLE */
+				default:
+				{
+					/* Require "naked" floor grid */
+					if (!cave_naked_bold(y, x)) continue;
+
+					break;
+				}
 			}
 
 			/* Check for "room" */
@@ -945,6 +941,30 @@ static void alloc_object(int set, int typ, int num)
 				place_object(y, x, FALSE, FALSE, DROP_TYPE_UNTHEMED);
 				break;
 			}
+			case ALLOC_TYP_PARCHMENT:
+			{
+				object_type object_type_body;
+				object_type *i_ptr = &object_type_body;
+
+				/* Use a small wooden chest */
+				int k_idx = lookup_kind(TV_PARCHMENT, SV_PARCHMENT_FRAGMENT);
+
+				/* Get a random chest */
+				object_wipe(i_ptr);
+				object_prep(i_ptr, k_idx);
+				apply_magic(i_ptr, p_ptr->depth, TRUE, FALSE, FALSE, TRUE);
+
+				/*Don't let the player see what the object it, and make it a quest item*/
+				i_ptr->ident |= (IDENT_HIDE_CARRY | IDENT_QUEST);
+
+				object_aware(i_ptr);
+				object_known(i_ptr);
+
+				/* Give it to the floor */
+				(void)floor_carry(y, x, i_ptr);
+				break;
+			}
+			default: break;
 		}
 	}
 }
@@ -3136,16 +3156,30 @@ static bool monster_vault_okay(int r_idx)
 /*
  * Hack -- fill in "vault" rooms
  */
-static void build_vault(int y0, int x0, int ymax, int xmax, cptr data, bool quest_vault)
+static void build_vault(int y0, int x0, const vault_type *v_ptr)
 {
 	int dx, dy, x, y;
 	int ax, ay;
 	bool flip_v = FALSE;
 	bool flip_h = FALSE;
+	int ymax = v_ptr->hgt;
+	int xmax = v_ptr->wid;
+	cptr data = v_text + v_ptr->text;
 
 	byte quest_artifact_spots = 0;
 
 	cptr t;
+	int quest_type = quest_check(p_ptr->depth);
+	bool quest_greater_vault = FALSE;
+	bool quest_special_vault = FALSE;
+	if (quest_type == QUEST_VAULT)
+	{
+		if (v_ptr->typ == 9) quest_special_vault = TRUE;
+	}
+	else if (quest_type == QUEST_GREATER_VAULT)
+	{
+		if (v_ptr->typ == 8) quest_greater_vault = TRUE;
+	}
 
 	/* Flip the vault (sometimes) */
 	if (one_in_(2)) flip_v = TRUE;
@@ -3183,7 +3217,8 @@ static void build_vault(int y0, int x0, int ymax, int xmax, cptr data, bool ques
 				/* Granite wall (outer) */
 				case '%':
 				{
-					cave_set_feat(y, x, FEAT_WALL_OUTER);
+					/* For greater quest vaults, do nothing, floor already set */
+					if (!quest_greater_vault) cave_set_feat(y, x, FEAT_WALL_OUTER);
 					break;
 				}
 
@@ -3372,7 +3407,7 @@ static void build_vault(int y0, int x0, int ymax, int xmax, cptr data, bool ques
 			}
 
 			/*mark it as a quest monster*/
-			if ((cave_m_idx[y][x] > 0) && (quest_vault))
+			if ((cave_m_idx[y][x] > 0) && (quest_greater_vault || quest_special_vault))
 			{
 				monster_type *m_ptr = &mon_list[cave_m_idx[y][x]];
 
@@ -3440,7 +3475,7 @@ static void build_type_lesser_vault(int y0, int x0)
 	}
 
 	/* Hack -- Build the vault */
-	build_vault(y0, x0, v_ptr->hgt, v_ptr->wid, v_text + v_ptr->text, FALSE);
+	build_vault(y0, x0, v_ptr);
 }
 
 
@@ -3562,7 +3597,7 @@ static void build_type_greater_vault(int y0, int x0)
 	}
 
 	/* Build the vault */
-	build_vault(y0, x0, v_ptr->hgt, v_ptr->wid, v_text + v_ptr->text, FALSE);
+	build_vault(y0, x0, v_ptr);
 
 	/* Mark vault grids with the CAVE_G_VAULT flag */
 	mark_g_vault(y0, x0, v_ptr->hgt, v_ptr->wid);
@@ -3595,7 +3630,7 @@ static void build_type_special_vault(int y0, int x0)
 	rating += v_ptr->rat;
 
 	/* Hack -- Build the vault */
-	build_vault(y0, x0, v_ptr->hgt, v_ptr->wid, v_text + v_ptr->text, TRUE);
+	build_vault(y0, x0, v_ptr);
 }
 
 
@@ -9074,6 +9109,138 @@ static void build_formation(int y0, int x0, u16b feat, byte fractal_type, int ch
 }
 
 /*
+ * Helper function for add_wilderness_quest_terrain.  Take a spot, add dangerous wall terrain, and surround
+ * it with 3-4 dangerous floor terrains. *
+ */
+static void add_wilderness_quest_terrain_aux(int y, int x, u16b floor_terrain, u16b wall_terrain)
+{
+	int yy, xx;
+	int y_places[8];
+	int x_places[8];
+	int num_places = 0;
+	int num_floor = 2 + randint1(2);
+	int i;
+
+	/* Build a solid wall here */
+	cave_set_feat(y, x, wall_terrain);
+
+	/* Now find areas to add dangerous floor terrains */
+	for (i = 0; i < 8; i++)
+	{
+		yy = y + ddy[i];
+		xx = x + ddx[i];
+
+		if (!in_bounds_fully(yy, xx)) continue;
+		if (cave_ff1_match(yy, xx, FF1_PERMANENT))
+		{
+			/* Don't alter stairs or walls */
+			if (cave_ff1_match(yy, xx, FF1_WALL | FF1_STAIRS))continue;
+		}
+		y_places[num_places] = yy;
+		x_places[num_places] = xx;
+		num_places++;
+	}
+
+	/* Boundry control */
+	if (!num_places) return;
+
+	/* Add up to num_floor of the dangerous floor terrains */
+	for (i = 0; i < num_floor; i++)
+	{
+		int k = randint0(num_places);
+		yy = y_places[k];
+		xx = x_places[k];
+
+		/* Paranoia */
+		if (!in_bounds_fully(yy, xx)) continue;
+
+		/* Place the floor terrain, and then eliminate this square from future choices */
+		cave_set_feat(yy, xx, floor_terrain);
+		num_places--;
+		y_places[k] = y_places[num_places];
+		x_places[k] = x_places[num_places];
+	}
+}
+
+/* Add several pockets of terrain that will eventually overrun the level */
+static void add_wilderness_quest_terrain(u16b floor_terrain, u16b wall_terrain)
+{
+	int hgt = p_ptr->cur_map_hgt;
+	int wid = p_ptr->cur_map_wid;
+	int j;
+
+	/*
+	 * Add some patches of wall and floor in each corner of the dungeon.
+	 */
+	for (j = 0; j < 4; j++)
+	{
+		int i, x, y;
+		int coord_count = 0;
+		int y_start, y_end, x_start, x_end, slot;
+		int y_places[400];
+		int x_places[400];
+
+		/*
+		 * Just to avoid repeating the code below,
+		 * we assign the x and y ranges here and then
+		 * loop through the code below 4 times
+		 */
+		switch (j)
+		{
+			/* Top left */
+			case 1: {y_start = 1; y_end = 21; x_start = 1; x_end = 21; break;}
+			/* Bottom left */
+			case 2: {y_start = (hgt - 21); y_end = hgt; x_start = 1; x_end = 21; break;}
+			/* Top right */
+			case 3: {y_start = 1; y_end = 21; x_start = (wid - 21); x_end = wid; break;}
+			/* Bottom left */
+			default: {y_start = (hgt - 21); y_end = hgt; x_start = (wid - 21); x_end = wid; break;}
+		}
+
+		for (y = y_start; y < y_end; y++)
+		{
+			for (x = x_start; x < x_end; x++)
+			{
+				/* Paranoia */
+				if (!in_bounds_fully(y, x)) continue;
+
+				/* Don't alter stairs or permanent walls */
+				if (cave_ff1_match(y, x, FF1_PERMANENT))
+				{
+					if (cave_ff1_match(y, x, FF1_WALL | FF1_STAIRS))continue;
+				}
+
+				/* store this square */
+				y_places[coord_count] = y;
+				x_places[coord_count] = x;
+				coord_count++;
+			}
+		}
+
+		for (i = 0; i < 5; i++)
+		{
+			/* Paranoia */
+			if (!coord_count) break;
+
+			/* Pick one of the set of coordinates */
+			slot = randint0(coord_count);
+			y = y_places[slot];
+			x = x_places[slot];
+
+			/* Paranoia */
+			if (!in_bounds_fully(y, x)) continue;
+
+			/* Place the floor terrain, and then eliminate this square from future choices */
+			add_wilderness_quest_terrain_aux(y, x, floor_terrain, wall_terrain);
+			coord_count--;
+			y_places[slot] = y_places[coord_count];
+			x_places[slot] = x_places[coord_count];
+		}
+	}
+}
+
+
+/*
  * Place the irregular dungeon border of wilderness levels
  */
 static void build_border(int y, int x, u16b feat)
@@ -9551,162 +9718,6 @@ static bool place_monsters_objects(void)
 	return (TRUE);
 }
 
-/*
- * Helper function for add_wilderness_quest_terrain.  Take a spot, add dangerous wall terrain, and surround
- * it with 2-3 dangerous floor terrains. *
- */
-static void add_wilderness_quest_terrain_aux(int y, int x, u16b floor_terrain, u16b wall_terrain)
-{
-	int y_places[8];
-	int x_places[8];
-	int num_places = 0;
-	int num_floor = rand_range(2, 3);
-	int i;
-
-	/* Build a solid wall here */
-	cave_set_feat(y, x, wall_terrain);
-
-	/* Now find areas to add dangerous floor terrains */
-	for (i = 0; i < 8; i++)
-	{
-		int yy = y + ddy[i];
-		int xx = y + ddx[i];
-
-		if (cave_feat[y][x] == FEAT_PERM_SOLID) continue;
-		y_places[num_places] = yy;
-		x_places[num_places] = xx;
-		num_places++;
-	}
-
-	/* Add up to num_floor of the dangerous floor terrains */
-	for (i = 0; i < num_floor; i++)
-	{
-		int k = randint0(num_places);
-		int yy = y_places[k];
-		int xx = x_places[k];
-		cave_set_feat(yy, xx, floor_terrain);
-		y_places[k] = y_places[num_places];
-		x_places[k] = x_places[num_places];
-		num_places--;
-		if (!num_places) break;
-	}
-}
-
-#define TERRAIN_INTERVAL	20
-
-/* Add several pockets of terrain that will eventually overrun the level */
-static void add_wilderness_quest_terrain(u16b floor_terrain, u16b wall_terrain)
-{
-	int hgt = p_ptr->cur_map_hgt;
-	int wid = p_ptr->cur_map_wid;
-	int i;
-
-	/* One patch of terrain to spread every interval */
-	int terrain_wid = wid / TERRAIN_INTERVAL;
-	int terrain_hgt = hgt / TERRAIN_INTERVAL;
-
-	/*
-	 * Add some patches of wall and floor across each side of the dungeon.
-	 * First do the top part of the dungeon
-	 */
-	for (i = 0; i < terrain_wid; i++)
-	{
-
-		int y;
-		int x = randint0((TERRAIN_INTERVAL / 2));
-		x += (i * TERRAIN_INTERVAL) + (TERRAIN_INTERVAL / 4);
-
-		/* Now find the first non-permanent wall */
-		for (y = 0; y < hgt; y++)
-		{
-			if (cave_feat[y][x] == FEAT_PERM_SOLID) continue;
-
-			/* Found a non-blank spot */
-			break;
-		}
-
-		/* sometimes move inwards one more space */
-		if (one_in_(2)) y++;
-
-		/* Add some dangerous terrain */
-		add_wilderness_quest_terrain_aux(y, x, floor_terrain, wall_terrain);
-	}
-
-	/*
-	 * Next do the bottom part of the dungeon
-	 */
-	for (i = 0; i < terrain_wid; i++)
-	{
-		int y;
-		int x = randint0((TERRAIN_INTERVAL / 2));
-		x += (i * TERRAIN_INTERVAL) + (TERRAIN_INTERVAL / 4);
-
-		/* Now find the first non-permanent wall */
-		for (y = (hgt - 1); y >= 0; y--)
-		{
-			if (cave_feat[y][x] == FEAT_PERM_SOLID) continue;
-
-			/* Found a non-blank spot */
-			break;
-		}
-
-		/* sometimes move inwards one more space */
-		if (one_in_(2)) y--;
-
-		/* Add some dangerous terrain */
-		add_wilderness_quest_terrain_aux(y, x, floor_terrain, wall_terrain);
-	}
-
-	/*
-	 * Next do the left part of the dungeon.
-	 */
-	for (i = 0; i < terrain_hgt; i++)
-	{
-		int x;
-		int y = randint0((TERRAIN_INTERVAL / 2));
-		y += (i * TERRAIN_INTERVAL) + (TERRAIN_INTERVAL / 4);
-
-		/* Now find the first non-permanent wall */
-		for (x = 0; x < wid; x++)
-		{
-			if (cave_feat[y][x] == FEAT_PERM_SOLID) continue;
-
-			/* Found a non-blank spot */
-			break;
-		}
-
-		/* sometimes move inwards one more space */
-		if (one_in_(2)) x++;
-
-		/* Add some dangerous terrain */
-		add_wilderness_quest_terrain_aux(y, x, floor_terrain, wall_terrain);
-	}
-
-	/*
-	 * Finally do the right part of the dungeon.
-	 */
-	for (i = 0; i < terrain_hgt; i++)
-	{
-		int x;
-		int y = randint0((TERRAIN_INTERVAL / 2));
-		y += (i * TERRAIN_INTERVAL) + (TERRAIN_INTERVAL / 4);
-
-		/* Now find the first non-permanent wall */
-		for (x = (wid - 1); x >= 0; x--)
-		{
-			if (cave_feat[y][x] == FEAT_PERM_SOLID) continue;
-
-			/* Found a non-blank spot */
-			break;
-		}
-
-		/* sometimes move inwards one more space */
-		if (one_in_(2)) x++;
-
-		/* Add some dangerous terrain */
-		add_wilderness_quest_terrain_aux(y, x, floor_terrain, wall_terrain);
-	}
-}
 
 /*
  * Helper. Place an horizontal chain of ice mountains
@@ -9931,12 +9942,6 @@ static bool build_ice_level(bool is_quest_level)
 		}
 	}
 
-	/* Start the quest off with several levels of cracked walls and ice */
-	if (is_quest_level)
-	{
-		add_wilderness_quest_terrain(FEAT_BWATER, FEAT_BWATER_WALL);
-	}
-
 	return TRUE;
 }
 
@@ -10002,8 +10007,11 @@ static bool monster_wilderness_labrynth_okay(int r_idx)
 	/* No breeders */
 	if (r_ptr->flags2 & (RF2_MULTIPLY)) return (FALSE);
 
-	/*no mimics */
+	/* creature must move */
 	if (r_ptr->flags1 & (RF1_NEVER_MOVE)) return (FALSE);
+
+	/* No mimics */
+	if (r_ptr->flags1 & (RF1_CHAR_MIMIC)) return (FALSE);
 
 	/* Okay */
 	return (TRUE);
@@ -10039,7 +10047,7 @@ static bool build_wilderness_level(void)
 	p_ptr->py = p_ptr->px = 0;
 
 	/*check if we need a quest*/
-	if (quest_check(p_ptr->depth) == QUEST_WILDERNESS_LEVEL)
+	if (quest_check(p_ptr->depth) == QUEST_WILDERNESS)
 	{
 		is_quest_level = TRUE;
 	}
@@ -10068,7 +10076,7 @@ static bool build_wilderness_level(void)
 	}
 
 	/* Irregular borders */
-	build_wilderness_borders(FEAT_PERM_EXTRA);
+	build_wilderness_borders(FEAT_WALL_EXTRA);
 
 	/* Mandatory dungeon borders */
 	set_perm_boundry();
@@ -10129,6 +10137,15 @@ static bool build_wilderness_level(void)
 	/* Additional features */
 	build_misc_features();
 
+	/* Start destruction of the level for quests */
+	if (is_quest_level)
+	{
+		/* These terrain types are processed in dungeon.c during the quest level */
+		if (done_ice) add_wilderness_quest_terrain(FEAT_BWATER, FEAT_BWATER_WALL);
+		else add_wilderness_quest_terrain(FEAT_BMUD, FEAT_BMUD_WALL);
+	}
+
+
 	/*get the hook*/
 	get_mon_num_hook = monster_wilderness_labrynth_okay;
 
@@ -10157,6 +10174,9 @@ static bool build_wilderness_level(void)
 	/*final preps if this is a quest level*/
 	if (is_quest_level)
 	{
+		u16b obj_count = WILDERNESS_COLLECT;
+		u16b mon_count = 0;
+
 		q_ptr->q_num_killed = 0;
 		q_ptr->q_max_num = 0;
 
@@ -10168,51 +10188,68 @@ static bool build_wilderness_level(void)
 		for (i = 1; i < mon_max; i++)
 		{
 			monster_type *m_ptr = &mon_list[i];
-			monster_race *r_ptr;
 
 			/* Ignore non-existant monsters */
 			if (!m_ptr->r_idx) continue;
 
-			r_ptr = &r_info[m_ptr->r_idx];
-
 			/*mark it as a quest monster*/
 			m_ptr->mflag |= (MFLAG_QUEST);
 
-			if (!(r_ptr->flags1 & RF1_UNIQUE))
-			{
-				m_ptr->mflag &= ~(MFLAG_SLOWER);
-				m_ptr->mflag |= (MFLAG_FASTER);
-				calc_monster_speed(m_ptr->fy, m_ptr->fx);
-			}
-
-			/*increase the max_num counter*/
-			q_ptr->q_max_num ++;
-
-			/*Not many of them sleeping, others lightly sleeping*/
-			if (one_in_(2)) m_ptr->m_timed[MON_TMD_SLEEP] = 0;
-			else m_ptr->m_timed[MON_TMD_SLEEP] /= 2;
+			/* Count it */
+			mon_count++;
 
 			/* One in 25 generate a bonus item */
 			if ((mon_max % 25) == 0) m_ptr->mflag |= (MFLAG_BONUS_ITEM);
 		}
 
-		/* Process the mimic objects */
-		for (i = 1; i < o_max; i++)
+		/* Process the monsters */
+		for (i = 1; i < mon_max; i++)
 		{
-			object_type *o_ptr = &o_list[i];
+			monster_type *m_ptr = &mon_list[i];
 
-			/* Skip dead objects */
-			if (!o_ptr->k_idx) continue;
+			/* Ignore non-existant monsters */
+			if (!m_ptr->r_idx) continue;
 
-			if (!o_ptr->mimic_r_idx) continue;
+			if (randint0(mon_count) < obj_count)
+			{
+				object_type *i_ptr;
+				object_type object_type_body;
 
-			/* Mark it as a questor */
-			o_ptr->ident |= (IDENT_QUEST);
+				/* Use a small wooden chest */
+				int k_idx = lookup_kind(TV_PARCHMENT, SV_PARCHMENT_FRAGMENT);
 
-			/*increase the max_num counter*/
-			q_ptr->q_max_num ++;
+				i_ptr = &object_type_body;
+
+				/* Get a random chest */
+				object_wipe(i_ptr);
+				object_prep(i_ptr, k_idx);
+				apply_magic(i_ptr, p_ptr->depth, TRUE, FALSE, FALSE, TRUE);
+
+				/*Don't let the player see what the object it, and make it a quest item*/
+				i_ptr->ident |= (IDENT_HIDE_CARRY | IDENT_QUEST);
+
+				object_aware(i_ptr);
+				object_known(i_ptr);
+
+				(void)monster_carry(i, i_ptr);
+
+				/* One less object to drop */
+				obj_count--;
+			}
+
+			/* One less monster to count */
+			mon_count--;
+
+			/* We are done */
+			if (!obj_count) break;
 		}
 	}
+
+	/* Drop some additional parchments */
+	alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_PARCHMENT, (WILDERNESS_COLLECT / 2));
+
+	/* Drop some chests */
+	alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_CHEST, damroll(3, 2));
 
 	/* Try hard to place this level */
 	rating += 25;
@@ -10349,7 +10386,7 @@ static bool build_labyrinth_level(void)
 	bool soft = ((randint0(p_ptr->depth) < 35) || (!one_in_(3)));
 
 	/*check if we need a quest*/
-	if (quest_check(p_ptr->depth) == QUEST_LABYRINTH_LEVEL)
+	if (quest_check(p_ptr->depth) == QUEST_LABYRINTH)
 	{
 		is_quest_level = TRUE;
 		known = TRUE;
@@ -10780,10 +10817,10 @@ static bool player_place_greater_vault_level(void)
 			if (!in_bounds_fully(y, x)) continue;
 
 			/* Not part of the vault */
-			if (cave_info[y][x] & (CAVE_G_VAULT)) continue;
+			/*if (cave_info[y][x] & (CAVE_G_VAULT)) continue;*/
 
 			/* We want to be next to an outer wall */
-			if (!next_to_feature(y, x, FEAT_WALL_OUTER)) continue;
+			/*if (!next_to_walls(y, x)) continue;*/
 
 			/* New, and open square */
 			if (cave_naked_bold(y, x))
@@ -10796,10 +10833,10 @@ static bool player_place_greater_vault_level(void)
 	}
 
 	/* Paranoia - shouldn't happen */
-	if (empty_squares < 3) return (FALSE);
+	/*if (empty_squares < 3) return (FALSE);*/
 
 	/* Pick a square at random */
-	slot = randint0(empty_squares);
+	slot = 0;
 
 	/* Hack - escape stairs */
 	p_ptr->create_stair = FEAT_LESS;
@@ -10807,9 +10844,10 @@ static bool player_place_greater_vault_level(void)
 	if (!player_place(empty_squares_y[slot], empty_squares_x[slot])) return (FALSE);
 
 	/* Seleect a new location for down stairs */
+	empty_squares--;
 	empty_squares_y[slot] = empty_squares_y[empty_squares];
 	empty_squares_x[slot] = empty_squares_x[empty_squares];
-	empty_squares--;
+
 
 	/* Pick a square at random */
 	slot = randint0(empty_squares);
@@ -10841,7 +10879,6 @@ static bool player_place_greater_vault_level(void)
 static bool build_greater_vault_level(void)
 {
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
-	byte y, x;
 	bool is_quest_level = FALSE;
 	vault_type *v_ptr;
 	int hgt, wid;
@@ -10894,30 +10931,10 @@ static bool build_greater_vault_level(void)
 	rating += v_ptr->rat;
 
 	/* Build the vault */
-	build_vault((hgt / 2), (wid / 2), v_ptr->hgt, v_ptr->wid, v_text + v_ptr->text, FALSE);
+	build_vault((hgt / 2), (wid / 2), v_ptr);
 
 	/* Mark vault grids with the CAVE_G_VAULT flag */
 	mark_g_vault((hgt / 2), (wid / 2), v_ptr->hgt, v_ptr->wid);
-
-	/*
-	 * Now eliminate the outer wall that the vaults have
-	 * in normal dungeons.
-	 */
-	for (y = 4; y < p_ptr->cur_map_hgt - 4; y++)
-	{
-		for (x = 4; x < p_ptr->cur_map_wid - 4; x++)
-		{
-			if (!in_bounds_fully(y, x)) continue;
-
-			/* Eliminate the outer walls, unmark the grid */
-			if (cave_feat[y][x] == FEAT_WALL_OUTER)
-			{
-				cave_set_feat(y, x, FEAT_FLOOR);
-				cave_info[y][x] &= ~(CAVE_G_VAULT);
-			}
-
-		}
-	}
 
 	/* Remember the vault's name */
 	my_strcpy(g_vault_name, v_name + v_ptr->name, sizeof(g_vault_name));
@@ -11577,12 +11594,12 @@ static int pick_dungeon_type(void)
 	}
 
 	/* Themed level quest */
-	if (quest_check(p_ptr->depth) == QUEST_WILDERNESS_LEVEL)
+	if (quest_check(p_ptr->depth) == QUEST_WILDERNESS)
 	{
 		return DUNGEON_TYPE_WILDERNESS;
 	}
 	/* Labyrinth level quest */
-	if (quest_check(p_ptr->depth) == QUEST_LABYRINTH_LEVEL)
+	if (quest_check(p_ptr->depth) == QUEST_LABYRINTH)
 	{
 		return DUNGEON_TYPE_LABYRINTH;
 	}

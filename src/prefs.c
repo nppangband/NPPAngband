@@ -434,7 +434,7 @@ void dump_flavors(ang_file *fff)
 {
 	int i;
 
-	for (i = 0; i < z_info->flavor_max; i++)
+	for (i = 1; i < z_info->flavor_max; i++)
 	{
 		flavor_type *x_ptr = &flavor_info[i];
 		byte attr = x_ptr->x_attr;

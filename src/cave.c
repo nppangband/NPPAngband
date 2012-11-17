@@ -5334,7 +5334,7 @@ static void cave_set_feat_aux(int y, int x, u16b feat)
 	/* This is a generated dungeon*/
 	if (character_dungeon)
 	{
-                /* Hack -- Forget most of the new features */
+		/* Hack -- Forget most of the new features */
 		/*
                 if (!_feat_ff1_match(f2_ptr, FF1_DOOR))
                 {

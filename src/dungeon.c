@@ -288,6 +288,9 @@ static void monster_terrain_damage(void)
 
 			/*Take damage*/
 			(void)project_m(SOURCE_OTHER, m_ptr->fy, m_ptr->fx, f_ptr->dam_non_native, gf_type, 0L);
+
+			/* Hack - if the monster isn't visible or in line-of-sight, move it to safety */
+			if ((!m_ptr->ml) && (!m_ptr->project)) teleport_away(i, 1);
 		}
 	}
 }
@@ -839,11 +842,12 @@ static int count_labrynth_objects(void)
 }
 
 /*
- * Helper function for process_arena_level.
- * Add monsters to the recently added parts of the dungeon.
- * If new spaces have been cleared, this function will first try to put them there.
+ * Helper function for process_labyrnth_level.
+ * Add a monster to the dungeon.
+ * If requested, make them hold the quest parchment.
+ * Also if requested, add a helpful item to the dungeon floor
  */
-static bool add_labyrinth_monster_object(bool add_object)
+static bool add_labyrinth_monster_object(bool add_object, bool add_parchment)
 {
 	u16b empty_squares_y[LABYRINTH_QUEST_AREA];
 	u16b empty_squares_x[LABYRINTH_QUEST_AREA];
@@ -910,14 +914,11 @@ static bool add_labyrinth_monster_object(bool add_object)
 	m_ptr = &mon_list[cave_m_idx[y][x]];
 	m_ptr->mflag |= (MFLAG_QUEST);
 
-	/* Now hand them an object if requested */
-	if (add_object)
+	/* Now hand the monster an object if requested */
+	if (add_parchment)
 	{
-
-		/* Use a small wooden chest */
+		/* Make a piece of parchment */
 		k_idx = lookup_kind(TV_PARCHMENT, SV_PARCHMENT_FRAGMENT);
-
-		/* Get a random chest */
 		object_wipe(i_ptr);
 		object_prep(i_ptr, k_idx);
 		apply_magic(i_ptr, p_ptr->depth, TRUE, FALSE, FALSE, TRUE);
@@ -925,18 +926,19 @@ static bool add_labyrinth_monster_object(bool add_object)
 		/*Don't let the player see what the object it, and make it a quest item*/
 		i_ptr->ident |= (IDENT_HIDE_CARRY | IDENT_QUEST);
 
-		/* Undo the chest theme, and level */
-		i_ptr->xtra1 = i_ptr->pval = 0;
-
+		/* Identify it */
 		object_aware(i_ptr);
 		object_known(i_ptr);
 
 		(void)monster_carry(cave_m_idx[y][x], i_ptr);
+	}
 
+	if (add_object)
+	{
 		/* Now select another square */
+		empty_squares--;
 		empty_squares_y[slot] = empty_squares_y[empty_squares];
 		empty_squares_x[slot] = empty_squares_x[empty_squares];
-		empty_squares--;
 		slot = randint0(empty_squares);
 		y = empty_squares_y[slot];
 		x = empty_squares_x[slot];
@@ -999,6 +1001,7 @@ static void process_labyrinth_level(void)
 	{
 		int x = 4;
 		bool obj_added = FALSE;
+		bool parchment_added = FALSE;
 
 		/* No more than 5 objects added, one every other wave */
 		if (current_lab_wave > 10) obj_added = TRUE;
@@ -1007,16 +1010,25 @@ static void process_labyrinth_level(void)
 		for (i = 0; i < 4; i++)
 		{
 			bool add_obj = FALSE;
+			bool add_parchment = FALSE;
 
 			if (!obj_added)
 			{
-				if one_in_(x)
+				if (one_in_(x))
 				{
 					obj_added = add_obj = TRUE;
 				}
 			}
 
-			add_labyrinth_monster_object(add_obj);
+			if (!parchment_added)
+			{
+				if (one_in_(x))
+				{
+					add_parchment = parchment_added = TRUE;
+				}
+			}
+
+			add_labyrinth_monster_object(add_obj, add_parchment);
 			x--;
 		}
 	}
@@ -1133,83 +1145,203 @@ static void process_greater_vault_quests(void)
 }
 
 /*
- * Hack - the last couple monsters on a wilderness level are too hard to find.
- * Teleport them to the player, one every 10 normal game turns.
- * Don't teleport if there is one in line of sight
+ * Clear a square of any objects, effects and monsters that may be there.
+ */
+static void clear_square(int y, int x, bool do_wall, u16b feat)
+{
+	/*
+	 * Transform the square.
+	 * First destroy any objects, effects and monsters that may be there
+	 */
+	if (cave_m_idx[y][x])
+	{
+		monster_type *m_ptr = &mon_list[cave_m_idx[y][x]];
+		monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+		if ((do_wall) || (!is_monster_native_aux(feat, r_ptr->r_native)))
+		{
+			bool old_seen = m_ptr->ml;
+			bool new_seen = FALSE;
+
+			if (!teleport_away(cave_m_idx[y][x], 1))
+			{
+				delete_monster(y, x);
+			}
+			else new_seen = m_ptr->ml;
+
+			/* Print a message if the player sees it */
+			if (old_seen)
+			{
+				char m_name[80];
+
+				/* Get "the monster" or "it" */
+				monster_desc(m_name, sizeof(m_name),m_ptr, 0);
+
+				if (new_seen) msg_format("%^s blinks.", m_name);
+				else msg_format("%^s disappears.", m_name);
+			}
+		}
+	}
+
+	if (cave_o_idx[y][x])
+	{
+		s16b this_o_idx, next_o_idx = 0;
+
+		/* Delete objects - first preserve any unidentified objects */
+		for (this_o_idx = cave_o_idx[y][x]; this_o_idx; this_o_idx = next_o_idx)
+		{
+			object_type *o_ptr;
+
+			/* Get the object */
+			o_ptr = &o_list[this_o_idx];
+
+			/* Hack -- Preserve unknown artifacts */
+			if (artifact_p(o_ptr) && !object_known_p(o_ptr))
+			{
+				/* Mega-Hack -- Preserve the artifact */
+				a_info[o_ptr->art_num].a_cur_num = 0;
+			}
+
+			/* Get the next object */
+			next_o_idx = o_ptr->next_o_idx;
+
+
+			/* Hack - don't destroy the object if it can exist in the new feature */
+			if (!do_wall)
+			{
+				if (!hates_location(y, x, o_ptr)) continue; /* adadf a needs to be new feature */
+			}
+
+			delete_object(y, x);
+		}
+	}
+
+	/* Clear any effects */
+	if (cave_x_idx[y][x]) delete_effects(y, x);
+}
+
+/*
+ *
  */
 static void process_wilderness_quests(void)
 {
-	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
-	u16b tele_mon_idx[10];
-	u16b mon_count = 0;
-	u16b actual_mon_count = 0;
-	u16b i;
-	monster_type *m_ptr;
-	char ddesc[80];
-	int remaining = q_ptr->q_max_num - q_ptr->q_num_killed;
+	int y, x;
+	int ice_or_mud = 0;
 
-	/* Don't start teleporting them yet */
-	if (remaining > 10) return;
+	/* Every 100 game turns */
+	if (turn % 100) return;
 
-	for (i = 1; i < mon_max; i++)
+	/* First, figure out if we are on an ice level or mud level */
+	for (y = 1; y < (p_ptr->cur_map_hgt - 1); y++)
 	{
-		m_ptr = &mon_list[i];
-
-		/* Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
-
-		/* Count the real monsters */
-		actual_mon_count++;
-
-		/* Can we already see a monster, or is it in line of sight? */
-		if (m_ptr->project) continue;
-		if (m_ptr->ml) continue;
-
-		tele_mon_idx[mon_count++] = i;
-	}
-
-	/* No monsters to be revealed */
-	if (!mon_count)
-	{
-		/* There are monsters in line of sight or are already visible */
-		if (actual_mon_count)return;
-
-		/* Only mimics left.  Reveal them so the player can complete the quest */
-		for (i = 1; i < o_max; i++)
+		for (x = 1; x < (p_ptr->cur_map_wid - 1); x++)
 		{
-			object_type *o_ptr = &o_list[i];
-
-			/* Skip non-objects */
-			if (!o_ptr->k_idx) continue;
-
-			/* Only work with the mimic objects */
-			if (!o_ptr->mimic_r_idx) continue;
-
-			/* Mimic is waiting to turn into a quest monster */
-			reveal_mimic(i, FALSE);
-
-			break;
+			if (cave_feat[y][x] == FEAT_BWATER_WALL)
+			{
+				ice_or_mud++;
+				continue;
+			}
+			else if (cave_feat[y][x] == FEAT_BMUD_WALL)
+			{
+				ice_or_mud--;
+				continue;
+			}
 		}
 
-		return;
+		/* No need to re-examine the whole level */
+		if (ice_or_mud > 25) break;
+		else if (ice_or_mud < -25) break;
 	}
 
-	/* Pick one monster at random and teleport them to the player */
-	i = randint0(mon_count);
-	m_ptr = &mon_list[tele_mon_idx[i]];
-
-	/* Move monster near player (also updates "m_ptr->ml"). */
-	teleport_towards(m_ptr->fy, m_ptr->fx, p_ptr->py, p_ptr->px);
-
-	/* Get the "died from" name */
-	monster_desc(ddesc, sizeof(ddesc), m_ptr, 0x88);
-
-	/* Monster is now visible. */
-	if (m_ptr->ml)
+	/* Now allow the boiling mud-boiling water to spread */
+	for (y = 1; y < (p_ptr->cur_map_hgt - 1); y++)
 	{
-		disturb(1, 0);
-		/* Message */
-		msg_format("%^s suddenly appears.", ddesc);
+		for (x = 1; x < (p_ptr->cur_map_wid - 1); x++)
+		{
+			int i, result;
+			bool permanent = FALSE;
+			u16b chance = 0;
+			bool do_wall = FALSE;
+
+			/* Get the feature */
+			u16b feat = cave_feat[y][x];
+			u16b new_feat;
+
+			/* Already fully transformed */
+			if (feat == FEAT_BWATER_WALL) 		continue;
+			else if (feat == FEAT_BMUD_WALL)	continue;
+
+			/* Don't do squares close to the player */
+			if ((((y - p_ptr->py) * (y - p_ptr->py)) + ((x - p_ptr->px) * (x - p_ptr->px))) <= 100) continue;
+
+			/* Don't alter stairs or permanent walls */
+			if (cave_ff1_match(y, x, FF1_PERMANENT))
+			{
+				if (cave_ff1_match(y, x, (FF1_WALL | FF1_STAIRS))) continue;
+			}
+
+			if ((feat == FEAT_BWATER) || (feat == FEAT_BMUD))
+			{
+				do_wall = TRUE;
+				chance += 80;
+			}
+
+			/*
+			 * Check the squares around, come up with a chance
+			 * for them to convert to a wall or floor.
+			 */
+			for (i = 0; i < 8; i++)
+			{
+
+				int yy = y + ddy[i];
+				int xx = x + ddx[i];
+				u16b feat2 = cave_feat[yy][xx];
+				if (!in_bounds_fully(yy, xx)) continue;
+
+				/* Don't fill in around stairs */
+				if (cave_ff1_match(yy,xx, FF1_STAIRS))
+				{
+					permanent = TRUE;
+					break;
+				}
+
+				if ((feat2 == FEAT_BWATER_WALL) || (feat2 == FEAT_BMUD_WALL)) chance += 80;
+				else if ((feat2 == FEAT_BWATER) || (feat2 == FEAT_BMUD)) chance += 40;
+			}
+
+			result = randint1(1000);
+
+			/* Small chance of fire */
+			if (result > 997) cave_alter_feat(y, x, FS_HURT_FIRE);
+
+			/* Leave space around the stairs */
+			if (permanent) continue;
+
+			/* Not this time */
+			if (result > chance) continue;
+
+			/* Determine what the new terrain should be */
+			/* Ice level */
+			if (ice_or_mud > 0)
+			{
+				if (do_wall) 	new_feat =  FEAT_BWATER_WALL;
+				else 			new_feat =  FEAT_BWATER;
+			}
+			/* Boiling Mud */
+			else
+			{
+				if (do_wall)	new_feat =  FEAT_BMUD_WALL;
+				else 			new_feat =  FEAT_BMUD;
+			}
+
+			/* Clear off the square of objects, effects, and monsters */
+			clear_square(y, x, do_wall, new_feat);
+
+			/* Convert the feature */
+			cave_set_feat(y, x, new_feat);
+
+			light_spot(y, x);
+		}
 	}
 }
 
@@ -1765,20 +1897,14 @@ static void process_world(void)
 				}
 			}
 		}
-		/* We are on the level */
+		/* We are on the quest level */
 		else
 		{
-			if (q_ptr->q_type == QUEST_ARENA_LEVEL) process_arena_level();
-			else if (q_ptr->q_type == QUEST_LABYRINTH_LEVEL) process_labyrinth_level();
+			if (q_ptr->q_type == QUEST_ARENA_LEVEL) 		process_arena_level();
+			else if (q_ptr->q_type == QUEST_LABYRINTH) 		process_labyrinth_level();
+			else if (q_ptr->q_type == QUEST_WILDERNESS)		process_wilderness_quests();
+			else if (q_ptr->q_type == QUEST_GREATER_VAULT)	process_greater_vault_quests();
 			else if (!(turn % QUEST_TURNS)) process_guild_quests();
-			if (q_ptr->q_type == QUEST_WILDERNESS_LEVEL)
-			{
-				if (!(turn % 100)) process_wilderness_quests();
-			}
-			if (q_ptr->q_type == QUEST_GREATER_VAULT)
-			{
-				process_greater_vault_quests();
-			}
 		}
 	}
 
