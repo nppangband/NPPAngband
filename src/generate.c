@@ -3217,8 +3217,13 @@ static void build_vault(int y0, int x0, const vault_type *v_ptr)
 				/* Granite wall (outer) */
 				case '%':
 				{
-					/* For greater quest vaults, do nothing, floor already set */
-					if (!quest_greater_vault) cave_set_feat(y, x, FEAT_WALL_OUTER);
+					/* For vault quests, make it a normal empty square */
+					if (quest_greater_vault) cave_info[y][x] &= ~(CAVE_ROOM | CAVE_ICKY);
+
+					/* Otherwise a wall */
+					else cave_set_feat(y, x, FEAT_WALL_OUTER);
+
+
 					break;
 				}
 
@@ -10817,10 +10822,10 @@ static bool player_place_greater_vault_level(void)
 			if (!in_bounds_fully(y, x)) continue;
 
 			/* Not part of the vault */
-			/*if (cave_info[y][x] & (CAVE_G_VAULT)) continue;*/
+			if (cave_info[y][x] & (CAVE_ICKY)) continue;
 
-			/* We want to be next to an outer wall */
-			/*if (!next_to_walls(y, x)) continue;*/
+			/* We want to be next to a wall */
+			if (!next_to_walls(y, x)) continue;
 
 			/* New, and open square */
 			if (cave_naked_bold(y, x))
@@ -10833,7 +10838,7 @@ static bool player_place_greater_vault_level(void)
 	}
 
 	/* Paranoia - shouldn't happen */
-	/*if (empty_squares < 3) return (FALSE);*/
+	if (empty_squares < 3) return (FALSE);
 
 	/* Pick a square at random */
 	slot = 0;
