@@ -304,7 +304,7 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 		int remaining = quest_collection_num(q_ptr) - quest_item_count();
 
 		/* Just needs to get the reward */
-		if ((!remaining) && (mode == QMODE_FULL))
+		if ((remaining < 1 ) && (mode == QMODE_FULL))
 		{
 			my_strcpy(intro, "Collect your reward at the Guild!", sizeof(intro));
 		}
@@ -2120,8 +2120,6 @@ bool quest_allowed(byte j)
 	}
 	else if (j == QUEST_SLOT_WILDERNESS)
 	{
-		/* playtesting()  */
-		return (FALSE);
 		if (adult_simple_dungeons) return (FALSE);
 		if (p_ptr->max_depth < 17) return (FALSE);
 		if (!(q_info[GUILD_QUEST_SLOT].q_flags & (QFLAG_WILDERNESS_QUEST))) return (FALSE);
@@ -2306,7 +2304,7 @@ void quest_finished(quest_type *q_ptr)
 		inven_item_optimize(j);
 	}
 
-	else if (q_ptr->q_type == QUEST_LABYRINTH)
+	else if (quest_type_collection(q_ptr))
 	{
 		altered_inventory_counter += 5;
 
@@ -3032,7 +3030,7 @@ void quest_status_update(void)
 	{
 		remaining = quest_collection_num(q_ptr) - quest_item_count();
 
-		if (remaining)
+		if (remaining > 0)
 		{
 			/*
 			 * Hack - get the description.  We need to make an object to make sure

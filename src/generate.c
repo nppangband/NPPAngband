@@ -9123,7 +9123,7 @@ static void add_wilderness_quest_terrain_aux(int y, int x, u16b floor_terrain, u
 	int y_places[8];
 	int x_places[8];
 	int num_places = 0;
-	int num_floor = 2 + randint1(2);
+	int num_floor = randint1(2);
 	int i;
 
 	/* Build a solid wall here */
@@ -9182,8 +9182,8 @@ static void add_wilderness_quest_terrain(u16b floor_terrain, u16b wall_terrain)
 		int i, x, y;
 		int coord_count = 0;
 		int y_start, y_end, x_start, x_end, slot;
-		int y_places[400];
-		int x_places[400];
+		int y_places[900];
+		int x_places[900];
 
 		/*
 		 * Just to avoid repeating the code below,
@@ -9193,13 +9193,13 @@ static void add_wilderness_quest_terrain(u16b floor_terrain, u16b wall_terrain)
 		switch (j)
 		{
 			/* Top left */
-			case 1: {y_start = 1; y_end = 21; x_start = 1; x_end = 21; break;}
+			case 1: {y_start = 1; y_end = 31; x_start = 1; x_end = 31; break;}
 			/* Bottom left */
-			case 2: {y_start = (hgt - 21); y_end = hgt; x_start = 1; x_end = 21; break;}
+			case 2: {y_start = (hgt - 31); y_end = hgt; x_start = 1; x_end = 31; break;}
 			/* Top right */
-			case 3: {y_start = 1; y_end = 21; x_start = (wid - 21); x_end = wid; break;}
+			case 3: {y_start = 1; y_end = 31; x_start = (wid - 31); x_end = wid; break;}
 			/* Bottom left */
-			default: {y_start = (hgt - 21); y_end = hgt; x_start = (wid - 21); x_end = wid; break;}
+			default: {y_start = (hgt - 31); y_end = hgt; x_start = (wid - 31); x_end = wid; break;}
 		}
 
 		for (y = y_start; y < y_end; y++)
@@ -9222,7 +9222,7 @@ static void add_wilderness_quest_terrain(u16b floor_terrain, u16b wall_terrain)
 			}
 		}
 
-		for (i = 0; i < 5; i++)
+		for (i = 0; i < 8; i++)
 		{
 			/* Paranoia */
 			if (!coord_count) break;
@@ -9362,7 +9362,7 @@ static void build_wilderness_borders(u16b feat)
  * Build a full forest level
  * Returns TRUE on success
  */
-static bool build_forest_level(bool is_quest_level)
+static bool build_forest_level(void)
 {
 	int y, x;
 	int i, j;
@@ -9780,7 +9780,7 @@ static void build_ice_mountains(int row)
 /*
  * Builds an ice level. Returns TRUE on success, FALSE on error
  */
-static bool build_ice_level(bool is_quest_level)
+static bool build_ice_level(void)
 {
 	int y, x;
 	int i, j;
@@ -9947,7 +9947,7 @@ static bool build_ice_level(bool is_quest_level)
 		}
 	}
 
-	return TRUE;
+	return (TRUE);
 }
 
 /*
@@ -10060,7 +10060,7 @@ static bool build_wilderness_level(void)
 	/* Try with a forest */
 	if ((effective_depth(p_ptr->depth) < 35) || one_in_(2))
 	{
-		if (!build_forest_level(is_quest_level))
+		if (!build_forest_level())
 		{
 			if (cheat_room) msg_format("failed to build a forest level");
 
@@ -10070,7 +10070,7 @@ static bool build_wilderness_level(void)
 	/* Or try with an ice level */
 	else
 	{
-		if (!build_ice_level(is_quest_level))
+		if (!build_ice_level())
 		{
 			if (cheat_room) msg_format("failed to build an ice level");
 
@@ -10220,12 +10220,9 @@ static bool build_wilderness_level(void)
 				object_type *i_ptr;
 				object_type object_type_body;
 
-				/* Use a small wooden chest */
+				/* Make a piece of parchment */
 				int k_idx = lookup_kind(TV_PARCHMENT, SV_PARCHMENT_FRAGMENT);
-
 				i_ptr = &object_type_body;
-
-				/* Get a random chest */
 				object_wipe(i_ptr);
 				object_prep(i_ptr, k_idx);
 				apply_magic(i_ptr, p_ptr->depth, TRUE, FALSE, FALSE, TRUE);
@@ -10248,12 +10245,12 @@ static bool build_wilderness_level(void)
 			/* We are done */
 			if (!obj_count) break;
 		}
+
+		/* Drop some additional parchments */
+		alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_PARCHMENT, (WILDERNESS_COLLECT / 2));
 	}
 
-	/* Drop some additional parchments */
-	alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_PARCHMENT, (WILDERNESS_COLLECT / 2));
-
-	/* Drop some chests */
+	/* Drop some chests to make the level worth exploring */
 	alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_CHEST, damroll(3, 2));
 
 	/* Try hard to place this level */
@@ -11456,8 +11453,8 @@ static void town_gen_hack(void)
 		/*Require it to be surrounded by empty squares, so it is not right up against a store*/
 		else for (i = 0; i < 8; i++)
 		{
-			y = y1 + ddy[i];
-			x = x1 + ddx[i];
+			y = y1 + ddy_ddd[i];
+			x = x1 + ddx_ddd[i];
 
 			if (!cave_naked_bold(y, x))
 			{

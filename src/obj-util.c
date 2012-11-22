@@ -2711,7 +2711,7 @@ static bool find_similar_object_or_empty_grid(object_type *j_ptr, int *oy, int *
 			 */
 			if ((d <= max_dist) && generic_los(*oy, *ox, y, x, CAVE_PROJECT) &&
 				cave_ff1_match(y, x, FF1_DROP) && cave_passable_bold(y, x) &&
-				!cave_any_trap_bold(y, x) && !hates_location(y, x, j_ptr))
+				!cave_any_trap_bold(y, x) && !object_hates_location(y, x, j_ptr))
 			{
 				/* Get the first object index in that grid */
 				int o_idx = cave_o_idx[y][x];
@@ -2916,7 +2916,7 @@ bool drop_near(object_type *j_ptr, int chance, int y, int x)
 				if (cave_any_trap_bold(ty, tx)) continue;
 
 				/* Ignore dangerous locations */
-				if (hates_location(ty, tx, j_ptr)) continue;
+				if (object_hates_location(ty, tx, j_ptr)) continue;
 
 				/* No objects */
 				k = 0;

@@ -286,11 +286,18 @@ static void monster_terrain_damage(void)
 
 			get_spell_type_from_feature(feat, &gf_type, NULL);
 
+			/* Hack - quest monsters shouldn't take damage from terrain */
+			if (m_ptr->mflag & (MFLAG_QUEST))
+			{
+				teleport_away(i, 2);
+				continue;
+			}
+
 			/*Take damage*/
 			(void)project_m(SOURCE_OTHER, m_ptr->fy, m_ptr->fx, f_ptr->dam_non_native, gf_type, 0L);
 
 			/* Hack - if the monster isn't visible or in line-of-sight, move it to safety */
-			if ((!m_ptr->ml) && (!m_ptr->project)) teleport_away(i, 1);
+			if ((!m_ptr->ml) && (!m_ptr->project)) teleport_away(i, 2);
 		}
 	}
 }
@@ -746,7 +753,7 @@ static void add_arena_object(byte stage)
 /*
  * This function assumes it is called every 10 game turns during an arena level.
  */
-static void process_arena_level(void)
+static void process_arena_quest(void)
 {
 	int i;
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
@@ -974,7 +981,7 @@ static bool add_labyrinth_monster_object(bool add_object, bool add_parchment)
 /*
  * This function assumes it is called every 10 game turns during a labrynth level.
  */
-static void process_labyrinth_level(void)
+static void process_labyrinth_quest(void)
 {
 	int i;
 	s32b turns_lapsed = turn - q_info->turn_counter;
@@ -1038,7 +1045,7 @@ static void process_labyrinth_level(void)
 /*
  * Check the time remaining on the quest.
  */
-static void process_greater_vault_quests(void)
+static void process_greater_vault_quest(void)
 {
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 	int i;
@@ -1158,15 +1165,12 @@ static void clear_square(int y, int x, bool do_wall, u16b feat)
 		monster_type *m_ptr = &mon_list[cave_m_idx[y][x]];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-		if ((do_wall) || (!is_monster_native_aux(feat, r_ptr->r_native)))
+		if (!is_monster_native_aux(feat, r_ptr->r_native))
 		{
 			bool old_seen = m_ptr->ml;
 			bool new_seen = FALSE;
 
-			if (!teleport_away(cave_m_idx[y][x], 1))
-			{
-				delete_monster(y, x);
-			}
+			if (!teleport_away(cave_m_idx[y][x], 1)) delete_monster(y, x);
 			else new_seen = m_ptr->ml;
 
 			/* Print a message if the player sees it */
@@ -1209,7 +1213,7 @@ static void clear_square(int y, int x, bool do_wall, u16b feat)
 			/* Hack - don't destroy the object if it can exist in the new feature */
 			if (!do_wall)
 			{
-				if (!hates_location(y, x, o_ptr)) continue; /* adadf a needs to be new feature */
+				if (!object_hates_feature(feat, o_ptr)) continue;
 			}
 
 			delete_object(y, x);
@@ -1223,7 +1227,7 @@ static void clear_square(int y, int x, bool do_wall, u16b feat)
 /*
  *
  */
-static void process_wilderness_quests(void)
+static void process_wilderness_quest(void)
 {
 	int y, x;
 	int ice_or_mud = 0;
@@ -1283,7 +1287,7 @@ static void process_wilderness_quests(void)
 			if ((feat == FEAT_BWATER) || (feat == FEAT_BMUD))
 			{
 				do_wall = TRUE;
-				chance += 80;
+				chance += 45;
 			}
 
 			/*
@@ -1293,8 +1297,8 @@ static void process_wilderness_quests(void)
 			for (i = 0; i < 8; i++)
 			{
 
-				int yy = y + ddy[i];
-				int xx = x + ddx[i];
+				int yy = y + ddy_ddd[i];
+				int xx = x + ddx_ddd[i];
 				u16b feat2 = cave_feat[yy][xx];
 				if (!in_bounds_fully(yy, xx)) continue;
 
@@ -1305,17 +1309,24 @@ static void process_wilderness_quests(void)
 					break;
 				}
 
-				if ((feat2 == FEAT_BWATER_WALL) || (feat2 == FEAT_BMUD_WALL)) chance += 80;
-				else if ((feat2 == FEAT_BWATER) || (feat2 == FEAT_BMUD)) chance += 40;
+				if ((feat2 == FEAT_BWATER_WALL) || (feat2 == FEAT_BMUD_WALL)) chance += 45;
+				else if ((feat2 == FEAT_BWATER) || (feat2 == FEAT_BMUD)) chance += 35;
 			}
-
-			result = randint1(1000);
-
-			/* Small chance of fire */
-			if (result > 997) cave_alter_feat(y, x, FS_HURT_FIRE);
 
 			/* Leave space around the stairs */
 			if (permanent) continue;
+
+			result = randint1(1000);
+
+			/* Small chance of something starting in the middle of nowhere */
+			if ((result >= 999) && (!chance))
+			{
+				if (one_in_(5))
+				{
+					result = 0;
+					chance = 1;
+				}
+			}
 
 			/* Not this time */
 			if (result > chance) continue;
@@ -1900,10 +1911,10 @@ static void process_world(void)
 		/* We are on the quest level */
 		else
 		{
-			if (q_ptr->q_type == QUEST_ARENA_LEVEL) 		process_arena_level();
-			else if (q_ptr->q_type == QUEST_LABYRINTH) 		process_labyrinth_level();
-			else if (q_ptr->q_type == QUEST_WILDERNESS)		process_wilderness_quests();
-			else if (q_ptr->q_type == QUEST_GREATER_VAULT)	process_greater_vault_quests();
+			if (q_ptr->q_type == QUEST_ARENA_LEVEL) 		process_arena_quest();
+			else if (q_ptr->q_type == QUEST_LABYRINTH) 		process_labyrinth_quest();
+			else if (q_ptr->q_type == QUEST_WILDERNESS)		process_wilderness_quest();
+			else if (q_ptr->q_type == QUEST_GREATER_VAULT)	process_greater_vault_quest();
 			else if (!(turn % QUEST_TURNS)) process_guild_quests();
 		}
 	}
@@ -3053,7 +3064,7 @@ void process_player(void)
 		/* See if the greater vault quest just finished, if so, complete it */
 		if (q_ptr->q_type == QUEST_GREATER_VAULT)
 		{
-			process_greater_vault_quests();
+			process_greater_vault_quest();
 		}
 	}
 

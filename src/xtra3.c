@@ -428,18 +428,19 @@ byte monster_health_attr(void)
 static void prt_health(int row, int col)
 {
 	byte attr = monster_health_attr();
+	s16b who = p_ptr->health_who;
 
 	/* Not tracking */
-	if (!p_ptr->health_who)
+	if (!who)
 	{
 		/* Erase the health bar */
 		Term_erase(col, row, 12);
 	}
 
 	/* Tracking an unseen, hallucinatory, or dead monster */
-	else if ((!mon_list[p_ptr->health_who].ml) || /* Unseen */
+	else if ((!mon_list[who].ml) || /* Unseen */
 			(p_ptr->timed[TMD_IMAGE]) || /* Hallucination */
-			(mon_list[p_ptr->health_who].hp < 0)) /* Dead (?) */
+			(mon_list[who].hp < 0)) /* Dead (?) */
 	{
 		/* The monster health is "unknown" */
 		Term_putstr(col, row, 12, attr, "[----------]");
@@ -450,7 +451,8 @@ static void prt_health(int row, int col)
 	{
 		int pct, len;
 
-		monster_type *m_ptr = &mon_list[p_ptr->health_who];
+		monster_type *m_ptr = &mon_list[who];
+		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Extract the "percent" of health */
 		pct = 100L * m_ptr->hp / m_ptr->maxhp;
@@ -458,25 +460,34 @@ static void prt_health(int row, int col)
 		/* Convert percent into "health" */
 		len = (pct < 10) ? 1 : (pct < 90) ? (pct / 10 + 1) : 10;
 
+
+		/* Get default monster symbol */
+		Term_putch(col, row, r_ptr->d_attr, r_ptr->d_char);
+
+		/* Move over one to print the rest */
+		col++;
+
 		/* Default to "unknown" */
-		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
+		Term_putstr(col, row, 12, TERM_WHITE, "----------]");
+
+		Term_putstr(col, row, 11, TERM_WHITE, "----------]");
 
 		/* Dump the current "health" (handle monster stunning, confusion) */
 		if (m_ptr->m_timed[MON_TMD_CONF])
-			Term_putstr(col + 1, row, len, attr, "cccccccccc");
+			Term_putstr(col, row, len, attr, "cccccccccc");
 		else if (m_ptr->m_timed[MON_TMD_STUN])
-			Term_putstr(col + 1, row, len, attr, "ssssssssss");
+			Term_putstr(col, row, len, attr, "ssssssssss");
 		else if (m_ptr->m_timed[MON_TMD_SLEEP])
-			Term_putstr(col + 1, row, len, attr, "zzzzzzzzzz");
+			Term_putstr(col, row, len, attr, "zzzzzzzzzz");
 		else if (m_ptr->m_timed[MON_TMD_FEAR])
-			Term_putstr(col + 1, row, len, attr, "aaaaaaaaaa");
+			Term_putstr(col, row, len, attr, "aaaaaaaaaa");
 		/* Don't print messages for fast and slow if they cancel each other out */
 		else if ((m_ptr->m_timed[MON_TMD_FAST]) && (!m_ptr->m_timed[MON_TMD_SLOW]))
-			Term_putstr(col + 1, row, len, attr, "hhhhhhhhhhh");
+			Term_putstr(col, row, len, attr, "hhhhhhhhhhh");
 		else if ((m_ptr->m_timed[MON_TMD_SLOW]) && (!m_ptr->m_timed[MON_TMD_FAST]))
-			Term_putstr(col + 1, row, len, attr, "SSSSSSSSSSS");
+			Term_putstr(col, row, len, attr, "SSSSSSSSSSS");
 		else
-			Term_putstr(col + 1, row, len, attr, "**********");
+			Term_putstr(col, row, len, attr, "**********");
 	}
 }
 

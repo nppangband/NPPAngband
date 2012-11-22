@@ -120,7 +120,7 @@ bool teleport_away(int m_idx, int dis)
 		}
 
 		/* Increase the maximum distance */
-		dis = dis * 2;
+		dis = dis * 2 + 1;
 		if (dis > d) dis = d;
 
 		/* Decrease the minimum distance */
@@ -1505,14 +1505,13 @@ static bool hates_lava(const object_type *o_ptr)
 }
 
 
-
 /*
- * Return TRUE if the object can't exist in the given location
+ * Return TRUE if the object can't exist on the given feature
  */
-bool hates_location(int y, int x, const object_type *o_ptr)
+bool object_hates_feature(int feat, const object_type *o_ptr)
 {
 	/* Get the element flags of the location */
-	u32b terrain_native = cave_ff3_match(y, x, TERRAIN_MASK);
+	u32b terrain_native = feat_ff3_match(feat, TERRAIN_MASK);
 
 	u32b f1, f2, f3, fn;
 
@@ -1557,6 +1556,18 @@ bool hates_location(int y, int x, const object_type *o_ptr)
 	{
 		return (FALSE);
 	}
+}
+
+
+
+/*
+ * Return TRUE if the object can't exist in the given location
+ */
+bool object_hates_location(int y, int x, const object_type *o_ptr)
+{
+	int feat = cave_feat[y][x];
+
+	return object_hates_feature(feat, o_ptr);
 }
 
 /*
@@ -5652,7 +5663,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 		if (mon_take_hit(mon_idx, damage, &fear, "", who))
 		{
 			/* Dead monster. Empty statement */
-			;
+
 		}
 
 		/* Damaged monster */

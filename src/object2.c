@@ -3873,7 +3873,7 @@ void place_object(int y, int x, bool good, bool great, int droptype)
 		if (!make_object(i_ptr, good, great, droptype, FALSE)) continue;
 
 		/* Check compatibility with terrain */
-		if (hates_location(y, x, i_ptr))
+		if (object_hates_location(y, x, i_ptr))
 		{
 			/* Hack -- Preserve artifacts */
 			a_info[i_ptr->art_num].a_cur_num = 0;

@@ -333,8 +333,8 @@ static void show_commands(void)
 	/* Check the sourrounding squares for their contents */
 	for (i = 0; i < 8; i++)
 	{
-		int y = py + ddy[i];
-		int x = px + ddx[i];
+		int y = py + ddy_ddd[i];
+		int x = px + ddx_ddd[i];
 
 		if (!in_bounds_fully(y, x)) continue;
 

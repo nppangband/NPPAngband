@@ -1,4 +1,4 @@
-NPP 0.6.0. BETA 4 Changes: 
+NPP 0.6.0. BETA 5 Changes: 
 Broke savecompatibility with NPP 0.5.4.
 Revised Mimic Code
 Changes to the savefile structure.
@@ -42,7 +42,7 @@ New makefile.osx.
 Made cloaks of aman more common (rarity of 16 to rarity of 8).
 When studying or casting, the player is now only offered books with spells they can cast or study.
 Fix multiple bugs in the randart code (reported and fixed by "runningaway")
-New function for teleporting the player.
+New function for teleporting the player and teleporting away monsters.
 Added new object, Faded Scroll Fragment, for use in labrynth quests. 
 Stat gain potions can be good or great quest rewards at the lower depths.
 Added message for when a putrid flower the player cannot see fires at a player.
@@ -50,6 +50,11 @@ Bugfix:  Fixed a misspelled word in the descriptions for the Servant of Tulkas a
 Bugfix: Traps couldnt be disarmed if the player was standing on a disarmed chest.
 Bugfix:  Non-spellcasters were sometimes getting spellpoints.
 The message verifying a command now specified the action (eg really quaff that potion?)
+Add monster character to targeted monster display. (patch by Runningaway).
+Fixed some instances of functions that, when searching all squares around a certain square,
+was referencing the wrong table, causing it to ignore the down direction and downard-left direction.
+Quest monsters standing in dangerous terrain get teleported off.
+
 
 
 NPP 0.5.4 changes:
