@@ -2351,7 +2351,7 @@ byte spell_info_RF5[32][5]=
 	{6,     3,     1,     6,     6},        /* RF5_BEAM_ELEC */
 	{6,     4,     1,     6,     6},        /* RF5_BEAM_ICE */
 	{6,     3,     1,     6,     6},        /* RF5_BEAM_NETHR */
-	{6,     5,     2,     0,     0},        /* RF5_BEAM_LAVA */
+	{6,     5,     2,     6,     6},        /* RF5_BEAM_LAVA */
 	{5,     5,     2,     8,     8}         /* RF5_HOLY_ORB */
 };
 

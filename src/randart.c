@@ -434,7 +434,7 @@ static long eval_max_dam(int r_idx)
 	u32b melee_dam, atk_dam, spell_dam;
 	byte rlev;
 	monster_race *r_ptr;
-	u32b flag, breath_mask, attack_mask, ball_mask;
+	u32b flag, breath_mask, attack_mask, ball_mask, beam_mask;
 	u32b flag_counter;
 
 	r_ptr = &r_info[r_idx];
@@ -461,6 +461,7 @@ static long eval_max_dam(int r_idx)
 				attack_mask = RF4_ATTACK_MASK;
 				breath_mask = RF4_BREATH_MASK;
 				ball_mask 	= RF4_BALL_MASK;
+				beam_mask 	= RF4_BEAM_MASK;
 				break;
 			}
 			case 1:
@@ -469,6 +470,7 @@ static long eval_max_dam(int r_idx)
 				attack_mask = RF5_ATTACK_MASK;
 				breath_mask = RF5_BREATH_MASK;
 				ball_mask 	= RF5_BALL_MASK;
+				beam_mask 	= RF5_BEAM_MASK;
 				break;
 			}
 			case 2:
@@ -477,6 +479,7 @@ static long eval_max_dam(int r_idx)
 				attack_mask = RF6_ATTACK_MASK;
 				breath_mask = RF6_BREATH_MASK;
 				ball_mask 	= RF6_BALL_MASK;
+				beam_mask 	= RF6_BEAM_MASK;
 				break;
 			}
 			case 3:
@@ -486,6 +489,7 @@ static long eval_max_dam(int r_idx)
 				attack_mask = RF7_ATTACK_MASK;
 				breath_mask = RF7_BREATH_MASK;
 				ball_mask 	= RF7_BALL_MASK;
+				beam_mask 	= RF7_BEAM_MASK;
 				break;
 			}
 		}
@@ -665,7 +669,7 @@ static long eval_max_dam(int r_idx)
 					{
 						int attack = 96 + (x * 32) + i;
 
-						this_dam = get_ball_dam(r_ptr, attack, which_gf, powerful);
+						this_dam = get_ball_beam_dam(r_ptr, attack, which_gf, powerful);
 
 						/* handle elemental breaths*/
 						switch (which_gf)
@@ -688,6 +692,28 @@ static long eval_max_dam(int r_idx)
 						if (r_ptr->flags2 & RF2_CLOUD_SURROUND) this_dam = this_dam * 11 / 10;
 					}
 				}
+
+				/*Is it a beam spell? Should only be flag 5*/
+				else if (beam_mask & flag_counter)
+				{
+					int which_gf = 0;
+
+					if (flag_counter == RF5_BEAM_ELEC) 		which_gf = GF_ELEC;
+					else if (flag_counter == RF5_BEAM_ICE) 	which_gf = GF_ICE;
+					else if (flag_counter == RF5_BEAM_NETHR)which_gf = GF_NETHER;
+					else if (flag_counter == RF5_BEAM_LAVA)	which_gf = GF_LAVA;
+
+					if (which_gf)
+					{
+						int attack = 96 + (x * 32) + i;
+
+						this_dam = get_ball_beam_dam(r_ptr, attack, which_gf, powerful);
+					}
+
+					/*slight bonus for cloud_surround*/
+					if (r_ptr->flags2 & RF2_CLOUD_SURROUND) this_dam = this_dam * 11 / 10;
+				}
+
 
 				/*Is it an arrow, bolt, or beam?*/
 				else if (attack_mask & flag_counter)

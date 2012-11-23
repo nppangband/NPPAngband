@@ -1584,8 +1584,8 @@ B:CLAW:HURT:1d3
 B:BITE:HURT:1d5
 F:FORCE_MAXHP | FORCE_SLEEP | ONLY_GOLD | DROP_60 | DROP_1D2
 F:OPEN_DOOR | BASH_DOOR | DRAGON | EVIL | IM_ELEC
-S:SPELL_PCT_8 | POW_0
-S:BRTH_ELEC
+S:SPELL_PCT_8 | POW_7
+S:BRTH_ELEC | BALL_ELEC
 D:This hatchling dragon is still soft, its eyes unaccustomed to light
 D: and its scales a pale blue.
 
@@ -1600,8 +1600,8 @@ B:BITE:HURT:1d5
 F:FORCE_MAXHP | FORCE_SLEEP | ONLY_GOLD | DROP_60 | DROP_1D2
 F:OPEN_DOOR | BASH_DOOR | DRAGON | EVIL | HURT_FIRE
 F:IM_COLD | N_ICE
-S:SPELL_PCT_8 | POW_0
-S:BRTH_COLD
+S:SPELL_PCT_8 | POW_7
+S:BRTH_COLD | BALL_COLD
 D:This hatchling dragon is still soft, its eyes unaccustomed to light
 D: and its scales a pale white.
 
@@ -1615,8 +1615,8 @@ B:CLAW:HURT:1d3
 B:BITE:HURT:1d5
 F:FORCE_MAXHP | FORCE_SLEEP | ONLY_GOLD | DROP_60 | DROP_1D2
 F:OPEN_DOOR | BASH_DOOR | DRAGON | EVIL | IM_POIS
-S:SPELL_PCT_8 | POW_0
-S:BRTH_POIS
+S:SPELL_PCT_8 | POW_7
+S:BRTH_POIS | BALL_POIS
 D:This hatchling dragon is still soft, its eyes unaccustomed to light
 D: and its scales a sickly green.
 
@@ -1631,8 +1631,8 @@ B:BITE:HURT:1d5
 F:FORCE_MAXHP | FORCE_SLEEP | ONLY_GOLD | DROP_60 | DROP_1D2
 F:OPEN_DOOR | BASH_DOOR | DRAGON | EVIL | IM_ACID
 F:N_ACID
-S:SPELL_PCT_8 | POW_0
-S:BRTH_ACID
+S:SPELL_PCT_8 | POW_7
+S:BRTH_ACID | BALL_ACID
 D:This hatchling dragon is still soft, its eyes unaccustomed to light
 D: and its scales a dull black.
 
@@ -1647,8 +1647,8 @@ B:BITE:FIRE:1d5
 F:FORCE_MAXHP | FORCE_SLEEP | ONLY_GOLD | DROP_60 | DROP_1D2
 F:HAS_LIGHT | OPEN_DOOR | BASH_DOOR | DRAGON | EVIL
 F:HURT_COLD | IM_FIRE | N_FIRE
-S:SPELL_PCT_8 | POW_0
-S:BRTH_FIRE
+S:SPELL_PCT_8 | POW_7
+S:BRTH_FIRE | BALL_FIRE
 D:This hatchling dragon is still soft, its eyes unaccustomed to light
 D: and its scales a pale red.
 
@@ -1662,8 +1662,8 @@ B:CLAW:HURT:1d3
 B:BITE:HURT:1d5
 F:FORCE_MAXHP | FORCE_SLEEP | ONLY_GOLD | DROP_60 | DROP_1D2
 F:OPEN_DOOR | BASH_DOOR | DRAGON | EVIL | NO_CONF
-S:SPELL_PCT_8 | POW_0
-S:BRTH_CONFU
+S:SPELL_PCT_8 | POW_7
+S:BRTH_CONFU | BALL_CONFU
 D:This hatchling dragon is still soft, its eyes unaccustomed to light
 D: and its scales a dull bronze.
 
@@ -1677,8 +1677,8 @@ B:CLAW:HURT:1d3
 B:BITE:HURT:1d5
 F:FORCE_MAXHP | FORCE_SLEEP | ONLY_GOLD | DROP_60 | DROP_1D2
 F:OPEN_DOOR | BASH_DOOR | DRAGON | EVIL
-S:SPELL_PCT_8 | POW_0
-S:BRTH_SOUND
+S:SPELL_PCT_8 | POW_7
+S:BRTH_SOUND | BALL_SOUND
 D:This hatchling dragon is still soft, its eyes unaccustomed to light
 D: and its scales a pale gold.
 
@@ -1874,8 +1874,9 @@ B:CLAW:HURT:1d3
 B:BITE:HURT:1d5
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_60 | HAS_LIGHT | BASH_DOOR
 F:DRAGON | EVIL
-S:SPELL_PCT_9 | POW_3
-S:BRTH_LIGHT | BRTH_DARK | SCARE | CONF
+S:SPELL_PCT_9 | POW_5
+S:BRTH_LIGHT | BRTH_DARK | BALL_LIGHT | BALL_DARK | SCARE
+S:CONF
 D:A small relative of the dragon that inhabits dark caves.
 
 
@@ -1958,8 +1959,9 @@ F:ATTR_MULTI | FORCE_MAXHP | FORCE_SLEEP | ONLY_GOLD | DROP_60
 F:DROP_1D2 | OPEN_DOOR | BASH_DOOR | DRAGON | EVIL
 F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS
 F:N_ICE | N_FIRE | N_ACID
-S:SPELL_PCT_8 | POW_0
+S:SPELL_PCT_8 | POW_7
 S:BRTH_ACID | BRTH_ELEC | BRTH_FIRE | BRTH_COLD | BRTH_POIS
+S:BALL_ACID | BALL_ELEC | BALL_FIRE | BALL_COLD | BALL_POIS
 D:This hatchling dragon is still soft, its eyes unaccustomed to light
 D: and its scales shimmering with hints of many different colours.
 
@@ -2186,8 +2188,8 @@ W:13:2:0:10
 B:BITE:COLD:1d6
 F:FORCE_SLEEP | RAND_50 | WEIRD_MIND | EVASIVE | BASH_DOOR
 F:ANIMAL | FLYING | HURT_FIRE | IM_COLD | N_ICE
-S:SPELL_PCT_10 | POW_0
-S:BRTH_COLD
+S:SPELL_PCT_10 | POW_2
+S:BRTH_COLD | BALL_COLD
 D:It is a large fly that drips frost.
 
 
@@ -2479,8 +2481,8 @@ B:CLAW:HURT:1d4
 B:CLAW:HURT:1d4
 B:BITE:HURT:1d6
 F:FORCE_SLEEP | FRIENDS | HAS_LIGHT | BASH_DOOR | ANIMAL
-S:SPELL_PCT_20 | POW_0
-S:BRTH_LIGHT
+S:SPELL_PCT_20 | POW_3
+S:BRTH_LIGHT | BALL_LIGHT
 D:A brilliant canine form whose light hurts your eyes, even at this
 D: distance.
 
@@ -2493,8 +2495,8 @@ B:CLAW:HURT:1d4
 B:CLAW:HURT:1d4
 B:BITE:HURT:1d6
 F:FORCE_SLEEP | FRIENDS | BASH_DOOR | ANIMAL
-S:SPELL_PCT_20 | POW_0
-S:BRTH_DARK
+S:SPELL_PCT_20 | POW_2
+S:BRTH_DARK | BALL_DARK
 D:A hole in the air in the shape of a huge hound.  No light falls upon
 D: its form.
 
@@ -2585,8 +2587,8 @@ W:16:2:0:15
 B:BITE:POISON:1d6
 F:FORCE_SLEEP | RAND_25 | RAND_50 | WEIRD_MIND | EVASIVE
 F:BASH_DOOR | ANIMAL | FLYING | IM_POIS
-S:SPELL_PCT_10 | POW_0
-S:BRTH_POIS
+S:SPELL_PCT_10 | POW_2
+S:BRTH_POIS | BALL_POIS
 D:A vast, foul-smelling dragonfly.
 
 
@@ -2805,8 +2807,8 @@ W:18:2:0:15
 F:FORCE_SLEEP | NEVER_BLOW | RAND_25 | RAND_50 | WEIRD_MIND
 F:EVASIVE | BASH_DOOR | ANIMAL | FLYING | IM_ACID
 F:N_ACID
-S:SPELL_PCT_10 | POW_0
-S:BRTH_ACID
+S:SPELL_PCT_10 | POW_2
+S:BRTH_ACID | BALL_ACID
 D:The size of a large bird, this fly drips caustic acid.
 
 
@@ -2847,7 +2849,7 @@ B:BITE:FIRE:2d6
 F:FORCE_SLEEP | FRIENDS | HAS_LIGHT | BASH_DOOR | ANIMAL
 F:HURT_COLD | IM_FIRE | N_FIRE
 S:SPELL_PCT_10 | POW_0
-S:BRTH_FIRE
+S:BRTH_FIRE | BALL_FIRE
 D:Flames lick at its feet and its tongue is a blade of fire.  You can
 D: feel a furnace heat radiating from the creature.
 
@@ -2861,8 +2863,8 @@ B:CLAW:HURT:3d3
 B:BITE:COLD:2d6
 F:FORCE_SLEEP | FRIENDS | BASH_DOOR | ANIMAL | HURT_FIRE
 F:IM_COLD | N_ICE
-S:SPELL_PCT_10 | POW_0
-S:BRTH_COLD
+S:SPELL_PCT_10 | POW_7
+S:BRTH_COLD | BALL_COLD
 D:A hound as tall as a man, this creature appears to be composed of
 D: angular planes of ice.  Cold radiates from it and freezes your breath
 D: in the air.
@@ -2877,8 +2879,8 @@ B:CLAW:HURT:3d3
 B:BITE:ELEC:2d6
 F:FORCE_SLEEP | FRIENDS | HAS_LIGHT | BASH_DOOR | ANIMAL
 F:IM_ELEC
-S:SPELL_PCT_10 | POW_0
-S:BRTH_ELEC
+S:SPELL_PCT_10 | POW_5
+S:BRTH_ELEC | BALL_ELEC
 D:Saint Elmo's Fire forms a ghostly halo around this hound, and sparks
 D: sting your fingers as energy builds up in the air around you.
 
@@ -2961,8 +2963,8 @@ W:19:2:0:15
 B:BITE:HURT:1d3
 F:FORCE_SLEEP | RAND_25 | RAND_50 | WEIRD_MIND | EVASIVE
 F:BASH_DOOR | ANIMAL | FLYING | IM_FIRE
-S:SPELL_PCT_10 | POW_0
-S:BRTH_SOUND
+S:SPELL_PCT_10 | POW_2
+S:BRTH_SOUND | BALL_SOUND
 D:Large beating wings support this dazzling insect.  A loud buzzing
 D: noise pervades the air.
 
@@ -3041,8 +3043,8 @@ B:ENGULF:ACID:3d3
 F:FORCE_SLEEP | RAND_50 | EMPTY_MIND | BASH_DOOR | POWERFUL
 F:FLYING | IM_ACID | RES_WATER | NO_SLOW | NO_FEAR
 F:NO_STUN | NO_CONF | NO_SLEEP | N_WATER | N_ACID
-S:SPELL_PCT_18 | POW_0
-S:BRTH_ACID
+S:SPELL_PCT_18 | POW_6
+S:BRTH_ACID | BALL_ACID
 D:A caustic spinning whirlpool of water.
 
 
@@ -3138,7 +3140,7 @@ B:CLAW:HURT:3d3
 B:CLAW:HURT:3d3
 F:FORCE_SLEEP | FRIENDS | BASH_DOOR | ANIMAL
 S:SPELL_PCT_10 | POW_0
-S:BRTH_SHARD
+S:BRTH_SHARD | BALL_SHARD
 D:A beautiful crystalline shape does not disguise the danger this hound
 D: clearly presents.  Your flesh tingles as it approaches.
 
@@ -3153,8 +3155,8 @@ B:CLAW:HURT:3d3
 B:CLAW:HURT:3d3
 F:FORCE_SLEEP | FRIENDS | BASH_DOOR | ANIMAL | FLYING
 F:IM_POIS
-S:SPELL_PCT_10 | POW_0
-S:BRTH_POIS
+S:SPELL_PCT_10 | POW_7
+S:BRTH_POIS | BALL_POIS
 D:Swirling vapours surround this beast as it floats towards you,
 D: seemingly walking on air.  Noxious gases sting your throat.
 
@@ -3169,8 +3171,8 @@ B:CLAW:HURT:3d3
 B:CLAW:HURT:3d3
 F:FORCE_SLEEP | FRIENDS | BASH_DOOR | ANIMAL | IM_ACID
 F:RES_WATER | N_WATER | N_ACID
-S:SPELL_PCT_10 | POW_0
-S:BRTH_ACID
+S:SPELL_PCT_10 | POW_5
+S:BRTH_ACID | BALL_ACID
 D:Liquid footprints follow this hound as it pads around the dungeon.  An
 D: acrid smell of acid rises from the dog's pelt.
 
@@ -3184,8 +3186,8 @@ B:BITE:WOUND:2d10
 B:BITE:FIRE:2d6
 F:FORCE_SLEEP | BASH_DOOR | ANIMAL | HURT_COLD | IM_FIRE
 F:N_FIRE | N_SAND
-S:SPELL_PCT_10 | POW_6
-S:BRTH_FIRE
+S:SPELL_PCT_10 | POW_20
+S:BRTH_FIRE | BALL_FIRE
 D:It is a strange concoction of goat, lion and dragon, with the heads of
 D: all three beasts.
 
@@ -3228,8 +3230,8 @@ W:21:1:0:10
 B:BITE:ELEC:1d3
 F:FORCE_SLEEP | RAND_50 | EVASIVE | BASH_DOOR | ANIMAL
 F:FLYING | IM_ELEC
-S:SPELL_PCT_25 | POW_0
-S:BRTH_ELEC
+S:SPELL_PCT_25 | POW_2
+S:BRTH_ELEC | BALL_ELEC
 D:It is a glowing blue bat with a sharp tail.
 
 
@@ -3436,8 +3438,8 @@ W:23:2:0:15
 F:FORCE_SLEEP | NEVER_BLOW | RAND_25 | RAND_50 | WEIRD_MIND
 F:EVASIVE | BASH_DOOR | ANIMAL | FLYING | NO_CONF
 F:NO_SLEEP
-S:SPELL_PCT_10 | POW_0
-S:BRTH_CONFU
+S:SPELL_PCT_10 | POW_2
+S:BRTH_CONFU | BALL_CONFU
 D:This vast gleaming bronze fly has wings which beat mesmerically fast.
 
 
@@ -3484,8 +3486,8 @@ W:23:1:0:60
 B:BITE:FIRE:3d3
 F:FORCE_SLEEP | RAND_50 | HAS_LIGHT | EVASIVE | BASH_DOOR
 F:ANIMAL | FLYING | HURT_COLD | IM_FIRE | N_FIRE
-S:SPELL_PCT_25 | POW_0
-S:BRTH_FIRE
+S:SPELL_PCT_25 | POW_2
+S:BRTH_FIRE | BALL_FIRE
 D:It is a sharp-tailed bat, wreathed in fire.
 
 
@@ -4026,8 +4028,8 @@ B:CLAW:HURT:3d3
 B:CLAW:HURT:3d3
 F:FORCE_SLEEP | FRIENDS | BASH_DOOR | ANIMAL | NO_CONF
 F:NO_SLEEP
-S:SPELL_PCT_20 | POW_0
-S:BRTH_SOUND
+S:SPELL_PCT_20 | POW_15
+S:BRTH_SOUND | BALL_SOUND
 D:A blurry canine form which seems to be moving as fast as the eye can
 D: follow.  You can feel the earth resonating beneath your feet.
 
@@ -4088,7 +4090,7 @@ B:GAZE:PARALYZE:2d6
 F:FORCE_SLEEP | BASH_DOOR | ANIMAL | HURT_COLD | IM_FIRE
 F:N_SAND
 S:SPELL_PCT_15 | POW_10
-S:BRTH_FIRE
+S:BRTH_FIRE | BALL_FIRE
 D:The result of evil experiments, this travesty of nature should never
 D: be alive.  It has three heads - goat, dragon and gorgon - all
 D: attached to a lion's body.
@@ -4155,7 +4157,8 @@ B:CLAW:HURT:1d4
 F:FRIENDS | RAND_25 | DROP_60 | WEIRD_MIND | EVASIVE
 F:BASH_DOOR | ANIMAL | FLYING | IM_POIS
 S:SPELL_PCT_15 | POW_4
-S:BRTH_POIS | BRTH_DARK | HUNGER | SCARE
+S:BRTH_POIS | BRTH_DARK | BALL_POIS | BALL_DARK | HUNGER
+S:SCARE
 D:Fed with horrid meats and grown to enormous size, this slavering
 D: creature seeks livelier prey.
 
@@ -4383,8 +4386,8 @@ B:CLAW:HURT:2d4
 B:BITE:ELEC:2d6
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_2D2 | OPEN_DOOR | BASH_DOOR
 F:DRAGON | EVIL | IM_ELEC | NO_FEAR
-S:SPELL_PCT_10 | POW_3
-S:BRTH_ELEC | SCARE
+S:SPELL_PCT_10 | POW_13
+S:BRTH_ELEC | BALL_ELEC | SCARE
 D:It has a form that legends are made of.  Its still-tender scales are a
 D: deep blue in hue.  Sparks crackle along its length.
 
@@ -4399,8 +4402,8 @@ B:BITE:COLD:2d6
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_2D2 | OPEN_DOOR | BASH_DOOR
 F:DRAGON | EVIL | HURT_FIRE | IM_COLD | NO_FEAR
 F:N_ICE
-S:SPELL_PCT_10 | POW_3
-S:BRTH_COLD | SCARE
+S:SPELL_PCT_10 | POW_13
+S:BRTH_COLD | BALL_COLD | SCARE
 D:It has a form that legends are made of.  Its still-tender scales are a
 D: frosty white in hue.  Icy blasts of cold air come from it as it
 D: breathes.
@@ -4415,8 +4418,8 @@ B:CLAW:HURT:2d4
 B:BITE:POISON:2d6
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_2D2 | OPEN_DOOR | BASH_DOOR
 F:DRAGON | EVIL | IM_POIS | NO_FEAR
-S:SPELL_PCT_10 | POW_3
-S:BRTH_POIS | SCARE
+S:SPELL_PCT_10 | POW_13
+S:BRTH_POIS | BALL_POIS | SCARE
 D:It has a form that legends are made of.  Its still-tender scales are a
 D: deep green in hue.  Foul gas seeps through its scales.
 
@@ -4430,8 +4433,8 @@ B:CLAW:HURT:2d4
 B:BITE:CONFUSE:2d6
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_2D2 | OPEN_DOOR | BASH_DOOR
 F:DRAGON | EVIL | NO_FEAR | NO_CONF
-S:SPELL_PCT_10 | POW_4
-S:BRTH_CONFU | SCARE
+S:SPELL_PCT_10 | POW_13
+S:BRTH_CONFU | BALL_CONFU | SCARE
 D:It has a form that legends are made of.  Its still-tender scales are a
 D: rich bronze hue, and its shape glitters with strange colours that
 D: confuse you.
@@ -4622,8 +4625,8 @@ B:BITE:FIRE:2d8
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_3D2 | HAS_LIGHT | OPEN_DOOR
 F:BASH_DOOR | DRAGON | EVIL | HURT_COLD | IM_FIRE
 F:NO_FEAR | N_FIRE
-S:SPELL_PCT_10 | POW_3
-S:BRTH_FIRE | SCARE
+S:SPELL_PCT_10 | POW_13
+S:BRTH_FIRE | BALL_FIRE | SCARE
 D:It has a form that legends are made of.  Its still-tender scales are a
 D: deepest red hue.  Heat radiates from its form.
 
@@ -4637,8 +4640,8 @@ B:CLAW:HURT:2d6
 B:BITE:ACID:2d8
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_3D2 | OPEN_DOOR | BASH_DOOR
 F:DRAGON | EVIL | IM_ACID | NO_FEAR | N_ACID
-S:SPELL_PCT_10 | POW_3
-S:BRTH_ACID | SCARE
+S:SPELL_PCT_10 | POW_13
+S:BRTH_ACID | BALL_ACID | SCARE
 D:It has a form that legends are made of.  Its still-tender scales are a
 D: darkest black hue.  Acid drips from its body.
 
@@ -4652,8 +4655,8 @@ B:CLAW:HURT:2d6
 B:BITE:CONFUSE:2d8
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_3D2 | OPEN_DOOR | BASH_DOOR
 F:DRAGON | EVIL | NO_FEAR
-S:SPELL_PCT_10 | POW_4
-S:BRTH_SOUND | SCARE
+S:SPELL_PCT_10 | POW_20
+S:BRTH_SOUND | BALL_SOUND | SCARE
 D:It has a form that legends are made of.  Its still-tender scales are a
 D: tarnished gold hue, and light is reflected from its form.
 
@@ -4720,8 +4723,9 @@ F:ATTR_MULTI | FORCE_MAXHP | FORCE_SLEEP | DROP_1D2 | DROP_3D2
 F:OPEN_DOOR | BASH_DOOR | DRAGON | EVIL | IM_ACID
 F:IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | NO_FEAR
 F:N_ICE | N_FIRE | N_ACID
-S:SPELL_PCT_15 | POW_15
+S:SPELL_PCT_15 | POW_13
 S:BRTH_ACID | BRTH_ELEC | BRTH_FIRE | BRTH_COLD | BRTH_POIS
+S:BALL_ACID | BALL_ELEC | BALL_FIRE | BALL_COLD | BALL_POIS
 S:SCARE
 D:It has a form that legends are made of.  Beautiful scales of
 D: shimmering and magical colours cover it.
@@ -4872,8 +4876,9 @@ B:BITE:EXP_10:3d6
 F:FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM | DROP_3D2 | INVISIBLE
 F:PASS_WALL | DRAGON | EVIL | FLYING | RES_NETHR
 F:NO_FEAR
-S:SPELL_PCT_18 | POW_5
-S:BRTH_NETHR | DARKNESS | SCARE | CONF | SLOW
+S:SPELL_PCT_18 | POW_30
+S:BRTH_NETHR | BALL_NETHR | DARKNESS | SCARE | CONF
+S:SLOW
 D:It is a dragon-like form wrapped in shadow.  Glowing red eyes shine
 D: out in the dark, and it is surrounded by an aura of unearthly cold
 D: that chills the soul rather than the body.
@@ -4889,8 +4894,9 @@ B:BITE:HURT:3d6
 F:FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM | DROP_3D2 | HAS_LIGHT
 F:INVISIBLE | PASS_WALL | DRAGON | EVIL | FLYING
 F:NO_FEAR
-S:SPELL_PCT_18 | POW_5
-S:BRTH_LIGHT | BRTH_DARK | SCARE | CONF | SLOW
+S:SPELL_PCT_18 | POW_30
+S:BRTH_LIGHT | BRTH_DARK | BALL_LIGHT | BALL_DARK | SCARE
+S:CONF | SLOW
 D:A dragon of great power, with control over light and dark, the
 D: ethereal drake's eyes glare with white hatred from the shadows.
 
@@ -4905,8 +4911,8 @@ B:BITE:HURT:3d6
 F:FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM | DROP_3D2 | HAS_LIGHT
 F:BASH_DOOR | DRAGON | EVIL | FLYING | IM_COLD
 F:NO_FEAR
-S:SPELL_PCT_18 | POW_11
-S:BRTH_SHARD | SCARE | CONF | SLOW
+S:SPELL_PCT_18 | POW_30
+S:BRTH_SHARD | BALL_SHARD | SCARE | CONF | SLOW
 D:A dragon of strange crystalline form.  Light shines through it,
 D: dazzling your eyes with spectrums of colour.
 
@@ -4921,8 +4927,9 @@ B:BITE:CONFUSE:3d6
 F:ATTR_MULTI | FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM | DROP_3D2
 F:BASH_DOOR | DRAGON | EVIL | FLYING | IM_FIRE
 F:RES_CHAOS | RES_DISEN | NO_FEAR
-S:SPELL_PCT_18 | POW_11
-S:BRTH_CHAOS | BRTH_DISEN | SCARE | CONF | SLOW
+S:SPELL_PCT_18 | POW_35
+S:BRTH_CHAOS | BRTH_DISEN | BALL_CHAOS | SCARE | CONF
+S:SLOW
 D:A dragon twisted by the forces of chaos.  It seems first ugly, then
 D: fair, as its form shimmers and changes in front of your eyes.
 
@@ -4936,8 +4943,9 @@ B:CLAW:WOUND:2d4
 B:BITE:HURT:3d6
 F:FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM | DROP_3D2 | BASH_DOOR
 F:DRAGON | EVIL | FLYING | IM_COLD | NO_FEAR
-S:SPELL_PCT_18 | POW_11
-S:BRTH_SOUND | BRTH_SHARD | SCARE | CONF | SLOW
+S:SPELL_PCT_18 | POW_35
+S:BRTH_SOUND | BRTH_SHARD | BALL_SOUND | BALL_SHARD | SCARE
+S:CONF | SLOW
 D:This dragon is clever and cunning.  It laughs at your puny efforts to
 D: disturb it.
 
@@ -4952,9 +4960,9 @@ B:BITE:HURT:3d6
 F:FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM | DROP_3D2 | BASH_DOOR
 F:DRAGON | EVIL | FLYING | IM_FIRE | IM_COLD
 F:RES_CHAOS | RES_DISEN | NO_FEAR
-S:SPELL_PCT_18 | POW_12
-S:BRTH_SOUND | BRTH_SHARD | BRTH_CHAOS | BRTH_DISEN | SCARE
-S:CONF | SLOW
+S:SPELL_PCT_18 | POW_35
+S:BRTH_SOUND | BRTH_SHARD | BRTH_CHAOS | BRTH_DISEN | BALL_SOUND
+S:BALL_SHARD | BALL_CHAOS | SCARE | CONF | SLOW
 D:A mighty dragon, the balance drake seeks to maintain the Cosmic
 D: Balance, and despises your feeble efforts to destroy evil.
 
@@ -5121,8 +5129,8 @@ B:BITE:COLD:4d8
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_4D2 | BASH_DOOR | DRAGON
 F:EVIL | FLYING | HURT_FIRE | IM_COLD | NO_SLOW
 F:NO_FEAR | NO_SLEEP | N_ICE
-S:SPELL_PCT_12 | POW_8
-S:BRTH_COLD | SCARE
+S:SPELL_PCT_12 | POW_30
+S:BRTH_COLD | BALL_COLD | SCARE
 D:A large dragon, scales gleaming bright white.
 
 
@@ -5136,8 +5144,8 @@ B:BITE:ELEC:4d8
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_4D2 | BASH_DOOR | DRAGON
 F:EVIL | FLYING | IM_ELEC | NO_SLOW | NO_FEAR
 F:NO_SLEEP
-S:SPELL_PCT_12 | POW_8
-S:BRTH_ELEC | SCARE
+S:SPELL_PCT_12 | POW_30
+S:BRTH_ELEC | BALL_ELEC | SCARE
 D:A large dragon, scales tinted deep blue.
 
 
@@ -5151,8 +5159,8 @@ B:BITE:POISON:4d8
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_4D2 | BASH_DOOR | DRAGON
 F:EVIL | FLYING | IM_POIS | NO_SLOW | NO_FEAR
 F:NO_SLEEP
-S:SPELL_PCT_12 | POW_8
-S:BRTH_POIS | SCARE
+S:SPELL_PCT_12 | POW_30
+S:BRTH_POIS | BALL_POIS | SCARE
 D:A large dragon, scales tinted deep green.
 
 
@@ -5166,8 +5174,8 @@ B:BITE:CONFUSE:4d8
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_4D2 | BASH_DOOR | DRAGON
 F:EVIL | FLYING | NO_SLOW | NO_FEAR | NO_CONF
 F:NO_SLEEP
-S:SPELL_PCT_12 | POW_10
-S:BRTH_CONFU | SCARE | CONF
+S:SPELL_PCT_12 | POW_25
+S:BRTH_CONFU | BALL_CONFU | SCARE | CONF
 D:A large dragon with scales of rich bronze.
 
 
@@ -5371,8 +5379,8 @@ B:BITE:FIRE:3d12
 B:BITE:FIRE:3d12
 F:FORCE_MAXHP | FORCE_SLEEP | RAND_25 | HAS_LIGHT | BASH_DOOR
 F:EVIL | ANIMAL | HURT_COLD | IM_FIRE | N_FIRE
-S:SPELL_PCT_20 | POW_0
-S:BRTH_FIRE
+S:SPELL_PCT_20 | POW_25
+S:BRTH_FIRE | BALL_FIRE
 D:It is a giant dog that glows with heat.  Flames pour from its nostrils.
 
 
@@ -5715,8 +5723,8 @@ B:BITE:FIRE:4d10
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_2D2 | DROP_3D2 | HAS_LIGHT
 F:BASH_DOOR | DRAGON | EVIL | FLYING | HURT_COLD
 F:IM_FIRE | NO_SLOW | NO_FEAR | NO_SLEEP | N_FIRE
-S:SPELL_PCT_12 | POW_8
-S:BRTH_FIRE | SCARE | CONF
+S:SPELL_PCT_12 | POW_30
+S:BRTH_FIRE | BALL_FIRE | SCARE | CONF
 D:A large dragon, scales tinted deep red.
 
 
@@ -5730,8 +5738,8 @@ B:BITE:ACID:4d10
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_2D2 | DROP_3D2 | BASH_DOOR
 F:DRAGON | EVIL | FLYING | IM_ACID | NO_SLOW
 F:NO_FEAR | NO_SLEEP | N_ACID
-S:SPELL_PCT_12 | POW_8
-S:BRTH_ACID | SCARE
+S:SPELL_PCT_12 | POW_30
+S:BRTH_ACID | BALL_ACID | SCARE
 D:A large dragon, with scales of deepest black.
 
 
@@ -5903,8 +5911,8 @@ B:BITE:CONFUSE:4d10
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_2D2 | DROP_3D2 | BASH_DOOR
 F:DRAGON | EVIL | FLYING | NO_SLOW | NO_FEAR
 F:NO_SLEEP
-S:SPELL_PCT_12 | POW_10
-S:BRTH_SOUND | SCARE | CONF
+S:SPELL_PCT_12 | POW_30
+S:BRTH_SOUND | BALL_SOUND | SCARE | CONF
 D:A large dragon with scales of gleaming gold.
 
 
@@ -6158,8 +6166,9 @@ F:DROP_3D2 | OPEN_DOOR | BASH_DOOR | DRAGON | EVIL
 F:FLYING | IM_ACID | IM_ELEC | IM_FIRE | IM_COLD
 F:IM_POIS | NO_SLOW | NO_FEAR | NO_SLEEP | N_ICE
 F:N_FIRE | N_ACID
-S:SPELL_PCT_20 | POW_10
+S:SPELL_PCT_20 | POW_50
 S:BRTH_ACID | BRTH_ELEC | BRTH_FIRE | BRTH_COLD | BRTH_POIS
+S:BALL_ACID | BALL_ELEC | BALL_FIRE | BALL_COLD | BALL_POIS
 S:SCARE | BLIND | CONF
 D:A large dragon, scales shimmering many colours.
 
@@ -6173,8 +6182,8 @@ B:CLAW:HURT:3d5
 B:BITE:HURT:3d8
 F:FORCE_MAXHP | ONLY_ITEM | DROP_1D2 | DROP_3D2 | BASH_DOOR
 F:DRAGON | EVIL | FLYING | NO_FEAR
-S:SPELL_PCT_18 | POW_11
-S:BRTH_SOUND | SCARE | BLIND | CONF
+S:SPELL_PCT_18 | POW_25
+S:BRTH_SOUND | BALL_SOUND | SCARE | BLIND | CONF
 D:A blurry dragon-like form which seems to be moving as fast as the eye
 D: can follow.
 
@@ -6384,8 +6393,8 @@ F:FORCE_MAXHP | FORCE_SLEEP | DROP_1D2 | DROP_2D2 | DROP_4D2
 F:SMART | BASH_DOOR | POWERFUL | DRAGON | EVIL
 F:FLYING | IM_ELEC | NO_SLOW | NO_FEAR | NO_CONF
 F:NO_SLEEP
-S:SPELL_PCT_18 | POW_18
-S:BRTH_ELEC | SCARE | BLIND | CONF
+S:SPELL_PCT_18 | POW_100
+S:BRTH_ELEC | BALL_ELEC | SCARE | BLIND | CONF
 D:A huge draconic form.  Lightning crackles along its length.
 
 
@@ -6400,8 +6409,8 @@ B:BITE:CONFUSE:6d8
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_1D2 | DROP_2D2 | DROP_4D2
 F:SMART | BASH_DOOR | POWERFUL | DRAGON | EVIL
 F:FLYING | NO_SLOW | NO_FEAR | NO_CONF | NO_SLEEP
-S:SPELL_PCT_18 | POW_21
-S:BRTH_CONFU | SCARE | BLIND | CONF
+S:SPELL_PCT_18 | POW_65
+S:BRTH_CONFU | BALL_CONFU | SCARE | BLIND | CONF
 D:A huge draconic form enveloped in a cascade of colour.
 
 
@@ -6417,8 +6426,8 @@ F:FORCE_MAXHP | FORCE_SLEEP | DROP_1D2 | DROP_2D2 | DROP_4D2
 F:SMART | BASH_DOOR | POWERFUL | DRAGON | EVIL
 F:FLYING | HURT_FIRE | IM_COLD | NO_SLOW | NO_FEAR
 F:NO_CONF | NO_SLEEP | N_ICE
-S:SPELL_PCT_18 | POW_18
-S:BRTH_COLD | SCARE | BLIND | CONF
+S:SPELL_PCT_18 | POW_100
+S:BRTH_COLD | BALL_COLD | SCARE | BLIND | CONF
 D:A huge draconic form.  Frost covers it from head to tail.
 
 
@@ -6433,8 +6442,8 @@ B:BITE:POISON:6d8
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_3D2 | DROP_4D2 | SMART
 F:BASH_DOOR | POWERFUL | DRAGON | EVIL | FLYING
 F:IM_POIS | NO_SLOW | NO_FEAR | NO_CONF | NO_SLEEP
-S:SPELL_PCT_18 | POW_18
-S:BRTH_POIS | SCARE | BLIND | CONF
+S:SPELL_PCT_18 | POW_100
+S:BRTH_POIS | BALL_POIS | SCARE | BLIND | CONF
 D:A huge draconic form enveloped in clouds of poisonous vapour.
 
 
@@ -6600,8 +6609,8 @@ F:FORCE_MAXHP | FORCE_SLEEP | DROP_1D2 | DROP_2D2 | DROP_4D2
 F:SMART | BASH_DOOR | POWERFUL | DRAGON | EVIL
 F:FLYING | IM_ACID | NO_SLOW | NO_FEAR | NO_CONF
 F:NO_SLEEP | N_ACID
-S:SPELL_PCT_18 | POW_18
-S:BRTH_ACID | SCARE | BLIND | CONF
+S:SPELL_PCT_18 | POW_100
+S:BRTH_ACID | BALL_ACID | SCARE | BLIND | CONF
 D:A huge draconic form.  Pools of acid melt the floor around it.
 
 
@@ -6617,8 +6626,8 @@ F:FORCE_MAXHP | FORCE_SLEEP | DROP_1D2 | DROP_2D2 | DROP_4D2
 F:SMART | HAS_LIGHT | BASH_DOOR | POWERFUL | DRAGON
 F:EVIL | FLYING | HURT_COLD | IM_FIRE | NO_SLOW
 F:NO_FEAR | NO_CONF | NO_SLEEP | N_FIRE
-S:SPELL_PCT_18 | POW_18
-S:BRTH_FIRE | SCARE | BLIND | CONF
+S:SPELL_PCT_18 | POW_100
+S:BRTH_FIRE | BALL_FIRE | SCARE | BLIND | CONF
 D:A huge draconic form.  Wisps of smoke steam from its nostrils and the
 D: extreme heat surrounding it makes you gasp for breath.
 
@@ -6634,8 +6643,8 @@ B:BITE:CONFUSE:6d9
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_1D2 | DROP_2D2 | DROP_4D2
 F:SMART | BASH_DOOR | POWERFUL | DRAGON | EVIL
 F:FLYING | NO_SLOW | NO_FEAR | NO_CONF | NO_SLEEP
-S:SPELL_PCT_18 | POW_21
-S:BRTH_SOUND | SCARE | BLIND | CONF
+S:SPELL_PCT_18 | POW_125
+S:BRTH_SOUND | BALL_SOUND | SCARE | BLIND | CONF
 D:A huge draconic form wreathed in a nimbus of light. Its roar stuns and
 D: deafens you.
 
@@ -6686,9 +6695,11 @@ F:OPEN_DOOR | BASH_DOOR | POWERFUL | EVIL | ANIMAL
 F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | RES_NEXUS
 F:NO_SLOW | NO_CONF | NO_SLEEP | N_ICE | N_FIRE
 F:N_ACID
-S:SPELL_PCT_25 | POW_0
+S:SPELL_PCT_25 | POW_75
 S:BRTH_ACID | BRTH_ELEC | BRTH_FIRE | BRTH_COLD | BRTH_POIS
 S:BRTH_CONFU | BRTH_SOUND | BRTH_SHARD | BRTH_GRAV | BRTH_NEXUS
+S:BALL_ACID | BALL_ELEC | BALL_FIRE | BALL_COLD | BALL_POIS
+S:BALL_CONFU | BALL_SOUND | BALL_SHARD
 D:A large hydra with a selection of heads, all shouting and arguing as
 D: they look for prey, but each with its own deadly breath weapon.
 
@@ -6801,11 +6812,13 @@ F:IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | RES_CHAOS
 F:RES_NETHR | RES_WATER | RES_PLAS | RES_NEXUS | RES_DISEN
 F:NO_SLOW | NO_FEAR | NO_CONF | NO_SLEEP | N_ICE
 F:N_FIRE | N_ACID
-S:SPELL_PCT_25 | POW_15
+S:SPELL_PCT_25 | POW_50
 S:BRTH_ACID | BRTH_ELEC | BRTH_FIRE | BRTH_COLD | BRTH_POIS
 S:BRTH_LIGHT | BRTH_DARK | BRTH_CONFU | BRTH_SOUND | BRTH_NEXUS
-S:BRTH_NETHR | BRTH_CHAOS | BRTH_DISEN | SCARE | BLIND
-S:CONF
+S:BRTH_NETHR | BRTH_CHAOS | BRTH_DISEN | BALL_ACID | BALL_ELEC
+S:BALL_FIRE | BALL_COLD | BALL_POIS | BALL_LIGHT | BALL_DARK
+S:BALL_CONFU | BALL_SOUND | BALL_NETHR | BALL_CHAOS | SCARE
+S:BLIND | CONF
 D:An extremely dangerous drake.
 
 
@@ -6838,8 +6851,9 @@ B:BITE:HURT:4d4
 F:ATTR_MULTI | FORCE_SLEEP | FRIENDS | BASH_DOOR | ANIMAL
 F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS
 F:NO_CONF | NO_SLEEP | N_ICE | N_FIRE | N_ACID
-S:SPELL_PCT_20 | POW_0
+S:SPELL_PCT_20 | POW_13
 S:BRTH_ACID | BRTH_ELEC | BRTH_FIRE | BRTH_COLD | BRTH_POIS
+S:BALL_ACID | BALL_ELEC | BALL_FIRE | BALL_COLD | BALL_POIS
 D:Shimmering in rainbow hues, this hound is beautiful and deadly.
 
 
@@ -7008,8 +7022,9 @@ F:DROP_3D2 | DROP_4D2 | SMART | BASH_DOOR | POWERFUL
 F:DRAGON | EVIL | FLYING | IM_ACID | IM_ELEC
 F:IM_FIRE | IM_COLD | IM_POIS | NO_SLOW | NO_FEAR
 F:NO_CONF | NO_SLEEP | N_ICE | N_FIRE | N_ACID
-S:SPELL_PCT_25 | POW_18
+S:SPELL_PCT_25 | POW_160
 S:BRTH_ACID | BRTH_ELEC | BRTH_FIRE | BRTH_COLD | BRTH_POIS
+S:BALL_ACID | BALL_ELEC | BALL_FIRE | BALL_COLD | BALL_POIS
 S:SCARE | BLIND | CONF
 D:A huge draconic form.  Many colours ripple down its massive frame. Few
 D: live to see another.
@@ -7135,8 +7150,8 @@ B:HIT:HURT:3d4
 F:FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM | DROP_1D2 | HAS_LIGHT
 F:OPEN_DOOR | BASH_DOOR | POWERFUL | DEMON | EVIL
 F:HURT_COLD | IM_FIRE | NO_CONF | NO_SLEEP | N_FIRE
-S:SPELL_PCT_12 | POW_0
-S:BRTH_FIRE | BLIND | CONF | S_DEMON
+S:SPELL_PCT_12 | POW_65
+S:BRTH_FIRE | BALL_FIRE | BLIND | CONF | S_DEMON
 D:It is a large demon with the head of a giant boar.  Flames run up and
 D: down its length.
 
@@ -7203,8 +7218,8 @@ F:FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM | DROP_1D2 | DROP_2D2
 F:DROP_3D2 | SMART | HAS_LIGHT | BASH_DOOR | POWERFUL
 F:DRAGON | EVIL | FLYING | IM_COLD | NO_SLOW
 F:NO_FEAR | NO_SLEEP
-S:SPELL_PCT_20 | POW_20
-S:BRTH_SHARD | SCARE | CONF | SLOW
+S:SPELL_PCT_20 | POW_150
+S:BRTH_SHARD | BALL_SHARD | SCARE | CONF | SLOW
 D:A huge crystalline dragon.  Its claws could cut you to shreds and its
 D: teeth are razor sharp.  Strange colours ripple through it as it moves
 D: in the light.
@@ -7221,8 +7236,9 @@ F:FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM | DROP_1D2 | DROP_2D2
 F:DROP_3D2 | SMART | HAS_LIGHT | INVISIBLE | PASS_WALL
 F:POWERFUL | DRAGON | EVIL | FLYING | NO_SLOW
 F:NO_FEAR | NO_CONF | NO_SLEEP
-S:SPELL_PCT_20 | POW_15
-S:BRTH_LIGHT | BRTH_DARK | BRTH_CONFU | BLIND | CONF
+S:SPELL_PCT_20 | POW_150
+S:BRTH_LIGHT | BRTH_DARK | BRTH_CONFU | BALL_LIGHT | BALL_DARK
+S:BALL_CONFU | BLIND | CONF
 D:A huge dragon emanating from the ethereal plane, this terrible dragon
 D: is a master of light and dark.  Its form disappears from sight as it
 D: cloaks itself in unearthly shadows.
@@ -7296,8 +7312,8 @@ F:FORCE_MAXHP | FORCE_SLEEP | COLD_BLOOD | EMPTY_MIND | CLOUD_SURROUND
 F:OPEN_DOOR | BASH_DOOR | DRAGON | IM_ELEC | IM_FIRE
 F:IM_COLD | IM_POIS | NO_SLOW | NO_FEAR | NO_STUN
 F:NO_CONF | NO_SLEEP
-S:SPELL_PCT_20 | POW_105
-S:BRTH_POIS | BLIND | CONF | SLOW
+S:SPELL_PCT_20 | POW_175
+S:BRTH_POIS | BALL_POIS | BLIND | CONF | SLOW
 D:A constructed dragon, the drolem has massive strength.  Powerful
 D: spells weaved during its creation make it a fearsome adversary.  Its
 D: eyes show little intelligence, but it has been instructed to destroy
@@ -7317,8 +7333,9 @@ F:DROP_1D2 | DROP_2D2 | DROP_4D2 | DROP_GOOD | SMART
 F:CLOUD_SURROUND | BASH_DOOR | POWERFUL | DRAGON | EVIL
 F:FLYING | HURT_FIRE | IM_COLD | NO_SLOW | NO_FEAR
 F:NO_CONF | NO_SLEEP | N_ICE
-S:SPELL_PCT_25 | POW_38
-S:BRTH_COLD | CURE | WOUND | CONF
+S:SPELL_PCT_25 | POW_200
+S:BRTH_COLD | BALL_COLD | BEAM_ICE | CURE | WOUND
+S:CONF
 D:An ancient and wise Dragon.  Scatha has grown clever over the long
 D: years. His scales are covered with frost, and his breath sends a
 D: shower of ice into the air.
@@ -7386,8 +7403,9 @@ F:FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM | DROP_1D2 | DROP_2D2
 F:DROP_3D2 | SMART | INVISIBLE | PASS_WALL | TAKE_ITEM
 F:POWERFUL | DRAGON | EVIL | FLYING | IM_COLD
 F:RES_NETHR | NO_CONF | NO_SLEEP
-S:SPELL_PCT_20 | POW_18
-S:BRTH_NETHR | DARKNESS | SCARE | CONF | SLOW
+S:SPELL_PCT_20 | POW_100
+S:BRTH_NETHR | BALL_NETHR | BEAM_NETHR | DARKNESS | SCARE
+S:CONF | SLOW
 D:It is a dragon-like form wrapped in darkness.  You cannot make out its
 D: true form but you sense its evil.
 
@@ -7405,8 +7423,8 @@ F:DROP_1D2 | DROP_2D2 | DROP_4D2 | DROP_GOOD | SMART
 F:HAS_LIGHT | CLOUD_SURROUND | BASH_DOOR | POWERFUL | DRAGON
 F:EVIL | FLYING | HURT_COLD | IM_FIRE | NO_SLOW
 F:NO_FEAR | NO_CONF | NO_SLEEP | N_FIRE
-S:SPELL_PCT_25 | POW_30
-S:BRTH_FIRE | WOUND | CONF
+S:SPELL_PCT_25 | POW_175
+S:BRTH_FIRE | BALL_FIRE | WOUND | CONF
 D:A mighty ancient dragon, Itangast's form scorches your flesh.  Wisps
 D: of smoke curl up from his nostrils as he regards you with disdain.
 
@@ -7503,9 +7521,9 @@ F:FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM | DROP_1D2 | DROP_2D2
 F:DROP_GOOD | HAS_LIGHT | OPEN_DOOR | BASH_DOOR | POWERFUL
 F:DEMON | EVIL | HURT_COLD | IM_FIRE | NO_CONF
 F:NO_SLEEP | N_FIRE
-S:SPELL_PCT_25 | POW_70
-S:LASH | BRTH_FIRE | BALL_CHAOS | BLIND | CONF
-S:S_DEMON
+S:SPELL_PCT_25 | POW_100
+S:LASH | BRTH_FIRE | BALL_FIRE | BALL_CHAOS | BLIND
+S:CONF | S_DEMON
 D:It is a massive humanoid demon wreathed in flames.
 
 
@@ -7580,7 +7598,7 @@ F:ESCORTS | ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2
 F:DROP_GOOD | HAS_LIGHT | OPEN_DOOR | BASH_DOOR | POWERFUL
 F:DEMON | EVIL | HURT_COLD | IM_FIRE | NO_CONF
 F:NO_SLEEP | N_FIRE
-S:SPELL_PCT_35 | POW_75
+S:SPELL_PCT_35 | POW_100
 S:LASH | BRTH_FIRE | BALL_CHAOS | SCARE | CONF
 S:S_DEMON | S_UNDEAD
 D:A huge Balrog surrounded by raging pillars of fire, this is indeed a
@@ -7598,8 +7616,8 @@ B:BITE:HURT:3d12
 B:BITE:HURT:3d12
 F:FORCE_SLEEP | FRIENDS | OPEN_DOOR | BASH_DOOR | EVIL
 F:ANIMAL | RES_NETHR | NO_CONF | NO_SLEEP
-S:SPELL_PCT_20 | POW_0
-S:BRTH_NETHR
+S:SPELL_PCT_20 | POW_30
+S:BRTH_NETHR | BALL_NETHR
 D:You feel a soul-tearing chill upon viewing this beast, a ghostly form
 D: of darkness in the shape of a large dog.
 
@@ -7779,8 +7797,8 @@ F:FLYING | HURT_COLD | IM_ACID | IM_ELEC | IM_FIRE
 F:IM_POIS | RES_PLAS | NO_CONF | NO_SLEEP | N_LAVA
 F:N_FIRE
 S:SPELL_PCT_40 | POW_85
-S:BRTH_FIRE | BRTH_PLAS | BRTH_LIGHT | BALL_FIRE | BOLT_FIRE
-S:BOLT_PLAS | S_KIN
+S:BRTH_FIRE | BRTH_PLAS | BRTH_LIGHT | BALL_FIRE | BALL_LIGHT
+S:BOLT_FIRE | BOLT_PLAS | S_KIN
 D:A massive glowing eagle bathed in flames.  The searing heat chars your
 D: skin and melts your armour.
 
@@ -7819,10 +7837,10 @@ F:RES_CHAOS | RES_NETHR | RES_PLAS | RES_NEXUS | RES_DISEN
 F:NO_SLOW | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
 F:N_WATER
 S:SPELL_PCT_60 | POW_90
-S:BRTH_COLD | BRTH_SOUND | BALL_COLD | BALL_STORM | BALL_WATER
-S:BOLT_COLD | BOLT_ICE | BOLT_MANA | HASTE | ADD_MANA
-S:HEAL | CURE | BLINK | TELE_SELF_TO | TELE_TO
-S:S_AINU
+S:BRTH_COLD | BRTH_SOUND | BALL_COLD | BALL_SOUND | BALL_STORM
+S:BALL_WATER | BOLT_COLD | BOLT_ICE | BOLT_MANA | HASTE
+S:ADD_MANA | HEAL | CURE | BLINK | TELE_SELF_TO
+S:TELE_TO | S_AINU
 D:The most powerful of Ulmo's servants, Oss["e] is known as the most
 D: accomplished singer among the Maiar, but he is also known for his
 D: ruthlesness. While Ulmo himself moves in the rains and rivers of Arda
@@ -7988,8 +8006,9 @@ F:SMART | COLD_BLOOD | BASH_DOOR | TAKE_ITEM | POWERFUL
 F:DRAGON | UNDEAD | EVIL | FLYING | HURT_LIGHT
 F:HURT_FIRE | IM_COLD | IM_POIS | RES_NETHR | NO_SLOW
 F:NO_FEAR | NO_CONF | NO_SLEEP | N_ICE
-S:SPELL_PCT_18 | POW_8
-S:BRTH_COLD | BRTH_NETHR | BRTH_MANA | SCARE | CONF
+S:SPELL_PCT_18 | POW_175
+S:BRTH_COLD | BRTH_NETHR | BRTH_MANA | BALL_COLD | BALL_NETHR
+S:BEAM_NETHR | SCARE | CONF
 D:The skeletal form of a once-great dragon, enchanted by magic most
 D: perilous.  Its animated form strikes with speed and drains life from
 D: its prey to satisfy its hunger.
@@ -8024,8 +8043,8 @@ B:BITE:HURT:2d12
 B:BITE:HURT:2d12
 F:FORCE_SLEEP | FRIENDS | HAS_LIGHT | INVISIBLE | PASS_WALL
 F:ANIMAL | RES_NETHR | NO_CONF | NO_SLEEP
-S:SPELL_PCT_20 | POW_0
-S:BRTH_NETHR
+S:SPELL_PCT_20 | POW_45
+S:BRTH_NETHR | BALL_NETHR
 D:A pale green hound.  Pulsing red lines and strange fluorescent light
 D: hints at internal organs best left to the imagination.
 
@@ -8043,8 +8062,8 @@ F:SMART | BASH_DOOR | POWERFUL | DRAGON | EVIL
 F:ANIMAL | FLYING | HURT_COLD | IM_ACID | IM_FIRE
 F:RES_NEXUS | NO_SLOW | NO_FEAR | NO_CONF | NO_SLEEP
 F:N_FIRE
-S:SPELL_PCT_18 | POW_8
-S:BRTH_FIRE | BRTH_NEXUS | SCARE | HOLD
+S:SPELL_PCT_18 | POW_175
+S:BRTH_FIRE | BRTH_NEXUS | BALL_FIRE | SCARE | HOLD
 D:A mixture of dragon and basilisk, the dracolisk stares at you with
 D: deep piercing eyes, its evil breath burning the ground where it
 D: stands.
@@ -8252,8 +8271,8 @@ F:DROP_2D2 | DROP_4D2 | DROP_GOOD | SMART | CLOUD_SURROUND
 F:BASH_DOOR | POWERFUL | DRAGON | EVIL | FLYING
 F:IM_POIS | NO_SLOW | NO_FEAR | NO_STUN | NO_CONF
 F:NO_SLEEP
-S:SPELL_PCT_30 | POW_26
-S:BRTH_POIS | SCARE | BLIND | CONF
+S:SPELL_PCT_30 | POW_175
+S:BRTH_POIS | BALL_POIS | SCARE | BLIND | CONF
 D:A truly enormous dragon with great powers.  The foul gases issuing
 D: from the beast nearly make you vomit; and while you may try to hold
 D: your breath as you fight it, it sees no reason to do likewise.
@@ -8274,8 +8293,8 @@ F:EVIL | IM_ACID | IM_ELEC | IM_FIRE | IM_COLD
 F:IM_POIS | NO_SLOW | NO_CONF | NO_SLEEP
 S:SPELL_PCT_40 | POW_105
 S:BOLT_PLAS | BOLT_ICE | BOLT_WATER | BOLT_NETHR | BOLT_MANA
-S:BLINK | TELE_SELF_TO | TELE_TO | TRAPS | MIND_BLAST
-S:WOUND | S_UNDEAD | S_HI_UNDEAD
+S:BOLT_GRAV | BLINK | TELE_SELF_TO | TELE_TO | TRAPS
+S:MIND_BLAST | WOUND | S_UNDEAD | S_HI_UNDEAD
 D:You have tales of him from a previous generation, but shouldn't he be
 D: in the mines of Moria?  Old-timers speak of this pest with both
 D: loathing and fondness, cursing his name with a smile on their face as
@@ -8295,8 +8314,9 @@ F:DROP_2D2 | DROP_4D2 | DROP_GOOD | SMART | HAS_LIGHT
 F:CLOUD_SURROUND | BASH_DOOR | POWERFUL | DRAGON | EVIL
 F:FLYING | IM_ELEC | NO_SLOW | NO_FEAR | NO_STUN
 F:NO_CONF | NO_SLEEP
-S:SPELL_PCT_25 | POW_26
-S:BRTH_ELEC | SCARE | BLIND | CONF
+S:SPELL_PCT_25 | POW_200
+S:BRTH_ELEC | BALL_ELEC | BEAM_ICE | SCARE | BLIND
+S:CONF
 D:A vast dragon of power.  Storms and lightning crash around its titanic
 D: form.  Deep blue scales reflect the flashes and highlight the
 D: creature's great muscles.  It regards you with contempt.
@@ -8315,8 +8335,9 @@ F:DROP_3D2 | DROP_4D2 | DROP_GOOD | SMART | CLOUD_SURROUND
 F:BASH_DOOR | POWERFUL | DRAGON | EVIL | FLYING
 F:HURT_FIRE | IM_COLD | NO_SLOW | NO_FEAR | NO_STUN
 F:NO_CONF | NO_SLEEP | N_ICE
-S:SPELL_PCT_25 | POW_26
-S:BRTH_COLD | SCARE | BLIND | CONF
+S:SPELL_PCT_25 | POW_200
+S:BRTH_COLD | BALL_COLD | BEAM_ICE | SCARE | BLIND
+S:CONF
 D:An immense dragon capable of awesome destruction.  You have never felt
 D: such extreme cold, or witnessed such an icy stare.  Begone quickly or
 D: feel its wrath!
@@ -8334,8 +8355,8 @@ F:ATTR_MULTI | FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM | DROP_1D2
 F:DROP_2D2 | DROP_4D2 | DROP_GOOD | SMART | CLOUD_SURROUND
 F:BASH_DOOR | POWERFUL | DRAGON | EVIL | FLYING
 F:NO_SLOW | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
-S:SPELL_PCT_30 | POW_26
-S:BRTH_CONFU | SCARE | BLIND | CONF
+S:SPELL_PCT_30 | POW_150
+S:BRTH_CONFU | BALL_CONFU | SCARE | BLIND | CONF
 D:A dragon of great size and power.  Its polished bronze scales reflect
 D: the light in strange and confusing patterns, and you find it hard to
 D: keep your mind on the job of fighting for your life.
@@ -8351,8 +8372,8 @@ B:BITE:HURT:2d12
 B:BITE:HURT:2d12
 F:ATTR_MULTI | FORCE_SLEEP | FRIENDS | BASH_DOOR | ANIMAL
 F:RES_CHAOS | NO_CONF | NO_SLEEP
-S:SPELL_PCT_20 | POW_0
-S:BRTH_CHAOS
+S:SPELL_PCT_20 | POW_55
+S:BRTH_CHAOS | BALL_CHAOS
 D:A constantly changing canine form, this hound rushes towards you as if
 D: expecting mayhem and chaos ahead.  It appears to have an almost
 D: kamikaze relish for combat.  You suspect all may not be as it seems.
@@ -8415,10 +8436,10 @@ F:POWERFUL | EVIL | FLYING | HURT_LIGHT | IM_ACID
 F:IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | RES_CHAOS
 F:RES_NETHR | RES_WATER | RES_PLAS | RES_NEXUS | RES_DISEN
 F:NO_SLOW | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
-S:SPELL_PCT_65 | POW_100
-S:BRTH_DARK | BRTH_CONFU | BRTH_NETHR | BRTH_CHAOS | BALL_NETHR
-S:BOLT_NETHR | BOLT_MANA | ADD_MANA | HEAL | TELE_SELF_TO
-S:TELE_TO | BLIND | S_HI_DEMON
+S:SPELL_PCT_65 | POW_125
+S:BRTH_DARK | BRTH_CONFU | BRTH_NETHR | BRTH_CHAOS | BALL_DARK
+S:BALL_CONFU | BALL_NETHR | BALL_CHAOS | BOLT_NETHR | BOLT_MANA
+S:ADD_MANA | HEAL | TELE_SELF_TO | TELE_TO | S_HI_DEMON
 D:This creature appears as a shadow of darkness and chaos, with no
 D: definite physical form.  You have never seen anything like it. You
 D: hear the faint, annoying sounds of flutes and pipes as it comes to
@@ -8462,8 +8483,8 @@ F:N_LAVA | N_FIRE
 S:SPELL_PCT_35 | POW_60
 S:BRTH_PLAS | BRTH_LIGHT | BRTH_DARK | BRTH_CONFU | BRTH_SOUND
 S:BRTH_SHARD | BRTH_NEXUS | BRTH_CHAOS | BRTH_DISEN | BALL_LIGHT
-S:BALL_DARK | BALL_CONFU | BALL_SOUND | BALL_CHAOS | BOLT_WATER
-S:SCARE | BLIND | CONF
+S:BALL_DARK | BALL_CONFU | BALL_SOUND | BALL_SHARD | BALL_CHAOS
+S:BOLT_WATER | SCARE | BLIND | CONF
 D:A strange reptilian hybrid with fourteen heads.
 
 
@@ -8538,8 +8559,9 @@ F:DROP_2D2 | DROP_4D2 | DROP_GOOD | SMART | HAS_LIGHT
 F:CLOUD_SURROUND | BASH_DOOR | POWERFUL | DRAGON | EVIL
 F:FLYING | HURT_COLD | IM_FIRE | NO_SLOW | NO_FEAR
 F:NO_STUN | NO_CONF | NO_SLEEP | N_FIRE
-S:SPELL_PCT_25 | POW_27
-S:BRTH_FIRE | SCARE | BLIND | CONF
+S:SPELL_PCT_25 | POW_250
+S:BRTH_FIRE | BALL_FIRE | BEAM_LAVA | SCARE | BLIND
+S:CONF
 D:A vast dragon of immense power.  Fire leaps continuously from its huge
 D: form.  The air around it scalds you.  Its slightest glance burns you,
 D: and you truly realize how insignificant you are.
@@ -8558,8 +8580,8 @@ F:DROP_2D2 | DROP_4D2 | DROP_GOOD | SMART | CLOUD_SURROUND
 F:BASH_DOOR | POWERFUL | DRAGON | EVIL | FLYING
 F:IM_ACID | NO_SLOW | NO_FEAR | NO_STUN | NO_CONF
 F:NO_SLEEP | N_ACID
-S:SPELL_PCT_30 | POW_26
-S:BRTH_ACID | SCARE | BLIND | CONF
+S:SPELL_PCT_30 | POW_250
+S:BRTH_ACID | BALL_ACID | SCARE | BLIND | CONF
 D:A huge and very powerful dragon.  Great steaming pools of acid drip
 D: from its form onto the ground.  You shudder when you see the acid
 D: eating away the very stones of the dungeon - what could it do to you?
@@ -8600,8 +8622,8 @@ F:ATTR_MULTI | FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM | DROP_1D2
 F:DROP_2D2 | DROP_4D2 | DROP_GOOD | SMART | CLOUD_SURROUND
 F:BASH_DOOR | POWERFUL | DRAGON | EVIL | FLYING
 F:NO_SLOW | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
-S:SPELL_PCT_30 | POW_26
-S:BRTH_SOUND | SCARE | BLIND | CONF
+S:SPELL_PCT_30 | POW_200
+S:BRTH_SOUND | BALL_SOUND | SCARE | BLIND | CONF
 D:A dragon of gigantic proportions, with destructive abilities to match.
 D:  The sheer loudness of its roar leaves you stunned and unable to
 D: think clearly enough to defend yourself adequately.
@@ -8619,8 +8641,8 @@ F:ATTR_MULTI | FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM | DROP_1D2
 F:DROP_2D2 | DROP_4D2 | DROP_GOOD | SMART | HAS_LIGHT
 F:BASH_DOOR | POWERFUL | DRAGON | EVIL | FLYING
 F:NO_SLOW | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
-S:SPELL_PCT_30 | POW_26
-S:BRTH_SHARD | SCARE | BLIND | CONF
+S:SPELL_PCT_30 | POW_150
+S:BRTH_SHARD | BALL_SHARD | SCARE | BLIND | CONF
 D:A huge crystalline dragon.  Its skin is composed of thousands of
 D: razor-sharp silver plates.  Strange colours ripple through it as it
 D: moves in the light.
@@ -8735,8 +8757,8 @@ F:REGENERATE | OPEN_DOOR | BASH_DOOR | POWERFUL | DEMON
 F:EVIL | HURT_FIRE | IM_COLD | NO_CONF | NO_SLEEP
 F:N_ICE
 S:SPELL_PCT_18 | POW_100
-S:BRTH_COLD | BRTH_SHARD | BALL_COLD | BOLT_ICE | SCARE
-S:SLOW | HOLD | S_HI_DEMON
+S:BRTH_COLD | BRTH_SHARD | BALL_COLD | BALL_SHARD | BOLT_ICE
+S:SCARE | SLOW | HOLD | S_HI_DEMON
 D:This demon from the ice planes is a truly terrifying sight.  It has an
 D: extremely large, insect-like body towering a full twelve feet tall,
 D: with great claws on its hands and pincers on its mouth, and its head
@@ -8813,12 +8835,15 @@ F:IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | RES_CHAOS
 F:RES_NETHR | RES_WATER | RES_PLAS | RES_NEXUS | RES_DISEN
 F:NO_SLOW | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
 F:N_LAVA | N_ICE | N_FIRE | N_ACID
-S:SPELL_PCT_30 | POW_32
+S:SPELL_PCT_30 | POW_175
 S:BRTH_ACID | BRTH_ELEC | BRTH_FIRE | BRTH_COLD | BRTH_POIS
 S:BRTH_PLAS | BRTH_LIGHT | BRTH_DARK | BRTH_CONFU | BRTH_SOUND
 S:BRTH_SHARD | BRTH_INER | BRTH_GRAV | BRTH_FORCE | BRTH_NEXUS
 S:BRTH_NETHR | BRTH_CHAOS | BRTH_DISEN | BRTH_TIME | BRTH_MANA
-S:SCARE | BLIND | CONF
+S:BALL_ACID | BALL_ELEC | BALL_FIRE | BALL_COLD | BALL_POIS
+S:BALL_LIGHT | BALL_DARK | BALL_CONFU | BALL_SOUND | BALL_SHARD
+S:BALL_NETHR | BALL_CHAOS | BEAM_ELEC | BEAM_ICE | BEAM_NETHR
+S:BEAM_LAVA | SCARE | BLIND | CONF
 D:An awesome wyrm of pure magic.  It seems to be all colours and sizes
 D: and shapes, though the dominant form is that of a great dragon.
 
@@ -8855,9 +8880,11 @@ F:SMART | HAS_LIGHT | CLOUD_SURROUND | BASH_DOOR | POWERFUL
 F:DRAGON | EVIL | FLYING | IM_FIRE | IM_POIS
 F:NO_SLOW | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
 F:N_ICE | N_FIRE | N_ACID
-S:SPELL_PCT_40 | POW_55
+S:SPELL_PCT_40 | POW_250
 S:BRTH_ACID | BRTH_ELEC | BRTH_FIRE | BRTH_COLD | BRTH_POIS
-S:SCARE | BLIND | CONF | S_HI_DRAGON
+S:BALL_ACID | BALL_ELEC | BALL_FIRE | BALL_COLD | BALL_POIS
+S:BEAM_ELEC | BEAM_ICE | SCARE | BLIND | CONF
+S:S_HI_DRAGON
 D:Glaurung is the father of all dragons, and was for a long time the
 D: most powerful.  Though this is no longer so, he still has full
 D: command over his brood and can command them to appear whenever he so
@@ -8890,8 +8917,9 @@ F:DROP_2D2 | DROP_4D2 | DROP_GOOD | SMART | HAS_LIGHT
 F:INVISIBLE | PASS_WALL | POWERFUL | DRAGON | EVIL
 F:FLYING | NO_SLOW | NO_FEAR | NO_STUN | NO_CONF
 F:NO_SLEEP
-S:SPELL_PCT_30 | POW_26
-S:BRTH_LIGHT | BRTH_DARK | BLIND | CONF
+S:SPELL_PCT_30 | POW_150
+S:BRTH_LIGHT | BRTH_DARK | BALL_LIGHT | BALL_DARK | BLIND
+S:CONF
 D:A powerful wyrm with control over light and dark, the ethereal wyrm's
 D: eyes glare with white hatred from the shadows.
 
@@ -9013,6 +9041,9 @@ S:BRTH_ACID | BRTH_ELEC | BRTH_FIRE | BRTH_COLD | BRTH_POIS
 S:BRTH_PLAS | BRTH_LIGHT | BRTH_DARK | BRTH_CONFU | BRTH_SOUND
 S:BRTH_SHARD | BRTH_INER | BRTH_GRAV | BRTH_FORCE | BRTH_NEXUS
 S:BRTH_NETHR | BRTH_CHAOS | BRTH_DISEN | BRTH_TIME | BRTH_MANA
+S:BALL_ACID | BALL_ELEC | BALL_FIRE | BALL_COLD | BALL_POIS
+S:BALL_LIGHT | BALL_DARK | BALL_CONFU | BALL_SOUND | BALL_SHARD
+S:BALL_NETHR | BALL_CHAOS
 D:A shifting, swirling form.  It seems to be all colours and sizes and
 D: shapes, though the dominant form is that of a huge dog.  You feel
 D: very uncertain all of a sudden.
@@ -9069,9 +9100,9 @@ F:ATTR_MULTI | FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM | DROP_2D2
 F:DROP_3D2 | DROP_4D2 | DROP_GOOD | SMART | BASH_DOOR
 F:POWERFUL | DRAGON | EVIL | FLYING | IM_COLD
 F:NO_SLOW | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
-S:SPELL_PCT_30 | POW_40
-S:BRTH_SOUND | BRTH_SHARD | SCARE | BLIND | CONF
-S:S_DRAGON | S_HI_DRAGON
+S:SPELL_PCT_30 | POW_200
+S:BRTH_SOUND | BRTH_SHARD | BALL_SOUND | BALL_SHARD | SCARE
+S:BLIND | CONF | S_DRAGON | S_HI_DRAGON
 D:A massive dragon of powerful intellect.  It seeks to dominate the
 D: universe and despises all other life.  It sees all who do not obey it
 D: as mere insects to be crushed underfoot.
@@ -9170,7 +9201,8 @@ F:IM_FIRE | IM_POIS | RES_CHAOS | NO_CONF | NO_SLEEP
 F:N_FIRE
 S:SPELL_PCT_20 | POW_65
 S:LASH | PMISSL | BRTH_FIRE | BRTH_POIS | BRTH_CHAOS
-S:BALL_FIRE | WOUND | SCARE | S_HI_DRAGON | S_HI_DEMON
+S:BALL_FIRE | BALL_POIS | BALL_CHAOS | WOUND | SCARE
+S:S_HI_DRAGON | S_HI_DEMON
 D:Appearing as a giant, clawed and winged humanoid with a scaly red body
 D: and massive fangs dripping a foul green liquid, the Pit Fiend is a
 D: dreadful enemy from the lowest depths of the hells.  They are often
@@ -9209,8 +9241,8 @@ B:BITE:FIRE:5d12
 F:FORCE_MAXHP | FORCE_SLEEP | FRIENDS | RAND_25 | HAS_LIGHT
 F:BASH_DOOR | EVIL | ANIMAL | HURT_COLD | IM_FIRE
 F:N_FIRE
-S:SPELL_PCT_20 | POW_0
-S:BRTH_FIRE
+S:SPELL_PCT_20 | POW_25
+S:BRTH_FIRE | BALL_FIRE
 D:It is a giant dog that glows with heat.  Flames pour from its nostrils.
 
 
@@ -9227,9 +9259,9 @@ F:DROP_3D2 | DROP_4D2 | DROP_GOOD | SMART | BASH_DOOR
 F:POWERFUL | DRAGON | EVIL | FLYING | IM_FIRE
 F:RES_CHAOS | RES_DISEN | NO_SLOW | NO_FEAR | NO_STUN
 F:NO_CONF | NO_SLEEP
-S:SPELL_PCT_30 | POW_32
-S:BRTH_CHAOS | BRTH_DISEN | SCARE | BLIND | CONF
-S:S_DRAGON | S_HI_DRAGON
+S:SPELL_PCT_30 | POW_250
+S:BRTH_CHAOS | BRTH_DISEN | BALL_CHAOS | SCARE | BLIND
+S:CONF | S_DRAGON | S_HI_DRAGON
 D:A massive dragon of changing form.  As you watch, it appears first
 D: fair and then foul.  Its body is twisted by chaotic forces as it
 D: strives to stay real.  Its very existence distorts the universe
@@ -9290,9 +9322,11 @@ F:BASH_DOOR | POWERFUL | DRAGON | EVIL | FLYING
 F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS
 F:NO_SLOW | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
 F:N_ICE | N_FIRE | N_ACID
-S:SPELL_PCT_30 | POW_32
+S:SPELL_PCT_30 | POW_250
 S:BRTH_ACID | BRTH_ELEC | BRTH_FIRE | BRTH_COLD | BRTH_POIS
-S:SCARE | BLIND | CONF | S_DRAGON | S_HI_DRAGON
+S:BALL_ACID | BALL_ELEC | BALL_FIRE | BALL_COLD | BALL_POIS
+S:BEAM_ELEC | BEAM_ICE | SCARE | BLIND | CONF
+S:S_DRAGON | S_HI_DRAGON
 D:A gigantic dragon whose scales shimmer in myriad hues.
 
 
@@ -9309,9 +9343,10 @@ F:DROP_4D2 | DROP_GOOD | SMART | BASH_DOOR | POWERFUL
 F:DRAGON | EVIL | FLYING | IM_FIRE | IM_COLD
 F:RES_CHAOS | RES_DISEN | NO_SLOW | NO_FEAR | NO_STUN
 F:NO_CONF | NO_SLEEP
-S:SPELL_PCT_30 | POW_40
-S:BRTH_SOUND | BRTH_SHARD | BRTH_CHAOS | BRTH_DISEN | SCARE
-S:BLIND | CONF | S_DRAGON | S_HI_DRAGON
+S:SPELL_PCT_30 | POW_175
+S:BRTH_SOUND | BRTH_SHARD | BRTH_CHAOS | BRTH_DISEN | BALL_SOUND
+S:BALL_SHARD | BALL_CHAOS | SCARE | BLIND | CONF
+S:S_DRAGON | S_HI_DRAGON
 D:A massive dragon, one of the mightiest of dragonkind.  It is thousands
 D: of years old and seeks to maintain the Cosmic Balance.  It sees you
 D: as an upstart troublemaker without the wisdom to control your
@@ -9422,11 +9457,14 @@ F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS
 F:RES_CHAOS | RES_NETHR | RES_WATER | RES_PLAS | RES_NEXUS
 F:RES_DISEN | NO_SLOW | NO_FEAR | NO_STUN | NO_CONF
 F:NO_SLEEP | N_ICE | N_FIRE | N_ACID
-S:SPELL_PCT_33 | POW_45
+S:SPELL_PCT_33 | POW_225
 S:BRTH_ACID | BRTH_ELEC | BRTH_FIRE | BRTH_COLD | BRTH_POIS
 S:BRTH_LIGHT | BRTH_DARK | BRTH_CONFU | BRTH_SOUND | BRTH_NEXUS
-S:BRTH_NETHR | BRTH_CHAOS | BRTH_DISEN | SCARE | BLIND
-S:CONF | S_DRAGON | S_HI_DRAGON
+S:BRTH_NETHR | BRTH_CHAOS | BRTH_DISEN | BALL_ACID | BALL_ELEC
+S:BALL_FIRE | BALL_COLD | BALL_POIS | BALL_LIGHT | BALL_DARK
+S:BALL_CONFU | BALL_SOUND | BALL_NETHR | BALL_CHAOS | BEAM_ELEC
+S:BEAM_ICE | BEAM_NETHR | SCARE | BLIND | CONF
+S:S_DRAGON | S_HI_DRAGON
 D:The most powerful breed of wyrm.  It appears to be every color at
 D: once. Nobody has survived long enough to know all the different ways
 D: it can breathe.
@@ -9467,8 +9505,8 @@ F:IM_POIS | NO_SLOW | NO_FEAR | NO_STUN | NO_CONF
 F:NO_SLEEP
 S:SPELL_PCT_60 | POW_120
 S:BALL_NETHR | BALL_WATER | BOLT_ICE | BOLT_MANA | BEAM_NETHR
-S:ADD_MANA | TELE_TO | BRAIN_SMASH | WOUND | SCARE
-S:SLOW | S_HI_UNDEAD
+S:BEAM_LAVA | ADD_MANA | TELE_TO | BRAIN_SMASH | WOUND
+S:SCARE | SLOW | S_HI_UNDEAD
 D:A legion of evil undead druj animating the skeleton of a once mighty
 D: sorcerer.  His power is devastating and his speed unmatched in the
 D: underworld.  Flee his wrath!
@@ -9490,9 +9528,10 @@ F:IM_FIRE | IM_COLD | IM_POIS | RES_CHAOS | RES_NETHR
 F:RES_WATER | RES_PLAS | RES_NEXUS | RES_DISEN | NO_SLOW
 F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP | N_ICE
 F:N_FIRE | N_ACID
-S:SPELL_PCT_45 | POW_80
+S:SPELL_PCT_45 | POW_250
 S:BRTH_ACID | BRTH_ELEC | BRTH_FIRE | BRTH_COLD | BRTH_POIS
-S:S_KIN | S_HI_DRAGON
+S:BALL_ACID | BALL_ELEC | BALL_FIRE | BALL_COLD | BALL_POIS
+S:BEAM_ELEC | BEAM_ICE | S_KIN | S_HI_DRAGON
 D:Rushing Jaws is his name, and death is his game; the greatest and most
 D: terrible of all dragonkind, his power dismayed even the Valar for a
 D: time.
@@ -9511,8 +9550,8 @@ F:DROP_1D2 | DROP_2D2 | DROP_3D2 | DROP_GOOD | OPEN_DOOR
 F:BASH_DOOR | POWERFUL | ANIMAL | IM_FIRE | IM_COLD
 F:RES_DISEN | NO_STUN | NO_CONF | NO_SLEEP | N_ICE
 F:N_FIRE
-S:SPELL_PCT_45 | POW_0
-S:BRTH_FIRE | BRTH_COLD | BRTH_DISEN
+S:SPELL_PCT_45 | POW_250
+S:BRTH_FIRE | BRTH_COLD | BRTH_DISEN | BALL_FIRE | BALL_COLD
 D:The Tarrasque is a massive reptile of legend, rumoured to be
 D: unkillable and immune to magic.  Fear its anger, for its devastation
 D: is unmatched!
@@ -9533,7 +9572,8 @@ F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS
 F:N_ICE
 S:SPELL_PCT_33 | POW_100
 S:BOULDER | BRTH_FIRE | BRTH_COLD | BRTH_SOUND | BRTH_SHARD
-S:HEAL | TELE_TO | S_KIN | S_MONSTERS
+S:BALL_FIRE | BALL_COLD | BALL_SOUND | BALL_SHARD | HEAL
+S:TELE_TO | S_KIN | S_MONSTERS
 D:The lord of the Titans, he has broken loose from his confinement in
 D: the nether hells to seek revenge on the world.
 
@@ -9571,8 +9611,9 @@ F:UNIQUE | MALE | FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM
 F:DROP_4D2 | DROP_GOOD | SMART | OPEN_DOOR | BASH_DOOR
 F:KILL_BODY | ANIMAL | IM_ACID | IM_ELEC | IM_COLD
 F:NO_FEAR | NO_CONF | NO_SLEEP | N_ICE
-S:SPELL_PCT_20 | POW_55
-S:BRTH_COLD | BRTH_LIGHT | BRTH_SOUND | BRTH_SHARD
+S:SPELL_PCT_20 | POW_250
+S:BRTH_COLD | BRTH_LIGHT | BRTH_SOUND | BRTH_SHARD | BALL_COLD
+S:BALL_LIGHT | BALL_SOUND | BALL_SHARD
 D:The wolfhound of the Valar, Huan has served many masters in his time,
 D: from Celegorm son of F["e]anor to Beren son of Barahir: but now he
 D: runs wild and acknowledges no master save himself, as he hunts alone
@@ -9591,8 +9632,9 @@ F:UNIQUE | MALE | FORCE_MAXHP | FORCE_SLEEP | ONLY_ITEM
 F:DROP_4D2 | DROP_GOOD | SMART | HAS_LIGHT | OPEN_DOOR
 F:BASH_DOOR | EVIL | ANIMAL | HURT_COLD | IM_FIRE
 F:IM_POIS | RES_NETHR | NO_CONF | NO_SLEEP | N_FIRE
-S:SPELL_PCT_33 | POW_55
-S:BRTH_FIRE | BRTH_POIS | BRTH_DARK | BRTH_NETHR | S_HOUND
+S:SPELL_PCT_33 | POW_250
+S:BRTH_FIRE | BRTH_POIS | BRTH_DARK | BRTH_NETHR | BALL_FIRE
+S:BALL_POIS | BALL_DARK | BALL_NETHR | S_HOUND
 D:The first guard of Angband, Carcharoth, also known as 'The Red Maw',
 D: is the greatest wolf to ever walk the earth.  He is highly
 D: intelligent and a deadly opponent in combat.
@@ -9613,9 +9655,10 @@ F:UNDEAD | EVIL | HURT_LIGHT | IM_ELEC | IM_FIRE
 F:IM_COLD | IM_POIS | NO_SLOW | NO_FEAR | NO_CONF
 F:NO_SLEEP
 S:SPELL_PCT_65 | POW_130
-S:BALL_FIRE | BALL_NETHR | BALL_MANA | BOLT_MANA | BEAM_NETHR
-S:ADD_MANA | BLINK | TELE_SELF_TO | TELE_TO | DRAIN_MANA
-S:BRAIN_SMASH | WOUND | BLIND | CONF | S_KIN
+S:BALL_FIRE | BALL_METEOR | BALL_NETHR | BALL_MANA | BOLT_MANA
+S:BEAM_NETHR | ADD_MANA | BLINK | TELE_SELF_TO | TELE_TO
+S:DRAIN_MANA | BRAIN_SMASH | WOUND | BLIND | CONF
+S:S_KIN
 D:The greatest of all undead sorcerers, even the gods once feared him.
 D: This ancient shadow of death wilts every living thing it passes.
 
@@ -9634,9 +9677,9 @@ F:DROP_GOOD | DROP_GREAT | HAS_LIGHT | OPEN_DOOR | BASH_DOOR
 F:POWERFUL | DEMON | EVIL | HURT_COLD | IM_ELEC
 F:IM_FIRE | RES_PLAS | NO_SLOW | NO_STUN | NO_CONF
 F:NO_SLEEP | N_LAVA | N_FIRE
-S:SPELL_PCT_40 | POW_135
-S:LASH | BRTH_FIRE | BRTH_PLAS | BALL_CHAOS | SCARE
-S:BLIND | CONF | S_HI_DEMON | S_HI_UNDEAD
+S:SPELL_PCT_40 | POW_250
+S:LASH | BRTH_FIRE | BRTH_PLAS | BALL_FIRE | BALL_CHAOS
+S:SCARE | BLIND | CONF | S_HI_DEMON | S_HI_UNDEAD
 D:Gothmog is the Chief Balrog in Morgoth's personal guard.  He is
 D: renowned for slaying F["e]anor and Fingon, two of the High Kings of
 D: the Noldor Elves, and has never been defeated in combat.  With his
@@ -9695,9 +9738,10 @@ F:NO_SLOW | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
 F:N_LAVA | N_ICE | N_OIL | N_FIRE | N_SAND
 F:N_FOREST | N_WATER | N_ACID | N_MUD
 S:SPELL_PCT_60 | POW_200
-S:BALL_MANA | BOLT_PLAS | BOLT_MANA | ADD_MANA | HEAL
-S:CURE | TELE_TO | TELE_AWAY | BRAIN_SMASH | WOUND
-S:S_HI_DRAGON | S_HI_DEMON | S_HI_UNIQUE | S_HI_UNDEAD | S_WRAITH
+S:BALL_METEOR | BALL_MANA | BOLT_PLAS | BOLT_MANA | ADD_MANA
+S:HEAL | CURE | TELE_TO | TELE_AWAY | BRAIN_SMASH
+S:WOUND | S_HI_DRAGON | S_HI_DEMON | S_HI_UNIQUE | S_HI_UNDEAD
+S:S_WRAITH
 D:He is the Master of the Pits of Angband.  His figure is like a black
 D: mountain crowned with lightning.  He rages with everlasting anger,
 D: his body scarred by Fingolfin's eight mighty wounds.  He can never

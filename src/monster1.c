@@ -701,64 +701,120 @@ static void describe_monster_spells(int r_idx, const monster_lore *l_ptr)
 
 	if (l_ptr->r_l_flags5 & (RF5_BALL_ACID))
 	{
-		if (spower < 40) vp[vn++] = "produce acid balls";
+		if (r_ptr->flags4 & (RF4_BRTH_ACID))
+		{
+			if (spower < 40)	vp[vn++] = "breathe acid balls";
+			else 				vp[vn++] = "breathe enormous acid balls";
+		}
+		else if (spower < 10) vp[vn++] = "produce small acid balls";
+		else if (spower < 40) vp[vn++] = "produce acid balls";
 		else vp[vn++] = "produce acid storms";
 	}
 
 	if (l_ptr->r_l_flags5 & (RF5_BALL_ELEC))
 	{
-		if (spower < 40) vp[vn++] = "produce lightning balls";
+		if (r_ptr->flags4 & (RF4_BRTH_ELEC))
+		{
+			if (spower < 40)	vp[vn++] = "breathe lightning balls";
+			else 				vp[vn++] = "breathe enormous lightning balls";
+		}
+		else if (spower < 10) vp[vn++] = "produce small lightning balls";
+		else if (spower < 40) vp[vn++] = "produce lightning balls";
 		else vp[vn++] = "produce lightning storms";
 	}
 
 	if (l_ptr->r_l_flags5 & (RF5_BALL_FIRE))
 	{
-		if (spower < 40) vp[vn++] = "produce fire balls";
+		if (r_ptr->flags4 & (RF4_BRTH_FIRE))
+		{
+			if (spower < 40)	vp[vn++] = "breathe balls of flames";
+			else 				vp[vn++] = "breathe enormous balls of flames";
+		}
+		else if (spower < 10) vp[vn++] = "produce small fire balls";
+		else if (spower < 40) vp[vn++] = "produce fire balls";
 		else vp[vn++] = "produce fire storms";
 	}
 
 	if (l_ptr->r_l_flags5 & (RF5_BALL_COLD))
 	{
-		if (spower < 40) vp[vn++] = "produce frost balls";
+		if (r_ptr->flags4 & (RF4_BRTH_COLD))
+		{
+			if (spower < 40)	vp[vn++] = "breathe balls of frost";
+			else 				vp[vn++] = "breathe enormous balls of frost";
+		}
+		else if (spower < 10) vp[vn++] = "produce small frost balls";
+		else if (spower < 40) vp[vn++] = "produce frost balls";
 		else vp[vn++] = "produce frost storms";
 	}
 
 	if (l_ptr->r_l_flags5 & (RF5_BALL_POIS))
 	{
-		if (spower < 10) vp[vn++] = "produce stinking clouds";
+		if (r_ptr->flags4 & (RF4_BRTH_POIS))
+		{
+			if (spower < 40)	vp[vn++] = "breathe balls of poison";
+			else 				vp[vn++] = "breathe enormous balls of poison";
+		}
+		else if (spower < 10) vp[vn++] = "produce stinking clouds";
 		else if (spower < 40) vp[vn++] = "produce poison balls";
 		else vp[vn++] = "produce storms of poison";
 	}
 
 	if (l_ptr->r_l_flags5 & (RF5_BALL_LIGHT))
 	{
-		if (spower < 10) vp[vn++] = "produce spheres of light";
+		if (r_ptr->flags4 & (RF4_BRTH_LIGHT))
+		{
+			if (spower < 40)	vp[vn++] = "breathe balls of light";
+			else 				vp[vn++] = "breathe brilliant balls of light";
+		}
+		else if (spower < 10) vp[vn++] = "produce spheres of light";
 		else if (spower < 40) vp[vn++] = "produce explosions of light";
-		else vp[vn++] = "invoke starbursts";
+		else vp[vn++] = "produce powerful explosions of light";
 	}
 
 	if (l_ptr->r_l_flags5 & (RF5_BALL_DARK))
 	{
-		if (spower < 40) vp[vn++] = "produce balls of darkness";
-		else vp[vn++] = "produce storms of darkness";
+		if (r_ptr->flags4 & (RF4_BRTH_DARK))
+		{
+			if (spower < 40)	vp[vn++] = "breathe balls of darkness";
+			else 				vp[vn++] = "breathe enormous balls of darkness";
+		}
+		else if (spower < 20) vp[vn++] = "produce balls of darkness";
+		else if (spower < 70) vp[vn++] = "produce storms of darkness";
+		else vp[vn++] = "produce powerful storms of darkness";
 	}
 
 	if (l_ptr->r_l_flags5 & (RF5_BALL_CONFU))
 	{
-		if (spower < 40) vp[vn++] = "produce confusion balls";
-		else vp[vn++] = "produce storms of confusion";
+		if (r_ptr->flags4 & (RF4_BRTH_CONFU))
+		{
+			if (spower < 40)	vp[vn++] = "breathe balls of confusion";
+			else 				vp[vn++] = "breathe massive balls of confusion";
+		}
+		else if (spower < 10) vp[vn++] = "produce balls of confusion";
+		else if (spower < 40) vp[vn++] = "produce storms of confusion";
+		else vp[vn++] = "produce powerful storms of confusion";
 	}
 
 	if (l_ptr->r_l_flags5 & (RF5_BALL_SOUND))
 	{
-		if (spower < 10) vp[vn++] = "produce explosions of sound";
+		if (r_ptr->flags4 & (RF4_BRTH_SOUND))
+		{
+			if (spower < 40)	vp[vn++] = "breathe balls of noise";
+			else 				vp[vn++] = "breathe ear-splitting balls of noise";
+		}
+		else if (spower < 10) vp[vn++] = "produce blasts of sound";
 		else if (spower < 40) vp[vn++] = "produce thunderclaps";
 		else vp[vn++] = "unleash storms of sound";
 	}
 
 	if (l_ptr->r_l_flags5 & (RF5_BALL_SHARD))
 	{
-		if (spower < 10) vp[vn++] = "produce blasts of shards";
+		if (r_ptr->flags4 & (RF4_BRTH_SHARD))
+		{
+			if (spower < 40)	vp[vn++] = "breathe balls of shards";
+			else 				vp[vn++] = "breathe enormous balls of shards";
+		}
+		else if (spower < 10) vp[vn++] = "produce blasts of shards";
 		else if (spower < 50) vp[vn++] = "produce whirlwinds of shards";
 		else vp[vn++] = "call up storms of knives";
 	}
@@ -778,14 +834,24 @@ static void describe_monster_spells(int r_idx, const monster_lore *l_ptr)
 
 	if (l_ptr->r_l_flags5 & (RF5_BALL_NETHR))
 	{
-		if (spower < 22) vp[vn++] = "produce nether orbs";
+		if (r_ptr->flags4 & (RF4_BRTH_NETHR))
+		{
+			if (spower < 40)	vp[vn++] = "breathe nether balls";
+			else 				vp[vn++] = "breathe enormous nether balls";
+		}
+		else if (spower < 22) vp[vn++] = "produce nether orbs";
 		else if (spower < 40) vp[vn++] = "produce nether balls";
 		else vp[vn++] = "invoke nether storms";
 	}
 
 	if (l_ptr->r_l_flags5 & (RF5_BALL_CHAOS))
 	{
-		if (spower < 13) vp[vn++] = "produce spheres of chaos";
+		if (r_ptr->flags4 & (RF4_BRTH_CHAOS))
+		{
+			if (spower < 40)	vp[vn++] = "breathe balls of chaos";
+			else 				vp[vn++] = "breathe enormous balls of chaos";
+		}
+		else if (spower < 13) vp[vn++] = "produce spheres of chaos";
 		else if (spower < 40) vp[vn++] = "produce explosions of chaos";
 		else vp[vn++] = "call up maelstroms of raw chaos";
 	}
