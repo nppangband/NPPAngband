@@ -3409,7 +3409,7 @@ void do_cmd_feeling(void)
 
 	else if (p_ptr->dungeon_type == DUNGEON_TYPE_LABYRINTH)
 	{
-		if (is_quest_level) msg_print("You have entered a tony, closely guarded labyrinth.");
+		if (is_quest_level) msg_print("You have entered a tiny, closely guarded labyrinth.");
 		else msg_print("You have entered a complex labyrinth of dungeon hallways.");
 	}
 
