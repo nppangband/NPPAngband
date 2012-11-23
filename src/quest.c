@@ -379,29 +379,30 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 				}
 				else my_strcpy(intro, "There is 1 remaining creature from ", sizeof(intro));
 			}
-		}
 
-		else if (q_ptr->q_type == QUEST_ARENA_LEVEL)
-		{
-			my_strcat(intro, format("an arena level"), sizeof(intro));
-		}
-		else
-		{
-			my_strcpy(mon_theme, feeling_themed_level[q_ptr->q_theme], sizeof(mon_theme));
-			if (my_is_vowel(mon_theme[0])) my_strcat(intro, "an ", sizeof(intro));
-			else my_strcat(intro, "a ", sizeof(intro));
 
-			if (q_ptr->q_type ==  QUEST_THEMED_LEVEL)
+			if (q_ptr->q_type == QUEST_ARENA_LEVEL)
 			{
-				my_strcat(intro, format("%s stronghold", mon_theme), sizeof(intro));
+				my_strcat(intro, format("an arena level"), sizeof(intro));
 			}
-			else if (q_ptr->q_type == QUEST_PIT)
+			else
 			{
-				my_strcat(intro, format("%s pit", mon_theme), sizeof(intro));
-			}
-			else if (q_ptr->q_type == QUEST_NEST)
-			{
-				my_strcat(intro, format("%s nest", mon_theme), sizeof(intro));
+				my_strcpy(mon_theme, feeling_themed_level[q_ptr->q_theme], sizeof(mon_theme));
+				if (my_is_vowel(mon_theme[0])) my_strcat(intro, "an ", sizeof(intro));
+				else my_strcat(intro, "a ", sizeof(intro));
+
+				if (q_ptr->q_type ==  QUEST_THEMED_LEVEL)
+				{
+					my_strcat(intro, format("%s stronghold", mon_theme), sizeof(intro));
+				}
+				else if (q_ptr->q_type == QUEST_PIT)
+				{
+					my_strcat(intro, format("%s pit", mon_theme), sizeof(intro));
+				}
+				else if (q_ptr->q_type == QUEST_NEST)
+				{
+					my_strcat(intro, format("%s nest", mon_theme), sizeof(intro));
+				}
 			}
 		}
 
