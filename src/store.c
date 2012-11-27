@@ -422,7 +422,6 @@ static int stats_menu(int service)
 	/* Set up the menu */
 	WIPE(&menu, menu);
 	menu.count = count;
-	menu.title = "abcdef+-\n\r";
 	menu.title = "              Self RB CB  EB   Best";
 	menu.menu_data = stats;
 	if (service == SERVICE_RESTORE_STAT)

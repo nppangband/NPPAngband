@@ -1,4 +1,4 @@
-NPP 0.6.0. BETA 5 Changes: 
+NPP 0.6.0. BETA 1 Changes: 
 Broke savecompatibility with NPP 0.5.4.
 Revised Mimic Code
 Changes to the savefile structure.
@@ -54,7 +54,7 @@ Add monster character to targeted monster display. (patch by Runningaway).
 Fixed some instances of functions that, when searching all squares around a certain square,
 was referencing the wrong table, causing it to ignore the down direction and downard-left direction.
 Quest monsters standing in dangerous terrain get teleported off.
-
+Bugfix:  Player sometimes regenerated hp after dying.
 
 
 NPP 0.5.4 changes:

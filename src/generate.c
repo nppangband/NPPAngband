@@ -6716,13 +6716,14 @@ byte get_level_theme(s16b orig_theme_num, bool quest_level)
 
 	else if ((theme_depth <= 50) && (orig_theme_num <= 60))
 	{
-		/* Hounds, demon, or young dragon*/
+		/* Hounds, demon, servants of valar, or young dragon*/
+		if (one_in_(4))			return (LEV_THEME_VALAR_SERVANTS);
 		if (one_in_(3))			return (LEV_THEME_DEMON_ALL);
 		else if (one_in_(2))	return (LEV_THEME_HOUND);
 		else					return (LEV_THEME_DRAGON_YOUNG);
 	}
 
-	/* Giant, animal, or humanoid pit */
+	/* Giant, animal, servants of valar, or humanoid pit */
 	else if ((theme_depth <= 60) && (orig_theme_num <= 80))
 	{
 		if (one_in_(5))			return (LEV_THEME_VALAR_SERVANTS);

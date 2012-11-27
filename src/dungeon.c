@@ -2119,6 +2119,9 @@ static void process_world(void)
 		take_hit(i, "a fatal wound");
 	}
 
+	/* Don't bother with the rest if the player is dead. */
+	if (p_ptr->is_dead) return;
+
 	/*** Check the Food, and Regenerate ***/
 
 	/* Digest normally */
@@ -3455,12 +3458,8 @@ static void dungeon(void)
 		turn++;
 	}
 
-	/* Kill basic mouse buttons */
-	(void) button_kill(ESCAPE);
-	(void) button_kill('\r');
-	(void) button_kill(' ');
-	(void) button_kill('n');
-	(void) button_kill(',');
+	/* Kill the mouse buttons */
+	(void) button_kill_all();
 }
 
 

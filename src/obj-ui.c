@@ -934,7 +934,7 @@ static void item_prompt(menu_type *menu, int mode, cptr pmt)
 	if (p_ptr->command_wrk == (USE_INVEN))
 	{
 		/* Begin the prompt */
-    	sprintf(out_val, "Inven:");
+    	sprintf(out_val, "    Inven:");
 
     	/* Indicate lack of inventory choices. */
     	if (i1 > i2)

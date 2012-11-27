@@ -374,35 +374,34 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 
 				if (remaining > 1)
 				{
-					my_strcpy(intro, format("%d remaining creatures from ", remaining),
+					my_strcpy(intro, format("There are %d remaining creatures from ", remaining),
 									sizeof(intro));
 				}
 				else my_strcpy(intro, "There is 1 remaining creature from ", sizeof(intro));
 			}
+		}
 
+		if (q_ptr->q_type == QUEST_ARENA_LEVEL)
+		{
+			my_strcat(intro, format("an arena level"), sizeof(intro));
+		}
+		else
+		{
+			my_strcpy(mon_theme, feeling_themed_level[q_ptr->q_theme], sizeof(mon_theme));
+			if (my_is_vowel(mon_theme[0])) my_strcat(intro, "an ", sizeof(intro));
+			else my_strcat(intro, "a ", sizeof(intro));
 
-			if (q_ptr->q_type == QUEST_ARENA_LEVEL)
+			if (q_ptr->q_type ==  QUEST_THEMED_LEVEL)
 			{
-				my_strcat(intro, format("an arena level"), sizeof(intro));
+				my_strcat(intro, format("%s stronghold", mon_theme), sizeof(intro));
 			}
-			else
+			else if (q_ptr->q_type == QUEST_PIT)
 			{
-				my_strcpy(mon_theme, feeling_themed_level[q_ptr->q_theme], sizeof(mon_theme));
-				if (my_is_vowel(mon_theme[0])) my_strcat(intro, "an ", sizeof(intro));
-				else my_strcat(intro, "a ", sizeof(intro));
-
-				if (q_ptr->q_type ==  QUEST_THEMED_LEVEL)
-				{
-					my_strcat(intro, format("%s stronghold", mon_theme), sizeof(intro));
-				}
-				else if (q_ptr->q_type == QUEST_PIT)
-				{
-					my_strcat(intro, format("%s pit", mon_theme), sizeof(intro));
-				}
-				else if (q_ptr->q_type == QUEST_NEST)
-				{
-					my_strcat(intro, format("%s nest", mon_theme), sizeof(intro));
-				}
+				my_strcat(intro, format("%s pit", mon_theme), sizeof(intro));
+			}
+			else if (q_ptr->q_type == QUEST_NEST)
+			{
+				my_strcat(intro, format("%s nest", mon_theme), sizeof(intro));
 			}
 		}
 
@@ -417,8 +416,6 @@ void describe_quest(char *buf, size_t max, s16b level, int mode)
 		/*we are done*/
 		return;
 	}
-
-
 
 	/* Not a vault quest, so get the monster race name (singular)*/
 	monster_desc_race(race_name, sizeof(race_name), q_ptr->mon_idx);
@@ -2287,6 +2284,7 @@ void quest_finished(quest_type *q_ptr)
 	else if (q_ptr->q_type == QUEST_VAULT)
 	{
 		object_type *o_ptr;
+		byte art_num;
 
 		/* Find quest item in the inventory*/
 		j = quest_item_slot();
@@ -2295,14 +2293,17 @@ void quest_finished(quest_type *q_ptr)
 
 		altered_inventory_counter += 5;
 
+		/* Remember the artifact */
+		art_num = o_ptr->art_num;
+
 		/*if using notes file, make a note*/
 		write_quest_note(TRUE);
-		artifact_wipe(o_ptr->art_num, TRUE);
 
 		/* Destroy the quest item in the pack */
 		inven_item_increase(j, -255);
 		inven_item_describe(j);
 		inven_item_optimize(j);
+		artifact_wipe(art_num, TRUE);
 	}
 
 	else if (quest_type_collection(q_ptr))
@@ -2465,15 +2466,15 @@ bool guild_purchase(int choice)
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_VAULT_QUEST);
 
 	/* Arena quest allowed 1/5 of the time */
-	if (one_in_(5)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_ARENA_QUEST);
+	if (one_in_(4)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_ARENA_QUEST);
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_ARENA_QUEST);
 
 	/* Wilderness quests allowed 1/3 of the time */
-	if (one_in_(3)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_WILDERNESS_QUEST);
+	if (one_in_(4)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_WILDERNESS_QUEST);
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_WILDERNESS_QUEST);
 
 	/* Labyrinth quests allowed 1/3 of the time */
-	if (one_in_(3)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_LABYRINTH_QUEST);
+	if (one_in_(4)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_LABYRINTH_QUEST);
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_LABYRINTH_QUEST);
 
 	/* Greater vault quests allowed 1/5 of the time */
@@ -2878,6 +2879,37 @@ void quest_fail(void)
 	disturb(0,0);
 }
 
+/*
+ *  Helper function for format_quest_indicator.
+ *  Figure out if we should print the Goto message.
+ *  Assumes there is an active quest.
+ */
+
+static bool quest_indicator_aux(quest_type *q_ptr)
+{
+	/* Quest hasn't been started yet */
+	if (!guild_quest_started()) return (TRUE);
+
+	/* We are on the current level */
+	if (q_ptr->base_level == p_ptr->depth) return (FALSE);
+
+	if (q_ptr->q_type == QUEST_VAULT)
+	{
+		if (guild_quest_started()) return (FALSE);
+		if (quest_item_slot() > -1) return (FALSE);
+		return (TRUE);
+	}
+
+	if (quest_type_collection(q_ptr))
+	{
+		if (guild_quest_started()) return (FALSE);
+		if (quest_item_count() >= quest_collection_num(q_ptr)) return (FALSE);
+		return (TRUE);
+	}
+
+	return (FALSE);
+
+}
 
 /*
  * Create the quest indicator string and put it on "dest"
@@ -2903,7 +2935,7 @@ void format_quest_indicator(char dest[], int max, byte *attr)
 		return;
 	}
 
-	if (q_ptr->base_level != p_ptr->depth)
+	if (quest_indicator_aux(q_ptr))
 	{
 		strnfmt(dest, max, "Q:Goto %d'", q_ptr->base_level * 50);
 
@@ -2921,16 +2953,11 @@ void format_quest_indicator(char dest[], int max, byte *attr)
 		/* Default character */
 		char chr = ']';
 
-		/* Player has the quest item */
-		if (q_ptr->q_flags & (QFLAG_STARTED))
+		if (quest_item_slot() > -1)
 		{
-			if (quest_item_slot() > -1)
-			{
-				my_strcpy(dest, "Q:GoTo Guild!", max);
-				*attr = TERM_GREEN;
-				return;
-			}
-
+			my_strcpy(dest, "Q:GoTo Guild!", max);
+			*attr = TERM_GREEN;
+			return;
 		}
 
 		/* Get the symbol of the artifact */
@@ -2959,14 +2986,11 @@ void format_quest_indicator(char dest[], int max, byte *attr)
 		char chr = k_ptr->d_char;
 
 		/* Player has the quest item */
-		if (q_ptr->q_flags & (QFLAG_STARTED))
+		if (quest_item_count() >= num)
 		{
-			if (quest_item_count() >= num)
-			{
-				my_strcpy(dest, "Q:GoTo Guild!", max);
-				*attr = TERM_GREEN;
-				return;
-			}
+			my_strcpy(dest, "Q:GoTo Guild!", max);
+			*attr = TERM_GREEN;
+			return;
 		}
 
 		/* Format */
