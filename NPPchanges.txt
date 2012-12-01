@@ -1,5 +1,6 @@
-NPP 0.6.0. BETA 1 Changes: 
+NPP 6.0.0 Changes: 
 Broke savecompatibility with NPP 0.5.4.
+Changed numbering system to indicate from 0.6.0 to 6.0.0, to indicate NPP is a finished and fully playable game.
 Revised Mimic Code
 Changes to the savefile structure.
 Player ghosts can only appear at dungeon creation.

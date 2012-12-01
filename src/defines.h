@@ -53,14 +53,14 @@
 /*
  * Current version string
  */
-#define VERSION_STRING	"0.6.0 BETA1"
+#define VERSION_STRING	"6.0.0"
 
 
 /*
  * Current version numbers
  */
-#define VERSION_MAJOR	0
-#define VERSION_MINOR	6
+#define VERSION_MAJOR	6
+#define VERSION_MINOR	0
 #define VERSION_PATCH	0
 #define VERSION_EXTRA	0
 

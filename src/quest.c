@@ -1918,7 +1918,7 @@ static bool place_wilderness_quest(int lev)
 	/* Actually write the quest */
 	q_ptr->q_type = QUEST_WILDERNESS;
 	q_ptr->base_level = lev;
-	q_ptr->q_fame_inc = 15;
+	q_ptr->q_fame_inc = 20;
 	q_ptr->q_fame_inc += damroll(10,2);
 
 	/* Decide which rewards to offer the player */
