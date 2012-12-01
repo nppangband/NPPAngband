@@ -2907,7 +2907,7 @@ static bool quest_indicator_aux(quest_type *q_ptr)
 		return (TRUE);
 	}
 
-	return (FALSE);
+	return (TRUE);
 
 }
 
@@ -2939,7 +2939,10 @@ void format_quest_indicator(char dest[], int max, byte *attr)
 	{
 		strnfmt(dest, max, "Q:Goto %d'", q_ptr->base_level * 50);
 
-		if (quest_indicator_timer > 0) *attr = TERM_RED;
+		if (quest_might_fail_now())
+		{
+			*attr = TERM_RED;
+		}
 		else *attr = TERM_BLUE;
 		return;
 	}

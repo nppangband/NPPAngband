@@ -3375,6 +3375,8 @@ static void dungeon(void)
 		if (q_ptr->base_level == p_ptr->depth)
 		{
 			q_info[i].q_flags |= (QFLAG_STARTED);
+
+			p_ptr->redraw = (PR_QUEST_ST);
 			break;
 		}
 	}
