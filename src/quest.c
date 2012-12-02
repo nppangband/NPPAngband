@@ -2465,15 +2465,15 @@ bool guild_purchase(int choice)
 	if (one_in_(5)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_VAULT_QUEST);
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_VAULT_QUEST);
 
-	/* Arena quest allowed 1/5 of the time */
+	/* Arena quest allowed 1/4 of the time */
 	if (one_in_(4)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_ARENA_QUEST);
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_ARENA_QUEST);
 
-	/* Wilderness quests allowed 1/3 of the time */
+	/* Wilderness quests allowed 1/4 of the time */
 	if (one_in_(4)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_WILDERNESS_QUEST);
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_WILDERNESS_QUEST);
 
-	/* Labyrinth quests allowed 1/3 of the time */
+	/* Labyrinth quests allowed 1/4 of the time */
 	if (one_in_(4)) q_info[GUILD_QUEST_SLOT].q_flags |= (QFLAG_LABYRINTH_QUEST);
 	else q_info[GUILD_QUEST_SLOT].q_flags &= ~(QFLAG_LABYRINTH_QUEST);
 

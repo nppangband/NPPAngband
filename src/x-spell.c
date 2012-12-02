@@ -992,7 +992,7 @@ cptr do_mage_spell(int mode, int spell, int dir)
 
 			if (name) return ("Plasma Bolt");
 			if (desc) return (format("Fires a bolt or beam of plasma for %dd%d hp damage.", dice, sides));
-			if (desc) return (format("dam %dd%d", dice, sides));
+			if (desc_short) return (format("dam %dd%d", dice, sides));
 			if (cast)
 			{
 				fire_bolt_or_beam(beam, GF_PLASMA, dir, damroll(dice, sides));
@@ -1311,7 +1311,7 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			dam = 280 + (plev * 4);
 			rad = 3;
 
-			if (name) return ("Darness Storm");
+			if (name) return ("Darkness Storm");
 			if (desc) return (format("Fires a radius %d explosion of powerful darkness for %d hp damage.", rad, dam));
 			if (desc_short) return (format("rad %d dam %d", rad, dam));
 			if (cast)
