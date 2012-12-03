@@ -3075,12 +3075,12 @@ void quest_status_update(void)
 			i_ptr->number = remaining;
 			object_desc(o_name, sizeof(o_name), i_ptr, ODESC_BASE);
 
-			if (q_ptr->q_type == QUEST_LABYRINTH)
+			if (q_ptr->q_type == QUEST_WILDERNESS)
 			{
 				my_strcpy(note, format("You have %d remaining %s to collect from the wilderness level.",
 						remaining, o_name),sizeof(note));
 			}
-			else /* (q_ptr->q_type == QUEST_LABYRINTH_LEVEL) */
+			else /* (q_ptr->q_type == QUEST_LABYRINTH) */
 			{
 				my_strcpy(note, format("You have %d remaining %s to collect from the labyrinth level.",
 							remaining, o_name),sizeof(note));
