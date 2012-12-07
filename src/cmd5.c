@@ -774,7 +774,7 @@ void do_cmd_cast(cmd_code code, cmd_arg args[])
 	if (s_ptr->smana > p_ptr->csp)
 	{
 		/* Warning */
-		msg_format("You do not have enough mana to %s this %s.", noun, verb);
+		msg_format("You do not have enough mana to %s this %s.", verb, noun);
 
 		/* Flush input */
 		flush();
