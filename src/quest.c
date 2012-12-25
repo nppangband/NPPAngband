@@ -1099,7 +1099,7 @@ static void create_reward_objects(quest_type *q_ptr, byte reward_type)
 	/* Paranoia */
 	if (!reward_type) return;
 
-	/*ugly, but effective hack - make extra gold, prevent chests & allow artifacts*/
+	/*ugly, but effective hack - make extra gold, prevent chests & allow non-special artifacts*/
 	object_generation_mode = OB_GEN_MODE_QUEST;
 
 	get_title(title, sizeof(title));

@@ -462,6 +462,9 @@ static bool make_artifact_special(object_type *o_ptr)
 	if ((object_generation_mode >= OB_GEN_STORE_HEAD) &&
 		(object_generation_mode <= OB_GEN_STORE_TAIL)) return (FALSE);
 
+	/*no special artifacts as quest rewards */
+	if (object_generation_mode == OB_GEN_MODE_QUEST) return (FALSE);
+
 	/* No artifacts, do nothing */
 	if (adult_no_artifacts) return (FALSE);
 
