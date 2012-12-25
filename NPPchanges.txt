@@ -9,6 +9,7 @@ Bugfix: The guild sometimes overwrite bookstore inventory when generating reward
         with a very high flayer fame, causing the game to crash when the bookshop inventory was shuffled. 
 Special artifacts are no longer offered as quest rewards.
 Increase the potential bonus from deferred rewards by 50%.
+Added help file descriptions for the new quest rewards.
 
 NPP 6.0.0 Changes: 
 Broke savecompatibility with NPP 0.5.4.
