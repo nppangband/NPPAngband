@@ -7,6 +7,7 @@ Bugfix: Objects created and rejected as potential guild rewards still counted to
 Bugfix: Removed obsolete reference to old store inventory system.
 Bugfix: The guild sometimes overwrite bookstore inventory when generating rewards for players 
         with a very high flayer fame, causing the game to crash when the bookshop inventory was shuffled. 
+Bugfix: Fix inconcistencies of telling players about objects theyare not aware of yet.
 Special artifacts are no longer offered as quest rewards.
 Increase the potential bonus from deferred rewards by 50%.
 Added help file descriptions for the new quest rewards.

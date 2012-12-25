@@ -1349,7 +1349,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 	if (mode & (USE_FLOOR))
 	{
 		/* Scan all objects in the grid */
-		floor_num = scan_floor(floor_list, MAX_FLOOR_STACK, sq_y, sq_x, 0x01);
+		floor_num = scan_floor(floor_list, MAX_FLOOR_STACK, sq_y, sq_x, 0x03);
 	}
 
 	/* Full floor */

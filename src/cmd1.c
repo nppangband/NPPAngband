@@ -372,7 +372,7 @@ void do_cmd_pickup_from_pile(bool pickup, bool message)
 		handle_stuff();
 
 		/* Scan for floor objects */
-		floor_num = scan_floor(floor_list, MAX_FLOOR_STACK, py, px, 0x01);
+		floor_num = scan_floor(floor_list, MAX_FLOOR_STACK, py, px, 0x03);
 
 		/* No pile */
 		if (floor_num < 1) break;
@@ -381,7 +381,7 @@ void do_cmd_pickup_from_pile(bool pickup, bool message)
 		item_tester_hook = inven_carry_okay;
 
 		/* re-test to see if we can pick any of them up */
-		floor_num = scan_floor(floor_list, MAX_FLOOR_STACK, py, px, 0x01);
+		floor_num = scan_floor(floor_list, MAX_FLOOR_STACK, py, px, 0x03);
 
 		pickup_num = count_possible_pickups();
 
@@ -736,9 +736,14 @@ void py_pickup(bool pickup)
 		/* Get the next object */
 		next_o_idx = o_ptr->next_o_idx;
 
-		objects_left++;
+		/* Only marked objects */
+		if (!o_ptr->marked) continue;
 
+		objects_left++;
 	}
+
+	/* Nothing else to report */
+	if (!objects_left) return;
 
 	/* Only one object */
 	if (objects_left == 1)
@@ -750,14 +755,18 @@ void py_pickup(bool pickup)
 
 		object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
 
-		msg_c_format(msgt, "You see %s.", o_name);
+		if (p_ptr->timed[TMD_BLIND]) msg_c_format(msgt, "You are aware of %s.", o_name);
+
+		else msg_c_format(msgt, "You see %s.", o_name);
 	}
 
 	/* Multiple objects */
 	else
 	{
+		if (p_ptr->timed[TMD_BLIND]) msg_format("You are aware of a pile of %d objects.", objects_left);
+
 		/* Message */
-		msg_format("You see a pile of %d objects.", objects_left);
+		else msg_format("You see a pile of %d objects.", objects_left);
 	}
 
 	/* Done */
