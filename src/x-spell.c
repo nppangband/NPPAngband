@@ -1877,15 +1877,13 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 		case DRUID_ELEMENTAL_BRAND:
 		{
 			cptr extra = "";
-			dur1 = 5;
 			dur = 10 + p_ptr->lev / 2;
 
-			if (!p_ptr->timed[TMD_SLAY_ELEM])
+			if (p_ptr->timed[TMD_SLAY_ELEM])
 			{
 				dur = 5;
 				extra = " extra";
 			}
-
 
 			if (name) return ("Elemental Weapon");
 			if (desc) return (format("Temporarily makes your weapon glow with elemental brands for %d%s turns.", dur, extra));
