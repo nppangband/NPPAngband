@@ -509,27 +509,55 @@ void show_quest_mon(int y, int x)
 }
 
 /*
- * A simplified version of object_similar, fo rguid quest rewards.
- * Just figure out if the objects are fo the same type.
- * Then the game will keep just the more valuable one.
+ * A simplified version of object_similar, for guild quest rewards.
+ * Just figure out if the objects are the same type.
+ * The guild will keep the more valuable one.
  */
 static bool guild_object_similar(const object_type *o_ptr, const object_type *j_ptr)
 {
-	/* Hack -- Identical items cannot be stacked */
-	if (o_ptr == j_ptr) return (0);
+	/* Items are identical */
+	if (o_ptr == j_ptr) return (TRUE);
 
 	/* They are different objects */
-	if (o_ptr->k_idx != j_ptr->k_idx) return (0);
+	if (o_ptr->k_idx != j_ptr->k_idx) return (FALSE);
 
-	/* Artifacts are nevers similar*/
-	if (o_ptr->art_num) return (0);
-	if (j_ptr->art_num) return (0);
+	/* It is possible for artifacts to be created twice in guild reward generation */
+	if ((o_ptr->art_num) || (j_ptr->art_num))
+	{
+		if (o_ptr->art_num == j_ptr->art_num) return (TRUE);
+
+		/* Or else artifacts are never similar*/
+		else return (FALSE);
+	}
 
 	/* Require identical "ego-item" names */
-	if (o_ptr->ego_num != j_ptr->ego_num) return (0);
+	if (o_ptr->ego_num != j_ptr->ego_num) return (FALSE);
 
 	/* They match, so they must be similar */
 	return (TRUE);
+}
+
+/*
+ * Helper function for guild carry.  See if we already have a similar item in stock.
+ * If the item is better than the one it is replacing, return the replacement slot
+ */
+static int guild_redundant_item(const object_type *o_ptr)
+{
+	store_type *st_ptr = &store[STORE_GUILD];
+	int slot;
+
+	/* Check each existing object (look for similar items) */
+	for (slot = 0; slot < st_ptr->stock_num; slot++)
+	{
+		/* Get the existing object */
+		object_type *j_ptr = &st_ptr->stock[slot];
+
+		/* Found a match */
+		if (guild_object_similar(j_ptr, o_ptr)) return (slot);
+	}
+
+	/* No match found */
+	return (-1);
 }
 
 
@@ -548,12 +576,32 @@ static bool guild_carry(object_type *o_ptr)
 	u32b o_value = object_value(o_ptr);
 	u32b j_value;
 
-	/* No space? */
-	if (st_ptr->stock_num >= st_ptr->stock_size)
+	/* First see if we already have one of these in stock */
+	slot = guild_redundant_item(o_ptr);
+	if (slot > -1)
+	{
+		j_ptr = &st_ptr->stock[slot];
+
+		j_value = object_value(j_ptr);
+
+		/* The one already in stock is better */
+		if (j_value >= o_value) return (FALSE);
+
+		/* replace the one already in stock */
+		/* Not fair to lose an artifact this way */
+		if (j_ptr->art_num) a_info[j_ptr->art_num].a_cur_num = 0;
+		object_wipe(j_ptr);
+		object_copy(j_ptr, o_ptr);
+
+		/* Don't count this one */
+		return (FALSE);
+	}
+
+	/* Is the guild full? Try to replace the cheapest item*/
+	if (st_ptr->stock_num >= st_ptr->stock_size - 1)
 	{
 		u32b cheapest_object = 0xFFFFFFFFL;
 		int cheapest_slot = 0;
-		bool found_slot = FALSE;
 
 		/* Check each existing object (look for similar items) */
 		for (slot = 0; slot < st_ptr->stock_num; slot++)
@@ -563,48 +611,33 @@ static bool guild_carry(object_type *o_ptr)
 
 			j_value = object_value(j_ptr);
 
-			/* Can the existing items be incremented? */
-			if (guild_object_similar(j_ptr, o_ptr))
-			{
-				/* Keep the more valuable of the two */
-				if (o_value > j_value)
-				{
-					store_delete_index(STORE_GUILD, slot);
-
-					found_slot = TRUE;
-
-					break;
-				}
-			}
 			/* Keep track of the cheapest object */
-			else if (j_value < cheapest_object)
+			if (j_value < cheapest_object)
 			{
 				cheapest_object = j_value;
 				cheapest_slot = slot;
 			}
 		}
 
-		if (!found_slot)
+		/* Everything in stock is better than the one we are trying to replace */
+		if (o_value <= cheapest_object)
 		{
-			/*
-			 * We went through the whole list and found nothing.
-			 * So take the place of the cheapest object, unless
-			 * everything in the guild is more expensive than
-			 * the new object.
-			 */
-			if (o_value <= cheapest_object)
-			{
-				/* Wipe the cheapest item, and put the new on in it's place */
-				/* Not fair to lose an artifact this way */
-				if (o_ptr->art_num) a_info[o_ptr->art_num].a_cur_num = 0;
-				return (FALSE);
-			}
-
-			store_delete_index(STORE_GUILD, cheapest_slot);
+			/* Not fair to lose an artifact this way */
+			if (o_ptr->art_num) a_info[o_ptr->art_num].a_cur_num = 0;
+			return (TRUE);
 		}
+
+		/* Wipe the cheapest item, and put the new on in it's place */
+		/* Not fair to lose an artifact this way */
+		j_ptr = &st_ptr->stock[cheapest_slot];
+		if (j_ptr->art_num) a_info[j_ptr->art_num].a_cur_num = 0;
+
+		/* Delete the item */
+		store_item_increase(STORE_GUILD, cheapest_slot, 0 - j_ptr->number);
+		store_item_optimize(STORE_GUILD, cheapest_slot);
 	}
 
-	/* At this point, we should always have an empty slot for the new item */
+	/* At this point, we know there is an we should always have an empty slot for the new item */
 
 	/* Check existing slots to see if we must "slide" */
 	for (slot = 0; slot < st_ptr->stock_num; slot++)
@@ -709,7 +742,7 @@ void add_reward_gold(void)
 	object_generation_mode = OB_GEN_MODE_NORMAL;
 	object_level = p_ptr->depth;
 
-	guild_carry(i_ptr);
+	(void)guild_carry(i_ptr);
 
 	return;
 }
@@ -1001,8 +1034,7 @@ static void create_reward_spellbook(void)
 		}
 
 		/* Add the book to the guild, and we are done. */
-		guild_carry(o_ptr);
-		return;
+		if (guild_carry(o_ptr)) return;
 	}
 
 	/* Maybe offer the ironman book as a reward? */
@@ -1031,7 +1063,7 @@ static void create_reward_spellbook(void)
 			object_prep(o_ptr, i);
 
 			/* give it to the guild */
-			guild_carry(o_ptr);
+			(void)guild_carry(o_ptr);
 			return;
 		}
 	}
@@ -1211,7 +1243,7 @@ static void create_reward_objects(quest_type *q_ptr, byte reward_type)
 		o_ptr->ident |= (IDENT_MENTAL);
 
 		/* Give it to the guild */
-		guild_carry(o_ptr);
+		if (!guild_carry(o_ptr)) continue;
 
 		/* Success */
 		x++;

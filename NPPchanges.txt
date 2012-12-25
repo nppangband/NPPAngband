@@ -1,6 +1,12 @@
 
 NPP 6.1.0 changes:
-Bugfix:  Typos on the mage darkness storm name and plasma bolt spell short description.
+Bugfix: Typos on the mage darkness storm name and plasma bolt spell short description.
+BUgfix: The druid spell elemental weapon only lasted for 5 turns.
+Bugfix: The guild sometimes offered dungeon spellbooks the player already has seen.
+Bugfix: Objects created and rejected as potential guild rewards still counted towards the total rewards offered.
+Bugfix: Removed obsolete reference to old store inventory system.
+Bugfix: The guild sometimes overwrite bookstore inventory when generating rewards for players 
+        with a very high flayer fame, causing the game to crash when the bookshop inventory was shuffled. 
 
 NPP 6.0.0 Changes: 
 Broke savecompatibility with NPP 0.5.4.

@@ -2391,35 +2391,19 @@ static int store_carry(int st, object_type *o_ptr)
 			break;
 		}
 
-		/* Possibly recharge wands and staves */
+		/* recharge wands and staves */
 		case TV_STAFF:
 		case TV_WAND:
 		{
-			bool recharge = FALSE;
+			int charges = o_ptr->pval;
 
-			/* Recharge without fail if the store normally carries that type */
-			for (i = 0; i < st_ptr->table_num; i++)
-			{
-				if (st_ptr->table[i] == o_ptr->k_idx)
-					recharge = TRUE;
-			}
+			o_ptr->pval = 0;
 
-			if (recharge)
-			{
-				int charges = o_ptr->pval;
+			/* Calculate the recharged number of charges */
+			for (i = 0; i < o_ptr->number; i++) recharge_staff_wand(o_ptr, 60);
 
-				o_ptr->pval = 0;
-
-				/* Calculate the recharged number of charges */
-				for (i = 0; i < o_ptr->number; i++)
-					recharge_staff_wand(o_ptr, 60);
-
-				/* Use recharged value only if greater */
-				if (charges > o_ptr->pval)
-					o_ptr->pval = charges;
-			}
-
-			break;
+			/* Use recharged value only if greater */
+			if (charges > o_ptr->pval) o_ptr->pval = charges;
 		}
 	}
 
@@ -2492,7 +2476,7 @@ static int store_carry(int st, object_type *o_ptr)
  * Increase, by a 'num', the number of an item 'item' in store 'st'.
  * This can result in zero items.
  */
-static void store_item_increase(int st, int item, int num)
+void store_item_increase(int st, int item, int num)
 {
 	int cnt;
 	object_type *o_ptr;
@@ -2522,7 +2506,7 @@ static void store_item_increase(int st, int item, int num)
 /*
  * Remove a slot if it is empty, in store 'st'.
  */
-static void store_item_optimize(int st, int item)
+void store_item_optimize(int st, int item)
 {
 	int j;
 	object_type *o_ptr;
@@ -2805,7 +2789,7 @@ void store_delete_index(int st, int what)
  * Delete a random object from store 'st', or, if it is a stack, perhaps only
  * partially delete it.
  *
- * This function is used when store maintainance occurs, and is designed to
+ * This function is used when store maintenance occurs, and is designed to
  * imitate non-PC purchasers making purchases from the store.
  */
 static void store_delete_random(int st)

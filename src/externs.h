@@ -1265,6 +1265,8 @@ extern void do_cmd_squelch_autoinsc(void *unused, cptr title);
 
 /*Store.c*/
 extern s32b price_item(const object_type *o_ptr, bool store_buying);
+extern void store_item_increase(int st, int item, int num);
+extern void store_item_optimize(int st, int item);
 extern bool keep_in_stock(const object_type *o_ptr, int which);
 extern void store_delete_index(int st, int what);
 extern void store_shuffle(int which);

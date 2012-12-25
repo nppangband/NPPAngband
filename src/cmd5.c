@@ -746,6 +746,10 @@ void do_cmd_study_book(cmd_code code, cmd_arg args[])
 	}
 	else
 	{
+		/* Remember we have used this book */
+		object_kind *k_ptr = &k_info[o_ptr->k_idx];
+		k_ptr->tried = TRUE;
+
 		spell_learn(spell);
 		p_ptr->p_energy_use = BASE_ENERGY_MOVE;
 	}
