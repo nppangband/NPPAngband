@@ -103,7 +103,10 @@ static const char *obj_desc_get_basename(const object_type *o_ptr, bool aware)
 
 	/* Known artifacts get special treatment */
 	if (artifact_p(o_ptr) && aware)
-		return (k_name + k_ptr->name);
+	{
+		/* An exception for unidentified special artifacts */
+		if (!k_ptr->flavor || object_is_known(o_ptr)) return (k_name + k_ptr->name);
+	}
 
 	/* Analyze the object */
 	switch (o_ptr->tval)
