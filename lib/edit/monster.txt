@@ -135,7 +135,7 @@
 
 # Version stamp (required)
 
-V:6.0.0
+V:0.6.0
 
 ##### Non-race (contains the player picture) #####
 N:0:<player>
@@ -6393,7 +6393,7 @@ F:FORCE_MAXHP | FORCE_SLEEP | DROP_1D2 | DROP_2D2 | DROP_4D2
 F:SMART | BASH_DOOR | POWERFUL | DRAGON | EVIL
 F:FLYING | IM_ELEC | NO_SLOW | NO_FEAR | NO_CONF
 F:NO_SLEEP
-S:SPELL_PCT_18 | POW_100
+S:SPELL_PCT_18 | POW_65
 S:BRTH_ELEC | BALL_ELEC | SCARE | BLIND | CONF
 D:A huge draconic form.  Lightning crackles along its length.
 
@@ -6426,7 +6426,7 @@ F:FORCE_MAXHP | FORCE_SLEEP | DROP_1D2 | DROP_2D2 | DROP_4D2
 F:SMART | BASH_DOOR | POWERFUL | DRAGON | EVIL
 F:FLYING | HURT_FIRE | IM_COLD | NO_SLOW | NO_FEAR
 F:NO_CONF | NO_SLEEP | N_ICE
-S:SPELL_PCT_18 | POW_100
+S:SPELL_PCT_18 | POW_65
 S:BRTH_COLD | BALL_COLD | SCARE | BLIND | CONF
 D:A huge draconic form.  Frost covers it from head to tail.
 
@@ -6442,7 +6442,7 @@ B:BITE:POISON:6d8
 F:FORCE_MAXHP | FORCE_SLEEP | DROP_3D2 | DROP_4D2 | SMART
 F:BASH_DOOR | POWERFUL | DRAGON | EVIL | FLYING
 F:IM_POIS | NO_SLOW | NO_FEAR | NO_CONF | NO_SLEEP
-S:SPELL_PCT_18 | POW_100
+S:SPELL_PCT_18 | POW_65
 S:BRTH_POIS | BALL_POIS | SCARE | BLIND | CONF
 D:A huge draconic form enveloped in clouds of poisonous vapour.
 
