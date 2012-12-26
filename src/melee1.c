@@ -3690,6 +3690,12 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 		{
 			disturb(1, 0);
 			if (blind) msg_print("You feel a crackling in the air.");
+
+			/* Special handling for breathers as opposed to casters */
+			else if (r_ptr->flags4 & (RF4_BRTH_ELEC))
+			{
+				msg_format("%^s breathes a lightning bolt.", m_name);
+			}
 			else msg_format("%^s shoots a spark of lightning at you.", m_name);
 
 			mon_beam(m_idx, GF_ELEC, get_ball_beam_dam(r_ptr, attack, GF_ELEC, powerful), 10);
@@ -3700,10 +3706,10 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 		case 128+28:
 		{
 			disturb(1, 0);
-			if (spower < 50)
+			if (r_ptr->flags4 & (RF4_BRTH_COLD))
 			{
-				if (blind) msg_format("%^s mumbles.", m_name);
-				else msg_format("%^s casts an icy lance.", m_name);
+				if (blind) msg_format("%^s breathes.", m_name);
+				else msg_format("%^s breathes an icy spear", m_name);
 			}
 			else
 			{
@@ -3718,7 +3724,12 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 		case 128+29:
 		{
 			disturb(1, 0);
-			if (spower < 25)
+			if (r_ptr->flags4 & (RF4_BRTH_NETHR))
+			{
+				if (blind) msg_format("%^s breathes.", m_name);
+				else msg_format("%^s breathes a beam of nether", m_name);
+			}
+			else if (spower < 25)
 			{
 				if (blind) msg_format("%^s whispers nastily.", m_name);
 				else msg_format("%^s casts a beam of nether.", m_name);
@@ -3741,7 +3752,13 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 		case 128+30:
 		{
 			disturb(1, 0);
-			if (spower < 25)
+			/* SLightly different message for breathers */
+			if (r_ptr->flags4 & (RF4_BRTH_ALL))
+			{
+				if (blind) msg_format("%^s breathes.", m_name);
+				else msg_format("%^s breathes a stream of fiery lava.", m_name);
+			}
+			else if (spower < 25)
 			{
 				if (blind) msg_format("%^s begins murmuring.", m_name);
 				else msg_format("%^s shoots a beam of molten magma.", m_name);

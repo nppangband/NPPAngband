@@ -4,6 +4,7 @@ Special artifacts are no longer offered as quest rewards.
 Increase the potential bonus from deferred rewards by 50%.
 Added help file descriptions for the new quest rewards.
 Adjusted Ancient blue, green, and white dragons to 65 spellower (down from 100).
+Added more appropriate messages for when breathing monsters use beam attacks.
 Bugfix: Typos on the mage darkness storm name and plasma bolt spell short description.
 BUgfix: The druid spell elemental weapon only lasted for 5 turns.
 Bugfix: The guild sometimes offered dungeon spellbooks the player already has seen.

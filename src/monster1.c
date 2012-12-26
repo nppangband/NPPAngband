@@ -902,18 +902,41 @@ static void describe_monster_spells(int r_idx, const monster_lore *l_ptr)
 		else vp[vn++] = "casts powerful bolts of gravity";
 	}
 
-	if (l_ptr->r_l_flags5 & (RF5_BEAM_ELEC))	vp[vn++] = "shoot sparks of lightning";
-	if (l_ptr->r_l_flags5 & (RF5_BEAM_ICE))		vp[vn++] = "cast lances of ice";
+	if (l_ptr->r_l_flags5 & (RF5_BEAM_ELEC))
+	{
+		if (r_ptr->flags4 & (RF4_BRTH_ELEC))
+		{
+			vp[vn++] = "breathe lightning bolts";
+		}
+		else vp[vn++] = "shoot sparks of lightning";
+	}
+	if (l_ptr->r_l_flags5 & (RF5_BEAM_ICE))
+	{
+		if (r_ptr->flags4 & (RF4_BRTH_ELEC))
+		{
+			vp[vn++] = "breathe spears of ice";
+		}
+		else 	vp[vn++] = "cast lances of ice";
+	}
 
 	if (l_ptr->r_l_flags5 & (RF5_BEAM_NETHR))
 	{
-		if (spower < 25) vp[vn++] = "cast beams of nether";
+		if (r_ptr->flags4 & (RF4_BRTH_NETHR))
+		{
+			vp[vn++] = "breathe beams of nether";
+		}
+		else if (spower < 25) vp[vn++] = "cast beams of nether";
 		else if (spower < 50) vp[vn++] = "hurl lances of nether";
 		else vp[vn++] = "shoot rays of death";
 	}
 	if (l_ptr->r_l_flags5 & (RF5_BEAM_LAVA))
 	{
-		if (spower < 25) vp[vn++] = "shoots beams of molten magma";
+		/* SLightly different message for breathers */
+		if (r_ptr->flags4 & (RF4_BRTH_ALL))
+		{
+			vp[vn++] = "breathe streams of fiery lava";
+		}
+		else if (spower < 25) vp[vn++] = "shoots beams of molten magma";
 		else if (spower < 50) vp[vn++] = "shoots jets of lava";
 		else vp[vn++] = "shoots searing jets of lava";
 	}
