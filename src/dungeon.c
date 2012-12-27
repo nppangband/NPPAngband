@@ -863,7 +863,7 @@ static bool add_labyrinth_monster_object(bool add_object, bool add_parchment)
 	byte y, x;
 	s16b r_idx;
 	monster_type *m_ptr;
-	s16b mon_lev = p_ptr->depth;
+	s16b mon_lev = p_ptr->depth + 1;
 	object_type *i_ptr;
 	object_type object_type_body;
 	int k_idx;
@@ -880,10 +880,10 @@ static bool add_labyrinth_monster_object(bool add_object, bool add_parchment)
 			if (!in_bounds_fully(y, x)) continue;
 
 			/*
-			 * We want them at least 7 squares away, based on the labyrinth.
+			 * We want them at least 10 squares away, based on the labyrinth.
 			 * Assumes energy to pass is 100.
 			 */
-			if ((cave_cost[FLOW_PASS_DOORS][y][x] - cost_at_center[FLOW_PASS_DOORS]) < 700) continue;
+			if ((cave_cost[FLOW_PASS_DOORS][y][x] - cost_at_center[FLOW_PASS_DOORS]) < 1000) continue;
 
 			/* New, and open square */
 			if (cave_naked_bold(y, x))
@@ -906,6 +906,7 @@ static bool add_labyrinth_monster_object(bool add_object, bool add_parchment)
 	/* Prepare allocation table */
 	get_mon_num_hook = monster_arena_labyrinth_okay;
 	get_mon_num_prep();
+
 
 	/* Pick a monster, using the given level */
 	r_idx = get_mon_num(mon_lev, y, x, 0L);
@@ -1287,7 +1288,7 @@ static void process_wilderness_quest(void)
 			if ((feat == FEAT_BWATER) || (feat == FEAT_BMUD))
 			{
 				do_wall = TRUE;
-				chance += 45;
+				chance += 25 + p_ptr->depth / 5;
 			}
 
 			/*
@@ -1309,8 +1310,8 @@ static void process_wilderness_quest(void)
 					break;
 				}
 
-				if ((feat2 == FEAT_BWATER_WALL) || (feat2 == FEAT_BMUD_WALL)) chance += 45;
-				else if ((feat2 == FEAT_BWATER) || (feat2 == FEAT_BMUD)) chance += 35;
+				if ((feat2 == FEAT_BWATER_WALL) || (feat2 == FEAT_BMUD_WALL)) chance += 25 + p_ptr->depth / 5;
+				else if ((feat2 == FEAT_BWATER) || (feat2 == FEAT_BMUD)) chance += 15 + p_ptr->depth / 5;
 			}
 
 			/* Leave space around the stairs */

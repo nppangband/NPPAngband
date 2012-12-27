@@ -7924,7 +7924,7 @@ static bool build_themed_level(void)
 		{
 			monster_type *m_ptr = &mon_list[cave_m_idx[y][x]];
 
-			if ((mon_cnt % 17) == 0) m_ptr->mflag |= (MFLAG_BONUS_ITEM);
+			if ((mon_cnt % 15) == 0) m_ptr->mflag |= (MFLAG_BONUS_ITEM);
 		}
 	}
 
@@ -10252,7 +10252,10 @@ static bool build_wilderness_level(void)
 	}
 
 	/* Drop some chests to make the level worth exploring */
-	alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_CHEST, damroll(3, 2));
+	alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_CHEST, damroll(3, 3));
+
+	/* Let the player see the whole level */
+	wiz_light();
 
 	/* Try hard to place this level */
 	rating += 25;
