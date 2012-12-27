@@ -1089,12 +1089,17 @@ static char get_item_tag(menu_type *menu, int oid)
 
 }
 
+#define POUND_LENGTH   15
+
 static void get_item_display(menu_type *menu, int oid, bool cursor, int row, int col, int width)
 {
 	const int *choice = menu->menu_data;
 	int idx = choice[oid];
-	char o_name[120];
+	char o_name[200];
 	char label;
+	int weight;
+	char tmp_val[30];
+	u16b i, length, o_length;
 
 	byte attr = TERM_WHITE;
 
@@ -1129,10 +1134,23 @@ static void get_item_display(menu_type *menu, int oid, bool cursor, int row, int
 
 	/* Get the object description */
 	object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
-	object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
 
-	/* Hack -- enforce max length */
-	o_name[width - 3] = '\0';
+	/* Boundary control.  Ensure no memory leaks below during the for loop*/
+	length = strlen(o_name);
+	o_length = width - POUND_LENGTH;
+
+	/* Terminate the string */
+	o_name[o_length] = '\0';
+
+	/* add spaces to o_mname, ensuring memory leaks */
+	for (i = length; i < o_length; i++)
+	{
+		my_strcat(o_name," ", sizeof(o_name));
+	}
+
+	weight = o_ptr->weight * o_ptr->number;
+	strnfmt(tmp_val, sizeof(tmp_val), "%4d.%1d lb", weight / 10, weight % 10);
+	my_strcat(o_name, tmp_val, sizeof(o_name));
 
 	/* Hack - re-print the label with the right color, code taken from get_item_tag above*/
 	label = get_item_tag(menu, oid);
@@ -1140,7 +1158,9 @@ static void get_item_display(menu_type *menu, int oid, bool cursor, int row, int
 	c_put_str(attr, format("%c)",label), row, (col-3));
 
 	/* Now print the object  */
-	c_put_str(attr, format("%s", o_name), row, col);
+	c_put_str(attr, o_name, row, col);
+
+
 }
 
 
