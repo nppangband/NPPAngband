@@ -2185,7 +2185,7 @@ bool can_quest_at_level(void)
 	if (adult_no_quests) return (FALSE);
 
 	/* No more quests if they are at the bottom of the dungeon. */
-	if ((p_ptr->quest_depth + 2) > MAX_DEPTH) return (FALSE);
+	if (guild_quest_new_level() >= MAX_DEPTH) return (FALSE);
 
 	/* Make sure there is no fixed quest on the same level of quests */
 	for (i = 0; i < z_info->q_max; i++)

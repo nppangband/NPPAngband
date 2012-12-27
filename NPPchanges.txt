@@ -15,6 +15,7 @@ Bugfix: The guild sometimes overwrite bookstore inventory when generating reward
         with a very high flayer fame, causing the game to crash when the bookshop inventory was shuffled. 
 Bugfix: Fix inconcistencies of telling players about objects theyare not aware of yet.
 Bugfix: Unidentified flavored special artifacts were not dislaying thier flavors.
+Bugfix: Sometimes a quest was set up below max depth (6400').
 
 NPP 6.0.0 Changes: 
 Broke savecompatibility with NPP 0.5.4.
