@@ -250,6 +250,9 @@ bool make_attack_normal(monster_type *m_ptr)
 	}
 	blows = ap_cnt;
 
+	/* Make sure messages such as wakes up, etc. bome before attack messages */
+	if (size_mon_msg > 0) flush_monster_messages();
+
 	/* Scan through all the blows */
 	for (ap_cnt = 0; ap_cnt < blows; ap_cnt++)
 	{
