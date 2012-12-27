@@ -758,19 +758,19 @@ void get_title(char *buf, size_t max)
 {
 
 	/* Player's title */
-	if (p_ptr->q_fame > 1500) my_strcpy(buf, "oh glorious one", max);
-	else if (p_ptr->q_fame > 1100) my_strcpy(buf, "oh great one", max);
-	else if (p_ptr->q_fame > 800)
+	if (p_ptr->q_fame > 1800) my_strcpy(buf, "oh glorious one", max);
+	else if (p_ptr->q_fame > 1400) my_strcpy(buf, "oh great one", max);
+	else if (p_ptr->q_fame > 1000)
 	{
 		if (p_ptr->psex == SEX_MALE) my_strcpy(buf, "my lord", max);
 		else my_strcpy(buf, "my lady", max);
 	}
-	else if (p_ptr->q_fame > 500)
+	else if (p_ptr->q_fame > 700)
 	{
 		if (p_ptr->psex == SEX_MALE) my_strcpy(buf, "sir", max);
 		else my_strcpy(buf, "madam", max);
 	}
-	else if (p_ptr->q_fame > 200)
+	else if (p_ptr->q_fame > 300)
 	{
 		if (!op_ptr->full_name[0])
 		{
@@ -778,7 +778,11 @@ void get_title(char *buf, size_t max)
 		}
 		else my_strcpy(buf, op_ptr->full_name, max);
 	}
-	else my_strcpy(buf, (p_name + rp_ptr->name), max);
+	else if (p_ptr->q_fame > 50)
+	{
+		my_strcpy(buf, (p_name + rp_ptr->name), max);
+	}
+	else my_strcpy(buf, "stranger", max);
 
 	return;
 }
@@ -800,54 +804,65 @@ void prt_rep_guild(int rep_y, int rep_x)
 	rep_x += strlen(message);
 
 	/* Player's reputation */
-	switch (p_ptr->q_fame / 50)
+	switch (p_ptr->q_fame / 100)
 	{
 		case 0:
+		{
+			attr = TERM_RED;
+			my_strcpy(title, "insubstantial", sizeof(title));
+			break;
+		}
+		case 1:
+		case 2:
 		{
 			attr = TERM_RED;
 			my_strcpy(title, "poor", sizeof(title));
 			break;
 		}
-		case 1:
-		case 2:
+
 		case 3:
+		case 4:
+		case 5:
 		{
 			attr = TERM_YELLOW;
 			my_strcpy(title, "fair", sizeof(title));
 			break;
 		}
-		case 4:
-		case 5:
+
 		case 6:
+		case 7:
+		case 8:
 		{
 			attr = TERM_YELLOW;
 			my_strcpy(title, "good", sizeof(title));
 			break;
 		}
-		case 7:
-		case 8:
+
+		case 9:
+		case 10:
+		case 11:
 		{
 			attr = TERM_YELLOW;
 			my_strcpy(title, "very good", sizeof(title));
 			break;
 		}
-		case 9:
-		case 10:
+
+		case 12:
+		case 13:
 		{
 			attr = TERM_L_GREEN;
 			my_strcpy(title, "excellent", sizeof(title));
 			break;
 		}
-		case 11:
-		case 12:
-		case 13:
+
+		case 14:
+		case 15:
 		{
 			attr = TERM_L_GREEN;
 			my_strcpy(title, "superb", sizeof(title));
 			break;
 		}
-		case 14:
-		case 15:
+
 		case 16:
 		case 17:
 		{
