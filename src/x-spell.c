@@ -913,7 +913,7 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			if (desc_short) return ("");
 			if (cast)
 			{
-				set_recall();
+				if (!set_recall()) return (NULL);
 			}
 
 			break;
@@ -2152,7 +2152,7 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 			if (desc_short) return ("");
 			if (cast)
 			{
-				set_recall();
+				if (!set_recall()) return (NULL);
 			}
 
 			break;
@@ -3409,7 +3409,7 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 			if (desc_short) return ("");
 			if (cast)
 			{
-				set_recall();
+				if (!set_recall()) return (NULL);
 			}
 
 			break;

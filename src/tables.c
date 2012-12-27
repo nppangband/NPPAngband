@@ -1892,7 +1892,7 @@ option_entry options[OPT_MAX] =
 	{NULL,					NULL,									FALSE},		/* xxx */
 	{NULL,					NULL,									FALSE},		/* xxx */
 	{"auto_scum",			"Auto-scum for good levels",			FALSE},		/* OPT_auto_scum */
-	{"allow_themed_levels","Allow the generation of themed levels",TRUE},		/* OPT_allow_themed_levels */
+	{"allow_themed_levels","Allow the generation of themed levels",  TRUE},		/* OPT_allow_themed_levels */
 	{NULL,					NULL,									FALSE},		/* xxx */
 	{NULL,					NULL,									FALSE},		/* xxx */
 	{NULL,					NULL,									FALSE},		/* xxx */
@@ -1922,18 +1922,18 @@ option_entry options[OPT_MAX] =
 	{"view_bright_light",	"Use special colors for field of view",	FALSE},	/* OPT_view_bright_light */
 	{"view_granite_light",	"Use special colors for wall grids",	FALSE},	/* OPT_view_granite_light */
 	{"view_special_light",	"Use special colors for floor grids",	FALSE},	/* OPT_view_special_light */
-	{"easy_open",			"Open/Disarm/Close without direction",	FALSE},	/* OPT_easy_open */
-	{"easy_alter",			"Open/Disarm doors/traps on movement",	FALSE},	/* OPT_easy_alter */
+	{"easy_open",			"Open/Disarm/Close without direction",	TRUE},	/* OPT_easy_open */
+	{"easy_alter",			"Open/Disarm doors/traps on movement",	TRUE},	/* OPT_easy_alter */
 	{NULL,				NULL,								FALSE},/* xxx */
 	{"show_piles",			"Show stacks using special attr/char",	FALSE},	/* OPT_show_piles */
 	{"center_player",		"Center map continuously (very slow)",	FALSE},	/* OPT_center_player */
-	{"animate_flicker",    	"Shimmer multi-colored things",  		FALSE}, /* OPT_animate_flicker */
+	{"animate_flicker",    	"Shimmer multi-colored things",  		TRUE}, /* OPT_animate_flicker */
 	{"xchars_to_file",		"Allow accents in output files",		FALSE},	/* OPT_xchars_to_file */
 	{"auto_more",			"Automatically clear '-more-' prompts",	FALSE},	/* OPT_auto_more */
 	{NULL,				NULL,								FALSE},/* xxx */
-	{"auto_display_lists",	"Automatically display drop-down lists",FALSE},	/* OPT_auto_display_lists */
+	{"auto_display_lists",	"Automatically display drop-down lists", TRUE},	/* OPT_auto_display_lists */
 	{"hp_changes_color",	"Player color indicates low hit points",FALSE},	/* OPT_hp_changes_color*/
-	{"verify_leave_quests",	"Verify before descending from quest level",TRUE},/* OPT_verify_leave_quests*/
+	{"verify_leave_quest",	"Verify before leaving a quest level",TRUE},/* OPT_verify_leave_quest*/
 	{"mark_squelch_items",	"Items marked for squelch appear as dot",FALSE},/* OPT_mark_squelch_items */
 	{"mouse_movement",      "Allow mouse clicks to move the player",       TRUE }, /*OPT_mouse_movement*/
 	{"mouse_buttons",       "Show mouse status line buttons",              TRUE }, /*OPT_mouse_buttons*/

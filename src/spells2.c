@@ -1234,13 +1234,32 @@ void self_knowledge(void)
 /*
  * Set word of recall as appropriate
  */
-void set_recall(void)
+bool set_recall(void)
 {
 	/* Ironman */
 	if (adult_ironman && !p_ptr->total_winner)
 	{
 		msg_print("Nothing happens.");
-		return;
+		return (FALSE);
+	}
+
+	/* Verify leaving normal quest level */
+	if (verify_leave_quest)
+	{
+		char out_val[160];
+
+		if (quest_might_fail_if_leave_level())
+		{
+			sprintf(out_val, "Really risk failing your quest? ");
+			if (!get_check(out_val)) return (FALSE);
+		}
+
+		/* Verify leaving normal quest level */
+		else if (quest_shall_fail_if_leave_level())
+		{
+			sprintf(out_val, "Really fail your quest? ");
+			if (!get_check(out_val)) return (FALSE);
+		}
 	}
 
 	/* Activate recall */
@@ -1271,6 +1290,8 @@ void set_recall(void)
 	/* Redraw status line */
 	p_ptr->redraw = PR_STATUS;
 	handle_stuff();
+
+	return (TRUE);
 }
 
 

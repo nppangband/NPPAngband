@@ -1134,7 +1134,7 @@ extern bool remove_curse(bool heavy);
 extern bool remove_all_curse(void);
 extern bool restore_level(void);
 extern void self_knowledge(void);
-extern void set_recall(void);
+extern bool set_recall(void);
 extern bool detect(int dist, u16b detect_checks);
 extern void stair_creation(void);
 extern bool item_tester_hook_wieldable_ided_weapon(const object_type *o_ptr);

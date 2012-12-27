@@ -1404,7 +1404,7 @@ static bool read_scroll(object_type *o_ptr, bool *ident)
 
 		case SV_SCROLL_WORD_OF_RECALL:
 		{
-			set_recall();
+			if (!set_recall()) used_up = FALSE;
 			*ident = TRUE;
 			break;
 		}
@@ -2255,7 +2255,7 @@ static bool zap_rod(object_type *o_ptr, bool *ident, int dir)
 
 		case SV_ROD_RECALL:
 		{
-			set_recall();
+			if (!set_recall()) used_charge = FALSE;
 			*ident = TRUE;
 			break;
 		}
@@ -2829,7 +2829,7 @@ static bool activate_object(object_type *o_ptr, int dir)
 			case ACT_WOR:
 			{
 				msg_format("Your %s glows soft white...", o_name);
-				set_recall();
+				if (!set_recall()) return (FALSE);
 				break;
 			}
 
