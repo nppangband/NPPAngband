@@ -887,19 +887,19 @@ static void describe_monster_spells(int r_idx, const monster_lore *l_ptr)
 	if (l_ptr->r_l_flags5 & (RF5_BOLT_WATER))	vp[vn++] = "produce water bolts";
 	if (l_ptr->r_l_flags5 & (RF5_BOLT_NETHR))
 	{
-		if (spower < 40) vp[vn++] = "casts a nether bolt";
+		if (spower < 40) vp[vn++] = "produces a nether bolt";
 		else vp[vn++] = "hurls black bolts of nether";
 	}
 
 	if (l_ptr->r_l_flags5 & (RF5_BOLT_MANA))
 	{
-		if (spower < 5) vp[vn++] = "casts magic missiles";
-		else vp[vn++] = "cast mana bolts";
+		if (spower < 5) vp[vn++] = "fire magic missiles";
+		else vp[vn++] = "fire mana bolts";
 	}
 	if (l_ptr->r_l_flags5 & (RF5_BOLT_GRAV))
 	{
 		if (spower < 5) vp[vn++] = "fires gravity bolts";
-		else vp[vn++] = "casts powerful bolts of gravity";
+		else vp[vn++] = "shoots powerful bolts of gravity";
 	}
 
 	if (l_ptr->r_l_flags5 & (RF5_BEAM_ELEC))
@@ -916,7 +916,7 @@ static void describe_monster_spells(int r_idx, const monster_lore *l_ptr)
 		{
 			vp[vn++] = "breathe spears of ice";
 		}
-		else 	vp[vn++] = "cast lances of ice";
+		else 	vp[vn++] = "shoot lances of ice";
 	}
 
 	if (l_ptr->r_l_flags5 & (RF5_BEAM_NETHR))
@@ -925,7 +925,7 @@ static void describe_monster_spells(int r_idx, const monster_lore *l_ptr)
 		{
 			vp[vn++] = "breathe beams of nether";
 		}
-		else if (spower < 25) vp[vn++] = "cast beams of nether";
+		else if (spower < 25) vp[vn++] = "shoot beams of nether";
 		else if (spower < 50) vp[vn++] = "hurl lances of nether";
 		else vp[vn++] = "shoot rays of death";
 	}
