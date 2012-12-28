@@ -6,6 +6,10 @@ Added help file descriptions for the new quest rewards.
 Adjusted Ancient blue, green, and white dragons to 65 spellower (down from 100).
 Added more appropriate messages for when breathing monsters use beam attacks.
 The object selection menu now includes object weight.
+verify_leave_quest now verifies before casting word of recall spell on quest level.
+change default setting for some options.
+Revised the scale for guild reputation and player titles based on new quest system.
+Various tweaks to wilderness and labyrinth quests.
 Bugfix: Typos on the mage darkness storm name and plasma bolt spell short description.
 BUgfix: The druid spell elemental weapon only lasted for 5 turns.
 Bugfix: The guild sometimes offered dungeon spellbooks the player already has seen.
@@ -16,7 +20,11 @@ Bugfix: The guild sometimes overwrite bookstore inventory when generating reward
 Bugfix: Fix inconcistencies of telling players about objects theyare not aware of yet.
 Bugfix: Unidentified flavored special artifacts were not dislaying thier flavors.
 Bugfix: The game sometimes set up a quest below max depth (6400').
-Revised the scale for guild reputation and player titles based on new quest system.
+Bugfix: Monster messages were sometimes coming in the wrong order (The monster attacks you.  The  monste wakes up.)
+Bugfix:  Fix multiple grammar issues of spells being described as "casts spells which cast....".
+Bugfix:  A shopkeeper's race was describes as "Dundan".
+Bugfix: Fixed typos in the brigand and rogue descriptions in teh helpfiles.
+
 
 NPP 6.0.0 Changes: 
 Broke savecompatibility with NPP 0.5.4.
