@@ -796,8 +796,6 @@ static bool verify_item(int item)
 
 	object_type *o_ptr;
 
-
-
 	/* Inventory */
 	if (item >= 0)
 	{
@@ -1654,7 +1652,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 					k = 0 - floor_list[0];
 
 					/* Allow player to "refuse" certain actions */
-					if (!get_item_allow(k, TRUE))
+					if (!get_item_allow(k, FALSE))
 					{
 						done = TRUE;
 						break;
@@ -1930,7 +1928,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 	/* Check validity */
 	if (item)
 	{
-		if (!get_item_allow(*cp, TRUE))
+		if (!get_item_allow(*cp, FALSE))
 		{
 			item = FALSE;
 			msg_print(NULL);
