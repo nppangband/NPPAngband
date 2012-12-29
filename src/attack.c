@@ -46,11 +46,74 @@ bool test_hit(int chance, int ac, int vis)
 	return (FALSE);
 }
 
+/* Currently assumes all flags are in TR1 (object) and RF1 (monster flags) */
+struct slays_structure
+{
+  u32b slay_flag;  /* Assumes in object flag TR1_ */
+  byte multiplier;
+  u32b mon_flag; /* Assumes in monster flag RF3 */
+};
+
+static const struct slays_structure slays_info[] =
+{
+	{TR1_SLAY_ANIMAL, 2, RF3_ANIMAL},
+	{TR1_SLAY_EVIL, 2, RF3_EVIL},
+	{TR1_SLAY_UNDEAD, 3, RF3_UNDEAD},
+	{TR1_SLAY_DEMON, 3, RF3_DEMON},
+	{TR1_SLAY_ORC, 3, RF3_ORC},
+	{TR1_SLAY_TROLL, 3, RF3_TROLL},
+	{TR1_SLAY_GIANT, 3, RF3_GIANT},
+	{TR1_SLAY_DRAGON, 3, RF3_DRAGON},
+	{TR1_KILL_DRAGON, 5, RF3_DRAGON},
+	{TR1_KILL_DEMON, 5, RF3_DEMON},
+	{TR1_KILL_UNDEAD, 5, RF3_UNDEAD},
+
+};
+
+/* Currently assumes all flags are in TR1 (object) and RF1 (monster flags) */
+struct brands_structure
+{
+  u32b brand_flag;  /* Assumes in object flag TR1_ */
+  byte multiplier;
+  u32b mon_flag; /* Assumes in monster flag RF3 */
+  u32b element;
+  byte shallow_mult;
+  byte deep_mult;
+  byte divisor;
+};
 
 
+static const struct brands_structure brands_info[] =
+{
+	{TR1_BRAND_POIS, 3, RF3_IM_POIS, 0L, 1, 1, 1},
+	{TR1_BRAND_ACID, 3, RF3_IM_ACID, ELEMENT_ACID, 4, 5, 1},
+	{TR1_BRAND_ELEC, 3, RF3_IM_ELEC, (ELEMENT_WATER | ELEMENT_BWATER), 4, 5, 1},
+	{TR1_BRAND_FIRE, 3, RF3_IM_FIRE, (ELEMENT_LAVA), 5, 5, 1},
+	{TR1_BRAND_FIRE, 3, RF3_IM_FIRE, (ELEMENT_FIRE | ELEMENT_BWATER), 4, 4, 1},
+	{TR1_BRAND_FIRE, 3, RF3_IM_FIRE, (ELEMENT_WATER), 1, 1, 2},
+	{TR1_BRAND_COLD, 3, RF3_IM_COLD, (ELEMENT_ICE), 5, 5, 1},
+	{TR1_BRAND_COLD, 3, RF3_IM_COLD, (ELEMENT_WATER), 4, 4, 1},
+	{TR1_BRAND_COLD, 3, RF3_IM_COLD, (ELEMENT_LAVA), 1, 1, 2},
+	{TR1_BRAND_COLD, 3, RF3_IM_COLD, (ELEMENT_BMUD | ELEMENT_BWATER), 1, 1, 2}
+};
+
+
+
+/* Currently assumes all flags are in TR1 (object) and RF1 (monster flags) */
+struct mon_succeptability_struct
+{
+  u32b brand_flag;  /* Assumes in object flag TR1_ */
+  u32b mon_flag; /* Assumes in monster flag RF3 */
+};
+
+static const struct mon_succeptability_struct mon_succept[] =
+{
+	{TR1_BRAND_FIRE, RF3_HURT_FIRE},
+	{TR1_BRAND_COLD, RF3_HURT_COLD},
+};
 
 /*
- * Extract the "total damage" from a given object hitting a given monster.
+ * Adjust the damage dice for a given object hitting a given monster.
  *
  * Note that "flasks of oil" do NOT do fire damage, although they
  * certainly could be made to do so.  XXX XXX
@@ -58,9 +121,11 @@ bool test_hit(int chance, int ac, int vis)
  * Note that most brands and slays are x3, except Slay Animal (x2),
  * Slay Evil (x2), and Kill dragon (x5).
  */
-static int tot_dam_aux(const object_type *o_ptr, int tdam, const monster_type *m_ptr, bool is_weapon)
+static void dam_dice_aux(const object_type *o_ptr, int *dd, const monster_type *m_ptr, bool is_weapon)
 {
 	int mult = 1;
+	int div = 1;
+	int extra_dam = 0;
 
 	int y = m_ptr->fy;
 	int x = m_ptr->fx;
@@ -95,138 +160,109 @@ static int tot_dam_aux(const object_type *o_ptr, int tdam, const monster_type *m
 		case TV_SWORD:
 		case TV_DIGGING:
 		{
-			/* Slay Animal */
-			if ((f1 & (TR1_SLAY_ANIMAL)) &&
-			    (r_ptr->flags3 & (RF3_ANIMAL)))
-			{
-				if (m_ptr->ml)
-				{
-					l_ptr->r_l_flags3 |= (RF3_ANIMAL);
-				}
+			u16b i;
 
-				if (mult < 2) mult = 2;
+			/* Go through each slay/kill and get the best multiplier */
+			for (i = 0; i < N_ELEMENTS(slays_info); i++)
+			{
+				const struct slays_structure *si = &slays_info[i];
+
+				/* See if any of the weapons's slays flag matches the monster race flags */
+				if ((f1 & (si->slay_flag)) &&
+				    (r_ptr->flags3 & (si->mon_flag)))
+				{
+
+					/* If the player can see the monster, mark the lore */
+					if (m_ptr->ml)
+					{
+						l_ptr->r_l_flags3 |= (si->mon_flag);
+					}
+
+					/* Use the highest possible multiplier */
+					if (mult < si->multiplier) mult = si->multiplier;
+				}
 			}
 
-			/* Slay Evil */
-			if ((f1 & (TR1_SLAY_EVIL)) &&
-			    (r_ptr->flags3 & (RF3_EVIL)))
+			/* Go through each brand and look for a better multiplier, also factor in terrain */
+			for (i = 0; i < N_ELEMENTS(brands_info); i++)
 			{
-				if (m_ptr->ml)
-				{
-					l_ptr->r_l_flags3 |= (RF3_EVIL);
-				}
+				const struct brands_structure *bi = &brands_info[i];
 
-				if (mult < 2) mult = 2;
+				if (f1 & (bi->brand_flag))
+				{
+					/* If the monster is immune to the elemental brand, notice it */
+					if (r_ptr->flags3 & (bi->mon_flag))
+					{
+						if (m_ptr->ml)
+						{
+							l_ptr->r_l_flags3 |= (bi->mon_flag);
+						}
+					}
+
+					/* Possible increase in damage when standing in a terrain made of the element */
+					else if (!is_native && !is_flying && (element & (bi->element)) && (bi->element))
+					{
+						/* First handle damage reductions due to terrain */
+						if (bi->divisor > div)
+						{
+							div = bi->divisor;
+							terrain_flag = -1;
+						}
+
+						/* A deep feature increases damage even more */
+						else if (cave_ff2_match(y, x, FF2_DEEP))
+						{
+							/* Use the multiplier for a deep terrain if it is better */
+							if (mult < bi->deep_mult)
+							{
+								mult = bi->deep_mult;
+								terrain_flag = 1;
+							}
+						}
+
+
+						/* Handle shallow terrains */
+						else
+						{
+							/* Use the multiplier for a deep terrain if it is better */
+							if (mult < bi->shallow_mult)
+							{
+						      	mult = bi->shallow_mult;
+						      	terrain_flag = 1;
+							}
+						}
+					}
+
+					/* Otherwise, use the simple brand multplier */
+					else
+					{
+						if (mult < bi->multiplier) mult = bi->multiplier;
+					}
+				}
 			}
 
-			/* Slay Undead */
-			if ((f1 & (TR1_SLAY_UNDEAD)) &&
-			    (r_ptr->flags3 & (RF3_UNDEAD)))
+			/* Check for increased damage due to monster succeptability */
+			for (i = 0; i < N_ELEMENTS(mon_succept); i++)
 			{
-				if (m_ptr->ml)
-				{
-					l_ptr->r_l_flags3 |= (RF3_UNDEAD);
-				}
+				const struct mon_succeptability_struct *ms = &mon_succept[i];
 
-				if (mult < 3) mult = 3;
+				/* Does the weapon have this elemental brand? */
+				if (f1 & (ms->brand_flag))
+				{
+					/* Does the monster take extra damage from this brand? */
+					if (r_ptr->flags3 & (ms->mon_flag))
+					{
+						extra_dam = 1;
+
+						if (m_ptr->ml)
+						{
+							l_ptr->r_l_flags3 |= (ms->mon_flag);
+						}
+					}
+				}
 			}
 
-			/* Slay Demon */
-			if ((f1 & (TR1_SLAY_DEMON)) &&
-			    (r_ptr->flags3 & (RF3_DEMON)))
-			{
-				if (m_ptr->ml)
-				{
-					l_ptr->r_l_flags3 |= (RF3_DEMON);
-				}
-
-				if (mult < 3) mult = 3;
-			}
-
-			/* Slay Orc */
-			if ((f1 & (TR1_SLAY_ORC)) &&
-			    (r_ptr->flags3 & (RF3_ORC)))
-			{
-				if (m_ptr->ml)
-				{
-					l_ptr->r_l_flags3 |= (RF3_ORC);
-				}
-
-				if (mult < 3) mult = 3;
-			}
-
-			/* Slay Troll */
-			if ((f1 & (TR1_SLAY_TROLL)) &&
-			    (r_ptr->flags3 & (RF3_TROLL)))
-			{
-				if (m_ptr->ml)
-				{
-					l_ptr->r_l_flags3 |= (RF3_TROLL);
-				}
-
-				if (mult < 3) mult = 3;
-			}
-
-			/* Slay Giant */
-			if ((f1 & (TR1_SLAY_GIANT)) &&
-			    (r_ptr->flags3 & (RF3_GIANT)))
-			{
-				if (m_ptr->ml)
-				{
-					l_ptr->r_l_flags3 |= (RF3_GIANT);
-				}
-
-				if (mult < 3) mult = 3;
-			}
-
-			/* Slay Dragon */
-			if ((f1 & (TR1_SLAY_DRAGON)) &&
-			    (r_ptr->flags3 & (RF3_DRAGON)))
-			{
-				if (m_ptr->ml)
-				{
-					l_ptr->r_l_flags3 |= (RF3_DRAGON);
-				}
-
-				if (mult < 3) mult = 3;
-			}
-
-			/* Execute Dragon */
-			if ((f1 & (TR1_KILL_DRAGON)) &&
-			    (r_ptr->flags3 & (RF3_DRAGON)))
-			{
-				if (m_ptr->ml)
-				{
-					l_ptr->r_l_flags3 |= (RF3_DRAGON);
-				}
-
-				if (mult < 5) mult = 5;
-			}
-
-			/* Execute demon */
-			if ((f1 & (TR1_KILL_DEMON)) &&
-			    (r_ptr->flags3 & (RF3_DEMON)))
-			{
-				if (m_ptr->ml)
-				{
-					l_ptr->r_l_flags3 |= (RF3_DEMON);
-				}
-
-				if (mult < 5) mult = 5;
-			}
-
-			/* Execute undead */
-			if ((f1 & (TR1_KILL_UNDEAD)) &&
-			    (r_ptr->flags3 & (RF3_UNDEAD)))
-			{
-				if (m_ptr->ml)
-				{
-					l_ptr->r_l_flags3 |= (RF3_UNDEAD);
-				}
-
-				if (mult < 5) mult = 5;
-			}
-
+			/* Handle the elemental weapon structure */
 			if ((p_ptr->timed[TMD_SLAY_ELEM]) && (is_weapon))
 			{
 				/*First, Mark all resists in the lore if applicable*/
@@ -250,284 +286,52 @@ static int tot_dam_aux(const object_type *o_ptr, int tdam, const monster_type *m
 				}
 			}
 
-			/* Brand (Poison) */
-			if (f1 & (TR1_BRAND_POIS))
-			{
-				/* Notice immunity */
-				if (r_ptr->flags3 & (RF3_IM_POIS))
-				{
-					if (m_ptr->ml)
-					{
-						l_ptr->r_l_flags3 |= (RF3_IM_POIS);
-					}
-				}
-
-				/* Otherwise, take the damage */
-				else
-				{
-					if (mult < 3) mult = 3;
-				}
-			}
-
-			/* Brand (Acid) */
-			if (f1 & (TR1_BRAND_ACID))
-			{
-				/* Notice immunity */
-				if (r_ptr->flags3 & (RF3_IM_ACID))
-				{
-					if (m_ptr->ml)
-					{
-						l_ptr->r_l_flags3 |= (RF3_IM_ACID);
-					}
-				}
-				/* Otherwise, take the damage */
-				/* Increase damage when standing in acid */
-				else if (!is_native && !is_flying && (element == ELEMENT_ACID))
-				{
-					/* A deep feature increases damage even more */
-					if (cave_ff2_match(y, x, FF2_DEEP))
-					{
-						if (mult < 5)
-						{
-							mult = 5;
-							terrain_flag = 1;
-						}
-					}
-					else
-					{
-						if (mult < 4)
-						{
-						      	mult = 4;
-							terrain_flag = 1;
-						}
-					}
-				}
-				else
-				{
-					if (mult < 3) mult = 3;
-				}
-			}
-
-			/* Brand (Elec) */
-			if (f1 & (TR1_BRAND_ELEC))
-			{
-				/* Notice immunity */
-				if (r_ptr->flags3 & (RF3_IM_ELEC))
-				{
-					if (m_ptr->ml)
-					{
-						l_ptr->r_l_flags3 |= (RF3_IM_ELEC);
-					}
-				}
-				/* Otherwise, take the damage */
-				/* Water increases damage */
-				else if (!is_native && !is_flying &&
-					((element == ELEMENT_WATER) || (element == ELEMENT_BWATER)))
-				{
-					/* A deep feature increases damage even more */
-					if (cave_ff2_match(y, x, FF2_DEEP))
-					{
-						if (mult < 5)
-						{
-						      	mult = 5;
-							terrain_flag = 1;
-						}
-					}
-					else
-					{
-						if (mult < 4)
-						{
-						       	mult = 4;
-							terrain_flag = 1;
-						}
-					}
-				}
-				else
-				{
-					if (mult < 3) mult = 3;
-				}
-			}
-
-			/* Brand (Fire) */
-			if (f1 & (TR1_BRAND_FIRE))
-			{
-				int my_mult = 0;
-				int my_terrain_flag = 0;
-
-				/* Notice immunity */
-				if (r_ptr->flags3 & (RF3_IM_FIRE))
-				{
-					if (m_ptr->ml)
-					{
-						l_ptr->r_l_flags3 |= (RF3_IM_FIRE);
-					}
-				}
-				/* Flying monsters don't take damage from terrain */
-				else if (is_flying)
-				{
-					my_mult = 3;
-				}
-				/* Otherwise, take the damage */
-				/* Lava increases damage a lot */
-				else if (!is_native && (element == ELEMENT_LAVA))
-				{
-					my_mult = 5;
-					my_terrain_flag = 1;
-				}
-				/* Heat increases damage */
-				else if (!is_native &&
-					((element == ELEMENT_FIRE) || (element == ELEMENT_BMUD) ||
-						(element == ELEMENT_BWATER)))
-				{
-					my_mult = 4;
-					my_terrain_flag = 1;
-				}
-				/* Water decreases damage */
-				else if (element == ELEMENT_WATER)
-				{
-					my_mult = 2;
-					my_terrain_flag = -1;
-				}
-				/* Default damage increase */
-				else
-				{
-					my_mult = 3;
-				}
-
-				/* Succeptable */
-				if (r_ptr->flags3 & (RF3_HURT_FIRE))
-				{
-					/* Extra Damage */
-					if (my_mult > 0) ++my_mult;
-
-					if (m_ptr->ml)
-					{
-						l_ptr->r_l_flags3 |= (RF3_HURT_FIRE);
-					}
-				}
-
-				/* Override multiplier if brand damage is bigger */
-				if (my_mult > mult)
-				{
-					mult = my_mult;
-					terrain_flag = my_terrain_flag;
-				}
-			}
-
-			/* Brand (Cold) */
-			if (f1 & (TR1_BRAND_COLD))
-			{
-				int my_mult = 0;
-				int my_terrain_flag = 0;
-
-				/* Notice immunity */
-				if (r_ptr->flags3 & (RF3_IM_COLD))
-				{
-					if (m_ptr->ml)
-					{
-						l_ptr->r_l_flags3 |= (RF3_IM_COLD);
-					}
-				}
-				/* Flying monsters don't take damage from terrain */
-				else if (is_flying)
-				{
-					my_mult = 3;
-				}
-				/* Otherwise, take the damage */
-				/* Ice increases damage a lot */
-				else if (!is_native && (element == ELEMENT_ICE))
-				{
-					my_mult = 5;
-					my_terrain_flag = 1;
-				}
-				/* Water increases damage */
-				else if (!is_native && (element == ELEMENT_WATER))
-				{
-					my_mult = 4;
-					my_terrain_flag = 1;
-				}
-				/* Lava nullifies cold brand  */
-				else if (element == ELEMENT_LAVA)
-				{
-					my_terrain_flag = -1;
-				}
-				/* Heat decreases damage */
-				else if ((element == ELEMENT_FIRE) ||
-					(element == ELEMENT_BMUD) ||
-					(element == ELEMENT_BWATER))
-				{
-					my_mult = 2;
-					my_terrain_flag = -1;
-				}
-				/* Default damage increase */
-				else
-				{
-					my_mult = 3;
-				}
-
-				/* Succeptable */
-				if (r_ptr->flags3 & (RF3_HURT_COLD))
-				{
-					/* Extra damage */
-					if (my_mult > 0) ++my_mult;
-
-					if (m_ptr->ml)
-					{
-						l_ptr->r_l_flags3 |= (RF3_HURT_COLD);
-					}
-				}
-
-				/* Override multiplier if brand damage is bigger */
-				if (my_mult > mult)
-				{
-				       	mult = my_mult;
-					terrain_flag = my_terrain_flag;
-				}
-			}
-
 			break;
 		}
+		default: break;
 	}
 
-	/* To emulate fractional multiplier due to brigand combat */
-	mult *= 100;
+	/*rogues are deadly with slings*/
+	if ((cp_ptr->flags & CF_ROGUE_COMBAT) && (p_ptr->state.ammo_tval == TV_SHOT))
+	{
+		extra_dam++;
+	}
+
+	/* Add in extra damage for succeptabilities, if any */
+	mult += extra_dam;
 
 	/* A brigand can poison shots sometimes, if monster is not immune */
 	if ((o_ptr->tval == TV_SHOT) &&
 		(cp_ptr->flags & (CF_BRIGAND_COMBAT)) &&
 		!(r_ptr->flags3 & (RF3_IM_POIS)))
 	{
-		int m = 0;
+
 		char *message = "Your killer arts allowed you to create a poisoned shot!";
+
+		/* Re-set the variable */
+		extra_dam = 0;
 
 		/* Bigger chance to get a poisoned shot if the monster is sleeping */
 		if (m_ptr->m_timed[MON_TMD_SLEEP])
 		{
-			/* Chance and multiplier vary with player level */
+			/* Chance varies with player level */
 			if (rand_int(100) < (50 + 25 * p_ptr->lev / 25))
 			{
-				if (p_ptr->lev >= 50) m = 350;
-				else if (p_ptr->lev >= 47) m = 300;
-				else if (p_ptr->lev >= 40) m = 250;
-				else if (p_ptr->lev >= 25) m = 200;
-				else m = 150;
-
-				/* message = "Poison damage (SLEEP)!"; */
+				extra_dam = 1;
 			}
 		}
 		/* Monster is awake */
 		else if (rand_int(100) < p_ptr->lev)
 		{
-			/* Chance and multiplier vary with player level */
-			if (p_ptr->lev >= 35) m = 160;
-			else m = 140;
+			extra_dam = 1;
 		}
 
 		/* Multiplier is bigger than the current */
-		if ((m > 0) && (mult < m))
+		if (extra_dam)
 		{
 			/* Save multiplier */
-			mult = m;
+			mult += extra_dam;
+
 			/* Cancel terrain bonuses */
 			terrain_flag = 0;
 			/* Message */
@@ -556,46 +360,63 @@ static int tot_dam_aux(const object_type *o_ptr, int tdam, const monster_type *m
 		}
 	}
 
-	/* Return the total damage */
-	return ((tdam * mult) / 100);
+	/* Paranoia */
+	if (mult < 1) mult = 1;
+
+	/* Factor in the increased damage */
+	*dd *= mult;
+
+	/* Factor in reduced damage */
+	*dd /= div;
+
+	/* Boundry Control */
+	if (*dd < 1) *dd = 1;
+
 }
 /*
  * Critical hits (from objects thrown by player)
  * Factor in item weight, total plusses, and player level, bow skill.
  */
-static int critical_shot(int weight, int plus, int dam, bool throw)
+static int critical_shot(int weight, int plus_to_h, int *dd, int *plus, bool throw)
 {
 	int i, k;
 
 	int bonus = (throw ? p_ptr->state.skills[SKILL_TO_HIT_THROW] : p_ptr->state.skills[SKILL_TO_HIT_BOW]);
 
 	/* Extract "shot" power */
-	i = (weight + ((p_ptr->state.to_h + plus) * 4) + (p_ptr->lev * 2));
-	i += bonus;
+	i = weight + (p_ptr->state.to_h + plus_to_h) * 2;
+	i += bonus * 2;
 
 	/* Critical hit */
 	if (randint(5000) <= i)
 	{
-		k = weight + randint(500 + bonus);
+		int crit_hit_bonus = 250 + (bonus * 2);
+		crit_hit_bonus += (p_ptr->state.to_h + plus_to_h) * 2;
+		k = weight + randint(crit_hit_bonus);
 
 		if (k < 500)
 		{
 			msg_print("It was a good hit!");
-			dam = 2 * dam + 5;
+			*dd *= 2;
+			*plus += 5;
 		}
 		else if (k < 1000)
 		{
 			msg_print("It was a great hit!");
-			dam = 2 * dam + 10;
+			*dd *= 2;
+			*plus += 10;
 		}
 		else
 		{
 			msg_print("It was a superb hit!");
-			dam = 3 * dam + 15;
+			*dd *= 3;
+			*plus += 15;
 		}
+
+		return (2);
 	}
 
-	return (dam);
+	return (1);
 }
 
 
@@ -655,65 +476,69 @@ static int breakage_chance(const object_type *o_ptr)
  *
  * Factor in weapon weight, total plusses, player level.
  */
-static bool critical_norm(int weight, int plus, int *dd, int *ds)
+static int critical_norm(int weight, int plus_to_h, int *dd, int *plus)
 {
-	int i, k;
+	int i;
 
 	/* Extract "blow" power */
-	i = weight + ((p_ptr->state.to_h + plus) * 5);
-	i += p_ptr->state.skills[SKILL_TO_HIT_MELEE];
+	i = weight + (p_ptr->state.to_h + plus_to_h) * 3;
+	i += p_ptr->state.skills[SKILL_TO_HIT_MELEE] * 2;
 
 	/* Chance */
 	if (randint(5000) <= i)
 	{
-		k = weight + randint((450 + p_ptr->state.skills[SKILL_TO_HIT_MELEE]));
+		int k;
+		int crit_hit_bonus = 250 + p_ptr->state.skills[SKILL_TO_HIT_MELEE];
+		crit_hit_bonus += (p_ptr->state.to_h + plus_to_h);
+
+		k = weight + randint(crit_hit_bonus);
 
 		if (k < 400)
 		{
 			sound(MSG_HIT_GOOD);
 			msg_print("It was a good hit!");
 			*dd *= 2;
-			*ds += 2;
+			*plus += 5;
 		}
 		else if (k < 700)
 		{
 			sound(MSG_HIT_GREAT);
 			msg_print("It was a great hit!");
 			*dd *= 2;
-			*ds += 4;
+			*plus += 10;
 		}
 		else if (k < 900)
 		{
 			sound(MSG_HIT_SUPERB);
 			msg_print("It was a superb hit!");
 			*dd *= 3;
-			*ds += 6;
+			*plus += 15;
 		}
 		else if (k < 1300)
 		{
 			sound(MSG_HIT_HI_GREAT);
 			msg_print("It was a *GREAT* hit!");
 			*dd *= 3;
-			*ds += 8;
+			*plus += 20;
 		}
 		else
 		{
 			sound(MSG_HIT_HI_SUPERB);
 			msg_print("It was a *SUPERB* hit!");
 			*dd *= 7;
-			*ds += (*dd % 2);
 			*dd /= 2;
-			*ds += 10;
+			*plus += 25;
 		}
 	}
 
 	else
 	{
 		sound(MSG_HIT);
-		return (FALSE);
+		return (1);
 	}
 
-	return (TRUE);
+	/* Exceptional hit */
+	return (2);
 }
 
 
@@ -889,26 +714,21 @@ void py_attack(int y, int x)
 			{
 				int dd = o_ptr->dd;
 				int ds = o_ptr->ds;
+				int plus = (p_ptr->state.to_d + o_ptr->to_d);
 
-				bool reroll = critical_norm(o_ptr->weight, o_ptr->to_h, &dd, &ds);
+				int tries = critical_norm(o_ptr->weight, o_ptr->to_h, &dd, &plus);
 
-				k = damroll(dd, ds);
+				/* Possibly increase the damage dice due to brands, slays, etc */
+				dam_dice_aux(o_ptr, &dd, m_ptr, TRUE);
 
-				if (reroll)
-				{
-					int k2 = damroll(dd, ds);
-					if (k2 > k) k = k2;
-				}
-				k = tot_dam_aux(o_ptr, k, m_ptr, TRUE);
+				k = max_damroll(dd, ds, tries) + plus;
+
+
+				/* No negative damage */
+				if (k < 0) k = 0;
+
 				if (p_ptr->state.impact && (k > 50)) do_quake = TRUE;
-				k += o_ptr->to_d;
 			}
-
-			/* Apply the player damage bonuses */
-			k += p_ptr->state.to_d;
-
-			/* No negative damage */
-			if (k < 0) k = 0;
 
 			/* Complex message */
 			if (p_ptr->wizard)
@@ -990,7 +810,7 @@ void do_cmd_fire(cmd_code code, cmd_arg args[])
 {
 	int dir, item;
 	int i, j, y, x, ty, tx;
-	int tdam, tdis, thits, tmul;
+	int tmul, tdis, thits;
 	int bonus, chance;
 
 	object_type *o_ptr;
@@ -1110,18 +930,12 @@ void do_cmd_fire(cmd_code code, cmd_arg args[])
 	/* Use the proper number of shots */
 	thits = p_ptr->state.num_fire;
 
-	/* Base damage from thrown object plus launcher bonus */
-	tdam = damroll(i_ptr->dd, i_ptr->ds) + i_ptr->to_d + j_ptr->to_d;
-
 	/* Actually "fire" the object */
 	bonus = (p_ptr->state.to_h + i_ptr->to_h + j_ptr->to_h);
 	chance = (p_ptr->state.skills[SKILL_TO_HIT_BOW] + (bonus * BTH_PLUS_ADJ));
 
 	/* Assume a base multiplier */
 	tmul = p_ptr->state.ammo_mult;
-
-	/* Boost the damage */
-	tdam *= tmul;
 
 	/* Base range XXX XXX */
 	tdis = 10 + 5 * tmul;
@@ -1224,7 +1038,6 @@ void do_cmd_fire(cmd_code code, cmd_arg args[])
 
 			int visible = m_ptr->ml;
 
-
 			/*Adjust for player terrain*/
 			chance = feat_adjust_combat_for_player(chance, FALSE);
 
@@ -1261,6 +1074,8 @@ void do_cmd_fire(cmd_code code, cmd_arg args[])
 			else if (test_hit(chance2, r_ptr->ac, m_ptr->ml))
 			{
 				bool fear = FALSE;
+				int tdam, dd, ds, tries;
+				int plus = (i_ptr->to_d + j_ptr->to_d) * tmul;
 
 				/* Assume a default death */
 				cptr note_dies = " dies.";
@@ -1302,16 +1117,17 @@ void do_cmd_fire(cmd_code code, cmd_arg args[])
 					if (m_ptr->ml) health_track(cave_m_idx[y][x]);
 				}
 
+				dd = i_ptr->dd * tmul;
+				ds = i_ptr->ds;
+
 				/* Apply special damage XXX XXX XXX */
-				tdam = tot_dam_aux(i_ptr, tdam, m_ptr, FALSE);
-				tdam = critical_shot(i_ptr->weight, i_ptr->to_h, tdam, FALSE);
+				tries = critical_shot(i_ptr->weight, (i_ptr->to_h + j_ptr->to_h), &dd, &plus, FALSE);
 
-				/*rogues are deadly with slings*/
-				if ((cp_ptr->flags & CF_ROGUE_COMBAT) && (p_ptr->state.ammo_tval == TV_SHOT))
-				{
+				/* Possibly increase the damage dice due to brands, slays, etc */
+				dam_dice_aux(i_ptr, &dd, m_ptr, FALSE);
 
-					tdam += p_ptr->lev * 2 / 3;
-				}
+				/* Base damage from thrown object plus bonuses */
+				tdam = max_damroll(dd, ds, tries) + plus;
 
 				/* No negative damage */
 				if (tdam < 0) tdam = 0;
@@ -1319,6 +1135,7 @@ void do_cmd_fire(cmd_code code, cmd_arg args[])
 				/* Complex message */
 				if (p_ptr->wizard)
 				{
+					msg_format("You do %dd%d + %d damage.", dd, ds, plus);
 					msg_format("You do %d (out of %d) damage.",
 					           tdam, m_ptr->hp);
 				}
@@ -1923,7 +1740,7 @@ void do_cmd_throw(cmd_code code, cmd_arg args[])
 {
 	int dir, item;
 	int i, j, y, x, ty, tx;
-	int chance, tdam, tdis;
+	int chance, tdis;
 	int mul, divider;
 	u32b f1, f2, f3, fn;
 
@@ -2044,9 +1861,6 @@ void do_cmd_throw(cmd_code code, cmd_arg args[])
 
 	/* Max distance of 10 */
 	if (tdis > 10) tdis = 10;
-
-	/* Hack -- Base damage from thrown object */
-	tdam = damroll(i_ptr->dd, i_ptr->ds) + i_ptr->to_d;
 
 	/* Chance of hitting */
 	if (f3 & (TR3_THROWING))
@@ -2181,6 +1995,8 @@ void do_cmd_throw(cmd_code code, cmd_arg args[])
 			else if (test_hit((chance2 + sleeping_bonus), r_ptr->ac, m_ptr->ml))
 			{
 				bool fear = FALSE;
+				int tdam, dd, ds, tries;
+				int plus = i_ptr->to_d + p_ptr->state.to_d;
 
 				/* Assume a default death */
 				cptr note_dies = " dies.";
@@ -2231,6 +2047,9 @@ void do_cmd_throw(cmd_code code, cmd_arg args[])
 
 				}
 
+				dd = i_ptr->dd;
+				ds = i_ptr->ds;
+
 				/*special effects sometimes reveal the kind of potion*/
 				if (i_ptr->tval == TV_POTION)
 				{
@@ -2249,22 +2068,33 @@ void do_cmd_throw(cmd_code code, cmd_arg args[])
 				}
 
 				/* Apply special damage XXX XXX XXX */
-				if (!potion_effect) tdam = tot_dam_aux(i_ptr, tdam, m_ptr, FALSE);
+				if (!potion_effect) dam_dice_aux(i_ptr, &dd, m_ptr, FALSE);
 
 				/* Object is a throwing weapon. */
 				if (f3 & (TR3_THROWING))
 				{
 					/* Perfectly balanced weapons do even more damage. */
-					if (i_ptr->ident & IDENT_PERFECT_BALANCE) tdam *= 2;
+					if (i_ptr->ident & IDENT_PERFECT_BALANCE)
+					{
+						dd *= 2;
 
-					/* Critical hits may add damage dice. */
-					tdam = critical_shot(i_ptr->weight, i_ptr->to_h, tdam, TRUE);
+						/* Rogues are especially good at thrown weapons */
+						if (cp_ptr->flags & CF_ROGUE_COMBAT) dd *= 2;
+					}
 
 					/*
 					 * Double the damage for throwing weapons
 					 */
-					tdam *= 2;
+					dd *= 2;
 				}
+
+				/* Critical hits may add damage dice. */
+				tries = critical_shot(i_ptr->weight, i_ptr->to_h, &dd, &plus, TRUE);
+
+				/* Base damage from thrown object plus bonuses */
+				tdam = max_damroll(dd, ds, tries) + plus;
+
+
 
 				/* No negative damage */
 				if (tdam < 0) tdam = 0;
@@ -2272,7 +2102,7 @@ void do_cmd_throw(cmd_code code, cmd_arg args[])
 				/* Complex message */
 				if (p_ptr->wizard)
 				{
-
+					msg_format("You do %dd%d + %d damage.", dd, ds, plus);
 					msg_format("You do %d (out of %d) damage.",
 					           (potion_effect ? pdam : tdam), m_ptr->hp);
 				}

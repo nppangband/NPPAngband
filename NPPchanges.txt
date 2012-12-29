@@ -12,6 +12,7 @@ Revised the scale for guild reputation and player titles based on new quest syst
 Helpfiles now specify that poison resistance prevents the player from getting poisoned.
 Various tweaks to wilderness and labyrinth quests.
 Changed rarity of scrolls of summon unique from 8 to 4.
+Revised damage calculation from player melee, shooting, and throwing attacks.
 Bugfix: Typos on the mage darkness storm name and plasma bolt spell short description.
 BUgfix: The druid spell elemental weapon only lasted for 5 turns.
 Bugfix: The guild sometimes offered dungeon spellbooks the player already has seen.
