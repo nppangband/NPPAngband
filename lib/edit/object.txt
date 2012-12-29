@@ -2796,7 +2796,7 @@ G:?:w
 I:70:6:0
 W:25:0:5:0
 P:0:0d0:0:0:0
-A:25/8
+A:25/4
 F:EASY_KNOW
 D:It summons 1 unique on the current dungeon level.   If the unique
 D: normally has escorts, it will appear with escorts.
