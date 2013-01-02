@@ -3452,7 +3452,7 @@ void update_view(void)
 	fire_n = 0;
 
 	/* Extract "radius" value */
-	radius = p_ptr->cur_light;
+	radius = p_ptr->state.cur_light;
 
 	/* Handle real light */
 	if (radius > 0) ++radius;

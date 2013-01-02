@@ -3003,3 +3003,40 @@ cptr roguelike_home_letters =  "acfhmnoqruvyz13456790ABD";
 cptr standard_equip_letters =  "abcdefghijklmnopqrstuvw";
 cptr roguelike_equip_letters = "acdefgimopqrstuwvxzABCD";
 
+
+const slays_structure slays_info[11] =
+{
+	{TR1_SLAY_ANIMAL, 2, RF3_ANIMAL, 	"animals"},
+	{TR1_SLAY_EVIL, 2, RF3_EVIL, 		"evil creatures"},
+	{TR1_SLAY_UNDEAD, 3, RF3_UNDEAD,	"the undead"},
+	{TR1_SLAY_DEMON, 3, RF3_DEMON, 		"demons"},
+	{TR1_SLAY_ORC, 3, RF3_ORC, 			"orcs"},
+	{TR1_SLAY_TROLL, 3, RF3_TROLL, 		"trolls"},
+	{TR1_SLAY_GIANT, 3, RF3_GIANT, 		"giants"},
+	{TR1_SLAY_DRAGON, 3, RF3_DRAGON, 	"dragons"},
+	{TR1_KILL_DRAGON, 5, RF3_DRAGON, 	"dragons"},
+	{TR1_KILL_DEMON, 5, RF3_DEMON, 		"demons"},
+	{TR1_KILL_UNDEAD, 5, RF3_UNDEAD,	"the undead"},
+
+};
+
+
+const brands_structure brands_info[10] =
+{
+	{TR1_BRAND_POIS, 3, RF3_IM_POIS, 0L, 1, 1, 1, "resist poison"},
+	{TR1_BRAND_ACID, 3, RF3_IM_ACID, ELEMENT_ACID, 4, 5, 1, "resist acid"},
+	{TR1_BRAND_ELEC, 3, RF3_IM_ELEC, (ELEMENT_WATER | ELEMENT_BWATER), 4, 5, 1, "resist electricity"},
+	{TR1_BRAND_FIRE, 3, RF3_IM_FIRE, (ELEMENT_LAVA), 5, 5, 1, "resist fire"},
+	{TR1_BRAND_FIRE, 3, RF3_IM_FIRE, (ELEMENT_FIRE | ELEMENT_BWATER), 4, 4, 1, "resist fire"},
+	{TR1_BRAND_FIRE, 3, RF3_IM_FIRE, (ELEMENT_WATER), 1, 1, 2, "resist fire"},
+	{TR1_BRAND_COLD, 3, RF3_IM_COLD, (ELEMENT_ICE), 5, 5, 1, "resist cold"},
+	{TR1_BRAND_COLD, 3, RF3_IM_COLD, (ELEMENT_WATER), 4, 4, 1, "resist cold"},
+	{TR1_BRAND_COLD, 3, RF3_IM_COLD, (ELEMENT_LAVA), 1, 1, 2, "resist cold"},
+	{TR1_BRAND_COLD, 3, RF3_IM_COLD, (ELEMENT_BMUD | ELEMENT_BWATER), 1, 1, 2,"resist cold"}
+};
+
+const mon_succeptability_struct mon_succept[2] =
+{
+	{TR1_BRAND_FIRE, RF3_HURT_FIRE, "fire"},
+	{TR1_BRAND_COLD, RF3_HURT_COLD, "cold"},
+};

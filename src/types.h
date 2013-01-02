@@ -84,7 +84,9 @@ typedef struct dynamic_grid_type dynamic_grid_type;
 typedef struct quiver_group_type quiver_group_type;
 typedef struct option_entry option_entry;
 typedef struct dungeon_capabilities_type dungeon_capabilities_type;
-
+typedef struct slays_structure slays_structure;
+typedef struct brands_structure brands_structure;
+typedef struct mon_succeptability_struct mon_succeptability_struct;
 
 
 
@@ -940,9 +942,7 @@ struct player_state
 
 	u32b noise;			/* Derived from stealth */
 
-	bool heavy_wield;	/* Heavy weapon */
-	bool heavy_shoot;	/* Heavy shooter */
-	bool icky_wield;	/* Icky weapon */
+	s16b cur_light;		/* Radius of lite (if any) */
 
 	bool sustain_str;	/* Keep strength */
 	bool sustain_int;	/* Keep intelligence */
@@ -991,6 +991,14 @@ struct player_state
 	bool exp_drain;		/* Experience draining */
 
 	bool bless_blade;	/* Blessed blade */
+
+	bool cursed_quiver;	/* The quiver is cursed */
+
+	bool cumber_armor;	/* Mana draining armor */
+	bool cumber_glove;	/* Mana draining gloves */
+	bool heavy_wield;	/* Heavy weapon */
+	bool heavy_shoot;	/* Heavy shooter */
+	bool icky_wield;	/* Icky weapon */
 };
 
 
@@ -1177,14 +1185,6 @@ struct player_type
 
 	s16b new_spells;		/* Number of spells available */
 
-	bool cumber_armor;	/* Mana draining armor */
-	bool cumber_glove;	/* Mana draining gloves */
-	bool heavy_wield;	/* Heavy weapon */
-	bool heavy_shoot;	/* Heavy shooter */
-	bool icky_wield;	/* Icky weapon */
-
-	s16b cur_light;		/* Radius of lite (if any) */
-
 	u32b notice;		/* Special Updates (bit flags) */
 	u32b update;		/* Pending Updates (bit flags) */
 	u32b redraw;		/* Normal Redraws (bit flags) */
@@ -1214,7 +1214,7 @@ struct player_type
 
 	s32b p_turn; /* Player turn */
 
-	bool cursed_quiver;	/* The quiver is cursed */
+
 
 	u16b dungeon_type;	/* One of the DUNGEON_TYPE_* constants */
 
@@ -1509,6 +1509,35 @@ typedef struct
 
 } monster_vis;
 
+/* Currently assumes all flags are in TR1 (object) and RF1 (monster flags) */
+struct slays_structure
+{
+  u32b slay_flag;  /* Assumes in object flag TR1_ */
+  byte multiplier;
+  u32b mon_flag; /* Assumes in monster flag RF3 */
+  cptr slay_race;
+};
+
+/* Currently assumes all flags are in TR1 (object) and RF1 (monster flags) */
+struct brands_structure
+{
+  u32b brand_flag;  /* Assumes in object flag TR1_ */
+  byte multiplier;
+  u32b mon_flag; /* Assumes in monster flag RF3 */
+  u32b element;
+  byte shallow_mult;
+  byte deep_mult;
+  byte divisor;
+  cptr brand_resist;
+};
+
+/* Currently assumes all flags are in TR1 (object) and RF1 (monster flags) */
+struct mon_succeptability_struct
+{
+  u32b brand_flag;  /* Assumes in object flag TR1_ */
+  u32b mon_flag; /* Assumes in monster flag RF3 */
+  cptr brand_succeptability;
+};
 
 
 #endif /* INCLUDED_TYPES_H */

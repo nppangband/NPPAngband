@@ -97,6 +97,10 @@ extern cptr squelch_status[SQUELCH_OPT_MAX];
 extern const byte squelch_status_color[SQUELCH_OPT_MAX];
 extern const byte arena_level_map[ARENA_LEVEL_HGT][ARENA_LEVEL_WID];
 extern const byte pit_room_maps[MAX_PIT_PATTERNS][PIT_HEIGHT][PIT_WIDTH];
+extern const slays_structure slays_info[11];
+extern const brands_structure brands_info[10];
+extern const mon_succeptability_struct mon_succept[2];
+
 
 /* variable.c */
 extern cptr copyright;
@@ -357,11 +361,15 @@ extern cptr  roguelike_equip_letters;
 
 /* attack.c */
 extern bool test_hit(int chance, int ac, int vis);
+extern int rogue_shot(const object_type *o_ptr, int *plus, player_state shot_state);
 extern bool check_hit(int power);
+extern int critical_hit_chance(const object_type *o_ptr, player_state a_state, bool id_only);
+extern int critical_shot_chance(const object_type *o_ptr, player_state a_state, bool throw, bool id_only, u32b f3);
 extern void py_attack(int y, int x);
 extern void do_cmd_fire(cmd_code code, cmd_arg args[]);
 extern void textui_cmd_fire(void);
 extern void textui_cmd_fire_at_nearest(void);
+extern int weapon_throw_adjust(const object_type *o_ptr, u32b f3, int *plus, bool id_only);
 extern void do_cmd_throw(cmd_code code, cmd_arg args[]);
 extern void textui_cmd_throw(void);
 
@@ -390,6 +398,8 @@ extern size_t button_print(int row, int col);
 
 /* calcs.c*/
 extern void calc_spells(void);
+extern int calc_blows(const object_type *o_ptr, player_state *new_state);
+extern void calc_bonuses(object_type inventory[], player_state *state, bool id_only);
 extern void notice_stuff(void);
 extern void update_stuff(void);
 extern void redraw_stuff(void);
@@ -955,6 +965,7 @@ extern void display_object_kind_recall(s16b k_idx);
 extern void display_itemlist(void);
 extern bool obj_can_refill(const object_type *o_ptr);
 extern bool obj_is_spellbook(const object_type *o_ptr);
+extern bool obj_is_bow(const object_type *o_ptr);
 extern bool obj_is_staff(const object_type *o_ptr);
 extern bool obj_is_wand(const object_type *o_ptr);
 extern bool obj_is_rod(const object_type *o_ptr);

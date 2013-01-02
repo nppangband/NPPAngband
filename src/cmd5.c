@@ -63,7 +63,7 @@ s16b spell_chance(int spell)
 	}
 
 	/* Priest prayer penalty for "edged" weapons (before minfail) */
-	if (p_ptr->icky_wield)
+	if (p_ptr->state.icky_wield)
 	{
 		chance += 25;
 	}

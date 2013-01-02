@@ -391,6 +391,8 @@
 #define DETECT_RADIUS		40
 
 
+#define CRIT_HIT_CHANCE 5000
+
 /*
  * Maximum number of "normal" pack slots, and the index of the "overflow"
  * slot, which can hold an item, but only temporarily, since it causes the

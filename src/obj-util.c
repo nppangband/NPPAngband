@@ -5334,6 +5334,7 @@ bool obj_is_spellbook(const object_type *o_ptr)
 
 
 /* Basic tval testers */
+bool obj_is_bow(const object_type *o_ptr)   { return o_ptr->tval == TV_BOW; }
 bool obj_is_staff(const object_type *o_ptr)  { return o_ptr->tval == TV_STAFF; }
 bool obj_is_wand(const object_type *o_ptr)   { return o_ptr->tval == TV_WAND; }
 bool obj_is_rod(const object_type *o_ptr)    { return o_ptr->tval == TV_ROD; }
@@ -5447,7 +5448,7 @@ bool ammo_can_fire(const object_type *o_ptr, int item)
 	if (!item_is_available(item, NULL, (USE_INVEN | USE_FLOOR | USE_EQUIP | USE_QUIVER))) return (FALSE);
 
 	/* Cursed quiver */
-	if (IS_QUIVER_SLOT(item) && p_ptr->cursed_quiver && !cursed_p(o_ptr)) return (FALSE);
+	if (IS_QUIVER_SLOT(item) && p_ptr->state.cursed_quiver && !cursed_p(o_ptr)) return (FALSE);
 
 	/* Wrong ammo type */
 	if (o_ptr->tval != p_ptr->state.ammo_tval) return (FALSE);

@@ -374,7 +374,7 @@ void do_cmd_drop(cmd_code code, cmd_arg args[])
 	}
 
 	/* Cursed quiver */
-	else if (IS_QUIVER_SLOT(item) && p_ptr->cursed_quiver)
+	else if (IS_QUIVER_SLOT(item) && p_ptr->state.cursed_quiver)
 	{
 		/* Oops */
 		msg_print("Your quiver is cursed!");
