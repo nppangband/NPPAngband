@@ -12,7 +12,11 @@ Revised the scale for guild reputation and player titles based on new quest syst
 Helpfiles now specify that poison resistance prevents the player from getting poisoned.
 Various tweaks to wilderness and labyrinth quests.
 Changed rarity of scrolls of summon unique from 8 to 4.
-Revised damage calculation from player melee, shooting, and throwing attacks.
+Revised combat - slays/weapon branding now increases the amount of damage dice
+before damage calculation rather than multiplying the damage afterwards.
+Slightly revised calculations for critical hits, throwing and shooting.
+Much more detailed descriptions of weapon damage when (I)nspected.
+Unusual terrains now only appear on 25% of the regular dungeon levels.
 Bugfix: Typos on the mage darkness storm name and plasma bolt spell short description.
 BUgfix: The druid spell elemental weapon only lasted for 5 turns.
 Bugfix: The guild sometimes offered dungeon spellbooks the player already has seen.

@@ -11128,7 +11128,7 @@ static bool cave_gen(void)
 	dun->cent_n = 0;
 
 	/* No features on destroyed level */
-	if (!destroyed)
+	if ((!destroyed) && one_in_(4))
 	{
 		/* Build lakes and rivers */
 		build_nature();
