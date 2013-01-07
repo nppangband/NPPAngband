@@ -1,5 +1,5 @@
 
-NPP 6.1.0 changes:
+NPP 6.1.0 Beta-1 changes:
 Special artifacts are no longer offered as quest rewards.
 Increase the potential bonus from deferred rewards by 50%.
 Added help file descriptions for the new quest rewards.

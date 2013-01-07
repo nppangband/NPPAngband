@@ -47,20 +47,20 @@
 /*
  * Name of the version/variant
  */
-#define VERSION_NAME "NPPAngband"
+#define VERSION_NAME "NPP610Beta1"
 #define SAVEFILE_NAME  "VNLA"
 
 /*
  * Current version string
  */
-#define VERSION_STRING	"6.0.0"
+#define VERSION_STRING	"6.1.0"
 
 
 /*
  * Current version numbers
  */
 #define VERSION_MAJOR	6
-#define VERSION_MINOR	0
+#define VERSION_MINOR	1
 #define VERSION_PATCH	0
 #define VERSION_EXTRA	0
 
