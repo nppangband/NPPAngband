@@ -3616,8 +3616,8 @@ static OSStatus ResumeCommand (EventHandlerCallRef inCallRef,
 	term_data *td;
 
 	hibernate();
-	Cursor tempCursor;
-	SetCursor(GetQDGlobalsArrow(&tempCursor));
+/*	Cursor tempCursor;*/
+/*	SetCursor(GetQDGlobalsArrow(&tempCursor));*/
 
 	/* Redraw all visible terms */
 	for (int i = 0; i < MAX_TERM_DATA; i++ )
