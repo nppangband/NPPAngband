@@ -3923,7 +3923,7 @@ int main(void)
 	update_color_info();
 
 	/* Show the "watch" cursor */
-	SetCursor(*(GetCursor(watchCursor)));
+	/*SetCursor(*(GetCursor(watchCursor)));*/
 
 	/* Prepare the menubar */
 	init_menubar();
