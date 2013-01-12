@@ -3950,8 +3950,8 @@ int main(void)
 	install_handlers(0);
 
 	/* Reset the cursor */
-	Cursor tempCursor;
-	SetCursor(GetQDGlobalsArrow(&tempCursor));
+	/*	Cursor tempCursor;
+	SetCursor(GetQDGlobalsArrow(&tempCursor));*/
 
 
 	/* Quicktime -- Load sound effect resources */
