@@ -280,6 +280,10 @@ static int sidebar_click(int row)
 	if ((row >= sidebar_details[SIDEBAR_STAT_MIN]) &&
 		(row <= sidebar_details[SIDEBAR_STAT_MAX])) return SIDEBAR_STAT_MIN;
 
+	/* Hack - special handling for the monster list section */
+	if ((row >= sidebar_details[SIDEBAR_MON_MIN]) &&
+			(row <= sidebar_details[SIDEBAR_MON_MAX])) return SIDEBAR_MON_MIN;
+
 	for (i=0; i < SIDEBAR_MAX_TYPES; i++)
 	{
 		if (row == sidebar_details[i]) return (i);
@@ -687,8 +691,8 @@ static void do_cmd_mouseclick(void)
 			textui_cmd_cast();
 			return;
 		}
-		case SIDEBAR_MON_HP:
-		case SIDEBAR_MON_MANA:
+		case SIDEBAR_MON_MIN:
+		case SIDEBAR_MON_MAX:
 		{
 			if (p_ptr->monster_race_idx)
 			{

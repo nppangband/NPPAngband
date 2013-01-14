@@ -777,7 +777,7 @@ bool make_attack_normal(monster_type *m_ptr)
 								else m_ptr->hp += heal;
 
 								/* Redraw (later) if needed */
-								if (p_ptr->health_who == m_idx)
+								if ((p_ptr->health_who == m_idx)  || (m_ptr->sidebar))
 									p_ptr->redraw |= (PR_HEALTH|PR_MON_MANA);
 
 								/* Combine / Reorder the pack */
@@ -3917,7 +3917,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 
 
 			/* Redraw (later) if needed */
-			if ((p_ptr->health_who == m_idx) && (m_ptr->ml))
+			if (((p_ptr->health_who == m_idx) && (m_ptr->ml)) ||  (m_ptr->sidebar))
 				p_ptr->redraw |= (PR_HEALTH);
 
 			/* Cancel fear */
@@ -3962,7 +3962,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			}
 
 			/* Redraw (later) if needed */
-			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
+			if ((p_ptr->health_who == m_idx)  || (m_ptr->sidebar)) p_ptr->redraw |= (PR_HEALTH);
 
 			break;
 		}
@@ -4211,7 +4211,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 					if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
 
 					/* Redraw (later) if needed */
-					if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
+					if ((p_ptr->health_who == m_idx)  || (m_ptr->sidebar)) p_ptr->redraw |= (PR_HEALTH);
 
 					/* Special message */
 					if (seen)

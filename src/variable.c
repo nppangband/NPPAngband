@@ -1076,6 +1076,12 @@ u16b quest_indicator_timer = 0;
  */
 int sidebar_details[SIDEBAR_MAX_TYPES];
 
+
+/*
+ * Remember what is being displayed on each row on the side of the screen.
+ */
+int sidebar_monsters[SIDEBAR_MONSTER_MAX];
+
 /*
  * It's TRUE if the player won a quest.
  */

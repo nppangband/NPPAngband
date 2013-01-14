@@ -592,7 +592,7 @@ void py_attack(int y, int x)
 	mon_clear_timed(get_mon_idx(m_ptr), MON_TMD_SLEEP, MON_TMD_FLG_NOMESSAGE);
 
 	/*possibly update the monster health bar*/
-	if (p_ptr->health_who == cave_m_idx[y][x]) p_ptr->redraw |= (PR_HEALTH);
+	if ((p_ptr->health_who == cave_m_idx[y][x]) || (m_ptr->sidebar)) p_ptr->redraw |= (PR_HEALTH);
 
 	/* Disturb the player */
 	disturb(0, 0);
@@ -1727,7 +1727,10 @@ static bool thrown_potion_effects(object_type *o_ptr, bool *is_dead, bool *fear,
 	}
 
 	/* Redraw if necessary*/
-	if (used_potion) p_ptr->redraw |= (PR_HEALTH | PR_MON_MANA);
+	if (used_potion)
+	{
+		if (m_ptr->sidebar) p_ptr->redraw |= (PR_HEALTH | PR_MON_MANA);
+	}
 
 	/* Handle stuff */
 	handle_stuff();

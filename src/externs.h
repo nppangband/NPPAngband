@@ -205,6 +205,7 @@ extern u16b cave_cost[MAX_FLOWS][MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 extern int cost_at_center[MAX_FLOWS];
 
 extern int sidebar_details[SIDEBAR_MAX_TYPES];
+extern int sidebar_monsters[SIDEBAR_MONSTER_MAX];
 
 extern u16b quest_indicator_timer;
 extern byte quest_indicator_complete;
@@ -818,6 +819,7 @@ extern void wipe_mon_list(void);
 extern s16b mon_pop(void);
 extern errr get_mon_num_prep(void);
 extern s16b get_mon_num(int level, int y, int x, byte mp_flags);
+extern void update_mon_sidebar_list(void);
 extern void display_monlist(void);
 extern void monster_desc(char *desc, size_t max, const monster_type *m_ptr, int mode);
 extern void monster_desc_race(char *desc, size_t max, int r_idx);
@@ -1466,7 +1468,6 @@ extern void prt_hp(int row, int col);
 extern void prt_sp(int row, int col);
 extern byte player_hp_attr(void);
 extern byte player_sp_attr(void);
-extern byte monster_health_attr(void);
 extern size_t prt_cut(int row, int col);
 extern size_t prt_stun(int row, int col);
 extern size_t prt_hunger(int row, int col);

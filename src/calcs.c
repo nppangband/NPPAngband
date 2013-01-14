@@ -1855,7 +1855,6 @@ static const struct flag_event_trigger redraw_events[] =
 	{ PR_MANA,    EVENT_MANA },
 	{ PR_GOLD,    EVENT_GOLD },
 	{ PR_HEALTH,  EVENT_MONSTERHEALTH },
-	{ PR_HEALTH,  EVENT_MONSTERMANA },
 	{ PR_DEPTH,   EVENT_DUNGEONLEVEL },
 	{ PR_SPEED,   EVENT_PLAYERSPEED },
 	{ PR_STATE,   EVENT_STATE },
@@ -1866,6 +1865,8 @@ static const struct flag_event_trigger redraw_events[] =
 
 	{ PR_INVEN,   EVENT_INVENTORY },
 	{ PR_EQUIP,   EVENT_EQUIPMENT },
+
+	/* It is now important that this be processed before PR_MONSTER */
 	{ PR_MONLIST, EVENT_MONSTERLIST },
 	{ PR_ITEMLIST, EVENT_ITEMLIST },
 	{ PR_MONSTER, EVENT_MONSTERTARGET },
@@ -1894,6 +1895,13 @@ void redraw_stuff(void)
 
 	/* Character is in "icky" mode, no screen updates */
 	if (character_icky) return;
+
+	/* See if we need to re-prioritize the monster targets */
+	if (p_ptr->redraw & (PR_MONLIST))
+	{
+		p_ptr->redraw |= PR_HEALTH;
+		update_mon_sidebar_list();
+	}
 
 	/* For each listed flag, send the appropriate signal to the UI */
 	for (i = 0; i < N_ELEMENTS(redraw_events); i++)

@@ -1,5 +1,5 @@
 
-NPP 6.1.0 Beta-1 changes:
+NPP 6.1.0 Beta-2 changes:
 Special artifacts are no longer offered as quest rewards.
 Increase the potential bonus from deferred rewards by 50%.
 Added help file descriptions for the new quest rewards.
@@ -17,6 +17,7 @@ before damage calculation rather than multiplying the damage afterwards.
 Slightly revised calculations for critical hits, throwing and shooting.
 Much more detailed descriptions of weapon damage when (I)nspected.
 Unusual terrains now only appear on 25% of the regular dungeon levels.
+The hp/mana information appears on the sidebar for multiple monsters if there is room.
 Bugfix: Typos on the mage darkness storm name and plasma bolt spell short description.
 BUgfix: The druid spell elemental weapon only lasted for 5 turns.
 Bugfix: The guild sometimes offered dungeon spellbooks the player already has seen.
@@ -32,6 +33,7 @@ Bugfix: Fix multiple grammar issues of spells being described as "casts spells w
 Bugfix: A shopkeeper's race was describes as "Dundan".
 Bugfix: Fixed typos in the brigand and rogue descriptions in te helpfiles.
 Bugfix: Verify using the !* inscription wasn't working.
+
 
 NPP 6.0.0 Changes: 
 Broke savecompatibility with NPP 0.5.4.

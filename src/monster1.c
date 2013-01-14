@@ -300,7 +300,7 @@ static bool mon_set_timed(int m_idx, int idx, int v, u16b flag)
 	}
 
 	/*possibly update the monster health bar*/
-	if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
+	if ((p_ptr->health_who == m_idx)  || (m_ptr->sidebar))p_ptr->redraw |= (PR_HEALTH);
 
 	if ((idx == MON_TMD_FAST) || (idx == MON_TMD_SLOW))
 	{

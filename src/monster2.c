@@ -907,6 +907,204 @@ static void get_mon_name(char *output_name, size_t max, int r_idx, int in_los)
 	my_strcat(output_name, race_name, max);
 }
 
+/* Figure out which monsters to display in the sidebar */
+void update_mon_sidebar_list(void)
+{
+	monster_type *m_ptr;
+	monster_type *m2_ptr;
+	monster_race *r_ptr;
+	monster_race *r2_ptr;
+	int i;
+	int sidebar_count = 0;
+	int adj_count = 0;
+	int los_count = 0;
+	int vis_count = 0;
+	int adjacent_monsters[8];
+	int *line_of_sight_monsters;
+	int *visible_monsters;
+
+	/* Allocate the arrays */
+	line_of_sight_monsters = C_ZNEW(mon_max, int);
+	visible_monsters = C_ZNEW(mon_max, int);
+
+	/* First clear the old list */
+	C_WIPE(sidebar_monsters, SIDEBAR_MONSTER_MAX, sizeof(int));
+
+	/* First list the targeted monster, if there is one */
+	if (p_ptr->health_who)
+	{
+		sidebar_monsters[sidebar_count] = p_ptr->health_who;
+		sidebar_count++;
+
+		/* We are tracking this one */
+		mon_list[p_ptr->health_who].sidebar = TRUE;
+	}
+
+	/* Scan the list of monsters on the level */
+	for (i = 1; i < mon_max; i++)
+	{
+		m_ptr = &mon_list[i];
+		r_ptr = &r_info[m_ptr->r_idx];
+
+		/* Ignore dead monsters */
+		if (!m_ptr->r_idx) continue;
+
+		/* Only consider visible monsters */
+		if (!m_ptr->ml) continue;
+
+		/* Hack - ignore lurkers and trappers */
+		if (r_ptr->d_char == '.') continue;
+
+		/* Already recorded target monster */
+		if (i == p_ptr->health_who) continue;
+
+		/* Now decide which list to include them in first adjacent monsters*/
+		if ((GET_SQUARE((p_ptr->py - m_ptr->fy)) + GET_SQUARE((p_ptr->px - m_ptr->fx))) < 2)
+		{
+			adjacent_monsters[adj_count] = i;
+			adj_count++;
+			continue;
+		}
+		/* Projectable ones next */
+		if (m_ptr->project)
+		{
+			line_of_sight_monsters[los_count] = i;
+			los_count++;
+			continue;
+		}
+
+		/* Visible, not projectable last */
+		visible_monsters[vis_count] = i;
+		vis_count++;
+		continue;
+	}
+
+	/* Sort the lists by monster power using bubble sort */
+	/*  First do adjacent monsters */
+	for (i = 0; i < adj_count; i++)
+	{
+		int j;
+
+		for (j = i + 1; j < adj_count; j++)
+		{
+			m_ptr = &mon_list[adjacent_monsters[i]];
+			r_ptr = &r_info[m_ptr->r_idx];
+			m2_ptr = &mon_list[adjacent_monsters[j]];
+			r2_ptr = &r_info[m2_ptr->r_idx];
+
+			if (r_ptr->mon_power < r2_ptr->mon_power)
+			{
+				int temp = adjacent_monsters[i];
+				adjacent_monsters[i] = adjacent_monsters[j];
+				adjacent_monsters[j] = temp;
+			}
+		}
+	}
+
+	/* Now add them to the list */
+	for (i = 0; i < adj_count; i++)
+	{
+		sidebar_monsters[sidebar_count] = adjacent_monsters[i];
+		sidebar_count++;
+
+		/* We are tracking this one */
+		mon_list[sidebar_monsters[sidebar_count]].sidebar = TRUE;
+
+		/* paranoia - would only happen if SIDEBAR_MONSTER_MAX was less than 10*/
+		if (sidebar_count >= SIDEBAR_MONSTER_MAX)
+		{
+			/* Release the arrays */
+			FREE(line_of_sight_monsters);
+			FREE(visible_monsters);
+			return;
+		}
+	}
+
+	/*  Next do projectable monsters */
+	for (i = 0; i < los_count; i++)
+	{
+		int j;
+
+		for (j = i + 1; j < los_count; j++)
+		{
+			m_ptr = &mon_list[line_of_sight_monsters[i]];
+			r_ptr = &r_info[m_ptr->r_idx];
+			m2_ptr = &mon_list[line_of_sight_monsters[j]];
+			r2_ptr = &r_info[m2_ptr->r_idx];
+
+			if (r_ptr->mon_power < r2_ptr->mon_power)
+			{
+				int temp = line_of_sight_monsters[i];
+				line_of_sight_monsters[i] = line_of_sight_monsters[j];
+				line_of_sight_monsters[j] = temp;
+			}
+		}
+	}
+
+	/* Now add them to the list */
+	for (i = 0; i < los_count; i++)
+	{
+		sidebar_monsters[sidebar_count] = line_of_sight_monsters[i];
+		sidebar_count++;
+
+		/* We are tracking this one */
+		mon_list[sidebar_monsters[sidebar_count]].sidebar = TRUE;
+
+		/* Check to see if the list is full */
+		if (sidebar_count >= SIDEBAR_MONSTER_MAX)
+		{
+			/* Release the arrays */
+			FREE(line_of_sight_monsters);
+			FREE(visible_monsters);
+			return;
+		}
+	}
+
+	/*  Finally to other viewable monsters monsters */
+	for (i = 0; i < vis_count; i++)
+	{
+		int j;
+
+		for (j = i + 1; j < vis_count; j++)
+		{
+			m_ptr = &mon_list[visible_monsters[i]];
+			r_ptr = &r_info[m_ptr->r_idx];
+			m2_ptr = &mon_list[visible_monsters[j]];
+			r2_ptr = &r_info[m2_ptr->r_idx];
+
+			if (r_ptr->mon_power < r2_ptr->mon_power)
+			{
+				int temp = visible_monsters[i];
+				visible_monsters[i] = visible_monsters[j];
+				visible_monsters[j] = temp;
+			}
+		}
+	}
+
+	/* Now add them to the list */
+	for (i = 0; i < vis_count; i++)
+	{
+		sidebar_monsters[sidebar_count] = visible_monsters[i];
+		sidebar_count++;
+
+		/* We are tracking this one */
+		mon_list[sidebar_monsters[sidebar_count]].sidebar = TRUE;
+
+		/* Check to see if the list is full */
+		if (sidebar_count >= SIDEBAR_MONSTER_MAX)
+		{
+			/* Release the arrays */
+			FREE(line_of_sight_monsters);
+			FREE(visible_monsters);
+			return;
+		}
+	}
+
+	/* Release the arrays */
+	FREE(line_of_sight_monsters);
+	FREE(visible_monsters);
+}
+
 
 /*
  * Display visible monsters in a window
@@ -1938,7 +2136,7 @@ void update_mon(int m_idx, bool full)
 			light_spot(fy, fx);
 
 			/* Update health bar as needed */
-			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH | PR_MON_MANA);
+			if ((p_ptr->health_who == m_idx)  || (m_ptr->sidebar)) p_ptr->redraw |= (PR_HEALTH | PR_MON_MANA);
 
 			/* Hack -- Count "fresh" sightings */
 			if (l_ptr->sights < MAX_SHORT) l_ptr->sights++;
@@ -1977,7 +2175,7 @@ void update_mon(int m_idx, bool full)
 			light_spot(fy, fx);
 
 			/* Update health bar as needed */
-			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH | PR_MON_MANA);
+			if ((p_ptr->health_who == m_idx)  || (m_ptr->sidebar)) p_ptr->redraw |= (PR_HEALTH | PR_MON_MANA);
 
 			/* Disturb on visibility change */
 			if (disturb_move)
@@ -2730,8 +2928,8 @@ void monster_swap(int y1, int x1, int y2, int x2)
 		/*Automatically track the feature the player is on unless player is tracking a feature*/
 		if ((!p_ptr->target_set) || (p_ptr->target_who != 0)) feature_kind_track(cave_feat[y1][x1]);
 
-		/* Update the trap detection status */
-		p_ptr->redraw |= (PR_DTRAP | PR_ITEMLIST);
+		/* Update the trap detection status, itemlist and monlist */
+		p_ptr->redraw |= (PR_DTRAP | PR_ITEMLIST | PR_MONLIST);
 
 		/* Update the panel and player stealth */
 		p_ptr->update |= (PU_PANEL | PU_STEALTH);

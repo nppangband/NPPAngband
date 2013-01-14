@@ -4005,7 +4005,7 @@ static void make_confused_move(monster_type *m_ptr, int y, int x)
 		}
 
 		/*possibly update the monster health bar*/
-		if (p_ptr->health_who == cave_m_idx[m_ptr->fy][m_ptr->fx])
+		if ((p_ptr->health_who == cave_m_idx[m_ptr->fy][m_ptr->fx])  || (m_ptr->sidebar))
 					p_ptr->redraw |= (PR_HEALTH);
 	}
 
@@ -4914,7 +4914,6 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 			monster_type *n_ptr = &mon_list[cave_m_idx[ny][nx]];
 			monster_race *nr_ptr = &r_info[n_ptr->r_idx];
 
-
 			/* XXX - Kill (much) weaker monsters */
 			if ((r_ptr->flags2 & (RF2_KILL_BODY)) &&
 			    (!(nr_ptr->flags1 & (RF1_UNIQUE))) &&
@@ -5465,7 +5464,7 @@ static s16b process_monster(monster_type *m_ptr)
 	if (m_ptr->using_flow == NEED_FLOW) find_best_flow(m_ptr);
 
 	/* Hack -- Always redraw the current target monster health bar */
-	if (p_ptr->health_who == cave_m_idx[m_ptr->fy][m_ptr->fx])
+	if ((p_ptr->health_who == cave_m_idx[m_ptr->fy][m_ptr->fx])  || (m_ptr->sidebar))
 		p_ptr->redraw |= (PR_HEALTH | PR_MON_MANA);
 
 	/* Attempt to multiply if able to and allowed */
@@ -5993,7 +5992,7 @@ static void recover_monster(monster_type *m_ptr)
 	}
 
 	/* Hack -- Update the health and mana bar (always) */
-	if (p_ptr->health_who == m_idx)
+	if ((p_ptr->health_who == m_idx)  || (m_ptr->sidebar))
 		p_ptr->redraw |= (PR_HEALTH | PR_MON_MANA);
 
 }

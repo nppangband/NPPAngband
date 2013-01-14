@@ -684,6 +684,8 @@ struct monster_type
 	bool project;		/* Player projectables can hit the monster (not quite the same as
 				   	   	    being visible. */
 
+	bool sidebar;		/* Monster is being displayed on the sidebar */
+
 	s16b hold_o_idx;	/* Object being held (if any) */
 
 	u32b smart;			/* Field for "smart_learn" */

@@ -3276,8 +3276,7 @@ void mass_aggravate_monsters(int who)
 		}
 
 		/*possibly update the monster health bar*/
-		if (p_ptr->health_who == i) p_ptr->redraw |= (PR_HEALTH);
-
+		if ((p_ptr->health_who == i)  || (m_ptr->sidebar)) p_ptr->redraw |= (PR_HEALTH);
 	}
 
 	/* If it just woke up, update the monster list */
@@ -4029,7 +4028,7 @@ static void cave_temp_room_light(void)
 				mon_clear_timed(m_idx, MON_TMD_SLEEP, MON_TMD_FLG_NOTIFY);
 
 				/*possibly update the monster health bar*/
-				if (p_ptr->health_who == m_idx)
+				if ((p_ptr->health_who == m_idx)  || (m_ptr->sidebar))
 					p_ptr->redraw |= (PR_HEALTH);
 			}
 		}

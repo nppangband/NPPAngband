@@ -44,7 +44,6 @@ game_event_type player_events[] =
 	EVENT_AC,
 
 	EVENT_MONSTERHEALTH,
-	EVENT_MONSTERMANA,
 	EVENT_PLAYERSPEED,
 	EVENT_DUNGEONLEVEL,
 	EVENT_QUEST_TICKER,
@@ -358,59 +357,43 @@ void prt_sp(int row, int col)
 /*
  * Calculate the monster bar color separately, for ports.
  */
-byte monster_health_attr(void)
+static byte monster_health_attr(const monster_type *m_ptr)
 {
 	byte attr = TERM_WHITE;
+	int pct;
 
 	/* Not tracking */
-	if (!p_ptr->health_who)
-		attr = TERM_DARK;
+	if (!m_ptr->r_idx) return(TERM_DARK);
 
-	/* Tracking an unseen, hallucinatory, or dead monster */
-	else if ((!mon_list[p_ptr->health_who].ml) ||
-			(p_ptr->timed[TMD_IMAGE]) ||
-			(mon_list[p_ptr->health_who].hp < 0))
-	{
-		/* The monster health is "unknown" */
-		attr = TERM_WHITE;
-	}
+	/* Default to almost dead */
+	attr = TERM_RED;
 
-	else
-	{
-		int pct;
+	/* Extract the "percent" of health */
+	pct = 100L * m_ptr->hp / m_ptr->maxhp;
 
-		monster_type *m_ptr = &mon_list[p_ptr->health_who];
+	/* Badly wounded */
+	if (pct >= 10) attr = TERM_L_RED;
 
-		/* Default to almost dead */
-		attr = TERM_RED;
+	/* Wounded */
+	if (pct >= 25) attr = TERM_ORANGE;
 
-		/* Extract the "percent" of health */
-		pct = 100L * m_ptr->hp / m_ptr->maxhp;
+	/* Somewhat Wounded */
+	if (pct >= 60) attr = TERM_YELLOW;
 
-		/* Badly wounded */
-		if (pct >= 10) attr = TERM_L_RED;
+	/* Healthy */
+	if (pct >= 100) attr = TERM_L_GREEN;
 
-		/* Wounded */
-		if (pct >= 25) attr = TERM_ORANGE;
+	/* Afraid */
+	if (m_ptr->m_timed[MON_TMD_FEAR]) attr = TERM_VIOLET;
 
-		/* Somewhat Wounded */
-		if (pct >= 60) attr = TERM_YELLOW;
+	/* Confused */
+	if (m_ptr->m_timed[MON_TMD_CONF]) attr = TERM_UMBER;
 
-		/* Healthy */
-		if (pct >= 100) attr = TERM_L_GREEN;
+	/* Stunned */
+	if (m_ptr->m_timed[MON_TMD_STUN]) attr = TERM_L_BLUE;
 
-		/* Afraid */
-		if (m_ptr->m_timed[MON_TMD_FEAR]) attr = TERM_VIOLET;
-
-		/* Confused */
-		if (m_ptr->m_timed[MON_TMD_CONF]) attr = TERM_UMBER;
-
-		/* Stunned */
-		if (m_ptr->m_timed[MON_TMD_STUN]) attr = TERM_L_BLUE;
-
-		/* Asleep */
-		if (m_ptr->m_timed[MON_TMD_SLEEP]) attr = TERM_BLUE;
-	}
+	/* Asleep */
+	if (m_ptr->m_timed[MON_TMD_SLEEP]) attr = TERM_BLUE;
 
 	return attr;
 }
@@ -425,22 +408,21 @@ byte monster_health_attr(void)
  * is being tracked, we clear the health bar.  If the monster being
  * tracked is not currently visible, a special health bar is shown.
  */
-static void prt_health(int row, int col)
+static void prt_health(int row, int col, const monster_type *m_ptr)
 {
-	byte attr = monster_health_attr();
-	s16b who = p_ptr->health_who;
+	byte attr = monster_health_attr(m_ptr);
 
 	/* Not tracking */
-	if (!who)
+	if (!m_ptr->r_idx)
 	{
 		/* Erase the health bar */
 		Term_erase(col, row, 12);
 	}
 
 	/* Tracking an unseen, hallucinatory, or dead monster */
-	else if ((!mon_list[who].ml) || /* Unseen */
+	else if ((!m_ptr->ml) || /* Unseen */
 			(p_ptr->timed[TMD_IMAGE]) || /* Hallucination */
-			(mon_list[who].hp < 0)) /* Dead (?) */
+			(m_ptr->ml < 0)) /* Dead (?) */
 	{
 		/* The monster health is "unknown" */
 		Term_putstr(col, row, 12, attr, "[----------]");
@@ -451,7 +433,6 @@ static void prt_health(int row, int col)
 	{
 		int pct, len;
 
-		monster_type *m_ptr = &mon_list[who];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Extract the "percent" of health */
@@ -637,13 +618,12 @@ static void prt_depth(int row, int col)
  * of the monster currently being "tracked".  It follows the lead of the monster
  * health bar for who to track.
  */
-static void prt_mon_mana(int row, int col)
+static void prt_mon_mana(int row, int col, const monster_type *m_ptr)
 {
 
-	/* Not tracking, or hiding a mimic */
-	if (!p_ptr->health_who)
+	/* Not alive, or no mana */
+	if (!m_ptr->r_idx)
 	{
-
 		/* Erase the health bar */
 		Term_erase(col, row, 12);
 	}
@@ -676,7 +656,6 @@ static void prt_mon_mana(int row, int col)
 	{
 		int pct, len;
 
-		monster_type *m_ptr = &mon_list[p_ptr->health_who];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Default to out of mana*/
@@ -719,6 +698,55 @@ static void prt_mon_mana(int row, int col)
 
 }
 
+/* Print out monster health until we get to the bottom of the screen */
+static void prt_monsters(int row, int col)
+{
+	int max_row = Term->hgt - 2;
+	monster_type *m_ptr;
+	monster_race *r_ptr;
+
+	int i;
+
+	/* Remember the last row */
+	sidebar_details[SIDEBAR_MON_MAX] = row;
+
+	/* First clear the rest of the column */
+	for (i = row; i <= max_row; i++)
+	{
+		Term_erase(col, i, 12);
+	}
+
+	for (i = 0; i < SIDEBAR_MONSTER_MAX; i++)
+	{
+		/* No more to do */
+		if (!sidebar_monsters[i])
+		{
+			return;
+		}
+
+		/* Check if we have room */
+		if (row >= max_row) return;
+		m_ptr = &mon_list[sidebar_monsters[i]];
+		r_ptr = &r_info[m_ptr->r_idx];
+		if (r_ptr->mana)
+		{
+			if (row >= (max_row-1)) return;
+		}
+
+		/* Print the monster info*/
+		prt_health(row, col, m_ptr);
+		row++;
+		if (r_ptr->mana)
+		{
+			prt_mon_mana(row, col, m_ptr);
+			row++;
+		}
+		/* Make sure we have the last row */
+		sidebar_details[SIDEBAR_MON_MAX] = row;
+	}
+
+}
+
 
 
 /* Some simple wrapper functions */
@@ -738,7 +766,7 @@ static void prt_class(int row, int col) { prt_field(c_name + cp_ptr->name, row, 
 static const struct side_handler_t
 {
 	void (*hook)(int, int);	 /* int row, int col */
-	int priority;		 /* 1 is most important (always displayed) */
+	u16b priority;		 /* 1 is most important (always displayed) */
 	game_event_type type;	 /* PR_* flag this corresponds to */
 	byte sidebar_type;
 } side_handlers[] =
@@ -759,12 +787,13 @@ static const struct side_handler_t
 	{ prt_ac,       7, EVENT_AC, SIDEBAR_AC},
 	{ prt_hp,       8, EVENT_HP, SIDEBAR_HP},
 	{ prt_sp,       9, EVENT_MANA, SIDEBAR_MANA},
-	{ prt_health,  13, EVENT_MONSTERHEALTH, SIDEBAR_MON_HP},
-	{ prt_mon_mana,  14, EVENT_MONSTERMANA, SIDEBAR_MON_MANA},
 	{ prt_speed,   15, EVENT_PLAYERSPEED, SIDEBAR_SPEED}, /* Slow (-NN) / Fast (+NN) */
 	{ prt_depth,   16, EVENT_DUNGEONLEVEL, SIDEBAR_DEPTH}, /* Lev NNN / NNNN ft */
 	{ prt_quest_st,17, EVENT_QUEST_TICKER, SIDEBAR_QUEST},
 	{ prt_feeling, 21, EVENT_FEELING, SIDEBAR_FEELING},
+
+	/* Needs to be the last one */
+	{ prt_monsters,  22, EVENT_MONSTERHEALTH, SIDEBAR_MON_MIN},
 
 };
 
@@ -780,7 +809,7 @@ static const struct side_handler_t
 static void update_sidebar(game_event_type type, game_event_data *data, void *user)
 {
 	int x, y, row;
-	int max_priority;
+	u16b max_priority;
 	size_t i;
 
 	Term_get_size(&x, &y);
@@ -802,24 +831,13 @@ static void update_sidebar(game_event_type type, game_event_data *data, void *us
 	{
 		const struct side_handler_t *hnd = &side_handlers[i];
 		int priority = hnd->priority;
-		bool from_bottom = FALSE;
-
-		/* Negative means print from bottom */
-		if (priority < 0)
-		{
-			priority = -priority;
-			from_bottom = TRUE;
-		}
 
 		/* If this is high enough priority, display it */
 		if (priority <= max_priority)
 		{
 			if (hnd->type == type && hnd->hook)
 			{
-				if (from_bottom)
-					hnd->hook(Term->hgt - (N_ELEMENTS(side_handlers) - i), 0);
-				else
-				    hnd->hook(row, 0);
+			    hnd->hook(row, 0);
 			}
 
 			/*
@@ -1729,7 +1747,7 @@ static void update_player_compact_subwindow(game_event_type type, game_event_dat
 	prt_sp(row++, col);
 
 	/* Monster health */
-	prt_health(row++, col);
+	prt_monsters(row++, col);
 
 	Term_fresh();
 

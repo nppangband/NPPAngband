@@ -1623,7 +1623,7 @@ void py_steal(int y, int x)
 				(50 + rand_int(50)), MON_TMD_FLG_NOTIFY);
 
 		/*possibly update the monster health bar*/
-		if (p_ptr->health_who == cave_m_idx[m_ptr->fy][m_ptr->fx])
+		if ((p_ptr->health_who == cave_m_idx[m_ptr->fy][m_ptr->fx]) || (m_ptr->sidebar))
 				p_ptr->redraw |= (PR_HEALTH);
 	}
 
