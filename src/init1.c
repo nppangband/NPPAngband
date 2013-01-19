@@ -2159,6 +2159,8 @@ errr parse_a_info(char *buf, header *head)
 		/* Point at the "info" */
 		a_ptr = (artifact_type*)head->info_ptr + i;
 
+		if (strlen(s) > MAX_LEN_ART_NAME) return (PARSE_ERROR_NAME_TOO_LONG);
+
 		/* Store the name */
 		my_strcpy(a_ptr->name, s, MAX_LEN_ART_NAME);
 
@@ -2664,12 +2666,37 @@ errr parse_r_info(char *buf, header *head)
 		/* Save the index */
 		error_idx = i;
 
+		if (strlen(s) > MAX_MON_LONG_NAME) return (PARSE_ERROR_NAME_TOO_LONG);
+
 		/* Point at the "info" */
 		r_ptr = (monster_race*)head->info_ptr + i;
 
 		/* Store the name */
-		if (!(r_ptr->name = add_name(head, s)))
-			return (PARSE_ERROR_OUT_OF_MEMORY);
+		my_strcpy(r_ptr->name_full, s, MAX_MON_LONG_NAME);
+	}
+
+	/* Process 'A' for "Abbreviated Name" */
+	else if (buf[0] == 'A')
+	{
+		/* Find the colon before the name */
+		s = strchr(buf, ':');
+
+		/* Verify that colon */
+		if (!s) return (PARSE_ERROR_GENERIC);
+
+		/* Nuke the colon, advance to the name */
+		*s++ = '\0';
+
+		/* Paranoia -- require a name */
+		if (!*s) return (PARSE_ERROR_GENERIC);
+
+		if (strlen(s) > MAX_MON_SHORT_NAME) return (PARSE_ERROR_NAME_TOO_LONG);
+
+		/* Point at the "info" */
+		r_ptr = (monster_race*)head->info_ptr + i;
+
+		/* Store the name */
+		my_strcpy(r_ptr->name_short, s, MAX_MON_SHORT_NAME);
 	}
 
 	/* Process 'D' for "Description" */

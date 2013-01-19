@@ -9589,7 +9589,7 @@ static bool pick_monster_location(monster_race *r_ptr, int *py, int *px)
 			if (cheat_room)
 			{
 				msg_c_format(MSG_NOTICE, "Found a NATIVE location for \"%s\".",
-					r_name + r_ptr->name);
+					r_ptr->name_full);
 			}
 
 			/* Return the location */
@@ -9613,7 +9613,7 @@ static bool pick_monster_location(monster_race *r_ptr, int *py, int *px)
 			if (cheat_room)
 			{
 				msg_c_format(MSG_NOTICE, "Found a random location for \"%s\".",
-					r_name + r_ptr->name);
+					r_ptr->name_full);
 			}
 
 			/* Return the location */

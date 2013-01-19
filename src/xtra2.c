@@ -193,7 +193,7 @@ void lose_exp(s32b amount)
  */
 int get_coin_type(const monster_race *r_ptr)
 {
-	cptr name = (r_name + r_ptr->name);
+	cptr name = r_ptr->name_full;
 
 	/* Analyze "coin" or golem monsters */
 	if ((r_ptr->d_char == '$') || (r_ptr->d_char == 'g'))

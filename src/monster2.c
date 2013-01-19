@@ -1532,7 +1532,7 @@ void monster_desc(char *desc, size_t max, const monster_type *m_ptr, int mode)
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	cptr name = (r_name + r_ptr->name);
+	cptr name = r_ptr->name_full;
 
 	bool seen, pron;
 
@@ -1689,7 +1689,7 @@ void monster_desc_race(char *desc, size_t max, int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	cptr name = (r_name + r_ptr->name);
+	cptr name = r_ptr->name_full;
 
 	/* Write the name */
 	my_strcpy(desc, name, max);
@@ -2280,7 +2280,7 @@ static s16b get_mimic_k_idx(int r_idx)
 
 		case '$':
 		{
-			cptr name = (r_name + r_ptr->name);
+			cptr name = r_ptr->name_full;
 
 			/* Look for textual clues */
 			if (strstr(name, " copper "))     	return (lookup_kind(TV_GOLD, SV_GOLD_COPPER));
@@ -2307,7 +2307,7 @@ static s16b get_mimic_k_idx(int r_idx)
 		case '?':
 		case '[':
 		{
-			cptr name = (r_name + r_ptr->name);
+			cptr name = r_ptr->name_full;
 
 			/* 	Handle scrolls first */
 			if (strstr(name, "Scroll"))
@@ -2526,7 +2526,7 @@ static s16b get_mimic_k_idx(int r_idx)
 		/*rods and wands*/
 		case '-':
 		{
-			cptr name = (r_name + r_ptr->name);
+			cptr name = r_ptr->name_full;
 
 			if (strstr(name, "Wand mimic"))
 			{
@@ -3331,7 +3331,7 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	if (!cave_exist_mon(r_ptr, y, x, FALSE, FALSE, FALSE)) return (FALSE);
 
 	/* Paranoia */
-	if (!r_ptr->name) return (FALSE);
+	if (!r_ptr->speed) return (FALSE);
 
 	/* Limit the population */
 	if (r_ptr->cur_num >= r_ptr->max_num)
@@ -3340,7 +3340,7 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	}
 
 	/* Name */
-	name = (r_name + r_ptr->name);
+	name = r_ptr->name_full;
 
 	/* Hack -- "unique" monsters must be "unique" */
 	if (r_ptr->flags1 & (RF1_UNIQUE))
@@ -4159,9 +4159,9 @@ static bool summon_specific_okay(int r_idx)
 		{
 			okay = ((r_ptr->d_char == 'T') &&
 				(r_ptr->flags1 & (RF1_UNIQUE)) &&
-				  ((strstr((r_name + r_ptr->name), "Bert")) ||
-				   (strstr((r_name + r_ptr->name), "Bill")) ||
-				   (strstr((r_name + r_ptr->name), "Tom" ))));
+				  ((strstr(r_ptr->name_full, "Bert")) ||
+				   (strstr(r_ptr->name_full, "Bill")) ||
+				   (strstr(r_ptr->name_full, "Tom" ))));
 			break;
 		}
 
@@ -5053,7 +5053,7 @@ void flush_monster_messages(void)
 			char race_name[80];
 
 			/* Get the race name */
-			my_strcpy(race_name, r_name + r_ptr->name, sizeof(buf));
+			my_strcpy(race_name, r_ptr->name_full, sizeof(buf));
 
 			/* Special case. Player ghosts */
 			if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
@@ -5069,7 +5069,7 @@ void flush_monster_messages(void)
 			else if (r_ptr->flags1 & (RF1_UNIQUE))
 			{
 				/* Just copy the race name */
-				my_strcpy(buf, (r_name + r_ptr->name), sizeof(buf));
+				my_strcpy(buf, r_ptr->name_full, sizeof(buf));
 			}
 			/* We have more than one monster */
 			else if (count > 1)

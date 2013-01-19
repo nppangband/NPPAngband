@@ -1471,7 +1471,7 @@ bool format_object_history(char *buf, size_t max, const object_type *o_ptr)
 		case ORIGIN_DROP_KNOWN:
 		{
 			monster_race *r_ptr = &r_info[o_ptr->origin_r_idx];
-			cptr name = r_name + r_ptr->name;
+			cptr name = r_ptr->name_full;
 			cptr article = "";
 
 			/* Get an article for non-uniques */

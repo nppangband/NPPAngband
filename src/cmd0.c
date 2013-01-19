@@ -533,7 +533,7 @@ static void show_commands(void)
 /**
  * Divide up the screen into mousepress regions
  */
-int click_area(ui_event_data ke)
+static int click_area(ui_event_data ke)
 {
 	if ((ke.mousey) && (ke.mousex > COL_MAP) && (ke.mousey < (Term->hgt - 1)))
 	{
@@ -630,6 +630,44 @@ void do_cmd_quit(cmd_code code, cmd_arg args[])
 	p_ptr->leaving = TRUE;
 }
 
+static int find_sidebar_r_idx(void)
+{
+	int row = sidebar_details[SIDEBAR_MON_MIN] - 1;
+	int count = 0;
+	int mouse_y = p_ptr->command_cmd_ex.mousey;
+
+	/* Paranoia */
+	if (!sidebar_monsters[count]) return (0);
+
+	while (row < (Term->hgt - 2))
+	{
+		monster_type *m_ptr = &mon_list[sidebar_monsters[count]];
+		monster_race *r_ptr = &r_info[m_ptr->r_idx];
+		char m_name[80];
+
+		/* Get "the monster" or "it" */
+		monster_desc(m_name, sizeof(m_name), m_ptr, 0);
+
+		/* Figure out how many rows the monster entry is taking up */
+		row += 3;
+		if (r_ptr->mana) row++;
+
+		/* Hack - Avoid nonsense clicks with monsters who didn't fit on the final row */
+		if (row >= (Term->hgt - 2)) break;
+
+		/* We found the monster the player clicked on */
+		if (row >= mouse_y) return (m_ptr->r_idx);
+
+		/* Go to the next monster */
+		count++;
+
+		/* Paranoia */
+		if (count >= SIDEBAR_MONSTER_MAX) break;
+	}
+
+	return (0);
+}
+
 
 /*
  * Handle a mouseclick, using the horrible hack that is '\xff'.
@@ -694,16 +732,22 @@ static void do_cmd_mouseclick(void)
 		case SIDEBAR_MON_MIN:
 		case SIDEBAR_MON_MAX:
 		{
-			if (p_ptr->monster_race_idx)
+			if (sidebar_monsters[0])
 			{
-				/* Save screen */
-				screen_save();
+				int r_idx = find_sidebar_r_idx();
 
-				screen_roff(p_ptr->monster_race_idx);
+				if (r_idx)
+				{
 
-				(void)anykey();
+					/* Save screen */
+					screen_save();
 
-				screen_load();
+					screen_roff(r_idx);
+
+					(void)anykey();
+
+					screen_load();
+				}
 			}
 			return;
 		}
@@ -724,7 +768,7 @@ static void do_cmd_mouseclick(void)
 		}
 		case SIDEBAR_EQUIPPY:
 		{
-			do_cmd_equip();
+			cmd_use_item();
 			return;
 		}
 		/* Do nothing */

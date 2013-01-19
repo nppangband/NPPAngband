@@ -836,9 +836,14 @@
 #define RF6_INNATE_MASK \
 	(0L)
 
-	/*
- * Monster macros
- */
+/* Max long and short monster name lengths */
+
+#define MAX_MON_LONG_NAME   36
+#define MAX_MON_SHORT_NAME  14
+
+ /*
+  * Monster macros
+  */
 
 /*
  * Determine if a given monster is "non-living"

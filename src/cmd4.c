@@ -1587,7 +1587,7 @@ static int find_next_race(int r_idx, int increment)
 		if (next_r_idx == r_idx) return (r_idx);
 
 		/* Skip non-entries */
-		if (!r_ptr->name) continue;
+		if (!r_ptr->speed) continue;
 
 		return (next_r_idx);
 	}
@@ -1745,7 +1745,7 @@ static void change_monster_visuals(void *unused, const char *title)
 
 		/* Label the object */
 		Term_putstr(5, 2, -1, TERM_WHITE,
-				format("Monster = %d, Name = %-40.40s", r_idx, (r_name + r_ptr->name)));
+				format("Monster = %d, Name = %-40.40s", r_idx, r_ptr->name_full));
 
 		/* Label the Default values */
 		Term_putstr(10, 4, -1, TERM_WHITE,

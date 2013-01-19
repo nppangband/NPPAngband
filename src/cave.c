@@ -626,7 +626,7 @@ static u16b image_monster(bool use_default)
 		r_ptr = &r_info[rand_int(z_info->r_max)];
 
 		/* Skip non-entries */
-		if (!r_ptr->name) continue;
+		if (!r_ptr->speed) continue;
 
 		/* Retrieve attr/char */
 		if (use_default)

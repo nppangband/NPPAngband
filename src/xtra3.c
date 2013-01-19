@@ -425,6 +425,8 @@ static void prt_health(int row, int col, const monster_type *m_ptr)
 			(m_ptr->ml < 0)) /* Dead (?) */
 	{
 		/* The monster health is "unknown" */
+		Term_putstr(col, row, 12, attr, "<Unknown>");
+		row++;
 		Term_putstr(col, row, 12, attr, "[----------]");
 	}
 
@@ -441,6 +443,9 @@ static void prt_health(int row, int col, const monster_type *m_ptr)
 		/* Convert percent into "health" */
 		len = (pct < 10) ? 1 : (pct < 90) ? (pct / 10 + 1) : 10;
 
+		/* Print the short name */
+		Term_putstr(col, row, 12, r_ptr->d_attr, r_ptr->name_short);
+		row++;
 
 		/* Get default monster symbol */
 		Term_putch(col, row, r_ptr->d_attr, r_ptr->d_char);
@@ -629,7 +634,7 @@ static void prt_mon_mana(int row, int col, const monster_type *m_ptr)
 	}
 
 	/* Tracking an unseen monster */
-	else if (!mon_list[p_ptr->health_who].ml)
+	else if (!m_ptr->ml)
 	{
 
 		/* Indicate that the monster health is "unknown" */
@@ -644,7 +649,7 @@ static void prt_mon_mana(int row, int col, const monster_type *m_ptr)
 	}
 
 	/* Tracking a dead monster (?) */
-	else if (!mon_list[p_ptr->health_who].hp < 0)
+	else if (!m_ptr->hp < 0)
 	{
 
 		/* Indicate that the monster health is "unknown" */
@@ -708,6 +713,7 @@ static void prt_monsters(int row, int col)
 	int i;
 
 	/* Remember the last row */
+	sidebar_details[SIDEBAR_MON_MIN] = row;
 	sidebar_details[SIDEBAR_MON_MAX] = row;
 
 	/* First clear the rest of the column */
@@ -725,22 +731,23 @@ static void prt_monsters(int row, int col)
 		}
 
 		/* Check if we have room */
-		if (row >= max_row) return;
+		if (row+1 >= max_row-1) return;
 		m_ptr = &mon_list[sidebar_monsters[i]];
 		r_ptr = &r_info[m_ptr->r_idx];
 		if (r_ptr->mana)
 		{
-			if (row >= (max_row-1)) return;
+			if (row+2 >= (max_row-1)) return;
 		}
 
 		/* Print the monster info*/
 		prt_health(row, col, m_ptr);
-		row++;
+		row+=2;
 		if (r_ptr->mana)
 		{
 			prt_mon_mana(row, col, m_ptr);
 			row++;
 		}
+		row++;
 		/* Make sure we have the last row */
 		sidebar_details[SIDEBAR_MON_MAX] = row;
 	}

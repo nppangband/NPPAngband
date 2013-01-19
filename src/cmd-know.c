@@ -1062,7 +1062,7 @@ static void display_monster(int col, int row, bool cursor, int oid)
 	{
 		c_prt(attr, player_ghost_name, row, col);
 	}
-	else c_prt(attr, r_name + r_ptr->name, row, col);
+	else c_prt(attr, r_ptr->name_full, row, col);
 
 	/* Display symbol */
 	big_pad(66, row, a, c);
@@ -1097,7 +1097,7 @@ static int m_cmp_race(const void *a, const void *b)
 	c = r_a->level - r_b->level;
 	if (c) return c;
 
-	return strcmp(r_name + r_a->name, r_name + r_b->name);
+	return strcmp(r_a->name_full, r_b->name_full);
 }
 
 static char *m_xchar(int oid) { return &r_info[default_join[oid].oid].x_char; }
@@ -1167,7 +1167,7 @@ static int count_known_monsters(void)
 	{
 		monster_race *r_ptr = &r_info[i];
 		if ((!cheat_know) && !l_list[i].sights) continue;
-		if (!r_ptr->name) continue;
+		if (!r_ptr->speed) continue;
 
 		if (r_ptr->flags1 & RF1_UNIQUE) m_count++;
 
@@ -1208,7 +1208,7 @@ static void do_cmd_knowledge_monsters(void *obj, const char *name)
 	{
 		monster_race *r_ptr = &r_info[i];
 		if ((!cheat_know) && !l_list[i].sights) continue;
-		if (!r_ptr->name) continue;
+		if (!r_ptr->speed) continue;
 
 		if (r_ptr->flags1 & (RF1_UNIQUE)) m_count++;
 
@@ -1233,7 +1233,7 @@ static void do_cmd_knowledge_monsters(void *obj, const char *name)
 	{
 		monster_race *r_ptr = &r_info[i];
 		if ((!cheat_know) && !l_list[i].sights) continue;
-		if (!r_ptr->name) continue;
+		if (!r_ptr->speed) continue;
 
 		for (j = 0; j < N_ELEMENTS(monster_group)-1; j++)
 		{
@@ -2484,7 +2484,7 @@ static void do_cmd_knowledge_kills(void *obj, const char *name)
 
 		/* Print a message */
 		file_putf(fff, "     %-40s  %5d\n",
-		        (r_name + r_ptr->name), l_ptr->pkills);
+		        r_ptr->name_full, l_ptr->pkills);
 	}
 
 	/* Free the "who" array */

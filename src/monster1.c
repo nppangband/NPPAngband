@@ -2266,7 +2266,7 @@ void roff_top(int r_idx)
 	}
 
 	/* Dump the name */
-	else Term_addstr(-1, TERM_WHITE, (r_name + r_ptr->name));
+	else Term_addstr(-1, TERM_WHITE, (r_ptr->name_full));
 
 	/* Append the "standard" attr/char info */
 	Term_addstr(-1, TERM_WHITE, " ('");
@@ -2994,7 +2994,7 @@ void prepare_ghost_name(void)
 
 	t_ptr = &t_info[player_ghost_num];
 
-	my_strcat(player_ghost_name, format("%^s, the %^s", t_ptr->t_name, r_name + r_ptr->name), sizeof(player_ghost_name));
+	my_strcat(player_ghost_name, format("%^s, the %^s", t_ptr->t_name, r_ptr->name_full), sizeof(player_ghost_name));
 }
 
 /*

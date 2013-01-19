@@ -4083,7 +4083,7 @@ s16b select_powerful_race(void)
 			r_ptr = &r_info[r_idx];
 
 			/* Ignore empty races */
-			if (!r_ptr->name) continue;
+			if (!r_ptr->speed) continue;
 
 			/* Ignore player ghosts (no name) */
 			if (r_ptr->flags2 & (RF2_PLAYER_GHOST)) continue;

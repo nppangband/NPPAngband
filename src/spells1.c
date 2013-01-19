@@ -4221,7 +4221,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 	m_ptr = &mon_list[mon_idx];
 	r_ptr = &r_info[m_ptr->r_idx];
 	l_ptr = &l_list[m_ptr->r_idx];
-	name = (r_name + r_ptr->name);
+	name = r_ptr->name_full;
 	if (m_ptr->ml) seen = TRUE;
 
 	/*

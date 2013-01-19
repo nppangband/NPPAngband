@@ -760,7 +760,6 @@ char *e_text;
  * The monster race arrays
  */
 monster_race *r_info;
-char *r_name;
 char *r_text;
 
 

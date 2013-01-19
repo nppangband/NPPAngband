@@ -429,7 +429,8 @@ struct monster_blow
  */
 struct monster_race
 {
-	u32b name;				/* Name (offset) */
+	char name_full[MAX_MON_LONG_NAME];
+	char name_short[MAX_MON_SHORT_NAME];
 	u32b text;				/* Text (offset) */
 
 	byte hdice;				/* Creatures hit dice count */

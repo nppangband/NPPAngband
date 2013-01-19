@@ -270,7 +270,6 @@ extern ego_item_type *e_info;
 extern char *e_name;
 extern char *e_text;
 extern monster_race *r_info;
-extern char *r_name;
 extern char *r_text;
 extern player_race *p_info;
 extern char *p_name;
@@ -451,7 +450,6 @@ extern void disturb(int stop_search, int unused_flag);
 
 /* cmd0.c */
 extern void cmd_init(void);
-extern int click_area(ui_event_data ke);
 extern void do_cmd_quit(cmd_code code, cmd_arg args[]);
 extern void textui_process_command(bool no_request);
 
