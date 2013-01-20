@@ -49,7 +49,7 @@ endif
 
 include Makefile.inc
 
-APPNAME = Angband.app
+APPNAME = NPPAngband.app
 EXE = nppangband
 
 BOBJS = borg1.o borg2.o borg3.o borg4.o borg5.o borg6.o borg7.o borg8.o borg9.o
