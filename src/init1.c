@@ -2692,9 +2692,6 @@ errr parse_r_info(char *buf, header *head)
 
 		if (strlen(s) > MAX_MON_SHORT_NAME) return (PARSE_ERROR_NAME_TOO_LONG);
 
-		/* Point at the "info" */
-		r_ptr = (monster_race*)head->info_ptr + i;
-
 		/* Store the name */
 		my_strcpy(r_ptr->name_short, s, MAX_MON_SHORT_NAME);
 	}
