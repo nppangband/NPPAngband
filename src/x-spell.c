@@ -540,7 +540,7 @@ cptr do_mage_spell(int mode, int spell, int dir)
 
 			if (name) return ("Spear of Light");
 			if (desc) return (format("Fires a line of weak light.  %dd%d hp damage for light-hating creatures.", dice, sides));
-			if (desc_short) return (format("dam %dd%d.", dice, sides));
+			if (desc_short) return (format("dam %dd%d", dice, sides));
 			if (cast)
 			{
 				msg_print("A line of blue shimmering light appears.");
