@@ -1121,7 +1121,6 @@ void do_cmd_fire(cmd_code code, cmd_arg args[])
 				dd = i_ptr->dd * tmul;
 				ds = i_ptr->ds;
 
-
 				/* Apply special damage XXX XXX XXX */
 				tries = critical_shot_check(i_ptr, &dd, &plus, FALSE, f3);
 
@@ -1129,11 +1128,10 @@ void do_cmd_fire(cmd_code code, cmd_arg args[])
 				dam_dice_aux(i_ptr, &dd, m_ptr, FALSE);
 
 				/* Check for extra damage with a sling for a rogue */
-				tmul =+ rogue_shot(o_ptr, &plus, p_ptr->state);
+				tmul += rogue_shot(o_ptr, &plus, p_ptr->state);
 
 				/* Check for extra damage from a brigand */
 				tmul += brigand_shot(o_ptr, r_ptr->flags1, (m_ptr->m_timed[MON_TMD_SLEEP] ? TRUE: FALSE), p_ptr->state);
-
 				/* Now factor the extra damage */
 				plus *= tmul;
 
