@@ -18,9 +18,11 @@ Slightly revised calculations for critical hits, throwing and shooting.
 Much more detailed descriptions of weapon damage when (I)nspected.
 Unusual terrains now only appear on 25% of the regular dungeon levels.
 The hp/mana information appears on the sidebar for multiple monsters if there is room.
+The monster name now appears on the sidebar.
+Clicking on the monster name on the sidebar brings up the monster race information.
 Bugfix: Typos on the mage darkness storm name and plasma bolt spell short description.
 BUgfix: The druid spell elemental weapon only lasted for 5 turns.
-Bugfix: The guild sometimes offered dungeon spellbooks the player already has seen.
+Bugfix: The guild sometimes offered dungeon spellbooks the player has used before.
 Bugfix: Objects created and rejected as potential guild rewards still counted towards the total rewards offered.
 Bugfix: Removed obsolete reference to old store inventory system.
 Bugfix: The guild sometimes overwrite bookstore inventory when generating rewards for players 
@@ -33,6 +35,8 @@ Bugfix: Fix multiple grammar issues of spells being described as "casts spells w
 Bugfix: A shopkeeper's race was describes as "Dundan".
 Bugfix: Fixed typos in the brigand and rogue descriptions in te helpfiles.
 Bugfix: Verify using the !* inscription wasn't working.
+Bugfix: The mac binary now includes the NPPAngband icon.
+Bugfix:  Cursed items were not getting the cursed inscription when wielded.
 
 
 NPP 6.0.0 Changes: 

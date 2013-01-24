@@ -239,6 +239,15 @@ static bool put_object_in_quiver(object_type *o_ptr)
 		/* Warn the player */
 		sound(MSG_CURSED);
 		msg_print("Oops! It feels deathly cold!");
+
+		/* Remove special inscription, if any */
+		if (o_ptr->discount >= INSCRIP_NULL) o_ptr->discount = 0;
+
+		/* Sense the object if allowed */
+		if (o_ptr->discount == 0) o_ptr->discount = INSCRIP_CURSED;
+
+		/* The object has been "sensed" */
+		o_ptr->ident |= (IDENT_SENSE);
 	}
 
 	/* Combine / Reorder the pack */
