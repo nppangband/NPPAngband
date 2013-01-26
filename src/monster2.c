@@ -1005,10 +1005,11 @@ void update_mon_sidebar_list(void)
 	for (i = 0; i < adj_count; i++)
 	{
 		sidebar_monsters[sidebar_count] = adjacent_monsters[i];
-		sidebar_count++;
 
 		/* We are tracking this one */
 		mon_list[sidebar_monsters[sidebar_count]].sidebar = TRUE;
+
+		sidebar_count++;
 
 		/* paranoia - would only happen if SIDEBAR_MONSTER_MAX was less than 10*/
 		if (sidebar_count >= SIDEBAR_MONSTER_MAX)
@@ -1045,10 +1046,11 @@ void update_mon_sidebar_list(void)
 	for (i = 0; i < los_count; i++)
 	{
 		sidebar_monsters[sidebar_count] = line_of_sight_monsters[i];
-		sidebar_count++;
 
 		/* We are tracking this one */
 		mon_list[sidebar_monsters[sidebar_count]].sidebar = TRUE;
+
+		sidebar_count++;
 
 		/* Check to see if the list is full */
 		if (sidebar_count >= SIDEBAR_MONSTER_MAX)
@@ -1056,6 +1058,7 @@ void update_mon_sidebar_list(void)
 			/* Release the arrays */
 			FREE(line_of_sight_monsters);
 			FREE(visible_monsters);
+
 			return;
 		}
 	}
@@ -1085,10 +1088,11 @@ void update_mon_sidebar_list(void)
 	for (i = 0; i < vis_count; i++)
 	{
 		sidebar_monsters[sidebar_count] = visible_monsters[i];
-		sidebar_count++;
 
 		/* We are tracking this one */
 		mon_list[sidebar_monsters[sidebar_count]].sidebar = TRUE;
+
+		sidebar_count++;
 
 		/* Check to see if the list is full */
 		if (sidebar_count >= SIDEBAR_MONSTER_MAX)

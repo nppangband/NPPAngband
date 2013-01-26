@@ -632,7 +632,7 @@ void do_cmd_quit(cmd_code code, cmd_arg args[])
 
 static int find_sidebar_r_idx(void)
 {
-	int row = sidebar_details[SIDEBAR_MON_MIN] - 1;
+	int row = sidebar_details[SIDEBAR_MON_MIN];
 	int count = 0;
 	int mouse_y = p_ptr->command_cmd_ex.mousey;
 
@@ -643,10 +643,6 @@ static int find_sidebar_r_idx(void)
 	{
 		monster_type *m_ptr = &mon_list[sidebar_monsters[count]];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
-		char m_name[80];
-
-		/* Get "the monster" or "it" */
-		monster_desc(m_name, sizeof(m_name), m_ptr, 0);
 
 		/* Figure out how many rows the monster entry is taking up */
 		row += 3;

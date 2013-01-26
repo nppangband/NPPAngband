@@ -359,29 +359,10 @@ void prt_sp(int row, int col)
  */
 static byte monster_health_attr(const monster_type *m_ptr)
 {
-	byte attr = TERM_WHITE;
-	int pct;
+	byte attr = TERM_L_RED;
 
 	/* Not tracking */
 	if (!m_ptr->r_idx) return(TERM_DARK);
-
-	/* Default to almost dead */
-	attr = TERM_RED;
-
-	/* Extract the "percent" of health */
-	pct = 100L * m_ptr->hp / m_ptr->maxhp;
-
-	/* Badly wounded */
-	if (pct >= 10) attr = TERM_L_RED;
-
-	/* Wounded */
-	if (pct >= 25) attr = TERM_ORANGE;
-
-	/* Somewhat Wounded */
-	if (pct >= 60) attr = TERM_YELLOW;
-
-	/* Healthy */
-	if (pct >= 100) attr = TERM_L_GREEN;
 
 	/* Afraid */
 	if (m_ptr->m_timed[MON_TMD_FEAR]) attr = TERM_VIOLET;
@@ -437,6 +418,8 @@ static void prt_health(int row, int col, const monster_type *m_ptr)
 
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
+		byte mon_attr = (r_ptr->flags1 & (RF1_UNIQUE) ? TERM_VIOLET : TERM_WHITE);
+
 		/* Extract the "percent" of health */
 		pct = 100L * m_ptr->hp / m_ptr->maxhp;
 
@@ -444,7 +427,7 @@ static void prt_health(int row, int col, const monster_type *m_ptr)
 		len = (pct < 10) ? 1 : (pct < 90) ? (pct / 10 + 1) : 10;
 
 		/* Print the short name */
-		Term_putstr(col, row, 12, r_ptr->d_attr, r_ptr->name_short);
+		Term_putstr(col, row, 12, mon_attr, r_ptr->name_short);
 		row++;
 
 		/* Get default monster symbol */
@@ -663,9 +646,6 @@ static void prt_mon_mana(int row, int col, const monster_type *m_ptr)
 
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-		/* Default to out of mana*/
-		byte attr = TERM_RED;
-
 		/*no mana, stop here*/
 		if (!r_ptr->mana)
 		{
@@ -678,18 +658,6 @@ static void prt_mon_mana(int row, int col, const monster_type *m_ptr)
 		/* Extract the "percent" of health */
 		pct = 100L * m_ptr->mana / r_ptr->mana;
 
-		/* almost no mana */
-		if (pct >= 10) attr = TERM_L_RED;
-
-		/* some mana */
-		if (pct >= 25) attr = TERM_ORANGE;
-
-		/* most mana */
-		if (pct >= 60) attr = TERM_YELLOW;
-
-		/* full mana */
-		if (pct >= 100) attr = TERM_L_GREEN;
-
 		/* Convert percent into "health" */
 		len = (pct < 10) ? 1 : (pct < 90) ? (pct / 10 + 1) : 10;
 
@@ -697,7 +665,7 @@ static void prt_mon_mana(int row, int col, const monster_type *m_ptr)
 		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
 
 		/* Dump the current "mana"*/
-		Term_putstr(col + 1, row, len, attr, "**********");
+		Term_putstr(col + 1, row, len, TERM_L_GREEN, "**********");
 
 	}
 
@@ -714,29 +682,31 @@ static void prt_monsters(int row, int col)
 
 	/* Remember the last row */
 	sidebar_details[SIDEBAR_MON_MIN] = row;
-	sidebar_details[SIDEBAR_MON_MAX] = row;
+	sidebar_details[SIDEBAR_MON_MAX] = 0;
 
 	/* First clear the rest of the column */
 	for (i = row; i <= max_row; i++)
 	{
 		Term_erase(col, i, 12);
 	}
+	/* Give a little space */
+	row++;
 
 	for (i = 0; i < SIDEBAR_MONSTER_MAX; i++)
 	{
 		/* No more to do */
 		if (!sidebar_monsters[i])
 		{
-			return;
+			break;
 		}
 
 		/* Check if we have room */
-		if (row+1 >= max_row-1) return;
+		if (row+1 >= max_row-1) break;
 		m_ptr = &mon_list[sidebar_monsters[i]];
 		r_ptr = &r_info[m_ptr->r_idx];
 		if (r_ptr->mana)
 		{
-			if (row+2 >= (max_row-1)) return;
+			if (row+2 >= (max_row-1)) break;
 		}
 
 		/* Print the monster info*/
@@ -751,7 +721,6 @@ static void prt_monsters(int row, int col)
 		/* Make sure we have the last row */
 		sidebar_details[SIDEBAR_MON_MAX] = row;
 	}
-
 }
 
 
@@ -826,7 +795,18 @@ static void update_sidebar(game_event_type type, game_event_data *data, void *us
 
 	for (i=0; i < SIDEBAR_MAX_TYPES; i++)
 	{
+		if (i == SIDEBAR_MON_MIN)
+		{
+			if (sidebar_details[SIDEBAR_MON_MIN]) continue;
+		}
+		if 	(i == SIDEBAR_MON_MAX)
+		{
+			if (sidebar_details[SIDEBAR_MON_MAX]) continue;
+		}
+
 		sidebar_details[i] = SIDEBAR_MAX_TYPES;
+
+
 	}
 
 	/* Hack - extreme max and min for the stat section */
@@ -862,6 +842,12 @@ static void update_sidebar(game_event_type type, game_event_data *data, void *us
 				{
 					sidebar_details[SIDEBAR_STAT_MAX] = row;
 				}
+			}
+
+			else if ((hnd->sidebar_type == SIDEBAR_MON_MIN) ||
+					(hnd->sidebar_type == SIDEBAR_MON_MAX))
+			{
+				/* Do nothing */
 			}
 
 			else sidebar_details[hnd->sidebar_type] = row;

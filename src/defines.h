@@ -47,7 +47,7 @@
 /*
  * Name of the version/variant
  */
-#define VERSION_NAME "NPP610Beta1"
+#define VERSION_NAME "NPP610Beta2"
 #define SAVEFILE_NAME  "VNLA"
 
 /*
@@ -172,7 +172,7 @@
 
 #define SIDEBAR_MAX_TYPES	18
 
-#define SIDEBAR_MONSTER_MAX	20
+#define SIDEBAR_MONSTER_MAX	25
 
 /*
  * Mouse click region names
