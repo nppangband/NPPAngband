@@ -21,6 +21,7 @@ The hp/mana information appears on the sidebar for multiple monsters if there is
 The monster name now appears on the sidebar.
 Clicking on the monster name on the sidebar brings up the monster race information.
 Player can taret a monster by clicking on the sidebar while attacking or casting.
+In the bookshop, readable books will always come first.
 Added Cameron Browne as a permanent player ghost template.
 Bugfix: Typos on the mage darkness storm name and plasma bolt spell short description.
 BUgfix: The druid spell elemental weapon only lasted for 5 turns.
