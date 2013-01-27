@@ -2005,8 +2005,9 @@ bool target_set_interactive(int mode, int x, int y)
 					break;
 				}
 
-				case '\xff':
+				case DEFINED_XFF:
 				{
+
 					/* We only target if we click somewhere where the cursor
 					   is already (i.e. a double-click without a time limit) */
 					if (KEY_GRID_X(query) == x && KEY_GRID_Y(query) == y)

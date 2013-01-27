@@ -533,7 +533,7 @@ static void show_commands(void)
 /**
  * Divide up the screen into mousepress regions
  */
-static int click_area(ui_event_data ke)
+int click_area(ui_event_data ke)
 {
 	if ((ke.mousey) && (ke.mousex > COL_MAP) && (ke.mousey < (Term->hgt - 1)))
 	{
@@ -630,11 +630,11 @@ void do_cmd_quit(cmd_code code, cmd_arg args[])
 	p_ptr->leaving = TRUE;
 }
 
-static int find_sidebar_r_idx(void)
+int find_sidebar_mon_idx(ui_event_data ke)
 {
 	int row = sidebar_details[SIDEBAR_MON_MIN];
 	int count = 0;
-	int mouse_y = p_ptr->command_cmd_ex.mousey;
+	int mouse_y = ke.mousey;
 
 	/* Paranoia */
 	if (!sidebar_monsters[count]) return (0);
@@ -652,7 +652,7 @@ static int find_sidebar_r_idx(void)
 		if (row >= (Term->hgt - 2)) break;
 
 		/* We found the monster the player clicked on */
-		if (row >= mouse_y) return (m_ptr->r_idx);
+		if (row >= mouse_y) return (sidebar_monsters[count]);
 
 		/* Go to the next monster */
 		count++;
@@ -730,15 +730,21 @@ static void do_cmd_mouseclick(void)
 		{
 			if (sidebar_monsters[0])
 			{
-				int r_idx = find_sidebar_r_idx();
+				monster_type *m_ptr;
+				int m_idx = find_sidebar_mon_idx(p_ptr->command_cmd_ex);
 
-				if (r_idx)
+				/* Paranoia */
+				if (!m_idx) return;
+
+				m_ptr = &mon_list[m_idx];
+
+				if (m_ptr->r_idx)
 				{
 
 					/* Save screen */
 					screen_save();
 
-					screen_roff(r_idx);
+					screen_roff(m_ptr->r_idx);
 
 					(void)anykey();
 

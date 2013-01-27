@@ -20,6 +20,8 @@ Unusual terrains now only appear on 25% of the regular dungeon levels.
 The hp/mana information appears on the sidebar for multiple monsters if there is room.
 The monster name now appears on the sidebar.
 Clicking on the monster name on the sidebar brings up the monster race information.
+Player can taret a monster by clicking on the sidebar while attacking or casting.
+Added Cameron Browne as a permanent player ghost template.
 Bugfix: Typos on the mage darkness storm name and plasma bolt spell short description.
 BUgfix: The druid spell elemental weapon only lasted for 5 turns.
 Bugfix: The guild sometimes offered dungeon spellbooks the player has used before.
@@ -30,7 +32,7 @@ Bugfix: The guild sometimes overwrite bookstore inventory when generating reward
 Bugfix: Fix inconcistencies of telling players about objects theyare not aware of yet.
 Bugfix: Unidentified flavored special artifacts were not dislaying thier flavors.
 Bugfix: The game sometimes set up a quest below max depth (6400').
-Bugfix: Monster messages were sometimes coming in the wrong order (The monster attacks you.  The  monste wakes up.)
+Bugfix: Monster messages were sometimes coming in the wrong order (The monster attacks you.  The  monster wakes up.)
 Bugfix: Fix multiple grammar issues of spells being described as "casts spells which cast....".
 Bugfix: A shopkeeper's race was describes as "Dundan".
 Bugfix: Fixed typos in the brigand and rogue descriptions in te helpfiles.

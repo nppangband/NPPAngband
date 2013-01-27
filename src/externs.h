@@ -450,7 +450,9 @@ extern void disturb(int stop_search, int unused_flag);
 
 /* cmd0.c */
 extern void cmd_init(void);
+extern int click_area(ui_event_data ke);
 extern void do_cmd_quit(cmd_code code, cmd_arg args[]);
+extern int find_sidebar_mon_idx(ui_event_data ke);
 extern void textui_process_command(bool no_request);
 
 /* cmd1.c */

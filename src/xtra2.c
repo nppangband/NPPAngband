@@ -1438,7 +1438,27 @@ bool get_aim_dir(int *dp, bool target_trap)
 			/* Mouse aiming */
 			case DEFINED_XFF:
 			{
-				if (target_set_interactive(TARGET_KILL, KEY_GRID_X(ke), KEY_GRID_Y(ke)))
+
+				if (click_area(ke) == SIDEBAR_MON_MIN)
+				{
+
+					int m_idx = find_sidebar_mon_idx(ke);
+
+					if (m_idx)
+					{
+						monster_type *m_ptr = &mon_list[m_idx];
+
+						if (m_ptr->project)
+						{
+							health_track(m_idx);
+							target_set_monster(m_idx);
+							dir = 5;
+							break;
+						}
+					}
+				}
+
+				else if (target_set_interactive(TARGET_KILL, KEY_GRID_X(ke), KEY_GRID_Y(ke)))
 					dir = 5;
 
 				break;
