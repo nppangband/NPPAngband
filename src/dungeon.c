@@ -2021,7 +2021,7 @@ static void process_world(void)
 	}
 
 	/* Occasionally have the ghost give a challenge */
-	if ((player_ghost_num > -1) && (turn % 100))
+	if (turn % 100)
 	{
 		if (one_in_(50)) ghost_challenge();
 	}
@@ -3386,7 +3386,7 @@ static void dungeon(void)
 	if ((effective_depth(p_ptr->depth)) && (do_feeling)) do_cmd_feeling();
 
 	/* Announce a player ghost challenge. -LM- */
-	if (player_ghost_num > -1) ghost_challenge();
+	ghost_challenge();
 
 	/*** Process this dungeon level ***/
 

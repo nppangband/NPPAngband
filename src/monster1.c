@@ -3138,6 +3138,69 @@ bool prepare_ghost(int r_idx)
 	return (TRUE);
 }
 
+#define NUM_GHOST_CHALLENGES	26
+
+/*
+ * Array of feeling strings
+ */
+static cptr do_cmd_challenge_text[NUM_GHOST_CHALLENGES] =
+{
+	"challenges you from beyond the grave!",
+	"thunders 'Prove worthy of your traditions - or die ashamed!'.",
+	"desires to test your mettle!",
+	"has risen from the dead to test you!",
+	"roars 'Fight, or know yourself for a coward!'.",
+	"summons you to a duel of life and death!",
+	"desires you to know that you face a mighty champion of yore!",
+	"demands that you prove your worthiness in combat!",
+	"calls you unworthy of your ancestors!",
+	"challenges you to a deathmatch!",
+	"walks Middle-Earth once more!",
+	"challenges you to demonstrate your prowess!",
+	"demands you prove yourself here and now!",
+	"asks 'Can ye face the best of those who came before?'.",
+	"challenges you to a fight to the death!",
+	"wails 'These halls shall claim your life as well!'",
+	"begs you 'Free me from this cursed form!'.",
+	"whispers 'Those who perish here shall find no rest'.",
+	"boasts 'You won't leave this level alive!",
+	"wishes to claim your soul!",
+	"declares 'You will join me in this tortured afterlife!'",
+	"proclaims 'Prepare to fight your last battle'",
+	"bellows 'Your adventures will end here!'",
+	"dares you to proceed further!",
+	"wants to collect your bones!",
+	"yells 'Now you shall meet your undoing!'"
+};
+
+
+/*
+ * Personalize, randomize, and announce the challenge of a player ghost.
+ */
+void ghost_challenge(void)
+{
+	size_t i;
+
+	/* No active player ghost template */
+	if (!ghost_r_idx) return;
+
+	/*paranoia*/
+	/* Check there is a name/ghost first */
+	if (player_ghost_name[0] == '\0')
+	{
+		/*Make sure the name has been created*/
+		prepare_ghost_name();
+	}
+
+	i = randint0(NUM_GHOST_CHALLENGES);
+
+	msg_format("%^s %s", player_ghost_name, do_cmd_challenge_text[i]);
+
+	message_flush();
+}
+
+
+
 /* Remove the ghost. Make sure each one only shows up once per game */
 void remove_player_ghost(void)
 {

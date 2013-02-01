@@ -547,7 +547,6 @@ extern void do_cmd_options(void);
 extern void do_cmd_note(char *note, int what_depth);
 extern void do_cmd_version(void);
 extern void do_cmd_feeling(void);
-extern void ghost_challenge(void);
 extern void do_cmd_quest(void);
 extern void do_cmd_load_screen(void);
 extern void do_cmd_save_screen(void);
@@ -804,6 +803,7 @@ extern void get_closest_los_monster(int n, int y0, int x0, int *ty, int *tx,
    bool require_visible);
 extern void prepare_ghost_name(void);
 extern bool prepare_ghost(int r_idx);
+extern void ghost_challenge(void);
 extern void remove_player_ghost(void);
 extern void delete_player_ghost_entry(void);
 extern void add_player_ghost_entry(void);
