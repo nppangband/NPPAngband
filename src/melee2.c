@@ -5506,6 +5506,9 @@ static s16b process_monster(monster_type *m_ptr)
 		}
 	}
 
+	/* Make sure messages such as wakes up, etc. come before attack messages */
+	if (size_mon_msg) flush_monster_messages();
+
 	/*** Ranged attacks ***/
 
 	/*Monster can cast spells*/
