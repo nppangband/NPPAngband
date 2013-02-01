@@ -332,6 +332,8 @@ void target_set_monster(int m_idx)
 		p_ptr->target_row = 0;
 		p_ptr->target_col = 0;
 	}
+
+	p_ptr->redraw |= (PR_HEALTH);
 }
 
 
@@ -360,6 +362,8 @@ void target_set_location(int y, int x)
 		p_ptr->target_row = 0;
 		p_ptr->target_col = 0;
 	}
+
+	p_ptr->redraw |= (PR_HEALTH);
 }
 
 
