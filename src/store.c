@@ -4730,6 +4730,16 @@ static void store_examine(int oid)
 
 	screen_load();
 
+	/* Process artifact lore */
+	if (ARTIFACT_EASY_MENTAL(o_ptr))
+	{
+		/* Get the lore entry */
+		artifact_lore *a_l_ptr = &a_l_list[o_ptr->art_num];
+
+		/* Remember this artifact from now on */
+		a_l_ptr->was_fully_identified = TRUE;
+	}
+
 	/* Hack -- Browse book, then prompt for a command */
 	if (o_ptr->tval == cp_ptr->spell_book)
 	{

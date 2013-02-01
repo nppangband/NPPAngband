@@ -5518,7 +5518,7 @@ int do_ident_item(int item, object_type *o_ptr)
 		&& a_l_list[o_ptr->art_num].was_fully_identified)
 	{
 		/* Message */
-		msg_c_format(MSG_NOTICE, "You remember this artifact from a previous game.");
+		msg_c_format(MSG_NOTICE, "You are already familiar with this artifact.");
 
 		/* Fully identify the artifact for free */
 		o_ptr->ident |= (IDENT_MENTAL);
