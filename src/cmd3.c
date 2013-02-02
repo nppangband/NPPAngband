@@ -1628,7 +1628,7 @@ void py_steal(int y, int x)
 	/* The victim normally, but not always, wakes up and is aggravated. */
 	if ((!m_ptr->m_timed[MON_TMD_SLEEP]) || (randint(filching_power) >= theft_protection))
 	{
-		mon_clear_timed(get_mon_idx(m_ptr), MON_TMD_SLEEP, MON_TMD_FLG_NOMESSAGE);
+		wake_monster_attack(m_ptr, MON_TMD_FLG_NOMESSAGE);
 
 		/* Give the player a message. */
 		monster_desc(m_name, sizeof(m_name), m_ptr, 0);

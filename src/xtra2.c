@@ -823,7 +823,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note, int who)
 	}
 
 	/* Wake it up */
-	mon_clear_timed(m_idx, MON_TMD_SLEEP, MON_TMD_FLG_NOMESSAGE);
+	wake_monster_attack(m_ptr, MON_TMD_FLG_NOMESSAGE);
 
 	/* Hurt it */
 	m_ptr->hp -= dam;

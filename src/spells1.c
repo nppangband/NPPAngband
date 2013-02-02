@@ -4803,7 +4803,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			if (seen) obvious = TRUE;
 
 			/* Wake up */
-			mon_clear_timed(mon_idx, MON_TMD_SLEEP, MON_TMD_FLG_NOTIFY);
+			wake_monster_attack(m_ptr, MON_TMD_FLG_NOTIFY);
 
 			/* Monster goes active */
 			m_ptr->mflag |= (MFLAG_ACTV);
@@ -5581,7 +5581,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 		if ((p_ptr->health_who == mon_idx) || (m_ptr->sidebar)) p_ptr->redraw |= (PR_HEALTH);
 
 		/* Wake the monster up, no message */
-		mon_clear_timed(mon_idx, MON_TMD_SLEEP, (timed_flag | MON_TMD_FLG_NOMESSAGE));
+		wake_monster_attack(m_ptr, (timed_flag | MON_TMD_FLG_NOMESSAGE));
 
 		/* Monster goes active */
 		m_ptr->mflag |= (MFLAG_ACTV);
@@ -5688,7 +5688,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 				/* Sleep is applied as a percentage of "damage". */
 				int sleep = (rand_range((r_ptr->sleep + 1) / 2, r_ptr->sleep) * do_sleep) / 100;
 
-				if(mon_inc_timed(mon_idx, MON_TMD_SLEEP, sleep, (timed_flag | MON_TMD_FLG_NOMESSAGE)))
+				if (sleep_monster_spell(m_ptr, sleep, (timed_flag | MON_TMD_FLG_NOMESSAGE)))
 				{
 					sleep_note = MON_MSG_FALL_ASLEEP;
 				}

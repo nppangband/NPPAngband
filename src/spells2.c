@@ -3846,7 +3846,7 @@ void earthquake(int cy, int cx, int r, bool kill_vault)
 					damage = (sn ? damroll(4, 8) : (m_ptr->hp + 1));
 
 					/* Monster is certainly awake */
-					mon_clear_timed(m_idx, MON_TMD_SLEEP, MON_TMD_FLG_NOMESSAGE);
+					wake_monster_attack(m_ptr, MON_TMD_FLG_NOMESSAGE);
 
 					/* Apply damage directly */
 					m_ptr->hp -= damage;
@@ -4025,7 +4025,7 @@ static void cave_temp_room_light(void)
 			if ((m_ptr->m_timed[MON_TMD_SLEEP]) && (rand_int(100) < chance))
 			{
 				/* Wake up! */
-				mon_clear_timed(m_idx, MON_TMD_SLEEP, MON_TMD_FLG_NOTIFY);
+				wake_monster_attack(m_ptr, MON_TMD_FLG_NOTIFY);
 
 				/*possibly update the monster health bar*/
 				if ((p_ptr->health_who == m_idx)  || (m_ptr->sidebar))
@@ -4819,7 +4819,7 @@ bool slow_monster(int dir)
 bool sleep_monster(int dir)
 {
 	u32b flg = PROJECT_STOP;
-	return (fire_bolt_beam_special(GF_OLD_SLEEP, dir, damroll (2, p_ptr->lev), MAX_RANGE, flg));
+	return (fire_bolt_beam_special(GF_OLD_SLEEP, dir, damroll (3, p_ptr->lev), MAX_RANGE, flg));
 }
 
 bool confuse_monster(int dir, int plev)
@@ -4891,7 +4891,7 @@ bool sleep_monsters_touch(void)
 	int px = p_ptr->px;
 
 	u32b flg = PROJECT_BOOM | PROJECT_KILL | PROJECT_HIDE;
-	return (project(SOURCE_PLAYER, 1, py, px, py, px, damroll(2, p_ptr->lev), GF_OLD_SLEEP, flg, 0, 20));
+	return (project(SOURCE_PLAYER, 1, py, px, py, px, damroll(3, p_ptr->lev), GF_OLD_SLEEP, flg, 0, 20));
 }
 
 
@@ -5666,7 +5666,7 @@ bool read_minds(void)
 			if ((m_ptr->m_timed[MON_TMD_SLEEP]) && (rand_int(100) < p_ptr->lev))
 			{
 				/* No more sleeping */
-				mon_clear_timed(m_idx, MON_TMD_SLEEP, MON_TMD_FLG_NOMESSAGE);
+				wake_monster_attack(m_ptr, MON_TMD_FLG_NOMESSAGE);
 
 				/* Remember this */
 				++count;

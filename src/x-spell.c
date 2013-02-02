@@ -679,7 +679,7 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			if (desc_short) return ("");
 			if (cast)
 			{
-				(void)sleep_monsters(damroll (2, p_ptr->lev));
+				(void)sleep_monsters(damroll (3, p_ptr->lev));
 			}
 
 			break;

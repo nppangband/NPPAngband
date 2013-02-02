@@ -430,12 +430,61 @@ bool mon_clear_timed(int m_idx, int idx, u16b flag)
 	flag |= MON_TMD_FLG_NOFAIL;
 
 	/* Check we have a valid effect */
-	if ((idx < 0) || (idx > MON_TMD_MAX)) return FALSE;
+	if ((idx < 0) || (idx > MON_TMD_MAX)) return (FALSE);
 
 	return mon_set_timed(m_idx, idx, 0, flag);
 }
 
+/* Helper function to wake monsters who are asleep */
+void wake_monster_attack(monster_type *m_ptr, u16b flag)
+{
+	int m_idx = get_mon_idx(m_ptr);
 
+	/* Already Awake */
+	if (!m_ptr->m_timed[MON_TMD_SLEEP]) return;
+
+	/* Disturb the monster */
+	mon_clear_timed(m_idx, MON_TMD_SLEEP, flag);
+
+	/* Make the monster a little slow to wake up */
+	if (m_ptr->m_energy > BASE_ENERGY_MOVE /2) m_ptr->m_energy = BASE_ENERGY_MOVE /2;
+}
+
+static bool mon_fully_healthy(const monster_type *m_ptr)
+{
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+	/* Monster is wounded */
+	if (m_ptr->hp < m_ptr->maxhp) return (FALSE);
+	if (m_ptr->mana < r_ptr->mana) return (FALSE);
+	if (m_ptr->m_timed[MON_TMD_STUN]) return (FALSE);
+	if (m_ptr->m_timed[MON_TMD_FEAR]) return (FALSE);
+	if (m_ptr->m_timed[MON_TMD_CONF]) return (FALSE);
+
+	/* Fully healthy */
+	return (TRUE);
+}
+
+/* Helper function to sleep monsters who are awake */
+bool sleep_monster_spell(monster_type *m_ptr, int v, u16b flag)
+{
+	int m_idx = get_mon_idx(m_ptr);
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+	/* Already Asleep */
+	if (m_ptr->m_timed[MON_TMD_SLEEP]) return (FALSE);
+
+	/* Monster is eligible for a full sleep */
+	if (mon_fully_healthy(m_ptr))
+	{
+		int new_v = rand_range((r_ptr->sleep + 1) / 2, r_ptr->sleep);
+
+		if (v < new_v) v = new_v;
+	}
+
+	/* Disturb the monster */
+	return (mon_inc_timed(m_idx, MON_TMD_SLEEP, v, flag));
+}
 
 
 

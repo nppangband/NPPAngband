@@ -589,7 +589,7 @@ void py_attack(int y, int x)
 	if (m_ptr->m_timed[MON_TMD_SLEEP]) was_asleep = TRUE;
 
 	/* Disturb the monster */
-	mon_clear_timed(get_mon_idx(m_ptr), MON_TMD_SLEEP, MON_TMD_FLG_NOMESSAGE);
+	wake_monster_attack(m_ptr, MON_TMD_FLG_NOMESSAGE);
 
 	/*possibly update the monster health bar*/
 	if ((p_ptr->health_who == cave_m_idx[y][x]) || (m_ptr->sidebar)) p_ptr->redraw |= (PR_HEALTH);
@@ -1408,7 +1408,7 @@ static bool thrown_potion_effects(object_type *o_ptr, bool *is_dead, bool *fear,
 		case SV_POTION_SLEEP:
 		{
 			/*sleep explosion at the site, radius 1*/
-			ident = explosion(SOURCE_PLAYER, 1, y, x, damroll(2, p_ptr->lev), GF_OLD_SLEEP, flag);
+			ident = explosion(SOURCE_PLAYER, 1, y, x, damroll(3, p_ptr->lev), GF_OLD_SLEEP, flag);
 			break;
 		}
 

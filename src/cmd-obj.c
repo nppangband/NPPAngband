@@ -1853,7 +1853,7 @@ static bool use_staff(object_type *o_ptr, bool *ident)
 
 		case SV_STAFF_SLEEP_MONSTERS:
 		{
-			if (sleep_monsters(damroll(2, p_ptr->lev))) *ident = TRUE;
+			if (sleep_monsters(damroll(3, p_ptr->lev))) *ident = TRUE;
 			break;
 		}
 
