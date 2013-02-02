@@ -3902,21 +3902,21 @@ void place_object(int y, int x, bool good, bool great, int droptype)
 }
 
 /*
- * Attempt to place a quest_chest at the given location.
+ * Attempt to place a quest artifact at the given location.
  */
-void place_quest_artifact(int y, int x)
+bool place_quest_artifact(int y, int x)
 {
-	object_type *i_ptr;
 	object_type object_type_body;
+	object_type *i_ptr = &object_type_body;;
 
 	/* Paranoia */
-	if (!in_bounds(y, x)) return;
+	if (!in_bounds(y, x)) return (FALSE);
 
 	/* Hack -- clean floor space */
-	if (!cave_clean_bold(y, x)) return;
+	if (!cave_clean_bold(y, x)) return (FALSE);
 
-	/* Get local object */
-	i_ptr = &object_type_body;
+	/* Already created */
+	if (a_info[QUEST_ART_SLOT].a_cur_num) return (FALSE);
 
 	/* Wipe the object */
 	object_wipe(i_ptr);
@@ -3925,7 +3925,10 @@ void place_quest_artifact(int y, int x)
 	create_quest_artifact(i_ptr);
 
 	/* Give it to the floor */
-	floor_carry(y, x, i_ptr);
+	if (!floor_carry(y, x, i_ptr)) return (FALSE);
+
+	/* Success */
+	return (TRUE);
 
 }
 

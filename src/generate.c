@@ -3366,19 +3366,20 @@ static void build_vault(int y0, int x0, const vault_type *v_ptr)
 				/* Quest chest */
 				case 'Q':
 				{
+					bool placed_quest_artifact = FALSE;
 					monster_level = p_ptr->depth + 10;
 					place_monster(y, x, (MPLACE_SLEEP | MPLACE_GROUP | MPLACE_NO_MIMIC | MPLACE_NO_GHOST));
 					monster_level = p_ptr->depth;
 
 					/*randomly pick from several quest artifacts spots to place the artifact*/
-					if ((quest_artifact_spots > 0) && (one_in_(quest_artifact_spots)))
+					if (!a_info[QUEST_ART_SLOT].a_cur_num)
 					{
-						place_quest_artifact(y, x);
-
-						/*don't place it again*/
-						quest_artifact_spots = 0;
+						if (one_in_(quest_artifact_spots))
+						{
+							placed_quest_artifact = (place_quest_artifact(y, x));
+						}
 					}
-					else
+					if (!placed_quest_artifact)
 					{
 						/*place a decent sized object*/
 						object_level = effective_depth(p_ptr->depth) + 7;
