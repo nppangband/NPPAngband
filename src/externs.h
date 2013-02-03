@@ -340,7 +340,6 @@ extern bool use_transparency;
 extern void (*sound_hook)(int);
 extern char notes_fname[1024];
 extern ang_file *notes_file;
-extern byte recent_failed_thefts;
 extern autoinscription* inscriptions;
 extern u16b inscriptionsCount;
 extern byte num_trap_on_level;

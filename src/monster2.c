@@ -3450,34 +3450,10 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	/* And start out fully healthy */
 	n_ptr->hp = n_ptr->maxhp;
 
-	/* Hack -- in the dungeon, aggravate every monster as long as there
-	 * are too many recent thefts
-	 */
-	if ((p_ptr->depth) && (recent_failed_thefts > 30)
-		&& ((randint(5) + 30) > recent_failed_thefts))
-	{
-		/*make them all awake.....*/
-		n_ptr->m_timed[MON_TMD_SLEEP] = 0;
 
-		/*and wary*/
-		n_ptr->mflag |= (MFLAG_WARY);
-
-		/*Everybody but uniques are always hasted*/
-		if (!(r_ptr->flags1 & (RF1_UNIQUE)))
-		{
-			n_ptr->mflag |= (MFLAG_FASTER);
-		}
-
-		/*make all monster's faster*/
-		n_ptr->m_timed[MON_TMD_FAST] = (recent_failed_thefts * 10) + rand_int(10);
-
-
-		/* If it just woke up, update the monster list */
-		p_ptr->redraw |= PR_MONLIST;
-	}
 
 	/* 75% non-unique monsters vary their speed*/
-	else if (!(r_ptr->flags1 & (RF1_UNIQUE)))
+	if (!(r_ptr->flags1 & (RF1_UNIQUE)))
 	{
 		if (!(one_in_(4)))
 		{

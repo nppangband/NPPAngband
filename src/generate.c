@@ -11924,13 +11924,6 @@ void generate_cave(void)
 
 	/* Clear the summon mask */
 	dungeon_summon_mask_f7 = 0L;
-
-	/*All of Angband knows about a thief*/
-	if ((recent_failed_thefts > 30) && (p_ptr->depth))
-	{
-		msg_print("You hear hunting parties scouring the area for a notorious burglar.");
-	}
-
 }
 
 

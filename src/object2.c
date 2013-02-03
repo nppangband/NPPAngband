@@ -4055,7 +4055,7 @@ void steal_object_from_monster(int y, int x)
 		else while (!make_object(i_ptr, good, great,DROP_TYPE_UNTHEMED, FALSE)) continue;
 
 		/* Describe the object */
-		object_desc(o_name, sizeof(o_name), i_ptr, ODESC_BASE);
+		object_desc(o_name, sizeof(o_name), i_ptr, ODESC_PREFIX | ODESC_FULL);
 
 		/*update the monster lore*/
 		lore_treasure(cave_m_idx[y][x], 1, 0);

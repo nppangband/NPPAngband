@@ -670,7 +670,7 @@ static void wr_extra(void)
 	wr_s16b(player_ghost_num);
 
 	/* Store the number of thefts on the level. -LM- */
-	wr_byte(recent_failed_thefts);
+	wr_byte(0);
 
 	/* Store number of monster traps on this level. -LM- */
 	wr_byte(num_trap_on_level);

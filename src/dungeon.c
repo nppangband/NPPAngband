@@ -2038,23 +2038,6 @@ static void process_world(void)
 	/* Process effects */
 	process_effects();
 
-	/*boundry control*/
-	if (recent_failed_thefts > 50) recent_failed_thefts = 50;
-
-	/* Hack -- Dungeon Slowly Calms down from burglars
-	 * but only if you are within 10 levels of your max depth
-	 * and not resting in the town.
-	 */
-	if ((recent_failed_thefts > 0) && (p_ptr->depth) && (!(turn % 5000))
-		&& ((p_ptr->depth + 10) >= (p_ptr->max_depth)))
-	{
-		recent_failed_thefts --;
-
-		/*notify player that created monsters will no longer be aggravated*/
-		if (recent_failed_thefts == 29) msg_print("You sense The Pits of Angband have calmed down a little.");
-
-	}
-
 	/* Process dynamic dungeon grids */
 	process_dynamic_terrain();
 

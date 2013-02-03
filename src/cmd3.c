@@ -1485,22 +1485,16 @@ void py_steal(int y, int x)
 	int i;
 	int effect, theft_protection;
 	bool teststeal = FALSE;
+	bool did_steal = FALSE;
 	int filching_power = 0;
 	int counter = 0;
 	int counter2 = 0;
 
 	bool thief = FALSE;
 
-	/* Try all you like, but fail enough and the door is closed to you. */
-	if (recent_failed_thefts > 35)
-	{
-		msg_print("Everyone is keeping a lookout for you.  You can steal nothing here.");
-
-	}
-
 	/*before we go through everything else,
 	 *sometimes monsters aren't carry anything*/
-	else if (r_ptr->flags1 & (RF1_DROP_60))
+	if (r_ptr->flags1 & (RF1_DROP_60))
 	{
     	if (rand_int(100) >= 60)
 		{
@@ -1565,8 +1559,8 @@ void py_steal(int y, int x)
 		theft_protection /= 2;
 	}
 
-	/*speeling, stunned, or confused monsters are harder to steal from*/
-	if (m_ptr->m_timed[MON_TMD_SLEEP]) theft_protection /= 2;
+	/*sleeping, stunned, or confused monsters are easier to steal from*/
+	if (m_ptr->m_timed[MON_TMD_SLEEP]) theft_protection /= 3;
 	if (m_ptr->m_timed[MON_TMD_CONF]) theft_protection /= 3;
 	if (m_ptr->m_timed[MON_TMD_STUN]) theft_protection /= 5;
 
@@ -1586,12 +1580,6 @@ void py_steal(int y, int x)
 	}
 	if (thief) theft_protection += 30;
 
-	/*sleeping monsters are much easier*/
-	if (m_ptr->m_timed[MON_TMD_SLEEP])
-	{
-		theft_protection /= 2;
-	}
-
 	/*creatures who have guaranteed good or great times are very protective
 	 *creatures who hold chests are INCREDIBLY protective -JG
 	 */
@@ -1599,12 +1587,8 @@ void py_steal(int y, int x)
 	else if (r_ptr->flags1 & (RF1_DROP_GREAT)) theft_protection = (theft_protection * 5 / 3);
 	else if (r_ptr->flags1 & (RF1_DROP_GOOD)) theft_protection = (theft_protection * 3 / 2);
 
-	/* The more you fail to steal, the more wary the monsters. */
-	theft_protection += (recent_failed_thefts * 5) / 2;
-
 	if (teststeal)
 	{
-
 		/* Did the theft succeed, give object to player.  */
 		if (randint(filching_power) >= theft_protection)
 		{
@@ -1612,6 +1596,8 @@ void py_steal(int y, int x)
 
 			/*lower theft protection to 90% of orig value for next check*/
 			theft_protection *= 9; theft_protection /= 10;
+
+			did_steal = TRUE;
 		}
 
 		else
@@ -1624,9 +1610,8 @@ void py_steal(int y, int x)
 		}
 	}
 
-
 	/* The victim normally, but not always, wakes up and is aggravated. */
-	if ((!m_ptr->m_timed[MON_TMD_SLEEP]) || (randint(filching_power) >= theft_protection))
+	if ((!did_steal) && (randint(filching_power) < (theft_protection / 2)))
 	{
 		wake_monster_attack(m_ptr, MON_TMD_FLG_NOMESSAGE);
 
@@ -1638,9 +1623,8 @@ void py_steal(int y, int x)
 		mon_inc_timed(cave_m_idx[m_ptr->fy][m_ptr->fx], MON_TMD_FAST,
 				(50 + rand_int(50)), MON_TMD_FLG_NOTIFY);
 
-		/*possibly update the monster health bar*/
-		if ((p_ptr->health_who == cave_m_idx[m_ptr->fy][m_ptr->fx]) || (m_ptr->sidebar))
-				p_ptr->redraw |= (PR_HEALTH);
+		/* Update the monster health bar*/
+		p_ptr->redraw |= (PR_HEALTH);
 	}
 
 	/* Hack - count all the wary monsters */
@@ -1671,41 +1655,12 @@ void py_steal(int y, int x)
 	/*let the player know who saw, and aggravate the monsters*/
 	if ((!m_ptr->m_timed[MON_TMD_SLEEP]) || (counter2 > counter))
 	{
+		/* Aggravate monsters nearby. */
+		mass_aggravate_monsters(SOURCE_PLAYER);
+
 		/*dungeon gets different treatment than town*/
-		if (p_ptr->depth)
-		{
-			/*increase the recent thefts counter*/
-			recent_failed_thefts += 10;
-
-			/* Increment the number of thefts in the dungeon, and possibly raise the hue and cry. */
-
-			if (recent_failed_thefts > 30)
-			{
-				/* Wake up and haste the whole dungeon. */
-				mass_aggravate_monsters(SOURCE_PLAYER);
-
-				/* Message */
-				msg_print("The Pits of Angband roar with anger!");
-			}
-
-			else if ((recent_failed_thefts > 15) || (randint(8) == 1))
-			{
-				msg_print("You hear hunting parties scouring the area for a notorious burglar.");
-
-				/* Aggravate monsters nearby. */
-				aggravate_monsters(SOURCE_PLAYER);
-			}
-
-		}
-		else
-		{
-
-			/*the town gets aggravated right away*/
-			mass_aggravate_monsters(SOURCE_PLAYER);
-
-			msg_print("The furious townspeople search for the notorious burglar!");
-
-		}
+		if (p_ptr->depth) msg_print("The Pits of Angband roar with anger!");
+		else msg_print("The furious townspeople search for the notorious burglar!");
 	}
 
 	/* The thief also speeds up, but only for just long enough to escape. */
@@ -1713,6 +1668,7 @@ void py_steal(int y, int x)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
+	p_ptr->redraw |= (PR_HEALTH);
 
 	/* Handle stuff */
 	handle_stuff();

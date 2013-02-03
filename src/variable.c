@@ -970,7 +970,6 @@ ang_file *notes_file;
  /* Two variables that limit rogue stealing and creation of traps.
  * Cleared when a level is created. {From Oangband} -JG
  */
-byte recent_failed_thefts;
 byte num_trap_on_level;
 u16b altered_inventory_counter;
 bool allow_altered_inventory;

@@ -508,9 +508,6 @@ static void player_wipe(void)
 	/* Hack -- Well fed player */
 	p_ptr->food = PY_FOOD_FULL - 1;
 
-	/*re-set the thefts counter*/
-	recent_failed_thefts = 0;
-
 	/*re-set the altered inventory counter*/
 	allow_altered_inventory = FALSE;
 	altered_inventory_counter = 0;

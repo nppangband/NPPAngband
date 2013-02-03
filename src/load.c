@@ -1281,7 +1281,7 @@ static errr rd_extra(void)
 	rd_s16b(&player_ghost_num);
 
 	/* Find out how many thefts have recently occurred. */
-	rd_byte(&recent_failed_thefts);
+	strip_bytes(1);
 
 	/* Read number of monster traps on level. */
 	rd_byte(&num_trap_on_level);
