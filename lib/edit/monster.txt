@@ -4740,7 +4740,7 @@ D: deep blue in hue.  Sparks crackle along its length.
 
 
 N:345:Young white dragon
-A:YoungBlueDrg
+A:YoungWhiteDr
 G:d:w
 I:110:27d10:20:50:70
 W:29:1:17:500
