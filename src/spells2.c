@@ -3589,7 +3589,7 @@ void destroy_area(int y1, int x1, int r)
 	add_wakeup_chance = 10000;
 
 	/* Fully update the visuals */
-	p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS);
+	p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS | PU_FLOW_DOORS | PU_FLOW_NO_DOORS);
 
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP | PR_MONLIST | PR_ITEMLIST);
@@ -3948,7 +3948,7 @@ void earthquake(int cy, int cx, int r, bool kill_vault)
 	add_wakeup_chance = MAX(add_wakeup_chance, 8000);
 
 	/* Fully update the visuals */
-	p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS);
+	p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS | PU_FLOW_DOORS | PU_FLOW_NO_DOORS);
 
 	/* Update the health bar */
 	p_ptr->redraw |= (PR_HEALTH | PR_MON_MANA);

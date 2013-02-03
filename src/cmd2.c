@@ -962,7 +962,7 @@ static bool do_cmd_open_aux(int y, int x)
 			cave_alter_feat(y, x, FS_OPEN);
 
 			/* Update the visuals */
-			p_ptr->update |= (PU_UPDATE_VIEW | PU_MONSTERS | PU_FLOW_DOORS | PU_FLOW_NO_DOORS);
+			p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS | PU_FLOW_DOORS | PU_FLOW_NO_DOORS);
 
 			/* Experience */
 			gain_exp(1);
@@ -989,7 +989,7 @@ static bool do_cmd_open_aux(int y, int x)
 		cave_alter_feat(y, x, FS_OPEN);
 
 		/* Update the visuals */
-		p_ptr->update |= (PU_UPDATE_VIEW | PU_MONSTERS | PU_FLOW_NO_DOORS | PU_FLOW_DOORS);
+		p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS | PU_FLOW_NO_DOORS | PU_FLOW_DOORS);
 
 		/* Sound */
 		sound(MSG_OPENDOOR);
@@ -1167,7 +1167,7 @@ static bool do_cmd_close_aux(int y, int x)
 		find_secret(y,x);
 
 		/* Update the visuals */
-		p_ptr->update |= (PU_UPDATE_VIEW | PU_MONSTERS | PU_FLOW_NO_DOORS | PU_FLOW_DOORS);
+		p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS | PU_FLOW_NO_DOORS | PU_FLOW_DOORS);
 	}
 
 	/* Open door */
@@ -1181,7 +1181,7 @@ static bool do_cmd_close_aux(int y, int x)
 		cave_alter_feat(y, x, FS_CLOSE);
 
 		/* Update the visuals */
-		p_ptr->update |= (PU_UPDATE_VIEW | PU_MONSTERS | PU_FLOW_NO_DOORS | PU_FLOW_DOORS);
+		p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS | PU_FLOW_NO_DOORS | PU_FLOW_DOORS);
 
 		/* Sound */
 		sound(MSG_SHUTDOOR);
@@ -1343,7 +1343,7 @@ static bool do_cmd_tunnel_aux(int y, int x)
 			cave_alter_feat(y, x, FS_TUNNEL);
 
 			/* Update the visuals */
-			p_ptr->update |= (PU_UPDATE_VIEW | PU_MONSTERS);
+			p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS);
 
 		}
 
@@ -1831,7 +1831,7 @@ static bool do_cmd_bash_aux(int y, int x)
 		feat = cave_feat[y][x];
 
 		/* Update the visuals */
-		p_ptr->update |= (PU_UPDATE_VIEW | PU_MONSTERS);
+		p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS);
 	}
 
 	/* Hack -- Bash power based on strength */
@@ -1878,7 +1878,7 @@ static bool do_cmd_bash_aux(int y, int x)
 		}
 
 		/* Update the visuals */
-		p_ptr->update |= (PU_UPDATE_VIEW | PU_MONSTERS);
+		p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS);
 	}
 
 	/* Take a hit from the feature, sometimes */

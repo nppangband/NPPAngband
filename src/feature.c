@@ -237,9 +237,6 @@ void find_secret(int y, int x)
 	/* Change the location */
 	cave_alter_feat(y, x, FS_SECRET);
 
-
-	/*p_ptr->update |= (PU_UPDATE_VIEW | PU_MONSTERS);*/
-
 	/* Disturb */
 	disturb(0, 0);
 }

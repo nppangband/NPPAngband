@@ -500,13 +500,6 @@ static void calc_torch(void)
 	/* Update the visuals */
 	p_ptr->update |= (PU_UPDATE_VIEW);
 	p_ptr->update |= (PU_MONSTERS);
-
-	/* Notice changes in the "lite radius" */
-	 if (old_light != p_ptr->state.cur_light)
-	{
-		/* Update the visuals */
-		p_ptr->update |= (PU_UPDATE_VIEW | PU_MONSTERS);
-	}
 }
 
 /*

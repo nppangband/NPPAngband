@@ -1959,6 +1959,9 @@ void update_mon(int m_idx, bool full)
 	int fy = m_ptr->fy;
 	int fx = m_ptr->fx;
 
+	int py = p_ptr->py;
+	int px = p_ptr->px;
+
 	/* Seen at all */
 	bool is_visible = FALSE;
 
@@ -1968,9 +1971,6 @@ void update_mon(int m_idx, bool full)
 	/* Compute distance and projection status */
 	if (full)
 	{
-		int py = p_ptr->py;
-		int px = p_ptr->px;
-
 		/* Distance components */
 		int dy = (py > fy) ? (py - fy) : (fy - py);
 		int dx = (px > fx) ? (px - fx) : (fx - px);
@@ -1983,17 +1983,6 @@ void update_mon(int m_idx, bool full)
 
 		/* Save the distance */
 		m_ptr->cdis = d;
-
-		/* Update projectable status */
-		m_ptr->project = FALSE;
-
-		if (m_ptr->cdis < MAX_SIGHT)
-		{
-			if(projectable(py, px, fy, fx, PROJECT_NONE))
-			{
-				m_ptr->project = TRUE;
-			}
-		}
 
 	}
 
@@ -2010,6 +1999,17 @@ void update_mon(int m_idx, bool full)
 	/* Nearby */
 	if (d <= MAX_SIGHT)
 	{
+		/* Update projectable status */
+		m_ptr->project = FALSE;
+
+		if (m_ptr->cdis < MAX_SIGHT)
+		{
+			if(projectable(py, px, fy, fx, PROJECT_NONE))
+			{
+				m_ptr->project = TRUE;
+			}
+		}
+
 		/* Basic telepathy */
 		if (p_ptr->state.telepathy)
 		{

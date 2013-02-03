@@ -3494,6 +3494,10 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 
 					light_spot(y, x);
 				}
+
+				/* Fully update the visuals */
+				p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS | PU_FLOW_DOORS);
+
 			}
 
 			break;
@@ -3520,6 +3524,9 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 
 				/* Close the door */
 				cave_alter_feat(y, x, FS_CLOSE);
+
+				/* Fully update the visuals */
+				p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS | PU_FLOW_DOORS);
 			}
 
 			/* Jam doors */
@@ -3569,6 +3576,9 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 				cave_alter_feat(y, x, FS_HURT_ROCK);
 
 				obvious = TRUE;
+
+				/* Fully update the visuals */
+				p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS  | PU_FLOW_DOORS | PU_FLOW_NO_DOORS);
 
 				/* Make it a room, if called for. */
 				if (flg & PROJECT_ROOM)

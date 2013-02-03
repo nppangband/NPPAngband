@@ -5512,8 +5512,7 @@ void cave_set_feat(int y, int x, u16b feat)
 		/* Fully update the visuals */
 		if (player_has_los_bold(y, x))
 		{
-			p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW |
-				PU_MONSTERS);
+			p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW |	PU_MONSTERS);
 		}
 	}
 
@@ -5587,8 +5586,7 @@ void cave_set_feat(int y, int x, u16b feat)
 		/* Fully update the visuals */
 		if (player_has_los_bold(y, x))
 		{
-			p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW |
-				PU_MONSTERS);
+			p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW |	PU_MONSTERS);
 		}
 	}
 
