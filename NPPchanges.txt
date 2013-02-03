@@ -46,6 +46,7 @@ Bugfix: The mac binary now includes the NPPAngband icon.
 Bugfix: Cursed items were not getting the cursed inscription when wielded.
 Bugfix: Monster "wakes up" messages were happening after they make an attack.
 Bugfix: Hopefully prevent duplicate quest artifacts from being generated.
+Bugfix: Specify the "target closest" command in the cmdlist helpfile
 
 NPP 6.0.0 Changes: 
 Broke savecompatibility with NPP 0.5.4.
