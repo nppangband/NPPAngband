@@ -3174,7 +3174,12 @@ static void build_vault(int y0, int x0, const vault_type *v_ptr)
 	bool quest_special_vault = FALSE;
 	if (quest_type == QUEST_VAULT)
 	{
+		artifact_type *a_ptr = &a_info[QUEST_ART_SLOT];
 		if (v_ptr->typ == 9) quest_special_vault = TRUE;
+
+		/*Hack - allow the quest artifact to be created */
+		a_ptr->a_cur_num = 0;
+		a_ptr->a_max_num = 0;
 	}
 	else if (quest_type == QUEST_GREATER_VAULT)
 	{
@@ -3630,7 +3635,7 @@ static void build_type_special_vault(int y0, int x0)
 	}
 
 	/* Message */
-	if (cheat_room) msg_format("Greater vault (%s)", v_name + v_ptr->name);
+	if (cheat_room) msg_format("Special vault (%s)", v_name + v_ptr->name);
 
 	/* Boost the rating */
 	rating += v_ptr->rat;
@@ -11157,6 +11162,14 @@ static bool cave_gen(void)
 			if (quest_on_level == QUEST_VAULT)
 			{
 				if (room_build(by, bx, 9)) need_quest_room = FALSE;
+
+				/* Ensure the quest artifact was generated properly */
+				if (a_info[QUEST_ART_SLOT].a_cur_num != 1)
+				{
+					if (cheat_room) msg_format("quest artifact not generated properly");
+					return (FALSE);
+				}
+
 				continue;
 			}
 			else if (quest_on_level == QUEST_PIT)
