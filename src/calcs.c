@@ -426,8 +426,6 @@ static void calc_torch(void)
 	object_type *o_ptr;
 	u32b f1, f2, f3, native;
 
-	s16b old_light = p_ptr->state.cur_light;
-
 	/* Assume no light */
 	p_ptr->state.cur_light = 0;
 
