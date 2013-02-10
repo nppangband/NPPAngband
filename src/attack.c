@@ -148,10 +148,10 @@ static int mod_dd_succept(u32b f1, u32b r3, u32b *r_l3, bool seen)
 	u16b i;
 	int extra_dam = 0;
 
-	/* Check for increased damage due to monster succeptability */
-	for (i = 0; i < N_ELEMENTS(mon_succept); i++)
+	/* Check for increased damage due to monster susceptibility */
+	for (i = 0; i < N_ELEMENTS(mon_suscept); i++)
 	{
-		const mon_succeptability_struct *ms = &mon_succept[i];
+		const mon_susceptibility_struct *ms = &mon_suscept[i];
 
 		/* Does the weapon have this elemental brand? */
 		if (f1 & (ms->brand_flag))

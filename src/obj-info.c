@@ -142,6 +142,99 @@ static bool describe_secondary(const object_type *o_ptr, u32b f1)
 	return (TRUE);
 }
 
+/*
+ * Describe the special slays and executes of an item.
+ */
+static bool describe_slay(const object_type *o_ptr, u32b f1)
+{
+	cptr slays[8], execs[3];
+	int slcnt = 0, excnt = 0;
+
+	/* Unused parameter */
+	(void)o_ptr;
+
+	/* Collect brands */
+	if (f1 & (TR1_SLAY_ANIMAL)) slays[slcnt++] = "animals";
+	if (f1 & (TR1_SLAY_ORC))    slays[slcnt++] = "orcs";
+	if (f1 & (TR1_SLAY_TROLL))  slays[slcnt++] = "trolls";
+	if (f1 & (TR1_SLAY_GIANT))  slays[slcnt++] = "giants";
+
+	/* Dragon slay/execute */
+	if (f1 & TR1_KILL_DRAGON)
+		execs[excnt++] = "dragons";
+	else if (f1 & TR1_SLAY_DRAGON)
+		slays[slcnt++] = "dragons";
+
+	/* Demon slay/execute */
+	if (f1 & TR1_KILL_DEMON)
+		execs[excnt++] = "demons";
+	else if (f1 & TR1_SLAY_DEMON)
+		slays[slcnt++] = "demons";
+
+	/* Undead slay/execute */
+	if (f1 & TR1_KILL_UNDEAD)
+		execs[excnt++] = "undead";
+	else if (f1 & TR1_SLAY_UNDEAD)
+		slays[slcnt++] = "undead";
+
+	if (f1 & (TR1_SLAY_EVIL)) slays[slcnt++] = "all evil creatures";
+
+	/* Describe */
+	if (slcnt)
+	{
+		/* Output intro */
+		text_out("It slays ");
+
+		/* Output list */
+		output_list(slays, slcnt);
+
+		/* Output end (if needed) */
+		if (!excnt) text_out(".  ");
+	}
+
+	if (excnt)
+	{
+		/* Output intro */
+		if (slcnt) text_out(", and it is especially deadly against ");
+		else text_out("It is especially deadly against ");
+
+		/* Output list */
+		output_list(execs, excnt);
+
+		/* Output end */
+		text_out(".  ");
+	}
+
+	/* We are done here */
+	return ((excnt || slcnt) ? TRUE : FALSE);
+}
+
+
+/*
+ * Describe elemental brands.
+ */
+static bool describe_brand(const object_type *o_ptr, u32b f1)
+{
+	cptr descs[5];
+	int cnt = 0;
+
+	/* Unused parameter */
+	(void)o_ptr;
+
+	/* Collect brands */
+	if (f1 & (TR1_BRAND_ACID)) descs[cnt++] = "acid";
+	if (f1 & (TR1_BRAND_ELEC)) descs[cnt++] = "electricity";
+	if (f1 & (TR1_BRAND_FIRE)) descs[cnt++] = "fire";
+	if (f1 & (TR1_BRAND_COLD)) descs[cnt++] = "frost";
+	if (f1 & (TR1_BRAND_POIS)) descs[cnt++] = "poison";
+
+	/* Describe brands */
+	output_desc_list("It is branded with ", descs, cnt);
+
+	/* We are done here */
+	return (cnt ? TRUE : FALSE);
+}
+
 
 /*
  * Describe immunities granted by an object.
@@ -221,7 +314,7 @@ static bool describe_resist(const object_type *o_ptr, u32b f2, u32b f3)
 static bool describe_weapon(const object_type *o_ptr, u32b f1, bool extra_info)
 {
 	u16b i;
-	int old_blows, new_blows;
+	int old_blows, new_blows, old_str, old_dex;
 	int str_plus = 0;
 	int dex_plus = 0;
 	int str_done = -1;
@@ -330,37 +423,46 @@ static bool describe_weapon(const object_type *o_ptr, u32b f1, bool extra_info)
 		}
 	}
 
-	/* Check for increased damage due to monster succeptability */
-	for (i = 0; i < N_ELEMENTS(mon_succept); i++)
+	/* Check for increased damage due to monster susceptibility */
+	for (i = 0; i < N_ELEMENTS(mon_suscept); i++)
 	{
-		const mon_succeptability_struct *ms = &mon_succept[i];
+		const mon_susceptibility_struct *ms = &mon_suscept[i];
 		if (f1 & (ms->brand_flag))
 		{
-			average = (dd * ds) / 2 + plus;
+			average = (dd * ds) / 2;
 
-			text_out(format("This weapon does an additional %dd%d (%d avg) damage against creatures who are succeptible to %s.\n", dd, ds, average, ms->brand_succeptability));
+			text_out(format("This weapon does an additional %dd%d (%d avg) damage against creatures who are susceptible to %s.\n", dd, ds, average, ms->brand_susceptibility));
 		}
 	}
 
 	/* Describe how quickly the player can get additional attacks */
 	old_blows = object_state.num_blow;
 
+	/* Record current strength and dex */
+	old_str = object_state.stat_ind[A_STR];
+	old_dex = object_state.stat_ind[A_DEX];
+
 	/* Then we check for extra "real" blows */
 	for (dex_plus = 0; dex_plus < 8; dex_plus++)
 	{
 		for (str_plus = 0; str_plus < 8; str_plus++)
 		{
+			object_state.stat_ind[A_STR] = MIN(old_str + str_plus, 37);
+			object_state.stat_ind[A_DEX] = MIN(old_dex + dex_plus, 37);
+
 			new_blows = calc_blows(o_ptr, &object_state);
 
-			 if (f1 & (TR1_BLOWS)) new_blows += o_ptr->pval;
+			/* Calc blows doesn't factor in extra attacks */
+			if (f1 & (TR1_BLOWS)) new_blows += o_ptr->pval;
 
-			/* Test to make sure that this extra blow is a
+			/*
+			 * Test to make sure that this extra blow is a
 			 * new str/dex combination, not a repeat
 			 */
 			if ((new_blows > old_blows) &&
 				((str_plus < str_done) || (str_done == -1)))
 			{
-				text_out("With an additional %d str and %d dex it gives you %d attacks per turn.\n",
+				text_out("With +%d str and +%d dex you would get %d attacks per turn.\n",
 						str_plus, dex_plus, new_blows);
 				str_done = str_plus;
 				break;
@@ -589,15 +691,15 @@ static bool describe_ammo(const object_type *o_ptr, u32b f1, u32b f3, bool extra
 		}
 	}
 
-	/* Check for increased damage due to monster succeptability */
-	for (i = 0; i < N_ELEMENTS(mon_succept); i++)
+	/* Check for increased damage due to monster susceptibility */
+	for (i = 0; i < N_ELEMENTS(mon_suscept); i++)
 	{
-		const mon_succeptability_struct *ms = &mon_succept[i];
+		const mon_susceptibility_struct *ms = &mon_suscept[i];
 		if (f1 & (ms->brand_flag))
 		{
-			average = (dd * ds) / 2 + plus;
+			average = (dd * ds) / 2;
 
-			text_out(format("This ammunition does an additional %dd%d damage (%d avg) against creatures who are succeptible to %s.\n", dd, ds, average, ms->brand_succeptability));
+			text_out(format("This ammunition does an additional %dd%d damage (%d avg) against creatures who are susceptible to %s.\n", dd, ds, average, ms->brand_susceptibility));
 		}
 	}
 
@@ -705,15 +807,15 @@ static bool describe_throwing_weapon(const object_type *o_ptr, u32b f1, u32b f3,
 		}
 	}
 
-	/* Check for increased damage due to monster succeptability */
-	for (i = 0; i < N_ELEMENTS(mon_succept); i++)
+	/* Check for increased damage due to monster susceptibility */
+	for (i = 0; i < N_ELEMENTS(mon_suscept); i++)
 	{
-		const mon_succeptability_struct *ms = &mon_succept[i];
+		const mon_susceptibility_struct *ms = &mon_suscept[i];
 		if (f1 & (ms->brand_flag))
 		{
-			average = (dd * ds) / 2 + plus;
+			average = (dd * ds) / 2;
 
-			text_out(format("Throwing this weapon does an additional %dd%d damage (%d avg) against creatures who are succeptible to %s.\n", dd, ds, average, ms->brand_succeptability));
+			text_out(format("Throwing this weapon does an additional %dd%d damage (%d avg) against creatures who are susceptible to %s.\n", dd, ds, average, ms->brand_susceptibility));
 		}
 	}
 
@@ -1210,6 +1312,8 @@ bool object_info_out(const object_type *o_ptr,  bool extra_info)
 	if (describe_stats(o_ptr, f1)) something = TRUE;
 
 	if (describe_secondary(o_ptr, f1)) something = TRUE;
+	if (describe_slay(o_ptr, f1)) something = TRUE;
+	if (describe_brand(o_ptr, f1)) something = TRUE;
 	if (describe_immune(o_ptr, f2)) something = TRUE;
 	if (describe_resist(o_ptr, f2, f3)) something = TRUE;
 	if (describe_sustains(o_ptr, f2)) something = TRUE;

@@ -99,7 +99,7 @@ extern const byte arena_level_map[ARENA_LEVEL_HGT][ARENA_LEVEL_WID];
 extern const byte pit_room_maps[MAX_PIT_PATTERNS][PIT_HEIGHT][PIT_WIDTH];
 extern const slays_structure slays_info[11];
 extern const brands_structure brands_info[10];
-extern const mon_succeptability_struct mon_succept[2];
+extern const mon_susceptibility_struct mon_suscept[2];
 
 
 /* variable.c */

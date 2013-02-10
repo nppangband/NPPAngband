@@ -86,7 +86,7 @@ typedef struct option_entry option_entry;
 typedef struct dungeon_capabilities_type dungeon_capabilities_type;
 typedef struct slays_structure slays_structure;
 typedef struct brands_structure brands_structure;
-typedef struct mon_succeptability_struct mon_succeptability_struct;
+typedef struct mon_susceptibility_struct mon_susceptibility_struct;
 
 
 
@@ -1535,11 +1535,11 @@ struct brands_structure
 };
 
 /* Currently assumes all flags are in TR1 (object) and RF1 (monster flags) */
-struct mon_succeptability_struct
+struct mon_susceptibility_struct
 {
   u32b brand_flag;  /* Assumes in object flag TR1_ */
   u32b mon_flag; /* Assumes in monster flag RF3 */
-  cptr brand_succeptability;
+  cptr brand_susceptibility;
 };
 
 

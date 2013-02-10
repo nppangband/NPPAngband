@@ -721,21 +721,28 @@ static void calc_inven_cnt(void)
  */
 int calc_blows(const object_type *o_ptr, player_state *new_state)
 {
-	int str_index, dex_index;
+	int str_index, dex_index, str_ind, dex_ind;
 
 	int divide_by, new_blows;
+
+	str_ind = new_state->stat_ind[A_STR];
+	dex_ind = new_state->stat_ind[A_DEX];
+
+	/* Boundry control */
+	if (str_ind > 37) str_ind = 37;
+	if (dex_ind > 37) dex_ind = 37;
 
 	/* Enforce a minimum "weight" (tenth pounds) */
 	divide_by = ((o_ptr->weight < cp_ptr->min_weight) ? cp_ptr->min_weight : o_ptr->weight);
 
 	/* Get the strength vs weight */
-	str_index = (adj_str_blow[new_state->stat_ind[A_STR]] * cp_ptr->att_multiply / divide_by);
+	str_index = (adj_str_blow[str_ind] * cp_ptr->att_multiply / divide_by);
 
 	/* Maximal value */
 	if (str_index > 11) str_index = 11;
 
 	/* Index by dexterity */
-	dex_index = (adj_dex_blow[new_state->stat_ind[A_DEX]]);
+	dex_index = (adj_dex_blow[dex_ind]);
 
 	/* Maximal value */
 	if (dex_index > 11) dex_index = 11;

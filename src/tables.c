@@ -3035,7 +3035,7 @@ const brands_structure brands_info[10] =
 	{TR1_BRAND_COLD, 3, RF3_IM_COLD, (ELEMENT_BMUD | ELEMENT_BWATER), 1, 1, 2,"resist cold"}
 };
 
-const mon_succeptability_struct mon_succept[2] =
+const mon_susceptibility_struct mon_suscept[2] =
 {
 	{TR1_BRAND_FIRE, RF3_HURT_FIRE, "fire"},
 	{TR1_BRAND_COLD, RF3_HURT_COLD, "cold"},
