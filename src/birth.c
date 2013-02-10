@@ -463,7 +463,7 @@ static void player_wipe(void)
 		/* Reset level */
 		if (quest_fixed(q_ptr))
 		{
-			q_info[i].q_flags = 0L;
+			q_ptr->q_flags = 0L;
 			q_ptr->q_num_killed = 0;
 		}
 	}
