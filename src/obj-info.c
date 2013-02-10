@@ -338,7 +338,7 @@ static bool describe_weapon(const object_type *o_ptr, u32b f1, bool extra_info)
 		{
 			average = (dd * ds) / 2 + plus;
 
-			text_out(format("This weapon does an additional %dd%d (%d avg) damage against creatures who are succeptable to %s.\n", dd, ds, average, ms->brand_succeptability));
+			text_out(format("This weapon does an additional %dd%d (%d avg) damage against creatures who are succeptible to %s.\n", dd, ds, average, ms->brand_succeptability));
 		}
 	}
 
@@ -597,7 +597,7 @@ static bool describe_ammo(const object_type *o_ptr, u32b f1, u32b f3, bool extra
 		{
 			average = (dd * ds) / 2 + plus;
 
-			text_out(format("This ammunition does an additional %dd%d damage (%d avg) against creatures who are succeptable to %s.\n", dd, ds, average, ms->brand_succeptability));
+			text_out(format("This ammunition does an additional %dd%d damage (%d avg) against creatures who are succeptible to %s.\n", dd, ds, average, ms->brand_succeptability));
 		}
 	}
 
@@ -713,7 +713,7 @@ static bool describe_throwing_weapon(const object_type *o_ptr, u32b f1, u32b f3,
 		{
 			average = (dd * ds) / 2 + plus;
 
-			text_out(format("Throwing this weapon does an additional %dd%d damage (%d avg) against creatures who are succeptable to %s.\n", dd, ds, average, ms->brand_succeptability));
+			text_out(format("Throwing this weapon does an additional %dd%d damage (%d avg) against creatures who are succeptible to %s.\n", dd, ds, average, ms->brand_succeptability));
 		}
 	}
 
