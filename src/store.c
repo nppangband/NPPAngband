@@ -3353,6 +3353,9 @@ static void store_display_entry(menu_type *menu, int oid, bool cursor, int row, 
 		/* Redundant, but it avoids compiler warnings */
 		object_type *o_ptr = &st_ptr->stock[entry_num];
 
+		/* Make sure long inscriptions aren't mixed up in the weight */
+		Term_erase(row, scr_places_x[LOC_WEIGHT]-1, 20);
+
 		strnfmt(out_val, sizeof out_val, "%3d.%d lb", o_ptr->weight / 10, o_ptr->weight % 10);
 		c_put_str(curs_attrs[CURS_KNOWN][(int)cursor], out_val, row, scr_places_x[LOC_WEIGHT]);
 	}
@@ -3402,6 +3405,9 @@ static void store_display_entry(menu_type *menu, int oid, bool cursor, int row, 
 	{
 		colour = curs_attrs[CURS_UNKNOWN][(int)cursor];
 	}
+
+	/* Make sure long inscriptions aren't mixed up in the price */
+	Term_erase(row, scr_places_x[LOC_PRICE]-1, 20);
 
 	/* Actually draw the price */
 	c_put_str(colour, out_val, row, scr_places_x[LOC_PRICE]);
