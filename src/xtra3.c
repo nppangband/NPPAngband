@@ -674,7 +674,7 @@ static void prt_mon_mana(int row, int col, const monster_type *m_ptr)
 /* Print out monster health until we get to the bottom of the screen */
 static void prt_monsters(int row, int col)
 {
-	int max_row = Term->hgt - 2;
+	int max_row = Term->hgt - 1;
 	monster_type *m_ptr;
 	monster_race *r_ptr;
 
@@ -689,8 +689,13 @@ static void prt_monsters(int row, int col)
 	{
 		Term_erase(col, i, 12);
 	}
+
 	/* Give a little space */
-	row++;
+	if (max_row >= 24)
+	{
+		row++;
+		if (max_row >= 25) max_row--;
+	}
 
 	for (i = 0; i < SIDEBAR_MONSTER_MAX; i++)
 	{
@@ -701,12 +706,12 @@ static void prt_monsters(int row, int col)
 		}
 
 		/* Check if we have room */
-		if (row+1 >= max_row-1) break;
+		if (row+1 > max_row) break;
 		m_ptr = &mon_list[sidebar_monsters[i]];
 		r_ptr = &r_info[m_ptr->r_idx];
 		if (r_ptr->mana)
 		{
-			if (row+2 >= (max_row-1)) break;
+			if (row+2 > (max_row)) break;
 		}
 
 		/* Print the monster info*/
