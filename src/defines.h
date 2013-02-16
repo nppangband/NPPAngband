@@ -47,7 +47,7 @@
 /*
  * Name of the version/variant
  */
-#define VERSION_NAME "NPP610Beta3"
+#define VERSION_NAME "NPPAngband"
 #define SAVEFILE_NAME  "VNLA"
 
 /*
