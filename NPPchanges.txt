@@ -1,5 +1,5 @@
 
-NPP 6.1.0 Beta-2 changes:
+NPP 6.1.0 Changes:
 Special artifacts are no longer offered as quest rewards.
 Increase the potential bonus from deferred rewards by 50%.
 Added help file descriptions for the new quest rewards.
@@ -46,7 +46,9 @@ Bugfix: The mac binary now includes the NPPAngband icon.
 Bugfix: Cursed items were not getting the cursed inscription when wielded.
 Bugfix: Monster "wakes up" messages were happening after they make an attack.
 Bugfix: Hopefully prevent duplicate quest artifacts from being generated.
-Bugfix: Specify the "target closest" command in the cmdlist helpfile
+Bugfix: Specify the "target closest" command in the cmdlist helpfile.
+Bugfix: Fix some issues with some things not being updated (visuals, line of sight, movement paths)
+BUgfix: In stores, long inscriptions are sometimes mixed up in the weight and price.
 
 NPP 6.0.0 Changes: 
 Broke savecompatibility with NPP 0.5.4.
