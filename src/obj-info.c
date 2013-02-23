@@ -447,8 +447,8 @@ static bool describe_weapon(const object_type *o_ptr, u32b f1, bool extra_info)
 	{
 		for (str_plus = 0; str_plus < 8; str_plus++)
 		{
-			object_state.stat_ind[A_STR] = MIN(old_str + str_plus, 37);
-			object_state.stat_ind[A_DEX] = MIN(old_dex + dex_plus, 37);
+			object_state.stat_ind[A_STR] = old_str + str_plus;
+			object_state.stat_ind[A_DEX] = old_dex + dex_plus;
 
 			new_blows = calc_blows(o_ptr, &object_state);
 
@@ -1310,7 +1310,6 @@ bool object_info_out(const object_type *o_ptr,  bool extra_info)
 
 	/* Describe the object */
 	if (describe_stats(o_ptr, f1)) something = TRUE;
-
 	if (describe_secondary(o_ptr, f1)) something = TRUE;
 	if (describe_slay(o_ptr, f1)) something = TRUE;
 	if (describe_brand(o_ptr, f1)) something = TRUE;

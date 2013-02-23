@@ -729,7 +729,9 @@ int calc_blows(const object_type *o_ptr, player_state *new_state)
 	dex_ind = new_state->stat_ind[A_DEX];
 
 	/* Boundry control */
+	if (str_ind <  0) str_ind =  0;
 	if (str_ind > 37) str_ind = 37;
+	if (dex_ind <  0) dex_ind =  0;
 	if (dex_ind > 37) dex_ind = 37;
 
 	/* Enforce a minimum "weight" (tenth pounds) */
