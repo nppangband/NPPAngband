@@ -1,3 +1,6 @@
+NPP 6.1.1 changes:
+Bugfix:  Fixed a bug where the game could crash when inspecting a weapon.
+Bugfix:  Fixed 2 bugs regarding the description of the firing speed of a missile launcher.
 
 NPP 6.1.0 Changes:
 Special artifacts are no longer offered as quest rewards.

@@ -517,18 +517,17 @@ static bool describe_bow_slot(const object_type *o_ptr, u32b f1, u32b f3, bool e
 
 	object_desc(j_name, sizeof (j_name), j_ptr, ODESC_FULL | ODESC_PLURAL);
 
-	text_out("\n");
-
 	/*print out the number of attacks*/
-	if (object_state.num_fire >= 1)
+	if (object_state.num_fire > 1)
 	{
-		text_out(format("\nYou can fire this %s %d times more quickly than an ordinary %s.\n", launcher, object_state.num_fire, launcher));
+		if (object_state.num_fire == 2) text_out(format("\nYou can fire this %s twice as quickly as an ordinary %s.\n", launcher, launcher));
 
+		else text_out(format("\nYou can fire this %s %d times more quickly than an ordinary %s.\n", launcher, object_state.num_fire, launcher));
 	}
 
 	if (object_state.heavy_shoot)
 	{
-		text_out_c(TERM_RED, format("You have trouble aiming such a heavy %s.\n\n", launcher));
+		text_out_c(TERM_RED, format("\nYou have trouble aiming such a heavy %s.\n", launcher));
 	}
 
 	if (!extra_info) return (TRUE);
@@ -615,9 +614,9 @@ static bool describe_ammo(const object_type *o_ptr, u32b f1, u32b f3, bool extra
 
 	object_desc(j_name, sizeof (j_name), j_ptr, ODESC_PREFIX | ODESC_FULL);
 
-	text_out("\n");
-
 	if (!extra_info) return (TRUE);
+
+	text_out("\n");
 
 	mult = object_state.ammo_mult;
 
