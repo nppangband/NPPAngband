@@ -629,7 +629,7 @@ void textui_cmd_destroy(void)
 
 
 
-void refill_lamp(object_type *j_ptr, object_type *o_ptr, int item)
+static void refill_lamp(object_type *j_ptr, object_type *o_ptr, int item)
 {
 
 	/* Refuel from a latern */
@@ -732,7 +732,7 @@ void refill_lamp(object_type *j_ptr, object_type *o_ptr, int item)
 }
 
 
-void refuel_torch(object_type *j_ptr, object_type *o_ptr, int item)
+static void refuel_torch(object_type *j_ptr, object_type *o_ptr, int item)
 {
 	/* Refuel */
 	j_ptr->timeout += o_ptr->timeout + 5;

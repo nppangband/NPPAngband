@@ -4412,7 +4412,7 @@ bool multiply_monster(int m_idx, bool override)
  * string as a whole message, not as a part of a larger message. This
  * is useful to display Moria-like death messages.
  */
-static char *msg_repository[MAX_MON_MSG + 1] =
+static const char *msg_repository[MAX_MON_MSG + 1] =
 {
 	/* Dummy action */
 	"[is|are] hurt.",    		/* MON_MSG_NONE */
@@ -4774,7 +4774,7 @@ void message_pain(int m_idx, int dam)
 static char *get_mon_msg_action(byte msg_code, bool do_plural)
 {
 	static char buf[200];
-	char *action;
+	const char *action;
 
 	u16b n = 0;
 	/* Regular text */
@@ -4904,7 +4904,7 @@ static bool redundant_monster_message(int m_idx, int msg_code)
  * different monster descriptions for the same race.
  * Return TRUE on success.
  */
-bool add_monster_message(char *mon_name, int m_idx, int msg_code)
+bool add_monster_message(const char *mon_name, int m_idx, int msg_code)
 {
 	int i;
 	byte mon_flags = 0;
