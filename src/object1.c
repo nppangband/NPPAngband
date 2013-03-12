@@ -433,7 +433,6 @@ static bool obj_desc_show_armor(const object_type *o_ptr)
 		case TV_DRAG_SHIELD:
 		{
 			return TRUE;
-			break;
 		}
 	}
 

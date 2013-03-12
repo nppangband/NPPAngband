@@ -509,7 +509,6 @@ int squelch_itemp(const object_type *o_ptr, byte feelings, bool fullid)
 		case SQUELCH_NONE:
 		{
 			return result;
-			break;
 		}
 
 		case SQUELCH_CURSED:

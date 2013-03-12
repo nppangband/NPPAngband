@@ -2421,10 +2421,12 @@ bool identify_fully(void)
 		artifact_lore *a_l_ptr = &a_l_list[o_ptr->art_num];
 
 		/* Message, keep commented out for now */
+#if 0
 		if (FALSE && !a_l_ptr->was_fully_identified)
 		{
 			msg_print("You will always remember this artifact.");
 		}
+#endif
 
 		/* Remember that we *identified* this artifact */
 		a_l_ptr->was_fully_identified = TRUE;
