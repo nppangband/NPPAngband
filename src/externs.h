@@ -1444,8 +1444,6 @@ extern bool change_panel(int dir);
 extern void verify_panel(void);
 extern void verify_panel_int(bool centered);
 extern void center_panel(void);
-extern void ang_sort_aux(void *u, void *v, int p, int q);
-extern void ang_sort(void *u, void *v, int n);
 extern int motion_dir(int y1, int x1, int y2, int x2);
 extern int mouse_dir(ui_event_data ke, bool locating);
 extern int target_dir(char ch);

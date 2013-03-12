@@ -286,7 +286,7 @@ void (*ang_sort_swap)(void *u, void *v, int a, int b);
  * function hooks to interact with the data, which is given as
  * two pointers, and which may have any user-defined form.
  */
-void ang_sort_aux(void *u, void *v, int p, int q)
+static void ang_sort_aux(void *u, void *v, int p, int q)
 {
 	int z, a, b;
 
