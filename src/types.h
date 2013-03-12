@@ -1359,8 +1359,8 @@ struct quiver_group_type
  */
 struct option_entry
 {
-	char *name;
-	char *description;
+	const char *name;
+	const char *description;
 	bool normal;
 };
 

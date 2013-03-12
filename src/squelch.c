@@ -402,7 +402,7 @@ void autoinscribe_pack(void)
 }
 
 /* Convert the values returned by squelch_itemp to string */
-char *squelch_to_label(int squelch)
+const char *squelch_to_label(int squelch)
 {
   	if (squelch == SQUELCH_YES) return ("(Squelched)");
 

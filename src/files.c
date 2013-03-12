@@ -1285,7 +1285,7 @@ static void display_home_equipment_info(int mode, bool onscreen)
 /* Array of element pairs (name + feature flags) */
 static struct
 {
-       char *name;
+       const char *name;
        u32b flags;
 } element_table[] =
 {
@@ -1311,10 +1311,10 @@ static struct
 static void display_special_abilities(int row, int col)
 {
        int i;
-       char *msg;
+       const char *msg;
        int old_row;
        int col2;       /* The current column */
-       char *items[22];
+       const char *items[22];
        int n;
 
        /* Print the title */
@@ -3414,7 +3414,7 @@ void fill_template(char buf[], int max_buf)
 	char *start;
 	bool changed = FALSE;
 	/* List of recognized patterns */
-	static char *escapes[] =
+	static const char *escapes[] =
 	{
 		"{{full_character_name}}",
 		NULL

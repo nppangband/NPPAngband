@@ -843,7 +843,7 @@ extern bool alloc_monster(int dis, byte mp_flags);
 extern bool summon_specific(int y1, int x1, int lev, int type, byte mp_flags);
 extern bool multiply_monster(int m_idx, bool override);
 extern void message_pain(int m_idx, int dam);
-extern bool add_monster_message(char *mon_name, int m_idx, int msg_code);
+extern bool add_monster_message(const char *mon_name, int m_idx, int msg_code);
 extern void flush_monster_messages(void);
 extern void update_smart_learn(int m_idx, int what);
 
@@ -1265,7 +1265,7 @@ extern int remove_autoinscription(s16b kind);
 extern int add_autoinscription(s16b kind, cptr inscription);
 extern void autoinscribe_ground(void);
 extern void autoinscribe_pack(void);
-extern char *squelch_to_label(int squelch);
+extern const char *squelch_to_label(int squelch);
 extern bool squelch_tval(int tval);
 extern byte get_squelch_status(int k_idx);
 extern int squelch_itemp(const object_type *o_ptr, byte feeling, bool fullid);

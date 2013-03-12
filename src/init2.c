@@ -748,7 +748,7 @@ static void autoinscribe_clean(void)
 	inscriptionsCount = 0;
 }
 
-void autoinscribe_init(void)
+static void autoinscribe_init(void)
 {
 	/* Paranoia */
 	autoinscribe_clean();

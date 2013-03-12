@@ -181,7 +181,7 @@ static void pref_footer(ang_file *fff, const char *mark)
 /*
  * Save autoinscription data to a pref file.
  */
-void autoinsc_dump(ang_file *fff)
+static void autoinsc_dump(ang_file *fff)
 {
 	int i;
 	if (!inscriptions) return;
@@ -204,7 +204,7 @@ void autoinsc_dump(ang_file *fff)
 /*
  * Save squelch data to a pref file.
  */
-void squelch_dump(ang_file *fff)
+static void squelch_dump(ang_file *fff)
 {
 
 
