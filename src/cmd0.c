@@ -244,7 +244,7 @@ static bool show_action(char cmd, void *db, int oid)
 /**
  * Display a list of commands.
  */
-void show_cmd_menu(void)
+static void show_cmd_menu(void)
 {
 	menu_type menu;
 	menu_iter commands_menu = {show_tag, NULL, show_display, show_action };

@@ -25,7 +25,7 @@
  */
 void feature_desc(char *buf, size_t max, u16b feat, bool add_prefix, bool get_mimic)
 {
-	char *pref = "";
+	const char *pref = "";
 	char *name;
 	char *pbuf;
 
@@ -3533,7 +3533,7 @@ static void collect_dynamic_terrain(void)
  * We mark the terrain lore if the dynamic terrain change is observed.
  * This function should be consistent with describe_terrain_dynamic in the feature description.
  */
-void process_dynamic_terrain_aux(dynamic_grid_type *g_ptr)
+static void process_dynamic_terrain_aux(dynamic_grid_type *g_ptr)
 {
 
 	/* Get coordinates */
@@ -4660,7 +4660,7 @@ u32b get_level_flag_from_race(monster_race *r_ptr)
 void describe_one_level_flag(char *buf, size_t max, u32b flag)
 {
 	/* Default name */
-	char *name = "unknown";
+	const char *name = "unknown";
 
 	/* Analyze the flag */
 	switch (flag)

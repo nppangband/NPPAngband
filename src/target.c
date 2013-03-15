@@ -694,8 +694,8 @@ static bool adjust_panel(int y, int x)
  */
 static void coords_desc(char *buf, int size, int y, int x) {
 
-	char *east_or_west;
-	char *north_or_south;
+	const char *east_or_west;
+	const char *north_or_south;
 
 	int py = p_ptr->py;
 	int px = p_ptr->px;

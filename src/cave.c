@@ -714,7 +714,7 @@ static u16b image_random(bool use_default)
 /*
  * Specify which of the 32x32 tiles support lighting
  */
-bool feat_supports_lighting_dvg(u16b feat)
+static bool feat_supports_lighting_dvg(u16b feat)
 {
 	/* ALl the walls and floor support lighting*/
 	if (f_info[feat].f_flags1 & (FF1_WALL | FF1_FLOOR))

@@ -874,6 +874,8 @@ static void generate_stats(int stats[A_MAX], int points_spent[A_MAX],
 				}
 
 				step++;
+
+				break;
 			}
 
 			/*
