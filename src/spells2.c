@@ -4382,7 +4382,7 @@ bool fire_arc(int typ, int dir, int dam, int rad, int degrees)
 /*
  * Character casts an arc spell.
  */
-bool fire_arc_special(int typ, int dir, int dam, int rad, int degrees, u32b flg)
+static bool fire_arc_special(int typ, int dir, int dam, int rad, int degrees, u32b flg)
 {
 	int y1, x1;
 
@@ -5546,7 +5546,7 @@ void get_spell_type_from_feature(int f_idx, int *gf_type, cptr *action)
 	{
 		u32b element;
 		int gf_type;
-		char *action;
+		const char *action;
 	} spell_info[] =
 	{
 		{ELEMENT_BWATER, GF_BWATER, "burns"},

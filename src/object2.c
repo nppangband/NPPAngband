@@ -3047,7 +3047,7 @@ static bool kind_is_polearm(int k_idx)
 /*
  * Hack -- determine if a template is a weapon.
  */
-bool kind_is_weapon(int k_idx)
+static bool kind_is_weapon(int k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -4490,7 +4490,7 @@ void expand_inscription(const object_type *o_ptr, const char *src, char dest[], 
 		{
 			char temp[200];
 			/* The supported patterns */
-			char *pattern_list[] = {":all:", ":random:"};
+			const char *pattern_list[] = {":all:", ":random:"};
 			/* Info of each pattern */
 			bool mode_list[] = {FALSE, TRUE};
 			int found = -1;

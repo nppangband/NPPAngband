@@ -33,8 +33,8 @@ void dungeon_change_level(int dlev)
 	{
 		if (adult_take_notes)
 		{
-	    	char note[120];
-			char *fmt = "Left the level without entering the %s";
+			char note[120];
+			const char *fmt = "Left the level without entering the %s";
 
 			strnfmt(note, sizeof(note), fmt, g_vault_name);
 			do_cmd_note(note, p_ptr->depth);
@@ -2888,7 +2888,7 @@ void process_player(void)
 			if (adult_take_notes)
 			{
 		    	char note[120];
-		    	char *fmt = "You enter the %s";
+		    	const char *fmt = "You enter the %s";
 
 		    	strnfmt(note, sizeof(note), fmt, g_vault_name);
 
