@@ -928,7 +928,7 @@ void update_mon_sidebar_list(void)
 	visible_monsters = C_ZNEW(mon_max, int);
 
 	/* First clear the old list */
-	C_WIPE(sidebar_monsters, SIDEBAR_MONSTER_MAX, sizeof(int));
+	C_WIPE(sidebar_monsters, SIDEBAR_MONSTER_MAX, int);
 
 	/* First list the targeted monster, if there is one */
 	if (p_ptr->health_who)
