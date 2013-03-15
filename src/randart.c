@@ -3905,7 +3905,7 @@ bool make_one_randart(object_type *o_ptr, int art_power, bool tailored)
 			theme = get_theme();
 
 			/*hack - we con't need any more artifact digging tools*/
-			if (theme == DROP_TYPE_DIGGING) continue;
+			if (theme != DROP_TYPE_DIGGING) break;
 		}
 
 		/*prepare the object generation level for a specific theme*/
