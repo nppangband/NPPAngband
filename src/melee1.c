@@ -1879,8 +1879,6 @@ static int get_max_dam(int gf_type, bool powerful)
 			if (powerful) return (400);
 			else return (250);
 		}
-		/*Whoops!*/
-		default: return (0);
 	}
 
 	/* Return breath damage */
@@ -3681,7 +3679,6 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 				else msg_format("%^s casts a powerful bolt of gravity.", m_name);
 			}
 			mon_bolt(m_idx, GF_GRAVITY, get_dam(r_ptr, attack), 0L);
-			break;
 			break;
 		}
 

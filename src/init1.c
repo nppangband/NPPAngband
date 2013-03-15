@@ -1392,7 +1392,7 @@ static errr grab_one_flag(u32b **flag, cptr errstr, cptr what)
 static errr grab_one_feature_flag(feature_type *ptr, cptr what)
 {
 	u32b *f[MAX_FLAG_SETS];
-	C_WIPE(f, MAX_FLAG_SETS, sizeof(u32b*));
+	C_WIPE(f, MAX_FLAG_SETS, u32b);
 	f[FF1] = &(ptr->f_flags1);
 	f[FF2] = &(ptr->f_flags2);
 	f[FF3] = &(ptr->f_flags3);
@@ -1757,7 +1757,7 @@ errr parse_f_info(char *buf, header *head)
 static errr grab_one_kind_flag(object_kind *ptr, cptr what)
 {
 	u32b *f[MAX_FLAG_SETS];
-	C_WIPE(f, MAX_FLAG_SETS, sizeof(u32b*));
+	C_WIPE(f, MAX_FLAG_SETS, u32b);
 	f[TR1] = &(ptr->k_flags1);
 	f[TR2] = &(ptr->k_flags2);
 	f[TR3] = &(ptr->k_flags3);
@@ -2081,7 +2081,7 @@ errr parse_t_info(char *buf, header *head)
 static errr grab_one_artifact_flag(artifact_type *ptr, cptr what)
 {
 	u32b *f[MAX_FLAG_SETS];
-	C_WIPE(f, MAX_FLAG_SETS, sizeof(u32b*));
+	C_WIPE(f, MAX_FLAG_SETS, u32b);
 	f[TR1] = &(ptr->a_flags1);
 	f[TR2] = &(ptr->a_flags2);
 	f[TR3] = &(ptr->a_flags3);
@@ -2400,7 +2400,7 @@ errr parse_n_info(char *buf, header *head)
 static bool grab_one_ego_item_flag(ego_item_type *ptr, cptr what)
 {
 	u32b *f[MAX_FLAG_SETS];
-	C_WIPE(f, MAX_FLAG_SETS, sizeof(u32b*));
+	C_WIPE(f, MAX_FLAG_SETS, u32b);
 	f[TR1] = &(ptr->flags1);
 	f[TR2] = &(ptr->flags2);
 	f[TR3] = &(ptr->flags3);
@@ -2598,7 +2598,7 @@ errr parse_e_info(char *buf, header *head)
 static errr grab_one_basic_flag(monster_race *ptr, cptr what)
 {
 	u32b *f[MAX_FLAG_SETS];
-	C_WIPE(f, MAX_FLAG_SETS, sizeof(u32b*));
+	C_WIPE(f, MAX_FLAG_SETS, u32b);
 	f[RN1] = &(ptr->r_native);
 	f[RF1] = &(ptr->flags1);
 	f[RF2] = &(ptr->flags2);
@@ -2614,7 +2614,7 @@ static errr grab_one_basic_flag(monster_race *ptr, cptr what)
 static errr grab_one_spell_flag(monster_race *ptr, cptr what)
 {
 	u32b *f[MAX_FLAG_SETS];
-	C_WIPE(f, MAX_FLAG_SETS, sizeof(u32b*));
+	C_WIPE(f, MAX_FLAG_SETS, u32b);
 	f[RF4] = &(ptr->flags4);
 	f[RF5] = &(ptr->flags5);
 	f[RF6] = &(ptr->flags6);
@@ -2956,7 +2956,7 @@ errr parse_r_info(char *buf, header *head)
 static errr grab_one_racial_flag(player_race *ptr, cptr what)
 {
 	u32b *f[MAX_FLAG_SETS];
-	C_WIPE(f, MAX_FLAG_SETS, sizeof(u32b*));
+	C_WIPE(f, MAX_FLAG_SETS, u32b);
 	f[RN1] = &(ptr->pr_native);
 	f[TR1] = &(ptr->pr_flags1);
 	f[TR2] = &(ptr->pr_flags2);
@@ -3214,7 +3214,7 @@ errr parse_p_info(char *buf, header *head)
 static errr grab_one_class_flag(player_class *ptr, cptr what)
 {
 	u32b *f[MAX_FLAG_SETS];
-	C_WIPE(f, MAX_FLAG_SETS, sizeof(u32b*));
+	C_WIPE(f, MAX_FLAG_SETS, u32b);
 	f[RN1] = &(ptr->c_native);
 	f[CF1] = &(ptr->flags);
 	return grab_one_flag(f, "player", what);
