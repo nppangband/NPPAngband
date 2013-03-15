@@ -8493,13 +8493,13 @@ static void transform_regions(coord *grids, int num_grids, feature_selector_type
 					u16b new_floor = floor;
 
 					/* Flavor */
-					if ((floor == FEAT_FLOOR_WET))
+					if (floor == FEAT_FLOOR_WET)
 					{
 						int k = rand_int(100);
 
 						if (k < 30) new_floor = FEAT_WATER;
 					}
-					else if ((floor == FEAT_FSOIL))
+					else if (floor == FEAT_FSOIL)
 					{
 						int k = rand_int(100);
 
@@ -8509,13 +8509,13 @@ static void transform_regions(coord *grids, int num_grids, feature_selector_type
 
 						else if (k < 26) new_floor = FEAT_BUSH;
 					}
-					else if ((floor == FEAT_SAND))
+					else if (floor == FEAT_SAND)
 					{
 						int k = rand_int(100);
 
 						if (k < 7) new_floor = FEAT_ROCK;
 					}
-					else if ((floor == FEAT_FLOOR_MUD))
+					else if (floor == FEAT_FLOOR_MUD)
 					{
 						int k = rand_int(100);
 

@@ -2395,7 +2395,6 @@ bool askfor_aux_keypress(char *buf, size_t buflen, size_t *curs, size_t *len, ch
 		{
 			*curs = 0;
 			return TRUE;
-			break;
 		}
 
 		case '\n':
@@ -2403,7 +2402,6 @@ bool askfor_aux_keypress(char *buf, size_t buflen, size_t *curs, size_t *len, ch
 		{
 			*curs = *len;
 			return TRUE;
-			break;
 		}
 
 		case ARROW_LEFT:
