@@ -1,3 +1,10 @@
+Fix many compiler warnings when compiling with clang and gcc (Bardur Arantsson)
+Bugfix: Fix missing break statement in generate_stats. 
+Bugfix: Fix a bug that could cause the game to freeze while generating randarts.
+Bugfix: Fix bug that made game unplayable on 64 bit machines. (fix by Bardur Arantsson)
+Bugfix: Fix several other instances of code using C_WIPE similar to the one that caused crashes on 64 bit machines.
+
+
 NPP 6.1.1 changes:
 Bugfix:  Fixed a bug where the game could crash when inspecting a weapon.
 Bugfix:  Fixed 2 bugs regarding the description of the firing speed of a missile launcher.
