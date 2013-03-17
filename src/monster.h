@@ -838,7 +838,7 @@
 
 /* Max long and short monster name lengths */
 
-#define MAX_MON_LONG_NAME   36
+#define MAX_MON_LONG_NAME   38
 #define MAX_MON_SHORT_NAME  14
 
  /*
@@ -1043,7 +1043,7 @@ enum
 /* XXX */
 
 /*
- * Maximum length of artifact names
+ * Maximum length of ghost names
  */
 #define MAX_GHOST_NAME_LEN 32
 

@@ -4729,8 +4729,6 @@ static void store_examine(int oid)
 	/* Get the actual object */
 	o_ptr = &st_ptr->stock[entry_num];
 
-	text_out_hook = text_out_to_screen;
-
 	/* Show full info in most stores, but normal info in player home */
 	object_info_screen(o_ptr);
 
