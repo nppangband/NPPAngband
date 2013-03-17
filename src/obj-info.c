@@ -341,20 +341,20 @@ static bool describe_weapon(const object_type *o_ptr, u32b f1, bool extra_info)
 	calc_bonuses(object_inven, & object_state, TRUE);
 
 	/*print out the number of attacks*/
-	if (object_state.num_blow == 1) text_out("It gives you one attack per turn.  ");
-	else text_out(format("It gives you %d attacks per turn.  ", object_state.num_blow));
+	if (object_state.num_blow == 1) text_out("   It gives you one attack per turn.  ");
+	else text_out(format("   It gives you %d attacks per turn.  ", object_state.num_blow));
 
 	text_out("\n");
 
 	if (object_state.heavy_wield)
 	{
-		text_out_c(TERM_RED, "You have trouble wielding such a heavy weapon.\n\n");
+		text_out_c(TERM_RED, "   You have trouble wielding such a heavy weapon.\n\n");
 	}
 
 	/* Message */
 	if (object_state.icky_wield)
 	{
-		text_out_c(TERM_RED, "You do not feel comfortable with this weapon.\n\n");
+		text_out_c(TERM_RED, "   You do not feel comfortable with this weapon.\n\n");
 	}
 
 	if (!extra_info) return (TRUE);
@@ -383,7 +383,7 @@ static bool describe_weapon(const object_type *o_ptr, u32b f1, bool extra_info)
 	}
 
 	/* Now calculate and print out average damage */
-	text_out(format("This weapon does %dd%d%c%d damage (%d avg) per attack, with a critical hit chance of %d percent.\n",
+	text_out(format("   This weapon does %dd%d%c%d damage (%d avg) per attack, with a critical hit chance of %d percent.\n",
 			              dd, ds, plus_minus, plus, average, crit_hit_percent));
 
 	text_out("\n");
@@ -398,7 +398,7 @@ static bool describe_weapon(const object_type *o_ptr, u32b f1, bool extra_info)
 
 			average = (new_dd * ds) / 2 + plus;
 
-			text_out(format("This weapon does %dd%d%c%d damage (%d avg) against %s each hit.\n", new_dd, ds, plus_minus, plus, average, si->slay_race));
+			text_out(format("   This weapon does %dd%d%c%d damage (%d avg) against %s each hit.\n", new_dd, ds, plus_minus, plus, average, si->slay_race));
 		}
 	}
 
@@ -419,7 +419,7 @@ static bool describe_weapon(const object_type *o_ptr, u32b f1, bool extra_info)
 
 			average = (new_dd * ds) / 2 + plus;
 
-			text_out(format("This weapon does %dd%d%c%d damage (%d avg) against creatures who do not %s.\n", new_dd, ds, plus_minus, plus, average, bi->brand_resist));
+			text_out(format("   This weapon does %dd%d%c%d damage (%d avg) against creatures who do not %s.\n", new_dd, ds, plus_minus, plus, average, bi->brand_resist));
 		}
 	}
 
@@ -431,7 +431,7 @@ static bool describe_weapon(const object_type *o_ptr, u32b f1, bool extra_info)
 		{
 			average = (dd * ds) / 2;
 
-			text_out(format("This weapon does an additional %dd%d (%d avg) damage against creatures who are susceptible to %s.\n", dd, ds, average, ms->brand_susceptibility));
+			text_out(format("   This weapon does an additional %dd%d (%d avg) damage against creatures who are susceptible to %s.\n", dd, ds, average, ms->brand_susceptibility));
 		}
 	}
 
@@ -462,7 +462,7 @@ static bool describe_weapon(const object_type *o_ptr, u32b f1, bool extra_info)
 			if ((new_blows > old_blows) &&
 				((str_plus < str_done) || (str_done == -1)))
 			{
-				text_out("With +%d str and +%d dex you would get %d attacks per turn.\n",
+				text_out("   With +%d str and +%d dex you would get %d attacks per turn.\n",
 						str_plus, dex_plus, new_blows);
 				str_done = str_plus;
 				break;
@@ -520,14 +520,14 @@ static bool describe_bow_slot(const object_type *o_ptr, u32b f1, u32b f3, bool e
 	/*print out the number of attacks*/
 	if (object_state.num_fire > 1)
 	{
-		if (object_state.num_fire == 2) text_out(format("\nYou can fire this %s twice as quickly as an ordinary %s.\n", launcher, launcher));
+		if (object_state.num_fire == 2) text_out(format("\n   You can fire this %s twice as quickly as an ordinary %s.\n", launcher, launcher));
 
-		else text_out(format("\nYou can fire this %s %d times more quickly than an ordinary %s.\n", launcher, object_state.num_fire, launcher));
+		else text_out(format("\n   You can fire this %s %d times more quickly than an ordinary %s.\n", launcher, object_state.num_fire, launcher));
 	}
 
 	if (object_state.heavy_shoot)
 	{
-		text_out_c(TERM_RED, format("\nYou have trouble aiming such a heavy %s.\n", launcher));
+		text_out_c(TERM_RED, format("\n   You have trouble aiming such a heavy %s.\n", launcher));
 	}
 
 	if (!extra_info) return (TRUE);
@@ -555,7 +555,7 @@ static bool describe_bow_slot(const object_type *o_ptr, u32b f1, u32b f3, bool e
 	average = (dd * ds) / 2 + plus;
 
 	/* Now calculate and print out average damage */
-	text_out(format("Firing %s from this %s does %dd%d%c%d damage (%d avg), with a critical hit chance of %d percent.\n", j_name, launcher, dd, ds, plus_minus, plus, average, crit_hit_percent));
+	text_out(format("   Firing %s from this %s does %dd%d%c%d damage (%d avg), with a critical hit chance of %d percent.\n", j_name, launcher, dd, ds, plus_minus, plus, average, crit_hit_percent));
 
 	text_out("\n");
 
@@ -651,7 +651,7 @@ static bool describe_ammo(const object_type *o_ptr, u32b f1, u32b f3, bool extra
 	average = (dd * ds) / 2 + plus;
 
 	/* Now calculate and print out average damage */
-	text_out(format("Firing this ammunition from %s does %dd%d%c%d damage (%d avg), with a critical hit chance of %d percent.\n", j_name, dd, ds, plus_minus, plus, average, crit_hit_percent));
+	text_out(format("   Firing this ammunition from %s does %dd%d%c%d damage (%d avg), with a critical hit chance of %d percent.\n", j_name, dd, ds, plus_minus, plus, average, crit_hit_percent));
 
 	text_out("\n");
 
@@ -665,7 +665,7 @@ static bool describe_ammo(const object_type *o_ptr, u32b f1, u32b f3, bool extra
 
 			average = (new_dd * ds) / 2 + plus;
 
-			text_out(format("This ammunition does %dd%d%c%d damage (%d avg) against %s each hit.\n", new_dd, ds, plus_minus, plus, average, si->slay_race));
+			text_out(format("   This ammunition does %dd%d%c%d damage (%d avg) against %s each hit.\n", new_dd, ds, plus_minus, plus, average, si->slay_race));
 		}
 	}
 
@@ -686,7 +686,7 @@ static bool describe_ammo(const object_type *o_ptr, u32b f1, u32b f3, bool extra
 
 			average = (new_dd * ds) / 2 + plus;
 
-			text_out(format("This ammunition does %dd%d%c%d damage (%d avg) against creatures who do not %s.\n", new_dd, ds, plus_minus, plus, average, bi->brand_resist));
+			text_out(format("   This ammunition does %dd%d%c%d damage (%d avg) against creatures who do not %s.\n", new_dd, ds, plus_minus, plus, average, bi->brand_resist));
 		}
 	}
 
@@ -698,7 +698,7 @@ static bool describe_ammo(const object_type *o_ptr, u32b f1, u32b f3, bool extra
 		{
 			average = (dd * ds) / 2;
 
-			text_out(format("This ammunition does an additional %dd%d damage (%d avg) against creatures who are susceptible to %s.\n", dd, ds, average, ms->brand_susceptibility));
+			text_out(format("   This ammunition does an additional %dd%d damage (%d avg) against creatures who are susceptible to %s.\n", dd, ds, average, ms->brand_susceptibility));
 		}
 	}
 
@@ -767,7 +767,7 @@ static bool describe_throwing_weapon(const object_type *o_ptr, u32b f1, u32b f3,
 	average = (dd * ds) / 2 + plus;
 
 	/* Now calculate and print out average damage */
-	text_out(format("Throwing this weapon does %dd%d%c%d damage (%d avg), with a critical hit chance of %d percent.\n", dd, ds, plus_minus, plus, average, crit_hit_percent));
+	text_out(format("   Throwing this weapon does %dd%d%c%d damage (%d avg), with a critical hit chance of %d percent.\n", dd, ds, plus_minus, plus, average, crit_hit_percent));
 
 	text_out("\n");
 
@@ -781,7 +781,7 @@ static bool describe_throwing_weapon(const object_type *o_ptr, u32b f1, u32b f3,
 
 			average = (new_dd * ds) / 2 + plus;
 
-			text_out(format("Throwing this weapon does %dd%d%c%d damage (%d avg) against %s each hit.\n", new_dd, ds, plus_minus, plus, average, si->slay_race));
+			text_out(format("   Throwing this weapon does %dd%d%c%d damage (%d avg) against %s each hit.\n", new_dd, ds, plus_minus, plus, average, si->slay_race));
 		}
 	}
 
@@ -802,7 +802,7 @@ static bool describe_throwing_weapon(const object_type *o_ptr, u32b f1, u32b f3,
 
 			average = (new_dd * ds) / 2 + plus;
 
-			text_out(format("Throwing this weapon does %dd%d%c%d damage (%d avg) against creatures who do not %s.\n", new_dd, ds, plus_minus, plus, average, bi->brand_resist));
+			text_out(format("   Throwing this weapon does %dd%d%c%d damage (%d avg) against creatures who do not %s.\n", new_dd, ds, plus_minus, plus, average, bi->brand_resist));
 		}
 	}
 
@@ -814,7 +814,7 @@ static bool describe_throwing_weapon(const object_type *o_ptr, u32b f1, u32b f3,
 		{
 			average = (dd * ds) / 2;
 
-			text_out(format("Throwing this weapon does an additional %dd%d damage (%d avg) against creatures who are susceptible to %s.\n", dd, ds, average, ms->brand_susceptibility));
+			text_out(format("   Throwing this weapon does an additional %dd%d damage (%d avg) against creatures who are susceptible to %s.\n", dd, ds, average, ms->brand_susceptibility));
 		}
 	}
 
@@ -1405,9 +1405,12 @@ bool screen_out_head(const object_type *o_ptr)
 void object_info_screen(const object_type *o_ptr)
 {
 	bool has_description, has_info;
+	int old_text_out_indent = text_out_indent;
 
 	/* Redirect output to the screen */
 	text_out_hook = text_out_to_screen;
+
+	text_out_indent = 0;
 
 	/* Save the screen */
 	screen_save();
@@ -1475,6 +1478,8 @@ void object_info_screen(const object_type *o_ptr)
 		/* Wait for input */
 		(void)inkey_ex();
 	}
+
+	text_out_indent = old_text_out_indent;
 
 	/* Load the screen */
 	screen_load();
