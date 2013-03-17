@@ -1761,7 +1761,11 @@ int count_floor_items(int y, int x, bool pickup_only)
 		/* Factor in whether the player wants to be prompted first */
 		if (pickup_only)
 		{
-			if (k_info[o_ptr->k_idx].squelch == NO_SQUELCH_NEVER_PICKUP) continue;
+			if (k_info[o_ptr->k_idx].squelch == NO_SQUELCH_NEVER_PICKUP)
+			{
+				/* Only known items */
+				if (object_known_p(o_ptr)) continue;
+			}
 		}
 
 		count++;
