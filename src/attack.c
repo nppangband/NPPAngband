@@ -58,7 +58,7 @@ static void mod_dd_slays(u32b f1, u32b r3, u32b *r_l3, int *mult, bool seen)
 
 		/* See if any of the weapons's slays flag matches the monster race flags */
 		if ((f1 & (si->slay_flag)) &&
-		    (r3 & (si->mon_flag)))
+			(r3 & (si->mon_flag)))
 		{
 
 			/* If the player can see the monster, mark the lore */
@@ -125,7 +125,7 @@ static int mod_dd_brands(u32b f1, u32b r3, u32b *r_l3, byte *divider, bool deep,
 					if (max_mult < bi->shallow_mult)
 					{
 						max_mult = bi->shallow_mult;
-				      	terrain_flag = 1;
+						terrain_flag = 1;
 					}
 				}
 			}
@@ -214,9 +214,6 @@ int rogue_shot(const object_type *o_ptr, int *plus, player_state shot_state)
 
 	return (1);
 }
-
-
-
 
 /* Brigands can sometimes get extra damage with a sling. */
 static int brigand_shot(const object_type *o_ptr, u32b mon_race_flag_r1, bool asleep, player_state shot_state)
@@ -333,7 +330,6 @@ static void dam_dice_aux(const object_type *o_ptr, int *dd, const monster_type *
 
 	/* Boundry Control */
 	if (*dd < 1) *dd = 1;
-
 }
 
 int critical_shot_chance(const object_type *o_ptr, player_state a_state, bool throw, bool id_only, u32b f3)
@@ -358,7 +354,6 @@ int critical_shot_chance(const object_type *o_ptr, player_state a_state, bool th
 	}
 	return (i);
 }
-
 
 /*
  * Critical hits (from objects thrown by player)
@@ -406,9 +401,6 @@ static int critical_shot_check(const object_type *o_ptr, int *dd, int *plus, boo
 
 	return (1);
 }
-
-
-
 
 /*
  * Determines the odds of an object breaking when thrown at a monster
@@ -539,8 +531,6 @@ static int critical_hit_check(const object_type *o_ptr, int *dd, int *plus)
 	/* Exceptional hit */
 	return (2);
 }
-
-
 
 /*
  * Determine if a trap affects the player.
@@ -771,9 +761,6 @@ void py_attack(int y, int x)
 
 	return;
 }
-
-
-
 
 /*
  * Fire an object from the pack or floor.
@@ -1174,10 +1161,7 @@ void do_cmd_fire(cmd_code code, cmd_arg args[])
 
 	/* Drop (or break) near that location */
 	drop_near(i_ptr, j, y, x);
-
 }
-
-
 
 void textui_cmd_fire(void)
 {
@@ -1270,8 +1254,6 @@ void textui_cmd_fire_at_nearest(void)
 	cmd_insert(CMD_FIRE, item, dir);
 }
 
-
-
 /*
  * Flavor. Some objects cause random effects when thrown.
  * Returns TRUE if the object affected the dungeon in some way.
@@ -1351,9 +1333,6 @@ static bool do_flavor_breakage(const object_type *o_ptr, int y, int x)
 	return (FALSE);
 }
 
-
-
-
 /*handle special effects of throwing certain potions*/
 static bool thrown_potion_effects(object_type *o_ptr, bool *is_dead, bool *fear, int m_idx)
 {
@@ -1402,7 +1381,6 @@ static bool thrown_potion_effects(object_type *o_ptr, bool *is_dead, bool *fear,
 			/*confusion explosion at the site, radius 1*/
 			ident = explosion(SOURCE_PLAYER, 1, y, x, damroll (2, p_ptr->lev), GF_OLD_CONF, flag);
 			break;
-
 		}
 
 		case SV_POTION_SLEEP:
@@ -1486,6 +1464,7 @@ static bool thrown_potion_effects(object_type *o_ptr, bool *is_dead, bool *fear,
 		{
 			/*drain life explosion at the site, radius 1*/
 			ident = explosion(SOURCE_PLAYER, 1, y, x, damroll(30, 30), GF_LIFE_DRAIN, flag);
+
 			break;
 		}
 
@@ -1511,7 +1490,7 @@ static bool thrown_potion_effects(object_type *o_ptr, bool *is_dead, bool *fear,
 				ident = TRUE;
 			}
 
-			/* Potion isn't idntified */
+			/* Potion isn't identified */
 			else used_potion = FALSE;
 
 			break;
@@ -1530,6 +1509,7 @@ static bool thrown_potion_effects(object_type *o_ptr, bool *is_dead, bool *fear,
 
 			/*speed explosion at the site, radius 1*/
 			ident = explosion(SOURCE_PLAYER, 1, y, x, 20 + rand_int(20), GF_OLD_SPEED, flag);
+
 			break;
 		}
 
@@ -1667,12 +1647,10 @@ static bool thrown_potion_effects(object_type *o_ptr, bool *is_dead, bool *fear,
 
 	if (un_confuse)
 	{
-
 		mon_clear_timed(m_idx, MON_TMD_CONF, MON_TMD_FLG_NOTIFY);
 
 		/* Dump a message */
 		if (m_ptr->ml) ident = TRUE;
-
 	}
 
 	if (un_stun)
@@ -1697,13 +1675,11 @@ static bool thrown_potion_effects(object_type *o_ptr, bool *is_dead, bool *fear,
 		mon_inc_timed(m_idx, MON_TMD_STUN, 15, MON_TMD_FLG_NOTIFY);
 
 		ident = TRUE;
-
 	}
 
 	/*inform them of the potion, mark it as known*/
 	if ((ident) && (!(k_info[o_ptr->k_idx].aware)))
 	{
-
 		char o_name[80];
 
 		/* Identify it fully */
@@ -1721,7 +1697,6 @@ static bool thrown_potion_effects(object_type *o_ptr, bool *is_dead, bool *fear,
 
 		/* Window stuff */
 		p_ptr->redraw |= (PR_INVEN | PR_EQUIP);
-
 	}
 
 	/* Redraw if necessary*/
@@ -1734,7 +1709,6 @@ static bool thrown_potion_effects(object_type *o_ptr, bool *is_dead, bool *fear,
 	handle_stuff();
 
 	return (used_potion);
-
 }
 
 int weapon_throw_adjust(const object_type *o_ptr, u32b f3, int *plus, bool id_only)
@@ -1868,7 +1842,6 @@ void do_cmd_throw(cmd_code code, cmd_arg args[])
 		floor_item_optimize(0 - item);
 	}
 
-
 	/* Description */
 	object_desc(o_name, sizeof(o_name), i_ptr, ODESC_FULL);
 
@@ -1884,7 +1857,6 @@ void do_cmd_throw(cmd_code code, cmd_arg args[])
 		/* Hurt the player */
 		project_p(SOURCE_OTHER, p_ptr->py, p_ptr->px, dam, GF_NETHER, "throwing a cursed weapon");
 	}
-
 
 	/* Find the color and symbol for the object for throwing */
 	missile_attr = object_attr(i_ptr);
@@ -1914,7 +1886,6 @@ void do_cmd_throw(cmd_code code, cmd_arg args[])
 
 	/* Take a turn */
 	p_ptr->p_energy_use = BASE_ENERGY_MOVE;
-
 
 	/* Start at the player */
 	y = p_ptr->py;
@@ -1989,7 +1960,6 @@ void do_cmd_throw(cmd_code code, cmd_arg args[])
 			bool potion_effect = FALSE;
 			int pdam = 0;
 			bool is_dead = FALSE;
-
 
 			/*Adjust for player terrain*/
 			chance = feat_adjust_combat_for_player(chance, FALSE);
@@ -2104,7 +2074,6 @@ void do_cmd_throw(cmd_code code, cmd_arg args[])
 
 					/*monster could have been healed*/
 					if (pdam < 0) pdam = 0;
-
 				}
 
 				/* Apply special damage XXX XXX XXX */
@@ -2162,10 +2131,7 @@ void do_cmd_throw(cmd_code code, cmd_arg args[])
 
 	/* Drop (or break) near that location */
 	drop_near(i_ptr, j, y, x);
-
 }
-
-
 
 void textui_cmd_throw(void)
 {
@@ -2188,5 +2154,4 @@ void textui_cmd_throw(void)
 
 	cmd_insert(CMD_THROW, item, dir);
 }
-
 
