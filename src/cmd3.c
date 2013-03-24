@@ -50,7 +50,6 @@ void do_cmd_inven(void)
 	/* Load screen */
 	screen_load();
 
-
 	/* Hack -- Process "Escape" */
 	if (p_ptr->command_new == ESCAPE)
 	{
@@ -118,7 +117,6 @@ static int quiver_wield(int item, object_type *o_ptr)
 		msg_print("Your quiver needs more space.");
 		return 0;
  	}
-
 
 	/* Get local object */
 	i_ptr = &object_type_body;
@@ -365,8 +363,6 @@ bool item_tester_hook_activate(const object_type *o_ptr)
 }
 
 
-
-
 /*
  * Handle the user command to destroy an item
  */
@@ -493,7 +489,7 @@ void destroy_item(int item)
 
 		/* Check for aware objects */
 		else if (object_aware_p(o_ptr) &&
-		    	!(k_info[o_ptr->k_idx].k_flags3 & (TR3_INSTA_ART)))
+				!(k_info[o_ptr->k_idx].k_flags3 & (TR3_INSTA_ART)))
 		{
 
 			object_kind *k_ptr = &k_info[o_ptr->k_idx];
@@ -529,7 +525,6 @@ void destroy_item(int item)
 			/*return of 2 sets item to squelch*/
 			else if (result == 2)
 			{
-
 				/*set to squelch*/
 				k_ptr->squelch = SQUELCH_ALWAYS;
 
@@ -609,8 +604,8 @@ void destroy_item(int item)
 		floor_item_describe(0 - item);
 		floor_item_optimize(0 - item);
 	}
-
 }
+
 
 void textui_cmd_destroy(void)
 {
@@ -627,23 +622,18 @@ void textui_cmd_destroy(void)
 }
 
 
-
-
 static void refill_lamp(object_type *j_ptr, object_type *o_ptr, int item)
 {
 
-	/* Refuel from a latern */
+	/* Refuel from a lantern */
 	if (o_ptr->sval == SV_LIGHT_LANTERN)
 	{
-
 		j_ptr->timeout += o_ptr->timeout;
-
 	}
 	/* Refuel from a flask */
 	else
 	{
 		j_ptr->timeout += o_ptr->pval;
-
 	}
 
 	/* Message */
@@ -706,7 +696,6 @@ static void refill_lamp(object_type *j_ptr, object_type *o_ptr, int item)
 	/* Refilled from a flask */
 	else
 	{
-
 		/* Decrease the item (from the pack) */
 		if (item >= 0)
 		{
@@ -894,7 +883,6 @@ void do_cmd_refill(cmd_code code, cmd_arg args[])
 }
 
 
-
 /*
  * Target command
  */
@@ -919,7 +907,6 @@ void do_cmd_target_closest(void)
 }
 
 
-
 /*
  * Look command
  */
@@ -931,7 +918,6 @@ void do_cmd_look(void)
 		msg_print("Target Selected.");
 	}
 }
-
 
 
 /*
@@ -1014,7 +1000,6 @@ void do_cmd_locate(void)
 	/* Verify panel */
 	verify_panel();
 }
-
 
 
 /*
@@ -1573,7 +1558,7 @@ void py_steal(int y, int x)
 	/* Send a thief to catch a thief. */
 	for (i = 0; i < MONSTER_BLOW_MAX; i++)
 	{
-		/* Extract infomation about the blow effect */
+		/* Extract information about the blow effect */
 		effect = r_ptr->blow[i].effect;
 		if (effect == RBE_EAT_GOLD) thief = TRUE;
 		else if (effect == RBE_EAT_ITEM) thief = TRUE;
@@ -1676,11 +1661,9 @@ void py_steal(int y, int x)
 }
 
 
-
-
-
-/*create a monster trap, currently used from a scroll*/
-
+/*
+ * create a monster trap, currently used from a scroll
+ */
 bool make_monster_trap(void)
 {
 	int y, x, dir;
@@ -1705,6 +1688,7 @@ bool make_monster_trap(void)
 
 	return(TRUE);
 }
+
 
 /*
  * Rogues may set traps, or they can be set from a scroll.
@@ -1745,6 +1729,7 @@ void py_set_trap(int y, int x)
 	num_trap_on_level++;
 
 }
+
 
 /*
  * Choose advanced monster trap type
@@ -1802,17 +1787,17 @@ static bool choose_mtrap(int *choice)
 			}
 		}
 
-		/* Allow user to exit the fuction */
-        else if (c == ESCAPE)
-        {
+		/* Allow user to exit the function */
+		else if (c == ESCAPE)
+		{
 			/* Load screen */
 			screen_load();
 
 			return (FALSE);
-        }
+		}
 
-         /* Invalid input */
-         else bell("Illegal response to question!");
+		/* Invalid input */
+		else bell("Illegal response to question!");
 	}
 
 	/* Load screen */
@@ -1821,6 +1806,7 @@ static bool choose_mtrap(int *choice)
 	/* Return */
 	return (TRUE);
 }
+
 
 /*
  * Turn a basic monster trap into an advanced one -BR-
@@ -1863,7 +1849,9 @@ bool py_modify_trap(int y, int x)
 }
 
 
-/* Centers the map on the player */
+/*
+ * Centers the map on the player
+ */
 void do_cmd_center_map(void)
 {
 	center_panel();
