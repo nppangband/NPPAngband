@@ -4724,7 +4724,7 @@ D: looks likes the creation of some deranged alchemist.
 
 
 N:344:Young blue dragon
-A:YoungWhiteDr
+A:YoungBlueDr
 G:d:b
 I:110:27d10:20:50:70
 W:29:1:17:500
