@@ -712,8 +712,6 @@ static bool describe_throwing_weapon(const object_type *o_ptr, u32b f1, u32b f3,
 {
 	u16b i;
 	int dd, ds, plus, crit_hit_percent, mult, average;
-	object_type object_type_body;
-	object_type *j_ptr = &object_type_body;
 	u32b reported_brands = 0L;
 	char plus_minus = '+';
 
@@ -747,7 +745,7 @@ static bool describe_throwing_weapon(const object_type *o_ptr, u32b f1, u32b f3,
 		dd = k_ptr->dd;
 		ds = k_ptr->ds;
 	}
-	plus = (object_known_p(o_ptr) ? o_ptr->to_d : 0) + (object_known_p(j_ptr) ? j_ptr->to_d : 0) + p_ptr->state.dis_to_d; ;
+	plus = (object_known_p(o_ptr) ? o_ptr->to_d : 0) + p_ptr->state.dis_to_d; ;
 
 	/* Apply the throwing weapon bonus. */
 	mult = weapon_throw_adjust(o_ptr, f3, &plus, TRUE);
