@@ -550,7 +550,7 @@ enum
 #define PROJECT_BOOM		0x00000040
 #define PROJECT_WALL		0x00000080
 #define PROJECT_PASS		0x00000100  /*Ignore walls*/
-#define PROJECT_ROON		0x00000200  /* Create a room as you kill_wall */
+#define PROJECT_ROOM		0x00000200  /* Create a room as you kill_wall */
 #define PROJECT_SAME		0x00000400  /* Don't damage similar monsters */
 
 /* What projections affect */
