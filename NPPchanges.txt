@@ -11,6 +11,7 @@ Bugfix: Sometimes examining an item in the store, the description was intented w
 Bugfix: Made max monster name longer, as some names were cut off.
 Bugfix: Player's weren't prompted to pick up unidentified items that whose squelch settings were set to "never pickup".
 Bugfix: The shortened name for a young blue dragon was for a white dragon. (by levind aka "runningaway")
+Bugfix: Fixed bug that caused the game to crash on 64 bit machines when examining a throwing weapon.
 
 NPP 6.1.1 changes:
 Bugfix:  Fixed a bug where the game could crash when inspecting a weapon.
