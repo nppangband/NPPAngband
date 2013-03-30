@@ -4335,7 +4335,7 @@ s16b inven_takeoff(int item, int amt)
 	/* Took off bow */
 	else if (item == INVEN_BOW)
 	{
-		act = "You were holding";
+		act = "You were shooting";
 	}
 
 	/* Took off light */
