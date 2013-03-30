@@ -1,6 +1,5 @@
 
 NPP6.1.2 changes:
-
 Misc code cleanup, provided by levind on Github ("runningaway") on the NPP forums.
 Fix many compiler warnings when compiling with clang and gcc (Bardur Arantsson)
 Bugfix: Fix missing break statement in generate_stats. 
@@ -8,12 +7,12 @@ Bugfix: Fix a bug that could cause the game to freeze while generating randarts.
 Bugfix: Fix bug that made game unplayable on 64 bit machines. (fix by Bardur Arantsson)
 Bugfix: Fix several other instances of code using C_WIPE similar to the one that caused crashes on 64 bit machines.
 Bugfix: Sometimes examining an item in the store, the description was intented wrong.
-Bugfix: Player's weren't prompted to pick up unidentified items that whose squelch settings were set to "never pickup".
+
 Bugfix: Made max monster name longer, as some names were cut off.
 Bugfix: Player's weren't prompted to pick up unidentified items that whose squelch settings were set to "never pickup".
 Bugfix: The shortened name for a young blue dragon was for a white dragon. (by levind aka "runningaway")
 Bugfix: Fixed bug that caused the game to crash on 64 bit machines when examining a throwing weapon.
-
+Bugfix: Fixed but where cursor dissappeared when a monster was targeted.
 
 NPP 6.1.1 changes:
 Bugfix:  Fixed a bug where the game could crash when inspecting a weapon.
