@@ -1067,6 +1067,9 @@ static ui_event_data target_set_interactive_aux(int y, int x, int mode, cptr inf
 								sizeof(out_val));
 						}
 
+						/* Hack -- handle stuff */
+						handle_stuff();
+
 						prt(out_val, 0, 0);
 
 						/* Place cursor */
