@@ -212,7 +212,7 @@ void flavor_init(void)
 					make_random_name(syllable, min, max);
 
 					/* Make second syllable lowercase */
-					if (q) syllable[0] = tolower(syllable[0]);
+					if (q) syllable[0] = tolower((int)syllable[0]);
 
 					/* Add the syllable */
 					my_strcat(tmp, syllable, sizeof(tmp));
@@ -2224,20 +2224,19 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 		if (streq(o_name, j_name))
 		{
 			/* pval is a s16b. Check bounds */
-			if (((long)(o_ptr->pval) + (long)(j_ptr->pval)) <= MAX_SHORT) return (1);
+			if (((long)(o_ptr->pval) + (long)(j_ptr->pval)) <= MAX_SHORT) return (TRUE);
 
 			/* Overflow. Don't stack gold */
-			else return (0);
+			else return (FALSE);
 		}
 	}
 
-
 	/* Require identical object types */
-	if (o_ptr->k_idx != j_ptr->k_idx) return (0);
+	if (o_ptr->k_idx != j_ptr->k_idx) return (FALSE);
 
 	/* Hack - mimic objects aren't similar*/
-	if (o_ptr->mimic_r_idx) return (0);
-	if (j_ptr->mimic_r_idx) return (0);
+	if (o_ptr->mimic_r_idx) return (FALSE);
+	if (j_ptr->mimic_r_idx) return (FALSE);
 
 	/* Analyze the items */
 	switch (o_ptr->tval)
@@ -2249,7 +2248,7 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 			if ((o_ptr->ident & (IDENT_QUEST)) && (j_ptr->ident & (IDENT_QUEST))) return (TRUE);
 
 			/* Otherwise, never okay */
-			return (0);
+			return (FALSE);
 		}
 
 		/* Food and Potions and Scrolls */
@@ -2262,7 +2261,7 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 			break;
 		}
 
-		/* Staves and wands*/
+		/* Staves and wands */
 		case TV_STAFF:
 		case TV_WAND:
 		{
@@ -2270,7 +2269,7 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 			if ((!(o_ptr->ident & (IDENT_EMPTY)) &&
 							!object_known_p(o_ptr)) ||
 							(!(j_ptr->ident & (IDENT_EMPTY)) &&
-							!object_known_p(j_ptr))) return(0);
+							!object_known_p(j_ptr))) return (FALSE);
 
 			/* Wand/Staffs charges combine in NPPangband.  */
 
@@ -2288,6 +2287,7 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 		}
 
 		/* Weapons and Armor */
+		/* Rings, Amulets, Lites and Books */
 		case TV_BOW:
 		case TV_DIGGING:
 		case TV_HAFTED:
@@ -2303,11 +2303,6 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 		case TV_HARD_ARMOR:
 		case TV_DRAG_ARMOR:
 		case TV_DRAG_SHIELD:
-		{
-			/* Fall through */
-		}
-
-		/* Rings, Amulets, Lites and Books */
 		case TV_RING:
 		case TV_AMULET:
 		case TV_LIGHT:
@@ -2316,7 +2311,7 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 		case TV_DRUID_BOOK:
 		{
 			/* Require both items to be known */
-			if (!object_known_p(o_ptr) || !object_known_p(j_ptr)) return (0);
+			if (!object_known_p(o_ptr) || !object_known_p(j_ptr)) return (FALSE);
 
 			/* Fall through */
 		}
@@ -2327,7 +2322,7 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 		case TV_SHOT:
 		{
 			/* Require identical knowledge of both items */
-			if (object_known_p(o_ptr) != object_known_p(j_ptr)) return (0);
+			if (object_known_p(o_ptr) != object_known_p(j_ptr)) return (FALSE);
 
 			/* Require identical "bonuses" */
 			if (o_ptr->to_h != j_ptr->to_h) return (FALSE);
@@ -2344,12 +2339,12 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 			if (o_ptr->ego_num != j_ptr->ego_num) return (FALSE);
 
 			/* Hack -- Never stack "powerful" items */
-			if (o_ptr->xtra1 || j_ptr->xtra1) return (0);
+			if (o_ptr->xtra1 || j_ptr->xtra1) return (FALSE);
 
 			/* Mega-Hack -- Handle lites */
 			if (fuelable_light_p(o_ptr))
 			{
-				if (o_ptr->timeout != j_ptr->timeout) return (0);
+				if (o_ptr->timeout != j_ptr->timeout) return (FALSE);
 			}
 
 			/* Hack -- Never stack recharging items */
@@ -2374,37 +2369,34 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 		default:
 		{
 			/* Require knowledge */
-			if (!object_known_p(o_ptr) || !object_known_p(j_ptr)) return (0);
+			if (!object_known_p(o_ptr) || !object_known_p(j_ptr)) return (FALSE);
 
 			/* Probably okay */
 			break;
 		}
 	}
 
-
 	/* Hack -- Require identical "cursed" and "broken" status */
 	if (((o_ptr->ident & (IDENT_CURSED)) != (j_ptr->ident & (IDENT_CURSED))) ||
 	    ((o_ptr->ident & (IDENT_BROKEN)) != (j_ptr->ident & (IDENT_BROKEN))))
 	{
-
-		return (0);
+		return (FALSE);
 	}
 
 	/* Hack -- Mimics never stack */
 	if ((o_ptr->mimic_r_idx) || (j_ptr->mimic_r_idx))
 	{
-		return (0);
+		return (FALSE);
 	}
 
 	/* Hack -- Require compatible inscriptions */
 	if (o_ptr->obj_note != j_ptr->obj_note)
 	{
-
 		/* Normally require matching inscriptions */
-		if (!stack_force_notes) return (0);
+		if (!stack_force_notes) return (FALSE);
 
 		/* Never combine different inscriptions */
-		if (o_ptr->obj_note && j_ptr->obj_note) return (0);
+		if (o_ptr->obj_note && j_ptr->obj_note) return (FALSE);
 	}
 
 
@@ -2417,7 +2409,7 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 		    (j_ptr->discount >= INSCRIP_NULL))
 		{
 			/* Normally require matching inscriptions */
-			return (0);
+			return (FALSE);
 		}
 
 		/* One is a special inscription, one is a discount or nothing */
@@ -2425,7 +2417,7 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 		         (j_ptr->discount >= INSCRIP_NULL))
 		{
 			/* Normally require matching inscriptions */
-			if (!stack_force_notes) return (0);
+			if (!stack_force_notes) return (FALSE);
 
 			/* Hack -- Never merge a special inscription with a discount */
 			if ((o_ptr->discount > 0) && (j_ptr->discount > 0)) return (0);
@@ -2435,13 +2427,12 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 		else
 		{
 			/* Normally require matching discounts */
-			if (!stack_force_costs) return (0);
+			if (!stack_force_costs) return (FALSE);
 		}
 	}
 
-
 	/* Maximal "stacking" limit */
-	if (total >= MAX_STACK_SIZE) return (0);
+	if (total >= MAX_STACK_SIZE) return (FALSE);
 
 	/* They match, so they must be similar */
 	return (TRUE);
