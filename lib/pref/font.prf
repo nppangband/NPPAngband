@@ -31,8 +31,8 @@
 ?:[EQU $SYS mac]
 %:font-mac.prf
 
-#?:[EQU $SYS win]
-#%:font-win.prf
+?:[EQU $SYS win]
+%:font-win.prf
 
 ?:[EQU $SYS sdl]
 %:font-sdl.prf
