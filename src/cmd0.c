@@ -22,7 +22,7 @@
 
 /*
  * This file contains (several) big lists of commands, so that they can be
- * easily maniuplated for e.g. help displays, or if a port wants to provide a
+ * easily manipulated for e.g. help displays, or if a port wants to provide a
  * native menu containing a command list.
  *
  * Consider a two-paned layout for the command menus. XXX
@@ -38,7 +38,7 @@ typedef void do_cmd_type(void);
 
 /* Forward declare these, because they're really defined later */
 static do_cmd_type do_cmd_wizard, do_cmd_try_debug,
-            do_cmd_mouseclick, do_cmd_port,
+			do_cmd_mouseclick, do_cmd_port,
 			do_cmd_xxx_options, do_cmd_menu, do_cmd_monlist, do_cmd_itemlist;
 
 
@@ -54,6 +54,7 @@ typedef struct
 	cmd_code cmd;
 	do_cmd_type *hook;
 } command_type;
+
 
 /* Magic use */
 static command_type cmd_magic[] =
@@ -200,12 +201,14 @@ static command_list cmds_all[] =
 	{ "Hidden",          cmd_hidden,      N_ELEMENTS(cmd_hidden) }
 };
 
+
 /**
  * Menu functions
  */
 char comm[22];
 cptr comm_descr[22];
 int poss;
+
 
 /**
  * Item tag/command key
@@ -215,6 +218,7 @@ static char show_tag(menu_type *menu, int oid)
 	/* Caution - could be a problem here if KTRL commands were used */
 	return comm[oid];
 }
+
 
 /**
  * Display an entry on a command menu
@@ -241,6 +245,7 @@ static bool show_action(char cmd, void *db, int oid)
 	return TRUE;
 }
 
+
 /**
  * Display a list of commands.
  */
@@ -265,6 +270,7 @@ static void show_cmd_menu(void)
 	/* Select an entry */
 	(void) menu_select(&menu, &cursor, 0);
 }
+
 
 /*
  * Figure out which row of the sidebar was clicked.
@@ -292,6 +298,7 @@ static int sidebar_click(int row)
 	/* Nothing on this row */
 	return (MOUSE_NULL);
 }
+
 
 /**
  * Bring up player actions
@@ -366,14 +373,14 @@ static void show_commands(void)
 		}
 		if (do_cmd_test(y, x, FS_BASH, FALSE)) can_bash = TRUE;
 		if (do_cmd_test(y, x, FS_SPIKE, FALSE)) can_spike = TRUE;
-    }
+	}
 
 	/* Alter a grid */
 	if (nearby_monster || can_tunnel || nearby_closed_door || nearby_trap)
-    {
-      comm[poss] = '+';
-      comm_descr[poss++] = "Alter";
-    }
+	{
+		comm[poss] = '+';
+		comm_descr[poss++] = "Alter";
+	}
 
 	/* Dig a tunnel */
 	if (can_tunnel)
@@ -468,10 +475,10 @@ static void show_commands(void)
 
 	/* Open a door or chest */
 	if (nearby_closed_door || nearby_chest)
-    {
-      comm[poss] = 'o';
-      comm_descr[poss++] = "Open";
-    }
+	{
+		comm[poss] = 'o';
+		comm_descr[poss++] = "Open";
+	}
 
 	/* Close a door */
 	if (nearby_open_door)
@@ -546,6 +553,7 @@ int click_area(ui_event_data ke)
 	else return MOUSE_NULL;
 }
 
+
 /*
  * Toggle wizard mode
  */
@@ -585,8 +593,6 @@ static void do_cmd_wizard(void)
 	/* Redraw "title" */
 	p_ptr->redraw |= (PR_TITLE);
 }
-
-
 
 
 #ifdef ALLOW_DEBUG
@@ -780,7 +786,7 @@ static void do_cmd_mouseclick(void)
 		case MOUSE_NULL:
 		default:
 		{
-		    return;
+			return;
 		}
 	}
 
@@ -876,8 +882,6 @@ static void do_cmd_unknown(void)
 }
 
 
-
-
 /* List indexed by char */
 struct {
 	do_cmd_type *hook;
@@ -930,6 +934,7 @@ static bool cmd_sub_action(char cmd, void *db, int oid)
 		return FALSE;
 }
 
+
 /*
  * Display a list of commands.
  */
@@ -957,7 +962,7 @@ static bool cmd_menu(command_list *list, void *selection_p)
 	/* Select an entry */
 	evt = menu_select(&menu, &cursor, 0);
 
-	/* Load de screen */
+	/* Load the screen */
 	screen_load();
 
 	if (evt.type == EVT_SELECT)
@@ -976,7 +981,6 @@ static bool cmd_menu(command_list *list, void *selection_p)
 }
 
 
-
 static bool cmd_list_action(char cmd, void *db, int oid)
 {
 	if (cmd == '\n' || cmd == '\r' || cmd == DEFINED_XFF)
@@ -989,6 +993,7 @@ static bool cmd_list_action(char cmd, void *db, int oid)
 	}
 }
 
+
 static void cmd_list_entry(menu_type *menu, int oid, bool cursor, int row, int col, int width)
 {
 	byte attr = (cursor ? TERM_L_BLUE : TERM_WHITE);
@@ -996,6 +1001,7 @@ static void cmd_list_entry(menu_type *menu, int oid, bool cursor, int row, int c
 	(void)width;
 	Term_putstr(col, row, -1, attr, cmds_all[oid].name);
 }
+
 
 /*
  * Display a list of command types, allowing the user to select one.
@@ -1084,6 +1090,8 @@ void cmd_init(void)
 					converted_list[i].hook = do_cmd_unknown;
 					converted_list[i].cmd = CMD_NULL;
 				}
+
+				break;
 			}
 		}
 	}
@@ -1119,7 +1127,5 @@ void textui_process_command(bool no_request)
 
 		else if (converted_list[(unsigned char) p_ptr->command_cmd].hook)
 			converted_list[(unsigned char) p_ptr->command_cmd].hook();
-
 	}
-
 }
