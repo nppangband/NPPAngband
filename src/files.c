@@ -1560,6 +1560,7 @@ static void display_special_abilities(int row, int col)
 	}
 }
 
+
 /*
  * Display the character on the screen (five different modes)
  *
@@ -1573,7 +1574,7 @@ static void display_special_abilities(int row, int col)
  * Mode 4 = Special abilities (nativity) and temporary bonuses
  *
  * The boolean onscreen specifies if this is to display onscreen
- * or to be written to a file.  To make sure the equppy is displayed properly
+ * or to be written to a file.  To make sure the equippy is displayed properly
  * in a file while in tile mode.
  */
 void display_player(int mode, bool onscreen)
@@ -1782,7 +1783,6 @@ static void dump_player_stat_info(ang_file *fff)
 			}
 			/*dump the result*/
 			file_putf(fff,"%c",c);
-
 		}
 
 		/*a couple spaces, then do the sustains*/
@@ -1791,11 +1791,8 @@ static void dump_player_stat_info(ang_file *fff)
 		/* Process equipment, show stat modifiers */
 		for (y = INVEN_WIELD; y < INVEN_TOTAL; ++y)
 		{
-
-			object_type *o_ptr;
-
 			/* Get the object */
-			o_ptr = &inventory[y];
+			object_type *o_ptr = &inventory[y];
 
 			/* Get the "known" flags */
 			object_flags_known(o_ptr, &f1, &f2, &f3, &fn);
@@ -1809,7 +1806,6 @@ static void dump_player_stat_info(ang_file *fff)
 
 			/*dump the result*/
 			file_putf(fff,"%c",c);
-
 		}
 
 		/* Player flags */
@@ -1825,7 +1821,6 @@ static void dump_player_stat_info(ang_file *fff)
 		file_putf(fff,"%c",c);
 
 		file_putf(fff,"\n");
-
 	}
 
 }
@@ -1997,7 +1992,6 @@ static void dump_home_stat_info(ang_file *fff)
 		}
 
 		file_putf(fff, "\n");
-
 	}
 }
 
@@ -2129,7 +2123,6 @@ errr file_character(const char *path, bool full)
 					/* Dump it */
 					file_putf(fff, "%c", c);
 				}
-
 			}
 
 			/* End the row */
@@ -2190,17 +2183,16 @@ errr file_character(const char *path, bool full)
 	}
 	file_putf(fff, "\n");
 
-
 	/* Dump the Home Flags , then the inventory -- if anything there */
 	if (st_ptr->stock_num)
 	{
 		/* Header */
 		file_putf(fff, "  [Home Inventory Stat Modifiers, Sustains and Flags]\n\n");
 
-		/*dump stat modifiers and sustains*/
+		/* Dump stat modifiers and sustains */
 		dump_home_stat_info(fff);
 
-		/*dump the home resists and abilities display*/
+		/* Dump the home resists and abilities display */
 		for (i =2; i <4; ++i)
 		{
 			/* Display player */
@@ -2269,7 +2261,7 @@ errr file_character(const char *path, bool full)
 
 			x_file_putf(fff, encoding, "  [Current Quest]\n\n");
 
-			/*get the quest description*/
+			/* Get the quest description */
 			describe_quest(q_out, sizeof(q_out), guild_quest_level(), QMODE_FULL);
 
 			/* Describe quest */
@@ -2278,7 +2270,6 @@ errr file_character(const char *path, bool full)
 			/* Add an empty line */
 			x_file_putf(fff, encoding, "\n\n");
 		}
-
 	}
 
 	/* dump notes to character file*/
@@ -2326,11 +2317,11 @@ errr file_character(const char *path, bool full)
 	/* Dump options */
 	for (i = 0; i < OPT_MAX; i++)
 	{
-		/*hack - use game play options*/
+		/* Hack - use game play options */
 		if (i < OPT_GAME_PLAY) continue;
 		if ((i >= OPT_EFFICIENCY) && (i < OPT_ADULT)) continue;
 
-		/*print the labels*/
+		/* Print the labels */
 		if (i == OPT_GAME_PLAY) file_putf(fff, "\nGAME PLAY OPTIONS:\n\n");
 		if (i == OPT_CHEAT) file_putf(fff, "\nCHEAT OPTIONS:\n\n");
 		if (i == OPT_ADULT) file_putf(fff, "\nBIRTH OPTIONS:\n\n");
@@ -2689,7 +2680,7 @@ bool show_file(cptr name, cptr what, int line, int mode)
 
 		/* Show a general "title" */
 		prt(format("[%s %s, %s, Line %d-%d/%d]", VERSION_NAME, VERSION_STRING,
-	           caption, line, line + hgt - 4, size), 0, 0);
+				   caption, line, line + hgt - 4, size), 0, 0);
 
 		/* Buttons */
 		button_kill_all();
@@ -2870,7 +2861,7 @@ bool show_file(cptr name, cptr what, int line, int mode)
 		}
 
 		/* Recurse on letters */
-		if (menu && isdigit(ke.key) && hook[D2I(ke.key)][0])
+		if (menu && isdigit((int)ke.key) && hook[D2I(ke.key)][0])
 		{
 			/* Recurse on that file */
 			if (!show_file(hook[D2I(ke.key)], NULL, 0, mode))
@@ -3083,13 +3074,13 @@ void close_game(void)
 		}
 	}
 
-
 	/* Hack -- Decrease "icky" depth */
 	character_icky--;
 
 	/* Allow suspending now */
 	signals_handle_tstp();
 }
+
 
 /*
  * Handle abrupt death of the visual system
@@ -3273,7 +3264,7 @@ void html_screenshot(cptr name, int mode)
 	{
 		file_putf(fp, "<!DOCTYPE html><html><head>\n");
 		file_putf(fp, "  <meta='generator' content='%s %s'>\n",
-	            	VERSION_NAME, VERSION_STRING);
+					VERSION_NAME, VERSION_STRING);
 		file_putf(fp, "  <title>%s</title>\n", name);
 		file_putf(fp, "</head>\n\n");
 		file_putf(fp, "<body style='color: #fff; background: #000;'>\n");
@@ -3443,3 +3434,4 @@ void fill_template(char buf[], int max_buf)
 		my_strcpy(buf, local, max_buf);
 	}
 }
+
