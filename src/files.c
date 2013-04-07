@@ -1460,7 +1460,7 @@ static void display_special_abilities(int row, int col)
 
 		col2 += strlen(msg);
 
-	str(" forces", row++, col2);
+		put_str(" forces", row++, col2);
 	}
 
 	/* Print flying */
