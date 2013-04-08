@@ -1517,50 +1517,39 @@ extern char scroll_adj[MAX_TITLES][16];
 /**
  * Modes for object_desc().
  */
-typedef enum
-{
-	ODESC_BASE   = 0x00,   /*!< Only describe the base name */
-	ODESC_COMBAT = 0x01,   /*!< Also show combat bonuses */
-	ODESC_EXTRA  = 0x02,   /*!< Show charges/inscriptions/pvals */
+static const int	ODESC_BASE		= 0x00,	/*!< Only describe the base name */
+					ODESC_COMBAT	= 0x01,	/*!< Also show combat bonuses */
+					ODESC_EXTRA		= 0x02,	/*!< Show charges/inscriptions/pvals */
 
-	ODESC_FULL   = ODESC_COMBAT | ODESC_EXTRA,
-	                       /*!< Show entire description */
+					ODESC_FULL		= ODESC_COMBAT | ODESC_EXTRA,
+											/*!< Show entire description */
 
-	ODESC_STORE  = 0x04,   /*!< This is an in-store description */
-	ODESC_PLURAL = 0x08,   /*!< Always pluralise */
-	ODESC_SINGULAR    = 0x10,    /*!< Always singular */
-	ODESC_SPOIL  = 0x20,    /*!< Display regardless of player knowledge */
-	ODESC_PREFIX = 0x40   /* */
-} odesc_detail_t;
+					ODESC_STORE 	= 0x04,	/*!< This is an in-store description */
+					ODESC_PLURAL	= 0x08,	/*!< Always pluralise */
+					ODESC_SINGULAR	= 0x10,	/*!< Always singular */
+					ODESC_SPOIL		= 0x20,	/*!< Display regardless of player knowledge */
+					ODESC_PREFIX	= 0x40;	/* */
 
 
 /**
  * Modes for item lists in "show_inven()"  "show_equip()" and "show_floor()"
  */
-typedef enum
-{
-	OLIST_NONE   = 0x00,   /* No options */
-   OLIST_WINDOW = 0x01,   /* Display list in a sub-term (left-align) */
-   OLIST_QUIVER = 0x02,   /* Display quiver lines */
-   OLIST_GOLD   = 0x04,   /* Include gold in the list */
-	OLIST_WEIGHT = 0x08,   /* Show item weight */
-	OLIST_PRICE  = 0x10,   /* Show item price */
-	OLIST_FAIL   = 0x20    /* Show device failure */
-
-} olist_detail_t;
-
+static const int	OLIST_NONE		= 0x00,	/* No options */
+					OLIST_WINDOW	= 0x01,	/* Display list in a sub-term (left-align) */
+					OLIST_QUIVER	= 0x02,	/* Display quiver lines */
+					OLIST_GOLD		= 0x04,	/* Include gold in the list */
+					OLIST_WEIGHT	= 0x08,	/* Show item weight */
+					OLIST_PRICE  	= 0x10,	/* Show item price */
+					OLIST_FAIL   	= 0x20;	/* Show device failure */
 
 /**
  * Modes for object_info()
  */
-typedef enum
-{
-	OINFO_NONE   = 0x00, /* No options */
-	OINFO_TERSE  = 0x01, /* Keep descriptions brief, e.g. for dumps */
-	OINFO_SUBJ   = 0x02, /* Describe object from the character's POV */
-	OINFO_FULL   = 0x04, /* Treat object as if fully IDd */
-	OINFO_DUMMY  = 0x08 /* Object does not exist (e.g. knowledge menu) */
-} oinfo_detail_t;
+static const int	OINFO_NONE	= 0x00,	/* No options */
+					OINFO_TERSE	= 0x01,	/* Keep descriptions brief, e.g. for dumps */
+					OINFO_SUBJ	= 0x02,	/* Describe object from the character's POV */
+					OINFO_FULL	= 0x04,	/* Treat object as if fully IDd */
+					OINFO_DUMMY	= 0x08;	/* Object does not exist (e.g. knowledge menu) */
 
 
 /**
@@ -1568,17 +1557,17 @@ typedef enum
  */
 typedef enum
 {
-	INSCRIP_NULL = 100,
-	INSCRIP_TERRIBLE   =    101,
-	INSCRIP_WORTHLESS  =    102,
-	INSCRIP_CURSED     =    103,
-	INSCRIP_BROKEN     =    104,
-	INSCRIP_AVERAGE    =    105,
-	INSCRIP_GOOD_STRONG=    106,
-	INSCRIP_GOOD_WEAK  =	107,
-	INSCRIP_EXCELLENT  =    108,
-	INSCRIP_SPECIAL    =    109,
-	INSCRIP_UNCURSED   =    110,
+	INSCRIP_NULL		=   100,
+	INSCRIP_TERRIBLE	=   101,
+	INSCRIP_WORTHLESS	=   102,
+	INSCRIP_CURSED		=   103,
+	INSCRIP_BROKEN		=   104,
+	INSCRIP_AVERAGE		=   105,
+	INSCRIP_GOOD_STRONG	=   106,
+	INSCRIP_GOOD_WEAK	=	107,
+	INSCRIP_EXCELLENT	=   108,
+	INSCRIP_SPECIAL		=   109,
+	INSCRIP_UNCURSED	=   110,
 	INSCRIP_INDESTRUCTIBLE =111,
 
 	INSCRIP_MAX                  /*!< Maximum number of pseudo-ID markers */
