@@ -206,8 +206,6 @@ struct term_window
 };
 
 
-
-
 typedef struct mouse_info mouse_info;
 struct mouse_info
 {
@@ -220,7 +218,7 @@ struct mouse_info
 	int rightx;
 	int righty;
 
-	int x;						/* Current position of mouse */
+	int x;				/* Current position of mouse */
 	int y;
 
 };
@@ -245,8 +243,8 @@ struct sdl_Button
 	Uint32 cap_colour;			/* Caption colour */
 	void *data;					/* Something */
 	int tag;					/* Something */
-
 };
+
 
 struct sdl_ButtonBank
 {
@@ -255,6 +253,7 @@ struct sdl_ButtonBank
 	sdl_Window *window;			/* The window that these buttons are on */
 	bool need_update;
 };
+
 
 /*
  * Other 'windows' (basically a surface with a position and buttons on it)
@@ -273,7 +272,7 @@ struct sdl_Window
 
 	SDL_Surface *surface;	/* SDL surface info */
 
-	sdl_ButtonBank buttons;		/* Buttons */
+	sdl_ButtonBank buttons;	/* Buttons */
 
 	sdl_Font font;			/* Font */
 
@@ -282,8 +281,6 @@ struct sdl_Window
 	sdl_WindowCustomDraw draw_extra; /* Stuff to draw on the surface */
 	bool need_update;
 };
-
-
 
 
 /*
@@ -417,6 +414,7 @@ static SDL_Rect *RECT(int x, int y, int w, int h, SDL_Rect *rect)
 	return rect;
 }
 
+
 /*
  * Is a point(x, y) in a rectangle?
  */
@@ -430,6 +428,7 @@ static bool point_in(SDL_Rect *rect, int x, int y)
 	/* Must be inside */
 	return (TRUE);
 }
+
 
 /*
  * Draw an outline box
@@ -460,6 +459,7 @@ static void sdl_DrawBox(SDL_Surface *surface, SDL_Rect *rect, Uint32 colour, int
 	SDL_FillRect(surface, &rc, colour);
 }
 
+
 /*
  * Get the width and height of a given font file
  */
@@ -486,6 +486,7 @@ static errr sdl_CheckFont(cptr fontname, int *width, int *height)
 
 	return (0);
 }
+
 
 /*
 * The sdl_Font routines
@@ -607,15 +608,13 @@ static errr sdl_FontCreate(sdl_Font *font, cptr fontname, SDL_Surface *surface)
 }
 
 
-
-
 /*
  * Draw some text onto a surface
- * The surface is first checked to see if it is compatable with
+ * The surface is first checked to see if it is compatible with
  * this font, if it isn't the the font will be 're-precalculated'
  *
  * You can, I suppose, use one font on many surfaces, but it is
- * definately not recommended. One font per surface is good enough.
+ * definitely not recommended. One font per surface is good enough.
  */
 static errr sdl_FontDraw(sdl_Font *font, SDL_Surface *surface, Uint32 colour, int x, int y, int n , cptr s)
 {
@@ -693,7 +692,6 @@ static errr sdl_FontDraw(sdl_Font *font, SDL_Surface *surface, Uint32 colour, in
 }
 
 
-
 /*
  * Draw a button on the screen
  */
@@ -722,6 +720,7 @@ static void sdl_ButtonDraw(sdl_Button *button)
 	}
 }
 
+
 /*
  * Adjust the position of a button
  */
@@ -731,6 +730,7 @@ static void sdl_ButtonMove(sdl_Button *button, int x, int y)
 	button->pos.y = y;
 	button->owner->need_update = TRUE;
 }
+
 
 /*
  * Adjust the size of a button
@@ -742,6 +742,7 @@ static void sdl_ButtonSize(sdl_Button *button, int w, int h)
 	button->owner->need_update = TRUE;
 }
 
+
 /*
  * Set the caption
  */
@@ -750,6 +751,7 @@ static void sdl_ButtonCaption(sdl_Button *button, cptr s)
 	my_strcpy(button->caption, s, sizeof(button->caption));
 	button->owner->need_update = TRUE;
 }
+
 
 /*
  * Set the visibility of a button
@@ -782,6 +784,7 @@ static void sdl_ButtonBankInit(sdl_ButtonBank *bank, sdl_Window *window)
 	bank->need_update = TRUE;
 }
 
+
 /*
  * Clear the bank
  */
@@ -790,6 +793,7 @@ static void sdl_ButtonBankFree(sdl_ButtonBank *bank)
 	FREE(bank->buttons);
 	FREE(bank->used);
 }
+
 
 /*
  * Draw all the buttons on the screen
@@ -809,6 +813,7 @@ static void sdl_ButtonBankDrawAll(sdl_ButtonBank *bank)
 	}
 	bank->need_update = FALSE;
 }
+
 
 /*
  * Get a new button index
@@ -847,6 +852,7 @@ static int sdl_ButtonBankNew(sdl_ButtonBank *bank)
 	return (i);
 }
 
+
 /*
  * Retrieve button 'idx' or NULL
  */
@@ -859,6 +865,7 @@ static sdl_Button *sdl_ButtonBankGet(sdl_ButtonBank *bank, int idx)
 	/* Return it */
 	return &bank->buttons[idx];
 }
+
 
 #if 0
 /*
@@ -886,6 +893,7 @@ static void sdl_ButtonBankRemove(sdl_ButtonBank *bank, int idx)
 }
 
 #endif
+
 
 /*
  * Examine and respond to mouse presses
@@ -918,6 +926,7 @@ static bool sdl_ButtonBankMouseDown(sdl_ButtonBank *bank, int x, int y)
 	return (FALSE);
 }
 
+
 /*
  * Respond to a mouse button release
  */
@@ -937,7 +946,7 @@ static bool sdl_ButtonBankMouseUp(sdl_ButtonBank *bank, int x, int y)
 		/* Check the coordinates */
 		if (point_in(&button->pos, x, y))
 		{
-			/* Has this butoon been 'selected'? */
+			/* Has this button been 'selected'? */
 			if (button->selected)
 			{
 				/* Activate the button (usually) */
@@ -1016,10 +1025,12 @@ static void sdl_WindowBlit(sdl_Window* window)
 	SDL_UpdateRects(window->owner, 1, &rc);
 }
 
+
 static void sdl_WindowText(sdl_Window* window, Uint32 c, int x, int y, cptr s)
 {
 	sdl_FontDraw(&window->font, window->surface, c, x, y, strlen(s), s);
 }
+
 
 static void sdl_WindowUpdate(sdl_Window* window)
 {
@@ -1046,7 +1057,6 @@ static void sdl_WindowUpdate(sdl_Window* window)
 }
 
 
-
 static void term_windowFree(term_window* win)
 {
 	if (win->surface)
@@ -1067,7 +1077,10 @@ static void term_windowFree(term_window* win)
 	sdl_FontFree(&win->font);
 }
 
+
 static errr save_prefs(void);
+
+
 static void hook_quit(cptr str)
 {
 	int i;
@@ -1109,6 +1122,7 @@ static void hook_quit(cptr str)
 		string_free(FontList[i]);
 }
 
+
 static void BringToTop(void)
 {
 	int i, idx;
@@ -1129,7 +1143,6 @@ static void BringToTop(void)
 }
 
 
-
 /*
  * Validate a file
  */
@@ -1138,6 +1151,7 @@ static void validate_file(cptr s)
 	if (!file_exists(s))
 		quit_fmt("Cannot find required file:\n%s", s);
 }
+
 
 /*
  * Find a window that is under the points x,y on
@@ -1161,6 +1175,7 @@ static int sdl_LocateWin(int x, int y)
 
 	return (-1);
 }
+
 
 static void draw_statusbar(sdl_Window *window)
 {
@@ -1211,9 +1226,7 @@ static void draw_statusbar(sdl_Window *window)
 
 	x += button->pos.w + 20;
 
-
 }
-
 
 
 static void sdl_BlitWin(term_window *win)
@@ -1233,6 +1246,7 @@ static void sdl_BlitWin(term_window *win)
 	/* Mark the update as complete */
 	win->uRect.x = -1;
 }
+
 
 static void sdl_BlitAll(void)
 {
@@ -1280,9 +1294,8 @@ static void sdl_BlitAll(void)
 	SDL_BlitSurface(window->surface, NULL, AppWin, &rc);
 
 	SDL_UpdateRect(AppWin, 0, 0, AppWin->w, AppWin->h);
-
-
 }
+
 
 static void RemovePopUp(void)
 {
@@ -1290,6 +1303,7 @@ static void RemovePopUp(void)
 	popped = FALSE;
 	sdl_BlitAll();
 }
+
 
 static void QuitActivate(sdl_Button *sender)
 {
@@ -1299,6 +1313,7 @@ static void QuitActivate(sdl_Button *sender)
 
 	SDL_PushEvent(&Event);
 }
+
 
 static void SetStatusButtons(void)
 {
@@ -1322,6 +1337,7 @@ static void SetStatusButtons(void)
 	}
 }
 
+
 static void TermFocus(int idx)
 {
 	if (SelectedTerm == idx) return;
@@ -1334,6 +1350,7 @@ static void TermFocus(int idx)
 
 	sdl_BlitAll();
 }
+
 
 static void AboutDraw(sdl_Window *win)
 {
@@ -1362,12 +1379,14 @@ static void AboutActivate(sdl_Button *sender)
 	popped = TRUE;
 }
 
+
 static void SelectTerm(sdl_Button *sender)
 {
 	RemovePopUp();
 
 	TermFocus(sender->tag);
 }
+
 
 static void TermActivate(sdl_Button *sender)
 {
@@ -1401,6 +1420,7 @@ static void TermActivate(sdl_Button *sender)
 	popped = TRUE;
 }
 
+
 static void ResizeWin(term_window* win, int w, int h);
 static void term_data_link_sdl(term_window *win);
 
@@ -1415,18 +1435,17 @@ static void VisibleActivate(sdl_Button *sender)
 		window->visible = FALSE;
 		term_windowFree(window);
 		angband_term[SelectedTerm] = NULL;
-
 	}
 	else
 	{
 		window->visible = TRUE;
 		ResizeWin(window, window->width, window->height);
-
 	}
 
 	SetStatusButtons();
 	sdl_BlitAll();
 }
+
 
 static void SelectFont(sdl_Button *sender)
 {
@@ -1454,7 +1473,6 @@ static void SelectFont(sdl_Button *sender)
 	SetStatusButtons();
 
 	RemovePopUp();
-
 }
 
 
@@ -1639,8 +1657,6 @@ static void MoreDraw(sdl_Window *win)
 		sdl_ButtonVisible(button, FALSE);
 	}
 
-
-
 	sdl_WindowText(win, colour, 20, y, "Selected Graphics:");
 	sdl_WindowText(win, SDL_MapRGB(win->surface->format, 210, 110, 110),
 				   200, y, GfxDesc[SelectedGfx].name);
@@ -1671,6 +1687,7 @@ static void MoreDraw(sdl_Window *win)
 	button = sdl_ButtonBankGet(&win->buttons, MoreSnapPlus);
 	sdl_ButtonMove(button, 230, y);
 }
+
 
 static void MoreActivate(sdl_Button *sender)
 {
@@ -1997,8 +2014,6 @@ static errr load_prefs(void)
 		{
 			win->req_font = string_make(s);
 		}
-
-
 	}
 
 	if (screen_w < 640) screen_w = 640;
@@ -2008,6 +2023,7 @@ static errr load_prefs(void)
 
 	return (0);
 }
+
 
 static errr save_prefs(void)
 {
@@ -2218,7 +2234,6 @@ static void sdl_HandleMouseEvent(SDL_Event *event)
 		/* A button has been pressed */
 		case SDL_MOUSEBUTTONDOWN:
 		{
-
 			sdl_Window *window;
 			bool res;
 			int idx = sdl_LocateWin(mouse.x, mouse.y);
@@ -2272,7 +2287,7 @@ static void sdl_HandleMouseEvent(SDL_Event *event)
 					Movingy = mouse.y - win->top;
 				}
 
-				/* Check for the little hotspot in the botton right corner */
+				/* Check for the little hotspot in the bottom right corner */
 				else if (point_in(&SizingSpot, mouse.x, mouse.y))
 				{
 					/* Let's get sizing */
@@ -2284,7 +2299,6 @@ static void sdl_HandleMouseEvent(SDL_Event *event)
 					/* Remember where we started */
 					Movingx = mouse.x - win->left;
 					Movingy = mouse.y - win->top;
-
 				}
 
 				/* Signal a mouse press to angband (only if the window is already focused) */
@@ -2390,6 +2404,7 @@ static void sdl_HandleMouseEvent(SDL_Event *event)
 	}
 }
 
+
 /*
  * Handle keypresses.
  *
@@ -2471,7 +2486,7 @@ static void init_morewindows(void);
  *
  * Functions that are either called from a separate thread or which need to
  * create a separate thread (such as sounds) need to pass messages to this
- * function in order to execute most operations.  See the useage of
+ * function in order to execute most operations.  See the usage of
  * "SDL_USEREVENT".
  */
 static errr sdl_HandleEvent(SDL_Event *event)
@@ -2498,19 +2513,19 @@ static errr sdl_HandleEvent(SDL_Event *event)
 
 		case SDL_MOUSEMOTION:
 		{
-                        int i;
-                        SDL_Event events[10];
+			int i;
+			SDL_Event events[10];
 
 			/*
-                         * If there are a bundle of mouse movements pending,
-                         * we'll just take every tenth one - this makes a
-                         * simple approach to dragging practical, for instance.
+			 * If there are a bundle of mouse movements pending,
+			 * we'll just take every tenth one - this makes a
+			 * simple approach to dragging practical, for instance.
 			 */
-                        i = SDL_PeepEvents(events, 10, SDL_GETEVENT, SDL_EVENTMASK(SDL_MOUSEMOTION));
-                        if (i > 0)
-                        {
-                                *event = events[i - 1];
-                        }
+			i = SDL_PeepEvents(events, 10, SDL_GETEVENT, SDL_EVENTMASK(SDL_MOUSEMOTION));
+			if (i > 0)
+			{
+				*event = events[i - 1];
+			}
 
 			/* Handle mouse stuff */
 			sdl_HandleMouseEvent(event);
@@ -2590,6 +2605,7 @@ static errr sdl_HandleEvent(SDL_Event *event)
 	return (0);
 }
 
+
 /*
  * Update the redraw rect
  * A simple but effective way to keep track of what
@@ -2616,6 +2632,7 @@ static void set_update_rect(term_window *win, SDL_Rect *rc)
 	}
 }
 
+
 /*
  * Clear a terminal window
  */
@@ -2641,6 +2658,7 @@ static errr Term_xtra_sdl_clear(void)
 	/* Success */
 	return (0);
 }
+
 
 /*
  * Process at least one event
@@ -2681,6 +2699,7 @@ static errr Term_xtra_sdl_event(int v)
 	return (error);
 }
 
+
 /*
  * Process all pending events
  */
@@ -2699,6 +2718,7 @@ static errr Term_xtra_sdl_flush(void)
 	return (0);
 }
 
+
 /*
  * Delay for "x" milliseconds
  */
@@ -2714,6 +2734,7 @@ static errr Term_xtra_sdl_delay(int v)
 	/* Success */
 	return (0);
 }
+
 
 static errr Term_bigcurs_sdl(int col, int row)
 {
@@ -2740,6 +2761,7 @@ static errr Term_bigcurs_sdl(int col, int row)
 	return (0);
 }
 
+
 static errr Term_curs_sdl(int col, int row)
 {
 	term_window *win = (term_window*)(Term->data);
@@ -2764,6 +2786,7 @@ static errr Term_curs_sdl(int col, int row)
 	/* Success */
 	return (0);
 }
+
 
 static errr Term_xtra_sdl(int n, int v)
 {
@@ -2801,7 +2824,7 @@ static errr Term_xtra_sdl(int n, int v)
 			/* Get the current window data */
 			term_window *win = (term_window*)(Term->data);
 
-			/* Blat it! */
+			/* Blit it! */
 			sdl_BlitWin(win);
 
 			/* Done */
@@ -2826,7 +2849,6 @@ static errr Term_xtra_sdl(int n, int v)
 
 	return (1);
 }
-
 
 
 static errr Term_wipe_sdl(int col, int row, int n)
@@ -2855,15 +2877,17 @@ static errr Term_wipe_sdl(int col, int row, int n)
 	return (0);
 }
 
+
 /*
  * Given a position in the ISO Latin-1 character set, return
  * the correct character on this system.
  */
  static byte Term_xchar_sdl(byte c)
 {
- 	/* The Sdl port uses the Latin-1 standard */
+ 	/* The SDL port uses the Latin-1 standard */
  	return (c);
 }
+
 
 /*
  * Draw some text to a window
@@ -2889,7 +2913,9 @@ static errr Term_text_sdl(int col, int row, int n, byte a, cptr s)
 	return (sdl_FontDraw(&win->font, win->surface, colour, x, y, n, s));
 }
 
+
 #ifdef USE_GRAPHICS
+
 /*
  * Do a 'stretched blit'
  * SDL has no support for stretching... What a bastard!
@@ -2965,11 +2991,10 @@ static void sdl_StretchBlit(SDL_Surface *src, SDL_Rect *srcRect, SDL_Surface *de
 					*pd32 = *ps32;
 				}
 			}
-
 		}
 	}
-
 }
+
 
 /*
  * Make the 'pre-stretched' tiles for this window
@@ -3025,6 +3050,7 @@ static errr sdl_BuildTileset(term_window *win)
 	return (0);
 }
 #endif
+
 
 /*
  * Put some gfx on the screen
@@ -3092,8 +3118,9 @@ static errr Term_pict_sdl(int col, int row, int n, const byte *ap, const char *c
 	return (0);
 }
 
+
 /*
- * Create and initialize the Term contined within this window.
+ * Create and initialize the Term contained within this window.
  */
 static void term_data_link_sdl(term_window *win)
 {
@@ -3129,6 +3156,7 @@ static void term_data_link_sdl(term_window *win)
 	t->data = win;
 }
 
+
 /*
  * Initialize the status bar:
  *  Populate it with some buttons
@@ -3148,7 +3176,7 @@ static void init_morewindows(void)
 	/* Initialize the status bar */
 	sdl_WindowInit(&StatusBar, AppWin->w, StatusHeight, AppWin, DEFAULT_FONT_FILE);
 
-	/* Cusom drawing function */
+	/* Custom drawing function */
 	StatusBar.draw_extra = draw_statusbar;
 
 	AboutSelect = sdl_ButtonBankNew(&StatusBar.buttons);
@@ -3162,7 +3190,6 @@ static void init_morewindows(void)
 	sdl_ButtonVisible(button, TRUE);
 	sdl_ButtonCaption(button, buf);
 	button->activate = AboutActivate;
-
 
 	/* New button */
 	TermSelect = sdl_ButtonBankNew(&StatusBar.buttons);
@@ -3221,6 +3248,7 @@ static void init_morewindows(void)
 
 	TermFocus(0);
 }
+
 
 #ifdef USE_GRAPHICS
 
@@ -3300,6 +3328,7 @@ static errr load_gfx(void)
 }
 #endif
 
+
 /*
  * Initialize the graphics
  */
@@ -3350,6 +3379,7 @@ static void init_gfx(void)
 #endif
 }
 
+
 /*
  * Create the windows
  * Called sometime after load_prefs()
@@ -3391,6 +3421,7 @@ static void init_windows(void)
 	/* Good to go... */
 	Term_activate(term_screen);
 }
+
 
 /*
  * Set up some SDL stuff
@@ -3448,8 +3479,6 @@ static void init_sdl_local(void)
 						   angband_color_table[TERM_DARK][2],
 						   angband_color_table[TERM_DARK][3]);
 
-
-
 	/* Initialize the colours */
 	for (i = 0; i < MAX_COLORS; i++)
 	{
@@ -3465,6 +3494,7 @@ static void init_sdl_local(void)
 	/* Font used for window titles */
 	sdl_FontCreate(&SystemFont, DEFAULT_FONT_FILE, AppWin);
 }
+
 
 static void init_paths(void)
 {
@@ -3514,6 +3544,7 @@ static void init_paths(void)
 
 
 const char help_sdl[] = "SDL frontend";
+
 /*
  * The SDL port's "main()" function.
  */
@@ -3558,5 +3589,6 @@ int init_sdl(int argc, char *argv[])
 	/* Paranoia */
 	return (0);
 }
+
 
 #endif /* USE_SDL */

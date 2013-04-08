@@ -101,7 +101,6 @@
 #endif /* HTML_HELP */
 
 
-
 /*
  * Menu constants -- see "ANGBAND.RC"
  */
@@ -174,14 +173,14 @@
 #define IDM_WINDOW_D_HGT_6		276
 #define IDM_WINDOW_D_HGT_7		277
 
-#define IDM_OPTIONS_GRAPHICS_NONE   400
-#define IDM_OPTIONS_GRAPHICS_OLD    401
-#define IDM_OPTIONS_GRAPHICS_ADAM   402
-#define IDM_OPTIONS_GRAPHICS_DAVID  403
-#define IDM_OPTIONS_BIGTILE         409
-#define IDM_OPTIONS_LOW_PRIORITY    420
-#define IDM_OPTIONS_SAVER           430
-#define IDM_OPTIONS_MAP             440
+#define IDM_OPTIONS_GRAPHICS_NONE	400
+#define IDM_OPTIONS_GRAPHICS_OLD	401
+#define IDM_OPTIONS_GRAPHICS_ADAM	402
+#define IDM_OPTIONS_GRAPHICS_DAVID	403
+#define IDM_OPTIONS_BIGTILE			409
+#define IDM_OPTIONS_LOW_PRIORITY	420
+#define IDM_OPTIONS_SAVER			430
+#define IDM_OPTIONS_MAP				440
 
 #define IDM_HELP_GENERAL		901
 #define IDM_HELP_SPOILERS		902
@@ -195,41 +194,41 @@
 /*
  * Exclude parts of WINDOWS.H that are not needed
  */
-#define NOCOMM            /* Comm driver APIs and definitions */
-#define NOLOGERROR        /* LogError() and related definitions */
-#define NOPROFILER        /* Profiler APIs */
-#define NOLFILEIO         /* _l* file I/O routines */
-#define NOOPENFILE        /* OpenFile and related definitions */
-#define NORESOURCE        /* Resource management */
-#define NOATOM            /* Atom management */
-#define NOLANGUAGE        /* Character test routines */
-#define NOLSTRING         /* lstr* string management routines */
-#define NODBCS            /* Double-byte character set routines */
-#define NOKEYBOARDINFO    /* Keyboard driver routines */
-#define NOCOLOR           /* COLOR_* color values */
-#define NODRAWTEXT        /* DrawText() and related definitions */
-#define NOSCALABLEFONT    /* Truetype scalable font support */
-#define NOMETAFILE        /* Metafile support */
-#define NOSYSTEMPARAMSINFO /* SystemParametersInfo() and SPI_* definitions */
-#define NODEFERWINDOWPOS  /* DeferWindowPos and related definitions */
-#define NOKEYSTATES       /* MK_* message key state flags */
-#define NOWH              /* SetWindowsHook and related WH_* definitions */
-#define NOCLIPBOARD       /* Clipboard APIs and definitions */
-#define NOICONS           /* IDI_* icon IDs */
-#define NOMDI             /* MDI support */
-#define NOHELP            /* Help support */
+#define NOCOMM				/* Comm driver APIs and definitions */
+#define NOLOGERROR			/* LogError() and related definitions */
+#define NOPROFILER			/* Profiler APIs */
+#define NOLFILEIO			/* _l* file I/O routines */
+#define NOOPENFILE			/* OpenFile and related definitions */
+#define NORESOURCE			/* Resource management */
+#define NOATOM				/* Atom management */
+#define NOLANGUAGE			/* Character test routines */
+#define NOLSTRING			/* lstr* string management routines */
+#define NODBCS				/* Double-byte character set routines */
+#define NOKEYBOARDINFO		/* Keyboard driver routines */
+#define NOCOLOR				/* COLOR_* color values */
+#define NODRAWTEXT			/* DrawText() and related definitions */
+#define NOSCALABLEFONT		/* Truetype scalable font support */
+#define NOMETAFILE			/* Metafile support */
+#define NOSYSTEMPARAMSINFO	/* SystemParametersInfo() and SPI_* definitions */
+#define NODEFERWINDOWPOS	/* DeferWindowPos and related definitions */
+#define NOKEYSTATES			/* MK_* message key state flags */
+#define NOWH				/* SetWindowsHook and related WH_* definitions */
+#define NOCLIPBOARD			/* Clipboard APIs and definitions */
+#define NOICONS				/* IDI_* icon IDs */
+#define NOMDI				/* MDI support */
+#define NOHELP				/* Help support */
 
 /* Not defined since it breaks Borland C++ 5.5 */
-/* #define NOCTLMGR */    /* Control management and controls */
+/* #define NOCTLMGR */		/* Control management and controls */
 
 /*
  * Exclude parts of WINDOWS.H that are not needed (Win32)
  */
 #define WIN32_LEAN_AND_MEAN
-#define NONLS             /* All NLS defines and routines */
-#define NOSERVICE         /* All Service Controller routines, SERVICE_ equates, etc. */
-#define NOKANJI           /* Kanji support stuff. */
-#define NOMCX             /* Modem Configuration Extensions */
+#define NONLS				/* All NLS defines and routines */
+#define NOSERVICE			/* All Service Controller routines, SERVICE_ equates, etc. */
+#define NOKANJI				/* Kanji support stuff. */
+#define NOMCX				/* Modem Configuration Extensions */
 
 /*
  * Include the "windows" support file
@@ -242,15 +241,15 @@
 /*
  * Exclude parts of MMSYSTEM.H that are not needed
  */
-#define MMNODRV          /* Installable driver support */
-#define MMNOWAVE         /* Waveform support */
-#define MMNOMIDI         /* MIDI support */
-#define MMNOAUX          /* Auxiliary audio support */
-#define MMNOTIMER        /* Timer support */
-#define MMNOJOY          /* Joystick support */
-#define MMNOMCI          /* MCI support */
-#define MMNOMMIO         /* Multimedia file I/O support */
-#define MMNOMMSYSTEM     /* General MMSYSTEM functions */
+#define MMNODRV			/* Installable driver support */
+#define MMNOWAVE		/* Waveform support */
+#define MMNOMIDI		/* MIDI support */
+#define MMNOAUX			/* Auxiliary audio support */
+#define MMNOTIMER		/* Timer support */
+#define MMNOJOY			/* Joystick support */
+#define MMNOMCI			/* MCI support */
+#define MMNOMMIO		/* Multimedia file I/O support */
+#define MMNOMMSYSTEM	/* General MMSYSTEM functions */
 
 #include <mmsystem.h>
 
@@ -321,7 +320,6 @@
  * Font settings
  */
 #define DEFAULT_FONT	"8x12x.fon"
-
 
 
 /*
@@ -402,6 +400,7 @@ struct _term_data
  * An array of term_data's
  */
 static term_data data[MAX_TERM_DATA];
+
 
 /*
  * Hack -- global "window creation" pointer
@@ -735,7 +734,7 @@ static char *analyze_font(char *path, int *wp, int *hp)
 
 
 /*
- * Check for existance of a directory
+ * Check for existence of a directory
  */
 static bool check_dir(cptr s)
 {
@@ -1427,7 +1426,6 @@ static errr term_force_font(term_data *td, cptr path)
 	/* Check we have a path */
 	if (!path) return (1);
 
-
 	/* Forget the old font (if needed) */
 	if (td->font_id) DeleteObject(td->font_id);
 
@@ -1458,8 +1456,6 @@ static errr term_force_font(term_data *td, cptr path)
 		td->font_file = NULL;
 	}
 
-
-
 	/* Local copy */
 	my_strcpy(buf, path, sizeof(buf));
 
@@ -1486,9 +1482,9 @@ static errr term_force_font(term_data *td, cptr path)
 
 	/* Create the font (using the 'base' of the font file name!) */
 	td->font_id = CreateFont(hgt, wid, 0, 0, FW_DONTCARE, 0, 0, 0,
-	                         ANSI_CHARSET, OUT_DEFAULT_PRECIS,
-	                         CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
-	                         FIXED_PITCH | FF_DONTCARE, base);
+							 ANSI_CHARSET, OUT_DEFAULT_PRECIS,
+							 CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+							 FIXED_PITCH | FF_DONTCARE, base);
 
 	/* Hack -- Unknown size */
 	if (!wid || !hgt)
@@ -1516,7 +1512,6 @@ static errr term_force_font(term_data *td, cptr path)
 	/* Success */
 	return (0);
 }
-
 
 
 /*
@@ -1613,7 +1608,6 @@ static void term_data_redraw_section(term_data *td, int x1, int y1, int x2, int 
 	/* Restore the term */
 	Term_activate(term_screen);
 }
-
 
 
 /*** Function hooks needed by "Term" ***/
@@ -2009,7 +2003,6 @@ static errr Term_xtra_win(int n, int v)
 }
 
 
-
 /*
  * Low level graphics (Assumes valid input).
  *
@@ -2121,6 +2114,7 @@ static errr Term_wipe_win(int x, int y, int n)
 	return 0;
 }
 
+
 /*
  * Given a position in the ISO Latin-1 character set, return
  * the correct character on this system.
@@ -2130,6 +2124,7 @@ static errr Term_wipe_win(int x, int y, int n)
  	/* The Windows port uses the Latin-1 standard */
  	return (c);
 }
+
 
 /*
  * Low level graphics.  Assumes valid input.
@@ -2180,8 +2175,8 @@ static errr Term_text_win(int x, int y, int n, byte a, cptr s)
 
 	/* Bizarre size */
 	if (td->bizarre ||
-	    (td->tile_hgt != td->font_hgt) ||
-	    (td->tile_wid != td->font_wid))
+		(td->tile_hgt != td->font_hgt) ||
+		(td->tile_wid != td->font_wid))
 	{
 		int i;
 
@@ -2971,7 +2966,6 @@ static void check_for_save_file(LPSTR cmd_line)
 #ifdef USE_SAVER
 
 
-
 /*
  * Start the screensaver
  */
@@ -2988,7 +2982,7 @@ static void start_screensaver(void)
 	/* Does the savefile already exist? */
 	file_exist = file_exists(savefile);
 
-	/* Don't try to load a non-existant savefile */
+	/* Don't try to load a non-existent savefile */
 	if (!file_exist) savefile[0] = '\0';
 
 	/* Game in progress */
@@ -3001,7 +2995,6 @@ static void start_screensaver(void)
 
 	/* Low priority */
 	SendMessage(data[0].w, WM_COMMAND, IDM_OPTIONS_LOW_PRIORITY, 0);
-
 
 	/* Play game */
 	play_game((bool)!file_exist);
@@ -3699,7 +3692,7 @@ static LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 				/* Introduce the scan code */
 				Term_keypress('x');
 
-				/* Encode the hexidecimal scan code */
+				/* Encode the hexadecimal scan code */
 				Term_keypress(hexsym[i/16]);
 				Term_keypress(hexsym[i%16]);
 
@@ -4108,7 +4101,7 @@ static LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 				/* Introduce the scan code */
 				Term_keypress('x');
 
-				/* Encode the hexidecimal scan code */
+				/* Encode the hexadecimal scan code */
 				Term_keypress(hexsym[i/16]);
 				Term_keypress(hexsym[i%16]);
 
@@ -4299,9 +4292,6 @@ LRESULT FAR PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg,
 #endif /* USE_SAVER */
 
 
-
-
-
 /*** Temporary Hooks ***/
 
 
@@ -4344,7 +4334,6 @@ static void hack_quit(cptr str)
 	/* Exit */
 	exit(0);
 }
-
 
 
 /*** Various hooks ***/
