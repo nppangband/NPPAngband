@@ -24,8 +24,6 @@
 s32b object_last_wield;
 
 
-
-
 /*** Knowledge accessor functions ***/
 
 
@@ -42,6 +40,7 @@ bool easy_know(const object_type *o_ptr)
 		return FALSE;
 }
 
+
 /**
  * \returns whether an object should be treated as fully known (e.g. ID'd)
  */
@@ -50,6 +49,7 @@ bool object_is_known(const object_type *o_ptr)
 	return (o_ptr->ident & IDENT_KNOWN) || easy_know(o_ptr) ||
 			(o_ptr->ident & IDENT_STORE);
 }
+
 
 /**
  * \returns whether the object is known to be an artifact
@@ -69,6 +69,7 @@ bool object_was_sensed(const object_type *o_ptr)
 	return o_ptr->ident & IDENT_SENSE ? TRUE : FALSE;
 }
 
+
 /**
  * \returns whether the player is aware of the object's flavour
  */
@@ -76,7 +77,6 @@ bool object_flavor_is_aware(const object_type *o_ptr)
 {
 	return k_info[o_ptr->k_idx].aware;
 }
-
 
 
 /* Flags on an object that do not affect the player, belongs in some .h file */
@@ -151,6 +151,8 @@ static int value_check_aux2(const object_type *o_ptr)
 	/* Default to "average" */
 	return (INSCRIP_AVERAGE);
 }
+
+
 /*
  * Returns TRUE if this object can be pseudo-ided.
  */
@@ -159,37 +161,36 @@ bool can_be_pseudo_ided(const object_type *o_ptr)
 	/* Valid "tval" codes */
 	switch (o_ptr->tval)
 	{
-    	case TV_SHOT:
-    	case TV_ARROW:
-    	case TV_BOLT:
-    	case TV_BOW:
-    	case TV_DIGGING:
-    	case TV_HAFTED:
-    	case TV_POLEARM:
-    	case TV_SWORD:
-    	case TV_BOOTS:
-    	case TV_GLOVES:
-    	case TV_HELM:
-    	case TV_CROWN:
-    	case TV_SHIELD:
-    	case TV_CLOAK:
-    	case TV_SOFT_ARMOR:
-    	case TV_HARD_ARMOR:
-    	case TV_DRAG_ARMOR:
+		case TV_SHOT:
+		case TV_ARROW:
+		case TV_BOLT:
+		case TV_BOW:
+		case TV_DIGGING:
+		case TV_HAFTED:
+		case TV_POLEARM:
+		case TV_SWORD:
+		case TV_BOOTS:
+		case TV_GLOVES:
+		case TV_HELM:
+		case TV_CROWN:
+		case TV_SHIELD:
+		case TV_CLOAK:
+		case TV_SOFT_ARMOR:
+		case TV_HARD_ARMOR:
+		case TV_DRAG_ARMOR:
 		case TV_DRAG_SHIELD:
-      	{
+		{
 			return (TRUE);
-      	}
-    	case TV_LIGHT:
-      	{
+		}
+		case TV_LIGHT:
+		{
 			if (o_ptr->sval == SV_LIGHT_LANTERN)
-	  		return (TRUE);
+			return (TRUE);
 			break;
-      	}
-  	}
-  	return (FALSE);
+		}
+	}
+	return (FALSE);
 }
-
 
 
 /*
@@ -232,7 +233,6 @@ void sense_inventory(void)
 	/* Check everything */
 	for (i = 0; i < ALL_INVEN_TOTAL; i++)
 	{
-
 		int squelch = SQUELCH_NO;
 
 		o_ptr = &inventory[i];
@@ -245,7 +245,7 @@ void sense_inventory(void)
 
 		/* It already has a discount or special inscription */
 		if ((o_ptr->discount > 0) &&
-		    (o_ptr->discount != INSCRIP_INDESTRUCTIBLE)) continue;
+			(o_ptr->discount != INSCRIP_INDESTRUCTIBLE)) continue;
 
 		/* It has already been sensed, do not sense it again */
 		if (o_ptr->ident & (IDENT_SENSE)) continue;
@@ -284,18 +284,19 @@ void sense_inventory(void)
 		if (i >= INVEN_WIELD)
 		{
 			msg_format("You feel the %s (%c) you are %s %s %s...",
-			           o_name, index_to_label(i), describe_use(i),
-			           ((o_ptr->number == 1) ? "is" : "are"),
-			           inscrip_text[feel - INSCRIP_NULL]);
+					   o_name, index_to_label(i), describe_use(i),
+					   ((o_ptr->number == 1) ? "is" : "are"),
+					   inscrip_text[feel - INSCRIP_NULL]);
 		}
 
 		/* Message (inventory) */
 		else
 		{
 			msg_format("You feel the %s (%c) in your pack %s %s...  %s",
-			           o_name, index_to_label(i),
-			           ((o_ptr->number == 1) ? "is" : "are"),
-			           inscrip_text[feel - INSCRIP_NULL], squelch_to_label(squelch));
+					   o_name, index_to_label(i),
+					   ((o_ptr->number == 1) ? "is" : "are"),
+					   inscrip_text[feel - INSCRIP_NULL],
+					   squelch_to_label(squelch));
 		}
 
 		/* Sense the object */
