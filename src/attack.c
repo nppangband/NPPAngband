@@ -328,13 +328,13 @@ static void dam_dice_aux(const object_type *o_ptr, int *dd, const monster_type *
 	/* Factor in reduced damage */
 	*dd /= divider;
 
-	/* Boundry Control */
+	/* Boundary Control */
 	if (*dd < 1) *dd = 1;
 }
 
-int critical_shot_chance(const object_type *o_ptr, player_state a_state, bool throw, bool id_only, u32b f3)
+int critical_shot_chance(const object_type *o_ptr, player_state a_state, bool thr, bool id_only, u32b f3)
 {
-	int i = (throw ? p_ptr->state.skills[SKILL_TO_HIT_THROW] : p_ptr->state.skills[SKILL_TO_HIT_BOW]) * 2;
+	int i = (thr ? p_ptr->state.skills[SKILL_TO_HIT_THROW] : p_ptr->state.skills[SKILL_TO_HIT_BOW]) * 2;
 
 	/* Extract "shot" power */
 	if (id_only)
@@ -344,7 +344,7 @@ int critical_shot_chance(const object_type *o_ptr, player_state a_state, bool th
 
 	else i += o_ptr->weight + (a_state.to_h + o_ptr->to_h) * 3;
 
-	if (throw)
+	if (thr)
 	{
 		/* Rogues are especially good at throwing weapons */
 		if ((cp_ptr->flags & (CF_ROGUE_COMBAT)) && (f3 & (TR3_THROWING)))
