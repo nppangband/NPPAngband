@@ -21,7 +21,6 @@
 #include "cmds.h"
 
 
-
 /*** Utility bits and bobs ***/
 
 /*
@@ -68,9 +67,13 @@ static int check_devices(object_type *o_ptr)
 	return TRUE;
 }
 
+
 /*** Inscriptions ***/
 
-/* Remove inscription */
+
+/*
+ * Remove inscription
+ */
 void do_cmd_uninscribe(cmd_code code, cmd_arg args[])
 {
 	object_type *o_ptr = object_from_item_idx(args[0].item);
@@ -115,7 +118,6 @@ void do_cmd_uninscribe(cmd_code code, cmd_arg args[])
 		if (get_check(tmp_val)) remove_autoinscription(o_ptr->k_idx);
 	}
 
-
 	msg_print("Inscription removed.");
 
 	o_ptr->obj_note = 0;
@@ -124,7 +126,10 @@ void do_cmd_uninscribe(cmd_code code, cmd_arg args[])
 	p_ptr->redraw |= (PR_INVEN | PR_EQUIP | PR_ITEMLIST);
 }
 
-/* Add inscription */
+
+/*
+ * Add inscription
+ */
 void do_cmd_inscribe(cmd_code code, cmd_arg args[])
 {
 	object_type *o_ptr = object_from_item_idx(args[0].item);
@@ -135,22 +140,14 @@ void do_cmd_inscribe(cmd_code code, cmd_arg args[])
 	p_ptr->redraw |= (PR_INVEN | PR_EQUIP | PR_ITEMLIST);
 }
 
-void obj_inscribe(object_type *o_ptr, int item)
+
+/*
+ * Inscribe a given item
+ */
+static void obj_inscribe_aux(object_type *o_ptr)
 {
 	char o_name[80];
 	char tmp[80] = "";
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
 
 	/* Describe the activity */
 	object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
@@ -218,6 +215,28 @@ void obj_inscribe(object_type *o_ptr, int item)
 }
 
 
+/*
+ * Inscribe an item
+ */
+void obj_inscribe(object_type *o_ptr, int item)
+{
+	/* FIXME The passed value of o_ptr is always overwritten before use */
+
+	/* Get the item (in the pack) */
+	if (item >= 0)
+	{
+		o_ptr = &inventory[item];
+	}
+
+	/* Get the item (on the floor) */
+	else
+	{
+		o_ptr = &o_list[0 - item];
+	}
+
+	/* inscribe the item */
+	obj_inscribe_aux(o_ptr);
+}
 
 
 /*** Examination ***/
@@ -230,9 +249,13 @@ void obj_examine(object_type *o_ptr, int item)
 	object_info_screen(o_ptr);
 }
 
+
 /*** Taking off/putting on ***/
 
-/* Take off an item */
+
+/*
+ * Take off an item
+ */
 void do_cmd_takeoff(cmd_code code, cmd_arg args[])
 {
 	int item = args[0].item;
@@ -254,7 +277,10 @@ void do_cmd_takeoff(cmd_code code, cmd_arg args[])
 	p_ptr->p_energy_use = BASE_ENERGY_MOVE / 2;
 }
 
-/* Wield or wear an item */
+
+/*
+ * Wield or wear an item
+ */
 void do_cmd_wield(cmd_code code, cmd_arg args[])
 {
 	object_type *equip_o_ptr;
@@ -353,7 +379,10 @@ void do_cmd_wield(cmd_code code, cmd_arg args[])
 
 }
 
-/* Drop an item */
+
+/*
+ * Drop an item
+ */
 void do_cmd_drop(cmd_code code, cmd_arg args[])
 {
 	int item = args[0].item;
@@ -451,7 +480,10 @@ static void obj_wield(object_type *o_ptr, int item)
 	cmd_insert(CMD_WIELD, item, slot);
 }
 
-/* Peruse spells in a book */
+
+/*
+ * Peruse spells in a book
+ */
 void obj_browse(object_type *o_ptr, int item)
 {
 	(void)item;
@@ -460,8 +492,9 @@ void obj_browse(object_type *o_ptr, int item)
 }
 
 
-
-/* Study a book to gain a new spell */
+/*
+ * Study a book to gain a new spell
+ */
 void obj_study(object_type *o_ptr, int item)
 {
 	/* Track the object kind */
@@ -485,7 +518,9 @@ void obj_study(object_type *o_ptr, int item)
 }
 
 
-/* Helper function to help spells that target traps (disarming, etc...) */
+/*
+ * Helper function to help spells that target traps (disarming, etc...)
+ */
 static bool is_trap_spell(byte spell_book, int spell)
 {
 	if (spell_book == TV_MAGIC_BOOK)
@@ -528,11 +563,12 @@ void obj_cast(object_type *o_ptr, int item)
 		return;
 
 	cmd_insert(CMD_CAST, spell, dir);
-
 }
 
 
-/* Determine if the player can read scrolls. */
+/*
+ * Determine if the player can read scrolls.
+ */
 static bool player_can_read(void)
 {
 	if (p_ptr->timed[TMD_BLIND])
@@ -557,6 +593,9 @@ static bool player_can_read(void)
 	return TRUE;
 }
 
+/*
+ * Eat something
+ */
 static bool eat_food(object_type *o_ptr, bool *ident)
 {
 	/* Analyze the food */
@@ -735,7 +774,6 @@ static bool eat_food(object_type *o_ptr, bool *ident)
 			break;
 		}
 
-
 		case SV_FOOD_RATION:
 		case SV_FOOD_SLIME_MOLD:
 		{
@@ -762,10 +800,11 @@ static bool eat_food(object_type *o_ptr, bool *ident)
 }
 
 
+/*
+ * Quaff a potion
+ */
 static bool quaff_potion(object_type *o_ptr, bool *ident)
 {
-
-
 	/* Analyze the potion */
 	switch (o_ptr->sval)
 	{
@@ -1296,6 +1335,9 @@ static bool quaff_potion(object_type *o_ptr, bool *ident)
 }
 
 
+/*
+ * Read a scroll
+ */
 static bool read_scroll(object_type *o_ptr, bool *ident)
 {
 	int py = p_ptr->py;
@@ -1613,7 +1655,7 @@ static bool read_scroll(object_type *o_ptr, bool *ident)
 
 			int item;
 
-			/*artifact power is based on depth*/
+			/* artifact power is based on depth */
 			int randart_power = 10 + effective_depth(p_ptr->depth);
 
 			/* Get an item */
@@ -1624,7 +1666,7 @@ static bool read_scroll(object_type *o_ptr, bool *ident)
 
 			if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) break;
 
-			/*Got the item*/
+			/* Got the item */
 			o_ptr = &inventory[item];
 
 			if ((adult_no_artifacts) || (adult_no_xtra_artifacts))
@@ -1633,7 +1675,7 @@ static bool read_scroll(object_type *o_ptr, bool *ident)
 				break;
 			}
 
-			/*occasional power boost*/
+			/* occasional power boost */
 			while (one_in_(25)) randart_power += 25;
 
 			if (make_one_randart(o_ptr, randart_power, FALSE))
@@ -1650,7 +1692,7 @@ static bool read_scroll(object_type *o_ptr, bool *ident)
 
 				object_history(o_ptr, ORIGIN_ACQUIRE, 0);
 
-				/*Let the player know what they just got*/
+				/* Let the player know what they just got */
 				object_info_screen(o_ptr);
 
 			}
@@ -1691,6 +1733,9 @@ static bool read_scroll(object_type *o_ptr, bool *ident)
 }
 
 
+/*
+ * Use a staff
+ */
 static bool use_staff(object_type *o_ptr, bool *ident)
 {
 	int py = p_ptr->py;
@@ -1942,18 +1987,21 @@ static bool use_staff(object_type *o_ptr, bool *ident)
 }
 
 
+/*
+ * Aim a wand
+ */
 static bool aim_wand(object_type *o_ptr, bool *ident, int dir)
 {
 	int sval;
 
 
-	/*Special allowance for disarming and traps*/
+	/* Special allowance for disarming and traps */
 	bool is_disarm = FALSE;
 
 	if ((object_aware_p(o_ptr)) && ((o_ptr->sval == SV_WAND_DISARMING) ||
 			(o_ptr->sval == SV_WAND_TRAP_DOOR_DEST))) is_disarm = TRUE;
 
-	/* Allow direction to be cancelled for free */
+	/* Allow direction to be canceled for free */
 	if (!dir)
 	{
 		if (!get_aim_dir(&dir, is_disarm)) return (FALSE);
@@ -2205,6 +2253,9 @@ static bool aim_wand(object_type *o_ptr, bool *ident, int dir)
 }
 
 
+/*
+ * Zap a rod
+ */
 static bool zap_rod(object_type *o_ptr, bool *ident, int dir)
 {
 	bool used_charge = TRUE;
@@ -2455,8 +2506,6 @@ static bool zap_rod(object_type *o_ptr, bool *ident, int dir)
 		o_ptr->timeout += k_ptr->pval;
 
 	}
-
-
 
 	return TRUE;
 }
@@ -2782,7 +2831,6 @@ static bool activate_object(object_type *o_ptr, int dir)
 				break;
 			}
 
-
 			case ACT_FIRE2:
 			{
 				msg_format("Your %s rages in fire...", o_name);
@@ -2888,30 +2936,35 @@ static bool activate_object(object_type *o_ptr, int dir)
 				inc_timed(TMD_SHERO, randint(50) + 50, TRUE);
 				break;
 			}
+
 			case ACT_RES_ACID:
 			{
 				msg_format("Your %s glows light gray...", o_name);
 				(void)inc_timed(TMD_OPP_ACID, randint(20) + 20, TRUE);
 				break;
 			}
+
 			case ACT_RES_ELEC:
 			{
 				msg_format("Your %s glows light blue...", o_name);
 				(void)inc_timed(TMD_OPP_ELEC, randint(20) + 20, TRUE);
 				break;
 			}
+
 			case ACT_RES_FIRE:
 			{
 				msg_format("Your %s glows light red...", o_name);
 				(void)inc_timed(TMD_OPP_FIRE, randint(20) + 20, TRUE);
 				break;
 			}
+
 			case ACT_RES_COLD:
 			{
 				msg_format("Your %s glows bright white...", o_name);
 				(void)inc_timed(TMD_OPP_COLD, randint(20) + 20, TRUE);
 				break;
 			}
+
 			case ACT_RES_POIS:
 			{
 				msg_format("Your %s glows light green...", o_name);
@@ -2920,10 +2973,12 @@ static bool activate_object(object_type *o_ptr, int dir)
 			}
 
 			default:
-		   	{
+			{
 				if ((a_ptr->tval != TV_DRAG_ARMOR) &&
 					(a_ptr->tval != TV_DRAG_SHIELD)) return (FALSE);
 				else did_activation = FALSE;
+
+				break;
 			}
 		}
 
@@ -2942,7 +2997,6 @@ static bool activate_object(object_type *o_ptr, int dir)
 			return FALSE;
 		}
 	}
-
 
 	/* Hack -- Dragon Scale Mail can be activated as well */
 	if ((o_ptr->tval == TV_DRAG_ARMOR) ||
@@ -3225,8 +3279,9 @@ static bool activate_object(object_type *o_ptr, int dir)
 }
 
 
-
-
+/*
+ * Use an object
+ */
 static bool use_object(object_type *o_ptr, bool *ident, bool aware, int dir)
 {
 	bool used;
@@ -3282,10 +3337,8 @@ static bool use_object(object_type *o_ptr, bool *ident, bool aware, int dir)
 }
 
 
-
-
-
 /*** Using items the traditional way ***/
+
 
 /*
  * Use an object the right way.
@@ -3457,7 +3510,6 @@ void do_cmd_use(cmd_code code, cmd_arg args[])
 			gain_exp((lev + (p_ptr->lev / 2)) / p_ptr->lev);
 			apply_autoinscription(o_ptr);
 		}
-
 	}
 
 	/* If the item is a null pointer or has been wiped, be done now */
@@ -3519,13 +3571,11 @@ void do_cmd_use(cmd_code code, cmd_arg args[])
 		/* Delete the "moved" objects from their original position */
 		delete_object(py, px);
 	}
-
 }
 
 
-
-
 /*** Handling bits ***/
+
 
 /* Item "action" type */
 typedef struct
@@ -3679,7 +3729,10 @@ static bool trap_related_object(object_type *o_ptr)
 
 /*** Old-style noun-verb functions ***/
 
-/* Generic "do item action" function */
+
+/*
+ * Generic "do item action" function
+ */
 static void do_item(item_act act)
 {
 	int item;
