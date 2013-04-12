@@ -3997,13 +3997,12 @@ void do_cmd_reward(cmd_code code, cmd_arg args[])
 	/*It's an ironman spellbook, so make the spells available. */
 	if ((k_ptr->k_flags3 & (TR3_IRONMAN_ONLY)) && (cp_ptr->spell_book == k_ptr->tval))
 	{
-		byte realm, j;
-		realm = get_player_spell_realm();
+		byte j;
 
 		/* Extract spells */
 		for (j = 0; j < SPELLS_PER_BOOK; j++)
 		{
-			s16b spell = spell_list[realm][k_ptr->sval][j];
+			s16b spell = get_spell_from_list(k_ptr->sval, j);
 
 			/*skip blank spell slots*/
 			if (spell == -1) continue;

@@ -915,3 +915,42 @@ void spell_learn(int spell)
 	p_ptr->redraw |= (PR_STUDY | PR_OBJECT);
 }
 
+s16b get_spell_from_list(s16b book, s16b spell)
+{
+	int realm = get_player_spell_realm();
+
+	if (game_mode == GAME_NPPMORIA)
+	{
+		/* Check bounds */
+		if ((spell < 0) || (spell >= SPELLS_PER_BOOK)) return (-1);
+		if ((book < 0) || (book >= BOOKS_PER_REALM_MORIA)) return (-1);
+
+		if (realm == MAGE_REALM) return (spell_list_nppmoria_mage[book][spell]);
+		if (realm == PRIEST_REALM) return (spell_list_nppmoria_priest[book][spell]);
+	}
+	else
+	{
+		/* Check bounds */
+		if ((spell < 0) || (spell >= SPELLS_PER_BOOK)) return (-1);
+		if ((book < 0) || (book >= BOOKS_PER_REALM_ANGBAND)) return (-1);
+
+		if (realm == MAGE_REALM) return (spell_list_nppangband_mage[book][spell]);
+		if (realm == PRIEST_REALM) return (spell_list_nppangband_priest[book][spell]);
+		if (realm == DRUID_REALM) return (spell_list_nppangband_druid[book][spell]);
+	}
+
+
+	/* Whoops! */
+	return (-1);
+}
+
+
+
+int get_spell_index(const object_type *o_ptr, int index)
+{
+	return get_spell_from_list(o_ptr->sval,index);
+}
+
+
+
+

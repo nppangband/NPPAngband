@@ -3094,8 +3094,12 @@ void create_food(void)
 	/* Remember history */
 	object_history(i_ptr, ORIGIN_MAGIC, 0);
 
-	/* Drop the object */
+	/* First try to put it in the inventory */
+	if (put_object_in_inventory(i_ptr)) return;
+
+	/* If that fails, drop it on the floor Drop the object */
 	drop_near(i_ptr, -1, p_ptr->py, p_ptr->px);
+
 }
 
 

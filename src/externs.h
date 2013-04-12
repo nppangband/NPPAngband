@@ -73,7 +73,11 @@ extern const byte extract_energy[200];
 extern const s32b player_exp_nppangband[PY_MAX_LEVEL];
 extern const s32b player_exp_nppmoria[PY_MAX_LEVEL_MORIA];
 extern const player_sex sex_info[MAX_SEXES];
-extern const s16b spell_list[3][BOOKS_PER_REALM][SPELLS_PER_BOOK];
+extern const s16b spell_list_nppmoria_mage[BOOKS_PER_REALM_MORIA][SPELLS_PER_BOOK];
+extern const s16b spell_list_nppmoria_priest[BOOKS_PER_REALM_MORIA][SPELLS_PER_BOOK];
+extern const s16b spell_list_nppangband_mage[BOOKS_PER_REALM_ANGBAND][SPELLS_PER_BOOK];
+extern const s16b spell_list_nppangband_priest[BOOKS_PER_REALM_ANGBAND][SPELLS_PER_BOOK];
+extern const s16b spell_list_nppangband_druid[BOOKS_PER_REALM_ANGBAND][SPELLS_PER_BOOK];
 extern cptr feeling_themed_level[LEV_THEME_TAIL];
 extern const byte chest_traps[64];
 extern cptr color_names[16];
@@ -566,6 +570,8 @@ extern void do_cmd_study_spell(cmd_code code, cmd_arg args[]);
 extern void do_cmd_study_book(cmd_code code, cmd_arg args[]);
 extern void do_cmd_cast(cmd_code code, cmd_arg args[]);
 extern void spell_learn(int spell);
+extern s16b get_spell_from_list(s16b book, s16b spell);
+extern int get_spell_index(const object_type *o_ptr, int index);
 
 
 
@@ -1423,7 +1429,6 @@ extern const char seven_bit_translation[128];
 extern char xchar_trans(byte c);
 
 /* x-spell.c */
-extern int get_spell_index(const object_type *o_ptr, int index);
 extern bool spell_needs_aim(int tval, int spell);
 extern cptr do_mage_spell(int mode, int spell, int dir);
 extern cptr do_druid_incantation(int mode, int spell, int dir);
