@@ -314,10 +314,8 @@ static void calc_mana(void)
 		msp -= ((cur_wgt - max_wgt) / 10);
 	}
 
-
 	/* Mana can never be negative */
 	if (msp < 0) msp = 0;
-
 
 	/* Maximum mana has changed */
 	if (p_ptr->msp != msp)
@@ -334,9 +332,7 @@ static void calc_mana(void)
 
 		/* Display mana later */
 		p_ptr->redraw |= (PR_MANA);
-
 	}
-
 
 	/* Hack -- handle "xtra" mode */
 	if (character_xtra) return;
@@ -355,7 +351,6 @@ static void calc_mana(void)
 		}
 	}
 
-
 	/* Take note when "armor state" changes */
 	if (old_cumber_armor != p_ptr->state.cumber_armor)
 	{
@@ -370,7 +365,6 @@ static void calc_mana(void)
 		}
 	}
 }
-
 
 
 /*
@@ -409,12 +403,11 @@ static void calc_hitpoints(void)
 		/* Hack - any change in max hitpoint resets frac */
 		p_ptr->chp_frac = 0;
 
-		/* Dihplay hp later */
+		/* Display hp later */
 		p_ptr->redraw |= (PR_HP);
 
 	}
 }
-
 
 
 /*
@@ -500,6 +493,7 @@ static void calc_torch(void)
 	p_ptr->update |= (PU_MONSTERS);
 }
 
+
 /*
  * Extract and set the current nativity status
  */
@@ -542,7 +536,6 @@ static void calc_nativity(void)
 		object_flags_known(o_ptr, &f1, &f2, &f3, &fn);
 
 		p_ptr->p_native_known |= fn;
-
 	}
 
 	/*Manually add the temporary native flags.  Assume known*/
@@ -578,6 +571,7 @@ static void calc_nativity(void)
 	}
 
 }
+
 
 /*
  * Computes current weight limit.
@@ -663,6 +657,7 @@ static void calc_stealth(void)
 	}
 }
 
+
 /*
  * Go through player inventory, equipment, and quiver to calculate the player weight.
  */
@@ -688,6 +683,7 @@ static void calc_player_weight(void)
 		p_ptr->total_weight += o_ptr->weight * o_ptr->number;
 	}
 }
+
 
 /*
  * Go through player inventory, equipment, and quiver to calculate inventory count.
@@ -715,6 +711,7 @@ static void calc_inven_cnt(void)
 	}
 }
 
+
 /*
  * Calculate the number of attacks a player gets with a weapon per round.
  * Does not factor in extra attacks from weapon flags
@@ -728,7 +725,7 @@ int calc_blows(const object_type *o_ptr, player_state *new_state)
 	str_ind = new_state->stat_ind[A_STR];
 	dex_ind = new_state->stat_ind[A_DEX];
 
-	/* Boundry control */
+	/* Boundary control */
 	if (str_ind <  0) str_ind =  0;
 	if (str_ind > 37) str_ind = 37;
 	if (dex_ind <  0) dex_ind =  0;
@@ -760,6 +757,7 @@ int calc_blows(const object_type *o_ptr, player_state *new_state)
 
 	return (new_blows);
 }
+
 
 /*
  * Calculate the players current "state", taking into account
@@ -918,6 +916,7 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 	new_state->immune_cold = FALSE;
 	new_state->immune_pois = FALSE;
 
+
 	/*** Extract race/class info ***/
 
 	/* Base infravision plus current lite radius */
@@ -949,6 +948,7 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 
 	/* Base skill -- digging */
 	new_state->skills[SKILL_DIGGING] = 0;
+
 
 	/*** Analyze player ***/
 
@@ -1130,11 +1130,10 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 			new_state->to_d += o_ptr->to_d;
 		}
 
-		/* Apply the mental bonuses tp hit/damage, if known */
+		/* Apply the mental bonuses to hit/damage, if known */
 		if (object_known_p(o_ptr)) new_state->dis_to_h += o_ptr->to_h;
 		if (object_known_p(o_ptr)) new_state->dis_to_d += o_ptr->to_d;
 	}
-
 
 	/* Find cursed ammo in the quiver */
 	new_state->cursed_quiver = FALSE;
@@ -1161,6 +1160,7 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 
 	/*finally, add infravision to lite radius*/
 	if (new_state->see_infra) new_state->see_infra += new_state->cur_light;
+
 
 	/*** Handle stats ***/
 
@@ -1319,6 +1319,7 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 	/* Sanity check on extreme speeds */
 	if (new_state->p_speed < 0) 		new_state->p_speed = 0;
 	if (new_state->p_speed > 199) 		new_state->p_speed = 199;
+
 
 	/*** Apply modifier bonuses ***/
 
@@ -1482,6 +1483,7 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 	{
 		new_state->resist_pois = TRUE;
 	}
+
 
 	/*** Analyze weapon ***/
 
@@ -1713,6 +1715,7 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 
 }
 
+
 /*
  * Handle "p_ptr->notice"
  */
@@ -1828,9 +1831,7 @@ void update_stuff(void)
 
 	/* Clear all flags */
 	p_ptr->update = 0;
-
 }
-
 
 
 struct flag_event_trigger
@@ -1845,37 +1846,37 @@ struct flag_event_trigger
  */
 static const struct flag_event_trigger redraw_events[] =
 {
-	{ PR_MISC,    EVENT_RACE_CLASS },
-	{ PR_TITLE,   EVENT_PLAYERTITLE },
-	{ PR_LEV,     EVENT_PLAYERLEVEL },
-	{ PR_EXP,     EVENT_EXPERIENCE },
-	{ PR_STATS,   EVENT_STATS },
-	{ PR_ARMOR,   EVENT_AC },
-	{ PR_HP,      EVENT_HP },
-	{ PR_MANA,    EVENT_MANA },
-	{ PR_GOLD,    EVENT_GOLD },
-	{ PR_HEALTH,  EVENT_MONSTERHEALTH },
-	{ PR_DEPTH,   EVENT_DUNGEONLEVEL },
-	{ PR_SPEED,   EVENT_PLAYERSPEED },
-	{ PR_STATE,   EVENT_STATE },
-	{ PR_STATUS,  EVENT_STATUS },
-	{ PR_STUDY,   EVENT_STUDYSTATUS },
-	{ PR_DTRAP,   EVENT_DETECTIONSTATUS },
-	{ PR_BUTTONS, EVENT_MOUSEBUTTONS },
+	{ PR_MISC,		EVENT_RACE_CLASS },
+	{ PR_TITLE,		EVENT_PLAYERTITLE },
+	{ PR_LEV,		EVENT_PLAYERLEVEL },
+	{ PR_EXP,		EVENT_EXPERIENCE },
+	{ PR_STATS,		EVENT_STATS },
+	{ PR_ARMOR,		EVENT_AC },
+	{ PR_HP,		EVENT_HP },
+	{ PR_MANA,		EVENT_MANA },
+	{ PR_GOLD,		EVENT_GOLD },
+	{ PR_HEALTH,	EVENT_MONSTERHEALTH },
+	{ PR_DEPTH,		EVENT_DUNGEONLEVEL },
+	{ PR_SPEED,		EVENT_PLAYERSPEED },
+	{ PR_STATE,		EVENT_STATE },
+	{ PR_STATUS,	EVENT_STATUS },
+	{ PR_STUDY,		EVENT_STUDYSTATUS },
+	{ PR_DTRAP,		EVENT_DETECTIONSTATUS },
+	{ PR_BUTTONS,	EVENT_MOUSEBUTTONS },
 
-	{ PR_INVEN,   EVENT_INVENTORY },
-	{ PR_EQUIP,   EVENT_EQUIPMENT },
+	{ PR_INVEN,		EVENT_INVENTORY },
+	{ PR_EQUIP,		EVENT_EQUIPMENT },
 
 	/* It is now important that this be processed before PR_MONSTER */
-	{ PR_MONLIST, EVENT_MONSTERLIST },
-	{ PR_ITEMLIST, EVENT_ITEMLIST },
-	{ PR_MONSTER, EVENT_MONSTERTARGET },
-	{ PR_OBJECT, EVENT_OBJECTTARGET },
-	{ PR_MESSAGE, EVENT_MESSAGE },
-	{ PR_RESIST, EVENT_RESISTANCES },
-	{ PR_QUEST_ST, EVENT_QUEST_TICKER },
-	{ PR_FEELING, EVENT_FEELING },
-	{ PR_FEATURE, EVENT_FEATURE},
+	{ PR_MONLIST,	EVENT_MONSTERLIST },
+	{ PR_ITEMLIST,	EVENT_ITEMLIST },
+	{ PR_MONSTER,	EVENT_MONSTERTARGET },
+	{ PR_OBJECT,	EVENT_OBJECTTARGET },
+	{ PR_MESSAGE,	EVENT_MESSAGE },
+	{ PR_RESIST,	EVENT_RESISTANCES },
+	{ PR_QUEST_ST,	EVENT_QUEST_TICKER },
+	{ PR_FEELING,	EVENT_FEELING },
+	{ PR_FEATURE,	EVENT_FEATURE},
 
 };
 
@@ -1912,7 +1913,6 @@ void redraw_stuff(void)
 		{
 			event_signal(hnd->event);
 		}
-
 	}
 
 	/* Then the ones that require parameters to be supplied. */
@@ -1929,7 +1929,6 @@ void redraw_stuff(void)
 	 * is over.
 	 */
 	event_signal(EVENT_END);
-
 }
 
 
@@ -1944,8 +1943,5 @@ void handle_stuff(void)
 
 	/* Redraw stuff */
 	if (p_ptr->redraw) redraw_stuff();
-
 }
-
-
 
