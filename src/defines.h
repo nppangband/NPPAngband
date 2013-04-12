@@ -72,6 +72,10 @@
 #define OLD_VERSION_MINOR	6
 #define OLD_VERSION_PATCH	0
 
+/* Various game modes */
+#define GAME_NPPANGBAND		1
+#define GAME_NPPMORIA		2
+
 
 /*
  * Number of grids in each block (vertically)
@@ -210,10 +214,13 @@
 /*
  * Maximum dungeon level.  The player can never reach this level
  * in the dungeon, and this value is used for various calculations
- * involving object and monster creation.  It must be at least 100.
+ * involving object and monster creation.  In Angband, it must be at least 100.
+ * In Moria, it must be above 50
  * Setting it below 128 may prevent the creation of some objects.
  */
-#define MAX_DEPTH	128
+#define MAX_DEPTH_ALL	128
+#define MAX_DEPTH  		((game_mode == GAME_NPPMORIA) ? 64: 128)
+#define MORIA_QUEST_DEPTH	50
 
 
 /*

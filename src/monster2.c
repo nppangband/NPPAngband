@@ -706,6 +706,9 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 				if (mp_flags & (MPLACE_NO_MIMIC)) continue;
 			}
 
+			/* Hack -- some monsters can only be placed via treatment */
+			if (r_ptr->flags2 & (RF2_SPECIAL)) continue;
+
 			/* Hack -- "unique" monsters must be "unique" */
 			if (r_ptr->flags1 & (RF1_UNIQUE))
 			{
@@ -3970,7 +3973,7 @@ bool alloc_monster(int dis, byte mp_flags)
 			msg_print("Warning! Could not allocate a new monster.");
 		}
 
-		return FALSE;
+		return (FALSE);
 	}
 
 	/* Pick a monster */
@@ -4477,6 +4480,7 @@ static const char *msg_repository[MAX_MON_MSG + 1] =
 	/* From project_m */ 		/* MON_MSG_DIE */
 	"die[s].",   				/* MON_MSG_DIE  */
 	"[is|are] destroyed.",		/* MON_MSG_DESTROYED */
+	"[is|are] embedded in the wall.",	/* MON_MSG_BURIED_ROCK */
 	"resist[s] a lot.",			/* MON_MSG_RESIST_A_LOT */
 	"[is|are] hit hard.",		/* MON_MSG_HIT_HARD */
 	"resist[s].",				/* MON_MSG_RESIST */
@@ -4494,6 +4498,8 @@ static const char *msg_repository[MAX_MON_MSG + 1] =
 	"dissolve[s]!",				/* MON_MSG_DISSOLVE */
 	"catch[es] fire!",			/* MON_MSG_CATCH_FIRE */
 	"[is|are] badly frozen.", 	 /* MON_MSG_BADLY_FROZEN */
+	"[is|are] badly burned.", 	 /* MON_MSG_BADLY_BURNED */
+	"[is|are] severely poisoned.", 	 /* MON_MSG_BADLY_POISONED */
 	"shudder[s].",				/* MON_MSG_SHUDDER */
 	"become[s] aware of your crafty abilities.",/* MON_MSG_AWARE_OF_CRAFTY_ABILITIES */
 	"take[s] heed of your cunning tactics.",/* MON_MSG_AWARE_OF_CUNNING_TACTICS  */
@@ -4517,8 +4523,10 @@ static const char *msg_repository[MAX_MON_MSG + 1] =
 	"flee[s] in terror!",		/* MON_MSG_FLEE_IN_TERROR */
 	"[is|are] no longer afraid.",/* MON_MSG_NOT_AFRAID */
 	"~You hear [a|several] scream[|s] of agony!",/* MON_MSG_MORIA_DEATH */
-	"disintegrates!",		/* MON_MSG_DISENTEGRATES */
+	"disintegrate[s]!",		/* MON_MSG_DISENTEGRATES */
+	"melt[s] away.",		/* MON_MSG_MELTS_AWAY */
 	"freeze[s] and shatter[s].",  /* MON_MSG_FREEZE_SHATTER */
+	"choke[s] and die[s].",  /* MON_MSG_CHOKE_DIE */
 	"lose[s] some mana!",		/* MON_MSG_MANA_DRAIN */
 	"~There [is|are] [a|several] mimic[|s]!",		/* MON_MSG_MIMIC_REVEAL */
 	"appear[s]!",				/* MON_MSG_MIMIC_APPEARS */

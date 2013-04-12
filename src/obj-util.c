@@ -3093,6 +3093,29 @@ void acquirement(int y1, int x1, int num, bool great)
 	}
 }
 
+/*
+ * Scatter some "great" objects near the player
+ */
+void create_food(void)
+{
+	object_type *i_ptr;
+	object_type object_type_body;
+
+	/* Get local object */
+	i_ptr = &object_type_body;
+
+	/* Wipe the object */
+	object_wipe(i_ptr);
+
+	object_prep(i_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
+
+	/* Remember history */
+	object_history(i_ptr, ORIGIN_MAGIC, 0);
+
+	/* Drop the object */
+	drop_near(i_ptr, -1, p_ptr->py, p_ptr->px);
+}
+
 
 /*
  * Describe the charges on an item in the inventory.

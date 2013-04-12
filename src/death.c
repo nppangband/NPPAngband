@@ -79,7 +79,7 @@ static void print_tomb(void)
 	if (p_ptr->total_winner)
 		put_str_centred(line++, 8, 8+31, "Magnificent");
 	else
-		put_str_centred(line++, 8, 8+31, "%s", c_text + cp_ptr->title[(p_ptr->lev - 1) / 5]);
+		put_str_centred(line++, 8, 8+31, "%s", get_player_title());
 
 	line++;
 

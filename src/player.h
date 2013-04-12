@@ -338,7 +338,9 @@
  */
 #define PY_MAX_EXP	99999999L	/* Maximum exp */
 #define PY_MAX_GOLD	999999999L	/* Maximum gold */
-#define PY_MAX_LEVEL	50		/* Maximum level */
+#define PY_MAX_LEVEL		50		/* Maximum level */
+#define PY_MAX_LEVEL_MORIA	40		/* Maximum level */
+
 
 /*
  * Player "food" crucial values

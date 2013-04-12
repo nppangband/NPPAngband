@@ -284,18 +284,18 @@ static void roll_hp(void)
 	int i, j, min_value, max_value;
 
 	/* Minimum hitpoints at highest level */
-	min_value = (PY_MAX_LEVEL * (p_ptr->hitdie - 1) * 3) / 8;
-	min_value += PY_MAX_LEVEL;
+	min_value = (z_info->max_level * (p_ptr->hitdie - 1) * 3) / 8;
+	min_value += z_info->max_level;
 
 	/* Maximum hitpoints at highest level */
-	max_value = (PY_MAX_LEVEL * (p_ptr->hitdie - 1) * 5) / 8;
-	max_value += PY_MAX_LEVEL;
+	max_value = (z_info->max_level * (p_ptr->hitdie - 1) * 5) / 8;
+	max_value += z_info->max_level;
 
 	/* Roll out the hitpoints */
 	while (TRUE)
 	{
 		/* Roll the hitpoint values */
-		for (i = 1; i < PY_MAX_LEVEL; i++)
+		for (i = 1; i < z_info->max_level; i++)
 		{
 			j = randint1(p_ptr->hitdie);
 			p_ptr->player_hp[i] = p_ptr->player_hp[i-1] + j;
@@ -304,8 +304,8 @@ static void roll_hp(void)
 		/* XXX Could also require acceptable "mid-level" hitpoints */
 
 		/* Require "valid" hitpoints at highest level */
-		if (p_ptr->player_hp[PY_MAX_LEVEL-1] < min_value) continue;
-		if (p_ptr->player_hp[PY_MAX_LEVEL-1] > max_value) continue;
+		if (p_ptr->player_hp[z_info->max_level-1] < min_value) continue;
+		if (p_ptr->player_hp[z_info->max_level-1] > max_value) continue;
 
 		/* Acceptable */
 		break;

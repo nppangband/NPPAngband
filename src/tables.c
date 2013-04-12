@@ -1193,11 +1193,55 @@ const byte extract_energy[200] =
 	/* Fast */    49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
 };
 
+const s32b player_exp_nppmoria[PY_MAX_LEVEL_MORIA] =
+{
+      10,			/* Experience needed to gain level 2 */
+      25,			/* Experience needed to gain level 3 */
+      45,			/* Experience needed to gain level 4 */
+      70,			/* Experience needed to gain level 5 */
+      100,			/* Experience needed to gain level 6 */
+      140,			/* Experience needed to gain level 7 */
+      200,			/* Experience needed to gain level 8 */
+      280,			/* Experience needed to gain level 9 */
+      380,			/* Experience needed to gain level 10 */
+      500,			/* Experience needed to gain level 11 */
+      650,			/* Experience needed to gain level 12 */
+      850,	 		/* Experience needed to gain level 13 */
+      1100,	   		/* Experience needed to gain level 14 */
+      1400,     	/* Experience needed to gain level 15 */
+      1800,     	/* Experience needed to gain level 16 */
+      2300,			/* Experience needed to gain level 17 */
+      2900,    		/* Experience needed to gain level 18 */
+      3600,    		/* Experience needed to gain level 19 */
+      4400,    		/* Experience needed to gain level 20 */
+      5400,	 		/* Experience needed to gain level 21 */
+      6800,	   		/* Experience needed to gain level 22 */
+      8400,    		/* Experience needed to gain level 23 */
+      10200,    	/* Experience needed to gain level 24 */
+      12500,		/* Experience needed to gain level 25 */
+      17500,   		/* Experience needed to gain level 26 */
+      25000,  		/* Experience needed to gain level 27 */
+      35000L,  		/* Experience needed to gain level 28 */
+      50000L,   	/* Experience needed to gain level 29 */
+      75000L,		/* Experience needed to gain level 30 */
+      100000L,  	/* Experience needed to gain level 31 */
+      150000L,  	/* Experience needed to gain level 32 */
+      200000L,		/* Experience needed to gain level 33 */
+      300000L, 		/* Experience needed to gain level 34 */
+      400000L, 		/* Experience needed to gain level 35 */
+      500000L, 		/* Experience needed to gain level 36 */
+      750000L, 		/* Experience needed to gain level 37 */
+      1500000L, 	/* Experience needed to gain level 38 */
+      2500000L, 	/* Experience needed to gain level 39 */
+      5000000L, 	/* Experience needed to gain level 40 */
+      10000000L		/* Level 40 */
+};
+
 
 /*
  * Base experience levels, may be adjusted up for race and/or class
  */
-const s32b player_exp[PY_MAX_LEVEL] =
+const s32b player_exp_nppangband[PY_MAX_LEVEL] =
 {
 		10,			/* Experience needed to gain level 2 */
 		25,			/* Experience needed to gain level 3 */

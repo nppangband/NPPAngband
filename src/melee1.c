@@ -414,6 +414,13 @@ bool make_attack_normal(monster_type *m_ptr)
 				sound_msg = MSG_MON_BITE;
 				break;
 			}
+			case RBM_BREATHE:
+			{
+				act = "breathes on you";
+				do_cut = 1;
+				sound_msg = MSG_BR_ACID;
+				break;
+			}
 			case RBM_STING:
 			{
 				act = "stings you";
@@ -489,8 +496,12 @@ bool make_attack_normal(monster_type *m_ptr)
 				sound_msg = MSG_MON_SPORE;
 				break;
 			}
-			case RBM_XXX1:
-			case RBM_XXX4:
+			case RBM_TRAMPLE:
+			{
+				act = "tramples all over you!";
+				sound_msg = MSG_MON_CRUSH;
+				break;
+			}
 			case RBM_XXX5:
 			case RBM_XXX6:
 			{
@@ -1664,7 +1675,7 @@ bool make_attack_normal(monster_type *m_ptr)
 				case RBM_BITE:
 				case RBM_PECK:
 				case RBM_STING:
-				case RBM_XXX1:
+				case RBM_BREATHE:
 				case RBM_BUTT:
 				case RBM_CRUSH:
 

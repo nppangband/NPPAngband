@@ -670,6 +670,7 @@ s16b charge_wand(object_type *o_ptr, int percent)
 		case SV_WAND_DRAGON_FIRE:		pval = randint(3)  + 1; break;
 		case SV_WAND_DRAGON_COLD:		pval = randint(3)  + 1; break;
 		case SV_WAND_DRAGON_BREATH:		pval = randint(3)  + 1; break;
+		case SV_WAND_WALL_BUILDING:		pval = randint(5)  + 3; break;
 	}
 
 	/* Apply the proportional amount of charges */
@@ -720,6 +721,8 @@ s16b charge_staff(object_type *o_ptr, int percent)
 		case SV_STAFF_EARTHQUAKES:		pval = randint(5)  + 3; break;
 		case SV_STAFF_DESTRUCTION:		pval = randint(3)  + 1; break;
 		case SV_STAFF_MASS_IDENTIFY:	pval = randint(5) + 5; break;
+		case SV_STAFF_MASS_POLYMORPH:	pval = randint(5)  + 6; break;
+		case SV_STAFF_REMOVE_CURSE:		pval = randint(3)  + 4; break;
 	}
 
 	/* Apply the proportional amount of charges */
@@ -753,7 +756,17 @@ static int choose_chest_contents (void)
 
 	else num = object_level;
 
+	/* Hack - some themes don't work in Moria, and there are fewer levels. Cut it off at 60. */
+	if (game_mode == GAME_NPPMORIA)
+	{
+		if ((object_level + minlevel) > 60) num = 60 - minlevel;
+
+		else num = object_level;
+	}
+
 	chestlevel = randint (num) + minlevel;
+
+
 
 	/*now determine the chest theme*/
 
@@ -1038,6 +1051,31 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				/* Ring of Speed! */
 				case SV_RING_SPEED:
 				{
+					if (game_mode == GAME_NPPMORIA)
+					{
+						/* Cursed Ring */
+						if (power < 0)
+						{
+							/* Broken */
+							o_ptr->ident |= (IDENT_BROKEN);
+
+							/* Cursed */
+							o_ptr->ident |= (IDENT_CURSED);
+
+							/* Reverse pval */
+							o_ptr->pval = 0 - (o_ptr->pval);
+						}
+						else
+						{
+							/* Rating boost for rings of speed that are not cursed */
+							rating += 25;
+
+							o_ptr->pval = 1;
+						}
+
+						break;
+					}
+
 					/* Base speed (1 to 10) */
 					o_ptr->pval = randint(5) + m_bonus(5, level);
 
@@ -1232,6 +1270,30 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 
 					break;
 				}
+				/* Ring of Slaying */
+				case SV_RING_LORD_PROT_ACID:
+				case SV_RING_LORD_PROT_FIRE:
+				case SV_RING_LORD_PROT_COLD:
+				{
+					/* Bonus plus to AC */
+					o_ptr->to_a = randint(5) + m_bonus(5, level) + (level / 10);
+
+					/* Cursed */
+					if (power < 0)
+					{
+						/* Broken */
+						o_ptr->ident |= (IDENT_BROKEN);
+
+						/* Cursed */
+						o_ptr->ident |= (IDENT_CURSED);
+
+						/* Reverse bonus */
+						o_ptr->to_h = 0 - (o_ptr->to_h);
+					}
+
+					break;
+				}
+
 			}
 
 			break;
@@ -1359,6 +1421,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 
 				/* Amulet of Doom -- always cursed */
 				case SV_AMULET_DOOM:
+				case SV_AMULET_WOE:
 				{
 					/* Broken */
 					o_ptr->ident |= (IDENT_BROKEN);
@@ -1547,13 +1610,20 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 	if (lev > MAX_DEPTH - 1) lev = MAX_DEPTH - 1;
 
 	/* Base chance of being "good" */
-	test_good = lev + 10;
+	/* Moriais a base +15 */
+	if (game_mode == GAME_NPPMORIA) test_good = lev + 15;
+	else test_good = lev + 10;
 
 	/* Maximal chance of being "good" */
-	if (test_good > 75) test_good = 75;
+	if (game_mode == GAME_NPPMORIA)
+	{
+		if (test_good > 70) test_good = 70;
+	}
+	else if (test_good > 75) test_good = 75;
 
-	/* Base chance of being "great" */
-	test_great = test_good / 2;
+	/* Base chance of being "great", different for Moria */
+	if (game_mode == GAME_NPPMORIA) test_great = test_good / 6;
+	else test_great = test_good / 2;
 
 	/* Maximal chance of being "great" */
 	if (test_great > 20) test_great = 20;
@@ -1985,6 +2055,78 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
  * Note that this test only applies to the object *kind*, so it is
  * possible to cause the object to be cursed.
  */
+static bool kind_is_gen_store_moria(int k_idx)
+{
+	object_kind *k_ptr = &k_info[k_idx];
+
+	/* No "worthless" items */
+	if (k_ptr->cost < 0) return (FALSE);
+
+	/* Analyze the item type */
+	switch (k_ptr->tval)
+	{
+		/* Certain kinds of food is sold there*/
+		case TV_FOOD:
+		{
+			if (k_ptr->sval == SV_FOOD_RATION) return (TRUE);
+			if (k_ptr->sval == SV_FOOD_BISCUIT) return (TRUE);
+			if (k_ptr->sval == SV_FOOD_BEEF_JERKY) return (TRUE);
+			if (k_ptr->sval == SV_FOOD_FINE_ALE) return (TRUE);
+			if (k_ptr->sval == SV_FOOD_FINE_WINE) return (TRUE);
+			return (FALSE);
+		}
+
+		/* Non artifact Lite Sources are sold there*/
+		case TV_LIGHT:
+		{
+			if (k_ptr->sval == SV_LIGHT_TORCH) return (TRUE);
+			if (k_ptr->sval == SV_LIGHT_LANTERN) return (TRUE);
+			return (FALSE);
+		}
+
+		/* Flasks and Spikes are sold there*/
+		case TV_FLASK:
+		case TV_SPIKE:
+		{
+			return (TRUE);
+		}
+
+		/* Shovels and Picks are sold there*/
+		case TV_DIGGING:
+		{
+			if (k_ptr->sval == SV_SHOVEL) return (TRUE);
+			if (k_ptr->sval == SV_PICK) return (TRUE);
+			return (FALSE);
+		}
+
+		case TV_SOFT_ARMOR:
+		{
+			if (k_ptr->sval == SV_ROBE) return (TRUE);
+			return (FALSE);
+		}
+
+		/*
+		 *  Normal Cloaks are sold there
+		 */
+		case TV_CLOAK:
+		{
+			if (k_ptr->sval == SV_CLOAK) return (TRUE);
+			return (FALSE);
+		}
+	}
+
+	/* Assume not good */
+	return (FALSE);
+}
+
+
+
+/*
+ * Hack -- determine if a template is suitable for a general store.
+ *
+ * Note that this test only applies to the object *kind*, so it is
+ * possible to cause the object to be cursed.
+ */
 static bool kind_is_gen_store(int k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
@@ -2129,6 +2271,143 @@ static bool kind_is_armoury(int k_idx)
 }
 
 /*
+ * Hack -- determine if a template is suitable for the armoury.
+ *
+ * Note that this test only applies to the object *kind*, so it is
+ * possible to cause the object to be cursed.
+ */
+static bool kind_is_armoury_moria(int k_idx)
+{
+	object_kind *k_ptr = &k_info[k_idx];
+
+	/* No "worthless" items */
+	if (k_ptr->cost < 0) return (FALSE);
+
+	/* Analyze the item type */
+	switch (k_ptr->tval)
+	{
+		/* Armor -- Good unless damaged */
+		case TV_HARD_ARMOR:
+		{
+			if (k_ptr->sval == SV_METAL_SCALE_MAIL) return (TRUE);
+			if (k_ptr->sval == SV_CHAIN_MAIL) return (TRUE);
+			if (k_ptr->sval == SV_DOUBLE_CHAIN_MAIL) return (TRUE);
+			if (k_ptr->sval == SV_BAR_CHAIN_MAIL) return (TRUE);
+			return(FALSE);
+
+		}
+		case TV_SOFT_ARMOR:
+		{
+			if (k_ptr->sval == SV_SOFT_LEATHER_ARMOR) return (TRUE);
+			if (k_ptr->sval == SV_SOFT_STUDDED_LEATHER) return (TRUE);
+			if (k_ptr->sval == SV_HARD_LEATHER_ARMOR) return (TRUE);
+			if (k_ptr->sval == SV_HARD_STUDDED_LEATHER) return (TRUE);
+			if (k_ptr->sval == SV_LEATHER_RING_MAIL_HARD) return (TRUE);
+			if (k_ptr->sval == SV_LEATHER_SCALE_MAIL) return (TRUE);
+			return(FALSE);
+		}
+
+		case TV_SHIELD:
+		{
+			if (k_ptr->sval == SV_SMALL_LEATHER_SHIELD) return (TRUE);
+			if (k_ptr->sval == SV_MEDIUM_LEATHER_SHIELD) return (TRUE);
+			if (k_ptr->sval == SV_SMALL_METAL_SHIELD) return (TRUE);
+			return(FALSE);
+		}
+		case TV_BOOTS:
+		{
+			if (k_ptr->sval == SV_PAIR_OF_SOFT_LEATHER_SHOES) return (TRUE);
+			if (k_ptr->sval == SV_PAIR_OF_SOFT_LEATHER_BOOTS) return (TRUE);
+			return(FALSE);
+		}
+		case TV_GLOVES:
+		{
+			if (k_ptr->sval == SV_SET_OF_LEATHER_GLOVES) return (TRUE);
+			if (k_ptr->sval == SV_SET_OF_GAUNTLETS) return (TRUE);
+			return(FALSE);
+		}
+		case TV_HELM:
+		{
+			if (k_ptr->sval == SV_HARD_LEATHER_CAP) return (TRUE);
+			if (k_ptr->sval == SV_SOFT_LEATHER_CAP) return (TRUE);
+			if (k_ptr->sval == SV_METAL_CAP) return (TRUE);
+			return(FALSE);
+		}
+	}
+
+	/* Assume not good */
+	return (FALSE);
+}
+
+/*
+ * Hack -- determine if a template is suitable for the weaponsmith.
+ *
+ * Note that this test only applies to the object *kind*, so it is
+ * possible to cause the object to be cursed.
+ */
+static bool kind_is_weaponsmith_moria(int k_idx)
+{
+	object_kind *k_ptr = &k_info[k_idx];
+
+	/* No "worthless" items */
+	if (k_ptr->cost < 0) return (FALSE);
+
+	/* Analyze the item type */
+	switch (k_ptr->tval)
+	{
+		/* Weapons -- suitable  unless damaged */
+		case TV_SWORD:
+		{
+			if (k_ptr->sval == SV_DAGGER_STILLETO) return (TRUE);
+			if (k_ptr->sval == SV_DAGGER_MISERICORDE) return (TRUE);
+			if (k_ptr->sval == SV_BASTARD_SWORD) return (TRUE);
+			if (k_ptr->sval == SV_BROAD_SWORD) return (TRUE);
+			if (k_ptr->sval == SV_LONG_SWORD) return (TRUE);
+			if (k_ptr->sval == SV_SMALL_SWORD) return (TRUE);
+			return (FALSE);
+		}
+		case TV_HAFTED:
+		{
+			if (k_ptr->sval == SV_MORNING_STAR) return (TRUE);
+			if (k_ptr->sval == SV_MACE) return (TRUE);
+			if (k_ptr->sval == SV_WAR_HAMMER) return (TRUE);
+			return (FALSE);
+		}
+		case TV_POLEARM:
+		{
+
+			if (k_ptr->sval == SV_HALBERD) return (TRUE);
+			if (k_ptr->sval == SV_PIKE) return (TRUE);
+			if (k_ptr->sval == SV_SPEAR) return (TRUE);
+			if (k_ptr->sval == SV_BROAD_AXE) return (TRUE);
+			return (FALSE);
+		}
+		case TV_BOW:
+		{
+			if (k_ptr->sval == SV_SLING) return (TRUE);
+			if (k_ptr->sval == SV_SHORT_BOW) return (TRUE);
+			if (k_ptr->sval == SV_LONG_BOW) return (TRUE);
+			if (k_ptr->sval == SV_LIGHT_XBOW) return (TRUE);
+			return (FALSE);
+		}
+		/*Normal ammo is sold there*/
+		case TV_SHOT:
+		case TV_ARROW:
+		case TV_BOLT:
+		{
+			if (k_ptr->sval == SV_AMMO_NORMAL) return (TRUE);
+			if (k_ptr->sval == SV_AMMO_LIGHT) return (TRUE);
+			return (FALSE);
+		}
+
+	}
+
+	/* Assume not suitable */
+	return (FALSE);
+}
+
+
+/*
  * Hack -- determine if a template is suitable for the weaponsmith.
  *
  * Note that this test only applies to the object *kind*, so it is
@@ -2266,6 +2545,115 @@ static bool kind_is_temple(int k_idx)
 }
 
 /*
+ * Hack -- determine if a template is suitable for the temple.
+ *
+ * Note that this test only applies to the object *kind*, so it is
+ * possible to cause the object to be cursed.
+ */
+static bool kind_is_temple_moria(int k_idx)
+{
+	object_kind *k_ptr = &k_info[k_idx];
+
+	/* No "worthless" items */
+	if (k_ptr->cost < 0) return (FALSE);
+
+	/* Analyze the item type */
+	switch (k_ptr->tval)
+	{
+		/* Hafted weapons only in the temple*/
+		case TV_HAFTED:
+		{
+			if (k_ptr->sval == SV_MORNING_STAR) return (TRUE);
+			if (k_ptr->sval == SV_MACE) return (TRUE);
+			if (k_ptr->sval == SV_WAR_HAMMER) return (TRUE);
+			return (FALSE);
+		}
+		/*scrolls suitable for the temple*/
+		case TV_SCROLL:
+		{
+
+			if (k_ptr->sval == SV_SCROLL_REMOVE_CURSE) return (TRUE);
+			if (k_ptr->sval == SV_SCROLL_WORD_OF_RECALL) return (TRUE);
+			if (k_ptr->sval == SV_SCROLL_BLESSING) return (TRUE);
+			return (FALSE);
+		}
+		case TV_POTION:
+		{
+			if (k_ptr->sval == SV_POTION_RES_WIS) return (TRUE);
+			if (k_ptr->sval == SV_POTION_CURE_LIGHT) return (TRUE);
+			if (k_ptr->sval == SV_POTION_CURE_SERIOUS) return (TRUE);
+			if (k_ptr->sval == SV_POTION_CURE_CRITICAL) return (TRUE);
+			if (k_ptr->sval == SV_POTION_RESTORE_EXP) return (TRUE);
+			if (k_ptr->sval == SV_POTION_CURE_POISON) return (TRUE);
+			if (k_ptr->sval == SV_POTION_HEROISM) return (TRUE);
+			if (k_ptr->sval == SV_POTION_BOLDNESS) return (TRUE);
+			return (FALSE);
+		}
+
+
+		case TV_PRAYER_BOOK:
+		{
+			return (TRUE);
+		}
+	}
+
+	/* Assume not suitable */
+	return (FALSE);
+}
+
+/*
+ * Hack -- determine if a template is suitable for the alchemy shop.
+ *
+ * Note that this test only applies to the object *kind*, so it is
+ * possible to cause the object to be cursed.
+ */
+static bool kind_is_alchemy_moria(int k_idx)
+{
+	object_kind *k_ptr = &k_info[k_idx];
+
+	/* No "worthless" items */
+	if (k_ptr->cost < 0) return (FALSE);
+
+	/* Analyze the item type */
+	switch (k_ptr->tval)
+	{
+
+		/*scrolls suitable for the alchemy shop*/
+		case TV_SCROLL:
+		{
+			if (k_ptr->sval == SV_SCROLL_ENCHANT_WEAPON_TO_HIT) return (TRUE);
+			if (k_ptr->sval == SV_SCROLL_ENCHANT_WEAPON_TO_DAM) return (TRUE);
+			if (k_ptr->sval == SV_SCROLL_RECHARGING) return (TRUE);
+			if (k_ptr->sval == SV_SCROLL_ENCHANT_ARMOR) return (TRUE);
+			if (k_ptr->sval == SV_SCROLL_IDENTIFY) return (TRUE);
+			if (k_ptr->sval == SV_SCROLL_LIGHT) return (TRUE);
+			if (k_ptr->sval == SV_SCROLL_PHASE_DOOR) return (TRUE);
+			if (k_ptr->sval == SV_SCROLL_MAPPING) return (TRUE);
+			if (k_ptr->sval == SV_SCROLL_DETECT_GOLD) return (TRUE);
+			if (k_ptr->sval == SV_SCROLL_DETECT_ITEM) return (TRUE);
+			if (k_ptr->sval == SV_SCROLL_WORD_OF_RECALL) return (TRUE);
+			return (FALSE);
+		}
+		case TV_POTION:
+		{
+			if (k_ptr->sval == SV_POTION_RES_STR) return (TRUE);
+			if (k_ptr->sval == SV_POTION_RES_INT) return (TRUE);
+			if (k_ptr->sval == SV_POTION_RES_WIS) return (TRUE);
+			if (k_ptr->sval == SV_POTION_RES_DEX) return (TRUE);
+			if (k_ptr->sval == SV_POTION_RES_CON) return (TRUE);
+			if (k_ptr->sval == SV_POTION_RES_CHR) return (TRUE);
+			if (k_ptr->sval == SV_POTION_SLOW_POISON) return (TRUE);
+			return (FALSE);
+		}
+
+	}
+
+	/* Assume not suitable */
+	return (FALSE);
+}
+
+
+/*
  * Hack -- determine if a template is suitable for the alchemy shop.
  *
  * Note that this test only applies to the object *kind*, so it is
@@ -2323,6 +2711,73 @@ static bool kind_is_alchemy(int k_idx)
 	/* Assume not suitable */
 	return (FALSE);
 }
+
+/*
+ * Hack -- determine if a template is suitable for the magic_shop.
+ *
+ * Note that this test only applies to the object *kind*, so it is
+ * possible to cause the object to be cursed.
+ */
+static bool kind_is_magic_shop_moria(int k_idx)
+{
+	object_kind *k_ptr = &k_info[k_idx];
+
+	/* No "worthless" items */
+	if (k_ptr->cost < 0) return (FALSE);
+
+	/* Analyze the item type */
+	switch (k_ptr->tval)
+	{
+		/*Rings suitable for the magic_shop*/
+		case TV_RING:
+		{
+			if (k_ptr->sval == SV_RING_RESIST_FIRE) return (TRUE);
+			if (k_ptr->sval == SV_RING_RESIST_COLD) return (TRUE);
+			if (k_ptr->sval == SV_RING_FEATHER_FALL) return (TRUE);
+			if (k_ptr->sval == SV_RING_PROTECTION) return (TRUE);
+			return (FALSE);
+		}
+		/*Amulets suitable for the magic_shop*/
+		case TV_AMULET:
+		{
+			if (k_ptr->sval == SV_AMULET_CHARISMA) return (TRUE);
+			if (k_ptr->sval == SV_AMULET_SLOW_DIGEST) return (TRUE);
+			if (k_ptr->sval == SV_AMULET_RESIST_ACID) return (TRUE);
+			return (FALSE);
+		}
+		/*Amulets suitable for the magic_shop*/
+		case TV_WAND:
+		{
+			if (k_ptr->sval == SV_WAND_LIGHT) return (TRUE);
+			if (k_ptr->sval == SV_WAND_ELEC_BALL) return (TRUE);
+			if (k_ptr->sval == SV_WAND_STINKING_CLOUD) return (TRUE);
+			if (k_ptr->sval == SV_WAND_WONDER) return (TRUE);
+			if (k_ptr->sval == SV_WAND_MAGIC_MISSILE) return (TRUE);
+			if (k_ptr->sval == SV_WAND_ELEC_BOLT) return (TRUE);
+			if (k_ptr->sval == SV_WAND_DISARMING) return (TRUE);
+			return (FALSE);
+		}
+		/*Staves suitable for the magic_shop*/
+		case TV_STAFF:
+		{
+			if (k_ptr->sval == SV_STAFF_LIGHT) return (TRUE);
+
+			if (k_ptr->sval == SV_STAFF_DETECT_TRAP) return (TRUE);
+			if (k_ptr->sval == SV_STAFF_DETECT_DOOR) return (TRUE);
+			if (k_ptr->sval == SV_STAFF_DETECT_INVIS) return (TRUE);
+			return (FALSE);
+		}
+		case TV_MAGIC_BOOK:
+		{
+			return (TRUE);
+		}
+	}
+
+	/* Assume not suitable */
+	return (FALSE);
+}
+
+
 
 /*
  * Hack -- determine if a template is suitable for the magic_shop.
@@ -3455,7 +3910,7 @@ void object_quantities(object_type *j_ptr)
 		}
 		case TV_FOOD:
 		{
-			if (one_in_(3)) j_ptr->number = damroll(2,2);
+			if (one_in_(5)) j_ptr->number = damroll(2,2);
 			return;
 		}
 
@@ -3602,37 +4057,43 @@ bool prep_store_object(int storetype)
 		case STORE_GENERAL:
 		{
 			object_generation_mode = OB_GEN_MODE_GEN_ST;
-			get_obj_num_hook = kind_is_gen_store;
+			if (game_mode == GAME_NPPMORIA) get_obj_num_hook = kind_is_gen_store_moria;
+			else get_obj_num_hook = kind_is_gen_store;
 			break;
 		}
 		case STORE_ARMOR:
 		{
 			object_generation_mode = OB_GEN_MODE_ARMOURY;
-			get_obj_num_hook = kind_is_armoury;
+			if (game_mode == GAME_NPPMORIA) get_obj_num_hook = kind_is_armoury_moria;
+			else get_obj_num_hook = kind_is_armoury;
 			break;
 		}
 		case STORE_WEAPON:
 		{
 			object_generation_mode = OB_GEN_MODE_WEAPONSMITH;
-			get_obj_num_hook = kind_is_weaponsmith;
+			if (game_mode == GAME_NPPMORIA) get_obj_num_hook = kind_is_weaponsmith_moria;
+			else get_obj_num_hook = kind_is_weaponsmith;
 			break;
 		}
 		case STORE_TEMPLE:
 		{
 			object_generation_mode = OB_GEN_MODE_TEMPLE;
-			get_obj_num_hook = kind_is_temple;
+			if (game_mode == GAME_NPPMORIA) get_obj_num_hook = kind_is_temple_moria;
+			else get_obj_num_hook = kind_is_temple;
 			break;
 		}
 		case STORE_ALCHEMY:
 		{
 			object_generation_mode = OB_GEN_MODE_ALCHEMY;
-			get_obj_num_hook = kind_is_alchemy;
+			if (game_mode == GAME_NPPMORIA) get_obj_num_hook = kind_is_alchemy_moria;
+			else get_obj_num_hook = kind_is_alchemy;
 			break;
 		}
 		case STORE_MAGIC:
 		{
 			object_generation_mode = OB_GEN_MODE_MAGIC_SHOP;
-			get_obj_num_hook = kind_is_magic_shop;
+			if (game_mode == GAME_NPPMORIA) get_obj_num_hook = kind_is_magic_shop_moria;
+			else get_obj_num_hook = kind_is_magic_shop;
 			break;
 		}
 		case STORE_B_MARKET:
@@ -3824,7 +4285,7 @@ bool make_gold(object_type *j_ptr)
 	/* Determine how much the treasure is "worth" */
 	value = (base + (8L * randint(base)) + randint((8 * mult)));
 
-	/*chests containing gold are very lucritive*/
+	/*chests containing gold are very lucrative*/
 	if (object_generation_mode > 0)
 	{
 		value += ((randint((4 * mult)) + randint((4 * mult)) + object_level / 4 ) * 50);

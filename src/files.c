@@ -317,10 +317,10 @@ void display_player_xtra_info(void)
 	/* Advance Experience */
 	++row;
 	Term_putstr(col, row, -1, TERM_WHITE, "Adv Exp");
-	if (p_ptr->lev < PY_MAX_LEVEL)
+	if (p_ptr->lev < z_info->max_level)
 	{
-		s32b advance = (player_exp[p_ptr->lev - 1] *
-		                p_ptr->expfact / 100L);
+		s32b advance = (get_experience_by_level(p_ptr->lev-1) * p_ptr->expfact / 100L);
+
 		/*some players want to see experience needed to gain next level*/
 		advance -= p_ptr->exp;
 		Term_putstr(col2, row, -1, TERM_L_GREEN,
@@ -831,7 +831,7 @@ static void display_player_misc_info(int row, int col)
 	}
 
 	/* Winner */
-	else if (p_ptr->total_winner || (p_ptr->lev > PY_MAX_LEVEL))
+	else if (p_ptr->total_winner || (p_ptr->lev > z_info->max_level))
 	{
 		p = "**WINNER**";
 	}
@@ -839,7 +839,7 @@ static void display_player_misc_info(int row, int col)
 	/* Normal */
 	else
 	{
-		p = c_text + cp_ptr->title[(p_ptr->lev - 1) / 5];
+		p = get_player_title();
 	}
 
 	/* Dump it */
