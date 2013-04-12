@@ -25,8 +25,6 @@
 #define MAX_PANEL 12
 
 
-
-
 /*
  * Returns a "rating" of x depending on y, and sets "attr" to the
  * corresponding "attribute".
@@ -206,14 +204,10 @@ static void display_home_equippy(int y, int x, bool onscreen)
 			c = object_char_default(o_ptr);
 		}
 
-
 		/* Dump */
 		Term_putch(x+i, y, a, c);
-
 	}
 }
-
-
 
 
 /*
@@ -274,8 +268,6 @@ void display_player_xtra_info(void)
 	Term_putstr(col, row, -1, TERM_WHITE, "Level");
 	Term_putstr(col2, row, -1, ((p_ptr->lev >= p_ptr->max_lev) ? TERM_L_BLUE : TERM_YELLOW),
 			format("%4d", p_ptr->lev));
-
-
 
 
 	/* Left */
@@ -436,7 +428,6 @@ void display_player_xtra_info(void)
 	}
 
 
-
 	/* Range attacks */
 	++row;
 	strnfmt(buf, sizeof(buf), "(%+d,%+d)", hit, dam);
@@ -582,7 +573,6 @@ void display_player_xtra_info(void)
 }
 
 
-
 /*
  * Obtain the "flags" for the player as if he was an item
  */
@@ -717,7 +707,7 @@ static void display_player_flag_info(bool onscreen)
 				/* Color columns by parity */
 				if (i % 2) attr = TERM_L_WHITE;
 
-				/* Non-existant objects */
+				/* Non-existent objects */
 				if (!o_ptr->k_idx) attr = TERM_L_DARK;
 
 				/* First check immunities */
@@ -781,10 +771,6 @@ static void display_player_flag_info(bool onscreen)
 		display_player_equippy(row++, col+8, onscreen);
 	}
 }
-
-
-
-
 
 
 /*
@@ -1285,22 +1271,22 @@ static void display_home_equipment_info(int mode, bool onscreen)
 /* Array of element pairs (name + feature flags) */
 static struct
 {
-       const char *name;
-       u32b flags;
+	const char *name;
+	u32b flags;
 } element_table[] =
 {
-       {"acid", ELEMENT_ACID},
-       {"fire", ELEMENT_FIRE},
-       {"forest", ELEMENT_FOREST},
-       {"ice", ELEMENT_ICE},
-       {"lava", ELEMENT_LAVA},
-       {"mud", ELEMENT_MUD},
-       {"oil", ELEMENT_OIL},
-       {"sand", ELEMENT_SAND},
-       {"water", ELEMENT_WATER},
-       {"boiling water", ELEMENT_BWATER},
-       {"boiling mud", ELEMENT_BMUD},
-       {NULL, 0}
+	{"acid", ELEMENT_ACID},
+	{"fire", ELEMENT_FIRE},
+	{"forest", ELEMENT_FOREST},
+	{"ice", ELEMENT_ICE},
+	{"lava", ELEMENT_LAVA},
+	{"mud", ELEMENT_MUD},
+	{"oil", ELEMENT_OIL},
+	{"sand", ELEMENT_SAND},
+	{"water", ELEMENT_WATER},
+	{"boiling water", ELEMENT_BWATER},
+	{"boiling mud", ELEMENT_BMUD},
+	{NULL, 0}
 };
 
 
@@ -1310,271 +1296,270 @@ static struct
  */
 static void display_special_abilities(int row, int col)
 {
-       int i;
-       const char *msg;
-       int old_row;
-       int col2;       /* The current column */
-       const char *items[22];
-       int n;
+	int i;
+	const char *msg;
+	int old_row;
+	int col2;       /* The current column */
+	const char *items[22];
+	int n;
 
-       /* Print the title */
-       c_put_str(TERM_L_GREEN, "[Special abilities and temporary bonuses]", row, col);
+	/* Print the title */
+	c_put_str(TERM_L_GREEN, "[Special abilities and temporary bonuses]", row, col);
 
-       row += 2;
+	row += 2;
 
-       /* Save this row for later */
-       old_row = row;
+	/* Save this row for later */
+	old_row = row;
 
-       /* Reset item counter */
-       n = 0;
+	/* Reset item counter */
+	n = 0;
 
-       /* Collect nativity info */
-       for (i = 0; element_table[i].name != NULL; i++)
-       {
-               u32b flags;
+	/* Collect nativity info */
+	for (i = 0; element_table[i].name != NULL; i++)
+	{
+		u32b flags;
 
-               if (element_table[i].name[0] == '\0') continue;
+		if (element_table[i].name[0] == '\0') continue;
 
-               flags = element_table[i].flags;
+		flags = element_table[i].flags;
 
-               if (!flags) continue;
+		if (!flags) continue;
 
-               if ((p_ptr->p_native_known & flags) != flags) continue;
+		if ((p_ptr->p_native_known & flags) != flags) continue;
 
-               items[n++] = element_table[i].name;
-       }
+		items[n++] = element_table[i].name;
+	}
 
 
+	/* Print nativity info */
+	if (n > 0)
+	{
+		col2 = col;
 
-       /* Print nativity info */
-       if (n > 0)
-       {
-               col2 = col;
+		msg = "You are native to ";
 
-               msg = "You are native to ";
+		put_str(msg, row, col2);
 
-               put_str(msg, row, col2);
+		col2 += strlen(msg);
 
-               col2 += strlen(msg);
+		for (i = 0; i < n; i++)
+		{
+			/* Print separators */
+			if (i > 0)
+			{
+				if (i < (n - 1))
+				{
+					put_str(", ", row, col2);
 
-               for (i = 0; i < n; i++)
-               {
-                       /* Print separators */
-                       if (i > 0)
-                       {
-                               if (i < (n - 1))
-                               {
-                                       put_str(", ", row, col2);
+					col2 += 2;
+				}
+				else
+				{
+					put_str(" and ", row, col2);
 
-                                       col2 += 2;
-                               }
-                               else
-                               {
-                                       put_str(" and ", row, col2);
+					col2 += 5;
+				}
+			}
 
-                                       col2 += 5;
-                               }
-                       }
+			msg = items[i];
 
-                       msg = items[i];
+			c_put_str(TERM_L_GREEN, msg, row, col2);
 
-                       c_put_str(TERM_L_GREEN, msg, row, col2);
+			col2 += strlen(msg);
+		}
+		/* Punctuation */
+		put_str(".", row, col2);
 
-                       col2 += strlen(msg);
-               }
-               /* Punctuation */
-               put_str(".", row, col2);
+		++row;
+	}
 
-               ++row;
-       }
+	/* Print temporary bonus to infravision */
+	if (p_ptr->timed[TMD_SINFRA] > 0)
+	{
+		msg = "Your magic enhances your ";
 
-       /* Print temporary bonus to infravision */
-       if (p_ptr->timed[TMD_SINFRA] > 0)
-       {
-               msg = "Your magic enhaces your ";
+		put_str(msg, row, col);
 
-               put_str(msg, row, col);
+		c_put_str(TERM_ORANGE, "infravision", row++, col + strlen(msg));
+	}
 
-               c_put_str(TERM_ORANGE, "infravision", row++, col + strlen(msg));
-       }
+	/* Print temporary "see invisible" spell */
+	if (p_ptr->timed[TMD_SINVIS] > 0)
+	{
+		col2 = col;
 
-       /* Print temporary "see invisible" spell */
-       if (p_ptr->timed[TMD_SINVIS] > 0)
-       {
-               col2 = col;
+		msg = "You can see ";
 
-               msg = "You can see ";
+		put_str(msg, row, col2);
 
-               put_str(msg, row, col2);
+		col2 += strlen(msg);
 
-               col2 += strlen(msg);
+		msg = "invisible";
 
-               msg = "invisible";
+		c_put_str(TERM_ORANGE, msg, row, col2);
 
-               c_put_str(TERM_ORANGE, msg, row, col2);
+		col2 += strlen(msg);
 
-               col2 += strlen(msg);
+		put_str(" foes for some time", row++, col2);
+	}
 
-               put_str(" foes for some time", row++, col2);
-       }
+	/* Print temporary heroism */
+	if (p_ptr->timed[TMD_HERO] > 0)
+	{
+		msg = "You feel ";
 
-       /* Print temporary heroism */
-       if (p_ptr->timed[TMD_HERO] > 0)
-       {
-               msg = "You feel ";
+		put_str(msg, row, col);
 
-               put_str(msg, row, col);
+		c_put_str(TERM_L_BLUE, "heroic", row++, col + strlen(msg));
+	}
 
-               c_put_str(TERM_L_BLUE, "heroic", row++, col + strlen(msg));
-       }
+	/* Print temporary chant */
+	if (p_ptr->timed[TMD_BLESSED] > 0)
+	{
+		col2 = col;
 
-       /* Print temporary chant */
-       if (p_ptr->timed[TMD_BLESSED] > 0)
-       {
-               col2 = col;
+		msg = "You are ";
 
-               msg = "You are ";
+		put_str(msg, row, col2);
 
-               put_str(msg, row, col2);
+		col2 += strlen(msg);
 
-               col2 += strlen(msg);
+		msg = "praying";
 
-               msg = "praying";
+		c_put_str(TERM_L_BLUE, msg, row, col2);
 
-               c_put_str(TERM_L_BLUE, msg, row, col2);
+		col2 += strlen(msg);
 
-               col2 += strlen(msg);
+		put_str(" to your gods", row++, col2);
+	}
 
-               put_str(" to your gods", row++, col2);
-       }
+	/* Print temporary berserk rage */
+	if (p_ptr->timed[TMD_SHERO] > 0)
+	{
+		msg = "Your blood boils in ";
 
-       /* Print temporary berserk rage */
-       if (p_ptr->timed[TMD_SHERO] > 0)
-       {
-               msg = "Your blood boils in ";
+		put_str(msg, row, col);
 
-               put_str(msg, row, col);
+		c_put_str(TERM_L_RED, "berserk rage", row++, col + strlen(msg));
+	}
 
-               c_put_str(TERM_L_RED, "berserk rage", row++, col + strlen(msg));
-       }
+	/* Print temporary protection from evil */
+	if (p_ptr->timed[TMD_PROTEVIL] > 0)
+	{
+		col2 = col;
 
-       /* Print temporary protection from evil */
-       if (p_ptr->timed[TMD_PROTEVIL] > 0)
-       {
-               col2 = col;
+		msg = "You feel protected against ";
 
-               msg = "You feel protected against ";
+		put_str(msg, row, col2);
 
-               put_str(msg, row, col2);
+		col2 += strlen(msg);
 
-               col2 += strlen(msg);
+		msg = "evil";
 
-               msg = "evil";
+		c_put_str(TERM_L_BLUE, msg, row, col2);
 
-               c_put_str(TERM_L_BLUE, msg, row, col2);
+		col2 += strlen(msg);
 
-               col2 += strlen(msg);
+		put_str(" forces", row++, col2);
+	}
 
-               put_str(" forces", row++, col2);
-       }
+	/* Print flying */
+	if (p_ptr->timed[TMD_FLYING] > 0)
+	{
+		msg = "You are ";
 
-	    /* Print flying */
-       if (p_ptr->timed[TMD_FLYING] > 0)
-       {
-               msg = "You are ";
+		put_str(msg, row, col);
 
-               put_str(msg, row, col);
+	c_put_str(TERM_BLUE, "flying", row++, col + strlen(msg));
+	}
 
-               c_put_str(TERM_BLUE, "flying", row++, col + strlen(msg));
-       }
+	/* Print temporary shield protection */
+	if (p_ptr->timed[TMD_SHIELD] > 0)
+	{
+		msg = "Your body is protected by a magical ";
 
+		put_str(msg, row, col);
 
-       /* Print temporary shield protection */
-       if (p_ptr->timed[TMD_SHIELD] > 0)
-       {
-               msg = "Your body is protected by a magical ";
+		c_put_str(TERM_YELLOW, "shield", row++, col + strlen(msg));
+	}
 
-               put_str(msg, row, col);
+	/* Print temporary elemental brand */
+	if (p_ptr->timed[TMD_SLAY_ELEM] > 0)
+	{
+		msg = "Your weapon glows with ";
 
-               c_put_str(TERM_YELLOW, "shield", row++, col + strlen(msg));
-       }
+		put_str(msg, row, col);
 
-       /* Print temporary elemental brand */
-       if (p_ptr->timed[TMD_SLAY_ELEM] > 0)
-       {
-               msg = "Your weapon glows with ";
+		c_put_str(TERM_L_GREEN, "elemental brands", row++, col + strlen(msg));
+	}
 
-               put_str(msg, row, col);
+	/* Print temporary speed */
+	if (p_ptr->timed[TMD_FAST] > 0)
+	{
+		msg = "Your feet are temporarily ";
 
-               c_put_str(TERM_L_GREEN, "elemental brands", row++, col + strlen(msg));
-       }
+		put_str(msg, row, col);
 
-       /* Print temporary speed */
-       if (p_ptr->timed[TMD_FAST] > 0)
-       {
-               msg = "Your feet are temporarily ";
+		c_put_str(TERM_VIOLET, "hasted", row++, col + strlen(msg));
+	}
 
-               put_str(msg, row, col);
+	/* Reset item counter */
+	n = 0;
 
-               c_put_str(TERM_VIOLET, "hasted", row++, col + strlen(msg));
-       }
+	/* Collect resistances */
+	if (p_ptr->timed[TMD_OPP_ACID] > 0) items[n++] = "acid";
+	if (p_ptr->timed[TMD_OPP_COLD] > 0) items[n++] = "cold";
+	if (p_ptr->timed[TMD_OPP_ELEC] > 0) items[n++] = "electricity";
+	if (p_ptr->timed[TMD_OPP_FIRE] > 0) items[n++] = "fire";
+	if (p_ptr->timed[TMD_OPP_POIS] > 0) items[n++] = "poison";
 
-       /* Reset item counter */
-       n = 0;
+	/* Print resistances */
+	if (n > 0)
+	{
+		col2 = col;
 
-       /* Collect resistances */
-       if (p_ptr->timed[TMD_OPP_ACID] > 0) items[n++] = "acid";
-       if (p_ptr->timed[TMD_OPP_COLD] > 0) items[n++] = "cold";
-       if (p_ptr->timed[TMD_OPP_ELEC] > 0) items[n++] = "electricity";
-       if (p_ptr->timed[TMD_OPP_FIRE] > 0) items[n++] = "fire";
-       if (p_ptr->timed[TMD_OPP_POIS] > 0) items[n++] = "poison";
+		msg = "You have magical resistance to ";
 
-       /* Print resistances */
-       if (n > 0)
-       {
-               col2 = col;
+		put_str(msg, row, col2);
 
-               msg = "You have magical resistance to ";
+		col2 += strlen(msg);
 
-               put_str(msg, row, col2);
+		for (i = 0; i < n; i++)
+		{
+			/* Print separators */
+			if (i > 0)
+			{
+				if (i < (n - 1))
+				{
+					put_str(", ", row, col2);
 
-               col2 += strlen(msg);
+					col2 += 2;
+				}
+				else
+				{
+					put_str(" and ", row, col2);
 
-               for (i = 0; i < n; i++)
-               {
-                       /* Print separators */
-                       if (i > 0)
-                       {
-                               if (i < (n - 1))
-                               {
-                                       put_str(", ", row, col2);
+					col2 += 5;
+				}
+			}
 
-                                       col2 += 2;
-                               }
-                               else
-                               {
-                                       put_str(" and ", row, col2);
+			msg = items[i];
 
-                                       col2 += 5;
-                               }
-                       }
+			c_put_str(TERM_YELLOW, msg, row, col2);
 
-                       msg = items[i];
+			col2 += strlen(msg);
+		}
 
-                       c_put_str(TERM_YELLOW, msg, row, col2);
+		++row;
+	}
 
-                       col2 += strlen(msg);
-               }
-
-               ++row;
-       }
-
-       /* No special abilities were shown. Display a message */
-       if (row == old_row)
-       {
-               c_put_str(TERM_RED, "You don't have any", row, col);
-       }
+	/* No special abilities were shown. Display a message */
+	if (row == old_row)
+	{
+		c_put_str(TERM_RED, "You don't have any", row, col);
+	}
 }
+
 
 /*
  * Display the character on the screen (five different modes)
@@ -1584,12 +1569,12 @@ static void display_special_abilities(int row, int col)
  *
  * Mode 0 = standard display with skills/history
  * Mode 1 = special display with equipment flags
- * Mode 2 = Home equiment Stat Flags and 1st part of Resists
- * Mode 3 = Home equiment Stat Flags and 2st part of Resists
+ * Mode 2 = Home equipment Stat Flags and 1st part of Resists
+ * Mode 3 = Home equipment Stat Flags and 2st part of Resists
  * Mode 4 = Special abilities (nativity) and temporary bonuses
  *
  * The boolean onscreen specifies if this is to display onscreen
- * or to be written to a file.  To make sure the equppy is displalyed properly
+ * or to be written to a file.  To make sure the equippy is displayed properly
  * in a file while in tile mode.
  */
 void display_player(int mode, bool onscreen)
@@ -1650,8 +1635,6 @@ void display_player(int mode, bool onscreen)
 }
 
 
-
-
 static void dump_player_plus_minus(ang_file *fff)
 {
 	int i, stats, modifier;
@@ -1675,7 +1658,7 @@ static void dump_player_plus_minus(ang_file *fff)
 		if (object_known_p(o_ptr))
 		{
 
-			/*check to see if there is an increase or decrease of a stat*/
+			/* check to see if there is an increase or decrease of a stat */
 			for (stats = 0; stats < A_MAX; stats++)
 			{
 				/* Boost */
@@ -1706,7 +1689,6 @@ static void dump_player_plus_minus(ang_file *fff)
 		else file_putf(fff," ");
 	}
 }
-
 
 
 static void dump_player_stat_info(ang_file *fff)
@@ -1801,7 +1783,6 @@ static void dump_player_stat_info(ang_file *fff)
 			}
 			/*dump the result*/
 			file_putf(fff,"%c",c);
-
 		}
 
 		/*a couple spaces, then do the sustains*/
@@ -1810,11 +1791,8 @@ static void dump_player_stat_info(ang_file *fff)
 		/* Process equipment, show stat modifiers */
 		for (y = INVEN_WIELD; y < INVEN_TOTAL; ++y)
 		{
-
-			object_type *o_ptr;
-
 			/* Get the object */
-			o_ptr = &inventory[y];
+			object_type *o_ptr = &inventory[y];
 
 			/* Get the "known" flags */
 			object_flags_known(o_ptr, &f1, &f2, &f3, &fn);
@@ -1828,7 +1806,6 @@ static void dump_player_stat_info(ang_file *fff)
 
 			/*dump the result*/
 			file_putf(fff,"%c",c);
-
 		}
 
 		/* Player flags */
@@ -1844,7 +1821,6 @@ static void dump_player_stat_info(ang_file *fff)
 		file_putf(fff,"%c",c);
 
 		file_putf(fff,"\n");
-
 	}
 
 }
@@ -1862,7 +1838,6 @@ static void dump_home_plus_minus(ang_file *fff)
 	/* Print it out */
 	for (i = 0; i < MAX_INVENTORY_HOME; ++i)
 	{
-
 		/* Object */
 		o_ptr = &st_ptr->stock[i];
 
@@ -1907,7 +1882,6 @@ static void dump_home_plus_minus(ang_file *fff)
 }
 
 
-
 static void dump_home_stat_info(ang_file *fff)
 {
 	int i, stats;
@@ -1923,7 +1897,6 @@ static void dump_home_stat_info(ang_file *fff)
 	/* Print it out */
 	for (i = 0; i < MAX_INVENTORY_HOME; ++i)
 	{
-
 		/* Object */
 		o_ptr = &st_ptr->stock[i];
 
@@ -1932,7 +1905,6 @@ static void dump_home_stat_info(ang_file *fff)
 		{
 			/*Make it a space*/
 			equippy[i] = ' ';
-
 		}
 
 		/* Get attr/char for display */
@@ -1979,10 +1951,8 @@ static void dump_home_stat_info(ang_file *fff)
 				/* Good */
 				if (o_ptr->pval > 0)
 				{
-
 					/* Label boost */
 					if (o_ptr->pval < 10) c = I2D(o_ptr->pval);
-
 				}
 
 				/* Bad */
@@ -1990,14 +1960,12 @@ static void dump_home_stat_info(ang_file *fff)
 				{
 					/* Label boost */
 					if (o_ptr->pval > -10) c = I2D(-(o_ptr->pval));
-
 				}
 				if (o_ptr->pval == 0) c = '.';
 
 			}
 			/*dump the result*/
 			file_putf(fff,"%c",c);
-
 		}
 
 		/*a couple spaces, then do the sustains*/
@@ -2006,7 +1974,6 @@ static void dump_home_stat_info(ang_file *fff)
 		/* Process equipment, show stat modifiers */
 		for (i = 0; i < MAX_INVENTORY_HOME; ++i)
 		{
-
 			/* Object */
 			o_ptr = &st_ptr->stock[i];
 
@@ -2022,15 +1989,11 @@ static void dump_home_stat_info(ang_file *fff)
 
 			/*dump the result*/
 			file_putf(fff,"%c",c);
-
 		}
 
 		file_putf(fff, "\n");
-
 	}
-
 }
-
 
 
 /*
@@ -2056,7 +2019,7 @@ errr file_character(const char *path, bool full)
 
 	char buf[1024];
 
-	/* We use either ascii or system-specific encoding */
+	/* We use either ASCII or system-specific encoding */
  	int encoding = (xchars_to_file) ? SYSTEM_SPECIFIC : ASCII;
 
 	/* Unused parameter */
@@ -2075,8 +2038,7 @@ errr file_character(const char *path, bool full)
 
 	/* Begin dump */
 	file_putf(fff, "  [%s %s Character Dump]\n\n",
-	        VERSION_NAME, VERSION_STRING);
-
+			VERSION_NAME, VERSION_STRING);
 
 	/* Display player */
 	display_player(0, FALSE);
@@ -2161,7 +2123,6 @@ errr file_character(const char *path, bool full)
 					/* Dump it */
 					file_putf(fff, "%c", c);
 				}
-
 			}
 
 			/* End the row */
@@ -2222,18 +2183,16 @@ errr file_character(const char *path, bool full)
 	}
 	file_putf(fff, "\n");
 
-
 	/* Dump the Home Flags , then the inventory -- if anything there */
 	if (st_ptr->stock_num)
 	{
-
 		/* Header */
 		file_putf(fff, "  [Home Inventory Stat Modifiers, Sustains and Flags]\n\n");
 
-		/*dump stat modifiers and sustains*/
+		/* Dump stat modifiers and sustains */
 		dump_home_stat_info(fff);
 
-		/*dump the home resists and abilities display*/
+		/* Dump the home resists and abilities display */
 		for (i =2; i <4; ++i)
 		{
 			/* Display player */
@@ -2302,7 +2261,7 @@ errr file_character(const char *path, bool full)
 
 			x_file_putf(fff, encoding, "  [Current Quest]\n\n");
 
-			/*get the quest description*/
+			/* Get the quest description */
 			describe_quest(q_out, sizeof(q_out), guild_quest_level(), QMODE_FULL);
 
 			/* Describe quest */
@@ -2311,24 +2270,23 @@ errr file_character(const char *path, bool full)
 			/* Add an empty line */
 			x_file_putf(fff, encoding, "\n\n");
 		}
-
 	}
 
-	/*dump notes to character file*/
+	/* dump notes to character file*/
 	if (adult_take_notes)
 	{
  		char line[1024];
 
-		/*close the notes file for writing*/
+		/* close the notes file for writing */
 		file_close(notes_file);
 
-		/*get the path for the notes file*/
+		/* get the path for the notes file */
 		notes_file = file_open(notes_fname, MODE_READ, -1);
 
 		/* Write the contents of the notes file to the dump file line-by-line */
 		while (file_getl(notes_file, line, sizeof(line)))
 		{
-			/* Replace escape secuences in template */
+			/* Replace escape sequences in template */
 			fill_template(line, sizeof(line));
 
 			/* Translate the note to the desired encoding */
@@ -2339,10 +2297,9 @@ errr file_character(const char *path, bool full)
 
 			/* Put a new line character */
 			file_put(fff, "\n");
-
 		}
 
-		/*aesthetics*/
+		/* aesthetics */
 		file_putf(fff, "============================================================\n");
 
 		file_putf(fff, "\n\n");
@@ -2352,7 +2309,6 @@ errr file_character(const char *path, bool full)
 
 		/*re-open for appending*/
 		notes_file = file_open(notes_fname, MODE_APPEND, FTYPE_TEXT);
-
 	}
 
 	/* Dump options */
@@ -2361,11 +2317,11 @@ errr file_character(const char *path, bool full)
 	/* Dump options */
 	for (i = 0; i < OPT_MAX; i++)
 	{
-		/*hack - use game play options*/
+		/* Hack - use game play options */
 		if (i < OPT_GAME_PLAY) continue;
 		if ((i >= OPT_EFFICIENCY) && (i < OPT_ADULT)) continue;
 
-		/*print the labels*/
+		/* Print the labels */
 		if (i == OPT_GAME_PLAY) file_putf(fff, "\nGAME PLAY OPTIONS:\n\n");
 		if (i == OPT_CHEAT) file_putf(fff, "\nCHEAT OPTIONS:\n\n");
 		if (i == OPT_ADULT) file_putf(fff, "\nBIRTH OPTIONS:\n\n");
@@ -2514,7 +2470,6 @@ bool show_file(cptr name, cptr what, int line, int mode)
 	/* Redirect the name */
 	name = filename;
 
-
 	/* Hack XXX XXX XXX */
 	if (what)
 	{
@@ -2564,7 +2519,6 @@ bool show_file(cptr name, cptr what, int line, int mode)
 		/* Oops */
 		return (TRUE);
 	}
-
 
 	/* Pre-Parse the file */
 	while (TRUE)
@@ -2624,8 +2578,6 @@ bool show_file(cptr name, cptr what, int line, int mode)
 	{
 		char prompt[120];
 
-
-
 		/* Clear screen */
 		Term_clear();
 
@@ -2649,7 +2601,6 @@ bool show_file(cptr name, cptr what, int line, int mode)
 			next = 0;
 		}
 
-
 		/* Goto the selected line */
 		while (next < line)
 		{
@@ -2662,7 +2613,6 @@ bool show_file(cptr name, cptr what, int line, int mode)
 			/* Count the lines */
 			next++;
 		}
-
 
 		/* Dump the next lines of the file */
 		for (i = 0; i < hgt - 4; )
@@ -2679,7 +2629,7 @@ bool show_file(cptr name, cptr what, int line, int mode)
 			/* Count the "real" lines */
 			next++;
 
-			/* Replace escape secuences in template */
+			/* Replace escape sequences in template */
 			fill_template(buf, sizeof(buf));
 
 			/* Make a copy of the current line for searching */
@@ -2728,10 +2678,9 @@ bool show_file(cptr name, cptr what, int line, int mode)
 			continue;
 		}
 
-
 		/* Show a general "title" */
 		prt(format("[%s %s, %s, Line %d-%d/%d]", VERSION_NAME, VERSION_STRING,
-	           caption, line, line + hgt - 4, size), 0, 0);
+				   caption, line, line + hgt - 4, size), 0, 0);
 
 		/* Buttons */
 		button_kill_all();
@@ -2912,7 +2861,7 @@ bool show_file(cptr name, cptr what, int line, int mode)
 		}
 
 		/* Recurse on letters */
-		if (menu && isdigit(ke.key) && hook[D2I(ke.key)][0])
+		if (menu && isdigit((int)ke.key) && hook[D2I(ke.key)][0])
 		{
 			/* Recurse on that file */
 			if (!show_file(hook[D2I(ke.key)], NULL, 0, mode))
@@ -2948,12 +2897,11 @@ void do_cmd_help(void)
 	/* Load screen */
 	screen_load();
 
-	/* Restore the buttons and statusline */
+	/* Restore the buttons and status line */
 	button_kill_all();
 	button_restore();
 	event_signal(EVENT_MOUSEBUTTONS);
 }
-
 
 
 /*
@@ -3010,7 +2958,6 @@ void process_player_name(bool sf)
 		my_strcpy(op_ptr->base_name, "PLAYER", sizeof(op_ptr->base_name));
 	}
 
-
 	/* Pick savefile name if needed */
 	if (sf)
 	{
@@ -3028,7 +2975,6 @@ void process_player_name(bool sf)
 		path_build(savefile, sizeof(savefile), ANGBAND_DIR_SAVE, temp);
 	}
 }
-
 
 
 /*
@@ -3090,7 +3036,6 @@ void save_game(void)
  */
 void close_game(void)
 {
-
 	/* Handle stuff */
 	handle_stuff();
 
@@ -3119,7 +3064,7 @@ void close_game(void)
 		/* Save the game */
 		save_game();
 
-        if (Term->mapped_flag)
+		if (Term->mapped_flag)
 		{
 			/* Prompt for scores XXX XXX XXX */
 			prt("Press Return (or Escape).", 0, 40);
@@ -3129,13 +3074,13 @@ void close_game(void)
 		}
 	}
 
-
 	/* Hack -- Decrease "icky" depth */
 	character_icky--;
 
 	/* Allow suspending now */
 	signals_handle_tstp();
 }
+
 
 /*
  * Handle abrupt death of the visual system
@@ -3181,8 +3126,6 @@ void exit_game_panic(void)
 }
 
 
-
-
 static void write_html_escape_char(ang_file *htm, char c)
 {
 	switch (c)
@@ -3207,6 +3150,7 @@ static void write_html_escape_char(ang_file *htm, char c)
 			break;
 	}
 }
+
 
 /*
  * Get the default (ASCII) tile for a given screen location
@@ -3281,8 +3225,6 @@ static void get_default_tile(int row, int col, byte *a_def, char *c_def)
 }
 
 
-
-
 /* Take an html screenshot */
 void html_screenshot(cptr name, int mode)
 {
@@ -3322,7 +3264,7 @@ void html_screenshot(cptr name, int mode)
 	{
 		file_putf(fp, "<!DOCTYPE html><html><head>\n");
 		file_putf(fp, "  <meta='generator' content='%s %s'>\n",
-	            	VERSION_NAME, VERSION_STRING);
+					VERSION_NAME, VERSION_STRING);
 		file_putf(fp, "  <title>%s</title>\n", name);
 		file_putf(fp, "</head>\n\n");
 		file_putf(fp, "<body style='color: #fff; background: #000;'>\n");
@@ -3399,6 +3341,7 @@ void html_screenshot(cptr name, int mode)
 	file_close(fp);
 }
 
+
 /*
  * Finds text patterns in the given text and replaces them with some content determined
  * by the kind of pattern.
@@ -3420,7 +3363,7 @@ void fill_template(char buf[], int max_buf)
 		NULL
 	};
 
-	/* Find ocurrences of the patterns */
+	/* Find occurrences of the patterns */
 	/* First we look for the pattern's start */
 	while ((start = strstr(buf_ptr, "{{")) != NULL)
 	{
@@ -3452,7 +3395,6 @@ void fill_template(char buf[], int max_buf)
 
 				/* Concat the previous text to the result text */
 				end_local = my_fast_strcat(local, end_local, buf_ptr, sizeof(local));
-
 			}
 
 			/* Process pattern actions */
@@ -3492,3 +3434,4 @@ void fill_template(char buf[], int max_buf)
 		my_strcpy(buf, local, max_buf);
 	}
 }
+
