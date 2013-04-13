@@ -160,8 +160,8 @@ struct feature_type
 	u16b f_level;		/* Minimum level */
 	u16b f_rarity;		/* 1/Rarity */
 
-	u16b priority;  /* Map priority */
-	s16b defaults;     /* Default state */
+	u16b priority;		/* Map priority */
+	s16b defaults;		/* Default state */
 
 	feature_state state[MAX_FEAT_STATES];
 
@@ -231,7 +231,6 @@ struct feature_lore
 	byte f_l_non_native_to_hit_adj;	/* Number of observed combat penalties for being non-native (percentage)*/
 	byte f_l_stealth_adj;		/* Number of observed adjustments to stealth depending on terrain*/
 };
-
 
 
 /*

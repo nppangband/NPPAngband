@@ -809,7 +809,7 @@
  * of 2.7.9, these flags are not actually stored with the object, but
  * rather in the object_kind, ego_item, and artifact structures.
  *
- * Note that "flags1" contains all flags dependant on "pval" (including
+ * Note that "flags1" contains all flags dependent on "pval" (including
  * stat bonuses, but NOT stat sustainers), plus all "extra attack damage"
  * flags (SLAY_XXX and BRAND_XXX).
  *
@@ -979,7 +979,7 @@
 
 #define TR2_STAT_MOD_MASK \
 	(TR2_SUST_STR | TR2_SUST_INT | TR2_SUST_WIS | TR2_SUST_DEX | \
-		  TR2_SUST__CON | TR2_SUST_CHR)
+	 TR2_SUST__CON | TR2_SUST_CHR)
 
 #define TR3_STAT_MOD_MASK \
 	(0L)
@@ -1468,11 +1468,11 @@ object_aware_p(o_ptr) && \
 
 
 /* Object origins */
-#define ORIGIN_NONE             0
-#define ORIGIN_BIRTH            1
-#define ORIGIN_STORE            2
-#define ORIGIN_FLOOR            3
-#define ORIGIN_DROP_UNKNOWN     4
+#define ORIGIN_NONE				0
+#define ORIGIN_BIRTH			1
+#define ORIGIN_STORE			2
+#define ORIGIN_FLOOR			3
+#define ORIGIN_DROP_UNKNOWN		4
 #define ORIGIN_DROP_KNOWN       5
 #define ORIGIN_REWARD           6
 #define ORIGIN_ACQUIRE          7
@@ -1567,7 +1567,7 @@ typedef enum
 	INSCRIP_UNCURSED	=   110,
 	INSCRIP_INDESTRUCTIBLE =111,
 
-	INSCRIP_MAX                  /*!< Maximum number of pseudo-ID markers */
+	INSCRIP_MAX					/*!< Maximum number of pseudo-ID markers */
 } obj_pseudo_t;
 
 /*
