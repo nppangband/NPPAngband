@@ -117,17 +117,13 @@ static void remove_ironman_items(void)
 			 */
 			if ((k_ptr->tval == cp_ptr->spell_book) && (k_ptr->tried == FALSE))
 			{
-				byte realm, j;
-
-				/*Get the player spell realm*/
-				realm =  get_player_spell_realm();
+				byte j;
 
 				/* Extract spells */
 				for (j = 0; j < SPELLS_PER_BOOK; j++)
 				{
-					byte sval = k_ptr->sval;
 
-					s16b spell = spell_list[realm][sval][j];
+					s16b spell = get_spell_from_list(k_ptr->sval, j);
 
 					/*skip blank spell slots*/
 					if (spell == -1) continue;

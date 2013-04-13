@@ -46,6 +46,9 @@ byte sf_minor;			/* Savefile's "version_minor" */
 byte sf_patch;			/* Savefile's "version_patch" */
 byte sf_extra;			/* Savefile's "version_extra" */
 
+/* Game mode */
+byte game_mode;			/* What game are we playing */
+
 /*
  * Savefile information
  */
@@ -524,7 +527,7 @@ s16b (*cave_x_idx)[MAX_DUNGEON_WID];
  * Used to hep determine a suitable quest monster.
  */
 
-u32b mon_power_ave[MAX_DEPTH][CREATURE_TYPE_MAX];
+u32b mon_power_ave[MAX_DEPTH_ALL][CREATURE_TYPE_MAX];
 
 
 
