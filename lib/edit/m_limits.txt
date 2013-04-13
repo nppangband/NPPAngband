@@ -1,7 +1,7 @@
 # File: limits.txt
 
 
-# This file is used to initialize the "array sizes" information for the NPPAngband game.
+# This file is used to initialize the "array sizes" information for the NPPMoria game.
 
 # Do not modify this file unless you know exactly what you are doing,
 # unless you wish to risk possible system crashes and broken savefiles.
@@ -19,7 +19,7 @@ V:6.1.0
 M:F:207
 
 # Maximum number of object kinds
-M:K:454
+M:K:408
 
 # 
 # Maximum number of total artifacts (special + normal + pre-made random + in-game random)
@@ -30,13 +30,13 @@ M:K:454
 # reads M:A:special:normal:random
 # changing these numbers will almost always break savefile compatibility
 #
-M:A:18:123:35
+M:A:2:2:2
 
 # Maximum number of ego-item types
-M:E:145
+M:E:69
 
 # Maximum number of monster races
-M:R:750
+M:R:282
 
 # Maximum number of effects
 M:X:750
@@ -49,19 +49,19 @@ M:G:25:20
 M:V:61
 
 # Maximum number of player races
-M:P:11
+M:P:8
 
 # Maximum number of player classes
-M:C:8
+M:C:6
 
 # Maximum number of player history lines
-M:H:165
+M:H:128
 
 # Maximum number of owners per store
 M:B:4
 
 # Maximum number of quests (including a slot for random quests)
-M:Q:3
+M:Q:2
 
 # Maximum number of flavors
 M:L:348

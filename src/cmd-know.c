@@ -29,38 +29,37 @@
 
 typedef struct
 {
-	int maxnum;          /* Maximum possible item count for this class */
-	bool easy_know;      /* Items don't need to be IDed to recognize membership */
+	int maxnum;			/* Maximum possible item count for this class */
+	bool easy_know;		/* Items don't need to be IDed to recognize membership */
 
-	const char *(*name)(int gid);               /* Name of this group */
+	const char *(*name)(int gid);		/* Name of this group */
 
 	/* Compare, in group and display order (optional if already sorted) */
-	int (*gcomp)(const void *, const void *);   /* Compares gids of two oids */
-	int (*group)(int oid);                      /* Returns gid for an oid */
+	int (*gcomp)(const void *, const void *);	/* Compares gids of two oids */
+	int (*group)(int oid);						/* Returns gid for an oid */
 
 	/* Summary function for the "object" information. */
 	void (*summary)(int gid, const int *object_list, int n, int top, int row, int col);
-
 } group_funcs;
+
 
 typedef struct
 {
 	/* Displays an entry at specified location, including kill-count and graphics */
 	void (*display_member)(int col, int row, bool cursor, int oid);
 
-	void (*lore)(int oid);       /* Displays lore for an oid */
+	void (*lore)(int oid);		/* Displays lore for an oid */
 
 
 	/* Required only for objects with modifiable display attributes */
 	/* Unknown 'flavors' return flavor attributes */
-	char *(*xchar)(int oid);     /* Get character attr for OID (by address) */
-	byte *(*xattr)(int oid);     /* Get color attr for OID (by address) */
+	char *(*xchar)(int oid);	/* Get character attr for OID (by address) */
+	byte *(*xattr)(int oid);	/* Get color attr for OID (by address) */
 
-	const char *(*xtra_prompt)(int oid);  /* Returns optional extra prompt */
-	void (*xtra_act)(char ch, int oid);   /* Handles optional extra actions */
+	const char *(*xtra_prompt)(int oid);	/* Returns optional extra prompt */
+	void (*xtra_act)(char ch, int oid);		/* Handles optional extra actions */
 
-	bool is_visual;                       /* Does this kind have visual editing? */
-
+	bool is_visual;							/* Does this kind have visual editing? */
 } member_funcs;
 
 
@@ -70,6 +69,7 @@ typedef struct join
 		int oid;
 		int gid;
 } join_t;
+
 
 /* A default group-by */
 static join_t *default_join;
@@ -88,61 +88,63 @@ static struct
 	cptr name;
 } monster_group[] =
 {
-	{ (cptr)-1,   "Uniques" },
-	{ "A",        "Ainur/Maiar" },
-	{ "a",        "Ants" },
-	{ "b",        "Bats" },
-	{ "B",        "Birds" },
-	{ "C",        "Canines" },
-	{ "c",        "Centipedes" },
-	{ "uU",       "Demons" },
-	{ "dD",       "Dragons" },
-	{ "vE",       "Elementals/Vortices" },
-	{ "e",        "Eyes/Beholders" },
-	{ "f",        "Felines" },
-	{ "G",        "Ghosts" },
-	{ "OP",       "Giants/Ogres" },
-	{ "g",        "Golems" },
-	{ "H",        "Harpies/Hybrids" },
-	{ "h",        "Hominids (Elves, Dwarves)" },
-	{ "M",        "Hydras" },
-	{ "i",        "Icky Things" },
-	{ "lFI",      "Insects" },
-	{ "j",        "Jellies" },
-	{ "K",        "Killer Beetles" },
-	{ "k",        "Kobolds" },
-	{ "L",        "Lichs" },
-	{ "tp",		  "Men" },
+	{ (cptr)-1,	"Uniques" },
+	{ "A",		"Ainur/Maiar" },
+	{ "a",		"Ants" },
+	{ "b",		"Bats" },
+	{ "B",		"Birds" },
+	{ "C",		"Canines" },
+	{ "c",		"Centipedes" },
+	{ "uU",		"Demons" },
+	{ "dD",		"Dragons" },
+	{ "vE",		"Elementals/Vortices" },
+	{ "e",		"Eyes/Beholders" },
+	{ "f",		"Felines" },
+	{ "G",		"Ghosts" },
+	{ "OP",		"Giants/Ogres" },
+	{ "g",		"Golems" },
+	{ "H",		"Harpies/Hybrids" },
+	{ "h",		"Hominids (Elves, Dwarves)" },
+	{ "M",		"Hydras" },
+	{ "i",		"Icky Things" },
+	{ "lFI",	"Insects" },
+	{ "j",		"Jellies" },
+	{ "K",		"Killer Beetles" },
+	{ "k",		"Kobolds" },
+	{ "L",		"Lichs" },
+	{ "tp",		"Men" },
 /* Note some special handling of mimics in the code below since there are so many different symbols */
-	{ "$!?",  	  "Mimics" },
-	{ "m",        "Molds" },
-	{ ",",        "Mushroom Patches" },
-	{ "n",        "Nagas" },
-	{ "o",        "Orcs" },
-	{ "q",        "Quadrupeds" },
-	{ "Q",        "Quylthulgs" },
-	{ "R",        "Reptiles/Amphibians" },
-	{ "r",        "Rodents" },
-	{ "S",        "Scorpions/Spiders/Ticks" },
-	{ "s",        "Skeletons/Drujs" },
-	{ "J",        "Snakes" },
-	{ "T",        "Trolls" },
-	{ "V",        "Vampires" },
-	{ "W",        "Wights/Wraiths" },
-	{ "w",        "Worms/Worm Masses" },
-	{ "X",        "Xorns/Xarens" },
-	{ "y",        "Yeeks" },
-	{ "Y",        "Yeti" },
-	{ "Z",        "Zephyr Hounds" },
-	{ "z",        "Zombies" },
+	{ "$!?",	"Mimics" },
+	{ "m",		"Molds" },
+	{ ",",		"Mushroom Patches" },
+	{ "n",		"Nagas" },
+	{ "o",		"Orcs" },
+	{ "q",		"Quadrupeds" },
+	{ "Q",		"Quylthulgs" },
+	{ "R",		"Reptiles/Amphibians" },
+	{ "r",		"Rodents" },
+	{ "S",		"Scorpions/Spiders/Ticks" },
+	{ "s",		"Skeletons/Drujs" },
+	{ "J",		"Snakes" },
+	{ "T",		"Trolls" },
+	{ "V",		"Vampires" },
+	{ "W",		"Wights/Wraiths" },
+	{ "w",		"Worms/Worm Masses" },
+	{ "X",		"Xorns/Xarens" },
+	{ "y",		"Yeeks" },
+	{ "Y",		"Yeti" },
+	{ "Z",		"Zephyr Hounds" },
+	{ "z",		"Zombies" },
 	{ NULL,       NULL }
 };
+
 
 /*
  * The label of the group who collects miscellaneous features.
  */
 #define MISC_GRP "Misc"
 #define MAX_FEATURE_TYPES	18
+
 
 /*
  * Description of each feature group.
@@ -168,6 +170,7 @@ const char *feature_group_text[MAX_FEATURE_TYPES] =
 	"Fire",
 	MISC_GRP
 };
+
 
 /*
  * Flags of features in each group.
@@ -214,6 +217,7 @@ static void place_visual_list_cursor(int col, int row, byte a,
  */
 static byte attr_idx = 0;
 static byte char_idx = 0;
+
 
 /*
  * Return a specific ordering for the features.
@@ -262,7 +266,9 @@ static int feat_order(int feat)
 }
 
 
-/* Emit a 'graphical' symbol and a padding character if appropriate */
+/*
+ * Emit a 'graphical' symbol and a padding character if appropriate
+ */
 static void big_pad(int col, int row, byte a, byte c)
 {
 	Term_putch(col, row, a, c);
@@ -274,27 +280,32 @@ static void big_pad(int col, int row, byte a, byte c)
 		Term_putch(col + 1, row, 1, ' ');
 }
 
-/* Return the actual width of a symbol */
+
+/*
+ * Return the actual width of a symbol
+ */
 static int actual_width(int width)
 {
-
-
 	if (use_bigtile) width *= 2;
 
 	return width;
 }
 
-/* Return the actual height of a symbol */
+
+/*
+ * Return the actual height of a symbol
+ */
 static int actual_height(int height)
 {
-
 	if (use_bigtile) height *= 2;
 
 	return height;
 }
 
 
-/* From an actual width, return the logical width */
+/*
+ * From an actual width, return the logical width
+ */
 static int logical_width(int width)
 {
 	int divider = 1;
@@ -304,7 +315,10 @@ static int logical_width(int width)
 	return width / divider;
 }
 
-/* From an actual height, return the logical height */
+
+/*
+ * From an actual height, return the logical height
+ */
 static int logical_height(int height)
 {
 	int divider = 1;
@@ -337,13 +351,19 @@ static void display_group_member(menu_type *menu, int oid,
 	}
 }
 
+
+/*
+ * Append the recall prompt
+ */
 static const char *recall_prompt(int oid)
 {
 	(void)oid;
 	return ", 'r' to recall";
 }
 
+
 #define swap(a, b) (swapspace = (void*)(a)), ((a) = (b)), ((b) = swapspace)
+
 
 /*
  * Interactive group by.
@@ -365,14 +385,14 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 
 	const char **g_names;
 
-	int g_name_len = 8;  /* group name length, minumum is 8 */
+	int g_name_len = 8;  /* group name length, minimum is 8 */
 
 	int grp_cnt = 0; /* total number groups */
 
 	int g_cur = 0, grp_old = -1; /* group list positions */
-	int o_cur = 0;					/* object list positions */
-	int g_o_count = 0;				 /* object count for group */
-	int oid = -1;  				/* object identifiers */
+	int o_cur = 0;				/* object list positions */
+	int g_o_count = 0;			 /* object count for group */
+	int oid = -1;				/* object identifiers */
 
 	region title_area = { 0, 0, 0, 4 };
 	region group_region = { 0, 6, MISSING, -2 };
@@ -499,14 +519,12 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 			if (otherfields)
 				prt(otherfields, 4, 46);
 
-
 			/* Print dividers: horizontal and vertical */
 			for (i = 0; i < 79; i++)
 				Term_putch(i, 5, TERM_WHITE, '=');
 
 			for (i = 0; i < browser_rows; i++)
 				Term_putch(g_name_len + 1, 6 + i, TERM_WHITE, '|');
-
 
 			/* Reset redraw flag */
 			redraw = FALSE;
@@ -584,7 +602,6 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 				button_kill('\r');
 			}
 
-
 			prt(format("<dir>%s%s%s, ESC", pvs, pedit, xtra), hgt - 2, 0);
 		}
 
@@ -614,7 +631,7 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 		if (visual_list)
 		{
 			display_visual_list(g_name_len + 3, 7, browser_rows-1,
-			                             wid - (g_name_len + 3), attr_top, char_left);
+										wid - (g_name_len + 3), attr_top, char_left);
 			place_visual_list_cursor(g_name_len + 3, 7, *o_funcs.xattr(oid),
 										*o_funcs.xchar(oid), attr_top, char_left);
 		}
@@ -697,7 +714,6 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 
 		switch (ke.key)
 		{
-
 			case ESCAPE:
 			{
 				flag = TRUE;
@@ -1157,6 +1173,7 @@ static void mon_summary(int gid, const int *object_list, int n, int top, int row
 	}
 }
 
+
 static int count_known_monsters(void)
 {
 	int m_count = 0;
@@ -1185,6 +1202,7 @@ static int count_known_monsters(void)
 
 	return m_count;
 }
+
 
 /*
  * Display known monsters.
@@ -1261,6 +1279,7 @@ static void do_cmd_knowledge_monsters(void *obj, const char *name)
 	FREE(monsters);
 }
 
+
 static const grouper object_text_order[] =
 {
 	{TV_RING,			"Rings"			},
@@ -1288,7 +1307,7 @@ static const grouper object_text_order[] =
 	{TV_HELM,			"Helms"			},
 	{TV_GLOVES,			"Gloves"		},
 	{TV_BOOTS,			"Boots"			},
-	{TV_CLOAK,			"Cloaks"			},
+	{TV_CLOAK,			"Cloaks"		},
 	{TV_DRAG_ARMOR,		"Dragon Scale Mail" },
 	{TV_DRAG_SHIELD,	"Dragon Scale Shields" },
 	{TV_HARD_ARMOR,		"Hard Armors"	},
@@ -1321,6 +1340,7 @@ static void get_artifact_display_name(char *o_name, size_t namelen, int a_idx)
 	object_desc(o_name, namelen, o_ptr, ODESC_PREFIX | ODESC_BASE | ODESC_SPOIL);
 }
 
+
 /*
  * Display an artifact label
  */
@@ -1336,6 +1356,7 @@ static void display_artifact(int col, int row, bool cursor, int oid)
 	/* Display the name */
 	c_prt(attr, o_name, row, col);
 }
+
 
 /*
  * Show artifact lore
@@ -1414,6 +1435,7 @@ void desc_art_fake(int a_idx)
 
 }
 
+
 static int a_cmp_tval(const void *a, const void *b)
 {
 	const artifact_type *a_a = &a_info[*(const int *)a];
@@ -1431,10 +1453,22 @@ static int a_cmp_tval(const void *a, const void *b)
 	return strcmp(a_a->name, a_b->name);
 }
 
-static const char *kind_name(int gid) { return object_text_order[gid].name; }
-static int art2gid(int oid) { return obj_group_order[a_info[oid].tval]; }
 
-/* Check if the given artifact idx is something we should "Know" about */
+static const char *kind_name(int gid)
+{
+	return object_text_order[gid].name;
+}
+
+
+static int art2gid(int oid)
+{
+	return obj_group_order[a_info[oid].tval];
+}
+
+
+/*
+ * Check if the given artifact idx is something we should "Know" about
+ */
 static bool artifact_is_known(int a_idx)
 {
 	int i;
@@ -1458,7 +1492,7 @@ static bool artifact_is_known(int a_idx)
 		}
 	}
 
-        /* Check inventory for the same */
+	/* Check inventory for the same */
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
 		object_type *o_ptr = &inventory[i];
@@ -1512,6 +1546,7 @@ static int collect_known_artifacts(int *artifacts, size_t artifacts_len)
 	return a_count;
 }
 
+
 /*
  * Display known artifacts
  */
@@ -1536,6 +1571,7 @@ static void do_cmd_knowledge_artifacts(void *obj, const char *name)
 	FREE(artifacts);
 }
 
+
 /* =================== EGO ITEMS  ==================================== */
 /* Many-to-many grouping (uses default join) */
 
@@ -1553,6 +1589,7 @@ static void display_ego_item(int col, int row, bool cursor, int oid)
 	/* Display the name */
 	c_prt(attr, e_name + e_ptr->name, row, col);
 }
+
 
 /*
  * Describe fake ego item "lore"
@@ -1616,6 +1653,7 @@ static void desc_ego_fake(int oid)
 	screen_load();
 }
 
+
 /* TODO? Currently ego items will order by e_idx */
 static int e_cmp_tval(const void *a, const void *b)
 {
@@ -1629,6 +1667,7 @@ static int e_cmp_tval(const void *a, const void *b)
 	/* Order by */
 	return strcmp(e_name + ea->name, e_name + eb->name);
 }
+
 
 /*
  * Display known ego_items
@@ -1675,6 +1714,7 @@ static void do_cmd_knowledge_ego_items(void *obj, const char *name)
 	FREE(egoitems);
 }
 
+
 /* =================== ORDINARY OBJECTS  ==================================== */
 /* Many-to-one grouping */
 
@@ -1699,9 +1739,11 @@ static int get_artifact_from_kind(object_kind *k_ptr)
 		}
 	}
 
-        assert(i < z_info->art_max);
+	assert(i < z_info->art_max);
+
 	return i;
 }
+
 
 /*
  * Display the objects in a group.
@@ -1755,6 +1797,7 @@ static void display_object(int col, int row, bool cursor, int oid)
 	/* Display symbol */
 	big_pad(76, row, a, c);
 }
+
 
 /*
  * Add a pval so the object descriptions don't look strange*
@@ -1848,6 +1891,16 @@ void apply_magic_fake(object_type *o_ptr)
 
 					break;
 				}
+				/* Rings that provide of Protection */
+				case SV_RING_LORD_PROT_ACID:
+				case SV_RING_LORD_PROT_FIRE:
+				case SV_RING_LORD_PROT_COLD:
+				{
+					/* Bonus to armor class */
+					o_ptr->to_a = 5;
+
+					break;
+				}
 				/*both to-hit and to-damage*/
 				case SV_RING_SLAYING:
 				{
@@ -1905,6 +1958,7 @@ void apply_magic_fake(object_type *o_ptr)
 
 				/* Amulet of Doom -- always cursed */
 				case SV_AMULET_DOOM:
+				case SV_AMULET_WOE:
 				{
 					/* Broken */
 					o_ptr->ident |= (IDENT_BROKEN);
@@ -1952,10 +2006,9 @@ void apply_magic_fake(object_type *o_ptr)
 
 			break;
 		}
-
 	}
-
 }
+
 
 /*
  * Describe fake object
@@ -2007,6 +2060,7 @@ static void desc_obj_fake(int k_idx)
 
 }
 
+
 static int o_cmp_tval(const void *a, const void *b)
 {
 	const object_kind *k_a = &k_info[*(const int *)a];
@@ -2048,7 +2102,12 @@ static int o_cmp_tval(const void *a, const void *b)
 	return k_a->sval - k_b->sval;
 }
 
-static int obj2gid(int oid) { return obj_group_order[k_info[oid].tval]; }
+
+static int obj2gid(int oid)
+{
+	return obj_group_order[k_info[oid].tval];
+}
+
 
 static char *o_xchar(int oid)
 {
@@ -2060,6 +2119,7 @@ static char *o_xchar(int oid)
 		return &flavor_info[k_ptr->flavor].x_char;
 }
 
+
 static byte *o_xattr(int oid)
 {
 	object_kind *k_ptr = &k_info[oid];
@@ -2069,6 +2129,7 @@ static byte *o_xattr(int oid)
 	else
 		return &flavor_info[k_ptr->flavor].x_attr;
 }
+
 
 /*
  * Display special prompt for object inscription.
@@ -2099,6 +2160,7 @@ static const char *o_xtra_prompt(int oid)
 
 	return no_insc;
 }
+
 
 /*
  * Special key actions for object inscription.
@@ -2161,7 +2223,6 @@ static void o_xtra_act(char ch, int oid)
 }
 
 
-
 /*
  * Display known objects
  */
@@ -2205,13 +2266,13 @@ void do_cmd_knowledge_objects(void *obj, const char *name)
 
 		c = obj_group_order[k_info[i].tval];
 		if (c >= 0) objects[o_count++] = i;
-
 	}
 
 	display_knowledge("known objects", objects, o_count, kind_f, obj_f, "Squelch         Inscribed    Sym");
 
 	FREE(objects);
 }
+
 
 /* =================== TERRAIN FEATURES ==================================== */
 /* Many-to-one grouping */
@@ -2244,8 +2305,8 @@ static void display_feature_lore(int oid)
 
 	/* Load the screen */
 	screen_load();
-
 }
+
 
 /*
  * Display the features in a group.
@@ -2285,9 +2346,24 @@ static int f_cmp_fkind(const void *a, const void *b)
 	return strcmp(f_name + fa->name, f_name + fb->name);
 }
 
-static const char *fkind_name(int gid) { return feature_group_text[gid]; }
-static byte *f_xattr(int oid) { return &f_info[oid].x_attr; }
-static char *f_xchar(int oid) { return &f_info[oid].x_char; }
+
+static const char *fkind_name(int gid)
+{
+	return feature_group_text[gid];
+}
+
+
+static byte *f_xattr(int oid)
+{
+	return &f_info[oid].x_attr;
+}
+
+
+static char *f_xchar(int oid)
+{
+	return &f_info[oid].x_char;
+}
+
 
 /*
  * Interact with feature visuals.
@@ -2334,7 +2410,9 @@ static void do_cmd_knowledge_features(void *obj, const char *name)
 
 /* =================== END JOIN DEFINITIONS ================================ */
 
-
+/*
+ * Display the high scores
+ */
 static void do_cmd_knowledge_scores(void *obj, const char *name)
 {
 	(void)obj;
@@ -2343,10 +2421,11 @@ static void do_cmd_knowledge_scores(void *obj, const char *name)
 }
 
 
-/*display the notes file*/
+/*
+ * display the notes file
+ */
 void do_cmd_knowledge_notes(void)
 {
-
 	/*close the notes file for writing*/
 	file_close(notes_file);
 
@@ -2357,7 +2436,10 @@ void do_cmd_knowledge_notes(void)
 
 }
 
-/*display the notes file*/
+
+/*
+ * display the notes file
+ */
 static void textui_knowledge_notes(void *obj, const char *name)
 {
 	(void)obj;
@@ -2365,6 +2447,7 @@ static void textui_knowledge_notes(void *obj, const char *name)
 
 	do_cmd_knowledge_notes();
 }
+
 
 /*
  * Display contents of the Home. Code taken from the player death interface
@@ -2404,13 +2487,11 @@ static void do_cmd_knowledge_home(void *obj, const char *name)
 		/* Display contents of the home */
 		for (k = 0; k < st_ptr->stock_num; k++)
 		{
-
 			object_desc(o_name, sizeof(o_name), &st_ptr->stock[k], ODESC_PREFIX | ODESC_FULL);
 			file_putf(fff, "%c) %s\n", which_set[k], o_name);
 
 			/* Describe random object attributes*/
 			identify_random_gen(&st_ptr->stock[k]);
-
 		}
 	}
 
@@ -2425,9 +2506,6 @@ static void do_cmd_knowledge_home(void *obj, const char *name)
 	/* Remove the file */
 	file_delete(file_name);
 }
-
-
-
 
 
 /*
@@ -2483,8 +2561,7 @@ static void do_cmd_knowledge_kills(void *obj, const char *name)
 		monster_lore *l_ptr = &l_list[who[i]];
 
 		/* Print a message */
-		file_putf(fff, "     %-40s  %5d\n",
-		        r_ptr->name_full, l_ptr->pkills);
+		file_putf(fff, "     %-40s  %5d\n", r_ptr->name_full, l_ptr->pkills);
 	}
 
 	/* Free the "who" array */
@@ -2506,30 +2583,28 @@ static void do_cmd_knowledge_kills(void *obj, const char *name)
  */
 static menu_item knowledge_actions[] =
 {
-{ {0, "Display object knowledge",   do_cmd_knowledge_objects,   0}, 'a', 0 },
-{ {0, "Display artifact knowledge", do_cmd_knowledge_artifacts, 0}, 'b', 0 },
-{ {0, "Display ego item knowledge", do_cmd_knowledge_ego_items, 0}, 'c', 0 },
-{ {0, "Display monster knowledge",  do_cmd_knowledge_monsters,  0}, 'd', 0 },
-{ {0, "Display feature knowledge",  do_cmd_knowledge_features,  0}, 'e', 0 },
-{ {0, "Display hall of fame",       do_cmd_knowledge_scores,    0}, 'f', 0 },
-{ {0, "Display notes file",  		textui_knowledge_notes,   0}, 'g', 0 },
-{ {0, "Display home inventory",  	do_cmd_knowledge_home,   0}, 'h', 0 },
-{ {0, "Display kill counts",       	do_cmd_knowledge_kills,    0}, 'k', 0 },
+{ {0, "Display object knowledge",	do_cmd_knowledge_objects,	0}, 'a', 0 },
+{ {0, "Display artifact knowledge",	do_cmd_knowledge_artifacts,	0}, 'b', 0 },
+{ {0, "Display ego item knowledge",	do_cmd_knowledge_ego_items,	0}, 'c', 0 },
+{ {0, "Display monster knowledge",	do_cmd_knowledge_monsters,	0}, 'd', 0 },
+{ {0, "Display feature knowledge",	do_cmd_knowledge_features,	0}, 'e', 0 },
+{ {0, "Display hall of fame",		do_cmd_knowledge_scores,	0}, 'f', 0 },
+{ {0, "Display notes file",			textui_knowledge_notes,		0}, 'g', 0 },
+{ {0, "Display home inventory",		do_cmd_knowledge_home,		0}, 'h', 0 },
+{ {0, "Display kill counts",		do_cmd_knowledge_kills,		0}, 'k', 0 },
 };
 
 static menu_type knowledge_menu;
 
 
-
-
-
-
-
-/* Keep macro counts happy. */
+/*
+ * Keep macro counts happy.
+ */
 static void cleanup_cmds(void)
 {
 	FREE(obj_group_order);
 }
+
 
 void init_cmd_know(void)
 {
@@ -2561,8 +2636,6 @@ void init_cmd_know(void)
 		}
 	}
 }
-
-
 
 
 /*
@@ -2603,7 +2676,6 @@ void do_cmd_knowledge(void)
 	button_backup_all();
 	button_kill_all();
 
-
 	while (c.key != ESCAPE)
 	{
 		clear_from(0);
@@ -2613,10 +2685,6 @@ void do_cmd_knowledge(void)
 		c = menu_select(&knowledge_menu, &cursor, 0);
 	}
 
-	screen_load();
 
-	button_restore();
-	event_signal(EVENT_MOUSEBUTTONS);
 }
-
 

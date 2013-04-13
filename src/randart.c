@@ -861,6 +861,7 @@ static long eval_max_dam(int r_idx)
 				case RBM_CLAW:
 				case RBM_BITE:
 				case RBM_PECK:
+				case RBM_BREATHE:
 				{
 					atk_dam *= 7;
 					atk_dam /= 5;
@@ -1072,12 +1073,12 @@ static bool init_mon_power(void)
 {
 	int i, j;
 
-	s16b mon_count[MAX_DEPTH][CREATURE_TYPE_MAX];
-	u32b mon_power_total[MAX_DEPTH][CREATURE_TYPE_MAX];
+	s16b mon_count[MAX_DEPTH_ALL][CREATURE_TYPE_MAX];
+	u32b mon_power_total[MAX_DEPTH_ALL][CREATURE_TYPE_MAX];
 	monster_race *r_ptr;
 
 	/*first clear the tables*/
-	for (i = 0; i < MAX_DEPTH; i++)
+	for (i = 0; i < MAX_DEPTH_ALL; i++)
 	{
 
 		for (j = 0; j < CREATURE_TYPE_MAX; j++)
@@ -1148,7 +1149,7 @@ static bool init_mon_power(void)
 	}
 
 	/*populate the mon_power-ave table*/
-	for (i = 0; i < MAX_DEPTH; i++)
+	for (i = 0; i < MAX_DEPTH_ALL; i++)
 	{
 		for (j = 0; j < CREATURE_TYPE_MAX; j++)
 		{
@@ -1166,7 +1167,7 @@ static bool init_mon_power(void)
 	 * Now smooth it out because some levels aren't consistent, mainly due to
 	 * there not being enough monsters at the deeper levels
      */
-	for (i = 0; i < MAX_DEPTH; i++)
+	for (i = 0; i < MAX_DEPTH_ALL; i++)
 	{
 
 		byte min_level = 1;

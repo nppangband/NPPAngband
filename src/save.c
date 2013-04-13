@@ -203,7 +203,7 @@ static void wr_monster(const monster_type *m_ptr)
 	wr_byte(MON_TMD_MAX);
 
 	/* Write all the monster timed effects, in a loop */
-	for (i = 0; i < MON_TMD_MAX; i++) wr_s16b(m_ptr->m_timed[i]);
+	for (i = 0; i < MON_TMD_MAX; i++)	wr_s16b(m_ptr->m_timed[i]);
 
 	/*save the temporary flags*/
 	tmp32u = m_ptr->mflag & (SAVE_MON_FLAGS);
@@ -1141,7 +1141,7 @@ static bool wr_savefile_new(void)
 	wr_extra();
 
 	/* Dump the "player hp" entries */
-	tmp16u = PY_MAX_LEVEL;
+	tmp16u = z_info->max_level;
 	wr_u16b(tmp16u);
 	for (i = 0; i < tmp16u; i++)
 	{

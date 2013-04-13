@@ -78,7 +78,7 @@ static timed_effect effects[] =
 			"You feel even safer from evil!", "You feel less safe from evil.",
 			0, 0, 0, MSG_PROT_EVIL },
 	/* TMD_INVULN */
-	{ "You feel invulnerable!", "You feel vulnerable once more.",
+	{ "Your skin turns into steel!", "Your skin returns to normal.",
 			NULL, NULL,
 			0, PU_BONUS, 0, MSG_INVULN },
 	/* TMD_HERO */
@@ -161,7 +161,6 @@ static timed_effect effects[] =
 	{ "You try to awake the trees around you!", "The trees are asleep now.",
 			NULL, NULL,
 			0, 0, 0, 0 },
-
 };
 
 
