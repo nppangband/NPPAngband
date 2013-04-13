@@ -1462,12 +1462,9 @@ static errr init_alloc(void)
  */
 bool init_angband(void)
 {
-<<<<<<< HEAD
-=======
 	/* Which game are we playing? */
 	get_game_mode();
 
->>>>>>> 6b31a04f2c2e3a206a376431f8ff629a89971548
 	event_signal(EVENT_ENTER_INIT);
 
 	/*** Initialize some arrays ***/
