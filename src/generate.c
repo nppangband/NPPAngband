@@ -793,6 +793,9 @@ static void place_rubble(int y, int x)
  */
 static int pick_up_stairs(void)
 {
+	/* No shafts in Moria */
+	if (game_mode == GAME_NPPMORIA) return (FEAT_LESS);
+
 	if (p_ptr->depth >= 2)
 	{
 		if (one_in_(2)) return (FEAT_LESS_SHAFT);
@@ -807,6 +810,9 @@ static int pick_up_stairs(void)
  */
 static int pick_down_stairs(void)
 {
+	/* No shafts in Moria */
+	if (game_mode == GAME_NPPMORIA) return (FEAT_MORE);
+
 	if ((p_ptr->depth < MAX_DEPTH - 2) &&
 	    (!quest_check(p_ptr->depth + 1)))
 	{
@@ -837,14 +843,17 @@ void place_random_stairs(int y, int x)
 	}
 	else if (one_in_(2))
 	{
-		if ((quest_check(p_ptr->depth + 1)) || (p_ptr->depth <= 1))
+		/* No shafts in Moria */
+		if (game_mode == GAME_NPPMORIA) cave_set_feat(y, x, FEAT_MORE);
+		else if ((quest_check(p_ptr->depth + 1)) || (p_ptr->depth <= 1))
 			cave_set_feat(y, x, FEAT_MORE);
 		else if (one_in_(2)) cave_set_feat(y, x, FEAT_MORE);
 		else cave_set_feat(y, x, FEAT_MORE_SHAFT);
 	}
 	else
 	{
-		if ((one_in_(2)) || (p_ptr->depth == 1)) cave_set_feat(y, x, FEAT_LESS);
+		if (game_mode == GAME_NPPMORIA) cave_set_feat(y, x, FEAT_LESS);
+		else if ((one_in_(2)) || (p_ptr->depth == 1)) cave_set_feat(y, x, FEAT_LESS);
 		else cave_set_feat(y, x, FEAT_LESS_SHAFT);
 	}
 }
@@ -9680,8 +9689,67 @@ static bool place_monsters_objects(void)
 		(void)alloc_monster(0, (MPLACE_SLEEP | MPLACE_GROUP));
 	}
 
-	/* Ensure quest monsters */
-	for (i = 0; i < z_info->q_max; i++)
+	/*
+	 * Ensure quest monsters in Moria.
+	 *
+	 * The purpose of this function is to, when at level 50 or below, to place either
+	 * vil Iggy or The Balrog of Moria.
+	 */
+	if (game_mode == GAME_NPPMORIA)
+	{
+		if (p_ptr->depth >= MORIA_QUEST_DEPTH)
+		{
+			int mon_count = 0;
+			int mon_choice;
+
+			/* Count the special monsters */
+			for (i = 1; i < z_info->r_max; i++)
+			{
+				monster_race *r_ptr = &r_info[i];
+
+				if (!(r_ptr->flags2 & (RF2_SPECIAL))) continue;
+
+				if (r_ptr->max_num == 0) continue;
+
+				mon_count++;
+			}
+
+			/* Paranoia */
+			if (mon_count)
+			{
+				int y, x;
+				monster_race *r_ptr;
+
+				mon_choice = randint1(mon_count);
+				mon_count = 0;
+
+				/* Find the special monster of choice */
+				for (i = 1; i < z_info->r_max; i++)
+				{
+					monster_race *r_ptr = &r_info[i];
+
+					if (!(r_ptr->flags2 & (RF2_SPECIAL))) continue;
+					if (r_ptr->max_num == 0) continue;
+
+					mon_count++;
+
+					/* Found it */
+					if (mon_choice == mon_count) break;
+				}
+
+				r_ptr = &r_info[i];
+
+				/* No big deal if it fails. We just place it one the next time a level is generated. */
+				if (pick_monster_location(r_ptr, &y, &x))
+				{
+					place_monster_aux(y, x, i, MPLACE_OVERRIDE);
+				}
+			}
+		}
+	}
+
+	/* Ensure quest monsters Angband */
+	else for (i = 0; i < z_info->q_max; i++)
 	{
 		quest_type *q_ptr = &q_info[i];
 

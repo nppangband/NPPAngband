@@ -544,7 +544,7 @@ static void prt_welcome(const owner_type *ot_ptr)
 
 
 		/* Get a title for the character */
-		if ((i % 2) && randint0(2)) player_name = c_text + cp_ptr->title[(p_ptr->lev - 1) / 5];
+		if ((i % 2) && randint0(2)) player_name = get_player_title();
 		else if (randint0(2))       player_name = op_ptr->full_name;
 		else                        player_name = (p_ptr->psex == SEX_MALE ? "sir" : "lady");
 
@@ -3997,13 +3997,12 @@ void do_cmd_reward(cmd_code code, cmd_arg args[])
 	/*It's an ironman spellbook, so make the spells available. */
 	if ((k_ptr->k_flags3 & (TR3_IRONMAN_ONLY)) && (cp_ptr->spell_book == k_ptr->tval))
 	{
-		byte realm, j;
-		realm = get_player_spell_realm();
+		byte j;
 
 		/* Extract spells */
 		for (j = 0; j < SPELLS_PER_BOOK; j++)
 		{
-			s16b spell = spell_list[realm][k_ptr->sval][j];
+			s16b spell = get_spell_from_list(k_ptr->sval, j);
 
 			/*skip blank spell slots*/
 			if (spell == -1) continue;

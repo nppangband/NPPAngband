@@ -134,6 +134,17 @@ void prt_stat(int stat, int row, int col)
 	}
 }
 
+cptr get_player_title(void)
+{
+	if (game_mode == GAME_NPPANGBAND)
+	{
+		return (c_text + cp_ptr->p_title[p_ptr->lev]);
+	}
+
+	return (c_text + cp_ptr->p_title[(p_ptr->lev - 1) / 5]);
+}
+
+
 
 /*
  * Prints "title", including "wizard" or "winner" as needed.
@@ -149,7 +160,7 @@ void prt_title(int row, int col)
 	}
 
 	/* Winner */
-	else if (p_ptr->total_winner || (p_ptr->lev > PY_MAX_LEVEL))
+	else if (p_ptr->total_winner || (p_ptr->lev > z_info->max_level))
 	{
 		p = "***WINNER***";
 	}
@@ -157,7 +168,7 @@ void prt_title(int row, int col)
 	/* Normal */
 	else
 	{
-		p = c_text + cp_ptr->title[(p_ptr->lev - 1) / 5];
+		p = get_player_title();
 	}
 
 	prt_field(p, row, col);
@@ -199,7 +210,7 @@ void prt_exp(int row, int col)
 
 	/* Calculate XP for next level */
 	if (!lev50)
-		xp = (long)(player_exp[p_ptr->lev - 1] * p_ptr->expfact / 100L) - p_ptr->exp;
+		xp = (long)(get_experience_by_level(p_ptr->lev-1) * p_ptr->expfact / 100L) - p_ptr->exp;
 
 	/* Format XP */
 	strnfmt(out_val, sizeof(out_val), "%8ld", (long)xp);
@@ -2003,8 +2014,8 @@ static void show_splashscreen(game_event_type type, game_event_data *data, void 
 	char buf[1024];
 
 	/*** Verify the "news" file ***/
-
-	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "news.txt");
+	if (game_mode == GAME_NPPANGBAND) path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "news.txt");
+	else path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "m_news.txt"); /*game_mode == GAME_MORIA*/
 	if (!file_exists(buf))
 	{
 		char why[1024];
@@ -2020,7 +2031,8 @@ static void show_splashscreen(game_event_type type, game_event_data *data, void 
 	Term_clear();
 
 	/* Open the News file */
-	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "news.txt");
+	if (game_mode == GAME_NPPANGBAND) path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "news.txt");
+	else path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "m_news.txt"); /*game_mode == GAME_MORIA*/
 	fp = file_open(buf, MODE_READ, -1);
 
 	text_out_hook = text_out_to_screen;
