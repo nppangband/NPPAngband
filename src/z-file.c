@@ -25,7 +25,7 @@
 #ifdef WINDOWS
 # include <windows.h>
 # include <io.h>
-/*# include <direct.h> */
+# include <direct.h>
 #endif
 
 #ifdef MACH_O_CARBON
@@ -47,7 +47,7 @@
 #endif
 
 #ifdef WINDOWS
-# define my_mkdir(path, perms) mkdir(path, perms)
+# define my_mkdir(path, perms) mkdir(path)
 #elif HAVE_MKDIR || MACH_O_CARBON
 # define my_mkdir(path, perms) mkdir(path, perms)
 #else

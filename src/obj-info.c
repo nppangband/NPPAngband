@@ -1561,6 +1561,12 @@ bool format_object_history(char *buf, size_t max, const object_type *o_ptr)
 			history_depth(buf, max, o_ptr->origin_dlvl);
 			break;
 		}
+		case ORIGIN_MAGIC:
+		{
+			my_strcat(buf, " created magically", max);
+			history_depth(buf, max, o_ptr->origin_dlvl);
+			break;
+		}
 		case ORIGIN_DROP_UNKNOWN:
 		{
 			my_strcat(buf, " dropped by an unknown monster", max);

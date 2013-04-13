@@ -128,6 +128,7 @@ static int mon_resist_effect(int m_idx, int idx, u16b flag)
 		/* 2 changes to resist */
 		if (randint0(100) < resist_chance) return (FULL_RESIST);
 		if (randint0(100) < resist_chance) return (FULL_RESIST);
+
 	}
 
 	/* Uniques are doubly hard to affect */
@@ -1335,7 +1336,7 @@ static void describe_monster_attack(int r_idx, const monster_lore *l_ptr)
 			case RBM_BITE:          p = "bite"; break;
 			case RBM_PECK:          p = "peck"; break;
 			case RBM_STING:         p = "sting"; break;
-			case RBM_XXX1:          break;
+			case RBM_BREATHE:       p = "breathe";  break;
 			case RBM_BUTT:          p = "butt"; break;
 			case RBM_CRUSH:         p = "crush"; break;
 			case RBM_ENGULF:        p = "engulf"; break;
@@ -1346,7 +1347,7 @@ static void describe_monster_attack(int r_idx, const monster_lore *l_ptr)
 			case RBM_GAZE:          p = "gaze"; break;
 			case RBM_WAIL:          p = "wail"; break;
 			case RBM_SPORE:         p = "release spores"; break;
-			case RBM_XXX4:          break;
+			case RBM_TRAMPLE:       p = "tramples you"; break;break;
 			case RBM_BEG:           p = "beg"; break;
 			case RBM_INSULT:        p = "insult"; break;
 			case RBM_XXX5:          break;
@@ -1591,6 +1592,8 @@ static void describe_monster_abilities(int r_idx, const monster_lore *l_ptr)
 
 	/* Collect susceptibilities */
 	vn = 0;
+	if (l_ptr->r_l_flags3 & RF3_HURT_POIS) vp[vn++] = "poison";
+	if (l_ptr->r_l_flags3 & RF3_HURT_ACID) vp[vn++] = "acid";
 	if (l_ptr->r_l_flags3 & RF3_HURT_ROCK) vp[vn++] = "rock remover";
 	if (l_ptr->r_l_flags3 & RF3_HURT_LIGHT) vp[vn++] = "bright light";
 	if (l_ptr->r_l_flags3 & RF3_HURT_FIRE) vp[vn++] = "fire";

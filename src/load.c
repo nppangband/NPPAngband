@@ -1138,7 +1138,7 @@ static errr rd_extra(void)
 	rd_s16b(&p_ptr->lev);
 
 	/* Verify player level */
-	if ((p_ptr->lev < 1) || (p_ptr->lev > PY_MAX_LEVEL))
+	if ((p_ptr->lev < 1) || (p_ptr->lev > z_info->max_titles))
 	{
 		note(format("Invalid player level (%d).", p_ptr->lev));
 		return (-1);
@@ -1202,7 +1202,7 @@ static errr rd_extra(void)
 	if (num == TMD_MAX)
 	{
 		/* Read all the effects */
-		for (i = 0; i < num; i++) rd_s16b(&p_ptr->timed[i]);
+		for (i = 0; i < num; i++)  rd_s16b(&p_ptr->timed[i]);
 	}
 	else
 	{
@@ -1350,7 +1350,7 @@ static errr rd_extra(void)
 	rd_u16b(&tmp16u);
 
 	/* Incompatible save files */
-	if (tmp16u > PY_MAX_LEVEL)
+	if (tmp16u > z_info->max_titles)
 	{
 		note(format("Too many (%u) hitpoint entries!", tmp16u));
 		return (-1);

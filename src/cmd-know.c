@@ -1891,6 +1891,16 @@ void apply_magic_fake(object_type *o_ptr)
 
 					break;
 				}
+				/* Rings that provide of Protection */
+				case SV_RING_LORD_PROT_ACID:
+				case SV_RING_LORD_PROT_FIRE:
+				case SV_RING_LORD_PROT_COLD:
+				{
+					/* Bonus to armor class */
+					o_ptr->to_a = 5;
+
+					break;
+				}
 				/*both to-hit and to-damage*/
 				case SV_RING_SLAYING:
 				{
@@ -1948,6 +1958,7 @@ void apply_magic_fake(object_type *o_ptr)
 
 				/* Amulet of Doom -- always cursed */
 				case SV_AMULET_DOOM:
+				case SV_AMULET_WOE:
 				{
 					/* Broken */
 					o_ptr->ident |= (IDENT_BROKEN);
@@ -2674,9 +2685,6 @@ void do_cmd_knowledge(void)
 		c = menu_select(&knowledge_menu, &cursor, 0);
 	}
 
-	screen_load();
 
-	button_restore();
-	event_signal(EVENT_MOUSEBUTTONS);
 }
 

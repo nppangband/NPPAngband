@@ -122,8 +122,11 @@ struct maxima
 	u16b ghost_maint_max;
 	u16b art_spec_max;	/* Max number of special artifacts*/
 
-	u16b art_norm_max;	/* Max number for normal artifacts (special - normal)*/
-	u16b art_rand_max;	/*max number of random artifacts*/
+	u16b art_norm_max; /* Max number for normal artifacts (special - normal)*/
+	u16b art_rand_max; /*max number of random artifacts*/
+
+	byte max_level;
+	byte max_titles;
 };
 
 
@@ -839,7 +842,7 @@ struct player_class
 {
 	u32b name;			/* Name (offset) */
 
-	u32b title[10];		/* Titles - offset */
+	u32b p_title[PY_MAX_LEVEL];		/* Titles - offset */
 
 	s16b c_adj[A_MAX];	/* Class stat modifier */
 
@@ -1134,6 +1137,8 @@ struct player_type
 	u16b quiver_slots;
 
 
+
+
 	s16b target_set;		/* Target flag */
 	s16b target_who;		/* Target identity */
 	s16b target_row;		/* Target location */
@@ -1203,6 +1208,9 @@ struct player_type
 	s32b p_turn; /* Player turn */
 
 	u16b dungeon_type;	/* One of the DUNGEON_TYPE_* constants */
+
+
+
 };
 
 

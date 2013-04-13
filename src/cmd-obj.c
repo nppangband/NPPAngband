@@ -774,6 +774,36 @@ static bool eat_food(object_type *o_ptr, bool *ident)
 			break;
 		}
 
+		case SV_FOOD_FIRST_AID:
+		{
+			if (hp_player(damroll(1, 6))) *ident = TRUE;
+			break;
+		}
+
+		case SV_FOOD_MINOR_CURES:
+		{
+			if (hp_player(damroll(2, 6))) *ident = TRUE;
+			break;
+		}
+
+		case SV_FOOD_LIGHT_CURES:
+		{
+			if (hp_player(damroll(3, 6))) *ident = TRUE;
+			break;
+		}
+
+		case SV_FOOD_RESTORATION:
+		{
+			if (hp_player(damroll(3, 6))) *ident = TRUE;
+			break;
+		}
+
+		case SV_FOOD_MAJOR_CURES:
+		{
+			if (hp_player(damroll(3, 12))) *ident = TRUE;
+			break;
+		}
+
 		case SV_FOOD_RATION:
 		case SV_FOOD_SLIME_MOLD:
 		{
@@ -1057,7 +1087,16 @@ static bool quaff_potion(object_type *o_ptr, bool *ident)
 
 		case SV_POTION_CURE_LIGHT:
 		{
-			if (hp_player(damroll(3, 8))) *ident = TRUE;
+			int dam_dice = 3;
+			int dam_side = 8;
+
+			if (game_mode == GAME_NPPMORIA)
+			{
+				dam_dice = 2;
+				dam_side = 7;
+			}
+
+			if (hp_player(damroll(dam_dice, dam_side))) *ident = TRUE;
 			if (clear_timed(TMD_BLIND, TRUE)) *ident = TRUE;
 			if (set_cut(p_ptr->timed[TMD_CUT] - 10)) *ident = TRUE;
 			break;
@@ -1065,7 +1104,16 @@ static bool quaff_potion(object_type *o_ptr, bool *ident)
 
 		case SV_POTION_CURE_SERIOUS:
 		{
-			if (hp_player(damroll(5, 10))) *ident = TRUE;
+			int dam_dice = 5;
+			int dam_side = 10;
+
+			if (game_mode == GAME_NPPMORIA)
+			{
+				dam_dice = 4;
+				dam_side = 7;
+			}
+
+			if (hp_player(damroll(dam_dice, dam_side))) *ident = TRUE;
 			if (clear_timed(TMD_BLIND, TRUE)) *ident = TRUE;
 			if (clear_timed(TMD_CONFUSED, TRUE)) *ident = TRUE;
 			if (set_cut((p_ptr->timed[TMD_CUT] / 2) - 50)) *ident = TRUE;
@@ -1074,7 +1122,16 @@ static bool quaff_potion(object_type *o_ptr, bool *ident)
 
 		case SV_POTION_CURE_CRITICAL:
 		{
-			if (hp_player(damroll(8, 10))) *ident = TRUE;
+			int dam_dice = 8;
+			int dam_side = 10;
+
+			if (game_mode == GAME_NPPMORIA)
+			{
+				dam_dice = 6;
+				dam_side = 7;
+			}
+
+			if (hp_player(damroll(dam_dice, dam_side))) *ident = TRUE;
 			if (clear_timed(TMD_BLIND, TRUE)) *ident = TRUE;
 			if (clear_timed(TMD_CONFUSED, TRUE)) *ident = TRUE;
 			if (clear_timed(TMD_POISONED, TRUE)) *ident = TRUE;
@@ -1085,7 +1142,14 @@ static bool quaff_potion(object_type *o_ptr, bool *ident)
 
 		case SV_POTION_HEALING:
 		{
-			if (hp_player(325)) *ident = TRUE;
+			int heal = 325;
+
+			if (game_mode == GAME_NPPMORIA)
+			{
+				heal = 1000;
+			}
+
+			if (hp_player(heal)) *ident = TRUE;
 			if (clear_timed(TMD_BLIND, TRUE)) *ident = TRUE;
 			if (clear_timed(TMD_CONFUSED, TRUE)) *ident = TRUE;
 			if (clear_timed(TMD_POISONED, TRUE)) *ident = TRUE;
@@ -1313,6 +1377,16 @@ static bool quaff_potion(object_type *o_ptr, bool *ident)
 			break;
 		}
 
+		case SV_POTION_INVULNERABILITY:
+		{
+			if (p_ptr->timed[TMD_INVULN])
+			{
+				if (inc_timed(TMD_INVULN, 5, TRUE)) *ident = TRUE;
+			}
+			else if (inc_timed(TMD_INVULN, randint(10) + 10, TRUE)) *ident = TRUE;
+			break;
+		}
+
 	}
 
 	/*
@@ -1533,7 +1607,11 @@ static bool read_scroll(object_type *o_ptr, bool *ident)
 
 		case SV_SCROLL_LIGHT:
 		{
-			if (light_area(damroll(2, 8), 2)) *ident = TRUE;
+			int dam_dice = 2;
+
+			if (game_mode == GAME_NPPMORIA) dam_dice = 1;
+
+			if (light_area(damroll(dam_dice, 8), 2)) *ident = TRUE;
 			break;
 		}
 
@@ -1727,6 +1805,24 @@ static bool read_scroll(object_type *o_ptr, bool *ident)
 			*ident = TRUE;
 			break;
 		}
+		case SV_SCROLL_CREATE_FOOD:
+		{
+			create_food();
+			*ident = TRUE;
+			break;
+		}
+		case SV_SCROLL_CREATE_DOORS:
+		{
+			door_creation();
+			*ident = TRUE;
+			break;
+		}
+		case SV_SCROLL_SLEEP_MONSTER:
+		{
+			sleep_monsters_touch();
+			*ident = TRUE;
+			break;
+		}
 	}
 
 	return (used_up);
@@ -1799,11 +1895,14 @@ static bool use_staff(object_type *o_ptr, bool *ident)
 
 		case SV_STAFF_STARLIGHT:
 		{
+			int dam_dice = 6; /* (game_mode == GAME_NPPANGBAND) */
+			if (game_mode == GAME_NPPMORIA) dam_dice = 2;
+
 			if (!p_ptr->timed[TMD_BLIND])
 			{
 				msg_print("The end of the staff glows brightly...");
 			}
-			for (k = 0; k < 8; k++) light_line(ddd[k], damroll(6, 8));
+			for (k = 0; k < 8; k++) light_line(ddd[k], damroll(dam_dice, 8));
 			*ident = TRUE;
 			break;
 		}
@@ -1860,7 +1959,16 @@ static bool use_staff(object_type *o_ptr, bool *ident)
 
 		case SV_STAFF_CURE_LIGHT:
 		{
-			if (hp_player(damroll(2, 10))) *ident = TRUE;
+			int dam_dice = 2;  /* (game_mode == GAME_NPPANGBAND) */
+			int dam_side = 10;
+
+			if (game_mode == GAME_NPPMORIA)
+			{
+				dam_dice = 1;
+				dam_side = 8;
+			}
+
+			if (hp_player(damroll(dam_dice, dam_side))) *ident = TRUE;
 			break;
 		}
 
@@ -1898,7 +2006,11 @@ static bool use_staff(object_type *o_ptr, bool *ident)
 
 		case SV_STAFF_SLEEP_MONSTERS:
 		{
-			if (sleep_monsters(damroll(3, p_ptr->lev))) *ident = TRUE;
+			if (game_mode == GAME_NPPMORIA)
+			{
+				if (sleep_monsters(500)) *ident = TRUE;
+			}
+			else if (sleep_monsters(damroll(3, p_ptr->lev))) *ident = TRUE; /* (game_mode == GAME_NPPANGBAND) */
 			break;
 		}
 
@@ -1931,6 +2043,18 @@ static bool use_staff(object_type *o_ptr, bool *ident)
 		case SV_STAFF_DISPEL_EVIL:
 		{
 			if (dispel_evil(60)) *ident = TRUE;
+			break;
+		}
+
+		case SV_STAFF_MASS_POLYMORPH:
+		{
+			if (mass_polymorph()) *ident = TRUE;
+			break;
+		}
+
+		case SV_STAFF_REMOVE_CURSE:
+		{
+			if (remove_curse(FALSE)) *ident = TRUE;
 			break;
 		}
 
@@ -2070,8 +2194,12 @@ static bool aim_wand(object_type *o_ptr, bool *ident, int dir)
 
 		case SV_WAND_LIGHT:
 		{
+			int dam_dice = 6;
+
+			if (game_mode == GAME_NPPMORIA) dam_dice = 2;
+
 			msg_print("A line of blue shimmering light appears.");
-			light_line(dir, damroll(6, 8));
+			light_line(dir, damroll(dam_dice, 8));
 			*ident = TRUE;
 			break;
 		}
@@ -2102,7 +2230,11 @@ static bool aim_wand(object_type *o_ptr, bool *ident, int dir)
 
 		case SV_WAND_DRAIN_LIFE:
 		{
-			if (drain_life(dir, 150)) *ident = TRUE;
+			int dam = 150;
+
+			if (game_mode == GAME_NPPMORIA) dam = 75;
+
+			if (drain_life(dir, dam)) *ident = TRUE;
 			break;
 		}
 
@@ -2135,14 +2267,31 @@ static bool aim_wand(object_type *o_ptr, bool *ident, int dir)
 
 		case SV_WAND_ELEC_BOLT:
 		{
-			fire_bolt_or_beam(20, GF_ELEC, dir, damroll(6, 6));
+			int dam_dice = 6;
+			int dam_side = 6;
+
+			if (game_mode == GAME_NPPMORIA)
+			{
+				dam_dice = 4;
+				dam_side = 8;
+			}
+
+			fire_bolt_or_beam(20, GF_ELEC, dir, damroll(dam_dice, dam_side));
 			*ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_FIRE_BOLT:
 		{
-			fire_bolt_or_beam(20, GF_FIRE, dir, damroll(12, 8));
+			int dam_dice = 12;
+
+			if (game_mode == GAME_NPPMORIA)
+			{
+				dam_dice = 9;
+			}
+
+
+			fire_bolt_or_beam(20, GF_FIRE, dir, damroll(dam_dice, 8));
 			*ident = TRUE;
 			break;
 		}
@@ -2156,28 +2305,56 @@ static bool aim_wand(object_type *o_ptr, bool *ident, int dir)
 
 		case SV_WAND_ACID_BALL:
 		{
-			fire_ball(GF_ACID, dir, 120, 2);
+			int dam = 120;
+
+			if (game_mode == GAME_NPPMORIA)
+			{
+				dam = 60;
+			}
+
+			fire_ball(GF_ACID, dir, dam, 2);
 			*ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_ELEC_BALL:
 		{
-			fire_ball(GF_ELEC, dir, 64, 2);
+			int dam = 64;
+
+			if (game_mode == GAME_NPPMORIA)
+			{
+				dam = 32;
+			}
+
+			fire_ball(GF_ELEC, dir, dam, 2);
 			*ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_FIRE_BALL:
 		{
-			fire_ball(GF_FIRE, dir, 144, 2);
+			int dam = 144;
+
+			if (game_mode == GAME_NPPMORIA)
+			{
+				dam = 72;
+			}
+
+			fire_ball(GF_FIRE, dir, dam, 2);
 			*ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_COLD_BALL:
 		{
-			fire_ball(GF_COLD, dir, 96, 2);
+			int dam = 96;
+
+			if (game_mode == GAME_NPPMORIA)
+			{
+				dam = 48;
+			}
+
+			fire_ball(GF_COLD, dir, dam, 2);
 			*ident = TRUE;
 			break;
 		}
@@ -2244,6 +2421,12 @@ static bool aim_wand(object_type *o_ptr, bool *ident, int dir)
 		case SV_WAND_ANNIHILATION:
 		{
 			if (drain_life(dir, 250)) *ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_WALL_BUILDING:
+		{
+			if (build_wall(dir, damroll(4, 8))) *ident = TRUE;
 			break;
 		}
 	}
