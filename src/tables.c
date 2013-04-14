@@ -2278,7 +2278,7 @@ option_entry options[OPT_MAX] =
 /*
  * Option screen interface
  */
-const byte option_page[OPT_PAGE_MAX][OPT_PAGE_PER] =
+const byte option_page_nppangband[OPT_PAGE_MAX][OPT_PAGE_PER] =
 {
 	/*** Interface/Gameplay ***/
 
@@ -2375,6 +2375,137 @@ const byte option_page[OPT_PAGE_MAX][OPT_PAGE_PER] =
 		OPT_birth_no_xtra_artifacts,
 		OPT_birth_no_selling,
 		OPT_birth_simple_dungeons,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE
+	},
+
+	/*** Cheat ***/
+
+	{
+		OPT_cheat_peek,
+		OPT_cheat_hear,
+		OPT_cheat_room,
+		OPT_cheat_xtra,
+		OPT_cheat_know,
+		OPT_cheat_live,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE
+	}
+};
+
+/*
+ * Option screen interface
+ */
+const byte option_page_nppmoria[OPT_PAGE_MAX][OPT_PAGE_PER] =
+{
+	/*** Interface/Gameplay ***/
+
+	{
+		OPT_use_sound,
+		OPT_rogue_like_commands,
+		OPT_floor_query_flag,
+		OPT_carry_query_flag,
+		OPT_use_old_target,
+		OPT_always_pickup,
+		OPT_stack_force_notes,
+		OPT_stack_force_costs,
+		OPT_auto_display_lists,
+		OPT_easy_open,
+		OPT_easy_alter,
+		OPT_expand_inscribe,
+		OPT_mouse_movement,
+		OPT_mouse_buttons,
+		OPT_smart_cheat,
+		OPT_xchars_to_file,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE
+	},
+
+	/*** Display ***/
+
+	{
+		OPT_hp_changes_color,
+		OPT_hilight_player,
+		OPT_center_player,
+		OPT_show_piles,
+		OPT_show_flavors,
+		OPT_view_yellow_light,
+		OPT_view_bright_light,
+		OPT_view_granite_light,
+		OPT_view_special_light,
+		OPT_view_perma_grids,
+		OPT_view_torch_grids,
+		OPT_mark_squelch_items,
+		OPT_animate_flicker,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE
+	},
+
+	/* Warning */
+
+	{
+		OPT_disturb_move,
+		OPT_disturb_near,
+		OPT_disturb_detect,
+		OPT_disturb_state,
+		OPT_quick_messages,
+		OPT_auto_more,
+		OPT_ring_bell,
+		OPT_flush_failure,
+		OPT_flush_disturb,
+		OPT_verify_destroy,
+		OPT_notify_recharge,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE
+	},
+
+	/*** Birth ***/
+
+	{
+		OPT_birth_money,
+		OPT_birth_take_notes,
+		OPT_birth_ironman,
+		OPT_birth_no_stores,
+		OPT_birth_no_stacking,
+		OPT_birth_no_selling,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
+		OPT_NONE,
 		OPT_NONE,
 		OPT_NONE,
 		OPT_NONE

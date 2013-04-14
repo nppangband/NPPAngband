@@ -124,6 +124,7 @@
  * Dungeon generation values
  */
 
+#define DUN_UNUSUAL_MORIA	300	/* Level/chance of unusual room */
 #define DUN_UNUSUAL	180	/* Level/chance of unusual room */
 #define DUN_DEST	35	/* 1/chance of having a destroyed level */
 #define DUN_FRACTAL	25	/* 1/chance of having a fractal level */
@@ -170,6 +171,10 @@
 #define DUN_AMT_ROOM	9	/* Amount of objects for rooms */
 #define DUN_AMT_ITEM	3	/* Amount of objects for rooms/corridors */
 #define DUN_AMT_GOLD	3	/* Amount of treasure for rooms/corridors */
+
+#define DUN_AMT_ROOM_MORIA	7	/* Amount of objects for rooms */
+#define DUN_AMT_ITEM_MORIA	2	/* Amount of objects for rooms/corridors */
+#define DUN_AMT_GOLD_MORIA	2	/* Amount of treasure for rooms/corridors */
 
 /*
  * Hack -- Dungeon allocation "places"
@@ -6345,6 +6350,9 @@ static void place_marked_squares(void)
 	int y, x, k, i;
 	s32b j;
 
+	/* No secret quuares in Moria */
+	if (game_mode == GAME_NPPMORIA) return;
+
 	/*
 	 * First factor in the number of "secret squares" based on size of dungeon
 	 * Start with 100 since we are dealing with int variables.
@@ -9004,6 +9012,9 @@ static void transform_walls_regions(void)
  */
 static void build_misc_features(void)
 {
+	/* Moria dungeons are simple */
+	if (game_mode == GAME_NPPMORIA) return;
+
 	/* Sometimes we place fog on water and ice levels */
 	if ((level_flag & (LF1_WATER | LF1_ICE)) && !(level_flag & (LF1_LAVA | LF1_FIRE)) &&
 		(effective_depth(p_ptr->depth) >= 35) && one_in_(3))
@@ -11097,11 +11108,12 @@ static bool cave_gen(void)
 	/* Set level type */
 	set_dungeon_type(DUNGEON_TYPE_DEFAULT);
 
-	/* Possible "destroyed" level */
-	if ((effective_depth(p_ptr->depth) > 10) && (one_in_(DUN_DEST))) destroyed = TRUE;
+	/* Possible "destroyed" level, but not in Moria  */
+	if (game_mode == GAME_NPPMORIA) destroyed = FALSE;
+	else if ((effective_depth(p_ptr->depth) > 10) && (one_in_(DUN_DEST))) destroyed = TRUE;
 
 	/* Possible "fractal" level */
-	if (!destroyed && (effective_depth(p_ptr->depth) >= 15) && one_in_(DUN_FRACTAL) &&
+	if (!destroyed && (effective_depth(p_ptr->depth) >= 15) && one_in_(DUN_FRACTAL) && (game_mode != GAME_NPPMORIA) &&
 			 (!adult_simple_dungeons)) fractal_level = TRUE;
 
 	/*Clear the level flag*/
@@ -11139,8 +11151,8 @@ static bool cave_gen(void)
 		}
 	}
 
-	if ((adult_force_small_lev) || (one_in_(SMALL_LEVEL)) ||
-		(quest_on_level == QUEST_VAULT))
+	if (((adult_force_small_lev) || (one_in_(SMALL_LEVEL)) ||
+		(quest_on_level == QUEST_VAULT)) && (game_mode != GAME_NPPMORIA))
 	{
 		int l, m;
 
@@ -11212,8 +11224,8 @@ static bool cave_gen(void)
 	/* No rooms yet */
 	dun->cent_n = 0;
 
-	/* No features on destroyed level */
-	if ((!destroyed) && one_in_(2) && randint0(100) < p_ptr->depth)
+	/* No features on destroyed level, or in Moria */
+	if ((!destroyed) && one_in_(2) && (game_mode != GAME_NPPMORIA) && randint0(100) < p_ptr->depth)
 	{
 		/* Build lakes and rivers */
 		build_nature();
@@ -11275,39 +11287,57 @@ static bool cave_gen(void)
 		}
 
 		/* Attempt an "unusual" room */
-		if (rand_int(DUN_UNUSUAL) < effective_depth(p_ptr->depth))
+		if (rand_int(DUN_UNUSUAL) < effective_depth(p_ptr->depth) )
 		{
-			/* Roll for room type */
-			k = rand_int(100);
-
-			/* Attempt a very unusual room */
-			if (rand_int(DUN_UNUSUAL) < effective_depth(p_ptr->depth))
+			if (game_mode == GAME_NPPMORIA)
 			{
-				/* Type 8 -- Greater vault (10%) */
-				if ((k < 10) && !greater_vault && room_build(by, bx, 8))
+				if (rand_int(DUN_UNUSUAL_MORIA) < p_ptr->depth)
 				{
-					greater_vault = TRUE;
+					k = randint(3);
+					if (k == 1)	 		build_type2(by, bx);
+					else if (k == 2) 	build_type3(by, bx);
+					else		 		build_type4(by, bx);
+
 					continue;
 				}
-
-				/* Type 7 -- Lesser vault (15%) */
-				if ((k < 25) && room_build(by, bx, 7)) continue;
-
-				/* Type 6 -- Monster pit (15%) */
-				if ((k < 40) && room_build(by, bx, 6)) continue;
-
-				/* Type 5 -- Monster nest (10%) */
-				if ((k < 50) && room_build(by, bx, 5)) continue;
+				/* Attempt a trivial room */
+				else if (room_build(by, bx, 1)) continue;
 			}
 
-			/* Type 4 -- Large room (25%) */
-			if ((k < 25) && room_build(by, bx, 4)) continue;
+			else
+			{
+				/* Roll for room type */
+				k = rand_int(100);
 
-			/* Type 3 -- Cross room (25%) */
-			if ((k < 50) && room_build(by, bx, 3)) continue;
+				/* Attempt a very unusual room */
+				if (rand_int(DUN_UNUSUAL) < effective_depth(p_ptr->depth))
+				{
+					/* Type 8 -- Greater vault (10%) */
+					if ((k < 10) && !greater_vault && room_build(by, bx, 8))
+					{
+						greater_vault = TRUE;
+						continue;
+					}
 
-			/* Type 2 -- Overlapping (50%) */
-			if ((k < 100) && room_build(by, bx, 2)) continue;
+					/* Type 7 -- Lesser vault (15%) */
+					if ((k < 25) && room_build(by, bx, 7)) continue;
+
+					/* Type 6 -- Monster pit (15%) */
+					if ((k < 40) && room_build(by, bx, 6)) continue;
+
+					/* Type 5 -- Monster nest (10%) */
+					if ((k < 50) && room_build(by, bx, 5)) continue;
+				}
+
+				/* Type 4 -- Large room (25%) */
+				if ((k < 25) && room_build(by, bx, 4)) continue;
+
+				/* Type 3 -- Cross room (25%) */
+				if ((k < 50) && room_build(by, bx, 3)) continue;
+
+				/* Type 2 -- Overlapping (50%) */
+				if ((k < 100) && room_build(by, bx, 2)) continue;
+			}
 		}
 
 		/* Occasionally attempt a starburst room */
@@ -11394,16 +11424,30 @@ static void build_store(u16b feat, int yy, int xx)
 {
 	int y, x, y0, x0, y1, x1, y2, x2, tmp;
 
+	if (game_mode == GAME_NPPMORIA)
+	{
+		/* Find the "center" of the store */
+		y0 = yy * 10 + 5;
+		x0 = xx * 16 + 16;
 
-	/* Find the "center" of the store */
-	y0 = yy * 9 + 6;
-	x0 = xx * 11 + 11;
+		/* Determine the store boundaries */
+		y1 = y0 - randint1(3);
+		y2 = y0 + randint1(4);
+		x1 = x0 - randint1(5);
+		x2 = x0 + randint1(6);
+	}
+	else
+	{
+		/* Find the "center" of the store */
+		y0 = yy * 9 + 6;
+		x0 = xx * 11 + 11;
 
-	/* Determine the store boundaries */
-	y1 = y0 - randint((yy == 0) ? 2 : 1) - 1;
-	y2 = y0 + randint((yy == 1) ? 2 : 1) + 1;
-	x1 = x0 - randint(2) - 1;
-	x2 = x0 + randint(2) + 1;
+		/* Determine the store boundaries */
+		y1 = y0 - randint((yy == 0) ? 2 : 1) - 1;
+		y2 = y0 + randint((yy == 1) ? 2 : 1) + 1;
+		x1 = x0 - randint(2) - 1;
+		x2 = x0 + randint(2) + 1;
+	}
 
 	/* Build an invulnerable rectangular building */
 	for (y = y1; y <= y2; y++)
@@ -11486,6 +11530,10 @@ static void town_gen_hack(void)
 
 	u16b rooms[MAX_STORES];
 
+	u16b max_stores = MAX_STORES;
+
+	if (game_mode == GAME_NPPMORIA) max_stores = 6;
+
 	/* Hack -- Use the "simple" RNG */
 	Rand_quick = TRUE;
 
@@ -11494,6 +11542,9 @@ static void town_gen_hack(void)
 
 	/* Prepare an Array of "remaining stores" */
 	for (n = 0; n < MAX_STORES; n++) rooms[n] = 0;
+
+	/* hack - make sure the right number of stores is generated in the moria town */
+	if (game_mode == GAME_NPPMORIA) n = 6;
 
 	/* Scan the table */
 	for (i = 0; i < z_info->f_max; i++)
@@ -11505,7 +11556,7 @@ static void town_gen_hack(void)
 		if (!(f_ptr->f_flags1 & (FF1_SHOP))) continue;
 
 		/*paranoia*/
-		if (f_ptr->f_power >= MAX_STORES) continue;
+		if (f_ptr->f_power >= max_stores) continue;
 
 		/*We found a shop*/
 		rooms[f_ptr->f_power] = i;
@@ -11514,8 +11565,10 @@ static void town_gen_hack(void)
 	/* Place two rows of stores */
 	for (y = 0; y < 2; y++)
 	{
+		int stores_row = max_stores / 2;
+
 		/* Place five stores per row, but leave one space for stairs */
-		for (x = 0; x < 5; x++)
+		for (x = 0; x < stores_row; x++)
 		{
 			/* Pick a random unplaced store */
 			k = ((n <= 1) ? 0 : rand_int(n));
@@ -11669,6 +11722,9 @@ static int pick_dungeon_type(void)
 	{
 		return DUNGEON_TYPE_TOWN;
 	}
+
+	/* Classic moria level */
+	if (game_mode == GAME_NPPMORIA)	return DUNGEON_TYPE_DEFAULT;
 
 	/* Themed level quest */
 	if (quest_check(p_ptr->depth) == QUEST_THEMED_LEVEL)
@@ -12016,6 +12072,13 @@ static bool can_place_escorts_true(s16b r_idx)
 	return (TRUE);
 }
 
+/*
+ * Allow escorts
+ */
+static bool can_place_escorts_false(s16b r_idx)
+{
+	return (FALSE);
+}
 
 /*
  * Player in rooms
@@ -12299,6 +12362,79 @@ static dungeon_capabilities_type dun_cap_body_default =
 	get_gold_count_default,
 	get_extra_object_count_default,
 };
+
+/*
+ * Monsters in level
+ */
+static int get_monster_count_moria(void)
+{
+	int alloc_level = (p_ptr->depth / 3);
+
+	/* Boundary Control */
+	if (alloc_level < 2) alloc_level = 2;
+	else if (alloc_level > 10) alloc_level = 10;
+
+	alloc_level += MIN_M_ALLOC_LEVEL;
+
+	return (alloc_level);
+}
+
+
+/*
+ * Objects in rooms
+ */
+static int get_object_count_moria(void)
+{
+	return (Rand_normal(DUN_AMT_ROOM_MORIA, 3));
+}
+
+
+/*
+ * Gold in both rooms and corridors
+ */
+static int get_gold_count_moria(void)
+{
+	return (Rand_normal(DUN_AMT_GOLD_MORIA, 3));
+}
+
+/*
+ * objects in both rooms and corridors
+ */
+static int get_extra_object_count_moria(void)
+{
+	int alloc_level = (p_ptr->depth / 3);
+
+	/* Boundary Control */
+	if (alloc_level < 2) alloc_level = 2;
+	else if (alloc_level > 10) alloc_level = 10;
+
+	return (DUN_AMT_ITEM_MORIA + randint1(alloc_level));
+}
+
+
+/*
+ * Dungeon capabilities for classic levels
+ */
+static dungeon_capabilities_type dun_cap_body_moria =
+{
+	can_place_escorts_false,
+	can_place_player_in_rooms_false,
+	can_place_stairs_default,
+	adjust_stairs_number_default,
+	can_place_fog_in_rooms_false,
+	can_target_feature_default,
+	can_be_transformed_false,
+	can_place_non_native_monsters_false,
+	allow_level_repopulation_true,
+	limited_level_summoning_false,
+	allow_monster_multiply_true,
+	prevent_destruction_default,
+	get_monster_count_moria,
+	get_object_count_moria,
+	get_gold_count_moria,
+	get_extra_object_count_moria,
+};
+
 
 
 /*
@@ -12598,7 +12734,9 @@ void set_dungeon_type(u16b dungeon_type)
 		/* Classic dungeons */
 		default:
 		{
-			dun_cap = &dun_cap_body_default;
+			if (game_mode == GAME_NPPMORIA) dun_cap = &dun_cap_body_moria;
+
+			else dun_cap = &dun_cap_body_default;
 		}
 	}
 }
