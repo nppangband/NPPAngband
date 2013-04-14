@@ -1215,7 +1215,7 @@ void write_mon_power(void)
 	fprintf(fff, "\n\n");
 
 	/*first clear the tables*/
-	for (i = 0; i < MAX_DEPTH; i++)
+	for (i = 0; i < MAX_DEPTH_ALL; i++)
 	{
 		/* Write New/Number/Name */
 		fprintf(fff, "lvl: %3d unique_ave_power:%9d creature_ave_power:%9d \n", i,

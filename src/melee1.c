@@ -414,6 +414,13 @@ bool make_attack_normal(monster_type *m_ptr)
 				sound_msg = MSG_MON_BITE;
 				break;
 			}
+			case RBM_BREATHE:
+			{
+				act = "breathes on you";
+				do_cut = 1;
+				sound_msg = MSG_BR_ACID;
+				break;
+			}
 			case RBM_STING:
 			{
 				act = "stings you";
@@ -489,8 +496,12 @@ bool make_attack_normal(monster_type *m_ptr)
 				sound_msg = MSG_MON_SPORE;
 				break;
 			}
-			case RBM_XXX1:
-			case RBM_XXX4:
+			case RBM_TRAMPLE:
+			{
+				act = "tramples all over you!";
+				sound_msg = MSG_MON_CRUSH;
+				break;
+			}
 			case RBM_XXX5:
 			case RBM_XXX6:
 			{
@@ -1664,7 +1675,7 @@ bool make_attack_normal(monster_type *m_ptr)
 				case RBM_BITE:
 				case RBM_PECK:
 				case RBM_STING:
-				case RBM_XXX1:
+				case RBM_BREATHE:
 				case RBM_BUTT:
 				case RBM_CRUSH:
 
@@ -2574,6 +2585,13 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes acid.", m_name);
 
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_ACID, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			/*
 			 * Breaths are 40-degree arcs for POWERFUL monsters,
 			 * 20 degrees for others.
@@ -2590,6 +2608,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_ELEC);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes lightning.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_ELEC, (m_ptr->hp / 4), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_ELEC, TRUE, get_breath_dam(m_ptr->hp, GF_ELEC, powerful),
 			        0, (powerful ? 40 : 20));
 			break;
@@ -2602,6 +2628,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_FIRE);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes fire.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_FIRE, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_FIRE, TRUE, get_breath_dam(m_ptr->hp, GF_FIRE, powerful),
 			        0, (powerful ? 40 : 20));
 			break;
@@ -2614,6 +2648,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_FROST);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes frost.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_COLD, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_COLD, TRUE, get_breath_dam(m_ptr->hp, GF_COLD, powerful),
 			       0, (powerful ? 40 : 20));
 			break;
@@ -2626,6 +2668,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_GAS);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes gas.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_POIS, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_POIS, TRUE, get_breath_dam(m_ptr->hp, GF_POIS, powerful),
 			        0, (powerful ? 50 : 30));
 			break;
@@ -2638,6 +2688,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_PLASMA);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes plasma.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_PLASMA, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_PLASMA, TRUE, get_breath_dam(m_ptr->hp, GF_PLASMA, powerful),
 				   0, (powerful ? 40 : 20));
 			break;
@@ -2650,6 +2708,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_LIGHT);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes light.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_LIGHT, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_LIGHT, TRUE, get_breath_dam(m_ptr->hp, GF_LIGHT, powerful),
 			        0, (powerful ? 40 : 20));
 			break;
@@ -2662,6 +2728,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_DARK);
 			if (blind) msg_format("%^s breathes.", m_name);
 			msg_format("%^s breathes darkness.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_DARK, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_DARK, TRUE, get_breath_dam(m_ptr->hp, GF_DARK, powerful),
 					 0, (powerful ? 40 : 20));
 			break;
@@ -2674,6 +2748,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_CONF);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes confusion.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_CONFUSION, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_CONFUSION, TRUE, get_breath_dam(m_ptr->hp, GF_CONFUSION, powerful),
 			       0, (powerful ? 40 : 20));
 			break;
@@ -2686,6 +2768,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_SOUND);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes sound.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_SOUND, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_SOUND, TRUE, get_breath_dam(m_ptr->hp, GF_SOUND, powerful),
 			       0, (powerful ? 50 : 30));
 			break;
@@ -2698,6 +2788,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_SHARDS);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes shards.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_SHARD, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_SHARD, TRUE, get_breath_dam(m_ptr->hp, GF_SHARD, powerful),
 			        0, (powerful ? 40 : 20));
 			break;
@@ -2710,6 +2808,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_INERTIA);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes inertia.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_INERTIA, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_INERTIA, TRUE, get_breath_dam(m_ptr->hp, GF_INERTIA, powerful),
 				   0, (powerful ? 40 : 20));
 			break;
@@ -2722,6 +2828,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_GRAVITY);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes gravity.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_GRAVITY, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_GRAVITY, TRUE, get_breath_dam(m_ptr->hp, GF_GRAVITY, powerful),
 				   0, (powerful ? 40 : 20));
 			break;
@@ -2740,6 +2854,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_FORCE);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes force.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_FORCE, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_FORCE, TRUE, get_breath_dam(m_ptr->hp, GF_FORCE, powerful),
 				   0, (powerful ? 40 : 20));
 			break;
@@ -2752,6 +2874,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_NEXUS);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes nexus.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_NEXUS, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_NEXUS, TRUE, get_breath_dam(m_ptr->hp, GF_GRAVITY, powerful),
 			       0, (powerful ? 40 : 20));
 			break;
@@ -2763,6 +2893,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_NETHER);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes nether.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_NETHER, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_NETHER, TRUE, get_breath_dam(m_ptr->hp, GF_NETHER, powerful),
 			       0, (powerful ? 40 : 20));
 			break;
@@ -2775,6 +2913,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_CHAOS);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes chaos.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_CHAOS, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_CHAOS, TRUE, get_breath_dam(m_ptr->hp, GF_CHAOS, powerful),
 			       0, (powerful ? 40 : 20));
 			break;
@@ -2787,6 +2933,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_DISENCHANT);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes disenchantment.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_DISENCHANT, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_DISENCHANT, TRUE, get_breath_dam(m_ptr->hp, GF_DISENCHANT, powerful),
 			       0, (powerful ? 40 : 20));
 			break;
@@ -2799,6 +2953,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			sound(MSG_BR_TIME);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes time.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_TIME, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_TIME, TRUE, get_breath_dam(m_ptr->hp, GF_TIME, powerful),
 				   0, (powerful ? 40 : 20));
 			break;
@@ -2810,6 +2972,14 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 			disturb(1, 0);
 			if (blind) msg_format("%^s breathes.", m_name);
 			else msg_format("%^s breathes raw mana.", m_name);
+
+			/* Handle Moria breath spells the old fashioned way */
+			if (game_mode == GAME_NPPANGBAND)
+			{
+				mon_ball(m_idx, GF_TIME, (m_ptr->hp / 3), 2, py, px);
+				break;
+			}
+
 			mon_arc(m_idx, GF_MANA, TRUE, get_breath_dam(m_ptr->hp, GF_MANA, powerful),
 				    0, (powerful ? 40 : 20));
 			break;

@@ -81,7 +81,28 @@ struct birther
 	char history[250];
 };
 
+static void set_moria_options(void)
+{
+	/* Paranoia */
+	if (game_mode != GAME_NPPMORIA) return;
 
+	/* Turn off options unused in Moria */
+	auto_scum = FALSE;
+	allow_themed_levels = FALSE;
+	verify_leave_quest = FALSE;
+	birth_maximize = adult_maximize = FALSE;
+	birth_rand_artifacts = adult_rand_artifacts = FALSE;
+	birth_force_small_lev = adult_force_small_lev = FALSE;
+	birth_no_artifacts = adult_no_artifacts = FALSE;
+	birth_simple_dungeons = adult_simple_dungeons = TRUE;
+	birth_no_xtra_artifacts = adult_no_xtra_artifacts = TRUE;
+	birth_no_store_services = adult_no_store_services = TRUE;
+	birth_no_player_ghosts = adult_no_player_ghosts = TRUE;
+	birth_no_quests = adult_no_quests = TRUE;
+	birth_connected_stairs = adult_connected_stairs = FALSE;
+	birth_preserve = adult_preserve = TRUE;
+
+}
 
 /*
  * Save the currently rolled data into the supplied 'player'.
@@ -284,18 +305,18 @@ static void roll_hp(void)
 	int i, j, min_value, max_value;
 
 	/* Minimum hitpoints at highest level */
-	min_value = (PY_MAX_LEVEL * (p_ptr->hitdie - 1) * 3) / 8;
-	min_value += PY_MAX_LEVEL;
+	min_value = (z_info->max_level * (p_ptr->hitdie - 1) * 3) / 8;
+	min_value += z_info->max_level;
 
 	/* Maximum hitpoints at highest level */
-	max_value = (PY_MAX_LEVEL * (p_ptr->hitdie - 1) * 5) / 8;
-	max_value += PY_MAX_LEVEL;
+	max_value = (z_info->max_level * (p_ptr->hitdie - 1) * 5) / 8;
+	max_value += z_info->max_level;
 
 	/* Roll out the hitpoints */
 	while (TRUE)
 	{
 		/* Roll the hitpoint values */
-		for (i = 1; i < PY_MAX_LEVEL; i++)
+		for (i = 1; i < z_info->max_level; i++)
 		{
 			j = randint1(p_ptr->hitdie);
 			p_ptr->player_hp[i] = p_ptr->player_hp[i-1] + j;
@@ -304,8 +325,8 @@ static void roll_hp(void)
 		/* XXX Could also require acceptable "mid-level" hitpoints */
 
 		/* Require "valid" hitpoints at highest level */
-		if (p_ptr->player_hp[PY_MAX_LEVEL-1] < min_value) continue;
-		if (p_ptr->player_hp[PY_MAX_LEVEL-1] > max_value) continue;
+		if (p_ptr->player_hp[z_info->max_level-1] < min_value) continue;
+		if (p_ptr->player_hp[z_info->max_level-1] > max_value) continue;
 
 		/* Acceptable */
 		break;
@@ -1120,10 +1141,13 @@ void player_birth(bool quickstart_allowed)
 		else if (cmd.command == CMD_CHOOSE_RACE)
 		{
 			p_ptr->prace = cmd.args[0].choice;
+
 			generate_player();
 
 			reset_stats(stats, points_spent, &points_left);
+
 			generate_stats(stats, points_spent, &points_left);
+
 			rolled_stats = FALSE;
 		}
 		else if (cmd.command == CMD_CHOOSE_CLASS)
@@ -1256,6 +1280,9 @@ void player_birth(bool quickstart_allowed)
 	{
 		op_ptr->opt[OPT_SCORE + (i - OPT_CHEAT)] = op_ptr->opt[i];
 	}
+
+	/* Turn off many options for Moria */
+	if (game_mode == GAME_NPPMORIA) set_moria_options();
 
 	/*Re-set the squelch settings.  Spellbooks are never_pickup by default. */
 	for (i = 0; i < z_info->k_max; i++)

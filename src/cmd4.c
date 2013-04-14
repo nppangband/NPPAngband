@@ -670,8 +670,22 @@ void do_cmd_options_aux(void *vpage, cptr info)
 	/* Filter the options for this page */
 	for (i = 0; i < OPT_PAGE_PER; i++)
 	{
-		if (option_page[page][i] != OPT_NONE)
-			opt[n++] = option_page[page][i];
+		if (game_mode == GAME_NPPMORIA)
+		{
+			if (option_page_nppmoria[page][i] != OPT_NONE)
+			{
+				opt[n++] = option_page_nppmoria[page][i];
+			}
+
+		}
+		else
+		{
+			if (option_page_nppangband[page][i] != OPT_NONE)
+			{
+				opt[n++] = option_page_nppangband[page][i];
+			}
+		}
+
 	}
 
 	menu_set_filter(menu, opt, n);

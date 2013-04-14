@@ -900,7 +900,7 @@ void grant_reward_hp(void)
 	int max = p_ptr->player_hp[0];
 	s16b new_hp[PY_MAX_LEVEL];
 
-	int max_increase = MIN((max * 5 / 2), (PY_MAX_LEVEL / 2));
+	int max_increase = MIN((max * 5 / 2), (z_info->max_titles / 2));
 	int i, this_increase;
 
 	/* Get level 1 hitdice */
@@ -910,7 +910,7 @@ void grant_reward_hp(void)
      * Get the max increases for each level from the player_hp seed.
 	 * It's easier to work with the data this way.  Also find the current smallest increase.
 	 */
-	for (i = 1; i < PY_MAX_LEVEL; i++)
+	for (i = 1; i < z_info->max_titles; i++)
 	{
 		new_hp[i] = (p_ptr->player_hp[i] - p_ptr->player_hp[i - 1]);
 	}
@@ -921,7 +921,7 @@ void grant_reward_hp(void)
 	 * is anywhere close to max HP in all levels.
 	 * for i = 1 because we know 0 is already maxed.
 	 */
-	for (i = 1; i < PY_MAX_LEVEL; i++)
+	for (i = 1; i < z_info->max_titles; i++)
 	{
 		/* Already Maxed */
 		if (new_hp[i] == max) continue;
@@ -951,7 +951,7 @@ void grant_reward_hp(void)
 	/*
      * Re-calc the HP seed with the increases.
 	 */
-	for (i = 1; i < PY_MAX_LEVEL; i++)
+	for (i = 1; i < z_info->max_titles; i++)
 	{
 		p_ptr->player_hp[i] = p_ptr->player_hp[i-1] + new_hp[i];
 	}
@@ -1274,8 +1274,8 @@ static void create_reward_objects(quest_type *q_ptr, byte reward_type)
 /* Helper function to decide if the player should have a quest reward */
 static void check_reward_extra_hp(quest_type *q_ptr, int chance)
 {
-	int cur_hp = p_ptr->player_hp[PY_MAX_LEVEL-1];
-	int max_hp = ((PY_MAX_LEVEL * (p_ptr->hitdie - 1) * 5) / 8) + PY_MAX_LEVEL + (p_ptr->hitdie * 3);
+	int cur_hp = p_ptr->player_hp[z_info->max_level-1];
+	int max_hp = ((z_info->max_level * (p_ptr->hitdie - 1) * 5) / 8) + z_info->max_level + (p_ptr->hitdie * 3);
 	int hp_left = max_hp - cur_hp;
 
 	/* HP rewards are maxed out */
@@ -2540,6 +2540,9 @@ byte quest_check(int lev)
 
 	/* Town is never a quest */
 	if (!lev) return 0;
+
+	/* No quests in Moria */
+	if (game_mode == GAME_NPPMORIA) return (FALSE);
 
 	/* Check quests */
 	for (i = 0; i < z_info->q_max; i++)

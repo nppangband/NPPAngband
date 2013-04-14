@@ -404,6 +404,20 @@ bool do_res_stat(int stat)
 	return (FALSE);
 }
 
+/*
+ * Array of stat "descriptions"
+ */
+static cptr moria_desc_stat_pos[] =
+{
+	"Wow!  What bulging muscles!",
+	"Aren't you brilliant!",
+	"You suddenly have a profound thought!",
+	"You feel more limber!",
+	"You feel tingly for a moment.",
+	"Gee, ain't you cute!"
+};
+
+
 
 /*
  * Gain a "point" in a stat
@@ -419,7 +433,8 @@ bool do_inc_stat(int stat)
 	if (inc_stat(stat))
 	{
 		/* Message */
-		msg_format("You feel very %s!", desc_stat_pos[stat]);
+		if (game_mode == GAME_NPPMORIA) msg_format("%s", moria_desc_stat_pos[stat]);
+		else msg_format("You feel very %s!", desc_stat_pos[stat]);
 
 		/* Notice */
 		return (TRUE);
@@ -2353,6 +2368,9 @@ bool ident_spell(void)
 	/* Identify the object and get squelch setting */
 	squelch = do_ident_item(item, o_ptr);
 
+	/* In Moria, mark the item as fully known */
+	if (game_mode == GAME_NPPMORIA) o_ptr->ident |= (IDENT_MENTAL);
+
 	/* Now squelch it if needed */
 	do_squelch_item(squelch, item, o_ptr);
 
@@ -3207,6 +3225,15 @@ bool dispel_evil(int dam)
 bool dispel_monsters(int dam)
 {
 	return (project_los(p_ptr->py, p_ptr->px, dam, GF_DISP_ALL));
+}
+
+/*
+ * Polymorph all monsters in LOS
+ */
+bool mass_polymorph(void)
+{
+	/* damage figure of 100 isn't used */
+	return (project_los(p_ptr->py, p_ptr->px, 100, GF_OLD_POLY));
 }
 
 
@@ -4782,6 +4809,13 @@ bool drain_life(int dir, int dam)
 	return (fire_bolt_beam_special(GF_LIFE_DRAIN, dir, dam, MAX_RANGE, flg));
 }
 
+bool build_wall(int dir, int dam)
+{
+	u32b flg = (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_WALL);
+	return (fire_beam(GF_MAKE_WALL, dir, dam, flg));
+}
+
+
 bool wall_to_mud(int dir, int dam)
 {
 	u32b flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
@@ -4891,9 +4925,13 @@ bool sleep_monsters_touch(void)
 {
 	int py = p_ptr->py;
 	int px = p_ptr->px;
+	int dam = damroll(3, p_ptr->lev);
 
 	u32b flg = PROJECT_BOOM | PROJECT_KILL | PROJECT_HIDE;
-	return (project(SOURCE_PLAYER, 1, py, px, py, px, damroll(3, p_ptr->lev), GF_OLD_SLEEP, flg, 0, 20));
+
+	if (game_mode == GAME_NPPMORIA) dam = 500;
+
+	return (project(SOURCE_PLAYER, 1, py, px, py, px, dam, GF_OLD_SLEEP, flg, 0, 20));
 }
 
 
