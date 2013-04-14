@@ -127,7 +127,7 @@ static void get_game_mode(void)
 static void init_nppangband(void)
 {
 	z_info->max_level = 50;
-	z_info->max_titles = z_info->max_level  / 5;
+	z_info->max_titles = z_info->max_level;
 }
 
 /* We are going to play NPPMoria*/
