@@ -925,7 +925,7 @@ enum
 #define	birth_force_small_lev	op_ptr->opt[OPT_birth_force_small_lev]
 #define	birth_connected_stairs	op_ptr->opt[OPT_birth_connected_stairs]
 #define birth_no_quests			op_ptr->opt[OPT_birth_no_quests]
-#define birth_no_player ghosts	op_ptr->opt[OPT_birth_no_player_ghosts]
+#define birth_no_player_ghosts	op_ptr->opt[OPT_birth_no_player_ghosts]
 #define birth_no_store_services	op_ptr->opt[OPT_birth_no_store_services]
 #define birth_no_xtra_artifacts	op_ptr->opt[OPT_birth_no_xtra_artifacts]
 #define birth_money				op_ptr->opt[OPT_birth_money]
