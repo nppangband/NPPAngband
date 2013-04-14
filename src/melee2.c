@@ -1662,6 +1662,24 @@ static int choose_attack_spell_fast(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p, 
 	return (spells[rand_int(num)]);
 }
 
+static bool mon_race_has_ball_spells(const monster_race *r_ptr)
+{
+	if (r_ptr->flags4 & (RF4_BALL_MASK)) return (TRUE);
+	if (r_ptr->flags5 & (RF5_BALL_MASK)) return (TRUE);
+	if (r_ptr->flags6 & (RF6_BALL_MASK)) return (TRUE);
+	if (r_ptr->flags7 & (RF7_BALL_MASK)) return (TRUE);
+
+	if (game_mode == GAME_NPPMORIA)
+	{
+		if (r_ptr->flags4 & (RF4_BREATH_MASK)) return (TRUE);
+		if (r_ptr->flags5 & (RF5_BREATH_MASK)) return (TRUE);
+		if (r_ptr->flags6 & (RF6_BREATH_MASK)) return (TRUE);
+		if (r_ptr->flags7 & (RF7_BREATH_MASK)) return (TRUE);
+	}
+
+	return (FALSE);
+}
+
 /*
  * Have a monster choose a spell.
  *
@@ -1770,11 +1788,7 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 		}
 
 		/*are we in range (and not stupid), and have access to ball spells?*/
-		else if ((m_ptr->cdis < MAX_RANGE) && (!(r_ptr->flags2 & (RF2_STUPID))) &&
-			 ((r_ptr->flags4 & (RF4_BALL_MASK)) ||
-			  (r_ptr->flags5 & (RF5_BALL_MASK)) ||
-			  (r_ptr->flags6 & (RF6_BALL_MASK)) ||
-			  (r_ptr->flags7 & (RF7_BALL_MASK))))
+		else if ((m_ptr->cdis < MAX_RANGE) && (!(r_ptr->flags2 & (RF2_STUPID))) && mon_race_has_ball_spells(r_ptr))
 		{
 
 			int alt_y, alt_x, alt_path, best_y, best_x, best_path;
@@ -1829,8 +1843,11 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 			}
 		}
 
-		/* Don't allow breathing if player is not in a projectable path */
-		if (!monster_blocking)
+		/*
+		 * Don't allow breathing if player is not in a projectable path.
+		 * (In Moria breaths are simple ball spells)
+		 */
+		if ((!monster_blocking) && (game_mode != GAME_NPPMORIA))
 		{
 			f4 &= ~(RF4_BREATH_MASK);
 			f5 &= ~(RF5_BREATH_MASK);
