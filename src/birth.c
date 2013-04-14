@@ -81,7 +81,28 @@ struct birther
 	char history[250];
 };
 
+static void set_moria_options(void)
+{
+	/* Paranoia */
+	if (game_mode != GAME_NPPMORIA) return;
 
+	/* Turn off options unused in Moria */
+	auto_scum = FALSE;
+	allow_themed_levels = FALSE;
+	verify_leave_quest = FALSE;
+	birth_maximize = adult_maximize = FALSE;
+	birth_rand_artifacts = adult_rand_artifacts = FALSE;
+	birth_force_small_lev = adult_force_small_lev = FALSE;
+	birth_no_artifacts = adult_no_artifacts = FALSE;
+	birth_simple_dungeons = adult_simple_dungeons = TRUE;
+	birth_no_xtra_artifacts = adult_no_xtra_artifacts = TRUE;
+	birth_no_store_services = adult_no_store_services = TRUE;
+	birth_no_player_ghosts = adult_no_player_ghosts = TRUE;
+	birth_no_quests = adult_no_quests = TRUE;
+	birth_connected_stairs = adult_connected_stairs = FALSE;
+	birth_preserve = adult_preserve = TRUE;
+
+}
 
 /*
  * Save the currently rolled data into the supplied 'player'.
@@ -1120,10 +1141,13 @@ void player_birth(bool quickstart_allowed)
 		else if (cmd.command == CMD_CHOOSE_RACE)
 		{
 			p_ptr->prace = cmd.args[0].choice;
+
 			generate_player();
 
 			reset_stats(stats, points_spent, &points_left);
+
 			generate_stats(stats, points_spent, &points_left);
+
 			rolled_stats = FALSE;
 		}
 		else if (cmd.command == CMD_CHOOSE_CLASS)
@@ -1256,6 +1280,9 @@ void player_birth(bool quickstart_allowed)
 	{
 		op_ptr->opt[OPT_SCORE + (i - OPT_CHEAT)] = op_ptr->opt[i];
 	}
+
+	/* Turn off many options for Moria */
+	if (game_mode == GAME_NPPMORIA) set_moria_options();
 
 	/*Re-set the squelch settings.  Spellbooks are never_pickup by default. */
 	for (i = 0; i < z_info->k_max; i++)
