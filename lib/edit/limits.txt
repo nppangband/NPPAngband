@@ -41,7 +41,7 @@ M:R:750
 # Maximum number of effects
 M:X:750
 
-# Maximum number of permanant maintainer ghost templates (in *angband/lib/bones)
+# Maximum number of permanent maintainer ghost templates (in *angband/lib/bones)
 # followed by the max number of player ghost templates
 M:G:25:20
 
