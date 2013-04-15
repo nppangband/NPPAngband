@@ -3245,20 +3245,30 @@ void calc_monster_speed(int y, int x)
 	/* Paranoia XXX XXX */
 	if (cave_m_idx[y][x] == 0) return;
 
+	if (game_mode == GAME_NPPMORIA)
+	{
+		speed = r_ptr->r_speed;
+		if (m_ptr->m_timed[MON_TMD_SLOW]) speed--;
+		if (m_ptr->m_timed[MON_TMD_FAST]) speed++;
+		m_ptr->m_speed = speed;
+
+		return;
+	}
+
 	/* Get the monster base speed */
-	speed = r_ptr->speed;
+	speed = r_ptr->r_speed;
 
 	/*note: a monster should only have one of these flags*/
 	if (m_ptr->mflag & (MFLAG_SLOWER))
 	{
 		/* Allow some small variation each time to make pillar dancing harder */
-		i = extract_energy[r_ptr->speed] / 10;
+		i = calc_energy_gain(r_ptr->r_speed);
 		speed -= rand_spread(0, i);
 	}
 	else if (m_ptr->mflag & (MFLAG_FASTER))
 	{
 		/* Allow some small variation each time to make pillar dancing harder */
-		i = extract_energy[r_ptr->speed] / 10;
+		i = calc_energy_gain(r_ptr->r_speed);
 		speed += rand_spread(0, i);
 	}
 
@@ -3267,7 +3277,7 @@ void calc_monster_speed(int y, int x)
 	if (m_ptr->m_timed[MON_TMD_SLOW]) speed -= 10;
 
 	/*set the speed and return*/
-	m_ptr->mspeed = speed;
+	m_ptr->m_speed = speed;
 
 	return;
 }
@@ -3338,7 +3348,7 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	if (!cave_exist_mon(r_ptr, y, x, FALSE, FALSE, FALSE)) return (FALSE);
 
 	/* Paranoia */
-	if (!r_ptr->speed) return (FALSE);
+	if (!r_ptr->r_speed) return (FALSE);
 
 	/* Limit the population */
 	if (r_ptr->cur_num >= r_ptr->max_num)

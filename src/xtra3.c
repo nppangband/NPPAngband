@@ -136,7 +136,7 @@ void prt_stat(int stat, int row, int col)
 
 cptr get_player_title(void)
 {
-	if (game_mode == GAME_NPPANGBAND)
+	if (game_mode == GAME_NPPMORIA)
 	{
 		return (c_text + cp_ptr->p_title[p_ptr->lev]);
 	}
@@ -488,7 +488,7 @@ static byte analyze_speed_bonuses(byte default_attr)
  */
 static void prt_speed(int row, int col)
 {
-	int i = p_ptr->state.p_speed;
+	int i = calc_energy_gain(p_ptr->state.p_speed);
 
 	byte attr = TERM_WHITE;
 	char buf[32] = "";
@@ -497,17 +497,17 @@ static void prt_speed(int row, int col)
 	if (p_ptr->searching) i += 10;
 
 	/* Fast */
-	if (i > 110)
+	if (i > STANDARD_ENERGY_GAIN)
 	{
 		attr = analyze_speed_bonuses(TERM_L_GREEN);
-		sprintf(buf, "Fast (+%d)", (i - 110));
+		sprintf(buf, "Fast (+%d)", (game_mode == GAME_NPPMORIA ? (p_ptr->state.p_speed - NPPMORIA_NORMAL_SPEED) : (i - 110)));
 	}
 
 	/* Slow */
-	else if (i < 110)
+	else if (i < STANDARD_ENERGY_GAIN)
 	{
 		attr = analyze_speed_bonuses(TERM_L_UMBER);
-		sprintf(buf, "Slow (-%d)", (110 - i));
+		sprintf(buf, "Slow (-%d)", (game_mode == GAME_NPPMORIA ? (p_ptr->state.p_speed - NPPMORIA_NORMAL_SPEED) : (110 - i)));
 	}
 
 	/* Display the speed */

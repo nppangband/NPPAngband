@@ -2657,7 +2657,7 @@ s32b quest_player_turns_remaining(void)
 	/* Paranoia */
 	if (time_left <1) return 0;
 
-	turns_left = time_left * extract_energy[p_ptr->state.p_speed] / 100;
+	turns_left = time_left * calc_energy_gain(p_ptr->state.p_speed) / 100;
 
 	if (turns_left < 1) return 1;
 

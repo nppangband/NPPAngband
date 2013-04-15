@@ -1184,7 +1184,7 @@ static int count_known_monsters(void)
 	{
 		monster_race *r_ptr = &r_info[i];
 		if ((!cheat_know) && !l_list[i].sights) continue;
-		if (!r_ptr->speed) continue;
+		if (!r_ptr->r_speed) continue;
 
 		if (r_ptr->flags1 & RF1_UNIQUE) m_count++;
 
@@ -1226,7 +1226,7 @@ static void do_cmd_knowledge_monsters(void *obj, const char *name)
 	{
 		monster_race *r_ptr = &r_info[i];
 		if ((!cheat_know) && !l_list[i].sights) continue;
-		if (!r_ptr->speed) continue;
+		if (!r_ptr->r_speed) continue;
 
 		if (r_ptr->flags1 & (RF1_UNIQUE)) m_count++;
 
@@ -1251,7 +1251,7 @@ static void do_cmd_knowledge_monsters(void *obj, const char *name)
 	{
 		monster_race *r_ptr = &r_info[i];
 		if ((!cheat_know) && !l_list[i].sights) continue;
-		if (!r_ptr->speed) continue;
+		if (!r_ptr->r_speed) continue;
 
 		for (j = 0; j < N_ELEMENTS(monster_group)-1; j++)
 		{

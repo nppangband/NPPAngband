@@ -452,24 +452,31 @@ void display_player_xtra_info(void)
 	i = p_ptr->state.p_speed;
 
 	/* Hack -- Visually "undo" the Search Mode Slowdown */
-	if (p_ptr->searching) i += 10;
+	if (p_ptr->searching) i += (game_mode == GAME_NPPMORIA ? 1 : 10);
 
 	/* Hack -- Visually "undo" temp speed */
-	if (p_ptr->timed[TMD_FAST]) i -= 10;
+	if (p_ptr->timed[TMD_FAST]) i -= (game_mode == GAME_NPPMORIA ? 1 : 10);
 
 	/* Hack -- Visually "undo" temp slowing */
-	if (p_ptr->timed[TMD_SLOW]) i += 10;
+	if (p_ptr->timed[TMD_SLOW]) i += (game_mode == GAME_NPPMORIA ? 1 : 10);
+
+	/* Boundry Control */
+	if (game_mode == GAME_NPPMORIA)
+	{
+		if (i < NPPMORIA_LOWEST_SPEED) i = NPPMORIA_LOWEST_SPEED;
+		else if (i > NPPMORIA_MAX_SPEED) i = NPPMORIA_MAX_SPEED;
+	}
 
 	/* Fast */
-	if (i > 110)
+	if (i > (game_mode == GAME_NPPMORIA ? NPPMORIA_NORMAL_SPEED : 110))
 	{
-		sprintf(buf, "+%d", (i - 110));
+		sprintf(buf, "+%d", (i - (game_mode == GAME_NPPMORIA ? NPPMORIA_NORMAL_SPEED : 110)));
 	}
 
 	/* Slow */
-	else if (i < 110)
+	else if (i < (game_mode == GAME_NPPMORIA ? NPPMORIA_NORMAL_SPEED : 110))
 	{
-		sprintf(buf, "-%d", (110 - i));
+		sprintf(buf, "-%d", ((game_mode == GAME_NPPMORIA ? NPPMORIA_NORMAL_SPEED : 110) - i));
 	}
 
 	else
