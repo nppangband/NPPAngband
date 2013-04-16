@@ -2742,7 +2742,7 @@ errr parse_r_info(char *buf, header *head)
 			            &spd, &hp1, &hp2, &aaf, &ac, &slp)) return (PARSE_ERROR_GENERIC);
 
 		/* Save the values */
-		r_ptr->speed = spd;
+		r_ptr->r_speed = spd;
 		r_ptr->hdice = hp1;
 		r_ptr->hside = hp2;
 		r_ptr->aaf = aaf;

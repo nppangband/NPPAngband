@@ -657,6 +657,23 @@ static void calc_stealth(void)
 	}
 }
 
+/* return energy gain for a player or monster */
+byte calc_energy_gain(byte speed)
+{
+	if (game_mode == GAME_NPPMORIA)
+	{
+		/* Boundry control */
+		if (speed < NPPMORIA_LOWEST_SPEED) speed = NPPMORIA_LOWEST_SPEED;
+		else if (speed > NPPMORIA_MAX_SPEED) speed = NPPMORIA_MAX_SPEED;
+
+		return (extract_energy_nppmoria[speed - NPPMORIA_LOWEST_SPEED]);
+	}
+
+	if (speed > 199) speed = 199;
+
+	return (extract_energy_nppangband[speed]);
+}
+
 
 /*
  * Go through player inventory, equipment, and quiver to calculate the player weight.
@@ -850,7 +867,8 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 	/*** Reset ***/
 
 	/* Reset player speed */
-	new_state->p_speed = 110;
+	if (game_mode == GAME_NPPMORIA) new_state->p_speed = NPPMORIA_NORMAL_SPEED;
+	else new_state->p_speed = 110;
 
 	/* Reset "blow" info */
 	new_state->num_blow = 1;
@@ -1043,7 +1061,16 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 		if (f1 & (TR1_TUNNEL)) 		new_state->skills[SKILL_DIGGING] += (o_ptr->pval * 20);
 
 		/* Affect speed */
-		if (f1 & (TR1_SPEED)) 		new_state->p_speed += o_ptr->pval;
+		if (f1 & (TR1_SPEED))
+		{
+			if (game_mode == GAME_NPPMORIA)
+			{
+				if (o_ptr->pval > 0) new_state->p_speed++;
+				else if (o_ptr->pval < 0) new_state->p_speed--;
+			}
+			else new_state->p_speed += o_ptr->pval;
+		}
+
 
 		/* Affect blows */
 		if (f1 & (TR1_BLOWS)) 		extra_blows += o_ptr->pval;
@@ -1268,13 +1295,15 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 	/* Temporary "fast" */
 	if (p_ptr->timed[TMD_FAST])
 	{
-		new_state->p_speed += 10;
+		if (game_mode == GAME_NPPMORIA) new_state->p_speed++;
+		else new_state->p_speed += 10;
 	}
 
 	/* Temporary "slow" */
 	if (p_ptr->timed[TMD_SLOW])
 	{
-		new_state->p_speed -= 10;
+		if (game_mode == GAME_NPPMORIA) new_state->p_speed--;
+		else new_state->p_speed -= 10;
 	}
 
 	/* Temporary see invisible */
@@ -1308,17 +1337,38 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 	i = weight_limit();
 
 	/* Apply "encumbrance" from weight */
-	if (j > i / 2) new_state->p_speed -= ((j - (i / 2)) / (i / 10));
+	if (j > i / 2)
+	{
+		if (game_mode == GAME_NPPMORIA) new_state->p_speed--;
+		else new_state->p_speed -= ((j - (i / 2)) / (i / 10));
+	}
 
 	/* Bloating slows the player down (a little) */
-	if (p_ptr->food >= PY_FOOD_MAX) new_state->p_speed -= 10;
+	if (p_ptr->food >= PY_FOOD_MAX)
+	{
+		if (game_mode == GAME_NPPMORIA) new_state->p_speed--;
+		else new_state->p_speed -= 10;
+	}
 
 	/* Searching slows the player down */
-	if (p_ptr->searching) new_state->p_speed -= 10;
+	if (p_ptr->searching)
+	{
+		if (game_mode == GAME_NPPMORIA) new_state->p_speed--;
+		else new_state->p_speed -= 10;
+	}
 
 	/* Sanity check on extreme speeds */
-	if (new_state->p_speed < 0) 		new_state->p_speed = 0;
-	if (new_state->p_speed > 199) 		new_state->p_speed = 199;
+	if (game_mode == GAME_NPPMORIA)
+	{
+		if (new_state->p_speed < NPPMORIA_LOWEST_SPEED) 		new_state->p_speed = NPPMORIA_LOWEST_SPEED;
+		else if (new_state->p_speed > NPPMORIA_MAX_SPEED) 		new_state->p_speed = NPPMORIA_MAX_SPEED;
+	}
+	else
+	{
+		if (new_state->p_speed < 0) 		new_state->p_speed = 0;
+		if (new_state->p_speed > 199) 		new_state->p_speed = 199;
+	}
+
 
 
 	/*** Apply modifier bonuses ***/

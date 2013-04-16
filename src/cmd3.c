@@ -1550,7 +1550,7 @@ void py_steal(int y, int x)
 	if (m_ptr->m_timed[MON_TMD_STUN]) theft_protection /= 5;
 
 	/* now adjust for speed*/
-	theft_protection += (m_ptr->mspeed - p_ptr->state.p_speed);
+	theft_protection += (m_ptr->m_speed - p_ptr->state.p_speed) * (game_mode == GAME_NPPMORIA ? 10 : 1);
 
 	/*enforce a minimum - should almost never be necessary*/
 	if (theft_protection < 1) theft_protection = 1;

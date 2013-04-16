@@ -437,7 +437,7 @@ struct monster_race
 
 	s16b sleep;				/* Inactive counter (base) */
 	byte aaf;				/* Area affect radius (1-100) */
-	byte speed;				/* Speed (normally 110) */
+	byte r_speed;			/* Speed (normally 110) */
 
 	s32b mexp;				/* Exp value for kill */
 
@@ -669,7 +669,7 @@ struct monster_type
 	s16b hp;			/* Current Hit points */
 	s16b maxhp;			/* Max Hit points */
 
-	byte mspeed;		/* Monster "speed" */
+	byte m_speed;		/* Monster "speed" */
 	s16b m_energy;		/* Monster "energy" */
 
 	s16b m_timed[MON_TMD_MAX];

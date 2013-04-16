@@ -494,7 +494,7 @@ static void rd_monster(monster_type *m_ptr)
 	rd_byte(&m_ptr->fx);
 	rd_s16b(&m_ptr->hp);
 	rd_s16b(&m_ptr->maxhp);
-	rd_byte(&m_ptr->mspeed);
+	rd_byte(&m_ptr->m_speed);
 	rd_s16b(&m_ptr->m_energy);
 
 	/* Find the number of monster timed effects */
@@ -1350,7 +1350,7 @@ static errr rd_extra(void)
 	rd_u16b(&tmp16u);
 
 	/* Incompatible save files */
-	if (tmp16u > z_info->max_titles)
+	if (tmp16u > z_info->max_level)
 	{
 		note(format("Too many (%u) hitpoint entries!", tmp16u));
 		return (-1);

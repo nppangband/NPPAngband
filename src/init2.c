@@ -29,17 +29,12 @@
 static void cmd_game_nppangband(void *unused)
 {
 	game_mode = GAME_NPPANGBAND;
-/*
-	z_info->max_level = 50;
-	z_info->max_titles = z_info->max_level  / 5;*/
 }
 
 /* We are going to play NPPMoria*/
 static void cmd_game_nppmoria(void *unused)
 {
 	game_mode = GAME_NPPMORIA;
-/*
-	z_info->max_level = z_info->max_titles = PY_MAX_LEVEL_MORIA;*/
 }
 
 

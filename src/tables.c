@@ -1169,7 +1169,18 @@ const byte blows_table[12][12] =
  * the (compiled out) small random energy boost code.  It may
  * also tend to cause more "clumping" at high speeds.
  */
-const byte extract_energy[200] =
+
+const byte extract_energy_nppmoria[6] =
+{
+	2,  /* 9 speed - slow + temporary slow */
+	5,  /* 10 speed - slow */
+	10, /* 11 speed - normal speed */
+	20, /* 12 speed - +1 */
+	40, /* 13 speed - +2 */
+	80, /* 14 speed - +3  */
+};
+
+const byte extract_energy_nppangband[200] =
 {
 	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
