@@ -384,7 +384,7 @@ void dump_monsters(ang_file *fff)
 		byte chr = r_ptr->x_char;
 
 		/* Skip non-entries */
-		if (!r_ptr->speed) continue;
+		if (!r_ptr->r_speed) continue;
 
 		file_putf(fff, "# Monster: %s\n", r_ptr->name_full);
 		file_putf(fff, "R:%d:0x%02X:0x%02X\n", i, attr, chr);

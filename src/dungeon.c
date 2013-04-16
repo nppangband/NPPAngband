@@ -2098,7 +2098,7 @@ static void process_world(void)
 		if (!(turn % 100))
 		{
 			/* Basic digestion rate based on speed */
-			i = extract_energy[p_ptr->state.p_speed] * 2;
+			i = calc_energy_gain(p_ptr->state.p_speed) * 2;
 
 			/* Regeneration takes more food */
 			if (p_ptr->state.regenerate) i += 30;

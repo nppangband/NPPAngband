@@ -55,7 +55,7 @@
 /*
  * Maximum number of players spells
  */
-#define PY_MAX_SPELLS 75
+#define PY_MAX_SPELLS 74
 
 /*
  * Number of spells per book
@@ -845,6 +845,11 @@ enum
 #define player_on_guild_quest_level() \
        ((q_info[GUILD_QUEST_SLOT].base_level == p_ptr->depth) && \
     	(guild_quest_level()))
+
+#define NPPMORIA_LOWEST_SPEED	9
+#define NPPMORIA_MAX_SPEED		14
+#define NPPMORIA_NORMAL_SPEED	11
+#define STANDARD_ENERGY_GAIN	10
 
 #endif /*INCLUDED_PLAYER_H*/
 

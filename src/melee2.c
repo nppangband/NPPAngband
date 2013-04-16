@@ -92,7 +92,7 @@ static void find_range(monster_type *m_ptr)
 	if (m_ptr->min_range > FLEE_RANGE) m_ptr->min_range = FLEE_RANGE;
 
 	/* Nearby monsters that cannot run away will stand and fight */
-	if ((m_ptr->cdis < TURN_RANGE) && (m_ptr->mspeed < p_ptr->state.p_speed))
+	if ((m_ptr->cdis < TURN_RANGE) && (m_ptr->m_speed < p_ptr->state.p_speed))
 		m_ptr->min_range = 1;
 
 	/* Now find preferred range */
@@ -3380,7 +3380,7 @@ static bool get_move_retreat(monster_type *m_ptr, int *ty, int *tx)
 		 */
 		if ((player_has_los_bold(m_ptr->fy, m_ptr->fx)) &&
 			((m_ptr->mflag & (MFLAG_JUST_SCARED | MFLAG_DESPERATE)) == 0) &&
-		    ((m_ptr->cdis < TURN_RANGE) || (m_ptr->mspeed < p_ptr->state.p_speed)))
+		    ((m_ptr->cdis < TURN_RANGE) || (m_ptr->m_speed < p_ptr->state.p_speed)))
 		{
 			if (m_ptr->m_timed[MON_TMD_FEAR])
 			{
@@ -3638,7 +3638,7 @@ static bool get_move(monster_type *m_ptr, int *ty, int *tx, bool *fear,
 	{
 		/* The character is too close to avoid, and faster than we are */
 		if ((!m_ptr->m_timed[MON_TMD_FEAR]) && (m_ptr->cdis < TURN_RANGE) &&
-		     (p_ptr->state.p_speed > m_ptr->mspeed))
+		     (p_ptr->state.p_speed > m_ptr->m_speed))
 		{
 			/* Recalculate range */
 			find_range(m_ptr);
@@ -6085,14 +6085,16 @@ void process_entities(void)
 	/* Give the character some energy (unless leaving) */
 	if (!p_ptr->leaving)
 	{
+		byte energy_gain = calc_energy_gain(p_ptr->state.p_speed);
+
 		/* Give character energy */
-		p_ptr->p_energy += extract_energy[p_ptr->state.p_speed];
+		p_ptr->p_energy += energy_gain;
 
 		/* Can the character move? */
 		if (p_ptr->p_energy >= ENERGY_TO_MOVE)
 		{
 			/* Determine how much energy the character gets per turn */
-			energy_per_turn = extract_energy[p_ptr->state.p_speed];
+			energy_per_turn = energy_gain;
 
 			/* Note how much energy the character had last turn */
 			old_energy = p_ptr->p_energy - energy_per_turn;
@@ -6116,7 +6118,7 @@ void process_entities(void)
 		/* Ignore dead monsters */
 		if (!m_ptr->r_idx) continue;
 
-		energy_per_turn = extract_energy[m_ptr->mspeed];
+		energy_per_turn = calc_energy_gain(m_ptr->m_speed);
 
 		/* Give this monster some energy */
 		m_ptr->m_energy += energy_per_turn;

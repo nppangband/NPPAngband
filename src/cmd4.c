@@ -1601,7 +1601,7 @@ static int find_next_race(int r_idx, int increment)
 		if (next_r_idx == r_idx) return (r_idx);
 
 		/* Skip non-entries */
-		if (!r_ptr->speed) continue;
+		if (!r_ptr->r_speed) continue;
 
 		return (next_r_idx);
 	}

@@ -1839,7 +1839,7 @@ static void do_cmd_wiz_monster(void)
 	r_ptr = &r_info[r_idx];
 
 	/* Check sanity */
-	if ((r_idx < 1) || (r_idx >= z_info->r_max) || (!r_ptr->speed))
+	if ((r_idx < 1) || (r_idx >= z_info->r_max) || (!r_ptr->r_speed))
 	{
 		msg_print("Invalid monster number");
 
