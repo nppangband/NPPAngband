@@ -1,3 +1,8 @@
+NPP 7.0.0 changes:
+Bugfix:  Fix inconcistency when describing damage from ammo.
+
+
+
 
 NPP6.1.2 changes:
 Misc code cleanup, provided by levind on Github ("runningaway") on the NPP forums.
