@@ -1084,6 +1084,9 @@ void player_birth(bool quickstart_allowed)
 	 */
 	birther quickstart_prev = {0, 0, 0, 0, 0, 0, 0, 0, {0}, "" };
 
+	/* Turn off many options for Moria */
+	if (game_mode == GAME_NPPMORIA) set_moria_options();
+
 	/*
 	 * If there's a quickstart character, store it for later use.
 	 * If not, default to whatever the first of the choices is.
@@ -1281,8 +1284,6 @@ void player_birth(bool quickstart_allowed)
 		op_ptr->opt[OPT_SCORE + (i - OPT_CHEAT)] = op_ptr->opt[i];
 	}
 
-	/* Turn off many options for Moria */
-	if (game_mode == GAME_NPPMORIA) set_moria_options();
 
 	/*Re-set the squelch settings.  Spellbooks are never_pickup by default. */
 	for (i = 0; i < z_info->k_max; i++)
