@@ -3691,7 +3691,7 @@ D: sword, his fury blisters your skin and melts your flesh!
 
 N:280:Sm['e]agol
 A:Sm['e]agol
-G:h:B
+G:p:B
 I:13:10d10:20:12:5
 W:3:2:0:50
 B:TOUCH:EAT_GOLD:1d4

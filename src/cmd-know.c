@@ -2767,6 +2767,10 @@ void do_cmd_knowledge(void)
 		c = menu_select(&knowledge_menu, &cursor, 0);
 	}
 
+	screen_load();
+
+	button_restore();
+	event_signal(EVENT_MOUSEBUTTONS);
 
 }
 
