@@ -82,11 +82,71 @@ static int *obj_group_order;
 /*
  * Description of each monster group.
  */
-static struct
+typedef struct monster_group monster_group;
+
+struct monster_group
 {
 	cptr chars;
 	cptr name;
-} monster_group[] =
+};
+
+static struct monster_group monster_group_nppmoria[] =
+{
+	{ (cptr)-1,	"Uniques" },
+	{ "A",		"Ant Lions" },
+	{ "a",		"Ants" },
+	{ "B",		"Balrog" },
+	{ "b",		"Bats" },
+	{ "C",		"Gelatinous Cube" },
+	{ "c",		"Centipedes" },
+	{ "dD",		"Dragons" },
+	{ "E",		"Elementals/Spirits" },
+	{ "e",		"Floating Eyes" },
+	{ "F",		"Flying Insects" },
+	{ "f",		"Frogs" },
+	{ "G",		"Ghosts" },
+	{ "g",		"Golems" },
+	{ "H",		"Hobgoblin" },
+	{ "h",		"Harpies" },
+	{ "i",		"Icky Things" },
+	{ "J",		"Jellies" },
+	{ "j",		"Jackals" },
+	{ "K",		"Killer Beetles" },
+	{ "k",		"Kobolds" },
+	{ "L",		"Liches" },
+	{ "l",		"Louse" },
+	{ "M",		"Mummies" },
+	{ "m",		"Molds" },
+	{ "n",		"Nagas" },
+/* Note some special handling of mimics in the code below since there are so many different symbols */
+	{ "$!?",	"Mimics" },
+	{ ",",		"Mushroom Patches" },
+	{ "O",		"Oozes" },
+	{ "o",		"Orcs" },
+	{ "p",		"People/Humanoids" },
+	{ "P",		"Giants" },
+	{ "q",		"Quasits" },
+	{ "Q",		"Quylthulgs" },
+	{ "R",		"Snakes" },
+	{ "r",		"Rodents" },
+	{ "S",		"Scorpions" },
+	{ "s",		"Skeletons" },
+	{ "U",		"Umber Hulks" },
+	{ "T",		"Trolls" },
+	{ "t",		"Ticks" },
+	{ "V",		"Vampires" },
+	{ "W",		"Wights/Wraiths" },
+	{ "w",		"Worms/Worm Masses" },
+	{ "X",		"Xorns" },
+	{ "y",		"Yeeks" },
+	{ "Y",		"Yeti" },
+	{ "z",		"Zombies" },
+	{ NULL,       NULL }
+};
+
+
+
+static struct monster_group monster_group_nppangband[] =
 {
 	{ (cptr)-1,	"Uniques" },
 	{ "A",		"Ainur/Maiar" },
@@ -1105,10 +1165,16 @@ static int m_cmp_race(const void *a, const void *b)
 	c = r_a->d_char - r_b->d_char;
 	if (c && gid != 0)
 	{
+		if (game_mode == GAME_NPPMORIA)
+		{
+			return strchr(monster_group_nppmoria[gid].chars, r_a->d_char)
+						- strchr(monster_group_nppmoria[gid].chars, r_b->d_char);
+		}
+
 		/* UNIQUE group is ordered by level & name only */
 		/* Others by order they appear in the group symbols */
-		return strchr(monster_group[gid].chars, r_a->d_char)
-			- strchr(monster_group[gid].chars, r_b->d_char);
+		else return strchr(monster_group_nppangband[gid].chars, r_a->d_char)
+			- strchr(monster_group_nppangband[gid].chars, r_b->d_char);
 	}
 	c = r_a->level - r_b->level;
 	if (c) return c;
@@ -1118,7 +1184,13 @@ static int m_cmp_race(const void *a, const void *b)
 
 static char *m_xchar(int oid) { return &r_info[default_join[oid].oid].x_char; }
 static byte *m_xattr(int oid) { return &r_info[default_join[oid].oid].x_attr; }
-static const char *race_name(int gid) { return monster_group[gid].name; }
+static const char *race_name(int gid)
+{
+	if (game_mode == GAME_NPPMORIA) return monster_group_nppmoria[gid].name;
+
+	return monster_group_nppangband[gid].name;
+
+}
 
 static void mon_lore(int oid)
 {
@@ -1182,15 +1254,20 @@ static int count_known_monsters(void)
 
 	for (i = 0; i < z_info->r_max; i++)
 	{
+		size_t counter = (game_mode == GAME_NPPMORIA ? N_ELEMENTS(monster_group_nppmoria) : N_ELEMENTS(monster_group_nppangband));
+
 		monster_race *r_ptr = &r_info[i];
 		if ((!cheat_know) && !l_list[i].sights) continue;
 		if (!r_ptr->r_speed) continue;
 
 		if (r_ptr->flags1 & RF1_UNIQUE) m_count++;
 
-		for (j = 1; j < N_ELEMENTS(monster_group) - 1; j++)
+		/* Stop before the last one */
+		counter--;
+
+		for (j = 1; j < counter; j++)
 		{
-			const char *pat = monster_group[j].chars;
+			const char *pat = (game_mode == GAME_NPPMORIA ? monster_group_nppmoria[j].chars : monster_group_nppangband[j].chars);
 			if (strchr(pat, r_ptr->d_char)) m_count++;
 			/* Special hack to count all of the mimics */
 			else if (r_ptr->flags1 & (RF1_CHAR_MIMIC))
@@ -1209,8 +1286,13 @@ static int count_known_monsters(void)
  */
 static void do_cmd_knowledge_monsters(void *obj, const char *name)
 {
-	group_funcs r_funcs = {N_ELEMENTS(monster_group), FALSE, race_name,
+	size_t counter = (game_mode == GAME_NPPMORIA ? N_ELEMENTS(monster_group_nppmoria) : N_ELEMENTS(monster_group_nppangband));
+
+	group_funcs r_funcs_nppangband = {N_ELEMENTS(monster_group_nppangband), FALSE, race_name,
 							m_cmp_race, default_group, mon_summary};
+
+	group_funcs r_funcs_nppmoria = {N_ELEMENTS(monster_group_nppmoria), FALSE, race_name,
+								m_cmp_race, default_group, mon_summary};
 
 	member_funcs m_funcs = {display_monster, mon_lore, m_xchar, m_xattr, recall_prompt, 0, 0};
 
@@ -1230,9 +1312,9 @@ static void do_cmd_knowledge_monsters(void *obj, const char *name)
 
 		if (r_ptr->flags1 & (RF1_UNIQUE)) m_count++;
 
-		for (j = 1; j < N_ELEMENTS(monster_group) - 1; j++)
+		for (j = 1; j < (counter - 1); j++)
 		{
-			const char *pat = monster_group[j].chars;
+			const char *pat = (game_mode == GAME_NPPMORIA ? monster_group_nppmoria[j].chars : monster_group_nppangband[j].chars);
 			if (strchr(pat, r_ptr->d_char)) m_count++;
 
 			/* Special hack to count all of the mimics */
@@ -1253,9 +1335,9 @@ static void do_cmd_knowledge_monsters(void *obj, const char *name)
 		if ((!cheat_know) && !l_list[i].sights) continue;
 		if (!r_ptr->r_speed) continue;
 
-		for (j = 0; j < N_ELEMENTS(monster_group)-1; j++)
+		for (j = 0; j < (counter-1); j++)
 		{
-			const char *pat = monster_group[j].chars;
+			const char *pat = (game_mode == GAME_NPPMORIA ? monster_group_nppmoria[j].chars : monster_group_nppangband[j].chars);
 			if (j == 0 && !(r_ptr->flags1 & (RF1_UNIQUE))) continue;
 
 			else if (j > 0)
@@ -1273,8 +1355,8 @@ static void do_cmd_knowledge_monsters(void *obj, const char *name)
 		}
 	}
 
-	display_knowledge("monsters", monsters, m_count, r_funcs, m_funcs,
-			"                   Sym  Kills");
+	if (game_mode == GAME_NPPMORIA) display_knowledge("monsters", monsters, m_count, r_funcs_nppmoria, m_funcs, "                   Sym  Kills");
+	else display_knowledge("monsters", monsters, m_count, r_funcs_nppangband, m_funcs, "                   Sym  Kills");
 	FREE(default_join);
 	FREE(monsters);
 }
