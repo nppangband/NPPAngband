@@ -45,7 +45,12 @@ s16b spell_chance(int spell)
 	chance -= 3 * (p_ptr->lev - s_ptr->slevel);
 
 	/* Reduce failure rate by INT/WIS adjustment */
-	chance -= adj_mag_stat[SPELL_STAT_SLOT];
+	/* Extract the minimum failure rate */
+	if (game_mode == GAME_NPPMORIA)
+	{
+		chance -= 3 * (stat_adj_moria()-1);
+	}
+	else chance -= adj_mag_stat[SPELL_STAT_SLOT];
 
 	/* Not enough mana to cast */
 	if (s_ptr->smana > p_ptr->csp)
@@ -54,7 +59,8 @@ s16b spell_chance(int spell)
 	}
 
 	/* Extract the minimum failure rate */
-	minfail = adj_mag_fail[SPELL_STAT_SLOT];
+	if (game_mode == GAME_NPPMORIA) minfail = 0;
+	else minfail = adj_mag_fail[SPELL_STAT_SLOT];
 
 	/* Non mage/priest characters never get better than 5 percent */
 	if (!(cp_ptr->flags & CF_ZERO_FAIL))

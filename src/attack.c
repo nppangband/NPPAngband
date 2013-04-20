@@ -30,6 +30,8 @@ bool test_hit(int chance, int ac, int vis)
 {
 	int k;
 
+	int numerator = (game_mode == GAME_NPPMORIA ? 4 : 3);
+
 	/* Percentile dice */
 	k = randint0(100);
 
@@ -40,7 +42,7 @@ bool test_hit(int chance, int ac, int vis)
 	if (!vis) chance = chance / 2;
 
 	/* Power competes against armor */
-	if ((chance > 0) && (randint0(chance) >= (ac * 3 / 4))) return (TRUE);
+	if ((chance > 0) && (randint0(chance) >= (ac * numerator / 4))) return (TRUE);
 
 	/* Assume miss */
 	return (FALSE);
