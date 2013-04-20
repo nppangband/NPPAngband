@@ -404,6 +404,7 @@ extern char button_get_key(int x, int y);
 extern size_t button_print(int row, int col);
 
 /* calcs.c*/
+extern int stat_adj_moria(void);
 extern void calc_spells(void);
 extern int calc_blows(const object_type *o_ptr, player_state *new_state);
 extern void calc_bonuses(object_type inventory[], player_state *state, bool id_only);
