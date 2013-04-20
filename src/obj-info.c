@@ -634,7 +634,7 @@ static bool describe_ammo(const object_type *o_ptr, u32b f1, u32b f3, bool extra
 	plus = (object_known_p(o_ptr) ? o_ptr->to_d : 0) + (object_known_p(j_ptr) ? j_ptr->to_d : 0);
 
 	/* Check for extra damage with a sling for a rogue */
-	mult += rogue_shot(j_ptr, &plus, object_state);
+	mult += rogue_shot(o_ptr, &plus, object_state);
 
 	dd *= mult;
 	plus *= mult;

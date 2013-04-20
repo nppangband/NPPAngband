@@ -760,13 +760,13 @@ static s32b calc_mon_exp(const monster_race *r_ptr)
 		 * Player is not gaining a new max level
 		 * (in the player_exp chart level 1 exp-to-gain-next-level is at slot 0)
 		 */
-		if ((p_ptr->exp + new_exp) <= (get_experience_by_level(p_ptr->lev-1))) break;
+		if ((p_ptr->exp + new_exp) <= (get_experience_by_level(new_level-1)) * p_ptr->expfact / 100L) break;
 
 		/*just checking this again*/
 		if (new_exp < 1) break;
 
 		/*figure out the remainder*/
-		net_exp_gain = (p_ptr->exp + new_exp) - (get_experience_by_level(p_ptr->lev-1) * p_ptr->expfact / 100L);
+		net_exp_gain = (p_ptr->exp + new_exp) - (get_experience_by_level(new_level-1) * p_ptr->expfact / 100L);
 
 		/*add one level*/
 		new_level++;

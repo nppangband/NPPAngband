@@ -1001,12 +1001,115 @@ void do_cmd_locate(void)
 	verify_panel();
 }
 
+/*
+ * The table of "symbol info" -- each entry is a string of the form
+ * "X:desc" where "X" is the trigger, and "desc" is the "info".
+ */
+static cptr ident_info_nppmoria[] =
+{
+	" :A dark grid",
+	"!:A potion (or oil)",
+	"\":An amulet (or necklace)",
+	"#:A wall (or secret door)",
+	"$:Treasure (gold or gems)",
+	"%:A vein (magma or quartz)",
+	/* "&:unused", */
+	"':An open door",
+	"(:Soft armor",
+	"):A shield",
+	"*:A vein with treasure",
+	"+:A closed door",
+	",:Food (or mushroom patch)",
+	"-:A wand (or rod)",
+	".:Floor",
+	"/:A polearm (Axe/Pike/etc)",
+	/* "0:unused", */
+	"1:Entrance to General Store",
+	"2:Entrance to Armory",
+	"3:Entrance to Weaponsmith",
+	"4:Entrance to Temple",
+	"5:Entrance to Alchemy shop",
+	"6:Entrance to Magic store",
+	"::Rubble",
+	";:A glyph of warding or glacier",
+	"<:An up staircase",
+	"=:A ring",
+	">:A down staircase",
+	"?:A scroll",
+	"@:You",
+	"A:Ant Lion",
+	"B:Balrog",
+	"C:Gelatinous Cube",
+	"D:Ancient Dragon (Beware)",
+	"E:Elemental/Spirit",
+	"F:Fly/Dragon Fly/Insect",
+	"G:Ghost",
+	"H:Hobgoblin",
+	/* "I:unused", */
+	"J:Jelly",
+	"K:Killer Beetle",
+	"L:Lich",
+	"M:Mummy",
+	/* "N:unused", */
+	"O:Ooze",
+	"P:Giant",
+	"Q:Quylthulg (Pulsing Flesh Mound)",
+	"R:Snake",
+	"S:Scorpions",
+	"T:Troll",
+	"U:Umber Hulk",
+	"V:Vampire",
+	"W:Wight/Wraith",
+	"X:Xorn",
+	"Y:Yeti",
+	/* "Z:unused", */
+	"[:Hard armor",
+	"\\:A hafted weapon (mace/whip/etc)",
+	"]:Misc. armor",
+	"^:A trap",
+	"_:A staff",
+	/* "`:unused", */
+	"a:Ant",
+	"b:Bat",
+	"c:Centipede",
+	"d:Dragon",
+	"e:Floating Eye",
+	"f:Frogs",
+	"g:Golem",
+	"h:harpy",
+	"i:Icky Thing",
+	"j:Jackal",
+	"k:Kobold",
+	"l:Louse",
+	"m:Mold",
+	"n:Naga",
+	"o:Orc",
+	"p:Person/Humanoid",
+	"q:Quasit",
+	"r:Rodent",
+	"s:Skeleton",
+	"t:Tick",
+	/* "u:unused", */
+	/* "v:unused", */
+	"w:Worm/Worm-Mass",
+	/* "x:unused", */
+	"y:Yeek",
+	"z:Zombie",
+	"{:A missile (arrow/bolt/shot)",
+	"|:An edged weapon (sword/dagger/etc)",
+	"}:A launcher (bow/crossbow/sling)",
+	"~:A chest (or miscellaneous item)",
+	NULL
+};
+
+
+
 
 /*
  * The table of "symbol info" -- each entry is a string of the form
  * "X:desc" where "X" is the trigger, and "desc" is the "info".
  */
-static cptr ident_info[] =
+static cptr ident_info_nppangband[] =
 {
 	" :A dark grid",
 	"!:A potion (or oil)",
@@ -1246,10 +1349,19 @@ void do_cmd_query_symbol(void)
 	/* Get a character, or abort */
 	if (!get_com("Enter character to be identified, or control+[ANU]: ", &sym)) return;
 
-	/* Find that character info, and describe it */
-	for (i = 0; ident_info[i]; ++i)
+	if (game_mode == GAME_NPPMORIA)
 	{
-		if (sym == ident_info[i][0]) break;
+		/* Find that character info, and describe it */
+		for (i = 0; ident_info_nppmoria[i]; ++i)
+		{
+			if (sym == ident_info_nppmoria[i][0]) break;
+		}
+	}
+
+	/* Find that character info, and describe it */
+	else for (i = 0; ident_info_nppangband[i]; ++i)
+	{
+		if (sym == ident_info_nppangband[i][0]) break;
 	}
 
 	/* Describe */
@@ -1268,9 +1380,9 @@ void do_cmd_query_symbol(void)
 		all = norm = TRUE;
 		my_strcpy(buf, "Non-unique monster list.", sizeof(buf));
 	}
-	else if (ident_info[i])
+	else if ((game_mode == GAME_NPPMORIA) ? ident_info_nppmoria[i] : ident_info_nppangband[i])
 	{
-		strnfmt(buf, sizeof(buf), "%c - %s.", sym, ident_info[i] + 2);
+		strnfmt(buf, sizeof(buf), "%c - %s.", sym, (game_mode == GAME_NPPMORIA) ? ident_info_nppmoria[i] + 2 : ident_info_nppangband[i] + 2);
 	}
 	else
 	{

@@ -19,6 +19,21 @@
 #include "angband.h"
 #include "game-event.h"
 
+/* Adjustment for wisdom/intelligence in moria	*/
+
+int stat_adj_moria(void)
+{
+	int value = (cp_ptr->spell_book == TV_MAGIC_BOOK ? p_ptr->state.stat_ind[A_INT] : p_ptr->state.stat_ind[A_WIS]);
+
+	if (value > 117) 		return(7);
+	else if (value > 107)	return(6);
+	else if (value > 87)	return(5);
+	else if (value > 67)	return(4);
+	else if (value > 17)	return(3);
+	else if (value > 14)	return(2);
+	else if (value > 7)		return(1);
+	else	return(0);
+}
 
 
 
@@ -59,8 +74,18 @@ void calc_spells(void)
 	/* Hack -- no negative spells */
 	if (levels < 0) levels = 0;
 
+	if (game_mode == GAME_NPPMORIA)
+	{
+		int stat_adj = stat_adj_moria();
+		if (stat_adj == 7) 		percent_spells = 250;
+		else if (stat_adj == 6) percent_spells = 200;
+		else if (stat_adj >= 4) percent_spells = 200;
+		else if (stat_adj >= 1) percent_spells = 100;
+		else 					percent_spells = 0;
+	}
+
 	/* Number of 1/100 spells per level */
-	percent_spells = adj_mag_study[SPELL_STAT_SLOT];
+	else percent_spells = adj_mag_study[SPELL_STAT_SLOT];
 
 	/* Extract total allowed spells (rounded up) */
 	num_allowed = (((percent_spells * levels) + 50) / 100);
@@ -254,7 +279,22 @@ static void calc_mana(void)
 	levels = (p_ptr->lev - cp_ptr->spell_first) + 1;
 	if (levels > 0)
 	{
-		msp = 1 + (long)adj_mag_mana[SPELL_STAT_SLOT] * levels / 100;
+		long int mana_percent = adj_mag_mana[SPELL_STAT_SLOT];
+
+		if (game_mode == GAME_NPPMORIA)
+		{
+			int stat_adj = stat_adj_moria();
+			if (stat_adj == 7) 		mana_percent = 400;
+			else if (stat_adj == 6) mana_percent = 300;
+			else if (stat_adj == 5) mana_percent = 250;
+			else if (stat_adj == 4) mana_percent = 200;
+			else if (stat_adj == 3) mana_percent = 150;
+			else if (stat_adj >= 1) mana_percent = 100;
+			else 					mana_percent = 0;
+		}
+
+
+		msp = 1 + mana_percent * levels / 100;
 	}
 	else
 	{
