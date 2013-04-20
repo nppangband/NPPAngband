@@ -48,7 +48,7 @@ s16b spell_chance(int spell)
 	/* Extract the minimum failure rate */
 	if (game_mode == GAME_NPPMORIA)
 	{
-		chance -= 3 * (stat_adj_moria()-1);
+		chance -= 3 * (stat_adj_moria(MORIA_SPELL_STAT)-1);
 	}
 	else chance -= adj_mag_stat[SPELL_STAT_SLOT];
 

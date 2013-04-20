@@ -1071,14 +1071,31 @@ static bool quaff_potion(object_type *o_ptr, bool *ident)
 
 		case SV_POTION_HEROISM:
 		{
+			if (game_mode == GAME_NPPMORIA)
+			{
+				if (!p_ptr->timed[TMD_HERO])
+				{
+					p_ptr->chp +=10;
+					p_ptr->mhp +=10;
+				}
+			}
 			if (hp_player(10)) *ident = TRUE;
 			if (clear_timed(TMD_AFRAID, TRUE)) *ident = TRUE;
 			if (inc_timed(TMD_HERO, randint(25) + 25, TRUE)) *ident = TRUE;
+
 			break;
 		}
 
 		case SV_POTION_BERSERK_STRENGTH:
 		{
+			if (game_mode == GAME_NPPMORIA)
+			{
+				if (!p_ptr->timed[TMD_SHERO])
+				{
+					p_ptr->mhp +=15;
+					p_ptr->chp +=15;
+				}
+			}
 			if (hp_player(30)) *ident = TRUE;
 			if (clear_timed(TMD_AFRAID, TRUE)) *ident = TRUE;
 			if (inc_timed(TMD_SHERO, randint(25) + 25, TRUE)) *ident = TRUE;

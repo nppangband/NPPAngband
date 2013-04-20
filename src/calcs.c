@@ -19,11 +19,82 @@
 #include "angband.h"
 #include "game-event.h"
 
+
+
+/* Returns a character's adjustment to armor class	 -JWT-	 */
+static int moria_toac_adj()
+{
+	int stat;
+
+	stat = p_ptr->state.stat_use[A_DEX];
+	if	  (stat <   4)	return(-4);
+	else if (stat ==  4)	return(-3);
+	else if (stat ==  5)	return(-2);
+	else if (stat ==  6)	return(-1);
+	else if (stat <  15)	return( 0);
+	else if (stat <  18)	return( 1);
+	else if (stat <  59)	return( 2);
+	else if (stat <  94)	return( 3);
+	else if (stat < 117)	return( 4);
+	else			return( 5);
+}
+
+
+/* Returns a character's adjustment to damage		 -JWT-	 */
+static int moria_todam_adj()
+{
+	int stat = p_ptr->state.stat_use[A_STR];
+	if	  (stat <   4)	return(-2);
+	else if (stat <   5)	return(-1);
+	else if (stat <  16)	return( 0);
+	else if (stat <  17)	return( 1);
+	else if (stat <  18)	return( 2);
+	else if (stat <  94)	return( 3);
+	else if (stat < 109)	return( 4);
+	else if (stat < 117)	return( 5);
+	else return( 6);
+}
+
+/* Returns a character's adjustment to hit.		 -JWT-	 */
+static int moria_tohit_adj()
+{
+	int total;
+
+	/* First do dexterity adjustments */
+	int stat = p_ptr->state.stat_use[A_DEX];
+	if	  (stat <   4)		total = -3;
+	else if (stat <   6)	total = -2;
+	else if (stat <   8)	total = -1;
+	else if (stat <  16)	total =	 0;
+	else if (stat <  17)	total =	 1;
+	else if (stat <  18)	total =	 2;
+	else if (stat <  69)	total =	 3;
+	else if (stat < 118)	total =	 4;
+	else			total =	 5;
+
+	/* Now do strength adjustments */
+	stat = p_ptr->state.stat_use[A_STR];
+	if	  (stat <   4)	total -= 3;
+	else if (stat <   5)	total -= 2;
+	else if (stat <   7)	total -= 1;
+	else if (stat <  18)	total -= 0;
+	else if (stat <  94)	total += 1;
+	else if (stat < 109)	total += 2;
+	else if (stat < 117)	total += 3;
+	else			total += 4;
+	return(total);
+}
+
+
+
+
 /* Adjustment for wisdom/intelligence in moria	*/
 
-int stat_adj_moria(void)
+int stat_adj_moria(int stat)
 {
-	int value = (cp_ptr->spell_book == TV_MAGIC_BOOK ? p_ptr->state.stat_ind[A_INT] : p_ptr->state.stat_ind[A_WIS]);
+
+
+	int value = p_ptr->state.stat_use[stat];
 
 	if (value > 117) 		return(7);
 	else if (value > 107)	return(6);
@@ -76,7 +147,7 @@ void calc_spells(void)
 
 	if (game_mode == GAME_NPPMORIA)
 	{
-		int stat_adj = stat_adj_moria();
+		int stat_adj = stat_adj_moria(MORIA_SPELL_STAT);
 		if (stat_adj == 7) 		percent_spells = 250;
 		else if (stat_adj == 6) percent_spells = 200;
 		else if (stat_adj >= 4) percent_spells = 200;
@@ -283,7 +354,7 @@ static void calc_mana(void)
 
 		if (game_mode == GAME_NPPMORIA)
 		{
-			int stat_adj = stat_adj_moria();
+			int stat_adj = stat_adj_moria(MORIA_SPELL_STAT);
 			if (stat_adj == 7) 		mana_percent = 400;
 			else if (stat_adj == 6) mana_percent = 300;
 			else if (stat_adj == 5) mana_percent = 250;
@@ -417,14 +488,34 @@ static void calc_hitpoints(void)
 	long bonus;
 	int mhp;
 
-	/* Get "1/100th hitpoint bonus per level" value */
-	bonus = adj_con_mhp[p_ptr->state.stat_ind[A_CON]];
+	if (game_mode == GAME_NPPMORIA)
+	{
+		int con = p_ptr->state.stat_use[A_CON];
+
+		if (con < 7) 			bonus = -700;
+		else if (con < 17)		bonus = 0;
+		else if (con ==  17)	bonus = 100;
+		else if (con <  94)		bonus = 200;
+		else if (con < 117)		bonus = 300;
+		else					bonus = 400;
+	}
+	else
+	{
+		/* Get "1/100th hitpoint bonus per level" value */
+		bonus = adj_con_mhp[p_ptr->state.stat_ind[A_CON]];
+	}
 
 	/* Calculate hitpoints */
 	mhp = p_ptr->player_hp[p_ptr->lev-1] + (bonus * p_ptr->lev / 100);
 
 	/* Always have at least one hitpoint per level */
 	if (mhp < p_ptr->lev + 1) mhp = p_ptr->lev + 1;
+
+	if (game_mode == GAME_NPPMORIA)
+	{
+		if (p_ptr->timed[TMD_HERO]) mhp += 10;
+		if (p_ptr->timed[TMD_SHERO]) mhp += 15;
+	}
 
 	/* New maximum hitpoints */
 	if (p_ptr->mhp != mhp)
@@ -769,6 +860,45 @@ static void calc_inven_cnt(void)
 }
 
 
+
+/* Weapon weight VS strength and dexterity	*/
+static int calc_blows_moria(const object_type *o_ptr, player_state *new_state)
+{
+	int adj_weight;
+	int str_index, dex_index;
+	int str = new_state->stat_use[A_STR];
+	int dex = new_state->stat_use[A_DEX];
+
+	if ((str * 15) < o_ptr->weight)
+	{
+		return 1;
+	}
+	else
+    {
+
+		/* First figure out the dex index */
+		if      (dex < 10)	 dex_index = 0;
+		else if (dex<  19)	 dex_index = 1;
+		else if (dex < 68)	 dex_index = 2;
+		else if (dex < 108)	 dex_index = 3;
+		else if (dex < 118)	 dex_index = 4;
+		else		 dex_index = 5;
+
+		/* Now do the str_index */
+
+		adj_weight = ((str * 10) / o_ptr->weight);
+		if      (adj_weight < 2)	str_index = 0;
+		else if (adj_weight < 3)	str_index = 1;
+		else if (adj_weight < 4)	str_index = 2;
+		else if (adj_weight < 5)	str_index = 3;
+		else if (adj_weight < 7)	str_index = 4;
+		else if (adj_weight < 9)	str_index = 5;
+		else			str_index = 6;
+		return moria_blows_table[str_index][dex_index];
+    }
+}
+
+
 /*
  * Calculate the number of attacks a player gets with a weapon per round.
  * Does not factor in extra attacks from weapon flags
@@ -778,6 +908,11 @@ int calc_blows(const object_type *o_ptr, player_state *new_state)
 	int str_index, dex_index, str_ind, dex_ind;
 
 	int divide_by, new_blows;
+
+	if (game_mode == GAME_NPPMORIA)
+	{
+		return calc_blows_moria(o_ptr, new_state);
+	}
 
 	str_ind = new_state->stat_ind[A_STR];
 	dex_ind = new_state->stat_ind[A_DEX];
@@ -1258,6 +1393,12 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 		/* Extract the new "stat_use" value for the stat */
 		use = modify_stat_value(p_ptr->stat_cur[i], add);
 
+		/* Stats max out at 118 in Moria */
+		if (game_mode == GAME_NPPANGBAND)
+		{
+			if (use > 117) use = 118;
+		}
+
 		/* Save the new value */
 		new_state->stat_use[i] = use;
 
@@ -1413,30 +1554,57 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 
 	/*** Apply modifier bonuses ***/
 
-	/* Actual Modifier Bonuses (Un-inflate stat bonuses) */
-	new_state->to_a += ((int)(adj_dex_ta[new_state->stat_ind[A_DEX]]) - 128);
-	new_state->to_d += ((int)(adj_str_td[new_state->stat_ind[A_STR]]) - 128);
-	new_state->to_h += ((int)(adj_dex_th[new_state->stat_ind[A_DEX]]) - 128);
-	new_state->to_h += ((int)(adj_str_th[new_state->stat_ind[A_STR]]) - 128);
 
-	/* Displayed Modifier Bonuses (Un-inflate stat bonuses) */
-	new_state->dis_to_a += ((int)(adj_dex_ta[new_state->stat_ind[A_DEX]]) - 128);
-	new_state->dis_to_d += ((int)(adj_str_td[new_state->stat_ind[A_STR]]) - 128);
-	new_state->dis_to_h += ((int)(adj_dex_th[new_state->stat_ind[A_DEX]]) - 128);
-	new_state->dis_to_h += ((int)(adj_str_th[new_state->stat_ind[A_STR]]) - 128);
 
 
 	/*** Modify skills ***/
 
-	/* Affect Skill -- disarming (DEX and INT) */
-	new_state->skills[SKILL_DISARM] += adj_dex_dis[new_state->stat_ind[A_DEX]];
-	new_state->skills[SKILL_DISARM] += adj_int_dis[new_state->stat_ind[A_INT]];
+	if (game_mode == GAME_NPPMORIA)
+	{
+		/* Affect Skill -- magic devices (INT) */
+		new_state->skills[SKILL_DEVICE] += (moria_class_level_adj[p_ptr->pclass][MORIA_CLA_DEVICE] * p_ptr->lev / 3);
+		new_state->skills[SKILL_DISARM] += (moria_class_level_adj[p_ptr->pclass][MORIA_CLA_DISARM] * p_ptr->lev / 3);
+		new_state->skills[SKILL_TO_HIT_MELEE] += (moria_class_level_adj[p_ptr->pclass][MORIA_CLA_BTH] * p_ptr->lev);
+		new_state->skills[SKILL_SAVE] += (moria_class_level_adj[p_ptr->pclass][MORIA_CLA_SAVE] * p_ptr->lev / 3);
+		/* Throwing and bows used the same factor in Moria */
+		new_state->skills[SKILL_TO_HIT_BOW] += (moria_class_level_adj[p_ptr->pclass][MORIA_CLA_BTHB] * p_ptr->lev);
+		new_state->skills[SKILL_TO_HIT_THROW] += (moria_class_level_adj[p_ptr->pclass][MORIA_CLA_BTHB] * p_ptr->lev);
 
-	/* Affect Skill -- magic devices (INT) */
-	new_state->skills[SKILL_DEVICE] += adj_int_dev[new_state->stat_ind[A_INT]];
+		new_state->to_a += moria_toac_adj();
+		new_state->to_d += moria_todam_adj();
+		new_state->to_h += moria_tohit_adj();
 
-	/* Affect Skill -- saving throw (WIS) */
-	new_state->skills[SKILL_SAVE] += adj_wis_sav[new_state->stat_ind[A_WIS]];
+		new_state->dis_to_a += moria_toac_adj();
+		new_state->dis_to_d += moria_todam_adj();
+		new_state->dis_to_h += moria_tohit_adj();
+
+	}
+	else
+	{
+		/* Affect Skill -- disarming (DEX and INT) */
+		new_state->skills[SKILL_DISARM] += adj_dex_dis[new_state->stat_ind[A_DEX]];
+		new_state->skills[SKILL_DISARM] += adj_int_dis[new_state->stat_ind[A_INT]];
+
+		/* Affect Skill -- magic devices (INT) */
+		new_state->skills[SKILL_DEVICE] += adj_int_dev[new_state->stat_ind[A_INT]];
+
+		/* Affect Skill -- saving throw (WIS) */
+		new_state->skills[SKILL_SAVE] += adj_wis_sav[new_state->stat_ind[A_WIS]];
+
+		/* Actual Modifier Bonuses (Un-inflate stat bonuses) */
+		new_state->to_a += ((int)(adj_dex_ta[new_state->stat_ind[A_DEX]]) - 128);
+		new_state->to_d += ((int)(adj_str_td[new_state->stat_ind[A_STR]]) - 128);
+		new_state->to_h += ((int)(adj_dex_th[new_state->stat_ind[A_DEX]]) - 128);
+		new_state->to_h += ((int)(adj_str_th[new_state->stat_ind[A_STR]]) - 128);
+
+		/* Displayed Modifier Bonuses (Un-inflate stat bonuses) */
+		new_state->dis_to_a += ((int)(adj_dex_ta[new_state->stat_ind[A_DEX]]) - 128);
+		new_state->dis_to_d += ((int)(adj_str_td[new_state->stat_ind[A_STR]]) - 128);
+		new_state->dis_to_h += ((int)(adj_dex_th[new_state->stat_ind[A_DEX]]) - 128);
+		new_state->dis_to_h += ((int)(adj_str_th[new_state->stat_ind[A_STR]]) - 128);
+	}
+
+
 
 	/* Affect Skill -- digging (STR) */
 	new_state->skills[SKILL_DIGGING] += adj_str_dig[new_state->stat_ind[A_STR]];
