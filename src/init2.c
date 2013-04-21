@@ -122,7 +122,7 @@ static void get_game_mode(void)
 static void init_nppangband(void)
 {
 	z_info->max_level = 50;
-	z_info->max_titles = z_info->max_level  / 5;
+	z_info->max_titles = z_info->max_level;
 }
 
 /* We are going to play NPPMoria*/
@@ -372,19 +372,19 @@ header t_head;
  */
 static void init_header(header *head, int num, int len)
 {
-       /* Save the "version" */
-       head->v_major = VERSION_MAJOR;
-       head->v_minor = VERSION_MINOR;
-       head->v_patch = VERSION_PATCH;
-       head->v_extra = VERSION_EXTRA;
+	/* Save the "version" */
+	head->v_major = VERSION_MAJOR;
+	head->v_minor = VERSION_MINOR;
+	head->v_patch = VERSION_PATCH;
+	head->v_extra = VERSION_EXTRA;
 
-       /* Save the "record" information */
-       head->info_num = num;
-       head->info_len = len;
+	/* Save the "record" information */
+	head->info_num = num;
+	head->info_len = len;
 
-       /* Save the size of "*_head" and "*_info" */
-       head->head_size = sizeof(header);
-       head->info_size = head->info_num * head->info_len;
+	/* Save the size of "*_head" and "*_info" */
+	head->head_size = sizeof(header);
+	head->info_size = head->info_num * head->info_len;
 }
 
 
@@ -407,7 +407,6 @@ static void display_parse_error(cptr filename, errr err, cptr buf)
 	/* Quit */
 	quit_fmt("Error in '%s.txt' file.", filename);
 }
-
 
 
 /*
@@ -476,6 +475,7 @@ static errr init_info(cptr filename, header *head)
 	return (0);
 }
 
+
 /*
  * Free the allocated memory for the info-, name-, and text- arrays.
  */
@@ -493,6 +493,7 @@ static errr free_info(header *head)
 	/* Success */
 	return (0);
 }
+
 
 /*
  * Initialize the "z_info" array
@@ -565,6 +566,7 @@ static errr init_k_info(void)
 	return (err);
 }
 
+
 /*
  * Initialize the "t_info" array
  */
@@ -587,8 +589,6 @@ static errr init_t_info(void)
 
 	return (err);
 }
-
-
 
 
 /*
@@ -614,7 +614,6 @@ static errr init_a_info(void)
 
 	return (err);
 }
-
 
 
 /*
@@ -665,7 +664,6 @@ static errr init_r_info(void)
 }
 
 
-
 /*
  * Initialize the "v_info" array
  */
@@ -688,7 +686,6 @@ static errr init_v_info(void)
 
 	return (err);
 }
-
 
 
 /*
@@ -741,7 +738,6 @@ static errr init_c_info(void)
 }
 
 
-
 /*
  * Initialize the "h_info" array
  */
@@ -764,7 +760,6 @@ static errr init_h_info(void)
 
 	return (err);
 }
-
 
 
 /*
@@ -814,26 +809,26 @@ static errr init_q_info(void)
 	return (err);
 }
 
+
 /*
  * Initialize the "n_info" structure
  */
 static errr init_n_info(void)
 {
-  errr err;
+	errr err;
 
-  /* Init the header */
-  init_header(&n_head, 1, sizeof(names_type));
+	/* Init the header */
+	init_header(&n_head, 1, sizeof(names_type));
 
-  /* Save a pointer to the parsing function */
-  n_head.parse_info_txt = parse_n_info;
+	/* Save a pointer to the parsing function */
+	n_head.parse_info_txt = parse_n_info;
 
-  err = init_info("names", &n_head);
+	err = init_info("names", &n_head);
 
-  n_info = n_head.info_ptr;
+	n_info = n_head.info_ptr;
 
-  return (err);
+	return (err);
 }
-
 
 
 /*
@@ -870,6 +865,7 @@ static void autoinscribe_clean(void)
 	inscriptions = 0;
 	inscriptionsCount = 0;
 }
+
 
 static void autoinscribe_init(void)
 {
@@ -918,7 +914,7 @@ static errr init_other(void)
 	fire_g = C_ZNEW(VIEW_MAX, u16b);
 
 	/* has_LIGHT patch causes both temp_g and temp_x/y to be used
-	   in targetting mode: can't use the same memory any more. */
+	   in targeting mode: can't use the same memory any more. */
 	temp_y = C_ZNEW(TEMP_MAX, byte);
 	temp_x = C_ZNEW(TEMP_MAX, byte);
 
@@ -977,7 +973,7 @@ static errr init_other(void)
 	x_list = C_ZNEW(z_info->x_max, effect_type);
 
 
-	/*** Prepare mosnter lore array ***/
+	/*** Prepare monster lore array ***/
 
 	/* Lore */
 	l_list = C_ZNEW(z_info->r_max, monster_lore);
@@ -1054,7 +1050,6 @@ static errr init_other(void)
 	/* Success */
 	return (0);
 }
-
 
 
 /*
@@ -1411,6 +1406,7 @@ static errr init_alloc(void)
 	/* Success */
 	return (0);
 }
+
 
 /*
  * Hack -- main Angband initialization entry point

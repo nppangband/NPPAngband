@@ -45,7 +45,7 @@
 #include "init.h"
 
 
-/*** Helper arrays for parsing ascii template files ***/
+/*** Helper arrays for parsing ASCII template files ***/
 
 /*
  * Monster Blow Methods
@@ -155,7 +155,6 @@ struct flag_name
 #define MAX_FLAG_SETS	16
 
 
-
 /*
  * Monster race flags for the race_info_flags1 structure
  */
@@ -208,7 +207,6 @@ static flag_name info_flags[] =
 	{"DROP_UP_TO_20", RF1, RF1_DROP_UP_TO_20},
 
 
-
 /*
  * Monster race flags 2
  */
@@ -245,7 +243,6 @@ static flag_name info_flags[] =
 	{"RF2XXX9", RF2, RF2_RF2XXX9},
 	{"RF2XX10", RF2, RF2_RF2XX10},
 	{"BRAIN_3", RF2, RF2_BRAIN_3},
-
 
 
 /*
@@ -296,7 +293,6 @@ static flag_name info_flags[] =
  * Monster race flags 4
  */
 
-
 	{"SHRIEK", RF4, RF4_SHRIEK},
 	{"LASH", RF4, RF4_LASH},
 	{"BOULDER", RF4, RF4_BOULDER},
@@ -339,7 +335,6 @@ static flag_name info_flags[] =
 /*
  * Monster race flags 5
  */
-
 
 	{"BALL_ACID", RF5, RF5_BALL_ACID},
 	{"BALL_ELEC", RF5, RF5_BALL_ELEC},
@@ -748,7 +743,6 @@ static flag_name info_flags[] =
 	/*FFE Uber-Flags*/
 
 
-
 /*
  * Class flags
  */
@@ -788,10 +782,6 @@ static flag_name info_flags[] =
 	{"CFXXX32",  CF1, CF_CFXXX32}
 
 };
-
-
-
-
 
 
 /*
@@ -858,11 +848,11 @@ static cptr a_info_act[ACT_MAX] =
 
 
 
-/*** Initialize from ascii template files ***/
+/*** Initialize from ASCII template files ***/
 
 
 /*
- * Initialize an "*_info" array, by parsing an ascii "template" file
+ * Initialize an "*_info" array, by parsing an ASCII "template" file
  */
 errr init_info_txt(ang_file *fp, char *buf, header *head,
                    parse_info_txt_func parse_info_txt_line)
@@ -877,7 +867,6 @@ errr init_info_txt(ang_file *fp, char *buf, header *head,
 
 	/* Just before the first line */
 	error_line = 0;
-
 
 	/* Prepare the "fake" stuff */
 	head->name_size = 0;
@@ -894,7 +883,6 @@ errr init_info_txt(ang_file *fp, char *buf, header *head,
 
 		/* Verify correct "colon" format */
 		if (buf[1] != ':') return (PARSE_ERROR_GENERIC);
-
 
 		/* Hack -- Process 'V' for "Version" */
 		if (buf[0] == 'V')
@@ -925,15 +913,12 @@ errr init_info_txt(ang_file *fp, char *buf, header *head,
 			return (err);
 	}
 
-
 	/* Complete the "name" and "text" sizes */
 	if (head->name_size) head->name_size++;
 	if (head->text_size) head->text_size++;
 
-
 	/* No version yet */
 	if (!okay) return (PARSE_ERROR_OBSOLETE_FILE);
-
 
 	/* Success */
 	return (0);
@@ -1009,7 +994,6 @@ errr parse_z_info(char *buf, header *head)
 	if (buf[0] != 'M') return (PARSE_ERROR_UNDEFINED_DIRECTIVE);
 	if (!buf[2]) return (PARSE_ERROR_UNDEFINED_DIRECTIVE);
 	if (buf[3] != ':') return (PARSE_ERROR_UNDEFINED_DIRECTIVE);
-
 
 	/* Process 'F' for "Maximum f_info[] index" */
 	if (buf[2] == 'F')
@@ -1344,6 +1328,7 @@ errr parse_v_info(char *buf, header *head)
 	return (0);
 }
 
+
 #ifdef ALLOW_DATA_DUMP
 
 void get_feature_name(char *desc, size_t max, byte feature_num)
@@ -1356,6 +1341,7 @@ void get_feature_name(char *desc, size_t max, byte feature_num)
 }
 
 #endif /*ALLOW_DATA_DUMP*/
+
 
 /*
  * Grab one flag from a textual string
@@ -1399,6 +1385,7 @@ static errr grab_one_feature_flag(feature_type *ptr, cptr what)
 	return grab_one_flag(f, "terrain", what);
 }
 
+
 /*
  * Grab an action in an feature_type from a textual string
  *
@@ -1434,6 +1421,7 @@ static errr grab_one_feature_action(feature_type *ptr, cptr what, int count)
 
 	return -1;
 }
+
 
 /*
  * Initialize the "f_info" array, by parsing an ascii "template" file
@@ -1657,7 +1645,6 @@ errr parse_f_info(char *buf, header *head)
 		f_ptr->x_gf_type = (byte)gf_type;
 		f_ptr->x_timeout_set = (byte)timeout_set;
 		f_ptr->x_timeout_rand = (byte)timeout_rand;
-
 	}
 
 	/* Process 'K' for "States" (up to four lines + default (which cannot be last)) */
@@ -1749,8 +1736,6 @@ errr parse_f_info(char *buf, header *head)
 }
 
 
-
-
 /*
  * Grab one flag in an object_kind from a textual string
  */
@@ -1764,8 +1749,6 @@ static errr grab_one_kind_flag(object_kind *ptr, cptr what)
 	f[TN1] = &(ptr->k_native);
 	return grab_one_flag(f, "object", what);
 }
-
-
 
 
 /*
@@ -1999,6 +1982,7 @@ errr parse_k_info(char *buf, header *head)
 	return (0);
 }
 
+
 /*
  * Initialize the "t_info" array, by parsing an ascii "template" file
  */
@@ -2090,7 +2074,6 @@ static errr grab_one_artifact_flag(artifact_type *ptr, cptr what)
 }
 
 
-
 /*
  * Grab one activation from a textual string
  */
@@ -2114,7 +2097,6 @@ static errr grab_one_activation(artifact_type *a_ptr, cptr what)
 	/* Error */
 	return (PARSE_ERROR_GENERIC);
 }
-
 
 
 /*
@@ -2166,7 +2148,6 @@ errr parse_a_info(char *buf, header *head)
 
 		/* Ignore everything */
 		a_ptr->a_flags3 |= (TR3_IGNORE_MASK);
-
 	}
 
 	/* Process 'I' for "Info" (one line only) */
@@ -2344,6 +2325,7 @@ static errr build_prob(char *name, names_type *n_ptr)
 	return 0;
 }
 
+
 /*
  * Initialize the "n_info" array, by parsing an ascii "template" file
  */
@@ -2370,7 +2352,7 @@ errr parse_n_info(char *buf, header *head)
 
 	if (buf[0] == 'N')
 	{
-    	return build_prob (buf + 2, n_ptr);
+		return build_prob (buf + 2, n_ptr);
 	}
 
  	/*
@@ -2388,9 +2370,9 @@ errr parse_n_info(char *buf, header *head)
 	 */
 	else
 	{
-    	/* Oops */
-    	return (PARSE_ERROR_UNDEFINED_DIRECTIVE);
-  	}
+		/* Oops */
+		return (PARSE_ERROR_UNDEFINED_DIRECTIVE);
+	}
 }
 
 
@@ -2407,6 +2389,7 @@ static bool grab_one_ego_item_flag(ego_item_type *ptr, cptr what)
 	f[TN1] = &(ptr->e_native);
 	return grab_one_flag(f, "object", what);
 }
+
 
 /*
  * Initialize the "e_info" array, by parsing an ascii "template" file
@@ -2607,7 +2590,6 @@ static errr grab_one_basic_flag(monster_race *ptr, cptr what)
 }
 
 
-
 /*
  * Grab one (spell) flag in a monster_race from a textual string
  */
@@ -2621,9 +2603,6 @@ static errr grab_one_spell_flag(monster_race *ptr, cptr what)
 	f[RF7] = &(ptr->flags7);
 	return grab_one_flag(f, "monster", what);
 }
-
-
-
 
 
 /*
@@ -2965,8 +2944,6 @@ static errr grab_one_racial_flag(player_race *ptr, cptr what)
 }
 
 
-
-
 /*
  * Initialize the "p_info" array, by parsing an ascii "template" file
  */
@@ -3219,7 +3196,6 @@ static errr grab_one_class_flag(player_class *ptr, cptr what)
 	f[CF1] = &(ptr->flags);
 	return grab_one_flag(f, "player", what);
 }
-
 
 
 /*
@@ -3540,7 +3516,6 @@ errr parse_c_info(char *buf, header *head)
 }
 
 
-
 /*
  * Initialize the "h_info" array, by parsing an ascii "template" file
  */
@@ -3609,8 +3584,6 @@ errr parse_h_info(char *buf, header *head)
 }
 
 
-
-
 /*
  * Initialize the "b_info" array, by parsing an ascii "template" file
  */
@@ -3665,7 +3638,6 @@ errr parse_b_info(char *buf, header *head)
 	/* Oops */
 	return (PARSE_ERROR_UNDEFINED_DIRECTIVE);
 }
-
 
 
 /*
@@ -3747,8 +3719,6 @@ errr parse_q_info(char *buf, header *head)
 
 			q_ptr->q_max_num = max;
 		}
-
-
 	}
 	else
 	{
@@ -3759,6 +3729,7 @@ errr parse_q_info(char *buf, header *head)
 	/* Success */
 	return (0);
 }
+
 
 /*
  * Initialize the "flavor_info" array, by parsing an ascii "template" file

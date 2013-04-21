@@ -872,7 +872,7 @@
  * of 2.7.9, these flags are not actually stored with the object, but
  * rather in the object_kind, ego_item, and artifact structures.
  *
- * Note that "flags1" contains all flags dependant on "pval" (including
+ * Note that "flags1" contains all flags dependent on "pval" (including
  * stat bonuses, but NOT stat sustainers), plus all "extra attack damage"
  * flags (SLAY_XXX and BRAND_XXX).
  *
@@ -1042,7 +1042,11 @@
 
 #define TR2_STAT_MOD_MASK \
 	(TR2_SUST_STR | TR2_SUST_INT | TR2_SUST_WIS | TR2_SUST_DEX | \
+<<<<<<< HEAD
+	 TR2_SUST__CON | TR2_SUST_CHR)
+=======
 		  TR2_SUST_CON | TR2_SUST_CHR)
+>>>>>>> 6b31a04f2c2e3a206a376431f8ff629a89971548
 
 #define TR3_STAT_MOD_MASK \
 	(0L)
@@ -1531,11 +1535,11 @@ object_aware_p(o_ptr) && \
 
 
 /* Object origins */
-#define ORIGIN_NONE             0
-#define ORIGIN_BIRTH            1
-#define ORIGIN_STORE            2
-#define ORIGIN_FLOOR            3
-#define ORIGIN_DROP_UNKNOWN     4
+#define ORIGIN_NONE				0
+#define ORIGIN_BIRTH			1
+#define ORIGIN_STORE			2
+#define ORIGIN_FLOOR			3
+#define ORIGIN_DROP_UNKNOWN		4
 #define ORIGIN_DROP_KNOWN       5
 #define ORIGIN_REWARD           6
 #define ORIGIN_ACQUIRE          7
@@ -1581,50 +1585,36 @@ extern char scroll_adj[MAX_TITLES][16];
 /**
  * Modes for object_desc().
  */
-typedef enum
-{
-	ODESC_BASE   = 0x00,   /*!< Only describe the base name */
-	ODESC_COMBAT = 0x01,   /*!< Also show combat bonuses */
-	ODESC_EXTRA  = 0x02,   /*!< Show charges/inscriptions/pvals */
+static const int	ODESC_BASE		= 0x00,	/*!< Only describe the base name */
+					ODESC_COMBAT	= 0x01,	/*!< Also show combat bonuses */
+					ODESC_EXTRA		= 0x02,	/*!< Show charges/inscriptions/pvals */
+					ODESC_STORE 	= 0x04,	/*!< This is an in-store description */
+					ODESC_PLURAL	= 0x08,	/*!< Always pluralise */
+					ODESC_SINGULAR	= 0x10,	/*!< Always singular */
+					ODESC_SPOIL		= 0x20,	/*!< Display regardless of player knowledge */
+					ODESC_PREFIX	= 0x40;	/* */
 
-	ODESC_FULL   = ODESC_COMBAT | ODESC_EXTRA,
-	                       /*!< Show entire description */
-
-	ODESC_STORE  = 0x04,   /*!< This is an in-store description */
-	ODESC_PLURAL = 0x08,   /*!< Always pluralise */
-	ODESC_SINGULAR    = 0x10,    /*!< Always singular */
-	ODESC_SPOIL  = 0x20,    /*!< Display regardless of player knowledge */
-	ODESC_PREFIX = 0x40   /* */
-} odesc_detail_t;
-
+#define ODESC_FULL	ODESC_COMBAT | ODESC_EXTRA	/*!< Show entire description */
 
 /**
  * Modes for item lists in "show_inven()"  "show_equip()" and "show_floor()"
  */
-typedef enum
-{
-	OLIST_NONE   = 0x00,   /* No options */
-   OLIST_WINDOW = 0x01,   /* Display list in a sub-term (left-align) */
-   OLIST_QUIVER = 0x02,   /* Display quiver lines */
-   OLIST_GOLD   = 0x04,   /* Include gold in the list */
-	OLIST_WEIGHT = 0x08,   /* Show item weight */
-	OLIST_PRICE  = 0x10,   /* Show item price */
-	OLIST_FAIL   = 0x20    /* Show device failure */
-
-} olist_detail_t;
-
+static const int	OLIST_NONE		= 0x00,	/* No options */
+					OLIST_WINDOW	= 0x01,	/* Display list in a sub-term (left-align) */
+					OLIST_QUIVER	= 0x02,	/* Display quiver lines */
+					OLIST_GOLD		= 0x04,	/* Include gold in the list */
+					OLIST_WEIGHT	= 0x08,	/* Show item weight */
+					OLIST_PRICE  	= 0x10,	/* Show item price */
+					OLIST_FAIL   	= 0x20;	/* Show device failure */
 
 /**
  * Modes for object_info()
  */
-typedef enum
-{
-	OINFO_NONE   = 0x00, /* No options */
-	OINFO_TERSE  = 0x01, /* Keep descriptions brief, e.g. for dumps */
-	OINFO_SUBJ   = 0x02, /* Describe object from the character's POV */
-	OINFO_FULL   = 0x04, /* Treat object as if fully IDd */
-	OINFO_DUMMY  = 0x08 /* Object does not exist (e.g. knowledge menu) */
-} oinfo_detail_t;
+static const int	OINFO_NONE	= 0x00,	/* No options */
+					OINFO_TERSE	= 0x01,	/* Keep descriptions brief, e.g. for dumps */
+					OINFO_SUBJ	= 0x02,	/* Describe object from the character's POV */
+					OINFO_FULL	= 0x04,	/* Treat object as if fully IDd */
+					OINFO_DUMMY	= 0x08;	/* Object does not exist (e.g. knowledge menu) */
 
 
 /**
@@ -1632,20 +1622,20 @@ typedef enum
  */
 typedef enum
 {
-	INSCRIP_NULL = 100,
-	INSCRIP_TERRIBLE   =    101,
-	INSCRIP_WORTHLESS  =    102,
-	INSCRIP_CURSED     =    103,
-	INSCRIP_BROKEN     =    104,
-	INSCRIP_AVERAGE    =    105,
-	INSCRIP_GOOD_STRONG=    106,
-	INSCRIP_GOOD_WEAK  =	107,
-	INSCRIP_EXCELLENT  =    108,
-	INSCRIP_SPECIAL    =    109,
-	INSCRIP_UNCURSED   =    110,
+	INSCRIP_NULL		=   100,
+	INSCRIP_TERRIBLE	=   101,
+	INSCRIP_WORTHLESS	=   102,
+	INSCRIP_CURSED		=   103,
+	INSCRIP_BROKEN		=   104,
+	INSCRIP_AVERAGE		=   105,
+	INSCRIP_GOOD_STRONG	=   106,
+	INSCRIP_GOOD_WEAK	=	107,
+	INSCRIP_EXCELLENT	=   108,
+	INSCRIP_SPECIAL		=   109,
+	INSCRIP_UNCURSED	=   110,
 	INSCRIP_INDESTRUCTIBLE =111,
 
-	INSCRIP_MAX                  /*!< Maximum number of pseudo-ID markers */
+	INSCRIP_MAX					/*!< Maximum number of pseudo-ID markers */
 } obj_pseudo_t;
 
 /*

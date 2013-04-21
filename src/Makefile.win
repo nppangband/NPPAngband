@@ -46,6 +46,7 @@ else
 endif
 
 CC = $(CROSS)gcc
+#CC = $(CROSS)g++
 WRES = $(CROSS)windres
 WARNINGS = -Wall -Wextra -Wno-unused-parameter
 CFLAGS += $(WARNINGS) -std=iso9899:199409 -pedantic -O2 -I.

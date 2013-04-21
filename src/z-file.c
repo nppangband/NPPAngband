@@ -25,7 +25,7 @@
 #ifdef WINDOWS
 # include <windows.h>
 # include <io.h>
-# include <direct.h>
+/* causes Cygwin compile to fail: # include <direct.h> */
 #endif
 
 #ifdef MACH_O_CARBON
@@ -47,7 +47,9 @@
 #endif
 
 #ifdef WINDOWS
-# define my_mkdir(path, perms) mkdir(path)
+/* Changes required for Cygwin compile */
+/* # define my_mkdir(path, perms) mkdir(path) */
+# define my_mkdir(path, perms) mkdir(path, perms)
 #elif HAVE_MKDIR || MACH_O_CARBON
 # define my_mkdir(path, perms) mkdir(path, perms)
 #else
@@ -687,7 +689,7 @@ bool dir_create(const char *path)
 
 	#ifdef WINDOWS
 	/* If we're on windows, we need to skip past the "C:" part. */
-	if (isalpha(path[0]) && path[1] == ':') path += 2;
+	if (isalpha((int)path[0]) && path[1] == ':') path += 2;
 	#endif
 
 	/* Iterate through the path looking for path segements. At each step,

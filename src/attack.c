@@ -330,13 +330,13 @@ static void dam_dice_aux(const object_type *o_ptr, int *dd, const monster_type *
 	/* Factor in reduced damage */
 	*dd /= divider;
 
-	/* Boundry Control */
+	/* Boundary Control */
 	if (*dd < 1) *dd = 1;
 }
 
-int critical_shot_chance(const object_type *o_ptr, player_state a_state, bool throw, bool id_only, u32b f3)
+int critical_shot_chance(const object_type *o_ptr, player_state a_state, bool thr, bool id_only, u32b f3)
 {
-	int i = (throw ? p_ptr->state.skills[SKILL_TO_HIT_THROW] : p_ptr->state.skills[SKILL_TO_HIT_BOW]) * 2;
+	int i = (thr ? p_ptr->state.skills[SKILL_TO_HIT_THROW] : p_ptr->state.skills[SKILL_TO_HIT_BOW]) * 2;
 
 	/* Extract "shot" power */
 	if (id_only)
@@ -346,7 +346,7 @@ int critical_shot_chance(const object_type *o_ptr, player_state a_state, bool th
 
 	else i += o_ptr->weight + (a_state.to_h + o_ptr->to_h) * 3;
 
-	if (throw)
+	if (thr)
 	{
 		/* Rogues are especially good at throwing weapons */
 		if ((cp_ptr->flags & (CF_ROGUE_COMBAT)) && (f3 & (TR3_THROWING)))
@@ -361,19 +361,19 @@ int critical_shot_chance(const object_type *o_ptr, player_state a_state, bool th
  * Critical hits (from objects thrown by player)
  * Factor in item weight, total plusses, and player level, bow skill.
  */
-static int critical_shot_check(const object_type *o_ptr, int *dd, int *plus, bool throw, u32b f3)
+static int critical_shot_check(const object_type *o_ptr, int *dd, int *plus, bool thr, u32b f3)
 {
-	int i = critical_shot_chance(o_ptr, p_ptr->state, throw, FALSE, f3);
+	int i = critical_shot_chance(o_ptr, p_ptr->state, thr, FALSE, f3);
 
 	/* Critical hit */
 	if (randint(CRIT_HIT_CHANCE) <= i)
 	{
 		int k;
-		int crit_hit_bonus = 250 + (throw ? p_ptr->state.skills[SKILL_TO_HIT_THROW] : p_ptr->state.skills[SKILL_TO_HIT_BOW]);
+		int crit_hit_bonus = 250 + (thr ? p_ptr->state.skills[SKILL_TO_HIT_THROW] : p_ptr->state.skills[SKILL_TO_HIT_BOW]);
 		crit_hit_bonus += (p_ptr->state.to_h + o_ptr->to_h) * 2;
 
 		/* Rogues are especially good at throwing weapons */
-		if ((throw) && (cp_ptr->flags & (CF_ROGUE_COMBAT)) && (f3 & (TR3_THROWING)))
+		if ((thr) && (cp_ptr->flags & (CF_ROGUE_COMBAT)) && (f3 & (TR3_THROWING)))
 		{
 			i += p_ptr->lev * 5;
 		}

@@ -25,7 +25,7 @@ M:K:454
 # Maximum number of total artifacts (special + normal + pre-made random + in-game random)
 # special artifacts (1 to this number - 1)
 # normal artifacts ((special) to (special + this number - 1))
-# max random artfiacts ((normal artifacts) to (normal artfiacts + this number - 1))
+# max random artifacts ((normal artifacts) to (normal artifacts + this number - 1))
 # total artifacts will equal special + normal + random + 1 slot for a fake quest artifact
 # reads M:A:special:normal:random
 # changing these numbers will almost always break savefile compatibility
@@ -41,7 +41,7 @@ M:R:750
 # Maximum number of effects
 M:X:750
 
-# Maximum number of permanant maintainer ghost templates (in *angband/lib/bones)
+# Maximum number of permanent maintainer ghost templates (in *angband/lib/bones)
 # followed by the max number of player ghost templates
 M:G:25:20
 

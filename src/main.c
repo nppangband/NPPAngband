@@ -88,7 +88,6 @@ static void quit_hook(cptr s)
 }
 
 
-
 /*
  * SDL needs a look-in
  */
@@ -142,7 +141,6 @@ static void init_stuff(void)
 }
 
 
-
 /*
  * Handle a "-d<what>=<path>" option
  *
@@ -160,8 +158,6 @@ static void change_path(cptr info)
 	string_free(ANGBAND_DIR_USER);
 	ANGBAND_DIR_USER = string_make(info);
 }
-
-
 
 
 #ifdef SET_UID
@@ -233,7 +229,6 @@ int main(int argc, char *argv[])
 	const char *mstr = NULL;
 
 	bool args = TRUE;
-
 
 	/* Save the "program name" XXX XXX XXX */
 	argv0 = argv[0];
@@ -374,7 +369,11 @@ int main(int argc, char *argv[])
 
 				/* Actually abort the process */
 				quit(NULL);
+
 			}
+
+			/* Compiler happiness */
+			break;
 		}
 		if (*arg) goto usage;
 	}
