@@ -51,6 +51,8 @@ M:V:61
 # Maximum number of player races
 M:P:8
 
+
+# For Moria only, this number is also hard-coded in player.h, and will need to be changed if changed here.
 # Maximum number of player classes
 M:C:6
 

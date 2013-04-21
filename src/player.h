@@ -79,6 +79,21 @@
 		 ((p_ptr->state.stat_ind[A_INT] + p_ptr->state.stat_ind[A_WIS]) / 2) : \
 		 ((cp_ptr->spell_book == TV_MAGIC_BOOK) ? p_ptr->state.stat_ind[A_INT] : p_ptr->state.stat_ind[A_WIS]))
 
+/*Define the spell stat for the various classes (Note, can't handle druids) */
+#define MORIA_SPELL_STAT ((cp_ptr->spell_book == TV_MAGIC_BOOK) ? A_INT : A_WIS)
+
+#define MORIA_MAX_CLASS		6
+#define MORIA_MAX_LEV_ADJ	7
+#define MORIA_MAX_STR_ADJ	7
+#define MORIA_MAX_DEX_ADJ	6
+
+/* class level adjustment constants */
+#define MORIA_CLA_BTH		0
+#define MORIA_CLA_BTHB		1
+#define MORIA_CLA_DEVICE	2
+#define MORIA_CLA_DISARM	3
+#define MORIA_CLA_SAVE		4
+
 
 /*Magic for Beginners*/
 #define SPELL_MAGIC_MISSILE             0

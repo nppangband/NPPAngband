@@ -57,6 +57,30 @@ const char hexsym[16] =
 	'8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
 };
 
+const byte moria_class_level_adj[MORIA_MAX_CLASS][MORIA_MAX_LEV_ADJ] =
+{
+/*	       bth    bthb   device  disarm   save/misc hit  */
+/* Warrior */ {	4,	4,	2,	2,	3 },
+/* Mage    */ { 2,	2,	4,	3,	3 },
+/* Priest  */ { 2,	2,	4,	3,	3 },
+/* Rogue   */ { 3,	4,	3,	4,	3 },
+/* Ranger  */ { 3,	4,	3,	3,	3 },
+/* Paladin */ { 3,	3,	3,	2,	3 }
+};
+
+/* used to calculate the number of blows the player gets in combat */
+const byte moria_blows_table[MORIA_MAX_STR_ADJ][MORIA_MAX_DEX_ADJ] =
+{
+/* STR/W:	   9  18  67 107 117 118   : DEX */
+/* <2 */	{  1,  1,  1,  1,  1,  1 },
+/* <3 */	{  1,  1,  1,  1,  2,  2 },
+/* <4 */	{  1,  1,  1,  2,  2,  3 },
+/* <5 */	{  1,  1,  2,  2,  3,  3 },
+/* <7 */	{  1,  2,  2,  3,  3,  4 },
+/* <9 */	{  1,  2,  2,  3,  4,  4 },
+/* >9 */	{  2,  2,  3,  3,  4,  4 }
+};
+
 
 /*
  * Stat Table (INT/WIS) -- Number of half-spells per level
@@ -336,7 +360,6 @@ const s16b adj_chr_charm[] =
 	13	/* 18/210-18/219 */,
 	15	/* 18/220+ */
 };
-
 
 
 /*
