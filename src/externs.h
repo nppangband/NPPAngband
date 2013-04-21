@@ -40,6 +40,8 @@ extern char *macro_trigger_keycode[2][MAX_MACRO_TRIGGER];
 
 
 /* tables.c */
+extern const byte moria_class_level_adj[MORIA_MAX_CLASS][MORIA_MAX_LEV_ADJ];
+extern const byte moria_blows_table[MORIA_MAX_STR_ADJ][MORIA_MAX_DEX_ADJ];
 extern const s16b ddd[9];
 extern const s16b ddx[10];
 extern const s16b ddy[10];
@@ -404,7 +406,7 @@ extern char button_get_key(int x, int y);
 extern size_t button_print(int row, int col);
 
 /* calcs.c*/
-extern int stat_adj_moria(void);
+extern int stat_adj_moria(int stat);
 extern void calc_spells(void);
 extern int calc_blows(const object_type *o_ptr, player_state *new_state);
 extern void calc_bonuses(object_type inventory[], player_state *state, bool id_only);
