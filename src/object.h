@@ -696,6 +696,7 @@
 #define SV_FOOD_BEEF_JERKY		39
 #define SV_FOOD_FINE_ALE		40
 #define SV_FOOD_FINE_WINE		41
+#define SV_FOOD_FINE_MUSH		42
 
 /*gold, incomplete list defined primarily for the mimics*/
 
@@ -976,7 +977,7 @@
 #define TR3_HOLD_LIFE       0x00000080L /* Hold life */
 #define TR3_NEVER_PICKUP    0x00000100L /* monsters can't pickup*/
 #define TR3_IRONMAN_ONLY    0x00000200L	/* Ironman object */
-#define TR3_TR3XXX3         0x00000400L
+#define TR3_STORE_ONLY      0x00000400L /* Do not generate object in a dungeon */
 #define TR3_TR3XXX4         0x00000800L
 #define TR3_IMPACT          0x00001000L /* Earthquake blows */
 #define TR3_TELEPORT        0x00002000L /* Random teleportation */

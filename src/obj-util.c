@@ -356,8 +356,10 @@ void reset_visuals(bool unused)
 	/* Graphic symbols */
 	if (use_graphics)
 	{
+		if (game_mode == GAME_NPPMORIA) process_pref_file("m_graf.prf");
+
 		/* Process "graf.prf" */
-		process_pref_file("graf.prf");
+		else process_pref_file("graf.prf");
 	}
 
 	/* Normal symbols */
@@ -3089,7 +3091,7 @@ void create_food(void)
 	/* Wipe the object */
 	object_wipe(i_ptr);
 
-	object_prep(i_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
+	object_prep(i_ptr, lookup_kind(TV_FOOD, SV_FOOD_FINE_MUSH));
 
 	/* Remember history */
 	object_history(i_ptr, ORIGIN_MAGIC, 0);

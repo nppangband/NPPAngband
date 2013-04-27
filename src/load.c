@@ -2067,8 +2067,8 @@ static errr rd_savefile_new_aux(void)
 	note(format("Loading a %d.%d.%d savefile...",
 	            sf_major, sf_minor, sf_patch));
 
-	/* Strip the version bytes */
-	strip_bytes(4);
+	/* Strip the version bytes, and the game_mode byte */
+	strip_bytes(5);
 
 	/* Hack -- decrypt */
 	xor_byte = sf_extra;
@@ -2391,6 +2391,7 @@ bool load_player(void)
 	errr err = 0;
 
 	byte vvv[4];
+	byte savefile_game;
 
 	cptr what = "generic";
 
@@ -2466,6 +2467,8 @@ bool load_player(void)
 		/* What */
 		if (err) what = "Cannot read savefile";
 
+		rd_byte(&savefile_game);
+
 		/* Close the file */
 		file_close(fff);
 	}
@@ -2491,6 +2494,13 @@ bool load_player(void)
 		{
 			err = -1;
 			what = "Savefile is from the future";
+		}
+		else if (game_mode != savefile_game)
+		{
+			err = -1;
+			if (game_mode == GAME_NPPMORIA) what = "Not a NPPMoria savefile";
+			else if (game_mode == GAME_NPPANGBAND) what = "Not a NPPAngband savefile";
+			else what = "Unknown savefile type";
 		}
 		else
 		{

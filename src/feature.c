@@ -1785,6 +1785,9 @@ u16b pick_trap(int y, int x, byte mode)
 {
 	u16b feat = 0;
 
+	/* No smart traps in Moria */
+	if (game_mode == GAME_NPPMORIA) mode = EFFECT_TRAP_DUMB;
+
 	/* Set hook*/
 
 	if (mode == EFFECT_TRAP_SMART) get_feat_num_hook = vault_trap_smart;

@@ -179,11 +179,14 @@ therefore occasionally want to jam a door shut with iron spikes.  Each spike
 used on the door will make it harder to bash down the door, up to a limit of
 eight.  This command takes a full turn.
 
-Bash a door (B) / (f) :
+Bash a door or Monster (B) / (f) :
      Bash down jammed doors.  Your door bashing ability increases with strength.
 Bashing open a door can (briefly) throw you off balance and sometimes ruins the
 door.  All doors can be bashed; jammed or spiked doors will not open any other
-way.  This command takes a full turn.
+way.  Bashing a monster can damage the monster and paralyze it for a half turn, 
+however if the player misses, he can be paralyzed for 3-4 turns.
+
+This command takes a full turn.
 
 Disarm a trap or chest (D) :
      You can attempt to disarm known traps on the floor or on chests.  If you

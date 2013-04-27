@@ -754,8 +754,10 @@ static void reset_stats(int stats[A_MAX], int points_spent[A_MAX], int *points_l
 static bool buy_stat(int choice, int stats[A_MAX], int points_spent[A_MAX],
 					 int *points_left)
 {
-	/* Must be a valid stat, and have a "base" of below 18 to be adjusted */
-	if (!(choice >= A_MAX || choice < 0) &&	(stats[choice] < 18))
+	byte max_stat = (adult_maximize ? 18 : 17);
+
+	/* Must be a valid stat, and have a "base" of below allowable max to be adjusted */
+	if (!(choice >= A_MAX || choice < 0) &&	(stats[choice] < max_stat))
 	{
 		/* Get the cost of buying the extra point (beyond what
 		   it has already cost to get this far). */

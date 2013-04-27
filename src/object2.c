@@ -1610,7 +1610,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 	if (lev > MAX_DEPTH - 1) lev = MAX_DEPTH - 1;
 
 	/* Base chance of being "good" */
-	/* Moriais a base +15 */
+	/* Moria is a base +15 */
 	if (game_mode == GAME_NPPMORIA) test_good = lev + 15;
 	else test_good = lev + 10;
 
@@ -2048,6 +2048,20 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 		if (k_ptr->k_flags3 & (TR3_PERMA_CURSE)) o_ptr->ident |= (IDENT_CURSED);
 	}
 }
+
+/*
+ * Hack -- determine if a template suitabel for the dungeon.
+ * This is just to eliminate store_only items like wine and hard biscuits
+  */
+static bool kind_is_dungeon(int k_idx)
+{
+	object_kind *k_ptr = &k_info[k_idx];
+
+	if (k_ptr->k_flags3 & (TR3_STORE_ONLY)) return (FALSE);
+
+	return (TRUE);
+}
+
 
 /*
  * Hack -- determine if a template is suitable for a general store.
@@ -3955,63 +3969,51 @@ bool make_object(object_type *j_ptr, bool good, bool great, int objecttype, bool
 		int k_idx;
 
 		/*
-		 * Next check if it is a themed drop, and
-		 * only include objects from a pre-set theme.  But, it can be
-		 * called from anywhere.
-		 * First check to skip all these checks when unnecessary.
+		 * Find out what kind of objects we want.
 		 */
-		 if ((good) || (great) || (objecttype >= DROP_TYPE_POTION))
-		{
-			/*note - theme 1 is gold, sent to the make_gold function*/
-			if (objecttype == DROP_TYPE_POTION)						get_obj_num_hook = kind_is_potion;
-			else if (objecttype == DROP_TYPE_ROD_WAND_STAFF) 		get_obj_num_hook = kind_is_rod_wand_staff;
-			else if (objecttype == DROP_TYPE_SCROLL) 				get_obj_num_hook = kind_is_scroll;
-			else if (objecttype == DROP_TYPE_SHIELD) 				get_obj_num_hook = kind_is_shield;
-			else if (objecttype == DROP_TYPE_WEAPON) 				get_obj_num_hook = kind_is_weapon;
-			else if (objecttype == DROP_TYPE_ARMOR) 				get_obj_num_hook = kind_is_body_armor;
-			else if (objecttype == DROP_TYPE_BOOTS) 				get_obj_num_hook = kind_is_boots;
-			else if (objecttype == DROP_TYPE_BOW) 					get_obj_num_hook = kind_is_bow;
-			else if (objecttype == DROP_TYPE_CLOAK)					get_obj_num_hook = kind_is_cloak;
-			else if (objecttype == DROP_TYPE_GLOVES)				get_obj_num_hook = kind_is_gloves;
-			else if (objecttype == DROP_TYPE_HAFTED)				get_obj_num_hook = kind_is_hafted;
-			else if (objecttype == DROP_TYPE_HEADGEAR)				get_obj_num_hook = kind_is_headgear;
-			else if (objecttype == DROP_TYPE_JEWELRY)				get_obj_num_hook = kind_is_jewelry;
-			else if (objecttype == DROP_TYPE_DRAGON_ARMOR)			get_obj_num_hook = kind_is_dragarmor;
-			else if (objecttype == DROP_TYPE_CHEST)					get_obj_num_hook = kind_is_chest;
-			else if (objecttype == DROP_TYPE_DUNGEON_MAGIC_BOOK)	get_obj_num_hook = kind_is_dungeon_magic_book;
-			else if (objecttype == DROP_TYPE_DUNGEON_PRAYER_BOOK)	get_obj_num_hook = kind_is_dungeon_prayer_book;
-			else if (objecttype == DROP_TYPE_DUNGEON_DRUID_BOOK)	get_obj_num_hook = kind_is_dungeon_druid_book;
-			else if (objecttype == DROP_TYPE_EDGED)					get_obj_num_hook = kind_is_edged;
-			else if (objecttype == DROP_TYPE_POLEARM)				get_obj_num_hook = kind_is_polearm;
-			else if (objecttype == DROP_TYPE_DIGGING)				get_obj_num_hook = kind_is_digging_tool;
+		/*note - theme 1 is gold, sent to the make_gold function*/
+		if (objecttype == DROP_TYPE_POTION)						get_obj_num_hook = kind_is_potion;
+		else if (objecttype == DROP_TYPE_ROD_WAND_STAFF) 		get_obj_num_hook = kind_is_rod_wand_staff;
+		else if (objecttype == DROP_TYPE_SCROLL) 				get_obj_num_hook = kind_is_scroll;
+		else if (objecttype == DROP_TYPE_SHIELD) 				get_obj_num_hook = kind_is_shield;
+		else if (objecttype == DROP_TYPE_WEAPON) 				get_obj_num_hook = kind_is_weapon;
+		else if (objecttype == DROP_TYPE_ARMOR) 				get_obj_num_hook = kind_is_body_armor;
+		else if (objecttype == DROP_TYPE_BOOTS) 				get_obj_num_hook = kind_is_boots;
+		else if (objecttype == DROP_TYPE_BOW) 					get_obj_num_hook = kind_is_bow;
+		else if (objecttype == DROP_TYPE_CLOAK)					get_obj_num_hook = kind_is_cloak;
+		else if (objecttype == DROP_TYPE_GLOVES)				get_obj_num_hook = kind_is_gloves;
+		else if (objecttype == DROP_TYPE_HAFTED)				get_obj_num_hook = kind_is_hafted;
+		else if (objecttype == DROP_TYPE_HEADGEAR)				get_obj_num_hook = kind_is_headgear;
+		else if (objecttype == DROP_TYPE_JEWELRY)				get_obj_num_hook = kind_is_jewelry;
+		else if (objecttype == DROP_TYPE_DRAGON_ARMOR)			get_obj_num_hook = kind_is_dragarmor;
+		else if (objecttype == DROP_TYPE_CHEST)					get_obj_num_hook = kind_is_chest;
+		else if (objecttype == DROP_TYPE_DUNGEON_MAGIC_BOOK)	get_obj_num_hook = kind_is_dungeon_magic_book;
+		else if (objecttype == DROP_TYPE_DUNGEON_PRAYER_BOOK)	get_obj_num_hook = kind_is_dungeon_prayer_book;
+		else if (objecttype == DROP_TYPE_DUNGEON_DRUID_BOOK)	get_obj_num_hook = kind_is_dungeon_druid_book;
+		else if (objecttype == DROP_TYPE_EDGED)					get_obj_num_hook = kind_is_edged;
+		else if (objecttype == DROP_TYPE_POLEARM)				get_obj_num_hook = kind_is_polearm;
+		else if (objecttype == DROP_TYPE_DIGGING)				get_obj_num_hook = kind_is_digging_tool;
 
-			/*
-			 *	If it isn't a chest, check good and great flags.
-			 *  They each now have their own templates.
-			 */
-			else if (great)	get_obj_num_hook = kind_is_great;
-			else if (good)	get_obj_num_hook = kind_is_good;
-		}
+		/*
+		 *	If it isn't a chest, check good and great flags.
+		 *  They each now have their own templates.
+		 */
+		else if (great)	get_obj_num_hook = kind_is_great;
+		else if (good)	get_obj_num_hook = kind_is_good;
+		/* DROP_TYPE_UNTHEMED - just eliminate STORE_ONLY items */
+		else get_obj_num_hook = kind_is_dungeon;
 
-		/* Prepare allocation table if needed*/
-		if ((objecttype) || (good) || (great) || (interesting))
-		{
-			get_obj_num_prep();
-		}
+		/* Prepare allocation table */
+		get_obj_num_prep();
 
 		/* Pick a random object */
 		k_idx = get_obj_num(base);
 
 		/* Clear the objects template*/
-		if ((objecttype) ||	(good) || (great) || (interesting))
-		{
-			/* Clear restriction */
-			get_obj_num_hook = NULL;
+		get_obj_num_hook = NULL;
 
-			/* Prepare allocation table */
-			get_obj_num_prep();
-		}
-
+		/* Prepare allocation table */
+		get_obj_num_prep();
 
 		/* Handle failure*/
 		if (!k_idx) return (FALSE);

@@ -409,7 +409,7 @@ static void chest_death(int y, int x, s16b o_idx)
 
 		/*theme 1 is gold, themes 2-15 are objects*/
 
-		if (chesttheme == 1) make_gold(i_ptr);
+		if (chesttheme == DROP_TYPE_GOLD) make_gold(i_ptr);
 
 		else if (chesttheme >= 2)
 		{
@@ -1790,6 +1790,75 @@ void textui_cmd_disarm(void)
 	cmd_insert(CMD_DISARM, dir);
 }
 
+static bool player_bash(int y, int x)
+{
+	monster_type *m_ptr = &mon_list[cave_m_idx[y][x]];
+	monster_race *r_ptr;
+	char m_name[80];
+	object_type *o_ptr = &inventory[INVEN_ARM];
+
+	/* Chance to hit based on strength and weight */
+	int base_to_hit = p_ptr->state.stat_ind[A_STR] + o_ptr->weight / 2 + p_ptr->total_weight/10;
+
+	/* Paranoia */
+	if (!(cave_m_idx[y][x] > 0)) return (FALSE);
+
+	m_ptr = &mon_list[cave_m_idx[y][x]];
+	r_ptr = &r_info[m_ptr->r_idx];
+	monster_desc(m_name, sizeof(m_name), m_ptr, 0);
+
+	/* Boundry control */
+	if (base_to_hit < 4)  base_to_hit = 4;
+
+	if (test_hit(base_to_hit, r_ptr->ac, m_ptr->ml))
+	{
+		int dd = 4;
+		int ds = (base_to_hit / 4);
+		int plus = p_ptr->state.to_d;
+		int damage;
+		bool fear = FALSE;
+
+		msg_print(format("You bash %s.", m_name));
+
+		/* Allow for a critical hit */
+		(void)critical_hit_check(o_ptr, &dd, &plus);
+
+		damage = damroll(dd, ds) + plus;
+
+		/* Monster is still alive */
+		if (!mon_take_hit(cave_m_idx[y][x], damage, &fear, NULL, SOURCE_PLAYER))
+		{
+			/* Reduce its energy (half-paralysis) */
+			m_ptr->m_energy = BASE_ENERGY_MOVE / 2;
+			if (!m_ptr->m_timed[MON_TMD_STUN])
+			{
+				(void)mon_inc_timed(cave_m_idx[y][x], MON_TMD_STUN, (randint(3) + 1), MON_TMD_FLG_NOTIFY);
+			}
+		}
+
+		return (TRUE);
+	}
+
+	else msg_print(format("You miss %s.", m_name));
+
+	/* High dexterity yields coolness */
+	if (randint1(150) < p_ptr->state.stat_ind[A_DEX])
+	{
+		/* Message */
+		msg_print("You retain your balance.");
+	}
+	else
+	{
+		/* Message */
+		msg_print("You are off-balance.");
+
+		/* Hack -- Lose balance aka paralysis */
+		(void)set_timed(TMD_PARALYZED, 2 + randint(2), FALSE);
+	}
+
+	return (FALSE);
+}
+
 
 /*
  * Perform the basic "bash" command
@@ -1958,8 +2027,14 @@ void do_cmd_bash(cmd_code code, cmd_arg args[])
 	y = p_ptr->py + ddy[dir];
 	x = p_ptr->px + ddx[dir];
 
+	/* In Moria, possibly bash a monster */
+	if ((cave_m_idx[y][x] > 0) && (game_mode == GAME_NPPMORIA))
+	{
+		/* Do nothing except avoid the next check */
+	}
+
 	/* Verify legality */
-	if (!do_cmd_test(y, x, FS_BASH, TRUE)) return;
+	else if (!do_cmd_test(y, x, FS_BASH, TRUE)) return;
 
 	/* Take a turn */
 	p_ptr->p_energy_use = BASE_ENERGY_MOVE;
@@ -1988,11 +2063,7 @@ void do_cmd_bash(cmd_code code, cmd_arg args[])
 	/* Monster */
 	if (cave_m_idx[y][x] > 0)
 	{
-		/* Message */
-		msg_print("There is a monster in the way!");
-
-		/* Attack */
-		py_attack(y, x);
+		player_bash(y, x);
 	}
 
 	/* Door */

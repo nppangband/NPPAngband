@@ -473,7 +473,7 @@ int critical_hit_chance(const object_type *o_ptr, player_state a_state, bool id_
  *
  * Factor in weapon weight, total plusses, player level.
  */
-static int critical_hit_check(const object_type *o_ptr, int *dd, int *plus)
+int critical_hit_check(const object_type *o_ptr, int *dd, int *plus)
 {
 	int i = critical_hit_chance(o_ptr, p_ptr->state, FALSE);
 

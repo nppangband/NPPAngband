@@ -1551,7 +1551,13 @@ A:7/1
 F:HIDE_TYPE
 
 
-# XXX Record182 is unused XXX #
+N:182:Free Action
+G:=:d
+I:45:21:0
+W:20:0:2:1500
+P:0:0d0:0:0:0
+A:20/1
+F:FREE_ACT | EASY_KNOW
 
 
 # XXX Record183 is unused XXX #
@@ -3326,7 +3332,7 @@ G:,:y
 I:80:38:500
 W:0:1:5:1
 P:0:0d0:0:0:0
-F:EASY_KNOW
+F:STORE_ONLY | EASY_KNOW
 D:It provides nourishment for about 500 turns under normal conditions.
 
 
@@ -3335,7 +3341,7 @@ G:,:U1
 I:80:39:1750
 W:0:1:5:2
 P:0:0d0:0:0:0
-F:EASY_KNOW
+F:STORE_ONLY | EASY_KNOW
 D:It provides nourishment for about 1750 turns under normal conditions.
 
 
@@ -3344,7 +3350,7 @@ G:!:u1
 I:80:40:500
 W:0:1:3:1
 P:0:0d0:0:0:0
-F:EASY_KNOW
+F:STORE_ONLY | EASY_KNOW
 D:It provides nourishment for about 500 turns under normal conditions.
 
 
@@ -3353,11 +3359,18 @@ G:!:R
 I:80:41:400
 W:0:1:1:2
 P:0:0d0:0:0:0
-F:EASY_KNOW
+F:STORE_ONLY | EASY_KNOW
 D:It provides nourishment for about 400 turns under normal conditions.
 
 
-# XXX Record362 is unused XXX #
+N:362:& Pint~ of Fine Grade Mush
+G:!:U1
+I:80:42:1500
+W:0:0:1:1
+P:0:1d1:0:0:0
+A:0/1
+F:EASY_KNOW
+D:It provides nourishment for about 1500 turns under normal conditions.
 
 
 # XXX Record363 is unused XXX #

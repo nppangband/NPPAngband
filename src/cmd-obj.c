@@ -805,6 +805,7 @@ static bool eat_food(object_type *o_ptr, bool *ident)
 		}
 
 		case SV_FOOD_RATION:
+		case SV_FOOD_FINE_MUSH:
 		case SV_FOOD_SLIME_MOLD:
 		{
 			msg_print("That tastes good.");
@@ -2840,6 +2841,14 @@ static bool activate_object(object_type *o_ptr, int dir)
 			{
 				int act_time = randint(50) + 50;
 				msg_format("Your %s glows many colours...", o_name);
+				if (game_mode == GAME_NPPMORIA)
+				{
+					if (!p_ptr->timed[TMD_SHERO])
+					{
+						p_ptr->mhp +=15;
+						p_ptr->chp +=15;
+					}
+				}
 				(void)hp_player(30);
 				(void)clear_timed(TMD_AFRAID, TRUE);
 				(void)inc_timed(TMD_SHERO, randint(50) + 50, TRUE);
@@ -3133,6 +3142,14 @@ static bool activate_object(object_type *o_ptr, int dir)
 			case ACT_BERSERKER:
 			{
 				msg_format("Your %s glows in anger...", o_name);
+				if (game_mode == GAME_NPPMORIA)
+				{
+					if (!p_ptr->timed[TMD_SHERO])
+					{
+						p_ptr->mhp +=15;
+						p_ptr->chp +=15;
+					}
+				}
 				inc_timed(TMD_SHERO, randint(50) + 50, TRUE);
 				break;
 			}

@@ -1,6 +1,7 @@
 NPP 7.0.0 changes:
+Added opportunity to do a shield bash on a monster as in Moria.
 Bugfix:  Fix inconcistency when describing damage from ammo.
-
+Bugfix:  Fix display of equipment flags on equipment screen.
 
 
 

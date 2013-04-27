@@ -81,7 +81,7 @@ static command_type cmd_action[] =
 	{ "Open a door or a chest",     'o', CMD_NULL, textui_cmd_open },
 	{ "Close a door",               'c', CMD_NULL, textui_cmd_close },
 	{ "Jam a door shut",            'j', CMD_NULL, textui_cmd_spike },
-	{ "Bash a door open",           'B', CMD_NULL, textui_cmd_bash },
+	{ "Bash a monster or door",	    'B', CMD_NULL, textui_cmd_bash },
 	{ "Make a monster trap",		'O', CMD_NULL, textui_cmd_make_trap},
 	{ "Steal from a monster",		'P', CMD_NULL, textui_cmd_steal}
 };
@@ -364,7 +364,7 @@ static void show_commands(void)
 		if (cave_m_idx[y][x] > 0)
 		{
 			nearby_monster = TRUE;
-
+			can_bash = TRUE;
 			if (cp_ptr->flags & CF_ROGUE_COMBAT) can_steal = TRUE;
 		}
 		else if (cave_passable_bold(y,x))

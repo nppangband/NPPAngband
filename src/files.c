@@ -619,45 +619,46 @@ struct player_flag_record
 	byte set;				/* Which field this resistance is in { 1 2 3 } */
 	u32b res_flag;			/* resistance flag bit */
 	u32b im_flag;			/* corresponding immunity bit, if any */
+	bool moria_flag;		/* Is it used in Moria? */
 };
 
 static const struct player_flag_record player_flag_table[RES_ROWS*4] =
 {
-	{ "rAcid",	2, TR2_RES_ACID,	TR2_IM_ACID},
-	{ "rElec",	2, TR2_RES_ELEC,	TR2_IM_ELEC},
-	{ "rFire",	2, TR2_RES_FIRE,	TR2_IM_FIRE},
-	{ "rCold",	2, TR2_RES_COLD,	TR2_IM_COLD},
-	{ "rPois",	2, TR2_RES_POIS,	TR2_IM_POIS},
-	{ "rFear",	2, TR2_RES_FEAR,	0},
-	{ "rLite",	2, TR2_RES_LIGHT,	0},
-	{ "rDark",	2, TR2_RES_DARK,	0},
+	{ "rAcid",	2, TR2_RES_ACID,	TR2_IM_ACID, TRUE},
+	{ "rElec",	2, TR2_RES_ELEC,	TR2_IM_ELEC, TRUE},
+	{ "rFire",	2, TR2_RES_FIRE,	TR2_IM_FIRE, TRUE},
+	{ "rCold",	2, TR2_RES_COLD,	TR2_IM_COLD, TRUE},
+	{ "rPois",	2, TR2_RES_POIS,	TR2_IM_POIS, FALSE},
+	{ "rFear",	2, TR2_RES_FEAR,	0, FALSE},
+	{ "rLite",	2, TR2_RES_LIGHT,	0, FALSE},
+	{ "rDark",	2, TR2_RES_DARK,	0, FALSE},
 
-	{ "rBlnd",	2, TR2_RES_BLIND,	0},
-	{ "rConf",	2, TR2_RES_CONFU,	0},
-	{ "Sound",	2, TR2_RES_SOUND,	0},
-	{ "Shard",	2, TR2_RES_SHARD,	0},
-	{ "Nexus",	2, TR2_RES_NEXUS,	0},
-	{ "Nethr",	2, TR2_RES_NETHR,	0},
-	{ "Chaos",	2, TR2_RES_CHAOS,	0},
-	{ "Disen",	2, TR2_RES_DISEN,	0},
+	{ "rBlnd",	2, TR2_RES_BLIND,	0, TRUE},
+	{ "rConf",	2, TR2_RES_CONFU,	0, FALSE},
+	{ "Sound",	2, TR2_RES_SOUND,	0, FALSE},
+	{ "Shard",	2, TR2_RES_SHARD,	0, FALSE},
+	{ "Nexus",	2, TR2_RES_NEXUS,	0, FALSE},
+	{ "Nethr",	2, TR2_RES_NETHR,	0, FALSE},
+	{ "Chaos",	2, TR2_RES_CHAOS,	0, FALSE},
+	{ "Disen",	2, TR2_RES_DISEN,	0, FALSE},
 
-	{ "S.Dig",	3, TR3_SLOW_DIGEST,	0},
-	{ "Feath",	3, TR3_FEATHER, 	0},
-	{ "PLite",	3, TR3_LIGHT, 		0},
-	{ "Regen",	3, TR3_REGEN, 		0},
-	{ "Telep",	3, TR3_TELEPATHY, 	0},
-	{ "Invis",	3, TR3_SEE_INVIS, 	0},
-	{ "FrAct",	3, TR3_FREE_ACT, 	0},
-	{ "HLife",	3, TR3_HOLD_LIFE, 	0},
+	{ "S.Dig",	3, TR3_SLOW_DIGEST,	0, TRUE},
+	{ "Feath",	3, TR3_FEATHER, 	0, TRUE},
+	{ "PLite",	3, TR3_LIGHT, 		0, TRUE},
+	{ "Regen",	3, TR3_REGEN, 		0, TRUE},
+	{ "Telep",	3, TR3_TELEPATHY, 	0, TRUE},
+	{ "Invis",	3, TR3_SEE_INVIS, 	0, TRUE},
+	{ "FrAct",	3, TR3_FREE_ACT, 	0, TRUE},
+	{ "HLife",	3, TR3_HOLD_LIFE, 	0, TRUE},
 
-	{ "Stea.",	1, TR1_STEALTH,		0},
-	{ "Sear.",	1, TR1_SEARCH,		0},
-	{ "Infra",	1, TR1_INFRA,		0},
-	{ "Aggr",	3, TR3_AGGRAVATE,	0},
-	{ "Speed",	1, TR1_SPEED,		0},
-	{ "Blows",	1, TR1_BLOWS,		0},
-	{ "Shots",	1, TR1_SHOTS,		0},
-	{ "Might",	1, TR1_MIGHT,		0}
+	{ "Stea.",	1, TR1_STEALTH,		0, TRUE},
+	{ "Sear.",	1, TR1_SEARCH,		0, TRUE},
+	{ "Infra",	1, TR1_INFRA,		0, TRUE},
+	{ "Aggr",	3, TR3_AGGRAVATE,	0, TRUE},
+	{ "Speed",	1, TR1_SPEED,		0, TRUE},
+	{ "Blows",	1, TR1_BLOWS,		0, TRUE},
+	{ "Shots",	1, TR1_SHOTS,		0, TRUE},
+	{ "Might",	1, TR1_MIGHT,		0, TRUE}
 };
 
 /*
@@ -690,6 +691,16 @@ static void display_player_flag_info(bool onscreen)
 			const struct player_flag_record *pfr_ptr = &player_flag_table[record++];
 			u32b flag_used;
 
+			/* Don't display flags unused in Moria */
+			if (game_mode == GAME_NPPMORIA)
+			{
+				if(!pfr_ptr->moria_flag)
+				{
+					row++;
+					continue;
+				}
+			}
+
 			/* Check equipment */
 			for (n = 8, i = INVEN_WIELD; i < INVEN_TOTAL; ++i, ++n)
 			{
@@ -718,7 +729,7 @@ static void display_player_flag_info(bool onscreen)
 				if (!o_ptr->k_idx) attr = TERM_L_DARK;
 
 				/* First check immunities */
-				else if ((pfr_ptr->im_flag) && (flag_used & (pfr_ptr->im_flag)))
+				if ((pfr_ptr->im_flag) && (flag_used & (pfr_ptr->im_flag)))
 				{
 					c_put_str(TERM_L_GREEN, "*", row, col+n);
 					name_attr = TERM_L_GREEN;
@@ -1221,6 +1232,16 @@ static void display_home_equipment_info(int mode, bool onscreen)
 			const struct player_flag_record *pfr_ptr = &player_flag_table[z];
 			u32b flag_used;
 
+			/* Don't display flags unused in Moria */
+			if (game_mode == GAME_NPPMORIA)
+			{
+				if(!pfr_ptr->moria_flag)
+				{
+					row++;
+					continue;
+				}
+			}
+
 			/* Check equipment */
 			for (n = 7, i = 0; i < MAX_INVENTORY_HOME; ++i, ++n)
 			{
@@ -1244,6 +1265,12 @@ static void display_home_equipment_info(int mode, bool onscreen)
 				else if (pfr_ptr->set == 2) flag_used = f2;
 				else if (pfr_ptr->set == 3) flag_used = f3;
 				else/*(pfr_ptr->set == 3)*/ flag_used = fn;
+
+				/* Color columns by parity */
+				if (i % 2) attr = TERM_L_WHITE;
+
+				/* Non-existent objects */
+				if (!o_ptr->k_idx) attr = TERM_L_DARK;
 
 				/* First check immunities */
 				if ((pfr_ptr->im_flag) && (flag_used & (pfr_ptr->im_flag)))

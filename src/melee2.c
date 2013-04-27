@@ -1808,15 +1808,6 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 
 				if (alt_path == PROJECT_NOT_CLEAR)
 				{
-					if (cave_m_idx[alt_y][alt_x])
-					{
-						monster_type *m2_ptr = &mon_list[cave_m_idx[alt_y][alt_x]];
-						monster_race *r2_ptr = &r_info[m2_ptr->r_idx];
-
-						if (!race_similar_monsters(m_idx, alt_y, alt_x)) continue;
-						if (!race_similar_breaths(r_ptr, r2_ptr)) continue;
-					}
-
 					/*we already have a NOT_CLEAR path*/
 					if ((best_path == PROJECT_NOT_CLEAR) && (one_in_(2))) continue;
 				}

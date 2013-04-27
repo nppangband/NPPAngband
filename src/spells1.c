@@ -6731,6 +6731,12 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
 	/*We can't see this square*/
 	if (!player_can_see_bold(y, x)) obvious = FALSE;
 
+	if (game_mode == GAME_NPPANGBAND)
+	{
+		/* Allow traps, but that's all */
+		if (typ != GF_MAKE_TRAP) return FALSE;
+	}
+
 	/*
 	 * Apply bonuses/penalties from terrain, only if damage doesn't come
 	 * from terrain already
