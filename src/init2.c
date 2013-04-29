@@ -780,7 +780,9 @@ static errr init_b_info(void)
 	/* Save a pointer to the parsing function */
 	b_head.parse_info_txt = parse_b_info;
 
-	err = init_info("shop_own", &b_head);
+
+	if (game_mode == GAME_NPPANGBAND) err = init_info("shop_own", &b_head);
+	else err = init_info("m_shop_own", &b_head);
 
 	/* Set the global variables */
 	b_info = b_head.info_ptr;

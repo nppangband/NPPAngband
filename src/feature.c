@@ -772,6 +772,8 @@ void hit_trap(int f_idx, int y, int x, byte mode)
 			dice = 2;
 			sides = 6;
 
+			if (game_mode == GAME_NPPMORIA) sides = 8;
+
 			if (mode == MODE_DESCRIBE)
 			{
 				text_out(format("  This trap door will cause you %dd%d damage when you fall through to the", dice, sides));
@@ -1145,6 +1147,8 @@ void hit_trap(int f_idx, int y, int x, byte mode)
 			int base = 25;
 			int rand_base = 50;
 
+			if (game_mode == GAME_NPPMORIA) base = 50;
+
 			if (mode == MODE_DESCRIBE)
 			{
 				text_out(format("  This trap releases black gas that can blind you for %d + %dd turns.", base, rand_base));
@@ -1166,6 +1170,13 @@ void hit_trap(int f_idx, int y, int x, byte mode)
 		{
 			int base = 10;
 			int rand_base = 20;
+
+			if (game_mode == GAME_NPPMORIA)
+			{
+				base = 15;
+				rand_base = 15;
+			}
+
 
 			if (mode == MODE_DESCRIBE)
 			{
@@ -1189,6 +1200,12 @@ void hit_trap(int f_idx, int y, int x, byte mode)
 			int base = 10;
 			int rand_base = 30;
 
+			if (game_mode == GAME_NPPMORIA)
+			{
+				base = 2;
+				rand_base = 10;
+			}
+
 			if (mode == MODE_DESCRIBE)
 			{
 				text_out(format("  This trap releases green gas that can poison you for %d + %dd turns.", base, rand_base));
@@ -1211,6 +1228,12 @@ void hit_trap(int f_idx, int y, int x, byte mode)
 		{
 			int base = 5;
 			int rand_base = 20;
+
+			if (game_mode == GAME_NPPMORIA)
+			{
+				base = 4;
+				rand_base = 10;
+			}
 
 			if (mode == MODE_DESCRIBE)
 			{

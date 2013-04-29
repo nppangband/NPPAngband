@@ -321,6 +321,7 @@ static bool describe_weapon(const object_type *o_ptr, u32b f1, bool extra_info)
 	int dd, ds, plus, crit_hit_percent, average;
 	u32b reported_brands = 0L;
 	char plus_minus = '+';
+	u16b counter;
 
 	/* The player's hypothetical state, were they to wield this item */
 	player_state object_state;
@@ -388,10 +389,17 @@ static bool describe_weapon(const object_type *o_ptr, u32b f1, bool extra_info)
 
 	text_out("\n");
 
+	if (game_mode == GAME_NPPMORIA) counter = N_ELEMENTS(slays_info_nppmoria);
+	else counter = N_ELEMENTS(slays_info_nppangband);
+
+
 	/* Go through each brand and specify the applicable brand multiplier */
-	for (i = 0; i < N_ELEMENTS(slays_info); i++)
+	for (i = 0; i < counter; i++)
 	{
-		const slays_structure *si = &slays_info[i];
+		const slays_structure *si;
+		if (game_mode == GAME_NPPMORIA) si = &slays_info_nppmoria[i];
+		else si = &slays_info_nppangband[i];
+
 		if (f1 & (si->slay_flag))
 		{
 			int new_dd = dd * si->multiplier;
@@ -402,10 +410,32 @@ static bool describe_weapon(const object_type *o_ptr, u32b f1, bool extra_info)
 		}
 	}
 
-	/* Go through each brand and specify the applicable brand multiplier */
-	for (i = 0; i < N_ELEMENTS(brands_info); i++)
+	if (game_mode == GAME_NPPMORIA) counter = N_ELEMENTS(brands_info_nppmoria);
+	else counter = N_ELEMENTS(brands_info_nppangband);
+
+	/* Use the hackish slays info to find succeptibilities in Moria */
+	if (game_mode == GAME_NPPMORIA)
 	{
-		const brands_structure *bi = &brands_info[i];
+		for (i = 0; i < counter; i++)
+		{
+			const slays_structure *si = &brands_info_nppmoria[i];
+
+			/* See if any of the weapons's slays flag matches the monster race flags */
+			if (f1 & (si->slay_flag))
+			{
+				int new_dd = dd * si->multiplier;
+
+				average = (new_dd * ds) / 2 + plus;
+
+				text_out(format("   This weapon does %dd%d%c%d damage (%d avg) against creatures who %s each hit.\n", new_dd, ds, plus_minus, plus, average, si->slay_race));
+			}
+ 		}
+	}
+
+	/* Go through each brand and specify the applicable brand multiplier */
+	else for (i = 0; i < counter; i++)
+	{
+		const brands_structure *bi = &brands_info_nppangband[i];
 
 		/* We already checked this one, there are multiple entries for each flag */
 		if (reported_brands & (bi->brand_flag)) continue;
@@ -424,7 +454,7 @@ static bool describe_weapon(const object_type *o_ptr, u32b f1, bool extra_info)
 	}
 
 	/* Check for increased damage due to monster susceptibility */
-	for (i = 0; i < N_ELEMENTS(mon_suscept); i++)
+	if (game_mode != GAME_NPPMORIA) for (i = 0; i < N_ELEMENTS(mon_suscept); i++)
 	{
 		const mon_susceptibility_struct *ms = &mon_suscept[i];
 		if (f1 & (ms->brand_flag))
@@ -574,7 +604,7 @@ static bool describe_ammo(const object_type *o_ptr, u32b f1, u32b f3, bool extra
 	char j_name[120];
 	u32b reported_brands = 0L;
 	char plus_minus = '+';
-
+	u16b counter;
 
 	/* The player's hypothetical state, were they to wield this item */
 	player_state object_state;
@@ -655,10 +685,16 @@ static bool describe_ammo(const object_type *o_ptr, u32b f1, u32b f3, bool extra
 
 	text_out("\n");
 
+	counter = N_ELEMENTS(slays_info_nppangband);
+	if (game_mode == GAME_NPPMORIA) counter = N_ELEMENTS(slays_info_nppmoria);
+
 	/* Go through each brand and specify the applicable brand multiplier */
-	for (i = 0; i < N_ELEMENTS(slays_info); i++)
+	for (i = 0; i < counter; i++)
 	{
-		const slays_structure *si = &slays_info[i];
+		const slays_structure *si;
+		if (game_mode == GAME_NPPMORIA) si = &slays_info_nppmoria[i];
+		else si = &slays_info_nppangband[i];
+
 		if (f1 & (si->slay_flag))
 		{
 			int new_dd = dd * si->multiplier;
@@ -669,10 +705,33 @@ static bool describe_ammo(const object_type *o_ptr, u32b f1, u32b f3, bool extra
 		}
 	}
 
-	/* Go through each brand and specify the applicable brand multiplier */
-	for (i = 0; i < N_ELEMENTS(brands_info); i++)
+	if (game_mode == GAME_NPPMORIA) counter = N_ELEMENTS(brands_info_nppmoria);
+	else counter = N_ELEMENTS(brands_info_nppangband);
+
+	/* Use the hackish slays info to find succeptibilities in Moria */
+	if (game_mode == GAME_NPPMORIA)
 	{
-		const brands_structure *bi = &brands_info[i];
+		for (i = 0; i < counter; i++)
+		{
+			const slays_structure *si = &brands_info_nppmoria[i];
+
+			/* See if any of the weapons's slays flag matches the monster race flags */
+			if (f1 & (si->slay_flag))
+			{
+				int new_dd = dd * si->multiplier;
+
+				average = (new_dd * ds) / 2 + plus;
+
+				text_out(format("   This ammunition does %dd%d%c%d damage (%d avg) against creatures who %s each hit.\n", new_dd, ds, plus_minus, plus, average, si->slay_race));
+			}
+	 	}
+	}
+
+
+	/* Go through each brand and specify the applicable brand multiplier */
+	else for (i = 0; i < counter; i++)
+	{
+		const brands_structure *bi = &brands_info_nppangband[i];
 
 		/* We already checked this one, there are multiple entries for each flag */
 		if (reported_brands & (bi->brand_flag)) continue;
@@ -691,7 +750,7 @@ static bool describe_ammo(const object_type *o_ptr, u32b f1, u32b f3, bool extra
 	}
 
 	/* Check for increased damage due to monster susceptibility */
-	for (i = 0; i < N_ELEMENTS(mon_suscept); i++)
+	if (game_mode != GAME_NPPMORIA) for (i = 0; i < N_ELEMENTS(mon_suscept); i++)
 	{
 		const mon_susceptibility_struct *ms = &mon_suscept[i];
 		if (f1 & (ms->brand_flag))
@@ -714,6 +773,7 @@ static bool describe_throwing_weapon(const object_type *o_ptr, u32b f1, u32b f3,
 	int dd, ds, plus, crit_hit_percent, mult, average;
 	u32b reported_brands = 0L;
 	char plus_minus = '+';
+	u16b counter;
 
 	/* The player's hypothetical state, were they to throw this item */
 	player_state object_state;
@@ -769,10 +829,17 @@ static bool describe_throwing_weapon(const object_type *o_ptr, u32b f1, u32b f3,
 
 	text_out("\n");
 
+	if (game_mode == GAME_NPPMORIA) counter = N_ELEMENTS(slays_info_nppmoria);
+	else counter = N_ELEMENTS(slays_info_nppangband);
+
+
 	/* Go through each brand and specify the applicable brand multiplier */
-	for (i = 0; i < N_ELEMENTS(slays_info); i++)
+	for (i = 0; i < counter; i++)
 	{
-		const slays_structure *si = &slays_info[i];
+		const slays_structure *si;
+		if (game_mode == GAME_NPPMORIA) si = &slays_info_nppmoria[i];
+		else si = &slays_info_nppangband[i];
+
 		if (f1 & (si->slay_flag))
 		{
 			int new_dd = dd * si->multiplier;
@@ -783,10 +850,33 @@ static bool describe_throwing_weapon(const object_type *o_ptr, u32b f1, u32b f3,
 		}
 	}
 
-	/* Go through each brand and specify the applicable brand multiplier */
-	for (i = 0; i < N_ELEMENTS(brands_info); i++)
+	if (game_mode == GAME_NPPMORIA) counter = N_ELEMENTS(brands_info_nppmoria);
+	else counter = N_ELEMENTS(brands_info_nppangband);
+
+	/* Use the hackish slays info to find succeptibilities in Moria */
+	if (game_mode == GAME_NPPMORIA)
 	{
-		const brands_structure *bi = &brands_info[i];
+		for (i = 0; i < counter; i++)
+		{
+			const slays_structure *si = &brands_info_nppmoria[i];
+
+			/* See if any of the weapons's slays flag matches the monster race flags */
+			if (f1 & (si->slay_flag))
+			{
+				int new_dd = dd * si->multiplier;
+
+				average = (new_dd * ds) / 2 + plus;
+
+				text_out(format("   Throwing this weapon does %dd%d%c%d damage (%d avg) against creatures who %s each hit.\n", new_dd, ds, plus_minus, plus, average, si->slay_race));
+			}
+	 	}
+	}
+
+
+	/* Go through each brand and specify the applicable brand multiplier */
+	else for (i = 0; i < counter; i++)
+	{
+		const brands_structure *bi = &brands_info_nppangband[i];
 
 		/* We already checked this one, there are multiple entries for each flag */
 		if (reported_brands & (bi->brand_flag)) continue;
@@ -805,7 +895,7 @@ static bool describe_throwing_weapon(const object_type *o_ptr, u32b f1, u32b f3,
 	}
 
 	/* Check for increased damage due to monster susceptibility */
-	for (i = 0; i < N_ELEMENTS(mon_suscept); i++)
+	if (game_mode != GAME_NPPMORIA) for (i = 0; i < N_ELEMENTS(mon_suscept); i++)
 	{
 		const mon_susceptibility_struct *ms = &mon_suscept[i];
 		if (f1 & (ms->brand_flag))

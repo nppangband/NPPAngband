@@ -60,7 +60,7 @@ M:C:6
 M:H:128
 
 # Maximum number of owners per store
-M:B:4
+M:B:3
 
 # Maximum number of quests (including a slot for random quests)
 M:Q:2

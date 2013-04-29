@@ -53,10 +53,15 @@ static void mod_dd_slays(u32b f1, u32b r3, u32b *r_l3, int *mult, bool seen)
 	u16b i;
 	int max_mult = 1;
 
+	u16b counter = N_ELEMENTS(slays_info_nppangband);
+	if (game_mode == GAME_NPPMORIA) counter = N_ELEMENTS(slays_info_nppmoria);
+
 	/* Go through each slay/kill and get the best multiplier */
-	for (i = 0; i < N_ELEMENTS(slays_info); i++)
+	for (i = 0; i < counter; i++)
 	{
-		const slays_structure *si = &slays_info[i];
+		const slays_structure *si;
+		if (game_mode == GAME_NPPMORIA) si = &slays_info_nppmoria[i];
+		else si = &slays_info_nppangband[i];
 
 		/* See if any of the weapons's slays flag matches the monster race flags */
 		if ((f1 & (si->slay_flag)) &&
@@ -83,10 +88,37 @@ static int mod_dd_brands(u32b f1, u32b r3, u32b *r_l3, byte *divider, bool deep,
 	int max_mult = 1;
 	int terrain_flag = 0;
 
-	/* Go through each brand and look for a better multiplier, also factor in terrain */
-	for (i = 0; i < N_ELEMENTS(brands_info); i++)
+	u16b counter = N_ELEMENTS(brands_info_nppangband);
+	if (game_mode == GAME_NPPMORIA) counter = N_ELEMENTS(brands_info_nppmoria);
+
+	/* Use the hackish slays info to find succeptibilities in Moria */
+	if (game_mode == GAME_NPPMORIA)
 	{
-		const brands_structure *bi = &brands_info[i];
+		for (i = 0; i < counter; i++)
+		{
+			const slays_structure *si = &brands_info_nppmoria[i];
+
+			/* See if any of the weapons's slays flag matches the monster race flags */
+			if ((f1 & (si->slay_flag)) &&
+						(r3 & (si->mon_flag)))
+			{
+
+				/* If the player can see the monster, mark the lore */
+				if (seen)
+				{
+					*r_l3 |= (si->mon_flag);
+				}
+
+				/* Use the highest possible multiplier */
+				if (max_mult < si->multiplier) max_mult = si->multiplier;
+			}
+		}
+	}
+
+	/* Go through each brand and look for a better multiplier, also factor in terrain */
+	else for (i = 0; i < counter; i++)
+	{
+		const brands_structure *bi = &brands_info_nppangband[i];
 
 		if (f1 & (bi->brand_flag))
 		{
@@ -149,6 +181,9 @@ static int mod_dd_succept(u32b f1, u32b r3, u32b *r_l3, bool seen)
 {
 	u16b i;
 	int extra_dam = 0;
+
+	/* Moria doesn't have succeptabilities */
+	if (game_mode == GAME_NPPMORIA) return 0;
 
 	/* Check for increased damage due to monster susceptibility */
 	for (i = 0; i < N_ELEMENTS(mon_suscept); i++)
