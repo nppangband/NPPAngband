@@ -141,6 +141,7 @@ void do_cmd_go_up(cmd_code code, cmd_arg args[])
 
 	/* Success */
 	message(MSG_STAIRS_UP, 0, "You enter a maze of up staircases.");
+	if (game_mode == GAME_NPPMORIA) msg_print("You pass through a one-way door.");
 
 	/* Create a way back */
 	if (adult_connected_stairs) p_ptr->create_stair = FEAT_MORE;
@@ -207,6 +208,7 @@ void do_cmd_go_down(cmd_code code, cmd_arg args[])
 
 	/* Success */
 	message(MSG_STAIRS_DOWN, 0, "You enter a maze of down staircases.");
+	if (game_mode == GAME_NPPMORIA) msg_print("You pass through a one-way door.");
 
 	/* Create a way back (usually) */
 	if (adult_connected_stairs) p_ptr->create_stair = FEAT_LESS;

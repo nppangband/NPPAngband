@@ -1838,24 +1838,36 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 		 * Don't allow breathing if player is not in a projectable path.
 		 * (In Moria breaths are simple ball spells)
 		 */
-		if ((!monster_blocking) && (game_mode != GAME_NPPMORIA))
+		if (!monster_blocking)
 		{
-			f4 &= ~(RF4_BREATH_MASK);
-			f5 &= ~(RF5_BREATH_MASK);
-			f6 &= ~(RF6_BREATH_MASK);
-			f7 &= ~(RF7_BREATH_MASK);
+			if (game_mode != GAME_NPPMORIA)
+			{
+				f4 &= ~(RF4_BREATH_MASK);
+				f5 &= ~(RF5_BREATH_MASK);
+				f6 &= ~(RF6_BREATH_MASK);
+				f7 &= ~(RF7_BREATH_MASK);
+			}
 			require_los = FALSE;
 		}
 
 		/*We don't have a reason to try a ball spell*/
 		if (clear_ball_spell)
 		{
-			f4 &= ~(RF4_BALL_MASK);
-			f5 &= ~(RF5_BALL_MASK);
-			f6 &= ~(RF6_BALL_MASK);
-			f7 &= ~(RF7_BALL_MASK);
+			if (game_mode == GAME_NPPMORIA)
+			{
+				f4 &= ~(RF4_BREATH_MASK);
+				f5 &= ~(RF5_BREATH_MASK);
+				f6 &= ~(RF6_BREATH_MASK);
+				f7 &= ~(RF7_BREATH_MASK);
+			}
+			else
+			{
+				f4 &= ~(RF4_BALL_MASK);
+				f5 &= ~(RF5_BALL_MASK);
+				f6 &= ~(RF6_BALL_MASK);
+				f7 &= ~(RF7_BALL_MASK);
+			}
 		}
-
 	}
 
 	/* Remove spells the 'no-brainers'*/

@@ -520,6 +520,8 @@ static void prt_quest_st(int row, int col)
 	char quest_msg[16];
 	byte attr = TERM_WHITE;
 
+	if (adult_no_quests) return;
+
 	/* Get the quest indicator */
 	format_quest_indicator(quest_msg, sizeof(quest_msg), &attr);
 
@@ -535,6 +537,9 @@ static void prt_feeling(int row, int col)
 {
 	char feel[16];
 	byte attr = TERM_WHITE;
+
+	/* No sensing things in Moria */
+	if (game_mode == GAME_NPPMORIA) return;
 
 	/* No useful feeling in town, or no feeling yet */
 	if ((!p_ptr->depth) || (!feeling) || (!do_feeling))

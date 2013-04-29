@@ -340,6 +340,32 @@ static cptr desc_stat_neg[] =
 	"ugly"
 };
 
+/*
+ * Array of stat "descriptions"
+ */
+static cptr moria_desc_stat_sus_pos[] =
+{
+	"You feel weaker for a moment, but it passes.",
+	"You have trouble thinking clearly.  But your mind quickly clears.",
+	"Your wisdom is sustained.",
+	"You feel clumsy for a moment, but it passes.",
+	"Your body resists the effects of the disease.",
+	"Your skin starts to itch, but instantly feels better."
+};
+
+/*
+ * Array of stat "descriptions"
+ */
+static cptr moria_desc_stat_dec_pos[] =
+{
+	"You feel weaker.",
+	"You have trouble thinking clearly.",
+	"Your wisdom is drained.",
+	"You feel more clumsy.",
+	"Your health is damaged!",
+	"Your skin starts to itch."
+};
+
 
 /*
  * Lose a "point"
@@ -363,8 +389,8 @@ bool do_dec_stat(int stat)
 	if (sust)
 	{
 		/* Message */
-		msg_format("You feel very %s for a moment, but the feeling passes.",
-		           desc_stat_neg[stat]);
+		if (game_mode == GAME_NPPMORIA) msg_format("%s", moria_desc_stat_sus_pos[stat]);
+		else msg_format("You feel very %s for a moment, but the feeling passes.", desc_stat_neg[stat]);
 
 		/* Notice effect */
 		return (TRUE);
@@ -374,7 +400,8 @@ bool do_dec_stat(int stat)
 	if (dec_stat(stat, 10, FALSE))
 	{
 		/* Message */
-		message_format(MSG_DRAIN_STAT, stat, "You feel very %s.", desc_stat_neg[stat]);
+		if (game_mode == GAME_NPPMORIA) msg_format("%s", moria_desc_stat_dec_pos[stat]);
+		else message_format(MSG_DRAIN_STAT, stat, "You feel very %s.", desc_stat_neg[stat]);
 
 		/* Notice effect */
 		return (TRUE);
@@ -383,6 +410,20 @@ bool do_dec_stat(int stat)
 	/* Nothing obvious */
 	return (FALSE);
 }
+
+/*
+ * Array of stat "descriptions"
+ */
+static cptr moria_desc_stat_res_pos[] =
+{
+	"You feel your strength returning.",
+	"Your head spins a moment.",
+	"You feel your wisdom returning.",
+	"You feel more dextrous.",
+	"You feel your health returning.",
+	"You feel your looks returning."
+};
+
 
 
 /*
@@ -394,7 +435,8 @@ bool do_res_stat(int stat)
 	if (res_stat(stat))
 	{
 		/* Message */
-		msg_format("You feel less %s.", desc_stat_neg[stat]);
+		if (game_mode == GAME_NPPMORIA) msg_format("%s", moria_desc_stat_res_pos[stat]);
+		else msg_format("You feel less %s.", desc_stat_neg[stat]);
 
 		/* Notice */
 		return (TRUE);
@@ -407,7 +449,7 @@ bool do_res_stat(int stat)
 /*
  * Array of stat "descriptions"
  */
-static cptr moria_desc_stat_pos[] =
+static cptr moria_desc_stat_inc_pos[] =
 {
 	"Wow!  What bulging muscles!",
 	"Aren't you brilliant!",
@@ -433,7 +475,7 @@ bool do_inc_stat(int stat)
 	if (inc_stat(stat))
 	{
 		/* Message */
-		if (game_mode == GAME_NPPMORIA) msg_format("%s", moria_desc_stat_pos[stat]);
+		if (game_mode == GAME_NPPMORIA) msg_format("%s", moria_desc_stat_inc_pos[stat]);
 		else msg_format("You feel very %s!", desc_stat_pos[stat]);
 
 		/* Notice */
@@ -2835,7 +2877,10 @@ bool project_ball(int who, int rad, int y0, int x0, int y1, int x1, int dam,
 	/* Hurt the character unless he controls the spell */
 	if (who != SOURCE_PLAYER) flg |= (PROJECT_PLAY);
 	/*Hack - poison cloud poison spells have a lingering cloud */
-	else if (typ == GF_POIS) flg |= (PROJECT_CLOUD);
+	else if (typ == GF_POIS)
+	{
+		if (game_mode != GAME_NPPMORIA) flg |= (PROJECT_CLOUD);
+	}
 
 	/* Limit radius to nine (up to 256 grids affected) */
 	if (rad > 9) rad = 9;

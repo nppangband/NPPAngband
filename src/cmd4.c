@@ -3396,6 +3396,9 @@ void do_cmd_feeling(void)
 {
 	bool is_quest_level = quest_check(p_ptr->depth);
 
+	/* No sensing things in Moria */
+	if (game_mode == GAME_NPPMORIA) return;
+
 	/* No useful feeling in town */
 	if (!p_ptr->depth)
 	{

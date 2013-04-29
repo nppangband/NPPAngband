@@ -4991,8 +4991,7 @@ void display_itemlist(void)
 		if (in_term)
 			clear_from(0);
 		Term_gotoxy(0, 0);
-		text_out_to_screen(TERM_ORANGE,
-			"Your hallucinations are too wild to see things clearly.");
+		text_out_to_screen(TERM_ORANGE, "You can't believe what you are seeing! It's like a dream!");
 		return;
 	}
 
@@ -5089,8 +5088,14 @@ void display_itemlist(void)
 	/* Note no visible items */
 	if ((!counter) && (!num_player))
 	{
+		/* Player is Blind */
+		if (p_ptr->timed[TMD_BLIND])
+		{
+			c_prt(TERM_ORANGE, "You can't see anything!", 0, 0);
+		}
+
 		/* Clear display and print note */
-		c_prt(TERM_SLATE, "You see no items.", 0, 0);
+		else c_prt(TERM_SLATE, "You see no items.", 0, 0);
 		if (!in_term)
 			Term_addstr(-1, TERM_WHITE, "  (Press any key to continue.)");
 		/* Done */

@@ -1145,11 +1145,10 @@ void display_monlist(void)
 			clear_from(0);
 		Term_gotoxy(0, 0);
 		text_out_to_screen(TERM_ORANGE,
-			"Your hallucinations are too wild to see things clearly.");
+			"You can't believe what you are seeing! It's like a dream!");
 
 		return;
 	}
-
 
 	/* Clear the term if in a subwindow, set x otherwise */
 	if (in_term)
@@ -1216,8 +1215,14 @@ void display_monlist(void)
 	/* Note no visible monsters at all */
 	if (!total_count)
 	{
+		/* Player is Blind */
+		if (p_ptr->timed[TMD_BLIND])
+		{
+			c_prt(TERM_ORANGE, "You can't see anything!", 0, 0);
+		}
+
 		/* Clear display and print note */
-		c_prt(TERM_SLATE, "You see no monsters.", 0, 0);
+		else c_prt(TERM_SLATE, "You see no monsters.", 0, 0);
 		if (!in_term)
 		    Term_addstr(-1, TERM_WHITE, "  (Press any key to continue.)");
 
