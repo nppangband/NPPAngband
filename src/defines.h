@@ -300,11 +300,14 @@
  * Store constants
  */
 #define STORE_INVEN_MAX	24		/* Max number of discrete objs in inven */
-#define STORE_TURNOVER	12		/* Normal shop turnover, per day */
-#define STORE_MIN_KEEP	8		/* Min slots to "always" keep full */
-#define STORE_MAX_KEEP	20		/* Max slots to "always" keep full */
 #define STORE_SHUFFLE	25		/* 1/Chance (per day) of an owner changing */
 #define STORE_TURNS		1000	/* Number of turns between turnovers */
+#define STORE_TURNOVER_NPPANGBAND	12		/* Normal shop turnover, per day */
+#define STORE_MIN_KEEP_NPPANGBAND	8		/* Min slots to "always" keep full */
+#define STORE_MAX_KEEP_NPPANGBAND	20		/* Max slots to "always" keep full */
+#define STORE_TURNOVER_NPPMORIA		9		/* Normal shop turnover, per day */
+#define STORE_MIN_KEEP_NPPMORIA		10		/* Min slots to "always" keep full */
+#define STORE_MAX_KEEP_NPPMORIA		18		/* Max slots to "always" keep full */
 
 /*
  * Misc constants

@@ -3003,7 +3003,7 @@ D: experience point total plus 10, whichever is less.
 ##### Chests #####
 
 N:324:& Small Wooden Chest
-G:&:U
+G:~:U
 I:7:1:0
 W:7:1:250:20
 P:0:2d3:0:0:0
@@ -3011,7 +3011,7 @@ A:7/4
 
 
 N:325:& Small Iron Chest
-G:&:s
+G:~:s
 I:7:2:0
 W:25:1:500:100
 P:0:2d4:0:0:0
@@ -3019,7 +3019,7 @@ A:25/4
 
 
 N:326:& Small Steel Chest
-G:&:s1
+G:~:s1
 I:7:3:0
 W:45:1:500:200
 P:0:2d4:0:0:0
@@ -3027,7 +3027,7 @@ A:45/4
 
 
 N:327:& Large Wooden Chest
-G:&:U
+G:~:U
 I:7:5:0
 W:15:1:500:60
 P:0:2d5:0:0:0
@@ -3035,7 +3035,7 @@ A:15/16
 
 
 N:328:& Large Iron Chest
-G:&:s
+G:~:s
 I:7:6:0
 W:35:1:1000:150
 P:0:2d6:0:0:0
@@ -3043,7 +3043,7 @@ A:35/16
 
 
 N:329:& Large Steel Chest
-G:&:s1
+G:~:s1
 I:7:7:0
 W:50:1:1000:250
 P:0:2d6:0:0:0

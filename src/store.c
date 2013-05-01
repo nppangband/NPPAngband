@@ -3003,13 +3003,30 @@ void store_maint(int which)
 	j = st_ptr->stock_num;
 
 	/* Sell a few items */
-	j = j - randint(STORE_TURNOVER);
+	if (game_mode == GAME_NPPMORIA)
+	{
+		/* Sell a few items */
+		j = j - randint(STORE_TURNOVER_NPPMORIA);
 
-	/* Never keep more than "STORE_MAX_KEEP" slots */
-	if (j > STORE_MAX_KEEP) j = STORE_MAX_KEEP;
+		/* Never keep more than "STORE_MAX_KEEP" slots */
+		if (j > STORE_MAX_KEEP_NPPMORIA) j = STORE_MAX_KEEP_NPPMORIA;
 
-	/* Always "keep" at least "STORE_MIN_KEEP" items */
-	if (j < STORE_MIN_KEEP) j = STORE_MIN_KEEP;
+		/* Always "keep" at least "STORE_MIN_KEEP" items */
+		if (j < STORE_MIN_KEEP_NPPMORIA) j = STORE_MIN_KEEP_NPPMORIA;
+	}
+	else
+	{
+		/* Sell a few items */
+		j = j - randint(STORE_TURNOVER_NPPANGBAND);
+
+		/* Never keep more than "STORE_MAX_KEEP" slots */
+		if (j > STORE_MAX_KEEP_NPPANGBAND) j = STORE_MAX_KEEP_NPPANGBAND;
+
+		/* Always "keep" at least "STORE_MIN_KEEP" items */
+		if (j < STORE_MIN_KEEP_NPPANGBAND) j = STORE_MIN_KEEP_NPPANGBAND;
+	}
+
+
 
 	/* Count how many items must be kept*/
 	alt_min = st_ptr->stock_num - count_nonstandard_inven(which);
@@ -3029,14 +3046,29 @@ void store_maint(int which)
 	/* Choose the number of slots to fill */
 	j = st_ptr->stock_num;
 
-	/* Buy some more items */
-	j = j + randint(STORE_TURNOVER);
+	/* Sell a few items */
+	if (game_mode == GAME_NPPMORIA)
+	{
+		/* Buy some more items */
+			j = j + randint(STORE_TURNOVER_NPPMORIA);
 
-	/* Never keep more than "STORE_MAX_KEEP" slots */
-	if (j > STORE_MAX_KEEP) j = STORE_MAX_KEEP;
+			/* Never keep more than "STORE_MAX_KEEP" slots */
+			if (j > STORE_MAX_KEEP_NPPMORIA) j = STORE_MAX_KEEP_NPPMORIA;
 
-	/* Always "keep" at least "STORE_MIN_KEEP" items */
-	if (j < STORE_MIN_KEEP) j = STORE_MIN_KEEP;
+			/* Always "keep" at least "STORE_MIN_KEEP" items */
+			if (j < STORE_MIN_KEEP_NPPMORIA) j = STORE_MIN_KEEP_NPPMORIA;
+	}
+	else
+	{
+		/* Buy some more items */
+			j = j + randint(STORE_TURNOVER_NPPANGBAND);
+
+			/* Never keep more than "STORE_MAX_KEEP" slots */
+			if (j > STORE_MAX_KEEP_NPPANGBAND) j = STORE_MAX_KEEP_NPPANGBAND;
+
+			/* Always "keep" at least "STORE_MIN_KEEP" items */
+			if (j < STORE_MIN_KEEP_NPPANGBAND) j = STORE_MIN_KEEP_NPPANGBAND;
+	}
 
 	/*
 	 * Paranoia - should never happen unless the items in

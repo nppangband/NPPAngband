@@ -1341,7 +1341,8 @@ void player_birth(bool quickstart_allowed)
 		file_putf(notes_file, "{{full_character_name}} the %s %s\n",
 								p_name + rp_ptr->name,
 								c_name + cp_ptr->name);
-		file_putf(notes_file, "Began the quest to kill Morgoth on %s\n",long_day);
+		if (game_mode == GAME_NPPMORIA) file_putf(notes_file, "Began the quest to kill The Balrog of Moria on %s\n",long_day);
+		else file_putf(notes_file, "Began the quest to kill Morgoth on %s\n",long_day);
 		file_putf(notes_file, "============================================================\n");
 		file_putf(notes_file, "                   CHAR.  \n");
 		file_putf(notes_file, "|   TURN  | DEPTH |LEVEL| EVENT\n");
