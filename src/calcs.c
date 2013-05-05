@@ -1387,6 +1387,12 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 		/* Extract the new "stat_top" value for the stat */
 		top = modify_stat_value(p_ptr->stat_max[i], add);
 
+		/* Stats max out at 118 in Moria */
+		if (game_mode == GAME_NPPANGBAND)
+		{
+			if (top > 117) top = 118;
+		}
+
 		/* Save the new value */
 		new_state->stat_top[i] = top;
 
@@ -1414,6 +1420,8 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 		/* Save the new index */
 		new_state->stat_ind[i] = ind;
 	}
+
+
 
 
 	/*** Temporary flags ***/

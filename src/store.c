@@ -350,13 +350,16 @@ static void stat_display(menu_type *menu, int oid, bool cursor, int row, int col
 	cnv_stat(p_ptr->stat_max[pr_stat], buf, sizeof(buf));
 	c_put_str(TERM_L_GREEN, buf, row, col+5);
 
-	/* Race Bonus */
-	strnfmt(buf, sizeof(buf), "%+3d", (rp_ptr->r_adj[pr_stat] + p_ptr->stat_quest_add[pr_stat]));
-	c_put_str(TERM_L_BLUE, buf, row, col+11);
+	if (!adult_preserve)
+	{
+		/* Race Bonus */
+		strnfmt(buf, sizeof(buf), "%+3d", (rp_ptr->r_adj[pr_stat] + p_ptr->stat_quest_add[pr_stat]));
+		c_put_str(TERM_L_BLUE, buf, row, col+11);
 
-	/* Class Bonus */
-	strnfmt(buf, sizeof(buf), "%+3d", cp_ptr->c_adj[pr_stat]);
-	c_put_str(TERM_L_BLUE, buf, row, col+14);
+		/* Class Bonus */
+		strnfmt(buf, sizeof(buf), "%+3d", cp_ptr->c_adj[pr_stat]);
+		c_put_str(TERM_L_BLUE, buf, row, col+14);
+	}
 
 	/* Equipment Bonus */
 	strnfmt(buf, sizeof(buf), "%+3d", p_ptr->state.stat_add[pr_stat]);
@@ -422,7 +425,8 @@ static int stats_menu(int service)
 	/* Set up the menu */
 	WIPE(&menu, menu);
 	menu.count = count;
-	menu.title = "              Self RB CB  EB   Best";
+	if (!adult_preserve) menu.title = "              Self        EB   Best";
+	else menu.title = "              Self RB CB  EB   Best";
 	menu.menu_data = stats;
 	if (service == SERVICE_RESTORE_STAT)
 	{

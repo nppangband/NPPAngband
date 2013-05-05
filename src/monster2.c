@@ -4561,6 +4561,15 @@ void message_pain(int m_idx, int dam)
 {
 	long oldhp, newhp, tmp;
 	int percentage;
+	bool is_jelly = FALSE;
+	bool is_hound = FALSE;
+	bool is_reptile = FALSE;
+	bool is_feline = FALSE;
+	bool is_insect = FALSE;
+	bool is_bird = FALSE;
+	bool is_skeleton = FALSE;
+	bool is_zombie = FALSE;
+	bool is_other = FALSE;
 
 	monster_type *m_ptr = &mon_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -4586,9 +4595,34 @@ void message_pain(int m_idx, int dam)
 	tmp = (newhp * 100L) / oldhp;
 	percentage = (int)(tmp);
 
+	/* Figure out which type of creature this is */
+	if (game_mode == GAME_NPPMORIA)
+	{
+		if (strchr("eJmQCOw", r_ptr->d_char)) is_jelly = TRUE;
+		if (strchr("j", r_ptr->d_char)) is_hound = TRUE;
+		if (strchr("cfR", r_ptr->d_char)) is_reptile = TRUE;
+		if (r_ptr->flags1 & (RF1_CHAR_MIMIC)) is_reptile = TRUE;
+		if (strchr("AaFKltS", r_ptr->d_char)) is_insect = TRUE;
+		if (strchr("s", r_ptr->d_char)) is_skeleton = TRUE;
+		if (strchr("zM", r_ptr->d_char)) is_zombie = TRUE;
+		if (strchr("XUbqr,", r_ptr->d_char)) is_other = TRUE;
+	}
+	else
+	{
+		if (strchr("ejmvQw", r_ptr->d_char)) is_jelly = TRUE;
+		if (strchr("CZ", r_ptr->d_char)) is_hound = TRUE;
+		if (strchr("cR", r_ptr->d_char)) is_reptile = TRUE;
+		if (r_ptr->flags1 & (RF1_CHAR_MIMIC)) is_reptile = TRUE;
+		if (strchr("f", r_ptr->d_char)) is_feline = TRUE;
+		if (strchr("alFIKS", r_ptr->d_char)) is_insect = TRUE;
+		if (strchr("B", r_ptr->d_char)) is_bird = TRUE;
+		if (strchr("s", r_ptr->d_char)) is_skeleton = TRUE;
+		if (strchr("z", r_ptr->d_char)) is_zombie = TRUE;
+		if (strchr("XMbqr,", r_ptr->d_char)) is_other = TRUE;
+	}
 
 	/* Floating Eyes, Jelly's, Mold's, Vortex's, Quthl's */
-	if (strchr("ejmvQ", r_ptr->d_char))
+	if (is_jelly)
 	{
 		if (percentage > 95)
 			msg_code = MON_MSG_BARELY_NOTICE;
@@ -4607,7 +4641,7 @@ void message_pain(int m_idx, int dam)
 	}
 
 	/* Dogs and Hounds */
-	else if (strchr("CZ", r_ptr->d_char))
+	else if (is_hound)
 	{
 		if (percentage > 95)
 			msg_code = MON_MSG_SHRUG_OFF;
@@ -4626,8 +4660,7 @@ void message_pain(int m_idx, int dam)
 	}
 
 	/* Snakes, Reptiles, Centipedes, Mimics */
-	else if (strchr("cJR", r_ptr->d_char) ||
-	         r_ptr->flags1 & (RF1_CHAR_MIMIC))
+	else if (is_reptile)
 	{
 		if (percentage > 95)
 			msg_code = MON_MSG_BARELY_NOTICE;
@@ -4646,7 +4679,7 @@ void message_pain(int m_idx, int dam)
 	}
 
 	/* Felines */
-	else if (strchr("f", r_ptr->d_char))
+	else if (is_feline)
 	{
 		if (percentage > 95)
 			msg_code = MON_MSG_SHRUG_OFF;
@@ -4665,7 +4698,7 @@ void message_pain(int m_idx, int dam)
 	}
 
 	/* Ants, Lice, Flies, Insects, Beetles, Spiders */
-	else if (strchr("alFIKS", r_ptr->d_char))
+	else if (is_insect)
 	{
 		if (percentage > 95)
 			msg_code = MON_MSG_IGNORE_ATTACK;
@@ -4684,7 +4717,7 @@ void message_pain(int m_idx, int dam)
 	}
 
 	/* Birds */
-	else if (strchr("B", r_ptr->d_char))
+	else if (is_bird)
 	{
 		if (percentage > 95)
 			msg_code = MON_MSG_SHRUG_OFF;
@@ -4703,7 +4736,7 @@ void message_pain(int m_idx, int dam)
 	}
 
 	/* Skeletons (ignore, rattle, stagger) */
-	else if (strchr("s", r_ptr->d_char))
+	else if (is_skeleton)
 	{
 		if (percentage > 95)
 			msg_code = MON_MSG_IGNORE_ATTACK;
@@ -4722,7 +4755,7 @@ void message_pain(int m_idx, int dam)
 	}
 
 	/* Zombies and Mummies (ignore, groan, stagger) */
-	else if (strchr("z", r_ptr->d_char))
+	else if (is_zombie)
 	{
 		if (percentage > 95)
 			msg_code = MON_MSG_IGNORE_ATTACK;
@@ -4741,7 +4774,7 @@ void message_pain(int m_idx, int dam)
 	}
 
 	/* One type of monsters (ignore,squeal,shriek) */
-	else if (strchr("XMbqrt", r_ptr->d_char))
+	else if (is_other)
 	{
 		if (percentage > 95)
 			msg_code = MON_MSG_IGNORE_ATTACK;

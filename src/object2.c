@@ -157,7 +157,6 @@ s16b get_obj_num(int level)
 		if (table[i].level < table[j].level) i = j;
 	}
 
-
 	/* Result */
 	return (table[i].index);
 }
@@ -4274,7 +4273,11 @@ bool make_gold(object_type *j_ptr)
 	if (coin_type) sval = coin_type;
 
 	/* Do not create "illegal" Treasure Types */
-	if (sval > MAX_GOLD) sval = MAX_GOLD;
+	if (game_mode == GAME_NPPMORIA)
+	{
+		if (sval > MAX_GOLD_NPPMORIA) sval = MAX_GOLD_NPPMORIA;
+	}
+	else if (sval > MAX_GOLD_NPPANGBAND) sval = MAX_GOLD_NPPANGBAND;
 
 	k_idx = lookup_kind(TV_GOLD, sval);
 

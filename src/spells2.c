@@ -2410,9 +2410,6 @@ bool ident_spell(void)
 	/* Identify the object and get squelch setting */
 	squelch = do_ident_item(item, o_ptr);
 
-	/* In Moria, mark the item as fully known */
-	if (game_mode == GAME_NPPMORIA) o_ptr->ident |= (IDENT_MENTAL);
-
 	/* Now squelch it if needed */
 	do_squelch_item(squelch, item, o_ptr);
 
@@ -2456,9 +2453,6 @@ bool identify_fully(void)
 	{
 		o_ptr = &o_list[0 - item];
 	}
-
-	/* Mark the item as fully known */
-	o_ptr->ident |= (IDENT_MENTAL);
 
 	/* Identify the object and get the squelch setting */
 	squelch = do_ident_item(item, o_ptr);
@@ -5505,6 +5499,9 @@ int do_ident_item(int item, object_type *o_ptr)
 	char o_name[80];
 	u16b msgt = MSG_GENERIC;
 	int squelch = SQUELCH_NO;
+
+	/* In Moria, mark the item as fully known */
+	if (game_mode == GAME_NPPMORIA) o_ptr->ident |= (IDENT_MENTAL);
 
 	/* Identify it */
 	object_aware(o_ptr);

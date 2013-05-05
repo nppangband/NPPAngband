@@ -3325,10 +3325,12 @@ bool quest_slot_timed(int quest_num)
 /* Verify if no down stairs should be generated until the quest is completed */
 bool quest_no_down_stairs(const quest_type *q_ptr)
 {
+	if (game_mode == GAME_NPPMORIA) return (FALSE);
 	if (q_ptr->q_type == QUEST_PERMANENT) return (TRUE);
 	if (q_ptr->q_type == QUEST_GUARDIAN) return (TRUE);
 	if (q_ptr->q_type == QUEST_ARENA_LEVEL) return (TRUE);
-	return (FALSE);
+
+ 	return (FALSE);
 }
 
 /* Verify if no down stairs should be generated on the current level due to quests */
@@ -3338,6 +3340,8 @@ bool no_down_stairs(s16b check_depth)
 
 	/* Always false in the town */
 	if (!check_depth) return (FALSE);
+
+	if (game_mode == GAME_NPPMORIA) return (FALSE);
 
 	/* Count incomplete quests */
 	for (i = 0; i < z_info->q_max; i++)

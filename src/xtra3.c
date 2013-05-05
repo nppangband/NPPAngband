@@ -72,6 +72,11 @@ void cnv_stat(int val, char *out_val, size_t out_len)
 	{
 		int bonus = (val - 18);
 
+		if (game_mode == GAME_NPPMORIA)
+		{
+			if (bonus > 99) bonus = 100;
+		}
+
 		if (bonus >= 220)
 			strnfmt(out_val, out_len, "18/***");
 		else if (bonus >= 100)
@@ -138,7 +143,7 @@ cptr get_player_title(void)
 {
 	if (game_mode == GAME_NPPMORIA)
 	{
-		return (c_text + cp_ptr->p_title[p_ptr->lev]);
+		return (c_text + cp_ptr->p_title[p_ptr->lev-1]);
 	}
 
 	return (c_text + cp_ptr->p_title[(p_ptr->lev - 1) / 5]);
@@ -203,13 +208,13 @@ void prt_level(int row, int col)
 void prt_exp(int row, int col)
 {
 	char out_val[32];
-	bool lev50 = (p_ptr->lev == 50);
+	bool max_lev = (p_ptr->lev == z_info->max_level);
 
 	long xp = (long)p_ptr->exp;
 
 
 	/* Calculate XP for next level */
-	if (!lev50)
+	if (!max_lev)
 		xp = (long)(get_experience_by_level(p_ptr->lev-1) * p_ptr->expfact / 100L) - p_ptr->exp;
 
 	/* Format XP */
@@ -218,12 +223,12 @@ void prt_exp(int row, int col)
 
 	if (p_ptr->exp >= p_ptr->max_exp)
 	{
-		put_str((lev50 ? "EXP" : "NXT"), row, col);
+		put_str((max_lev ? "EXP" : "NXT"), row, col);
 		c_put_str(TERM_L_GREEN, out_val, row, col + 4);
 	}
 	else
 	{
-		put_str((lev50 ? "Exp" : "Nxt"), row, col);
+		put_str((max_lev ? "Exp" : "Nxt"), row, col);
 		c_put_str(TERM_YELLOW, out_val, row, col + 4);
 	}
 }

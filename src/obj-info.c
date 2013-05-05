@@ -561,7 +561,7 @@ static bool describe_bow_slot(const object_type *o_ptr, u32b f1, u32b f3, bool e
 	object_aware(j_ptr);
 	object_known(j_ptr);
 
-	object_desc(j_name, sizeof (j_name), j_ptr, ODESC_FULL | ODESC_PLURAL);
+	object_desc(j_name, sizeof (j_name), j_ptr, ODESC_COMBAT | ODESC_PLURAL);
 
 	/*print out the number of attacks*/
 	if (object_state.num_fire > 1)
@@ -658,7 +658,7 @@ static bool describe_ammo(const object_type *o_ptr, u32b f1, u32b f3, bool extra
 		calc_bonuses(object_inven, &object_state, TRUE);
 	}
 
-	object_desc(j_name, sizeof (j_name), j_ptr, ODESC_PREFIX | ODESC_FULL);
+	object_desc(j_name, sizeof (j_name), j_ptr, ODESC_PREFIX | ODESC_COMBAT);
 
 	if (!extra_info) return (TRUE);
 

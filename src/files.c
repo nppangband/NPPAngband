@@ -876,8 +876,12 @@ void display_player_stat_info(int row, int col)
 
 	/* Print out the labels for the columns */
 	c_put_str(TERM_WHITE, "  Self", row-1, col+5);
-	c_put_str(TERM_WHITE, " RB", row-1, col+11);
-	c_put_str(TERM_WHITE, " CB", row-1, col+14);
+	/* Don't print stat modifiers stats aren't preserved */
+	if (!adult_preserve)
+	{
+		c_put_str(TERM_WHITE, " RB", row-1, col+11);
+		c_put_str(TERM_WHITE, " CB", row-1, col+14);
+	}
 	c_put_str(TERM_WHITE, " EB", row-1, col+18);
 	c_put_str(TERM_WHITE, "  Best", row-1, col+22);
 
@@ -908,13 +912,18 @@ void display_player_stat_info(int row, int col)
 		cnv_stat(p_ptr->stat_max[i], buf, sizeof(buf));
 		c_put_str(TERM_L_GREEN, buf, row+i, col+5);
 
-		/* Race Bonus add in permanent stat bonus here */
-		strnfmt(buf, sizeof(buf), "%+3d", (rp_ptr->r_adj[i] + p_ptr->stat_quest_add[i]));
-		c_put_str(TERM_L_BLUE, buf, row+i, col+11);
+		/* Don't print stat modifiers stats aren't preserved */
+		if (!adult_preserve)
+		{
 
-		/* Class Bonus */
-		strnfmt(buf, sizeof(buf), "%+3d", cp_ptr->c_adj[i]);
-		c_put_str(TERM_L_BLUE, buf, row+i, col+14);
+			/* Race Bonus add in permanent stat bonus here */
+			strnfmt(buf, sizeof(buf), "%+3d", (rp_ptr->r_adj[i] + p_ptr->stat_quest_add[i]));
+			c_put_str(TERM_L_BLUE, buf, row+i, col+11);
+
+			/* Class Bonus */
+			strnfmt(buf, sizeof(buf), "%+3d", cp_ptr->c_adj[i]);
+			c_put_str(TERM_L_BLUE, buf, row+i, col+14);
+		}
 
 		/* Equipment Bonus */
 		strnfmt(buf, sizeof(buf), "%+3d", p_ptr->state.stat_add[i]);

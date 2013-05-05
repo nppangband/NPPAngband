@@ -747,8 +747,8 @@
 /*
  * Special "k_info" hard coded values -
  */
-#define MAX_GOLD		18	/* Number of "gold" entries */
-
+#define MAX_GOLD_NPPANGBAND		18	/* Number of "gold" entries */
+#define MAX_GOLD_NPPMORIA		17	/* Number of "gold" entries */
 
 
 /*Squelch Modes for k_info->squelch*/
