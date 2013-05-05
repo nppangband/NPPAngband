@@ -1559,7 +1559,7 @@ object_aware_p(o_ptr) && \
 /*
  * Max sizes of the following arrays.
  */
-#define MAX_TITLES     50       /* Used with scrolls (min 48) */
+#define MAX_TITLES     55       /* Used with scrolls (min 48) */
 
 
 /** The titles of scrolls, ordered by sval. */
@@ -1582,50 +1582,40 @@ extern char scroll_adj[MAX_TITLES][16];
 /**
  * Modes for object_desc().
  */
-typedef enum
-{
-	ODESC_BASE   = 0x00,   /*!< Only describe the base name */
-	ODESC_COMBAT = 0x01,   /*!< Also show combat bonuses */
-	ODESC_EXTRA  = 0x02,   /*!< Show charges/inscriptions/pvals */
+#define		ODESC_BASE   0x00   	/*!< Only describe the base name */
+#define		ODESC_COMBAT 0x01   	/*!< Also show combat bonuses */
+#define		ODESC_EXTRA  0x02   	/*!< Show charges/inscriptions/pvals */
+#define		ODESC_STORE  0x04   	/*!< This is an in-store description */
+#define		ODESC_PLURAL 0x08   	/*!< Always pluralise */
+#define		ODESC_SINGULAR    0x10    /*!< Always singular */
+#define		ODESC_SPOIL  0x20    /*!< Display regardless of player knowledge */
+#define		ODESC_PREFIX 0x40   	/* */
 
-	ODESC_FULL   = ODESC_COMBAT | ODESC_EXTRA,
-	                       /*!< Show entire description */
-
-	ODESC_STORE  = 0x04,   /*!< This is an in-store description */
-	ODESC_PLURAL = 0x08,   /*!< Always pluralise */
-	ODESC_SINGULAR    = 0x10,    /*!< Always singular */
-	ODESC_SPOIL  = 0x20,    /*!< Display regardless of player knowledge */
-	ODESC_PREFIX = 0x40   /* */
-} odesc_detail_t;
+#define		ODESC_FULL   (ODESC_COMBAT | ODESC_EXTRA)  /*!< Show entire description */
 
 
 /**
  * Modes for item lists in "show_inven()"  "show_equip()" and "show_floor()"
  */
-typedef enum
-{
-	OLIST_NONE   = 0x00,   /* No options */
-   OLIST_WINDOW = 0x01,   /* Display list in a sub-term (left-align) */
-   OLIST_QUIVER = 0x02,   /* Display quiver lines */
-   OLIST_GOLD   = 0x04,   /* Include gold in the list */
-	OLIST_WEIGHT = 0x08,   /* Show item weight */
-	OLIST_PRICE  = 0x10,   /* Show item price */
-	OLIST_FAIL   = 0x20    /* Show device failure */
+#define		OLIST_NONE   0x00   /* No options */
+#define   	OLIST_WINDOW 0x01   /* Display list in a sub-term (left-align) */
+#define   	OLIST_QUIVER 0x02   /* Display quiver lines */
+#define   	OLIST_GOLD   0x04   /* Include gold in the list */
+#define		OLIST_WEIGHT 0x08   /* Show item weight */
+#define		OLIST_PRICE  0x10   /* Show item price */
+#define		OLIST_FAIL   0x20    /* Show device failure */
 
-} olist_detail_t;
 
 
 /**
  * Modes for object_info()
  */
-typedef enum
-{
-	OINFO_NONE   = 0x00, /* No options */
-	OINFO_TERSE  = 0x01, /* Keep descriptions brief, e.g. for dumps */
-	OINFO_SUBJ   = 0x02, /* Describe object from the character's POV */
-	OINFO_FULL   = 0x04, /* Treat object as if fully IDd */
-	OINFO_DUMMY  = 0x08 /* Object does not exist (e.g. knowledge menu) */
-} oinfo_detail_t;
+#define	OINFO_NONE   = 0x00 /* No options */
+#define	OINFO_TERSE  = 0x00 /* Keep descriptions brief, e.g. for dumps */
+#define	OINFO_SUBJ   = 0x02 /* Describe object from the character's POV */
+#define	OINFO_FULL   = 0x04 /* Treat object as if fully IDd */
+#define	OINFO_DUMMY  = 0x08 /* Object does not exist (e.g. knowledge menu) */
+
 
 
 /**

@@ -11113,8 +11113,7 @@ static bool cave_gen(void)
 	else if ((effective_depth(p_ptr->depth) > 10) && (one_in_(DUN_DEST))) destroyed = TRUE;
 
 	/* Possible "fractal" level */
-	if (!destroyed && (effective_depth(p_ptr->depth) >= 15) && one_in_(DUN_FRACTAL) && (game_mode != GAME_NPPMORIA) &&
-			 (!adult_simple_dungeons)) fractal_level = TRUE;
+	if (!destroyed && (effective_depth(p_ptr->depth) >= 15) && one_in_(DUN_FRACTAL) && (!adult_simple_dungeons)) fractal_level = TRUE;
 
 	/*Clear the level flag*/
 	level_flag = 0;
@@ -11238,6 +11237,27 @@ static bool cave_gen(void)
 		by = rand_int(dun->row_rooms);
 		bx = rand_int(dun->col_rooms);
 
+		if (game_mode == GAME_NPPMORIA)
+		{
+			if (rand_int(DUN_UNUSUAL_MORIA) < p_ptr->depth)
+			{
+				k = randint(3);
+
+				if (k == 1)
+				{
+					if (room_build(by, bx, 2)) continue;
+				}
+				else if (k == 2)
+				{
+					if (room_build(by, bx, 3)) continue;
+				}
+				else if (room_build(by, bx, 4)) continue;
+
+			}
+
+			if (room_build(by, bx, 1)) continue;
+		}
+
 		/* Destroyed levels are boring */
 		if (destroyed)
 		{
@@ -11286,58 +11306,43 @@ static bool cave_gen(void)
 			if (rand_int(100) < 90) continue;
 		}
 
-		/* Attempt an "unusual" room */
-		if (rand_int(DUN_UNUSUAL) < effective_depth(p_ptr->depth) )
-		{
-			if (game_mode == GAME_NPPMORIA)
-			{
-				if (rand_int(DUN_UNUSUAL_MORIA) < p_ptr->depth)
-				{
-					k = randint(3);
-					if (k == 1)	 		build_type2(by, bx);
-					else if (k == 2) 	build_type3(by, bx);
-					else		 		build_type4(by, bx);
 
+
+		/* Attempt an "unusual" room */
+		else if (rand_int(DUN_UNUSUAL) < effective_depth(p_ptr->depth) )
+		{
+
+			/* Roll for room type */
+			k = rand_int(100);
+
+			/* Attempt a very unusual room */
+			if (rand_int(DUN_UNUSUAL) < effective_depth(p_ptr->depth))
+			{
+				/* Type 8 -- Greater vault (10%) */
+				if ((k < 10) && !greater_vault && room_build(by, bx, 8))
+				{
+					greater_vault = TRUE;
 					continue;
 				}
-				/* Attempt a trivial room */
-				else if (room_build(by, bx, 1)) continue;
+
+				/* Type 7 -- Lesser vault (15%) */
+				if ((k < 25) && room_build(by, bx, 7)) continue;
+
+				/* Type 6 -- Monster pit (15%) */
+				if ((k < 40) && room_build(by, bx, 6)) continue;
+
+				/* Type 5 -- Monster nest (10%) */
+				if ((k < 50) && room_build(by, bx, 5)) continue;
 			}
 
-			else
-			{
-				/* Roll for room type */
-				k = rand_int(100);
+			/* Type 4 -- Large room (25%) */
+			if ((k < 25) && room_build(by, bx, 4)) continue;
 
-				/* Attempt a very unusual room */
-				if (rand_int(DUN_UNUSUAL) < effective_depth(p_ptr->depth))
-				{
-					/* Type 8 -- Greater vault (10%) */
-					if ((k < 10) && !greater_vault && room_build(by, bx, 8))
-					{
-						greater_vault = TRUE;
-						continue;
-					}
+			/* Type 3 -- Cross room (25%) */
+			if ((k < 50) && room_build(by, bx, 3)) continue;
 
-					/* Type 7 -- Lesser vault (15%) */
-					if ((k < 25) && room_build(by, bx, 7)) continue;
-
-					/* Type 6 -- Monster pit (15%) */
-					if ((k < 40) && room_build(by, bx, 6)) continue;
-
-					/* Type 5 -- Monster nest (10%) */
-					if ((k < 50) && room_build(by, bx, 5)) continue;
-				}
-
-				/* Type 4 -- Large room (25%) */
-				if ((k < 25) && room_build(by, bx, 4)) continue;
-
-				/* Type 3 -- Cross room (25%) */
-				if ((k < 50) && room_build(by, bx, 3)) continue;
-
-				/* Type 2 -- Overlapping (50%) */
-				if ((k < 100) && room_build(by, bx, 2)) continue;
-			}
+			/* Type 2 -- Overlapping (50%) */
+			if ((k < 100) && room_build(by, bx, 2)) continue;
 		}
 
 		/* Occasionally attempt a starburst room */

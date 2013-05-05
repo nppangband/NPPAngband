@@ -202,32 +202,6 @@ static void autoinsc_dump(ang_file *fff)
 }
 
 /*
- * Save squelch data to a pref file.
- */
-static void squelch_dump(ang_file *fff)
-{
-
-
-	int i;
-	file_putf(fff, "# Squelch settings\n");
-
-	for (i = 1; i < z_info->k_max; i++)
-	{
-		int tval = k_info[i].tval;
-		int sval = k_info[i].sval;
-		bool squelch = k_info[i].squelch;
-
-		/* Dump the squelch info */
-		if (tval || sval)
-			file_putf(fff, "Q:%d:%d:%d:%d\n", i, tval, sval, squelch);
-	}
-
-	file_putf(fff, "\n");
-}
-
-
-
-/*
  * Write all current options to a user preference file.
  */
 void option_dump(ang_file *fff)
@@ -281,10 +255,6 @@ void option_dump(ang_file *fff)
 	}
 
 	autoinsc_dump(fff);
-#if 0
-	/* Dumping squelch settings caused problems, see #784 */
-	squelch_dump(fff);
-#endif
 }
 
 

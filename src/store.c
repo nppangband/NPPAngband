@@ -3363,7 +3363,7 @@ static bool object_ident_changed(object_type *o_ptr)
 static void store_display_entry(menu_type *menu, int oid, bool cursor, int row, int col, int width)
 {
 	s32b x;
-	odesc_detail_t desc = ODESC_PREFIX;
+	byte desc = ODESC_PREFIX;
 	int entry_type;
    	int entry_num;
 

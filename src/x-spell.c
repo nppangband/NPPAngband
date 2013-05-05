@@ -174,6 +174,7 @@ bool spell_needs_aim(int tval, int spell)
 			case SPELL_LIGHTNING_BOLT:
 			case SPELL_FROST_BOLT:
 			case SPELL_FROST_BALL:
+			case SPELL_FIRE_BOLT:
 			case SPELL_FIRE_BALL:
 			case SPELL_TRAP_DOOR_DESTRUCTION:
 			case SPELL_SLEEP_MONSTER:

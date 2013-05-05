@@ -635,7 +635,7 @@ void monster_death(int m_idx, int who)
 
 	/* If the player kills a Unique, and the notes option is on, write a note.
 	 * If the unique is a guild questor, the note was already written */
-   	if ((r_ptr->flags1 & RF1_UNIQUE) && (adult_take_notes) && (writenote))
+   	if ((r_ptr->flags1 & (RF1_UNIQUE)) && (adult_take_notes) && (writenote))
 	{
 
 		char note2[120];
@@ -671,6 +671,20 @@ void monster_death(int m_idx, int who)
 
 	/* Only process dungeon kills */
 	if (!p_ptr->depth) return;
+
+	/* Hack, check if the Balrog of Moria just died in NPPMoria */
+	if (game_mode == GAME_NPPMORIA)
+	{
+		/* Only the Balrog of Moria should have this flag */
+		if (!(r_ptr->flags1 & (RF1_QUESTOR))) return;
+
+		/* Set the variables so the game knows we are done */
+		questlevel = TRUE;
+		completed = TRUE;
+		fixedquest = TRUE;
+		total = FALSE;
+	}
+
 
 	/* Require a quest level */
 	if (!questlevel) return;
@@ -727,7 +741,8 @@ void monster_death(int m_idx, int who)
  			char long_day[25];
 			file_putf(notes_file, "============================================================\n");
   		    (void)strftime(long_day, 25, "%m/%d/%Y at %I:%M %p", localtime(&ct));
-			file_putf(notes_file, "{{full_character_name}} slew Morgoth on %s.\n", long_day);
+  		    if (game_mode == GAME_NPPMORIA) file_putf(notes_file, "{{full_character_name}} slew The Balrog of Moria on %s.\n", long_day);
+  		    else file_putf(notes_file, "{{full_character_name}} slew Morgoth on %s.\n", long_day);
  			file_putf(notes_file, "Long live {{full_character_name}}!\n");
  		    file_putf(notes_file, "Long live {{full_character_name}}!\n");
 			file_putf(notes_file, "============================================================\n");

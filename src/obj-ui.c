@@ -26,7 +26,7 @@
  * Used by show_inven(), show_equip(), and show_floor().  Mode flags are
  * documented in object.h
  */
-static void show_obj_list(int num_obj, char labels[50][80], object_type *objects[50], olist_detail_t mode)
+static void show_obj_list(int num_obj, char labels[50][80], object_type *objects[50], byte mode)
 {
 	int i, row = 0, col = 0;
 	size_t max_len = 0;
@@ -276,7 +276,7 @@ static bool find_object_in_use(int *item)
  * off to show_obj_list() for display.  Mode flags documented in
  * object.h
  */
-void show_inven(olist_detail_t mode)
+void show_inven(byte mode)
 {
 	int i, last_slot = 0;
 
@@ -657,7 +657,7 @@ void display_equip(void)
  * off to show_obj_list() for display.  Mode flags documented in
  * object.h
  */
-void show_equip(olist_detail_t mode)
+void show_equip(byte mode)
 {
 	int i, last_slot = 0;
 
@@ -746,7 +746,7 @@ void show_equip(olist_detail_t mode)
  * off to show_obj_list() for display.  Mode flags documented in
  * object.h
  */
-void show_floor(const int *floor_list, int floor_num, olist_detail_t mode)
+void show_floor(const int *floor_list, int floor_num, byte mode)
 {
 	int i;
 

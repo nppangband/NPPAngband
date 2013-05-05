@@ -931,7 +931,7 @@ void do_cmd_fire(cmd_code code, cmd_arg args[])
 	sound(MSG_SHOOT);
 
 	/* Describe the object */
-	object_desc(o_name, sizeof(o_name), i_ptr, ODESC_FULL | ODESC_SINGULAR);
+	object_desc(o_name, sizeof(o_name), i_ptr, (ODESC_FULL | ODESC_SINGULAR));
 
 	/* Cursed ammunition can hurt the player sometimes */
 	if (IS_QUIVER_SLOT(item) && cursed_p(i_ptr) && (rand_int(100) < 70))
@@ -1724,7 +1724,7 @@ static bool thrown_potion_effects(object_type *o_ptr, bool *is_dead, bool *fear,
 		object_known(o_ptr);
 
 		/* Description */
-		object_desc(o_name, sizeof(o_name), o_ptr, ODESC_FULL | ODESC_SINGULAR);
+		object_desc(o_name, sizeof(o_name), o_ptr, (ODESC_FULL | ODESC_SINGULAR));
 
 		/* Describe the potion */
 		msg_format("You threw %s.", o_name);
