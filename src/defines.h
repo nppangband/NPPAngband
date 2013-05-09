@@ -50,10 +50,12 @@
 #define VERSION_NAME "NPPAngband"
 #define SAVEFILE_NAME  "VNLA"
 
+#define VERSION_MODE_NAME (game_mode == GAME_NPPMORIA ? "NPPMoria" : "NPPAngband")
+
 /*
  * Current version string
  */
-#define VERSION_STRING	"6.1.2"
+#define VERSION_STRING	"7.0.0"
 
 
 /*

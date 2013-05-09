@@ -285,7 +285,7 @@ static void display_scores_aux(const high_score scores[], int from, int to, int 
 		Term_clear();
 
 		/* Title */
-		put_str(format("%s Hall of Fame", VERSION_NAME), 0, 26);
+		put_str(format("%s Hall of Fame", VERSION_MODE_NAME), 0, 26);
 
 		/* Indicate non-top scores */
 		if (k > 0)

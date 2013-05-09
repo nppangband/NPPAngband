@@ -235,7 +235,6 @@ void display_player_xtra_info(void)
 
 	char buf[160];
 
-
 	/* Upper middle */
 	col = 23;
 	col2 = col + 7;
@@ -288,6 +287,7 @@ void display_player_xtra_info(void)
 	/* Current Experience */
 	++row;
 	Term_putstr(col, row, -1, TERM_WHITE, "Cur Exp");
+
 	if (p_ptr->exp >= p_ptr->max_exp)
 	{
 		Term_putstr(col2, row, -1, TERM_L_GREEN,
@@ -304,7 +304,6 @@ void display_player_xtra_info(void)
 	Term_putstr(col, row, -1, TERM_WHITE, "Max Exp");
 	Term_putstr(col2, row, -1, TERM_L_GREEN,
 	            format("%10ld", p_ptr->max_exp));
-
 
 	/* Advance Experience */
 	++row;
@@ -877,7 +876,7 @@ void display_player_stat_info(int row, int col)
 	/* Print out the labels for the columns */
 	c_put_str(TERM_WHITE, "  Self", row-1, col+5);
 	/* Don't print stat modifiers stats aren't preserved */
-	if (!adult_preserve)
+	if (!adult_maximize)
 	{
 		c_put_str(TERM_WHITE, " RB", row-1, col+11);
 		c_put_str(TERM_WHITE, " CB", row-1, col+14);
@@ -913,7 +912,7 @@ void display_player_stat_info(int row, int col)
 		c_put_str(TERM_L_GREEN, buf, row+i, col+5);
 
 		/* Don't print stat modifiers stats aren't preserved */
-		if (!adult_preserve)
+		if (!adult_maximize)
 		{
 
 			/* Race Bonus add in permanent stat bonus here */
@@ -1640,9 +1639,11 @@ void display_player(int mode, bool onscreen)
 
 	if ((mode) < 2)
 	{
+
 		/* Special */
 		if (mode)
 		{
+
 			/* Misc info */
 			display_player_misc_info(2, 1);
 
@@ -1660,6 +1661,7 @@ void display_player(int mode, bool onscreen)
 		/* Standard */
 		else
 		{
+
 			/* Misc info */
 			display_player_misc_info(1, 1);
 
@@ -2081,7 +2083,7 @@ errr file_character(const char *path, bool full)
 
 	/* Begin dump */
 	file_putf(fff, "  [%s %s Character Dump]\n\n",
-			VERSION_NAME, VERSION_STRING);
+			VERSION_MODE_NAME, VERSION_STRING);
 
 	/* Display player */
 	display_player(0, FALSE);
@@ -2722,7 +2724,7 @@ bool show_file(cptr name, cptr what, int line, int mode)
 		}
 
 		/* Show a general "title" */
-		prt(format("[%s %s, %s, Line %d-%d/%d]", VERSION_NAME, VERSION_STRING,
+		prt(format("[%s %s, %s, Line %d-%d/%d]", VERSION_MODE_NAME, VERSION_STRING,
 				   caption, line, line + hgt - 4, size), 0, 0);
 
 		/* Buttons */
@@ -3307,7 +3309,7 @@ void html_screenshot(cptr name, int mode)
 	{
 		file_putf(fp, "<!DOCTYPE html><html><head>\n");
 		file_putf(fp, "  <meta='generator' content='%s %s'>\n",
-					VERSION_NAME, VERSION_STRING);
+				VERSION_MODE_NAME, VERSION_STRING);
 		file_putf(fp, "  <title>%s</title>\n", name);
 		file_putf(fp, "</head>\n\n");
 		file_putf(fp, "<body style='color: #fff; background: #000;'>\n");

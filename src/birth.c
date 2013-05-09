@@ -60,8 +60,6 @@ typedef struct birther /*lovely*/ birther; /*sometimes we think she's a dream*/
 /*
  * A structure to hold "rolled" information, and any
  * other useful state for the birth process.
- *
- * XXX Demand Obama's birth certificate
  */
 struct birther
 {
@@ -707,8 +705,7 @@ static void recalculate_stats(int *stats, int points_left)
 			int bonus = rp_ptr->r_adj[i] + cp_ptr->c_adj[i];
 
 			/* Apply the racial/class bonuses */
-			p_ptr->stat_cur[i] = p_ptr->stat_max[i] =
-				modify_stat_value(stats[i], bonus);
+			p_ptr->stat_cur[i] = p_ptr->stat_max[i] = p_ptr->stat_birth[i] = modify_stat_value(stats[i], bonus);
 		}
 	}
 
@@ -748,6 +745,7 @@ static void reset_stats(int stats[A_MAX], int points_spent[A_MAX], int *points_l
 	   stat values (i.e. after modifiers) and tell the UI things have
 	   changed. */
 	recalculate_stats(stats, *points_left);
+
 	event_signal_birthpoints(points_spent, *points_left);
 }
 
@@ -1104,6 +1102,7 @@ void player_birth(bool quickstart_allowed)
 	}
 
 	reset_stats(stats, points_spent, &points_left);
+
 	do_birth_reset(quickstart_allowed, &quickstart_prev);
 
 	/* Handle incrementing name suffix */
@@ -1135,7 +1134,9 @@ void player_birth(bool quickstart_allowed)
 		if (cmd.command == CMD_BIRTH_RESET)
 		{
 			reset_stats(stats, points_spent, &points_left);
+
 			do_birth_reset(quickstart_allowed, &quickstart_prev);
+
 			rolled_stats = FALSE;
 		}
 		else if (cmd.command == CMD_CHOOSE_SEX)

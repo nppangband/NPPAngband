@@ -1423,7 +1423,6 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 
 
 
-
 	/*** Temporary flags ***/
 
 	/* Apply temporary "stun" */

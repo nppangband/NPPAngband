@@ -350,7 +350,7 @@ static void stat_display(menu_type *menu, int oid, bool cursor, int row, int col
 	cnv_stat(p_ptr->stat_max[pr_stat], buf, sizeof(buf));
 	c_put_str(TERM_L_GREEN, buf, row, col+5);
 
-	if (!adult_preserve)
+	if (!adult_maximize)
 	{
 		/* Race Bonus */
 		strnfmt(buf, sizeof(buf), "%+3d", (rp_ptr->r_adj[pr_stat] + p_ptr->stat_quest_add[pr_stat]));
@@ -425,7 +425,7 @@ static int stats_menu(int service)
 	/* Set up the menu */
 	WIPE(&menu, menu);
 	menu.count = count;
-	if (!adult_preserve) menu.title = "              Self        EB   Best";
+	if (!adult_maximize) menu.title = "              Self        EB   Best";
 	else menu.title = "              Self RB CB  EB   Best";
 	menu.menu_data = stats;
 	if (service == SERVICE_RESTORE_STAT)

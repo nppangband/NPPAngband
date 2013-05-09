@@ -3364,7 +3364,7 @@ void do_cmd_version(void)
 {
 	/* Silly message */
 	msg_format("You are playing %s %s.  Type '?' for more info.",
-	           VERSION_NAME, VERSION_STRING);
+			VERSION_MODE_NAME, VERSION_STRING);
 }
 
 

@@ -2168,7 +2168,6 @@ static void ui_remove_statusline(game_event_type type, game_event_data *data, vo
 
 errr textui_get_cmd(cmd_context context, bool wait)
 {
-
 	if (context == CMD_BIRTH)
 		return get_birth_command(wait);
 	else if (context == CMD_GAME)

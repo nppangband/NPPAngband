@@ -422,7 +422,7 @@ static void spoil_artifact(cptr fname)
 
 	/* Dump the header */
 	spoiler_underline(format("Artifact Spoilers for %s %s",
-	                         VERSION_NAME, VERSION_STRING), '=');
+			VERSION_MODE_NAME, VERSION_STRING), '=');
 
 	/* List the artifacts by tval */
 	for (i = 0; group_artifact[i].tval; i++)
@@ -529,7 +529,7 @@ static void spoil_mon_desc(cptr fname)
 
 	/* Dump the header */
 	x_file_putf(fh, encoding, "Monster Spoilers for %s Version %s\n",
-	        VERSION_NAME, VERSION_STRING);
+			VERSION_MODE_NAME, VERSION_STRING);
 	x_file_putf(fh, encoding, "------------------------------------------\n\n");
 
 	/* Dump the header */
@@ -667,7 +667,7 @@ static void spoil_mon_info(cptr fname)
 
 	/* Dump the header */
 	text_out("Monster Spoilers for %s Version %s\n",
-	        VERSION_NAME, VERSION_STRING);
+			VERSION_MODE_NAME, VERSION_STRING);
 	text_out("------------------------------------------\n\n");
 
 	/* Allocate the "who" array */
@@ -803,7 +803,7 @@ static void spoil_features(cptr fname)
 
 	/* Dump the header */
 	strnfmt(buf, sizeof(buf), "Feature Spoilers for %s Version %s\n",
-	        VERSION_NAME, VERSION_STRING);
+			VERSION_MODE_NAME, VERSION_STRING);
 	text_out(buf);
 	text_out("------------------------------------------\n\n");
 

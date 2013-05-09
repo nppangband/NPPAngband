@@ -3625,6 +3625,7 @@ static bool kind_is_potion(int k_idx)
 			if (k_ptr->sval == SV_POTION_EXPERIENCE) return (TRUE);
 			if (k_ptr->sval == SV_POTION_ENLIGHTENMENT) return (TRUE);
 			if (k_ptr->sval == SV_POTION_RESISTANCE) return (TRUE);
+			if (k_ptr->sval == SV_POTION_INVULNERABILITY) return (TRUE);
 
 			return (FALSE);
 		}

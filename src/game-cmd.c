@@ -162,6 +162,7 @@ errr cmd_insert_s(game_command *cmd)
  */
 errr cmd_get(cmd_context c, game_command *cmd, bool wait)
 {
+
 	/* If there are no commands queued, ask the UI for one. */
 	if (cmd_head == cmd_tail)
 	{
@@ -171,11 +172,13 @@ errr cmd_get(cmd_context c, game_command *cmd, bool wait)
 	/* If we have a command ready, set it and return success. */
 	if (cmd_head != cmd_tail)
 	{
+
 		*cmd = cmd_queue[cmd_tail++];
 		if (cmd_tail == CMD_QUEUE_SIZE) cmd_tail = 0;
 
 		return 0;
 	}
+
 
 	/* Failure to get a command. */
 	return 1;
