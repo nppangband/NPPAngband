@@ -21,6 +21,24 @@
 #include "ui-menu.h"
 #include "game-event.h"
 
+/* Adjustment to minimum failure rates for wisdom/intelligence in moria */
+int spell_failure_min_moria(int stat)
+{
+
+
+	int value = p_ptr->state.stat_use[stat];
+
+	if (value > 117) 		return(0);
+	else if (value > 107)	return(1);
+	else if (value > 87)	return(2);
+	else if (value > 67)	return(3);
+	else if (value > 17)	return(4);
+	else if (value > 14)	return(7);
+	else if (value > 7)		return(10);
+	else	return(25);
+}
+
+
 
 /*
  * Returns chance of failure for a spell
@@ -59,7 +77,7 @@ s16b spell_chance(int spell)
 	}
 
 	/* Extract the minimum failure rate */
-	if (game_mode == GAME_NPPMORIA) minfail = 0;
+	if (game_mode == GAME_NPPMORIA) minfail = spell_failure_min_moria(MORIA_SPELL_STAT);
 	else minfail = adj_mag_fail[SPELL_STAT_SLOT];
 
 	/* Non mage/priest characters never get better than 5 percent */

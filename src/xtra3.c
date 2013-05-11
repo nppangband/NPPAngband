@@ -512,7 +512,11 @@ static void prt_speed(int row, int col)
 	else if (i < STANDARD_ENERGY_GAIN)
 	{
 		attr = analyze_speed_bonuses(TERM_L_UMBER);
-		sprintf(buf, "Slow (-%d)", (game_mode == GAME_NPPMORIA ? (p_ptr->state.p_speed - NPPMORIA_NORMAL_SPEED) : (110 - i)));
+		if (game_mode == GAME_NPPMORIA)
+		{
+			sprintf(buf, "Slow (%d)", (p_ptr->state.p_speed - NPPMORIA_NORMAL_SPEED));
+		}
+		else sprintf(buf, "Slow (-%d)", (110 - i));
 	}
 
 	/* Display the speed */

@@ -88,7 +88,7 @@ static int moria_tohit_adj()
 
 
 
-/* Adjustment for wisdom/intelligence in moria	*/
+/* Adjustment for wisdom/intelligence in moria */
 
 int stat_adj_moria(int stat)
 {

@@ -936,11 +936,15 @@ void update_mon_sidebar_list(void)
 	/* First list the targeted monster, if there is one */
 	if (p_ptr->health_who)
 	{
-		sidebar_monsters[sidebar_count] = p_ptr->health_who;
-		sidebar_count++;
+		/* Must be visible */
+	 	if (mon_list[p_ptr->health_who].ml)
+	 	{
+	 		sidebar_monsters[sidebar_count] = p_ptr->health_who;
+	 		sidebar_count++;
 
-		/* We are tracking this one */
-		mon_list[p_ptr->health_who].sidebar = TRUE;
+	 		/* We are tracking this one */
+	 		mon_list[p_ptr->health_who].sidebar = TRUE;
+	 	}
 	}
 
 	/* Scan the list of monsters on the level */

@@ -2774,10 +2774,10 @@ static bool kind_is_magic_shop_moria(int k_idx)
 		case TV_STAFF:
 		{
 			if (k_ptr->sval == SV_STAFF_LIGHT) return (TRUE);
-
 			if (k_ptr->sval == SV_STAFF_DETECT_TRAP) return (TRUE);
 			if (k_ptr->sval == SV_STAFF_DETECT_DOOR) return (TRUE);
 			if (k_ptr->sval == SV_STAFF_DETECT_INVIS) return (TRUE);
+			if (k_ptr->sval == SV_STAFF_IDENTIFY) return (TRUE);
 			return (FALSE);
 		}
 		case TV_MAGIC_BOOK:

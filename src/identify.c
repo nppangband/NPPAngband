@@ -182,6 +182,8 @@ bool can_be_pseudo_ided(const object_type *o_ptr)
       	}
     	case TV_LIGHT:
       	{
+      		if (game_mode == GAME_NPPMORIA) return (FALSE);
+
 			if (o_ptr->sval == SV_LIGHT_LANTERN)
 	  		return (TRUE);
 			break;

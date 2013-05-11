@@ -2634,7 +2634,7 @@ static bool black_market_ok(const object_type *o_ptr)
 /*
  * Keep certain objects (undiscounted only).
  *
- * Note if this list is greatly expanded, teh store_maint function
+ * Note if this list is greatly expanded, the store_maint function
  * could get caught in an eternal loop.  Be mindful of the fixed
  * variable STORE_MAX_KEEP and STORE_MIN_KEEP when making this list.
  */
@@ -2642,6 +2642,8 @@ bool keep_in_stock(const object_type *o_ptr, int which)
 {
 
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
+
+	if (game_mode == GAME_NPPMORIA) return (FALSE);
 
 	/*Discounted items, ego items, or artifacts don't stay in stock*/
 	if (o_ptr->discount) return (FALSE);
