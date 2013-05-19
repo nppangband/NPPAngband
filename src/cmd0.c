@@ -111,6 +111,7 @@ static command_type cmd_item_manage[] =
 	{ "Display inventory listing", 'i', CMD_NULL, do_cmd_inven },
 	{ "Pick up objects",           'g', CMD_PICKUP, NULL },
 	{ "Wear/wield an item",        'w', CMD_NULL, textui_cmd_wield },
+	{ "Swap weapons",              'x', CMD_NULL, do_cmd_swap_weapon },
 	{ "Take/unwield off an item",  't', CMD_NULL, textui_cmd_takeoff },
 	{ "Drop an item",              'd', CMD_NULL, textui_cmd_drop },
 	{ "Destroy an item",           'k', CMD_NULL, textui_cmd_destroy },
@@ -118,6 +119,7 @@ static command_type cmd_item_manage[] =
 	{ "Inscribe an object",        '{', CMD_NULL, textui_cmd_inscribe },
 	{ "Uninscribe an object",      '}', CMD_NULL, textui_cmd_uninscribe },
 	{ "Use item",            	   '|', CMD_NULL, cmd_use_item }
+
 };
 
 /* Information access commands */

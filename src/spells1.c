@@ -1831,6 +1831,9 @@ static int inven_drain(int dam)
 		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
+		/* Ignore the swap weapon */
+		if ((adult_swap_weapons) && (i == INVEN_SWAP_WEAPON)) continue;
+
 		/*
 		 * No messages needed.
 		 * We do not notice this with objects sitting on the ground.
@@ -2535,16 +2538,28 @@ bool apply_disenchant(int mode)
 	char o_name[80];
 
 	/* Pick a random slot */
-	switch (randint(8))
+	/* Ignore the swap weapon */
+	if (adult_swap_weapons) switch (randint(7))
 	{
-		case 1: t = INVEN_WIELD; break;
-		case 2: t = INVEN_BOW; break;
-		case 3: t = INVEN_BODY; break;
-		case 4: t = INVEN_OUTER; break;
-		case 5: t = INVEN_ARM; break;
-		case 6: t = INVEN_HEAD; break;
-		case 7: t = INVEN_HANDS; break;
-		case 8: t = INVEN_FEET; break;
+		case 1: {t = INVEN_WIELD; break;}
+		case 2: {t = INVEN_BODY; break;}
+		case 3: {t = INVEN_OUTER; break;}
+		case 4: {t = INVEN_ARM; break;}
+		case 5: {t = INVEN_HEAD; break;}
+		case 6: {t = INVEN_HANDS; break;}
+		default:{t = INVEN_FEET; break;}
+	}
+
+	else switch (randint(8))
+	{
+		case 1: {t = INVEN_WIELD; break;}
+		case 2: {t = INVEN_BOW; break;}
+		case 3: {t = INVEN_BODY; break;}
+		case 4: {t = INVEN_OUTER; break;}
+		case 5: {t = INVEN_ARM; break;}
+		case 6: {t = INVEN_HEAD; break;}
+		case 7: {t = INVEN_HANDS; break;}
+		default:{t = INVEN_FEET; break;}
 	}
 
 	/* Get the item */

@@ -2197,7 +2197,7 @@ option_entry options[OPT_MAX] =
 	{"birth_no_xtra_artifacts", "Birth: Disable extra artifacts",				FALSE},	/* OPT_birth_no_xtra_artifacts*/
 	{"birth_money",             "Birth: Start with more money and no equipment",FALSE },/* OPT_birth_money */
 	{"birth_simple_dungeons",   "Birth: Prevent unusual terrains or dungeons",	FALSE },/* OPT_birth_birth_simple_dungeons */
-	{NULL,NULL,FALSE},/* xxx */
+	{"birth_swap_weapons",   	"Birth: Replace bow slot with swap weapon slot",	FALSE },/* OPT_birth_swap_weapons */
 	{NULL,NULL,FALSE},/* xxx */
 	{NULL,NULL,FALSE},/* xxx */
 	{NULL,NULL,FALSE},/* xxx */
@@ -2261,7 +2261,7 @@ option_entry options[OPT_MAX] =
 	{"adult_no_xtra_artifacts",	"Adult: Disable extra artifacts",				FALSE},	/* OPT_adult_no_xtra_artifacts*/
 	{"adult_birth_money",      	"Adult: Start with more money and no equipment",FALSE },/* OPT_adult_birth_money*/
 	{"adult_simple_dungeons",   "Adult: Prevent unusual terrains or dungeons",	FALSE },/* OPT_adult_birth_simple_dungeons */
-	{NULL,NULL,FALSE},/* xxx */
+	{"adult_swap_weapons",   	"Adult: Replace bow slot with swap weapon slot",	FALSE },/* OPT_adult_swap_weapons */
 	{NULL,NULL,FALSE},/* xxx */
 	{NULL,NULL,FALSE},/* xxx */
 	{NULL,NULL,FALSE},/* xxx */

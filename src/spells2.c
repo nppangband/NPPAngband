@@ -729,6 +729,8 @@ void self_knowledge(void)
 		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
+		if ((adult_swap_weapons) && (k == INVEN_SWAP_WEAPON)) continue;
+
 		/* Extract the flags */
 		object_flags(o_ptr, &t1, &t2, &t3, &tn);
 
@@ -1159,7 +1161,7 @@ void self_knowledge(void)
 	o_ptr = &inventory[INVEN_WIELD];
 
 	/* Analyze the weapon */
-	if (o_ptr->k_idx)
+	if (obj_is_weapon(o_ptr))
 	{
 		/* Special "Attack Bonuses" */
 		if (f1 & (TR1_BRAND_ACID))
@@ -5049,6 +5051,14 @@ bool curse_weapon(void)
 	/* Curse the weapon */
 	o_ptr = &inventory[INVEN_WIELD];
 
+	/* Handle swap weapons */
+	if (!obj_is_weapon(o_ptr))
+	{
+		o_ptr = &inventory[INVEN_SWAP_WEAPON];
+
+		if (!obj_is_weapon(o_ptr)) return (FALSE);
+	}
+
 	/* Nothing to curse */
 	if (!o_ptr->k_idx) return (FALSE);
 
@@ -5192,6 +5202,12 @@ bool brand_weapon(bool enchant)
 	byte brand_type;
 
 	o_ptr = &inventory[INVEN_WIELD];
+
+	/* Handle swap weapons */
+	if (!obj_is_weapon(o_ptr))
+	{
+		if (!obj_is_weapon(o_ptr)) return (FALSE);
+	}
 
 	/* Select a brand */
 	if (one_in_(3))

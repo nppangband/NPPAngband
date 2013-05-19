@@ -229,7 +229,9 @@ void display_player_xtra_info(void)
 	int xdis, xdev, xsav, xstl;
 	byte likert_attr;
 
+	object_type object_type_body;
 	object_type *o_ptr;
+	object_type *i_ptr;
 
 	cptr desc;
 
@@ -409,15 +411,26 @@ void display_player_xtra_info(void)
 
 
 	/* Range weapon */
-	o_ptr = &inventory[INVEN_BOW];
+	if (adult_swap_weapons)
+	{
+		if (inventory[INVEN_MAIN_WEAPON].tval == TV_BOW) i_ptr = &inventory[INVEN_MAIN_WEAPON];
+
+		/* A bow is not wielded, just set up a "dummy, blank" object and point to that */
+		else
+		{
+			i_ptr = &object_type_body;
+			object_wipe(i_ptr);
+		}
+	}
+	else i_ptr = &inventory[INVEN_BOW];
 
 	/* Base skill */
 	hit = p_ptr->state.dis_to_h;
 	dam = 0;
 
 	/* Apply weapon bonuses */
-	if (object_known_p(o_ptr)) hit += o_ptr->to_h;
-	if (object_known_p(o_ptr)) dam += o_ptr->to_d;
+	if (object_known_p(i_ptr)) hit += i_ptr->to_h;
+	if (object_known_p(i_ptr)) dam += i_ptr->to_d;
 
 	/* hack, rogues are deadly with slings*/
 	if ((cp_ptr->flags & CF_ROGUE_COMBAT) && (p_ptr->state.ammo_tval == TV_SHOT))
@@ -425,7 +438,6 @@ void display_player_xtra_info(void)
 		hit += 3 + p_ptr->lev / 4;
 		dam += p_ptr->lev * 2 / 3;
 	}
-
 
 	/* Range attacks */
 	++row;
@@ -498,13 +510,11 @@ void display_player_xtra_info(void)
 	col = 40;
 
 	/* Fighting Skill (with current weapon) */
-	o_ptr = &inventory[INVEN_WIELD];
 	tmp = p_ptr->state.to_h + o_ptr->to_h;
 	xthn = p_ptr->state.skills[SKILL_TO_HIT_MELEE] + (tmp * BTH_PLUS_ADJ);
 
 	/* Shooting Skill (with current bow) */
-	o_ptr = &inventory[INVEN_BOW];
-	tmp = p_ptr->state.to_h + o_ptr->to_h;
+	tmp = p_ptr->state.to_h + i_ptr->to_h;
 	xthb = p_ptr->state.skills[SKILL_TO_HIT_BOW] + (tmp * BTH_PLUS_ADJ);
 
 	/* Basic abilities */
@@ -709,6 +719,12 @@ static void display_player_flag_info(bool onscreen)
 
 				/* Object */
 				o_ptr = &inventory[i];
+
+				if (adult_swap_weapons && (i == INVEN_SWAP_WEAPON))
+				{
+					c_put_str(TERM_L_DARK, ".", row, col+n);
+					continue;
+				}
 
 				object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
 
@@ -991,6 +1007,12 @@ static void display_player_sust_info(bool onscreen)
 			/* Default */
 			a = TERM_SLATE;
 			c = '.';
+
+			if (adult_swap_weapons && (i == INVEN_SWAP_WEAPON))
+			{
+				Term_putch(col, row+stats, a, c);
+				continue;
+			}
 
 			if (object_known_p(o_ptr))
 			{
@@ -1695,6 +1717,12 @@ static void dump_player_plus_minus(ang_file *fff)
 		/* Object */
 		o_ptr = &inventory[i];
 
+		if (adult_swap_weapons && (i == INVEN_SWAP_WEAPON))
+		{
+			file_putf(fff," ");
+			continue;
+		}
+
 		/* Get the "known" flags */
 		object_flags_known(o_ptr, &f1, &f2, &f3, &fn);
 
@@ -1756,6 +1784,12 @@ static void dump_player_stat_info(ang_file *fff)
 		/* Object */
 		o_ptr = &inventory[i];
 
+		if (adult_swap_weapons && (i == INVEN_SWAP_WEAPON))
+		{
+			equippy[x] = ' ';
+			continue;
+		}
+
 		/* empty objects */
 		if (!o_ptr->k_idx)
 		{
@@ -1794,6 +1828,13 @@ static void dump_player_stat_info(ang_file *fff)
 
 			/* Get the object */
 			o_ptr = &inventory[y];
+
+			if (adult_swap_weapons && (i == INVEN_SWAP_WEAPON))
+			{
+				/*dump the result*/
+				file_putf(fff,".");
+				continue;
+			}
 
 			/* Get the "known" flags */
 			object_flags_known(o_ptr, &f1, &f2, &f3, &fn);
@@ -1838,6 +1879,12 @@ static void dump_player_stat_info(ang_file *fff)
 		{
 			/* Get the object */
 			object_type *o_ptr = &inventory[y];
+
+			if (adult_swap_weapons && (i == INVEN_SWAP_WEAPON))
+			{
+				file_putf(fff,".");
+				continue;
+			}
 
 			/* Get the "known" flags */
 			object_flags_known(o_ptr, &f1, &f2, &f3, &fn);

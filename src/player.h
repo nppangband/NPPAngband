@@ -467,6 +467,9 @@
  */
 #define INVEN_TOTAL		36
 
+/* Used for the swap_weapons option */
+#define INVEN_MAIN_WEAPON	INVEN_WIELD
+#define INVEN_SWAP_WEAPON	INVEN_BOW
 
 /*
  *Quiver

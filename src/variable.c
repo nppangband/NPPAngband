@@ -878,6 +878,13 @@ byte item_tester_tval;
 
 
 /*
+ * Specifies whether the item tester should allow the swap weapon or not.
+ * For example, the player shouldn't be allowed to activate a swap weapon.
+ */
+bool item_tester_swap;
+
+
+/*
  * Here is a "hook" used during calls to "get_item()" and
  * "show_inven()" and "show_equip()", and the choice window routines.
  */

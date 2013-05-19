@@ -551,7 +551,8 @@ static bool describe_bow_slot(const object_type *o_ptr, u32b f1, u32b f3, bool e
 	memcpy(object_inven, inventory, sizeof(object_inven));
 
 	/* Now replace the bow slot with the one being examined */
-	object_inven[INVEN_BOW] = *o_ptr;
+	if (adult_swap_weapons) object_inven[INVEN_MAIN_WEAPON] = *o_ptr;
+	else object_inven[INVEN_BOW] = *o_ptr;
 
 	/* Get the player state */
 	calc_bonuses(object_inven, &object_state, TRUE);
@@ -634,7 +635,9 @@ static bool describe_ammo(const object_type *o_ptr, u32b f1, u32b f3, bool extra
 
 	memcpy(object_inven, inventory, sizeof(object_inven));
 
-	j_ptr = &object_inven[INVEN_BOW];
+	/* Now replace the bow slot with the one being examined */
+	if (adult_swap_weapons) j_ptr = &object_inven[INVEN_MAIN_WEAPON];
+	else j_ptr = &object_inven[INVEN_BOW];
 
 	/* Get the player state */
 	calc_bonuses(object_inven, &object_state, TRUE);

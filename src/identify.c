@@ -242,6 +242,9 @@ void sense_inventory(void)
 		/* Skip empty slots */
 		if (!o_ptr->k_idx) continue;
 
+		/* Sensing the swap weapon is kind of cheating */
+		if (adult_swap_weapons && (i == INVEN_SWAP_WEAPON))	continue;
+
 		/* Skip non-sense machines */
 		if (!can_be_pseudo_ided(o_ptr)) continue;
 

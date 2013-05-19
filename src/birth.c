@@ -93,6 +93,7 @@ static void set_moria_options(void)
 	birth_force_small_lev = adult_force_small_lev = FALSE;
 	birth_no_artifacts = adult_no_artifacts = FALSE;
 	birth_simple_dungeons = adult_simple_dungeons = TRUE;
+	birth_swap_weapons = adult_swap_weapons = TRUE;
 	birth_no_xtra_artifacts = adult_no_xtra_artifacts = TRUE;
 	birth_no_store_services = adult_no_store_services = TRUE;
 	birth_no_player_ghosts = adult_no_player_ghosts = TRUE;

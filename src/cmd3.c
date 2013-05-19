@@ -298,10 +298,12 @@ void wield_item(object_type *o_ptr, int item, int slot)
 	object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
 
 	/* Where is the item now */
-	if (slot == INVEN_WIELD)
-		fmt = "You are wielding %s (%c).";
-	else if (slot == INVEN_BOW)
-		fmt = "You are shooting with %s (%c).";
+	if ((slot == INVEN_WIELD) || (slot == INVEN_BOW))
+	{
+		if (obj_is_bow(o_ptr)) fmt = "You are shooting with %s (%c).";
+		else fmt = "You are wielding %s (%c).";
+
+	}
 	else if (slot == INVEN_LIGHT)
 		fmt = "Your light source is %s (%c).";
 

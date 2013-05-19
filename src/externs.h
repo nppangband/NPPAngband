@@ -339,6 +339,7 @@ extern char *ANGBAND_DIR_XTRA_ICON;
 
 extern bool item_tester_full;
 extern byte item_tester_tval;
+extern bool item_tester_swap;
 extern bool (*item_tester_hook)(const object_type*);
 extern bool (*get_mon_num_hook)(int r_idx);
 extern bool (*get_obj_num_hook)(int k_idx);
@@ -606,6 +607,7 @@ extern void obj_examine(object_type *o_ptr, int item);
 extern void do_cmd_takeoff(cmd_code code, cmd_arg args[]);
 extern void do_cmd_wield(cmd_code code, cmd_arg args[]);
 extern void do_cmd_drop(cmd_code code, cmd_arg args[]);
+extern void do_cmd_swap_weapon(cmd_code code, cmd_arg args[]);
 extern void obj_browse(object_type *o_ptr, int item);
 extern void obj_study(object_type *o_ptr, int item);
 extern void obj_cast(object_type *o_ptr, int item);
@@ -986,6 +988,7 @@ extern void display_object_kind_recall(s16b k_idx);
 extern void display_itemlist(void);
 extern bool obj_can_refill(const object_type *o_ptr);
 extern bool obj_is_spellbook(const object_type *o_ptr);
+extern bool obj_is_shovel(const object_type *o_ptr);
 extern bool obj_is_bow(const object_type *o_ptr);
 extern bool obj_is_staff(const object_type *o_ptr);
 extern bool obj_is_wand(const object_type *o_ptr);
@@ -1023,6 +1026,7 @@ extern bool pack_is_overfull(void);
 extern void pack_overflow(void);
 
 /* obj-ui.c */
+extern bool find_object_in_use(int *item);
 extern void show_inven(byte);
 extern void display_equip(void);
 extern void show_equip(byte);

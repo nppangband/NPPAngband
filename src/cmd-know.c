@@ -1582,7 +1582,6 @@ static bool artifact_is_known(int a_idx)
 		/* Ignore non-objects */
 		if (!o_ptr->k_idx) continue;
 
-
 		if ((o_ptr->art_num == a_idx) && !object_is_known(o_ptr))
 		{
 			return FALSE;

@@ -1560,6 +1560,9 @@ static void recharge_objects(void)
 		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
+		/* Skip the swap weapon */
+		if ((adult_swap_weapons) && (i == INVEN_SWAP_WEAPON)) continue;
+
 		/* Recharge activatable objects */
 		if (o_ptr->timeout > 0 && !fuelable_light_p(o_ptr))
 		{

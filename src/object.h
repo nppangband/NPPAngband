@@ -824,7 +824,7 @@
  * Special object flags
  */
 #define IDENT_SENSE     		0x00000001	/* Item has been "sensed" */
-#define IDENT_UNUSED_XXXXXXX2	0x00000002	/* Unused */
+#define IDENT_CONFIRMED_USE		0x00000002	/* Weapon is confirmed to be used (for swap weapons, attacking with bow, shovel, etc )*/
 #define IDENT_EMPTY     		0x00000004	/* Item charges are known */
 #define IDENT_KNOWN     		0x00000008	/* Item abilities are known */
 #define IDENT_STORE     		0x00000010	/* Item is in the inventory of a store */

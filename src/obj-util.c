@@ -816,7 +816,8 @@ s16b wield_slot(const object_type *o_ptr)
 
 		case TV_BOW:
 		{
-			return (INVEN_BOW);
+			if (adult_swap_weapons) return (INVEN_WIELD);
+			else return (INVEN_BOW);
 		}
 
 		case TV_RING:
@@ -992,22 +993,32 @@ bool slot_can_wield_item(int slot, const object_type *o_ptr)
  */
 const char *mention_use(int slot)
 {
+
+
 	switch (slot)
 	{
-		case INVEN_WIELD:
-		{
-			if (adj_str_hold[p_ptr->state.stat_ind[A_STR]] < inventory[slot].weight / 10)
-				return "Just lifting";
-			else
-				return "Wielding";
-		}
 
+		/* Also INVEN_MAIN_WEAPON and INVEN_SWAP_WEAPON */
+		case INVEN_WIELD:
 		case INVEN_BOW:
 		{
-			if (adj_str_hold[p_ptr->state.stat_ind[A_STR]] < inventory[slot].weight / 10)
-				return "Just holding";
+			object_type *o_ptr = &inventory[slot];
+			if (adult_swap_weapons)
+			{
+				if (slot == INVEN_SWAP_WEAPON) return "holding";
+			}
+
+			if (obj_is_bow(o_ptr))
+			{
+				if (p_ptr->state.heavy_shoot)	return "Just holding";
+				else return "Shooting";
+			}
 			else
-				return "Shooting";
+			{
+				/* Weapons */
+				if (p_ptr->state.heavy_wield) return "Just lifting";
+				else return "Wielding";
+			}
 		}
 
 		case INVEN_LEFT:  return "On left hand";
@@ -1047,6 +1058,25 @@ const char *mention_use(int slot)
 cptr describe_use(int i)
 {
 	cptr p;
+	object_type *o_ptr;
+
+	if ((adult_swap_weapons) && ((i == INVEN_MAIN_WEAPON) || (i == INVEN_SWAP_WEAPON)))
+	{
+		o_ptr = &inventory[i];
+		if (obj_is_bow(o_ptr))
+		{
+			if (p_ptr->state.heavy_shoot)	p = "just holding";
+			else p = "shooting missiles with";
+		}
+		else
+		{
+			if (p_ptr->state.heavy_wield)	p = "just lifting";
+			else p = "attacking monsters with";
+		}
+
+		/* Return the result */
+		return p;
+	}
 
 	switch (i)
 	{
@@ -1068,23 +1098,15 @@ cptr describe_use(int i)
 	/* Hack -- Heavy weapon */
 	if (i == INVEN_WIELD)
 	{
-		object_type *o_ptr;
 		o_ptr = &inventory[i];
-		if (adj_str_hold[p_ptr->state.stat_ind[A_STR]] < o_ptr->weight / 10)
-		{
-			p = "just lifting";
-		}
+		if (p_ptr->state.heavy_wield) p = "just lifting";
 	}
 
 	/* Hack -- Heavy bow */
 	if (i == INVEN_BOW)
 	{
-		object_type *o_ptr;
 		o_ptr = &inventory[i];
-		if (adj_str_hold[p_ptr->state.stat_ind[A_STR]] < o_ptr->weight / 10)
-		{
-			p = "just holding";
-		}
+		if (p_ptr->state.heavy_shoot)p = "just holding";
 	}
 
 	/* Return the result */
@@ -1102,6 +1124,9 @@ bool item_tester_okay(const object_type *o_ptr)
 
 	/* Require an item */
 	if (!o_ptr->k_idx) return (FALSE);
+
+	/* Don't allow this choice for swap weapons */
+	if (!item_tester_swap) return (FALSE);
 
 	/* Hack -- ignore "gold" */
 	if (o_ptr->tval == TV_GOLD) return (FALSE);
@@ -4339,15 +4364,10 @@ s16b inven_takeoff(int item, int amt)
 	}
 
 	/* Took off weapon */
-	if (item == INVEN_WIELD)
+	if ((item == INVEN_WIELD) || (item == INVEN_BOW))
 	{
-		act = "You were wielding";
-	}
-
-	/* Took off bow */
-	else if (item == INVEN_BOW)
-	{
-		act = "You were shooting";
+		if (obj_is_bow(o_ptr)) act = "You were shooting";
+		else act = "You were wielding";
 	}
 
 	/* Took off light */
@@ -5352,6 +5372,7 @@ bool obj_is_spellbook(const object_type *o_ptr)
 
 
 /* Basic tval testers */
+bool obj_is_shovel(const object_type *o_ptr)   { return o_ptr->tval == TV_DIGGING;}
 bool obj_is_bow(const object_type *o_ptr)   { return o_ptr->tval == TV_BOW; }
 bool obj_is_staff(const object_type *o_ptr)  { return o_ptr->tval == TV_STAFF; }
 bool obj_is_wand(const object_type *o_ptr)   { return o_ptr->tval == TV_WAND; }
@@ -5405,7 +5426,7 @@ bool chest_requires_disarming(const object_type *o_ptr)
 }
 
 
-/**
+/*
  * Determine whether an object is a weapon
  *
  * \param o_ptr is the object to check
@@ -5457,6 +5478,12 @@ bool ammo_can_fire(const object_type *o_ptr, int item)
 {
 	/* Get the "bow" (if any) */
 	object_type *j_ptr = &inventory[INVEN_BOW];
+
+	if (adult_swap_weapons)
+	{
+		j_ptr = &inventory[INVEN_MAIN_WEAPON];
+		if (!obj_is_bow(j_ptr)) return (FALSE);
+	}
 
 	/* No ammo */
 	if (!obj_is_ammo(o_ptr)) return (FALSE);
@@ -5823,6 +5850,8 @@ int scan_items(int *item_list, size_t item_list_max, int mode)
 	/* Forget the item_tester_tval and item_tester_hook  restrictions */
 	item_tester_tval = 0;
 	item_tester_hook = NULL;
+	item_tester_swap = TRUE;
+
 
 	return item_list_num;
 }
@@ -5841,6 +5870,7 @@ bool item_is_available(int item, bool (*tester)(const object_type *), int mode)
 
 	item_tester_hook = tester;
 	item_tester_tval = 0;
+	item_tester_swap = TRUE;
 	item_num = scan_items(item_list, N_ELEMENTS(item_list), mode);
 
 	for (i = 0; i < item_num; i++)

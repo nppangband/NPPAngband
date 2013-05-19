@@ -646,6 +646,29 @@ void py_attack(int y, int x)
 	/* Get the weapon */
 	o_ptr = &inventory[INVEN_WIELD];
 
+	/* Make sure we are using a weapon instead of a bow/shovel */
+	if (adult_swap_weapons)
+	{
+		if (obj_is_bow(o_ptr) || obj_is_shovel(o_ptr))
+		{
+			/* Only check if the bow/shovel has not yet been confirmed */
+			if (!(o_ptr->ident & (IDENT_CONFIRMED_USE)))
+			{
+				char o_name[80];
+
+				object_desc(o_name, sizeof(o_name), o_ptr, (ODESC_BASE));
+
+				if (!get_check(format("Really attack with your %s? ", o_name)))
+				{
+					p_ptr->p_energy_use = 0;
+					return;
+				}
+				/* Mark it as OK to use in melee so we don't check every time*/
+				else o_ptr->ident |= IDENT_CONFIRMED_USE;
+			}
+		}
+	}
+
 	/* Calculate the "attack quality" */
 	bonus = p_ptr->state.to_h + o_ptr->to_h;
 
@@ -731,8 +754,8 @@ void py_attack(int y, int x)
 			hits++;
 			if (hits == 1) add_wakeup_chance += p_ptr->base_wakeup_chance;
 
-			/* No weapon wielded */
-			if (!obj_is_weapon(o_ptr))
+			/* Nothing wielded */
+			if (!o_ptr->k_idx)
 			{
 				dd = ds = 1;
 				plus = 0;
@@ -856,6 +879,18 @@ void do_cmd_fire(cmd_code code, cmd_arg args[])
 
 	/* Get the "bow" (if any) */
 	j_ptr = &inventory[INVEN_BOW];
+
+	/* Make sure we are using a weapon instead of a bow/shovel */
+	if (adult_swap_weapons)
+	{
+		j_ptr = &inventory[INVEN_MAIN_WEAPON];
+
+		if (!obj_is_bow(j_ptr) && (j_ptr->tval))
+		{
+			msg_print("You must first wield a weapon you can fire with.");
+			return;
+		}
+	}
 
 	/* Require a usable launcher */
 	if (!j_ptr->tval || !p_ptr->state.ammo_tval)
@@ -1211,6 +1246,18 @@ void textui_cmd_fire(void)
 	/* Get the "bow" (if any) */
 	j_ptr = &inventory[INVEN_BOW];
 
+	/* Make sure we are using a weapon instead of a bow/shovel */
+	if (adult_swap_weapons)
+	{
+		j_ptr = &inventory[INVEN_MAIN_WEAPON];
+
+		if (!obj_is_bow(j_ptr) && (j_ptr->tval))
+		{
+			msg_print("You must first wield a weapon you can fire with.");
+			return;
+		}
+	}
+
 	/* Require a usable launcher */
 	if (!j_ptr->tval || !p_ptr->state.ammo_tval)
 	{
@@ -1233,12 +1280,25 @@ void textui_cmd_fire(void)
 
 void textui_cmd_fire_at_nearest(void)
 {
+	object_type *j_ptr = &inventory[INVEN_BOW];
 
 	/* the direction '5' means 'use the target' */
 	int i, dir = 5, item = -1;
 
+	/* Make sure we are using a weapon instead of a bow/shovel */
+	if (adult_swap_weapons)
+	{
+		j_ptr = &inventory[INVEN_MAIN_WEAPON];
+
+		if (!obj_is_bow(j_ptr) && (j_ptr->tval))
+		{
+			msg_print("You must first wield a weapon you can fire with.");
+			return;
+		}
+	}
+
 	/* Require a usable launcher */
-	if (!inventory[INVEN_BOW].tval || !p_ptr->state.ammo_tval)
+	if (!j_ptr->tval || !p_ptr->state.ammo_tval)
 	{
 		msg_print("You have nothing to fire with.");
 		return;

@@ -802,6 +802,7 @@ enum
 #define OPT_birth_no_xtra_artifacts	(OPT_BIRTH+15)
 #define OPT_birth_money				(OPT_BIRTH+16)
 #define OPT_birth_simple_dungeons	(OPT_BIRTH+17)
+#define OPT_birth_swap_weapons		(OPT_BIRTH+18)
 
 /* xxx xxx */
 #define OPT_cheat_peek				(OPT_CHEAT+0)
@@ -829,6 +830,7 @@ enum
 #define OPT_adult_no_xtra_artifacts	(OPT_ADULT+15)
 #define OPT_adult_birth_money		(OPT_ADULT+16)
 #define OPT_adult_simple_dungeons	(OPT_ADULT+17)
+#define OPT_adult_swap_weapons		(OPT_ADULT+18)
 /* xxx xxx */
 #define OPT_score_peek				(OPT_SCORE+0)
 #define OPT_score_hear				(OPT_SCORE+1)
@@ -935,6 +937,7 @@ enum
 #define birth_no_xtra_artifacts	op_ptr->opt[OPT_birth_no_xtra_artifacts]
 #define birth_money				op_ptr->opt[OPT_birth_money]
 #define birth_simple_dungeons	op_ptr->opt[OPT_birth_simple_dungeons]
+#define birth_swap_weapons		op_ptr->opt[OPT_birth_swap_weapons]
 
 /* xxx xxx */
 #define cheat_peek				op_ptr->opt[OPT_cheat_peek]
@@ -962,6 +965,7 @@ enum
 #define adult_no_xtra_artifacts	op_ptr->opt[OPT_adult_no_xtra_artifacts]
 #define adult_money				op_ptr->opt[OPT_adult_money]
 #define adult_simple_dungeons	op_ptr->opt[OPT_adult_simple_dungeons]
+#define adult_swap_weapons		op_ptr->opt[OPT_adult_swap_weapons]
 
 #define hp_changes_color		op_ptr->opt[OPT_hp_changes_color]
 #define verify_leave_quest		op_ptr->opt[OPT_verify_leave_quest]

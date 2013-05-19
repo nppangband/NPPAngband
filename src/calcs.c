@@ -561,6 +561,9 @@ static void calc_torch(void)
 		/* Skip empty slots */
 		if (!o_ptr->k_idx) continue;
 
+		/* Don't count the swap weapon */
+		if ((adult_swap_weapons) && (i == INVEN_SWAP_WEAPON)) continue;
+
 		/* Examine actual lites */
 		if (o_ptr->tval == TV_LIGHT)
 		{
@@ -655,6 +658,9 @@ static void calc_nativity(void)
 		/* Skip empty slots */
 		if (!o_ptr->k_idx) continue;
 
+		/* Don't count the swap weapon */
+		if ((adult_swap_weapons) && (i == INVEN_SWAP_WEAPON)) continue;
+
 		/* Extract the flags */
 		object_flags(o_ptr, &f1, &f2, &f3, &fn);
 
@@ -746,6 +752,9 @@ static void calc_stealth(void)
 
 		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
+
+		/* Don't count the swap weapon */
+		if ((adult_swap_weapons) && (i == INVEN_SWAP_WEAPON)) continue;
 
 		/* Extract the item flags */
 		object_flags(o_ptr, &f1, &f2, &f3, &native);
@@ -1211,6 +1220,9 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
+		/* Don't count the swap weapon */
+		if ((adult_swap_weapons) && (i == INVEN_SWAP_WEAPON)) continue;
+
 		/* Extract the item flags */
 		if (id_only) 	object_flags_known(o_ptr, &f1, &f2, &f3, &fn);
 		else 			object_flags(o_ptr, &f1, &f2, &f3, &fn);
@@ -1652,95 +1664,104 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 	/* Examine the "current bow" */
 	o_ptr = &calc_inven[INVEN_BOW];
 
+	/* Don't count the swap weapon */
+	if (adult_swap_weapons)
+	{
+		o_ptr = &calc_inven[INVEN_MAIN_WEAPON];
+	}
+
 	/* Assume not heavy */
 	new_state->heavy_shoot = FALSE;
 
-	/* It is hard to hold a heavy bow */
-	if (hold < o_ptr->weight / 10)
+	if (obj_is_bow(o_ptr))
 	{
-		/* Hard to wield a heavy bow */
-		new_state->to_h += 2 * (hold - o_ptr->weight / 10);
-		new_state->dis_to_h += 2 * (hold - o_ptr->weight / 10);
-
-		/* Heavy Bow */
-		new_state->heavy_shoot = TRUE;
-	}
-
-	/* Analyze launcher */
-	if (o_ptr->k_idx)
-	{
-		/* Get to shoot */
-		new_state->num_fire = 1;
-
-		/* Analyze the launcher */
-		switch (o_ptr->sval)
+		/* It is hard to hold a heavy bow */
+		if (hold < o_ptr->weight / 10)
 		{
-			/* Sling and ammo */
-			case SV_SLING:
-			{
-				new_state->ammo_tval = TV_SHOT;
-				new_state->ammo_mult = 2;
+			/* Hard to wield a heavy bow */
+			new_state->to_h += 2 * (hold - o_ptr->weight / 10);
+			new_state->dis_to_h += 2 * (hold - o_ptr->weight / 10);
 
-				/*Hack - Rogues get increased skill with slings*/
-				if (cp_ptr->flags & CF_ROGUE_COMBAT)
+			/* Heavy Bow */
+			new_state->heavy_shoot = TRUE;
+		}
+
+		/* Analyze launcher */
+		if (o_ptr->k_idx)
+		{
+			/* Get to shoot */
+			new_state->num_fire = 1;
+
+			/* Analyze the launcher */
+			switch (o_ptr->sval)
+			{
+				/* Sling and ammo */
+				case SV_SLING:
 				{
-					new_state->skills[SKILL_TO_HIT_BOW] += 3 + p_ptr->lev / 4;
+					new_state->ammo_tval = TV_SHOT;
+					new_state->ammo_mult = 2;
+
+					/*Hack - Rogues get increased skill with slings*/
+					if (cp_ptr->flags & CF_ROGUE_COMBAT)
+					{
+						new_state->skills[SKILL_TO_HIT_BOW] += 3 + p_ptr->lev / 4;
+					}
+					break;
 				}
-				break;
+
+				/* Short Bow and Arrow */
+				case SV_SHORT_BOW:
+				{
+					new_state->ammo_tval = TV_ARROW;
+					new_state->ammo_mult = 2;
+					break;
+				}
+
+				/* Long Bow and Arrow */
+				case SV_LONG_BOW:
+				{
+					new_state->ammo_tval = TV_ARROW;
+					new_state->ammo_mult = 3;
+					break;
+				}
+
+				/* Light Crossbow and Bolt */
+				case SV_LIGHT_XBOW:
+				{
+					new_state->ammo_tval = TV_BOLT;
+					new_state->ammo_mult = 3;
+					break;
+				}
+
+				/* Heavy Crossbow and Bolt */
+				case SV_HEAVY_XBOW:
+				{
+					new_state->ammo_tval = TV_BOLT;
+					new_state->ammo_mult = 4;
+					break;
+				}
 			}
 
-			/* Short Bow and Arrow */
-			case SV_SHORT_BOW:
+			/* Apply special flags */
+			if (o_ptr->k_idx && !new_state->heavy_shoot)
 			{
-				new_state->ammo_tval = TV_ARROW;
-				new_state->ammo_mult = 2;
-				break;
+				/* Extra shots */
+				new_state->num_fire += extra_shots;
+
+				/* Extra might */
+				new_state->ammo_mult += extra_might;
+
+				/* Hack -- Rangers love Bows, rogues love slings */
+				if (((cp_ptr->flags & CF_EXTRA_SHOT) && (new_state->ammo_tval == TV_SHOT)) ||
+						((cp_ptr->flags & CF_EXTRA_ARROW) && (new_state->ammo_tval == TV_ARROW)))
+				{
+					if (p_ptr->lev >= LEV_EXTRA_COMBAT) new_state->num_fire++;
+				}
 			}
 
-			/* Long Bow and Arrow */
-			case SV_LONG_BOW:
-			{
-				new_state->ammo_tval = TV_ARROW;
-				new_state->ammo_mult = 3;
-				break;
-			}
-
-			/* Light Crossbow and Bolt */
-			case SV_LIGHT_XBOW:
-			{
-				new_state->ammo_tval = TV_BOLT;
-				new_state->ammo_mult = 3;
-				break;
-			}
-
-			/* Heavy Crossbow and Bolt */
-			case SV_HEAVY_XBOW:
-			{
-				new_state->ammo_tval = TV_BOLT;
-				new_state->ammo_mult = 4;
-				break;
-			}
+			/* Require at least one shot */
+			if (new_state->num_fire < 1) new_state->num_fire = 1;
 		}
-
-		/* Apply special flags */
-		if (o_ptr->k_idx && !new_state->heavy_shoot)
-		{
-			/* Extra shots */
-			new_state->num_fire += extra_shots;
-
-			/* Extra might */
-			new_state->ammo_mult += extra_might;
-
-			/* Hack -- Rangers love Bows, rogues love slings */
-			if (((cp_ptr->flags & CF_EXTRA_SHOT) && (new_state->ammo_tval == TV_SHOT)) ||
-				((cp_ptr->flags & CF_EXTRA_ARROW) && (new_state->ammo_tval == TV_ARROW)))
-			{
-				if (p_ptr->lev >= LEV_EXTRA_COMBAT) new_state->num_fire++;
-			}
-		}
-
-		/* Require at least one shot */
-		if (new_state->num_fire < 1) new_state->num_fire = 1;
 	}
 
 	/* Brigands get poison resistance */
@@ -1748,7 +1769,6 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 	{
 		new_state->resist_pois = TRUE;
 	}
-
 
 	/*** Analyze weapon ***/
 
@@ -1772,25 +1792,6 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 	/* Normal weapons */
 	if (o_ptr->k_idx && !new_state->heavy_wield)
 	{
-		int str_index, dex_index;
-
-		int divide_by;
-
-		/* Enforce a minimum "weight" (tenth pounds) */
-		divide_by = ((o_ptr->weight < cp_ptr->min_weight) ? cp_ptr->min_weight : o_ptr->weight);
-
-		/* Get the strength vs weight */
-		str_index = (adj_str_blow[new_state->stat_ind[A_STR]] * cp_ptr->att_multiply / divide_by);
-
-		/* Maximal value */
-		if (str_index > 11) str_index = 11;
-
-		/* Index by dexterity */
-		dex_index = (adj_dex_blow[new_state->stat_ind[A_DEX]]);
-
-		/* Maximal value */
-		if (dex_index > 11) dex_index = 11;
-
 		/* Use the blows table */
 		new_state->num_blow = calc_blows(o_ptr, new_state);
 
@@ -1801,7 +1802,7 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 		new_state->skills[SKILL_DIGGING] += (o_ptr->weight / 10);
 
 		/*add extra attack for those who have the flag*/
-		if ((p_ptr->lev >= LEV_EXTRA_COMBAT) && (cp_ptr->flags & CF_EXTRA_ATTACK))
+		if ((p_ptr->lev >= LEV_EXTRA_COMBAT) && (cp_ptr->flags & CF_EXTRA_ATTACK) && obj_is_weapon(o_ptr))
 			new_state->num_blow += 1;
 	}
 
@@ -1919,8 +1920,10 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 		/* default: SV_SHORT_BOW or SV_LONG_BOW	*/
 		cptr launcher = "bow";
 
+		int bow_slot = (adult_swap_weapons ? INVEN_MAIN_WEAPON : INVEN_BOW);
+
 		/* Examine the "current bow" */
-		object_kind *k_ptr = &k_info[calc_inven[INVEN_BOW].k_idx];
+		object_kind *k_ptr = &k_info[calc_inven[bow_slot].k_idx];
 
 		/* Make sure we are calling the launcher by the right name */
 		if (k_ptr->sval == SV_SLING) launcher = "sling";
@@ -1932,31 +1935,36 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 		{
 			msg_print(format("You have trouble aiming such a heavy %s.", launcher));
 		}
-		else if (calc_inven[INVEN_BOW].k_idx)
+		else if (calc_inven[bow_slot].k_idx)
 		{
 			msg_print(format("You have no trouble aiming your %s.", launcher));
 		}
 		else
 		{
-			msg_print(format("You feel relieved to put down your heavy %s.", launcher));
+			msg_print(format("You feel relieved to stop using your heavy %s.", launcher));
 		}
 	}
 
 	/* Take note when "heavy weapon" changes */
 	if (old_heavy_wield != new_state->heavy_wield)
 	{
+		char o_name[80];
+		/* Examine the "current weapon" */
+		o_ptr = &calc_inven[INVEN_WIELD];
+		object_desc(o_name, sizeof(o_name), o_ptr, (ODESC_BASE));
+
 		/* Message */
 		if (new_state->heavy_wield)
 		{
-			msg_print("You have trouble wielding such a heavy weapon.");
+			msg_print(format("You have trouble wielding such a heavy %s.", o_name));
 		}
 		else if (calc_inven[INVEN_WIELD].k_idx)
 		{
-			msg_print("You have no trouble wielding your weapon.");
+			msg_print(format("You have no trouble wielding your %s.", o_name));
 		}
 		else
 		{
-			msg_print("You feel relieved to put down your heavy weapon.");
+			msg_print(format("You feel relieved to stop wielding your heavy %s.", o_name));
 		}
 	}
 
