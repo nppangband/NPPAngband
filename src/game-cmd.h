@@ -30,7 +30,7 @@ typedef enum cmd_code
 	CMD_NAME_CHOICE,
 	CMD_ACCEPT_CHARACTER,
 
-	/* 
+	/*
 	 * The main game commands
 	 */
 	CMD_GO_UP,

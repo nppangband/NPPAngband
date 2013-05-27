@@ -607,6 +607,11 @@ void do_cmd_swap_weapon(cmd_code code, cmd_arg args[])
 	else wield_swap_weapon();
 }
 
+void textui_cmd_swap_weapon(void)
+{
+	cmd_insert(CMD_SWAP);
+}
+
 
 /*
  * Peruse spells in a book

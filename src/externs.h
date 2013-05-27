@@ -608,6 +608,7 @@ extern void do_cmd_takeoff(cmd_code code, cmd_arg args[]);
 extern void do_cmd_wield(cmd_code code, cmd_arg args[]);
 extern void do_cmd_drop(cmd_code code, cmd_arg args[]);
 extern void do_cmd_swap_weapon(cmd_code code, cmd_arg args[]);
+extern void textui_cmd_swap_weapon(void);
 extern void obj_browse(object_type *o_ptr, int item);
 extern void obj_study(object_type *o_ptr, int item);
 extern void obj_cast(object_type *o_ptr, int item);
