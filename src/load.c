@@ -1147,7 +1147,7 @@ static errr rd_extra(void)
 	rd_s16b(&p_ptr->lev);
 
 	/* Verify player level */
-	if ((p_ptr->lev < 1) || (p_ptr->lev > z_info->max_titles))
+	if ((p_ptr->lev < 1) || (p_ptr->lev > z_info->max_level))
 	{
 		note(format("Invalid player level (%d).", p_ptr->lev));
 		return (-1);
