@@ -493,30 +493,34 @@ static byte analyze_speed_bonuses(byte default_attr)
  */
 static void prt_speed(int row, int col)
 {
-	int i = calc_energy_gain(p_ptr->state.p_speed);
+	int i = p_ptr->state.p_speed;
 
 	byte attr = TERM_WHITE;
 	char buf[32] = "";
 
-	/* Hack -- Visually "undo" the Search Mode Slowdown */
-	if (p_ptr->searching) i += 10;
+	/* Erase the current display */
+	Term_erase(col, row, 12);
 
-	/* Fast */
-	if (i > STANDARD_ENERGY_GAIN)
+	/* Hack -- Visually "undo" the Search Mode Slowdown */
+	if (p_ptr->searching) i += ((game_mode == GAME_NPPMORIA) ? 1 : 10);
+
+	/* Boundry Control */
+	if (game_mode == GAME_NPPMORIA)
 	{
-		attr = analyze_speed_bonuses(TERM_L_GREEN);
-		sprintf(buf, "Fast (+%d)", (game_mode == GAME_NPPMORIA ? (p_ptr->state.p_speed - NPPMORIA_NORMAL_SPEED) : (i - 110)));
+		if (i < NPPMORIA_LOWEST_SPEED) i = NPPMORIA_LOWEST_SPEED;
+		else if (i > NPPMORIA_MAX_SPEED) i = NPPMORIA_MAX_SPEED;
 	}
 
-	/* Slow */
-	else if (i < STANDARD_ENERGY_GAIN)
+	/* Fast */
+	if (i > (game_mode == GAME_NPPMORIA ? NPPMORIA_NORMAL_SPEED : 110))
+	{
+		attr = analyze_speed_bonuses(TERM_L_GREEN);
+		sprintf(buf, "Fast (+%d)", (i - (game_mode == GAME_NPPMORIA ? NPPMORIA_NORMAL_SPEED : 110)));
+	}
+	else if (i < (game_mode == GAME_NPPMORIA ? NPPMORIA_NORMAL_SPEED : 110))
 	{
 		attr = analyze_speed_bonuses(TERM_L_UMBER);
-		if (game_mode == GAME_NPPMORIA)
-		{
-			sprintf(buf, "Slow (%d)", (p_ptr->state.p_speed - NPPMORIA_NORMAL_SPEED));
-		}
-		else sprintf(buf, "Slow (-%d)", (110 - i));
+		sprintf(buf, "Slow (-%d)", ((game_mode == GAME_NPPMORIA ? NPPMORIA_NORMAL_SPEED : 110) - i));
 	}
 
 	/* Display the speed */
