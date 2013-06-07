@@ -2007,7 +2007,7 @@ static void process_world(void)
 	}
 
 	/* Occasionally have the ghost give a challenge */
-	if (turn % 100)
+	if (turn % 500)
 	{
 		if (one_in_(50)) ghost_challenge();
 	}
