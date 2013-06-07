@@ -6746,7 +6746,7 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
 	/*We can't see this square*/
 	if (!player_can_see_bold(y, x)) obvious = FALSE;
 
-	if (game_mode == GAME_NPPANGBAND)
+	if (game_mode == GAME_NPPMORIA)
 	{
 		/* Allow traps, but that's all */
 		if (typ != GF_MAKE_TRAP) return FALSE;
