@@ -1464,7 +1464,10 @@ static errr init_alloc(void)
 bool init_angband(void)
 {
 	/* Which game are we playing? */
-	get_game_mode();
+	if (game_mode == 0)
+	{
+		get_game_mode();
+	}
 
 	event_signal(EVENT_ENTER_INIT);
 
