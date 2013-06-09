@@ -2459,6 +2459,9 @@ bool identify_fully(void)
 	/* Identify the object and get the squelch setting */
 	squelch = do_ident_item(item, o_ptr);
 
+	/* Identify the object and get the squelch setting */
+	squelch = do_ident_item(item, o_ptr);
+
 	/* Now squelch it if needed */
 	if (squelch == SQUELCH_YES)
 	{
