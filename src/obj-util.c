@@ -5190,6 +5190,9 @@ void display_itemlist(void)
 		else if (object_is_worthless(o_ptr))
 			/* worthless */
 			attr = TERM_SLATE;
+		else if (!object_is_known(o_ptr))
+			/* unidentified lying object */
+			attr = TERM_L_UMBER;
 		else
 			/* default */
 			attr = TERM_WHITE;
@@ -5292,6 +5295,9 @@ void display_itemlist(void)
 		else if (object_is_worthless(o_ptr))
 			/* worthless */
 			attr = TERM_SLATE;
+		else if (!object_is_known(o_ptr))
+			/* unidentified lying object */
+			attr = TERM_L_UMBER;
 		else
 			/* default */
 			attr = TERM_WHITE;
