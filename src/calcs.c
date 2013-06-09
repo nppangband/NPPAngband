@@ -1400,7 +1400,7 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 		top = modify_stat_value(p_ptr->stat_max[i], add);
 
 		/* Stats max out at 118 in Moria */
-		if (game_mode == GAME_NPPANGBAND)
+		if (game_mode == GAME_NPPMORIA)
 		{
 			if (top > 117) top = 118;
 		}
@@ -1412,7 +1412,7 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 		use = modify_stat_value(p_ptr->stat_cur[i], add);
 
 		/* Stats max out at 118 in Moria */
-		if (game_mode == GAME_NPPANGBAND)
+		if (game_mode == GAME_NPPMORIA)
 		{
 			if (use > 117) use = 118;
 		}
