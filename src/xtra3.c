@@ -456,6 +456,11 @@ static void prt_health(int row, int col, const monster_type *m_ptr)
 		Term_putstr(col, row, 12, TERM_WHITE, "----------]");
 
 		Term_putstr(col, row, 11, TERM_WHITE, "----------]");
+				
+		if (m_ptr == (&mon_list[p_ptr->health_who]))
+		{
+			Term_putstr(col+10, row, 1, TERM_ORANGE, "]");
+		}
 
 		/* Dump the current "health" (handle monster stunning, confusion) */
 		if (m_ptr->m_timed[MON_TMD_CONF])
@@ -692,6 +697,12 @@ static void prt_mon_mana(int row, int col, const monster_type *m_ptr)
 
 		/* Default to "unknown" */
 		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
+		
+		if (m_ptr == (&mon_list[p_ptr->health_who]))
+		{
+			Term_putstr(col+11, row, 1, TERM_ORANGE, "]");
+			Term_putstr(col, row, 1, TERM_ORANGE, "[");
+		}
 
 		/* Dump the current "mana"*/
 		Term_putstr(col + 1, row, len, TERM_L_GREEN, "**********");
