@@ -1811,10 +1811,16 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp, bool use_d
 
 		if ((hp_changes_color) && (arg_graphics == GRAPHICS_NONE))
 		{
+			/* check for hunger first */
+			a = TERM_WHITE;
+			if (p_ptr->food < PY_FOOD_ALERT)
+			{
+				a = TERM_L_UMBER;
+			}
+			
+			/* overwrite with health check */
 			switch(p_ptr->chp * 10 / p_ptr->mhp)
 			{
-				case 10:
-				case  9:	a = TERM_WHITE  ;	break;
 				case  8:
 				case  7:	a = TERM_YELLOW ;	break;
 				case  6:
@@ -1824,7 +1830,6 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp, bool use_d
 				case  2:
 				case  1:
 				case  0:	a = TERM_RED    ;	break;
-				default:	a = TERM_WHITE  ;	break;
 			}
 
 			default_a = a;
