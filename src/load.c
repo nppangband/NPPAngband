@@ -493,7 +493,7 @@ static void rd_monster(monster_type *m_ptr)
 	rd_byte(&m_ptr->fx);
 	rd_s16b(&m_ptr->hp);
 	rd_s16b(&m_ptr->maxhp);
-	rd_byte(&m_ptr->mspeed);
+	rd_byte(&m_ptr->m_speed);
 	rd_s16b(&m_ptr->m_energy);
 
 	/* Find the number of monster timed effects */
@@ -1147,7 +1147,7 @@ static errr rd_extra(void)
 	rd_s16b(&p_ptr->lev);
 
 	/* Verify player level */
-	if ((p_ptr->lev < 1) || (p_ptr->lev > PY_MAX_LEVEL))
+	if ((p_ptr->lev < 1) || (p_ptr->lev > z_info->max_level))
 	{
 		note(format("Invalid player level (%d).", p_ptr->lev));
 		return (-1);
@@ -1211,7 +1211,7 @@ static errr rd_extra(void)
 	if (num == TMD_MAX)
 	{
 		/* Read all the effects */
-		for (i = 0; i < num; i++) rd_s16b(&p_ptr->timed[i]);
+		for (i = 0; i < num; i++)  rd_s16b(&p_ptr->timed[i]);
 	}
 	else
 	{
@@ -1360,7 +1360,7 @@ static errr rd_extra(void)
 	rd_u16b(&tmp16u);
 
 	/* Incompatible save files */
-	if (tmp16u > PY_MAX_LEVEL)
+	if (tmp16u > z_info->max_level)
 	{
 		note(format("Too many (%u) hitpoint entries!", tmp16u));
 		return (-1);
@@ -2067,8 +2067,8 @@ static errr rd_savefile_new_aux(void)
 	note(format("Loading a %d.%d.%d savefile...",
 	            sf_major, sf_minor, sf_patch));
 
-	/* Strip the version bytes */
-	strip_bytes(4);
+	/* Strip the version bytes, and the game_mode byte */
+	strip_bytes(5);
 
 	/* Hack -- decrypt */
 	xor_byte = sf_extra;
@@ -2391,6 +2391,7 @@ bool load_player(void)
 	errr err = 0;
 
 	byte vvv[4];
+	byte savefile_game;
 
 	cptr what = "generic";
 
@@ -2466,6 +2467,8 @@ bool load_player(void)
 		/* What */
 		if (err) what = "Cannot read savefile";
 
+		rd_byte(&savefile_game);
+
 		/* Close the file */
 		file_close(fff);
 	}
@@ -2491,6 +2494,13 @@ bool load_player(void)
 		{
 			err = -1;
 			what = "Savefile is from the future";
+		}
+		else if (game_mode != savefile_game)
+		{
+			err = -1;
+			if (game_mode == GAME_NPPMORIA) what = "Not a NPPMoria savefile";
+			else if (game_mode == GAME_NPPANGBAND) what = "Not a NPPAngband savefile";
+			else what = "Unknown savefile type";
 		}
 		else
 		{

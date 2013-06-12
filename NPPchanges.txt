@@ -1,3 +1,11 @@
+NPP 7.0.0 Beta-3 changes:
+Add moria game mode, based on Moria 5.5.2.
+Added opportunity to do a shield bash on a monster as in Moria.
+Reduced frequency of ghost challenges.
+Bugfix:  Fix inconcistency when describing damage from ammo.
+Bugfix:  Fix display of equipment flags on equipment screen.
+
+
 
 NPP6.1.2 changes:
 Misc code cleanup, provided by levind on Github ("runningaway") on the NPP forums.

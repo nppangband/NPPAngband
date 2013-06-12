@@ -670,8 +670,22 @@ void do_cmd_options_aux(void *vpage, cptr info)
 	/* Filter the options for this page */
 	for (i = 0; i < OPT_PAGE_PER; i++)
 	{
-		if (option_page[page][i] != OPT_NONE)
-			opt[n++] = option_page[page][i];
+		if (game_mode == GAME_NPPMORIA)
+		{
+			if (option_page_nppmoria[page][i] != OPT_NONE)
+			{
+				opt[n++] = option_page_nppmoria[page][i];
+			}
+
+		}
+		else
+		{
+			if (option_page_nppangband[page][i] != OPT_NONE)
+			{
+				opt[n++] = option_page_nppangband[page][i];
+			}
+		}
+
 	}
 
 	menu_set_filter(menu, opt, n);
@@ -1587,7 +1601,7 @@ static int find_next_race(int r_idx, int increment)
 		if (next_r_idx == r_idx) return (r_idx);
 
 		/* Skip non-entries */
-		if (!r_ptr->speed) continue;
+		if (!r_ptr->r_speed) continue;
 
 		return (next_r_idx);
 	}
@@ -3350,7 +3364,7 @@ void do_cmd_version(void)
 {
 	/* Silly message */
 	msg_format("You are playing %s %s.  Type '?' for more info.",
-	           VERSION_NAME, VERSION_STRING);
+			VERSION_MODE_NAME, VERSION_STRING);
 }
 
 
@@ -3381,6 +3395,9 @@ static cptr do_cmd_feeling_text[LEV_THEME_HEAD] =
 void do_cmd_feeling(void)
 {
 	bool is_quest_level = quest_check(p_ptr->depth);
+
+	/* No sensing things in Moria */
+	if (game_mode == GAME_NPPMORIA) return;
 
 	/* No useful feeling in town */
 	if (!p_ptr->depth)

@@ -10,7 +10,7 @@
 Command Summary -- Original keyset
 
      a  Aim a wand                           A  Activate an artifact
-     b  Browse a book                        B  Bash a door
+     b  Browse a book                        B  Bash a door/Monster
      c  Close a door                         C  Character description
      d  Drop an item                         D  Disarm a trap
      e  Equipment list                       E  Eat some food
@@ -84,7 +84,7 @@ Command Summary -- Roguelike keyset
      c  Close a door                         C  Character description
      d  Drop an item                         D  Disarm a trap or chest
      e  Equipment list                       E  Eat some food
-     f  Bash a door (force)                  F  Fuel your lantern/torch
+     f  Bash a door/monster                  F  Fuel your lantern/torch
      g  Stay still (flip pickup)             G  Gain new spells/prayers
      h  (walk - west)                        H  (run - west)
      i  Inventory list                       I  Observe an item

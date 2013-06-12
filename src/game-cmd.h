@@ -30,7 +30,7 @@ typedef enum cmd_code
 	CMD_NAME_CHOICE,
 	CMD_ACCEPT_CHARACTER,
 
-	/* 
+	/*
 	 * The main game commands
 	 */
 	CMD_GO_UP,
@@ -45,6 +45,7 @@ typedef enum cmd_code
 	CMD_UNINSCRIBE,
 	CMD_TAKEOFF,
 	CMD_WIELD,
+	CMD_SWAP,
 	CMD_DROP,
 	CMD_STUDY_SPELL,
 	CMD_STUDY_BOOK,
