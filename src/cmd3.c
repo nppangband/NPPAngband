@@ -894,6 +894,8 @@ void do_cmd_target(void)
 	if (target_set_interactive(TARGET_KILL, -1, -1))
 	{
 		msg_print("Target Selected.");
+		p_ptr->redraw |= (PR_MONLIST);
+		redraw_stuff();
 	}
 
 	/* Target aborted */
@@ -918,6 +920,8 @@ void do_cmd_look(void)
 	if (target_set_interactive(TARGET_LOOK, -1, -1))
 	{
 		msg_print("Target Selected.");
+		p_ptr->redraw |= (PR_MONLIST);
+		redraw_stuff();
 	}
 }
 
