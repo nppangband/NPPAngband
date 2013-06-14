@@ -892,7 +892,7 @@ void display_player_stat_info(int row, int col)
 	/* Print out the labels for the columns */
 	c_put_str(TERM_WHITE, "  Self", row-1, col+5);
 	/* Don't print stat modifiers stats aren't preserved */
-	if (!adult_maximize)
+	if (adult_maximize)
 	{
 		c_put_str(TERM_WHITE, " RB", row-1, col+11);
 		c_put_str(TERM_WHITE, " CB", row-1, col+14);
@@ -928,7 +928,7 @@ void display_player_stat_info(int row, int col)
 		c_put_str(TERM_L_GREEN, buf, row+i, col+5);
 
 		/* Don't print stat modifiers stats aren't preserved */
-		if (!adult_maximize)
+		if (adult_maximize)
 		{
 
 			/* Race Bonus add in permanent stat bonus here */
