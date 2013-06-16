@@ -1592,12 +1592,6 @@ bool init_angband(void)
 			return FALSE;
 		}
 	}
-
-	/* Not that everything is initialized, fill in some specifics for the game mode chosen. */
-	/* NB all this stuff is unreachable!
-	init_game_mode();
-
-	return (FALSE);*/
 }
 
 
