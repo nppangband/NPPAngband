@@ -780,6 +780,7 @@ extern void cleanup_angband(void);
 
 /* load.c */
 extern bool load_player(void);
+extern void load_gamemode(void);
 
 /* melee1.c */
 extern int drain_charges(object_type *o_ptr, u32b heal);
