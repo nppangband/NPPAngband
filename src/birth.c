@@ -63,9 +63,9 @@ typedef struct birther /*lovely*/ birther; /*sometimes we think she's a dream*/
  */
 struct birther
 {
-	byte sex;
-	byte race;
-	byte class;
+	byte p_sex;
+	byte p_race;
+	byte p_class;
 
 	s16b age;
 	s16b wt;
@@ -111,9 +111,9 @@ static void save_roller_data(birther *player)
 	int i;
 
 	/* Save the data */
-	player->sex = p_ptr->psex;
-	player->race = p_ptr->prace;
-	player->class = p_ptr->pclass;
+	player->p_sex = p_ptr->psex;
+	player->p_race = p_ptr->prace;
+	player->p_class = p_ptr->pclass;
 	player->age = p_ptr->age;
 	player->wt = p_ptr->wt_birth;
 	player->ht = p_ptr->ht_birth;
@@ -156,9 +156,9 @@ static void load_roller_data(birther *player, birther *prev_player)
 	/*** Load the previous data ***/
 
 	/* Load the data */
-	p_ptr->psex = player->sex;
-	p_ptr->prace = player->race;
-	p_ptr->pclass = player->class;
+	p_ptr->psex = player->p_sex;
+	p_ptr->prace = player->p_race;
+	p_ptr->pclass = player->p_class;
 	p_ptr->age = player->age;
 	p_ptr->wt = p_ptr->wt_birth = player->wt;
 	p_ptr->ht = p_ptr->ht_birth = player->ht;

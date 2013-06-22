@@ -3660,6 +3660,9 @@ void play_game(void)
 	/* Start with normal object generation mode */
 	object_generation_mode = OB_GEN_MODE_NORMAL;
 
+	/* Start with the item_tester_swap variable as true */
+	item_tester_swap = TRUE;
+
 	/* Hack -- Decrease "icky" depth */
 	character_icky--;
 

@@ -3271,14 +3271,14 @@ void calc_monster_speed(int y, int x)
 	if (m_ptr->mflag & (MFLAG_SLOWER))
 	{
 		/* Allow some small variation each time to make pillar dancing harder */
-		i = calc_energy_gain(r_ptr->r_speed);
-		speed -= rand_spread(0, i);
+		i = calc_energy_gain(r_ptr->r_speed) / 10;
+		speed -= rand_range(0, i);
 	}
 	else if (m_ptr->mflag & (MFLAG_FASTER))
 	{
 		/* Allow some small variation each time to make pillar dancing harder */
-		i = calc_energy_gain(r_ptr->r_speed);
-		speed += rand_spread(0, i);
+		i = calc_energy_gain(r_ptr->r_speed) / 10;
+		speed += rand_range(0, i);
 	}
 
 	/*factor in the hasting and slowing counters*/

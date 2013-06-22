@@ -396,19 +396,19 @@ int critical_shot_chance(const object_type *o_ptr, player_state a_state, bool th
  * Critical hits (from objects thrown by player)
  * Factor in item weight, total plusses, and player level, bow skill.
  */
-static int critical_shot_check(const object_type *o_ptr, int *dd, int *plus, bool throw, u32b f3)
+static int critical_shot_check(const object_type *o_ptr, int *dd, int *plus, bool throwing, u32b f3)
 {
-	int i = critical_shot_chance(o_ptr, p_ptr->state, throw, FALSE, f3);
+	int i = critical_shot_chance(o_ptr, p_ptr->state, throwing, FALSE, f3);
 
 	/* Critical hit */
 	if (randint(CRIT_HIT_CHANCE) <= i)
 	{
 		int k;
-		int crit_hit_bonus = 250 + (throw ? p_ptr->state.skills[SKILL_TO_HIT_THROW] : p_ptr->state.skills[SKILL_TO_HIT_BOW]);
+		int crit_hit_bonus = 250 + (throwing ? p_ptr->state.skills[SKILL_TO_HIT_THROW] : p_ptr->state.skills[SKILL_TO_HIT_BOW]);
 		crit_hit_bonus += (p_ptr->state.to_h + o_ptr->to_h) * 2;
 
 		/* Rogues are especially good at throwing weapons */
-		if ((throw) && (cp_ptr->flags & (CF_ROGUE_COMBAT)) && (f3 & (TR3_THROWING)))
+		if ((throwing) && (cp_ptr->flags & (CF_ROGUE_COMBAT)) && (f3 & (TR3_THROWING)))
 		{
 			i += p_ptr->lev * 5;
 		}
