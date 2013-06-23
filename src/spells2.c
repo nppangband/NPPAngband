@@ -2456,8 +2456,8 @@ bool identify_fully(void)
 		o_ptr = &o_list[0 - item];
 	}
 
-	/* Identify the object and get the squelch setting */
-	squelch = do_ident_item(item, o_ptr);
+	/* Mark the item as fully known */
+	o_ptr->ident |= (IDENT_MENTAL);
 
 	/* Identify the object and get the squelch setting */
 	squelch = do_ident_item(item, o_ptr);

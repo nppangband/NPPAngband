@@ -2611,8 +2611,6 @@ void load_gamemode(void)
 	byte vvv[4];
 	byte savefile_game=0;
 
-	cptr what = "generic";
-
 	/* Allow empty savefile name */
 	if (!savefile[0]) return;
 
@@ -2635,9 +2633,6 @@ void load_gamemode(void)
 
 		/* No file */
 		if (fd < 0) err = -1;
-
-		/* Message (below) */
-		if (err) what = "Cannot open savefile";
 	}
 
 	/* Process file */

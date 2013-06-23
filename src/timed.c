@@ -127,7 +127,7 @@ static timed_effect effects[] =
 			"You feel more resistant to poison!", "You feel less resistant to poison.",
 			0, 0, 0, MSG_RES_POIS, FALSE  },
 	/* TMD_FLYING */
-	{ "You take flight!", "Your mystic wings dissappear.",
+	{ "You take flight!", "Your mystic wings disappear.",
 			NULL, NULL,
 			(PR_RESIST | PR_STATUS), PU_STEALTH, 0, 0, FALSE  },
 	/* TMD_NAT_LAVA */
