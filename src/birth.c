@@ -1262,8 +1262,8 @@ void player_birth(bool quickstart_allowed)
 		else if (cmd.command == CMD_HELP)
 		{
 			char buf[80];
-
-			strnfmt(buf, sizeof(buf), "birth.txt");
+			if (game_mode == GAME_NPPMORIA) strnfmt(buf, sizeof(buf), "m_birth.txt");
+			else strnfmt(buf, sizeof(buf), "birth.txt");
 			screen_save();
 			show_file(buf, NULL, 0, 0);
 			screen_load();

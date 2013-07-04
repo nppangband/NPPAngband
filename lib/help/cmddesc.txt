@@ -222,7 +222,7 @@ Clicking on sidebar:
 *Click on the player class to access help information for that class.
 *Cick on the player stats to bring up the character screen.
 *Click on player hit points to rest.
-*Click on monster hit poitns or mana to pull up information on that character.
+*Click on monster hit points or mana to pull up information on that character.
 *Click on the top (mesage) line of the screen to see a list of recent messages.
 *CLick on level feeling to see the player feeling (same as hitting CTRL-F).
 *CLick on your quest status to see the quest status (same as hitting CTRL-Q)

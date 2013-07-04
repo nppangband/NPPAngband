@@ -2895,7 +2895,8 @@ bool show_file(cptr name, cptr what, int line, int mode)
 		{
 			char ftmp[80];
 			prt("Goto File: ", hgt - 1, 0);
-			my_strcpy(ftmp, "help.hlp", sizeof(ftmp));
+			if (game_mode == GAME_NPPMORIA) my_strcpy(ftmp, "m_help.hlp", sizeof(ftmp));
+			else my_strcpy(ftmp, "help.hlp", sizeof(ftmp));
 			if (askfor_aux(ftmp, sizeof(ftmp), NULL))
 			{
 				if (!show_file(ftmp, NULL, 0, mode)) ke.key = ESCAPE;
@@ -2984,7 +2985,8 @@ void do_cmd_help(void)
 	screen_save();
 
 	/* Peruse the main help file */
-	(void)show_file("help.hlp", NULL, 0, 0);
+	if (game_mode == GAME_NPPMORIA) (void)show_file("m_help.hlp", NULL, 0, 0);
+	else (void)show_file("help.hlp", NULL, 0, 0);
 
 	/* Load screen */
 	screen_load();

@@ -622,7 +622,8 @@ static bool update_option (char key, void *pgdb, int oid)
 
 		case '?':
 		{
-			show_file(format("options.txt#%s", option_name(oid)), NULL, 0, 0);
+			if (game_mode == GAME_NPPMORIA) show_file(format("m_options.txt#%s", option_name(oid)), NULL, 0, 0);
+			else show_file(format("options.txt#%s", option_name(oid)), NULL, 0, 0);
 			break;
 		}
 
@@ -2236,7 +2237,12 @@ void do_cmd_visuals(void)
 		}
 		else if (evt.type == EVT_BUTTON)
 		{
-			if (evt.key == '?')	show_file("options.txt", NULL, 0, 0);
+
+			if (evt.key == '?')
+			{
+				if (game_mode == GAME_NPPMORIA) show_file("m_options.txt", NULL, 0, 0);
+				else show_file("options.txt", NULL, 0, 0);
+			}
 		}
 	}
 
@@ -2911,7 +2917,10 @@ void do_cmd_colors(void)
 		}
 		else if (evt.type == EVT_BUTTON)
 		{
-			if (evt.key == '?')	show_file("options.txt", NULL, 0, 0);
+			{
+				if (game_mode == GAME_NPPMORIA) show_file("m_options.txt", NULL, 0, 0);
+				else show_file("options.txt", NULL, 0, 0);
+			}
 		}
 	}
 
@@ -3195,7 +3204,8 @@ void do_cmd_options(void)
 		{
 			screen_save();
 
-			show_file("options.txt", NULL, 0, 0);
+			if (game_mode == GAME_NPPMORIA) show_file("m_options.txt", NULL, 0, 0);
+			else show_file("options.txt", NULL, 0, 0);
 
 			screen_load();
 			continue;

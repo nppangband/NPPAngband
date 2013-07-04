@@ -40,22 +40,15 @@ current version.
 
 --- Winning The Game ---
 
-     Once you have killed Sauron, who lives on level 99 (4950') in the dungeon,
-a magical staircase will appear that will allow you to finally reach level 100.
-Morgoth lurks on this level of the dungeon, and you will not be able to go below
-his level until you have killed him.  Try to avoid wandering around on level 100
-unless you are ready for him, since he has a habit of coming at you across the
-dungeon, the Mighty Hammer 'Grond' in hand, to slay you for your impudence.
+     The Balrog of Moria can be found at adepth of 2500' or greater.  Kill it to 
+win the game.
 
-     Morgoth cannot be killed by some of the easier methods used on normal
-creatures.  Morgoth, like all other unique monsters, will simply teleport away
+     The Balrog of Moria cannot be killed by some of the easier methods used on normal
+creatures.  The Balrog, like all other unique monsters, will simply teleport away
 to another region of the level if you attempt to use a spell such as destruction
-upon him.  He also cannot be polymorphed or genocided.  Magical spells like 
-Mana Storm and Annihilation are effective against him, as are some
-of the more powerful weapons, but he is difficult to kill and if allowed to
-escape for a time will heal himself rapidly.
+upon him.  He also cannot be polymorphed or genocided.  
 
-     If you should actually survive the attempt of killing Morgoth, you will
+     If you should actually survive the attempt of killing the Balrog, you will
 receive the status of WINNER.  You may continue to explore, and may even save
 the game and play more later, but since you have defeated the toughest creature
 alive, there is really not much point.  Unless you wish to listen to the rumours

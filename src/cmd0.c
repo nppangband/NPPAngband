@@ -697,8 +697,8 @@ static void do_cmd_mouseclick(void)
 		case SIDEBAR_RACE:
 		{
 			char buf[80];
-
-			strnfmt(buf, sizeof(buf), "raceclas.txt#%s", p_name + rp_ptr->name);
+			if (game_mode == GAME_NPPMORIA) strnfmt(buf, sizeof(buf), "m_raceclas.txt#%s", p_name + rp_ptr->name);
+			else strnfmt(buf, sizeof(buf), "raceclas.txt#%s", p_name + rp_ptr->name);
 			screen_save();
 			show_file(buf, NULL, 0, 0);
 			screen_load();
@@ -707,8 +707,8 @@ static void do_cmd_mouseclick(void)
 		case SIDEBAR_CLASS:
 		{
 			char buf[80];
-
-			strnfmt(buf, sizeof(buf), "raceclas.txt#%s", c_name + cp_ptr->name);
+			if (game_mode == GAME_NPPMORIA) strnfmt(buf, sizeof(buf), "m_raceclas.txt#%s", c_name + cp_ptr->name);
+			else strnfmt(buf, sizeof(buf), "raceclas.txt#%s", c_name + cp_ptr->name);
 			screen_save();
 			show_file(buf, NULL, 0, 0);
 			screen_load();

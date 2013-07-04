@@ -32,7 +32,7 @@ Command Summary -- Original keyset
      u  Use a staff                          U  (unused)
      v  Throw an item                        V  Version info
      w  Wear/wield equipment                 W  (unused)
-     x  (unused)                             X  (switch weapon macro)
+     x  Swap Weapons                         X  (switch weapon macro)
      y  (unused)                             Y  (unused)
      z  Zap a rod                            Z  (unused)
      !  Interact with system                ^A  (special - debug command)
