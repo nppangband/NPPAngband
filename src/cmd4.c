@@ -2917,6 +2917,7 @@ void do_cmd_colors(void)
 		}
 		else if (evt.type == EVT_BUTTON)
 		{
+			if (evt.key == '?')
 			{
 				if (game_mode == GAME_NPPMORIA) show_file("m_options.txt", NULL, 0, 0);
 				else show_file("options.txt", NULL, 0, 0);

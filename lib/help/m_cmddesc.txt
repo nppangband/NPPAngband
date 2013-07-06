@@ -136,11 +136,11 @@ You can play most of the game using only mouseclicks.   Here are some of the way
 Clicking on sidebar:
 *Click on the player race to access help information for that race.
 *Click on the player class to access help information for that class.
-*Cick on the player stats to bring up the character screen.
+*Click on the player stats to bring up the character screen.
 *Click on player hit points to rest.
 *Click on monster hit points or mana to pull up information on that character.
-*Click on the top (mesage) line of the screen to see a list of recent messages.
-*CLick on the equipment characters to see a list of your equipment.
+*Click on the top (message) line of the screen to see a list of recent messages.
+*Click on the equipment characters to see a list of your equipment.
 
 Other mouse commands:
 Click on the player to see a list of commands
