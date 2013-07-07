@@ -2003,7 +2003,7 @@ int get_ball_beam_dam(int m_idx, monster_race *r_ptr, int attack, int gf_type, b
 			 * Average the damage of a fully healthy creature, and the current monster, so
 			 * ball (breath) spells lose some power, but not as much as plain breath spells.
 			 */
-			max_dam = (breath_dam + max_dam) / 2;
+			dam = (breath_dam + dam) / 2;
 		}
 	}
 
