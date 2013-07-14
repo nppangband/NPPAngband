@@ -8,6 +8,7 @@ Bugfix:  Fix inconcistency when describing damage from ammo.
 Bugfix:  Fix display of equipment flags on equipment screen.
 Bugfix:  Fix bug in calculating monster speed variances (found by kaypy).
 Bugfix:  Commands could sucessfully be repeated while confused.
+Bugfix:  Fix multiple missing 'break' statements (found by "runningaway").
 
 
 NPP6.1.2 changes:

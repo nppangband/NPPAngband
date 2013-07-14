@@ -5410,6 +5410,7 @@ void flush_monster_messages(void)
 			else m_ptr->smart &= ~(SM_GOOD_SAVE);
 			if (p_ptr->state.skills[SKILL_SAVE] >= 100) m_ptr->smart |= (SM_PERF_SAVE);
 			else m_ptr->smart &= ~(SM_PERF_SAVE);
+			break;
 		}
 
 		/* Archery attacks don't learn anything */
@@ -5480,6 +5481,7 @@ void flush_monster_messages(void)
 			else m_ptr->smart &= ~(SM_RES_SOUND);
 			if (p_ptr->state.resist_confu) m_ptr->smart |= (SM_RES_CONFU);
 			else m_ptr->smart &= ~(SM_RES_CONFU);
+			break;
 		}
 
 		/*

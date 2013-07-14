@@ -1700,6 +1700,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 			{
 				evt.type = EVT_ESCAPE;
 				done = TRUE;
+				break;
 			}
 
 			case '0':

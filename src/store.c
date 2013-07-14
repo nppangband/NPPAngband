@@ -5009,6 +5009,7 @@ static bool store_process_command(char cmd, void *db, int oid)
 		case 'e':
 		{
 			equip_toggle = TRUE;
+			break;
 		}
 
 		/* Inventory list */
