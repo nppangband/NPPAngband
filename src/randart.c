@@ -669,7 +669,7 @@ static long eval_max_dam(int r_idx)
 					{
 						int attack = 96 + (x * 32) + i;
 
-						this_dam = get_ball_beam_dam(r_ptr, attack, which_gf, powerful);
+						this_dam = get_ball_beam_dam(-1, r_ptr, attack, which_gf, powerful);
 
 						/* handle elemental breaths*/
 						switch (which_gf)
@@ -707,7 +707,7 @@ static long eval_max_dam(int r_idx)
 					{
 						int attack = 96 + (x * 32) + i;
 
-						this_dam = get_ball_beam_dam(r_ptr, attack, which_gf, powerful);
+						this_dam = get_ball_beam_dam(-1, r_ptr, attack, which_gf, powerful);
 					}
 
 					/*slight bonus for cloud_surround*/

@@ -28,7 +28,6 @@ static cptr wd_his[3] =
 	(((c) == 1) ? (s) : (p))
 
 
-
 typedef struct
 {
   int message_begin;
