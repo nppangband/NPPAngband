@@ -5005,16 +5005,13 @@ static bool store_process_command(char cmd, void *db, int oid)
 			break;
 		}
 
-		/* Equipment list */
+		/* Equipment and inventory list */
 		case 'e':
-		{
-			equip_toggle = TRUE;
-			break;
-		}
-
-		/* Inventory list */
 		case 'i':
 		{
+			/* Handle equipment command */
+			if (cmd == 'e') equip_toggle = TRUE;
+
 			/* Display the right thing until the user escapes */
 			do
 			{
