@@ -56,7 +56,7 @@ Command Summary -- Original keyset
      ;  Walk (normal pickup)                ^S  Save and don't quit
      :  Take notes                          ^T  (unused)
      '  Target closest monster              ^U  (unused)
-     "  Enter a user pref command           ^V  Repeat last command
+     "  Enter a user pref command           ^V  (unused)
      ,  Stay still (normal pickup)          ^W  (special - wizard mode)
      <  Go up staircase                     ^X  Save and quit
      .  Run                                 ^Y  (unused)

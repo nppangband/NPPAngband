@@ -429,7 +429,7 @@ Save screen dump (right-parenthesis) :
      Dump a "snap-shot" of the current screen to an HTML file, including encoded
 color information.
 
-Repeat last command (Ctrl-V), also (n) / (') :
+Repeat last command (n) / (CTRL-V) :
      Repeat the previous command, selecting the same objects or spells you
 choose last time.
 
