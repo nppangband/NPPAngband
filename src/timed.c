@@ -61,7 +61,7 @@ static timed_effect effects[] =
 	/*TMD_AFRAID*/
 	{ "You are terrified!", "You feel bolder now.",
 			"You are more scared!", "You feel a little less scared.",
-			0, PU_BONUS, 0, MSG_AFRAID, TRUE },
+			0, PU_BONUS, 0, MSG_AFRAID, FALSE },
 	/*TMD_IMAGE*/
 	{ "You feel drugged!", "You can see clearly again.",
 			"You feel more drugged!", "You feel less drugged.",
@@ -301,7 +301,24 @@ bool clear_timed(int idx, bool notify)
 	return set_timed(idx, 0, notify);
 }
 
+/* Check to see if the player is in a state to repeat commands */
+bool player_can_repeat(void)
+{
+	int i;
 
+	for (i = 0; i < TMD_MAX; i++)
+	{
+		timed_effect *effect = &effects[i];
+
+		/* Player isn't in this time state */
+		if (!p_ptr->timed[i]) continue;
+
+		/* State prevent repeating commands, player can't repeat commands */
+		if (effect->disable_repeat) return (TRUE);
+	}
+
+	return (TRUE);
+}
 
 /*
  * Set "p_ptr->timed[TMD_STUN]", notice observable changes

@@ -1340,6 +1340,7 @@ extern bool set_timed(int idx, int v, bool notify);
 extern bool inc_timed(int idx, int v, bool notify);
 extern bool dec_timed(int idx, int v, bool notify);
 extern bool clear_timed(int idx, bool notify);
+extern bool player_can_repeat(void);
 extern bool set_stun(int v);
 extern bool set_cut(int v);
 extern bool set_food(int v);
