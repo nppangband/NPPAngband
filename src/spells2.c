@@ -1325,7 +1325,7 @@ bool set_recall(void)
 	if (!p_ptr->word_recall)
 	{
 		/* Reset recall depth */
-		if ((p_ptr->depth > 0) && (p_ptr->depth != p_ptr->recall_depth))
+		if ((p_ptr->depth > 0) && (p_ptr->depth != p_ptr->recall_depth) && (game_mode != GAME_NPPMORIA))
 		{
 			/*
 			 * ToDo: Add a new player_type field "recall_depth"
