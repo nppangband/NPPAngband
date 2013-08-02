@@ -2296,20 +2296,25 @@ static s16b get_mimic_k_idx(int r_idx)
 
 		case '$':
 		{
-			cptr name = r_ptr->name_full;
+			char mon_name[MAX_MON_LONG_NAME];
+
+			my_strcpy(mon_name, r_ptr->name_full, sizeof(mon_name));
+
+			/* make it all lowecase for simplicity of checking */
+			string_lower(mon_name);
 
 			/* Look for textual clues */
-			if (strstr(name, " copper "))     	return (lookup_kind(TV_GOLD, SV_GOLD_COPPER));
-			if (strstr(name, " silver "))     	return (lookup_kind(TV_GOLD, SV_GOLD_SILVER));
-			if (strstr(name, " garnet"))       	return (lookup_kind(TV_GOLD, SV_GOLD_GARNET));
-			if (strstr(name, " gold"))       	return (lookup_kind(TV_GOLD, SV_GOLD_GOLD));
-			if (strstr(name, " mithril"))    	return (lookup_kind(TV_GOLD, SV_GOLD_MITHRIL));
-			if (strstr(name, " opal"))    		return (lookup_kind(TV_GOLD, SV_GOLD_OPALS));
-			if (strstr(name, " sapphire"))    	return (lookup_kind(TV_GOLD, SV_GOLD_SAPPHIRES));
-			if (strstr(name, " ruby"))    		return (lookup_kind(TV_GOLD, SV_GOLD_RUBIES));
-			if (strstr(name, " emerald"))    	return (lookup_kind(TV_GOLD, SV_GOLD_EMERALD));
-			if (strstr(name, " diamond"))    	return (lookup_kind(TV_GOLD, SV_GOLD_DIAMOND));
-			if (strstr(name, " adamantite ")) 	return (lookup_kind(TV_GOLD, SV_GOLD_ADAMANTITE));
+			if (strstr(mon_name, " copper "))     	return (lookup_kind(TV_GOLD, SV_GOLD_COPPER));
+			if (strstr(mon_name, " silver "))     	return (lookup_kind(TV_GOLD, SV_GOLD_SILVER));
+			if (strstr(mon_name, " garnet"))       	return (lookup_kind(TV_GOLD, SV_GOLD_GARNET));
+			if (strstr(mon_name, " gold"))       	return (lookup_kind(TV_GOLD, SV_GOLD_GOLD));
+			if (strstr(mon_name, " mithril"))    	return (lookup_kind(TV_GOLD, SV_GOLD_MITHRIL));
+			if (strstr(mon_name, " opal"))    		return (lookup_kind(TV_GOLD, SV_GOLD_OPALS));
+			if (strstr(mon_name, " sapphire"))    	return (lookup_kind(TV_GOLD, SV_GOLD_SAPPHIRES));
+			if (strstr(mon_name, " ruby"))    		return (lookup_kind(TV_GOLD, SV_GOLD_RUBIES));
+			if (strstr(mon_name, " emerald"))    	return (lookup_kind(TV_GOLD, SV_GOLD_EMERALD));
+			if (strstr(mon_name, " diamond"))    	return (lookup_kind(TV_GOLD, SV_GOLD_DIAMOND));
+			if (strstr(mon_name, " adamantite ")) 	return (lookup_kind(TV_GOLD, SV_GOLD_ADAMANTITE));
 			break;
 		}
 

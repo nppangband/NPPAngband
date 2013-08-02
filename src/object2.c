@@ -2126,6 +2126,16 @@ static bool kind_is_gen_store_moria(int k_idx)
 			if (k_ptr->sval == SV_CLOAK) return (TRUE);
 			return (FALSE);
 		}
+
+		/*Normal ammo is sold there*/
+		case TV_SHOT:
+		case TV_ARROW:
+		case TV_BOLT:
+		{
+			if (k_ptr->sval == SV_AMMO_NORMAL) return (TRUE);
+			if (k_ptr->sval == SV_AMMO_LIGHT) return (TRUE);
+			return (FALSE);
+		}
 	}
 
 	/* Assume not good */

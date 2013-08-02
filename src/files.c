@@ -2445,7 +2445,7 @@ errr file_character(const char *path, bool full)
 /*
  * Make a string lower case.
  */
-static void string_lower(char *buf)
+void string_lower(char *buf)
 {
 	char *s;
 
