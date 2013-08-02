@@ -73,7 +73,7 @@ static timed_effect effects[] =
 	/* TMD_CUT -- handled seperately */
 	{ NULL, NULL, NULL, NULL, 0, 0, 0 ,0, FALSE },
    	/* TMD_STUN -- handled seperately */
-	{ NULL, NULL, NULL, NULL, 0, 0, 0 ,0, TRUE },
+	{ NULL, NULL, NULL, NULL, 0, 0, 0 ,0, FALSE },
 	/*TMD_PROTEVIL*/
 	{ "You feel safe from evil!", "You no longer feel safe from evil.",
 			"You feel even safer from evil!", "You feel less safe from evil.",
@@ -435,9 +435,6 @@ bool set_stun(int v)
 
 	/* Use the value */
 	p_ptr->timed[TMD_STUN] = v;
-
-	/* Disable repeated commands */
-	cmd_disable_repeat();
 
 	/* No change */
 	if (!notice) return (FALSE);
