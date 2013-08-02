@@ -11421,7 +11421,7 @@ D: adventurers realise of the deception is when the book opens and
 D: starts casting deadly spells at them.
 
 
-N:694:Dragon armor Mimic
+N:694:Dragon armor mimic
 A:DragArmMimic
 G:[:v1
 I:130:50d100:5:175:10

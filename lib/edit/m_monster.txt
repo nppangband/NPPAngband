@@ -349,7 +349,7 @@ N:19:Floating Eye
 A:Floating eye
 G:e:o
 I:11:3d6:2:6:10
-W:1:1:2:1
+W:1:1:10:1
 B:GAZE:PARALYZE
 F:NEVER_MOVE | FLYING | HURT_LIGHT
 S:SPELL_PCT_8 | POW_2
@@ -361,7 +361,7 @@ N:20:Shrieker Mushroom patch
 A:ShriekMushrm
 G:':R
 I:11:1d1:2:1:0
-W:2:1:0:1
+W:2:1:7:1
 F:FORCE_EXTRA | NEVER_MOVE | STUPID | EMPTY_MIND | HURT_POIS
 F:HURT_ACID | HURT_FIRE | NO_SLOW | NO_FEAR | NO_STUN
 F:NO_CONF | NO_SLEEP
@@ -595,7 +595,7 @@ N:40:Yellow Jelly
 A:Yellow jelly
 G:J:y
 I:12:10d8:2:1:99
-W:3:1:2:12
+W:3:1:10:12
 B:TOUCH:POISON:1d3
 F:NEVER_MOVE | STUPID | EMPTY_MIND | HURT_POIS | HURT_ACID
 F:HURT_LIGHT | HURT_FIRE | NO_SLOW | NO_FEAR | NO_STUN
@@ -688,7 +688,7 @@ N:48:Radiation Eye
 A:RadiationEye
 G:e:R2
 I:11:3d6:2:6:10
-W:3:1:0:6
+W:3:1:10:6
 B:GAZE:LOSE_STR:1d6
 F:NEVER_MOVE | FLYING | HURT_LIGHT
 S:SPELL_PCT_9 | POW_2
@@ -745,7 +745,7 @@ F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
 D:It's a large pile of pulsing blue flesh.
 
 
-N:53:Creeping Copper Coins
+N:53:Creeping copper Coins
 A:Copper coins
 G:$:u2
 I:10:7d8:3:24:10
@@ -841,7 +841,7 @@ N:61:Green Glutton Ghost
 A:GrGlutnGhost
 G:G:g
 I:13:3d6:10:20:10
-W:5:1:0:15
+W:5:1:15:15
 B:SLIME:EAT_FOOD:1d1
 F:RAND_25 | RAND_50 | DROP_60 | DROP_90 | INVISIBLE
 F:COLD_BLOOD | PASS_WALL | TAKE_ITEM | UNDEAD | EVIL
@@ -926,7 +926,7 @@ N:68:Disenchanter Eye
 A:DisenchanEye
 G:e:v
 I:10:7d8:2:10:10
-W:5:1:2:20
+W:5:1:10:20
 B:GAZE:UN_BONUS
 F:ATTR_MULTI | NEVER_MOVE | FLYING | HURT_LIGHT
 S:SPELL_PCT_11 | POW_2
@@ -1026,7 +1026,7 @@ D:A giant brown bat, the beating of whose wings produces a strangely
 D: unnerving noise.
 
 
-N:77:Creeping Silver Coins
+N:77:Creeping silver Coins
 A:Silver coins
 G:$:s2
 I:10:12d8:4:30:10
@@ -1090,7 +1090,7 @@ N:82:Bloodshot Eye
 A:BloodshotEye
 G:e:r
 I:11:4d8:2:6:10
-W:7:1:5:15
+W:7:1:10:15
 B:GAZE:BLIND:2d6
 F:NEVER_MOVE | FLYING | HURT_LIGHT
 S:SPELL_PCT_14 | POW_2
@@ -1407,7 +1407,7 @@ N:109:Disenchanter Mold
 A:DisenchaMold
 G:m:v
 I:11:16d8:2:20:70
-W:10:1:0:40
+W:10:1:15:40
 B:TOUCH:UN_BONUS:1d6
 F:ATTR_MULTI | NEVER_MOVE | STUPID | EMPTY_MIND | HURT_POIS
 F:HURT_ACID | HURT_FIRE | NO_SLOW | NO_FEAR | NO_STUN
@@ -1428,7 +1428,7 @@ F:WEIRD_MIND | BASH_DOOR | ANIMAL
 D:It is about four feet long and carnivorous.
 
 
-N:111:Creeping Gold Coins
+N:111:Creeping gold Coins
 A:CreepingGold
 G:$:y2
 I:10:18d8:5:36:10
@@ -1539,7 +1539,7 @@ N:120:Grape Jelly
 A:Grape jelly
 G:J:v
 I:11:52d8:2:1:99
-W:12:1:0:60
+W:12:1:20:60
 B:TOUCH:EXP_10:5d8
 F:NEVER_MOVE | STUPID | HAS_LIGHT | EMPTY_MIND | HURT_POIS
 F:HURT_ACID | HURT_LIGHT | HURT_FIRE | NO_SLOW | NO_FEAR
@@ -1931,7 +1931,7 @@ N:153:Violet Mold
 A:Violet Mold
 G:m:v
 I:11:17d8:2:15:70
-W:15:1:0:50
+W:15:1:15:50
 B:HIT:PARALYZE:1d2
 F:NEVER_MOVE | STUPID | EMPTY_MIND | HURT_POIS | HURT_ACID
 F:HURT_FIRE | NO_SLOW | NO_FEAR | NO_STUN | NO_CONF
@@ -2205,8 +2205,8 @@ A:Quylthulg
 G:Q:y
 I:11:4d8:10:1:0
 W:20:1:78:200
-F:FORCE_MAXHP | FORCE_EXTRA | INVISIBLE | EMPTY_MIND | NO_SLOW
-F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP | NEVER_MOVE
+F:FORCE_MAXHP | FORCE_EXTRA | NEVER_MOVE | INVISIBLE | EMPTY_MIND
+F:NO_SLOW | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
 S:SPELL_PCT_14 | POW_2
 S:BLINK | S_MONSTER
 D:It is a strange pulsing mound of flesh.
@@ -2363,7 +2363,7 @@ N:188:Black Ooze
 A:Black ooze
 G:O:D1
 I:9:6d8:10:6:1
-W:23:1:0:7
+W:23:1:15:7
 B:TOUCH:ACID:2d6
 F:RAND_25 | DROP_60 | STUPID | EMPTY_MIND | MULTIPLY
 F:OPEN_DOOR | KILL_BODY | TAKE_ITEM | HURT_FIRE | HURT_COLD
@@ -2983,7 +2983,7 @@ B:HIT:POISON:3d4
 B:HIT:LOSE_STR:3d4
 F:MALE | FORCE_MAXHP | DROP_1D2 | OPEN_DOOR | BASH_DOOR
 F:EVIL | HURT_FIRE | HURT_COLD
-D:A humanoid clothed in black who moves with blinding speed.
+D:A humanoid clothed in black who moves quietly, and with deadly intent.
 
 
 N:236:Barrow Wight
@@ -3564,8 +3564,8 @@ A:RottingQlthg
 G:Q:u
 I:12:12d8:20:1:0
 W:40:1:91:1000
-F:FORCE_MAXHP | FORCE_EXTRA | INVISIBLE | EMPTY_MIND | NO_SLOW
-F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP | NEVER_MOVE
+F:FORCE_MAXHP | FORCE_EXTRA | NEVER_BLOW | INVISIBLE | EMPTY_MIND
+F:NO_SLOW | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
 S:SPELL_PCT_25 | POW_2
 S:BLINK | S_UNDEAD
 D:It is a pulsing flesh mound that reeks of death and putrefaction.
