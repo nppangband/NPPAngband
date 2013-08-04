@@ -3675,8 +3675,6 @@ void play_game(void)
 	/* Hack -- Enforce "delayed death" */
 	if (p_ptr->chp < 0) p_ptr->is_dead = TRUE;
 
-	if (game_mode == GAME_NPPMORIA) birth_swap_weapons = adult_swap_weapons = TRUE;
-
 	/* Process */
 	while (TRUE)
 	{
