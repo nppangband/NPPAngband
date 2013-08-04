@@ -3389,7 +3389,13 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 				if (q_ptr->mon_idx == r_idx)
 				{
 					/*Is it at the proper depth?*/
-					if(p_ptr->depth != q_ptr->base_level)  return (FALSE);
+					/* Special placement of the moria monsters */
+					if (game_mode == GAME_NPPMORIA)
+					{
+						if(p_ptr->depth < q_ptr->base_level)	return (FALSE);
+					}
+
+					else if(p_ptr->depth != q_ptr->base_level)  return (FALSE);
 
 				}
 			}
