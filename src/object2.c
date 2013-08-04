@@ -734,7 +734,7 @@ s16b charge_staff(object_type *o_ptr, int percent)
 /*
  *
  * Determines the theme of a chest.  This function is called
- * from chest_death when the chest is being opened. JG
+ *  when the chest is being created. JG
  *
  */
 static int choose_chest_contents (void)
@@ -765,7 +765,16 @@ static int choose_chest_contents (void)
 
 	chestlevel = randint (num) + minlevel;
 
-
+	/* Hack - simpler themes for Moria */
+	if (game_mode == GAME_NPPMORIA)
+	{
+		/* chest theme #1 is treasure, theme 16 is a chest, not used here.  */
+		if (chestlevel <= 10) 	chest_theme = DROP_TYPE_GOLD;
+		else if (chestlevel <=25) chest_theme = DROP_TYPE_MORIA_ITEMS;
+		else if (one_in_(3)) 	chest_theme = DROP_TYPE_MORIA_WEAPONS;
+		else if (one_in_(2)) 	chest_theme = DROP_TYPE_MORIA_ARMOR_BODY;
+		else 					chest_theme = DROP_TYPE_MORIA_ARMOR_OTHER;
+	}
 
 	/*now determine the chest theme*/
 
@@ -819,6 +828,8 @@ static int choose_chest_contents (void)
 	 * dragon armor scale mail.
 	 */
 	else chest_theme = DROP_TYPE_DRAGON_ARMOR;
+
+
 
 	return(chest_theme);
 }
@@ -3270,6 +3281,59 @@ static bool kind_is_armor(int k_idx)
 }
 
 /*
+ * Hack -- determine if a template is wearable armor (all types).
+ *
+ */
+static bool kind_is_moria_armor_body(int k_idx)
+{
+	object_kind *k_ptr = &k_info[k_idx];
+
+	/* Analyze the item type */
+	switch (k_ptr->tval)
+	{
+		/* Armor -- suitable  unless damaged */
+		case TV_HARD_ARMOR:
+		case TV_SOFT_ARMOR:
+		case TV_SHIELD:
+		{
+			if (k_ptr->to_a < 0) return (FALSE);
+			return (TRUE);
+		}
+	}
+
+	/* Assume not armor */
+	return (FALSE);
+}
+
+/*
+ * Hack -- determine if a template is wearable armor (all types).
+ *
+ */
+static bool kind_is_moria_armor_other(int k_idx)
+{
+	object_kind *k_ptr = &k_info[k_idx];
+
+	/* Analyze the item type */
+	switch (k_ptr->tval)
+	{
+		/* Armor -- suitable  unless damaged */
+		case TV_CLOAK:
+		case TV_BOOTS:
+		case TV_GLOVES:
+		case TV_HELM:
+		case TV_CROWN:
+		{
+			if (k_ptr->to_a < 0) return (FALSE);
+			return (TRUE);
+		}
+	}
+
+	/* Assume not armor */
+	return (FALSE);
+}
+
+
+/*
  * Hack -- determine if a template is armor.
  *
  */
@@ -3548,6 +3612,38 @@ static bool kind_is_weapon(int k_idx)
 }
 
 /*
+ * Hack -- determine if a weapon is suitable for a moria chest.
+ */
+static bool kind_is_moria_weapons(int k_idx)
+{
+	object_kind *k_ptr = &k_info[k_idx];
+
+	/* Analyze the item type */
+	switch (k_ptr->tval)
+	{
+		/* Weapons -- suitable  unless damaged */
+		case TV_SWORD:
+		case TV_HAFTED:
+		case TV_POLEARM:
+		{
+			if (k_ptr->to_h < 0) return (FALSE);
+			if (k_ptr->to_d < 0) return (FALSE);
+			return (TRUE);
+		}
+
+		/* All firing weapons are suitable  */
+		case TV_BOW:
+		{
+			return (TRUE);
+		}
+	}
+
+	/* Assume not suitable */
+	return (FALSE);
+}
+
+
+/*
  * Hack -- determine if a scroll is suitable for a chest.
  *
  */
@@ -3769,6 +3865,70 @@ static bool kind_is_jewelry(int k_idx)
 	return (FALSE);
 }
 
+/*
+ * Hack -- determine if a rods/wands/staves are good for a moria chest.
+ *
+ */
+static bool kind_is_moria_items(int k_idx)
+{
+	object_kind *k_ptr = &k_info[k_idx];
+
+	/* Analyze the item type */
+	switch (k_ptr->tval)
+	{
+		/*potions suitable for a moria chest*/
+		case TV_POTION:
+		{
+			if (k_ptr->sval == SV_POTION_SPEED) return (TRUE);
+			if (k_ptr->sval == SV_POTION_HEALING) return (TRUE);
+			if ((k_ptr->sval == SV_POTION_INC_STR) &&
+				((k_ptr->k_level + 10) >= object_level )) return (TRUE);
+			if ((k_ptr->sval == SV_POTION_INC_INT) &&
+				((k_ptr->k_level + 10) >= object_level )) return (TRUE);
+			if ((k_ptr->sval == SV_POTION_INC_WIS) &&
+				((k_ptr->k_level + 10) >= object_level )) return (TRUE);
+			if ((k_ptr->sval == SV_POTION_INC_DEX) &&
+				((k_ptr->k_level + 10) >= object_level )) return (TRUE);
+			if ((k_ptr->sval == SV_POTION_INC_CON) &&
+				((k_ptr->k_level + 10) >= object_level )) return (TRUE);
+			if ((k_ptr->sval == SV_POTION_INC_CHR) &&
+				((k_ptr->k_level + 10) >= object_level )) return (TRUE);
+			if (k_ptr->sval == SV_POTION_EXPERIENCE) return (TRUE);
+			if (k_ptr->sval == SV_POTION_INVULNERABILITY) return (TRUE);
+
+			return (FALSE);
+		}
+
+		/*wands suitable for a chest*/
+		case TV_WAND:
+
+		{
+			if ((k_ptr->sval == SV_WAND_TELEPORT_AWAY) &&
+				((k_ptr->k_level + 20) >= object_level )) return (TRUE);
+			if ((k_ptr->sval == SV_WAND_STONE_TO_MUD) &&
+				((k_ptr->k_level + 20) >= object_level )) return (TRUE);
+			return (FALSE);
+
+		}
+
+		/*staffs suitable for a chest*/
+		case TV_STAFF:
+
+		{
+			if ((k_ptr->sval == SV_STAFF_TELEPORTATION) &&
+				((k_ptr->k_level + 20) >= object_level )) return (TRUE);
+			if (k_ptr->sval == SV_STAFF_SPEED) return (TRUE);
+			if (k_ptr->sval == SV_STAFF_DISPEL_EVIL) return (TRUE);
+			if (k_ptr->sval == SV_STAFF_BANISHMENT) return (TRUE);
+			if ((k_ptr->sval == SV_STAFF_DESTRUCTION) &&
+				((k_ptr->k_level + 20) >= object_level )) return (TRUE);
+			return (FALSE);
+		}
+	}
+
+	/* Assume not suitable */
+	return (FALSE);
+}
 
 
 
@@ -4003,7 +4163,10 @@ bool make_object(object_type *j_ptr, bool good, bool great, int objecttype, bool
 		else if (objecttype == DROP_TYPE_EDGED)					get_obj_num_hook = kind_is_edged;
 		else if (objecttype == DROP_TYPE_POLEARM)				get_obj_num_hook = kind_is_polearm;
 		else if (objecttype == DROP_TYPE_DIGGING)				get_obj_num_hook = kind_is_digging_tool;
-
+		else if (objecttype == DROP_TYPE_MORIA_ITEMS)			get_obj_num_hook = kind_is_moria_items;
+		else if (objecttype == DROP_TYPE_MORIA_WEAPONS)			get_obj_num_hook = kind_is_moria_weapons;
+		else if (objecttype == DROP_TYPE_MORIA_ARMOR_BODY)		get_obj_num_hook = kind_is_moria_armor_body;
+		else if (objecttype == DROP_TYPE_MORIA_ARMOR_OTHER)		get_obj_num_hook = kind_is_moria_armor_other;
 		/*
 		 *	If it isn't a chest, check good and great flags.
 		 *  They each now have their own templates.

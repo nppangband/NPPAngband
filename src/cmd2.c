@@ -406,6 +406,9 @@ static void chest_death(int y, int x, s16b o_idx)
 	 	 */
 		quality = randint (num) + minlevel;
 
+		/* Moria has less levels */
+		if (game_mode == GAME_NPPMORIA) quality += quality / 5;
+
 		/* Wipe the object */
 		object_wipe(i_ptr);
 
