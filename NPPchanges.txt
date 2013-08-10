@@ -1,4 +1,4 @@
-NPP 7.0.0 Beta-4 changes:
+NPP 7.0.0:
 Add moria game mode, based on Moria 5.5.2.
 Added opportunity to do a shield bash on a monster as in Moria.
 Reduced frequency of ghost challenges.
