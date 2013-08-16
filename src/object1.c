@@ -716,7 +716,7 @@ static size_t obj_desc_inscrip(const object_type *o_ptr, char *buf, size_t max, 
 	else if (o_ptr->discount > 0)
 	{
 		char buf[80];
-		my_strcpy(buf, format("%d%% off", o_ptr->discount), sizeof(buf));
+		my_strcpy(buf, format("%d pct off", o_ptr->discount), sizeof(buf));
 
 		u[n++] = buf;
 	}

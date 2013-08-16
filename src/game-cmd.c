@@ -403,23 +403,32 @@ void process_command(cmd_context ctx, bool no_request)
 			}
 		}
 
-		/* Command repetition */
-		if (game_cmds[idx].repeat_allowed)
+		if (player_can_repeat())
 		{
-			/* Auto-repeat */
-			if (game_cmds[idx].auto_repeat_n > 0 && p_ptr->command_arg == 0 && p_ptr->command_rep == 0)
-				p_ptr->command_arg = game_cmds[idx].auto_repeat_n;
+			/* Command repetition */
+			if (game_cmds[idx].repeat_allowed)
+			{
+				/* Auto-repeat */
+				if (game_cmds[idx].auto_repeat_n > 0 && p_ptr->command_arg == 0 && p_ptr->command_rep == 0)
+					p_ptr->command_arg = game_cmds[idx].auto_repeat_n;
 
-			allow_repeated_command();
+				allow_repeated_command();
+			}
+
+			cmd_enable_repeat();
 		}
 
-		repeat_prev_allowed = TRUE;
+		else cmd_disable_repeat();
 
 		if (game_cmds[idx].fn)
 			game_cmds[idx].fn(cmd.command, cmd.args);
 	}
 }
 
+void cmd_enable_repeat(void)
+{
+	repeat_prev_allowed = TRUE;
+}
 
 void cmd_disable_repeat(void)
 {

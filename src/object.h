@@ -103,6 +103,10 @@
 #define DROP_TYPE_EDGED					20
 #define DROP_TYPE_POLEARM				21
 #define DROP_TYPE_DIGGING				22
+#define DROP_TYPE_MORIA_ITEMS			23
+#define DROP_TYPE_MORIA_WEAPONS			24
+#define DROP_TYPE_MORIA_ARMOR_BODY		25
+#define DROP_TYPE_MORIA_ARMOR_OTHER		26
 
 
 /*** Object "tval" and "sval" codes ***/

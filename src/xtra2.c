@@ -131,10 +131,10 @@ void check_experience(void)
 		/* Handle stuff */
 		handle_stuff();
 	}
-
+	
 	/* Gain max levels while possible */
 	while ((p_ptr->max_lev < z_info->max_level) &&
-	       (p_ptr->max_exp >= (get_experience_by_level(p_ptr->lev-1) *
+	       (p_ptr->max_exp >= (get_experience_by_level(p_ptr->max_lev-1) *
 	                           p_ptr->expfact / 100L)))
 	{
 		/* Gain max level */

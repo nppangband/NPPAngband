@@ -35,7 +35,7 @@ static int moria_toac_adj()
 	else if (stat <  18)	return( 1);
 	else if (stat <  59)	return( 2);
 	else if (stat <  94)	return( 3);
-	else if (stat < 117)	return( 4);
+	else if (stat <= 117)	return( 4);
 	else			return( 5);
 }
 
@@ -51,7 +51,7 @@ static int moria_todam_adj()
 	else if (stat <  18)	return( 2);
 	else if (stat <  94)	return( 3);
 	else if (stat < 109)	return( 4);
-	else if (stat < 117)	return( 5);
+	else if (stat <= 117)	return( 5);
 	else return( 6);
 }
 
@@ -69,7 +69,7 @@ static int moria_tohit_adj()
 	else if (stat <  17)	total =	 1;
 	else if (stat <  18)	total =	 2;
 	else if (stat <  69)	total =	 3;
-	else if (stat < 118)	total =	 4;
+	else if (stat <= 117)	total =	 4;
 	else			total =	 5;
 
 	/* Now do strength adjustments */
@@ -80,7 +80,7 @@ static int moria_tohit_adj()
 	else if (stat <  18)	total -= 0;
 	else if (stat <  94)	total += 1;
 	else if (stat < 109)	total += 2;
-	else if (stat < 117)	total += 3;
+	else if (stat <= 117)	total += 3;
 	else			total += 4;
 	return(total);
 }
@@ -496,7 +496,7 @@ static void calc_hitpoints(void)
 		else if (con < 17)		bonus = 0;
 		else if (con ==  17)	bonus = 100;
 		else if (con <  94)		bonus = 200;
-		else if (con < 117)		bonus = 300;
+		else if (con <= 117)	bonus = 300;
 		else					bonus = 400;
 	}
 	else
@@ -877,6 +877,10 @@ static int calc_blows_moria(const object_type *o_ptr, player_state *new_state)
 	int str_index, dex_index;
 	int str = new_state->stat_use[A_STR];
 	int dex = new_state->stat_use[A_DEX];
+
+	/* Boundry control */
+	if (str > 118) str = 118;
+	if (dex  > 118) dex = 118;
 
 	if ((str * 15) < o_ptr->weight)
 	{

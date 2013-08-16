@@ -2137,6 +2137,13 @@ static bool store_will_buy(int store_num, const object_type *o_ptr)
 	if (store_num == STORE_HOME) return (TRUE);
 	if (store_num == STORE_GUILD) return (FALSE);
 
+	/* Some results are slightly different for Moria */
+	if (game_mode == GAME_NPPMORIA)
+	{
+		if ((store_num == STORE_TEMPLE) && (o_ptr->tval == TV_PRAYER_BOOK)) return (TRUE);
+		if ((store_num == STORE_MAGIC) &&  (o_ptr->tval == TV_MAGIC_BOOK)) 	return (TRUE);
+	}
+
 	/* Switch on the store */
 	switch (store_num)
 	{
@@ -5005,15 +5012,13 @@ static bool store_process_command(char cmd, void *db, int oid)
 			break;
 		}
 
-		/* Equipment list */
+		/* Equipment and inventory list */
 		case 'e':
-		{
-			equip_toggle = TRUE;
-		}
-
-		/* Inventory list */
 		case 'i':
 		{
+			/* Handle equipment command */
+			if (cmd == 'e') equip_toggle = TRUE;
+
 			/* Display the right thing until the user escapes */
 			do
 			{

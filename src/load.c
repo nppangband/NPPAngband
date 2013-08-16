@@ -2468,7 +2468,7 @@ bool load_player(void)
 		if (err) what = "Cannot read savefile";
 
 		rd_byte(&savefile_game);
-
+		
 		/* Close the file */
 		file_close(fff);
 	}
@@ -2594,3 +2594,77 @@ bool load_player(void)
 	return (FALSE);
 }
 
+/*
+ * Attempt to Load a gamemode
+ *
+ * That is, load just enough of the save file to determine whether
+ * we are playing Angband or Moria (and thus set game_mode) before
+ * returning
+ *
+ */
+void load_gamemode(void)
+{
+	int fd = -1;
+
+	errr err = 0;
+
+	byte vvv[4];
+	byte savefile_game=0;
+
+	/* Allow empty savefile name */
+	if (!savefile[0]) return;
+
+	/* Okay */
+	if (!err)
+	{
+		/* Grab permissions */
+		safe_setuid_grab();
+
+		/* Open the savefile */
+		fff = file_open(savefile, MODE_READ, -1);
+		if (fff)
+		{
+			fd = 0;
+		}
+		else fd = -1;
+
+		/* Drop permissions */
+		safe_setuid_drop();
+
+		/* No file */
+		if (fd < 0) err = -1;
+	}
+
+	/* Process file */
+	if (!err)
+	{
+		/* Read the first four bytes */
+		if (!file_read(fff, (char*)(vvv), 4)) err = -1;
+
+		rd_byte(&savefile_game);
+		
+		/* Close the file */
+		file_close(fff);
+	}
+	
+	/* Need to clear checksums so they wont glitch out the real load */
+	xor_byte = 0;
+	v_check = 0L;
+	x_check = 0L;
+	
+	if (err)
+	{
+		return;	
+	}
+
+	if (savefile_game == GAME_NPPMORIA)
+	{
+		game_mode = GAME_NPPMORIA;
+	}
+	else if (savefile_game == GAME_NPPANGBAND)
+	{
+		game_mode = GAME_NPPANGBAND;
+	}
+
+	return;
+}

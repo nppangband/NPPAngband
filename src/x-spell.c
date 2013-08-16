@@ -3691,7 +3691,7 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 			dice = 1;
 			sides = plev * 3;
 
-			if (name) return ("Dispel Evil");
+			if (name) return ("Dispel Undead");
 			if (desc) return (format("Does %dd%d damage to all evil creatures in line of sight.", dice, sides));
 			if (desc_short) return (format("dam %dd%d", dice, sides));
 			if (cast)

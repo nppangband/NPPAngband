@@ -1325,7 +1325,7 @@ bool set_recall(void)
 	if (!p_ptr->word_recall)
 	{
 		/* Reset recall depth */
-		if ((p_ptr->depth > 0) && (p_ptr->depth != p_ptr->recall_depth))
+		if ((p_ptr->depth > 0) && (p_ptr->depth != p_ptr->recall_depth) && (game_mode != GAME_NPPMORIA))
 		{
 			/*
 			 * ToDo: Add a new player_type field "recall_depth"
@@ -2456,8 +2456,8 @@ bool identify_fully(void)
 		o_ptr = &o_list[0 - item];
 	}
 
-	/* Identify the object and get the squelch setting */
-	squelch = do_ident_item(item, o_ptr);
+	/* Mark the item as fully known */
+	o_ptr->ident |= (IDENT_MENTAL);
 
 	/* Identify the object and get the squelch setting */
 	squelch = do_ident_item(item, o_ptr);

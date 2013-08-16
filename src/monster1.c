@@ -27,8 +27,6 @@ static cptr wd_his[3] =
 #define plural(c,s,p) \
 	(((c) == 1) ? (s) : (p))
 
-#define PLAYER_GHOST_TRIES_MAX 30
-
 
 typedef struct
 {

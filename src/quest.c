@@ -900,7 +900,7 @@ void grant_reward_hp(void)
 	int max = p_ptr->player_hp[0];
 	s16b new_hp[PY_MAX_LEVEL];
 
-	int max_increase = MIN((max * 5 / 2), (z_info->max_titles / 2));
+	int max_increase = MIN((max * 5 / 2), (z_info->max_level / 2));
 	int i, this_increase;
 
 	/* Get level 1 hitdice */
@@ -910,7 +910,7 @@ void grant_reward_hp(void)
      * Get the max increases for each level from the player_hp seed.
 	 * It's easier to work with the data this way.  Also find the current smallest increase.
 	 */
-	for (i = 1; i < z_info->max_titles; i++)
+	for (i = 1; i < z_info->max_level; i++)
 	{
 		new_hp[i] = (p_ptr->player_hp[i] - p_ptr->player_hp[i - 1]);
 	}
@@ -921,7 +921,7 @@ void grant_reward_hp(void)
 	 * is anywhere close to max HP in all levels.
 	 * for i = 1 because we know 0 is already maxed.
 	 */
-	for (i = 1; i < z_info->max_titles; i++)
+	for (i = 1; i < z_info->max_level; i++)
 	{
 		/* Already Maxed */
 		if (new_hp[i] == max) continue;
@@ -951,7 +951,7 @@ void grant_reward_hp(void)
 	/*
      * Re-calc the HP seed with the increases.
 	 */
-	for (i = 1; i < z_info->max_titles; i++)
+	for (i = 1; i < z_info->max_level; i++)
 	{
 		p_ptr->player_hp[i] = p_ptr->player_hp[i-1] + new_hp[i];
 	}

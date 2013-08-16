@@ -2296,20 +2296,25 @@ static s16b get_mimic_k_idx(int r_idx)
 
 		case '$':
 		{
-			cptr name = r_ptr->name_full;
+			char mon_name[MAX_MON_LONG_NAME];
+
+			my_strcpy(mon_name, r_ptr->name_full, sizeof(mon_name));
+
+			/* make it all lowecase for simplicity of checking */
+			string_lower(mon_name);
 
 			/* Look for textual clues */
-			if (strstr(name, " copper "))     	return (lookup_kind(TV_GOLD, SV_GOLD_COPPER));
-			if (strstr(name, " silver "))     	return (lookup_kind(TV_GOLD, SV_GOLD_SILVER));
-			if (strstr(name, " garnet"))       	return (lookup_kind(TV_GOLD, SV_GOLD_GARNET));
-			if (strstr(name, " gold"))       	return (lookup_kind(TV_GOLD, SV_GOLD_GOLD));
-			if (strstr(name, " mithril"))    	return (lookup_kind(TV_GOLD, SV_GOLD_MITHRIL));
-			if (strstr(name, " opal"))    		return (lookup_kind(TV_GOLD, SV_GOLD_OPALS));
-			if (strstr(name, " sapphire"))    	return (lookup_kind(TV_GOLD, SV_GOLD_SAPPHIRES));
-			if (strstr(name, " ruby"))    		return (lookup_kind(TV_GOLD, SV_GOLD_RUBIES));
-			if (strstr(name, " emerald"))    	return (lookup_kind(TV_GOLD, SV_GOLD_EMERALD));
-			if (strstr(name, " diamond"))    	return (lookup_kind(TV_GOLD, SV_GOLD_DIAMOND));
-			if (strstr(name, " adamantite ")) 	return (lookup_kind(TV_GOLD, SV_GOLD_ADAMANTITE));
+			if (strstr(mon_name, " copper "))     	return (lookup_kind(TV_GOLD, SV_GOLD_COPPER));
+			if (strstr(mon_name, " silver "))     	return (lookup_kind(TV_GOLD, SV_GOLD_SILVER));
+			if (strstr(mon_name, " garnet"))       	return (lookup_kind(TV_GOLD, SV_GOLD_GARNET));
+			if (strstr(mon_name, " gold"))       	return (lookup_kind(TV_GOLD, SV_GOLD_GOLD));
+			if (strstr(mon_name, " mithril"))    	return (lookup_kind(TV_GOLD, SV_GOLD_MITHRIL));
+			if (strstr(mon_name, " opal"))    		return (lookup_kind(TV_GOLD, SV_GOLD_OPALS));
+			if (strstr(mon_name, " sapphire"))    	return (lookup_kind(TV_GOLD, SV_GOLD_SAPPHIRES));
+			if (strstr(mon_name, " ruby"))    		return (lookup_kind(TV_GOLD, SV_GOLD_RUBIES));
+			if (strstr(mon_name, " emerald"))    	return (lookup_kind(TV_GOLD, SV_GOLD_EMERALD));
+			if (strstr(mon_name, " diamond"))    	return (lookup_kind(TV_GOLD, SV_GOLD_DIAMOND));
+			if (strstr(mon_name, " adamantite ")) 	return (lookup_kind(TV_GOLD, SV_GOLD_ADAMANTITE));
 			break;
 		}
 
@@ -3271,14 +3276,14 @@ void calc_monster_speed(int y, int x)
 	if (m_ptr->mflag & (MFLAG_SLOWER))
 	{
 		/* Allow some small variation each time to make pillar dancing harder */
-		i = calc_energy_gain(r_ptr->r_speed);
-		speed -= rand_spread(0, i);
+		i = calc_energy_gain(r_ptr->r_speed) / 10;
+		speed -= rand_range(0, i);
 	}
 	else if (m_ptr->mflag & (MFLAG_FASTER))
 	{
 		/* Allow some small variation each time to make pillar dancing harder */
-		i = calc_energy_gain(r_ptr->r_speed);
-		speed += rand_spread(0, i);
+		i = calc_energy_gain(r_ptr->r_speed) / 10;
+		speed += rand_range(0, i);
 	}
 
 	/*factor in the hasting and slowing counters*/
@@ -3384,7 +3389,13 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 				if (q_ptr->mon_idx == r_idx)
 				{
 					/*Is it at the proper depth?*/
-					if(p_ptr->depth != q_ptr->base_level)  return (FALSE);
+					/* Special placement of the moria monsters */
+					if (game_mode == GAME_NPPMORIA)
+					{
+						if(p_ptr->depth < q_ptr->base_level)	return (FALSE);
+					}
+
+					else if(p_ptr->depth != q_ptr->base_level)  return (FALSE);
 
 				}
 			}
@@ -5410,6 +5421,7 @@ void flush_monster_messages(void)
 			else m_ptr->smart &= ~(SM_GOOD_SAVE);
 			if (p_ptr->state.skills[SKILL_SAVE] >= 100) m_ptr->smart |= (SM_PERF_SAVE);
 			else m_ptr->smart &= ~(SM_PERF_SAVE);
+			break;
 		}
 
 		/* Archery attacks don't learn anything */
@@ -5480,6 +5492,7 @@ void flush_monster_messages(void)
 			else m_ptr->smart &= ~(SM_RES_SOUND);
 			if (p_ptr->state.resist_confu) m_ptr->smart |= (SM_RES_CONFU);
 			else m_ptr->smart &= ~(SM_RES_CONFU);
+			break;
 		}
 
 		/*

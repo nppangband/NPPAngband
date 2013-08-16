@@ -395,6 +395,26 @@ static byte monster_health_attr(const monster_type *m_ptr)
 	return attr;
 }
 
+static byte monster_hilite_attr(const monster_type *m_ptr)
+{
+	if (m_ptr == (&mon_list[p_ptr->health_who]))
+	{
+		if (m_ptr->project)
+		{
+			return TERM_ORANGE;
+		}
+		else
+		{
+			return TERM_UMBER;
+		}
+	}
+	else if (m_ptr->project)
+	{
+		return TERM_WHITE;
+	}
+	return TERM_L_DARK;
+}
+
 /*
  * Redraw the "monster health bar"
  *
@@ -456,6 +476,8 @@ static void prt_health(int row, int col, const monster_type *m_ptr)
 		Term_putstr(col, row, 12, TERM_WHITE, "----------]");
 
 		Term_putstr(col, row, 11, TERM_WHITE, "----------]");
+				
+		Term_putstr(col+10, row, 1, monster_hilite_attr(m_ptr), "]");
 
 		/* Dump the current "health" (handle monster stunning, confusion) */
 		if (m_ptr->m_timed[MON_TMD_CONF])
@@ -637,7 +659,8 @@ static void prt_depth(int row, int col)
  */
 static void prt_mon_mana(int row, int col, const monster_type *m_ptr)
 {
-
+	byte hilite = monster_hilite_attr(m_ptr);
+	
 	/* Not alive, or no mana */
 	if (!m_ptr->r_idx)
 	{
@@ -692,6 +715,9 @@ static void prt_mon_mana(int row, int col, const monster_type *m_ptr)
 
 		/* Default to "unknown" */
 		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
+		
+		Term_putstr(col+11, row, 1, hilite, "]");
+		Term_putstr(col, row, 1, hilite, "[");
 
 		/* Dump the current "mana"*/
 		Term_putstr(col + 1, row, len, TERM_L_GREEN, "**********");

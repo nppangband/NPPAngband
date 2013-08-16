@@ -32,7 +32,7 @@ Command Summary -- Original keyset
      u  Use a staff                          U  (unused)
      v  Throw an item                        V  Version info
      w  Wear/wield equipment                 W  (unused)
-     x  (unused)                             X  (switch weapon macro)
+     x  Swap Weapons                         X  (switch weapon macro)
      y  (unused)                             Y  (unused)
      z  Zap a rod                            Z  (unused)
      !  Interact with system                ^A  (special - debug command)
@@ -56,7 +56,7 @@ Command Summary -- Original keyset
      ;  Walk (normal pickup)                ^S  Save and don't quit
      :  Take notes                          ^T  (unused)
      '  Target closest monster              ^U  (unused)
-     "  Enter a user pref command           ^V  Repeat last command
+     "  Enter a user pref command           ^V  (unused)
      ,  Stay still (normal pickup)          ^W  (special - wizard mode)
      <  Go up staircase                     ^X  Save and quit
      .  Run                                 ^Y  (unused)

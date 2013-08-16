@@ -729,6 +729,7 @@ extern void player_flags(u32b *f1, u32b *f2, u32b *f3, u32b *fn);
 extern void display_player_stat_info(int row, int col);
 extern void display_player(int mode, bool onscreen);
 extern errr file_character(cptr name, bool full);
+extern void string_lower(char *buf);
 extern bool show_file(cptr name, cptr what, int line, int mode);
 extern void do_cmd_help(void);
 extern void process_player_name(bool sf);
@@ -780,13 +781,14 @@ extern void cleanup_angband(void);
 
 /* load.c */
 extern bool load_player(void);
+extern void load_gamemode(void);
 
 /* melee1.c */
 extern int drain_charges(object_type *o_ptr, u32b heal);
 extern bool make_attack_normal(monster_type *m_ptr);
 extern int get_dam(monster_race *r_ptr, int attack);
 extern int get_breath_dam(s16b hit_points, int gf_type, bool powerful);
-extern int get_ball_beam_dam(monster_race *r_ptr, int attack, int gf_type, bool powerful);
+extern int get_ball_beam_dam(int m_idx, monster_race *r_ptr, int attack, int gf_type, bool powerful);
 extern void mon_cloud(int m_idx, int typ, int dam, int rad);
 extern bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px);
 extern void cloud_surround(int r_idx, int *typ, int *dam, int *rad);
@@ -1339,6 +1341,7 @@ extern bool set_timed(int idx, int v, bool notify);
 extern bool inc_timed(int idx, int v, bool notify);
 extern bool dec_timed(int idx, int v, bool notify);
 extern bool clear_timed(int idx, bool notify);
+extern bool player_can_repeat(void);
 extern bool set_stun(int v);
 extern bool set_cut(int v);
 extern bool set_food(int v);

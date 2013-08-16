@@ -4081,6 +4081,7 @@ static bool project_o(int who, int y, int x, int dam, int typ)
 				do_kill = TRUE;
 				kill_art = TRUE;
 				note_kill = (plural ? " are destroyed!" : " is destroyed!");
+				break;
 			}
 
 			case GF_BWATER:
@@ -5182,6 +5183,8 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			if (seen) obvious = TRUE;
 
 			note_dies = MON_MSG_BURIED_ROCK;
+
+			break;
 		}
 
 

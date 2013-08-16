@@ -512,16 +512,16 @@ bool set_effect_glyph(byte y, byte x)
 /*
  * Move an effect from index i1 to index i2 in the effect list
  */
-static void compact_effects_aux(int old, int new)
+static void compact_effects_aux(int effect_old, int effect_new)
 {
 	int i;
 
 	int y, x;
 
-	effect_type *x_ptr = &x_list[old];
+	effect_type *x_ptr = &x_list[effect_old];
 
 	/* Do nothing */
-	if (old == new) return;
+	if (effect_old == effect_new) return;
 
 	/* Repair effects */
 	for (i = 1; i < x_max; i++)
@@ -530,10 +530,10 @@ static void compact_effects_aux(int old, int new)
 		if (!x_list[i].x_type) continue;
 
 		/* Repair "next" pointers */
-		if (x_list[i].next_x_idx == old)
+		if (x_list[i].next_x_idx == effect_old)
 		{
 			/* Repair */
-			x_list[i].next_x_idx = new;
+			x_list[i].next_x_idx = effect_new;
 		}
 	}
 
@@ -542,16 +542,16 @@ static void compact_effects_aux(int old, int new)
 	x = x_ptr->x_cur_x;
 
 	/* Hack -- move effect */
-	COPY(&x_list[new], &x_list[old], effect_type);
+	COPY(&x_list[effect_new], &x_list[effect_old], effect_type);
 
 	/* Hack -- wipe hole */
 	effect_wipe(x_ptr);
 
 	/* Repair grid */
-	if (cave_x_idx[y][x] == old)
+	if (cave_x_idx[y][x] == effect_old)
 	{
 		/* Repair */
-		cave_x_idx[y][x] = new;
+		cave_x_idx[y][x] = effect_new;
 	}
 }
 

@@ -3660,6 +3660,9 @@ void play_game(void)
 	/* Start with normal object generation mode */
 	object_generation_mode = OB_GEN_MODE_NORMAL;
 
+	/* Start with the item_tester_swap variable as true */
+	item_tester_swap = TRUE;
+
 	/* Hack -- Decrease "icky" depth */
 	character_icky--;
 
@@ -3671,8 +3674,6 @@ void play_game(void)
 
 	/* Hack -- Enforce "delayed death" */
 	if (p_ptr->chp < 0) p_ptr->is_dead = TRUE;
-
-	if (game_mode == GAME_NPPMORIA) birth_swap_weapons = adult_swap_weapons = TRUE;
 
 	/* Process */
 	while (TRUE)
