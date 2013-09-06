@@ -5,7 +5,7 @@ Bugfix: Fix height and weight rangess for all Moria races.
 Bugfix: Fix shortened names for Orcs ad Orc Warriors
 Bugfix: Rangers could not read or cast from the mage spellset.
 Bugfix: Create food spell was broken.
-Bugfix: Activation for the Phial was broken in NPPMoria
+Bugfix: Equipment activations for were not working.
 
 
 
