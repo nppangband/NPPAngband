@@ -26,7 +26,7 @@
  * Used by show_inven(), show_equip(), and show_floor().  Mode flags are
  * documented in object.h
  */
-static void show_obj_list(int num_obj, char labels[50][80], object_type *objects[50], byte mode)
+static void show_obj_list(int num_obj, char labels[50][80], object_type *objects[50], int mode)
 {
 	int i, row = 0, col = 0;
 	size_t max_len = 0;
@@ -276,7 +276,7 @@ bool find_object_in_use(int *item)
  * off to show_obj_list() for display.  Mode flags documented in
  * object.h
  */
-void show_inven(byte mode)
+void show_inven(int mode)
 {
 	int i, last_slot = 0;
 
@@ -660,7 +660,7 @@ void display_equip(void)
  * off to show_obj_list() for display.  Mode flags documented in
  * object.h
  */
-void show_equip(byte mode)
+void show_equip(int mode)
 {
 	int i, last_slot = 0;
 
@@ -749,7 +749,7 @@ void show_equip(byte mode)
  * off to show_obj_list() for display.  Mode flags documented in
  * object.h
  */
-void show_floor(const int *floor_list, int floor_num, byte mode)
+void show_floor(const int *floor_list, int floor_num, int mode)
 {
 	int i;
 
@@ -1644,6 +1644,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 					refresh = TRUE;
 					break;
 				}
+				/* Do not use break */
 			}
 			case '.':
 			{
@@ -2008,7 +2009,7 @@ bool get_item_beside(int *cp, cptr pmt, cptr str, int sq_y, int sq_x)
 	/* Forget the item_tester_tval restriction */
 	item_tester_tval = 0;
 
-	/* Forger the item tester_swap restriction */
+	/* Forget the item tester_swap restriction */
 	item_tester_swap = FALSE;
 
 	/* Forget the item_tester_hook restriction */
@@ -2349,7 +2350,6 @@ static void collect_commands(const object_type *o_ptr, int item)
 		/*  Check if the object can be activated and it isn't charging */
 		if (obj_can_activate(o_ptr))
 		{
-
 			if ((!adult_swap_weapons) || (item != INVEN_SWAP_WEAPON))
 			{
 				add_command(CMD_ACTIVATE);
