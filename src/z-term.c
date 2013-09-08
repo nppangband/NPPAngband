@@ -1996,7 +1996,8 @@ errr Term_event_push(const ui_event_data *ke)
 errr Term_inkey(ui_event_data *ch, bool wait, bool take)
 {
 	/* Assume no key */
-	ch->type = ch->key = 0;
+	ch->type = (ui_event_type)NULL;
+	ch->key = 0;
 
 	/* Hack -- get bored */
 	if (!Term->never_bored)
