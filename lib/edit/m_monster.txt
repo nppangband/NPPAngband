@@ -1040,7 +1040,7 @@ D:It appears to be a pile of silver coins.
 
 
 N:78:Orc
-A:Hill orc
+A:Orc
 G:o:u
 I:11:9d8:20:32:30
 W:6:1:0:16
@@ -1479,7 +1479,7 @@ D:It is a shambling orcish corpse leaving behind a trail of flesh.
 
 
 N:115:Orc Warrior
-A:Orc captain
+A:Orc Warrior
 G:o:o
 I:11:11d8:20:36:25
 W:11:1:0:34
