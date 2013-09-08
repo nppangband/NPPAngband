@@ -1,13 +1,11 @@
 
 ====== Races ======
 
-     There are eleven different races that you may choose among, representing
+     There are eight different races that you may choose among, representing
 most of the speaking peoples found in Tolkien's books, plus Gnomes and Kobolds.
 Races differ in vital statistics, and tend to be better at some abilities than
 at others.
-     Good races for new players are Dunedain and High-Elves (powerful but slow
-at gaining levels), and Elves and Dwarves (good abilities, not too slow at
-gaining levels).
+     Good races for new players are Elves and Dwarves (good abilities).
 
 ***** <Human>
 Human:

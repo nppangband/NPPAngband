@@ -93,7 +93,7 @@ when you wield new ammo) Fixed pseudo-tags appears as "@f1", "@f7", etc.
 to deal with shooting will note that the 'f'ire command is more careful now and
 it doesn't use the next slot automatically when a whole stack of ammo is shot.
      You'll notice that ammo on the floor is automatically wielded if it has
-been fired from, or can be merged with ith existing ammo in the quiver. 
+been fired from, or can be merged with existing ammo in the quiver. 
 You can also use the "=g" inscription to pick up ammo and place it in the quiver 
 regardless of the existence of matching ammo in the quiver.
      Throwing weapons can be put in the quiver too. You must inscribe the
@@ -174,7 +174,7 @@ armor, for a price.
      - Wands and staffs can be destroyed by failed recharges.
      - Boiling mud destroys scrolls.
      - Boiling water destroys flasks, potions, and bottles.
-     - Lava can destroy vitrually all objects, unless the object is indescructable,
+     - Lava can destroy virtually all objects, unless the object is indestructable,
        such as an artifact.
 
 
@@ -207,7 +207,7 @@ fight and kill monsters, use various attacks on them, probe them with magic, and
 get killed by them, you learn more about their strengths and weaknesses.
      You recall this memory in one of three ways:  'l'ooking at/e'x'amining the
 monster and then pressing 'r' for recall, or by pressing '/' and typing the
-monster's letter, or by pressing '~' and going to the monster knowlesge section.
+monster's letter, or by pressing '~' and going to the monster knowledge section.
      Unlike object memory, monster memory can be passed on even after your
 character dies.  You may use menu commands or command-line options to open up a
 specific file that contains a character with a monster memory.

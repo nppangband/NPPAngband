@@ -176,7 +176,7 @@ fight and kill monsters, use various attacks on them, probe them with magic, and
 get killed by them, you learn more about their strengths and weaknesses.
      You recall this memory in one of three ways:  'l'ooking at/e'x'amining the
 monster and then pressing 'r' for recall, or by pressing '/' and typing the
-monster's letter, or by pressing '~' and going to the monster knowlesge section.
+monster's letter, or by pressing '~' and going to the monster knowledge section.
      Unlike object memory, monster memory can be passed on even after your
 character dies.  You may use menu commands or command-line options to open up a
 specific file that contains a character with a monster memory.
@@ -246,5 +246,4 @@ danger they pose to you.  Some of the more interesting are listed and described.
        unskilled
      - Blows : Monsters can do great damage and inflict nasty effects in melee.
  
-
 

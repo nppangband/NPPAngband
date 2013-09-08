@@ -1,5 +1,4 @@
-
-====== Character Attributes ======
+===== Character Attributes ======
 
 --- Basic attributes ---
 
@@ -254,4 +253,4 @@ and flying.
 
 Dtrap:
      The player is in an area where they have detected traps.  If the player 
-is on the edge of the detect area, the text "DTrap" is yellow. 
+is on the edge of the detect area, the text "DTrap" is yellow.

@@ -80,14 +80,14 @@ Merge discounts when stacking                 [stack_force_costs]    (off):
 larger discount.
 
 ***** <auto_display_lists>
-Automatically display drop-down lists	     [auto_display_lists]   (off)  :	
+Automatically display drop-down lists       [auto_display_lists]   (off)  :  
     If selecting anything from a list, the list will automatically pop up.  Lists
 of objects will automatically display when targeting with the (l)ook command.
 
 ***** <easy_open>
 Open/Disarm/Close without direction           [easy_open]            (off):
      When you issue the open, close, or disarm commands, and there is only one
-useable door or visible trap adjacent to you, it is selected automatically.
+usable door or visible trap adjacent to you, it is selected automatically.
 
 ***** <easy_alter>
 Open/Disarm doors/traps on movement           [easy_alter]           (off):
@@ -114,7 +114,7 @@ Monsters exploit players weaknesses           [smart_cheat]          (off):
 learning.
 
 ***** <xchars_to_file>
-Allow accents in output files		    [xchars_to_file]   	 (off)  :	
+Allow accents in output files        [xchars_to_file]      (off)  :  
     Allow non-ascii characters to be saved in output files.
 
 
@@ -122,7 +122,7 @@ Allow accents in output files		    [xchars_to_file]   	 (off)  :
 
 ***** <hp_changes_color>
 Player color indicates low hit points         [hp_changes_color]     (off) :
-	As a player's hitpoints drops, the color of the player changes 
+     As a player's hitpoints drops, the color of the player changes 
 as a warning.  90-100% of max hp - White.  70-89% - Yellow.  50-69% -
 Orange.  30-49% - Light Red.  Less than 30% of max hp - Red.
 
@@ -148,14 +148,14 @@ Show flavors in object descriptions           [show_flavors]         (on) :
 screens, even for objects whose type is known.  This does not affect objects in
 stores.
 
-***** <view_yellow_lighte>
+***** <view_yellow_light>
 Use special colors for torch lite             [view_yellow_light]     (off) :
      If the option "view_special_light" is also on, floor grids that are only
 lit by the player's own light source will appear yellow.  If the option
 "view_granite_light" is on, walls will be colored in the same way.  Turning this
 option off will slightly increase the speed of the game.
 
-***** <view_bright_lighte>
+***** <view_bright_light>
 Use special colors for field of view          [view_bright_lite]     (off) :
      This option causes special colors to be used for non "viewable" grids in
  certain situations (see "view_granite_lite" and "view_special_lite"). When 
@@ -293,7 +293,7 @@ Adult: Preserve artifacts when leaving level  [adult_money]         (off) :
 
 ***** <birth_take_notes>
 Adult:  Have notes to written to a file       [adult_take_notes]     (off) :
-	Character can write notes to a specific file.  In addition, notes
+     Character can write notes to a specific file.  In addition, notes
 are taken automatically when: a player reaches a character level
 divisible by 5 (5, 10, 15, etc..), a unique is killed, an artifact is
 identified, or a greater vault is found.  The turn, character level, and 
@@ -333,9 +333,9 @@ wide-open spaces.
 
 
 ***** <birth_no_selling>
-Adult: 	No selling items to stores     		[birth_no_store_services] (off) :
+Adult: No selling items to stores         [birth_no_store_services] (off) :
     If this option is set, items will sell to the stores for 0 gold.  Gold found
-in the dungeon will be approximatly 5 times the value.
+in the dungeon will be approximately 5 times the value.
 
 
 --- Option Set #7:  Cheat ---

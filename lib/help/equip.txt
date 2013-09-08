@@ -3,7 +3,7 @@
 
 
      All effective combat methods require equipment, and all benefit greatly
-from various qualities that your equipped items may possess.  Defence is
+from various qualities that your equipped items may possess.  Defense is
 similarly equipment-dependent.
      Attacks can also benefit or be hindered depending on the terrain in which 
 the player or creature is standing.

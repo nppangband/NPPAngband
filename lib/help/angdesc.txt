@@ -26,8 +26,8 @@ First came "VMS Moria", by Robert Alan Koeneke (1985).
 
 Then came "Umoria" (Unix Moria), by James E. Wilson (1989).
 
-NPPMoria is based on the NPPAngband codebas, and Moria 5.5.2, maintained by 
-David Grabner. 
+NPPMoria is based on the NPPAngband codebase, and Moria 5.5.2, maintained by 
+David Grabner.
 
 In 1990, Alex Cutler and Andy Astrand, with the help of other students
 at the University of Warwick, created Angband 1.0, based on the existing
