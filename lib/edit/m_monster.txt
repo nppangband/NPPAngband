@@ -1,4 +1,4 @@
-# File: monster.txt
+# File: m_monster.txt
 
 
 # This file is used to initialize the monster race information for the NPPAngband game.
