@@ -377,7 +377,7 @@ extern int rogue_shot(const object_type *o_ptr, int *plus, player_state shot_sta
 extern bool check_hit(int power);
 extern int critical_hit_chance(const object_type *o_ptr, player_state a_state, bool id_only);
 extern int critical_hit_check(const object_type *o_ptr, int *dd, int *plus);
-extern int critical_shot_chance(const object_type *o_ptr, player_state a_state, bool throw, bool id_only, u32b f3);
+extern int critical_shot_chance(const object_type *o_ptr, player_state a_state, bool thr, bool id_only, u32b f3);
 extern void py_attack(int y, int x);
 extern void do_cmd_fire(cmd_code code, cmd_arg args[]);
 extern void textui_cmd_fire(void);
