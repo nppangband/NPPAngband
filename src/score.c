@@ -88,7 +88,7 @@ static size_t highscore_read(high_score scores[], size_t sz)
 
 	if(game_mode == GAME_NPPMORIA) path_build(fname, sizeof(fname), ANGBAND_DIR_APEX, "m_scores.raw");
 	else path_build(fname, sizeof(fname), ANGBAND_DIR_APEX, "scores.raw");
-	scorefile = file_open(fname, MODE_READ, -1);
+	scorefile = file_open(fname, MODE_READ, FTYPE_TEXT);
 
 	if (!scorefile) return TRUE;
 
