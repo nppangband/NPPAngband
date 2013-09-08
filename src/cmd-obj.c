@@ -4099,13 +4099,14 @@ static void do_item(item_act act)
 	/* Don't allow activation of swap weapons */
 	if (adult_swap_weapons)
 	{
-		if (item_actions[act].command == CMD_ACTIVATE)  item_tester_swap = FALSE;
+		if (item_actions[act].command == CMD_ACTIVATE)  item_tester_swap = TRUE;
 	}
 
 	/* Get item */
 	q = item_actions[act].prompt;
 	s = item_actions[act].noop;
 	item_tester_hook = item_actions[act].filter;
+
 	if (!get_item(&item, q, s, item_actions[act].mode)) return;
 
 	/* Get the item */

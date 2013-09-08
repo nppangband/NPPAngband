@@ -932,7 +932,7 @@ extern bool weapon_inscribed_for_quiver(const object_type *o_ptr);
 extern bool slot_can_wield_item(int slot, const object_type *o_ptr);
 extern cptr mention_use(int i);
 extern cptr describe_use(int i);
-extern bool item_tester_okay(const object_type *o_ptr);
+extern bool item_tester_okay(const object_type *o_ptr, int obj_num);
 extern int scan_floor(int *items, int size, int y, int x, int mode);
 extern void excise_object_idx(int o_idx);
 extern void delete_object_idx(int o_idx);
