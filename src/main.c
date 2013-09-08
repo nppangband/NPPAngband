@@ -88,7 +88,6 @@ static void quit_hook(cptr s)
 }
 
 
-
 /*
  * SDL needs a look-in
  */
@@ -142,7 +141,6 @@ static void init_stuff(void)
 }
 
 
-
 /*
  * Handle a "-d<what>=<path>" option
  *
@@ -160,8 +158,6 @@ static void change_path(cptr info)
 	string_free(ANGBAND_DIR_USER);
 	ANGBAND_DIR_USER = string_make(info);
 }
-
-
 
 
 #ifdef SET_UID
@@ -348,7 +344,7 @@ int main(int argc, char *argv[])
 						game_mode = GAME_NPPMORIA;
 						break;
 					}
-					
+
 					case 'a':
 					case 'A':
 					{
@@ -358,7 +354,7 @@ int main(int argc, char *argv[])
 				}
 				continue;
 			}
-			
+
 			case 'd':
 			case 'D':
 			{
@@ -400,6 +396,9 @@ int main(int argc, char *argv[])
 				/* Actually abort the process */
 				quit(NULL);
 			}
+
+			/* Compiler happiness */
+			break;
 		}
 		if (*arg) goto usage;
 	}

@@ -414,16 +414,16 @@ void process_command(cmd_context ctx, bool no_request)
 
 				allow_repeated_command();
 			}
-
 			cmd_enable_repeat();
 		}
-
-		else cmd_disable_repeat();
+		else
+			cmd_disable_repeat();
 
 		if (game_cmds[idx].fn)
 			game_cmds[idx].fn(cmd.command, cmd.args);
 	}
 }
+
 
 void cmd_enable_repeat(void)
 {

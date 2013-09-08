@@ -206,22 +206,22 @@ struct term_data
 	WindowRef w;
 	GlyphInfo *ginfo;
 
-	Rect wr;        /* Absolute bounds of window (for save/restore) */
-	Rect r;            /* Canvas bounds of window (for mouse addressing &c)  */
-	CGRect bounds;  /* Relative bounds of border-clipped canvas. */
+	Rect wr;			/* Absolute bounds of window (for save/restore) */
+	Rect r;				/* Canvas bounds of window (for mouse addressing &c)  */
+	CGRect bounds;		/* Relative bounds of border-clipped canvas. */
 
-	int spacing;      /* Text padding (in pixels) for tiling wider than text */
+	int spacing;		/* Text padding (in pixels) for tiling wider than text */
 
-	char title[255];    /* Window title. */
+	char title[255];	/* Window title. */
 
-	s16b mapped;    /* Active state. */
+	s16b mapped;		/* Active state. */
 
-	s16b rows;        /* rows in picture */
-	s16b cols;        /* columns in picture. */
+	s16b rows;			/* rows in picture */
+	s16b cols;			/* columns in picture. */
 
 	char font_name[200]; /* Name of font for storage. */
 	ATSUFontID font_id;
-	float font_size;    /* Scaled ATSU font size. */
+	float font_size;	/* Scaled ATSU font size. */
 
 	s16b font_wid;
 	s16b font_hgt;
@@ -229,8 +229,8 @@ struct term_data
 	s16b tile_wid;
 	s16b tile_hgt;
 
-	s16b size_wid;    /* Window size in x. */
-	s16b size_hgt;    /* Window size in y. */
+	s16b size_wid;		/* Window size in x. */
+	s16b size_hgt;		/* Window size in y. */
 };
 
 struct GlyphInfo
@@ -301,12 +301,13 @@ static long mac_os_version;
  * (It is a parallel structure to the Term variable.)
  */
 struct ActivePort {
-	WindowRef        active;
-	CGContextRef    ctx;
-	int                  color;   /* Current fill colorcode */
-	/* CGColorRef        color_info[256+1]; */
-	float color_info[256+1][3];
+	WindowRef		active;
+	CGContextRef	ctx;
+	int				color;	/* Current fill colorcode */
+	/* CGColorRef	color_info[256+1]; */
+	float			color_info[256+1][3];
 };
+
 
 static struct ActivePort focus; /* initialized to 0 */
 
@@ -347,9 +348,9 @@ static MenuRef MyGetMenuHandle_aux(int menuID, bool first)
 	}
 
 	/*
-	 * First heirarchical call, find and initialize all menu IDs.
+	 * First hierarchical call, find and initialize all menu IDs.
 	 * Subsequent misses will attempt to update the menuRefs array.
-	 * This will work for any depth heirarchy, so long as child menus have
+	 * This will work for any depth hierarchy, so long as child menus have
 	 * higher IDs than their parents.
 	 *
 	 * Invariant: all MenuRefs with ID < MenuID(tmp) have been initialized.
@@ -373,7 +374,7 @@ static MenuRef MyGetMenuHandle_aux(int menuID, bool first)
 
 /*
  * Provide a flat namespace for OS X menus and submenus.
- * It's a nuisance doing this via heirarchical calls all the time.
+ * It's a nuisance doing this via hierarchical calls all the time.
  */
 inline static MenuRef MyGetMenuHandle(int menuID)
 {
@@ -474,7 +475,7 @@ static void activate(WindowRef w)
 
 		term_data *td = (term_data*)GetWRefCon(w);
 
-		/* Start queueing graphics events. */
+		/* Start queuing graphics events. */
 		/* and set up the context */
 		QDBeginCGContext(GetWindowPort(w), &focus.ctx);
 
@@ -537,6 +538,7 @@ static void hibernate()
 	focus.ctx = 0;
 }
 
+
 /*
  * Display a warning message
  */
@@ -553,6 +555,7 @@ static void mac_warning(cptr warning)
 	/* DisposeDialog(dlg); // NO! */
 	CFRelease(msg);
 }
+
 
 /*
  * Notice fully up-to-date status of the main window
@@ -601,6 +604,7 @@ static void update_color_info(void)
 	}
 }
 
+
 /*
  * Activate a color (0 to 256)
  * -1 is invalid, 256 is true black.
@@ -619,6 +623,7 @@ inline static void term_data_color(int a)
 							focus.color_info[a][1], focus.color_info[a][2], 1);
 	}
 }
+
 
 /*
  * Get font metrics
@@ -747,6 +752,7 @@ static void release_glyph_info(GlyphInfo *info)
 	}
 }
 
+
 /*
  * Hack -- Apply and Verify the "font" info
  *
@@ -783,15 +789,12 @@ static void term_data_check_size(term_data *td)
 {
 	if (td == &data[0])
 	{
-
 		/* Enforce minimal size for the main game window */
 		if (td->cols < 80) td->cols = 80;
 		if (td->rows < 24) td->rows = 24;
-
 	}
 	else
 	{
-
 		/* Information windows can be much smaller */
 		if (td->cols < 10) td->cols = 10;
 		if (td->rows < 5) td->rows = 5;
@@ -865,7 +868,6 @@ static void term_data_check_size(term_data *td)
 		/* Use higher pict whenever possible */
 		td->t->higher_pict = TRUE;
 	}
-
 }
 
 
@@ -956,14 +958,14 @@ static struct
 	CGImageRef *tile_images;
 } frame = {0};
 
+
 /*
- * Rendevous for font update events.
+ * Rendezvous for font update events.
  */
 static struct
 {
 	WindowRef focus; /* The most recently focused window. (NOT the fontpanel.) */
 } fontInfo;
-
 
 
 /*
@@ -992,6 +994,7 @@ void DrawSubimage (CGContextRef context, CGRect dst,
 	/* CGContextDrawImage (context, &drawRect, image); */
 	CGContextRestoreGState (context);
 }
+
 
 /*
  * Copy an image with tiles of size src into a new one with
@@ -1100,6 +1103,7 @@ static CGImageRef GetTileImage(int row, int col, bool has_alpha)
 	return timg;
 }
 
+
 static void DrawTile(int x, int y, byte a, byte c, byte ta, byte tc)
 {
 	term_data *td = (term_data*) Term->data;
@@ -1132,11 +1136,12 @@ static void DrawTile(int x, int y, byte a, byte c, byte ta, byte tc)
 	}
 }
 
+
 static void ShowTextAt(int x, int y, int color, int n, const char *text )
 {
 	term_data *td = (term_data*) Term->data;
 	GlyphInfo *info = td->ginfo;
-	/* Overwite the text, unless it's being called recursively. */
+	/* Overwrite the text, unless it's being called recursively. */
 	if(use_overwrite_hack && color != COLOR_BLACK) {
 		Term_wipe_mac_aux(x, y, n);
 	}
@@ -1295,7 +1300,7 @@ static errr graphics_nuke(void)
 }
 
 
-/* Arbitary limit on number of possible samples per event */
+/* Arbitrary limit on number of possible samples per event */
 #define MAX_SAMPLES            8
 
 /* Struct representing all data for a set of event samples */
@@ -1311,7 +1316,7 @@ static sound_sample_list samples[MSG_MAX];
 /*
  * Load sound effects based on sound.cfg within the xtra/sound directory;
  * bridge to Cocoa to use NSSound for simple loading and playback, avoiding
- * I/O latency by cacheing all sounds at the start.  Inherits full sound
+ * I/O latency by caching all sounds at the start.  Inherits full sound
  * format support from Quicktime base/plugins.
  * pelpel favoured a plist-based parser for the future but .cfg support
  * improves cross-platform compatibility.
@@ -1413,7 +1418,7 @@ static void load_sounds(void)
 				samples[event].sound[num] = [[NSSound alloc] initWithContentsOfFile:[NSString stringWithUTF8String:path] byReference:NO];
 				if (samples[event].sound[num] != nil) {
 
-					/* Imcrement the sample count */
+					/* Increment the sample count */
 					samples[event].num++;
 				}
 			}
@@ -1451,12 +1456,10 @@ static void load_sounds(void)
 }
 
 
-
 /*
  * Play sound effects asynchronously.  Select a sound from any available
  * for the required event, and bridge to Cocoa to play it.
  */
-
 static void play_sound(int event)
 {
 	/* Paranoia */
@@ -1482,7 +1485,6 @@ static void play_sound(int event)
 	/* Release the autorelease pool */
 	[autorelease_pool release];
 }
-
 
 
 /*** Support for the "z-term.c" package ***/
@@ -1520,9 +1522,7 @@ static void Term_init_mac(term *t)
 
 	MoveWindowStructure((WindowRef)td->w, td->r.left, trueTop);
 
-
 	install_handlers(td->w);
-
 
 	/* Fatal error */
 	if (err != noErr) ExitToShell();
@@ -1556,6 +1556,7 @@ static void Term_init_mac(term *t)
 	/* Hack -- set "mapped" flag */
 	t->mapped_flag = td->mapped;
 }
+
 
 /*
  * Nuke an old Term
@@ -1706,6 +1707,7 @@ static errr Term_xtra_mac(int n, int v)
 	return (1);
 }
 
+
 /*
  * Low level graphics (Assumes valid input).
  * Draw a "cursor" at (x,y), using a "yellow box".
@@ -1727,7 +1729,8 @@ static errr Term_curs_mac(int x, int y)
 
 	/* Frame the grid, staying within the boundary. */
 	int tile_wid = td->tile_wid;
-	if(use_bigtile) {
+	if(use_bigtile)
+	{
 		byte a;
 		char c;
 		Term_what(x+1,y, &a, &c);
@@ -1744,6 +1747,7 @@ static errr Term_curs_mac(int x, int y)
 	/* Success */
 	return (0);
 }
+
 
 /*
  * Low level graphics helper (Assumes valid input)
@@ -1770,7 +1774,6 @@ static void Term_wipe_mac_aux(int x, int y, int n)
  */
 static errr Term_wipe_mac(int x, int y, int n)
 {
-
 	/*
 	 * Hack - overstrike the leftmost character with
 	 * the background colour. This doesn't interfere with
@@ -1790,6 +1793,7 @@ static errr Term_wipe_mac(int x, int y, int n)
 	/* Success */
 	return (0);
 }
+
 
 /*
  * Given a position in the ISO Latin-1 character set, return
@@ -1817,6 +1821,7 @@ static errr Term_text_mac(int x, int y, int n, byte a, const char *cp)
 	/* Success */
 	return (0);
 }
+
 
 static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp,
 			  const byte *tap, const char *tcp)
@@ -1908,7 +1913,6 @@ static void term_data_link(int i)
 	td->t->never_bored = TRUE;
 	td->t->never_frosh = TRUE;
 
-
 	/* Link the local structure */
 	td->t->data = (void *)(td);
 
@@ -1920,6 +1924,7 @@ static void term_data_link(int i)
 	/* Activate old */
 	Term_activate(old);
 }
+
 
 /*
  * (Carbon, Bundle)
@@ -2052,12 +2057,17 @@ static bool load_preference(const char *key, type_union *vptr, size_t maxlen )
 	return (TRUE);
 }
 
-/* Convenience wrappers for commonly used type short */
+
+/*
+ * Convenience wrappers for commonly used type short
+ */
 static void save_pref_short(const char *key, short value)
 {
 	type_union u = i2u(value);
 	save_preference(key, u);
 }
+
+
 static bool load_pref_short(const char *key, short *vptr)
 {
 	bool ret;
@@ -2066,6 +2076,7 @@ static bool load_pref_short(const char *key, short *vptr)
 	if( ret == TRUE ) *vptr = u.u.i;
 	return ret;
 }
+
 
 /*
  * Save preferences to preferences file for current host+current user+
@@ -2361,7 +2372,9 @@ static void init_windows(void)
 }
 
 
-/* Set up the contents of the about dialog */
+/*
+ * Set up the contents of the about dialog
+ */
 static void init_aboutdialogcontent()
 {
 	HIViewRef aboutDialogViewRef;
@@ -2477,8 +2490,8 @@ static bool select_savefile(bool all)
 		err = PtrToHand(&types, (Handle *)&myTypeList, sizeof(NavTypeList));
 
 		/* Oops */
-		if (err != noErr) quit("Error in PtrToHand. Try enlarging heap");
-
+		if (err != noErr)
+			quit("Error in PtrToHand. Try enlarging heap");
 	}
 
 	/* Call NavGetFile() with the types list */
@@ -2529,6 +2542,7 @@ static bool select_savefile(bool all)
 	return (TRUE);
 }
 
+
 /*
  * Initialize the menus
  *
@@ -2562,7 +2576,8 @@ static void init_menubar(void)
 		SetMenuItemRefCon(m, graphics_modes[i].menuItem, i);
 	}
 
-	for(int j = kTileWidMenu; j <= kTileHgtMenu; j++) {
+	for(int j = kTileWidMenu; j <= kTileHgtMenu; j++)
+	{
 		m = MyGetMenuHandle(j);
 		for(int i = MIN_FONT; i <= 32; i++) {
 			char buf[15];
@@ -2577,11 +2592,15 @@ static void init_menubar(void)
 	}
 }
 
-/* Install the handlers from the Commands table. */
+
+/*
+ * Install the handlers from the Commands table.
+ */
 static void install_handlers(WindowRef w)
 {
 	EventHandlerRef prevRef;
-	for(int i = 0; i < N_ELEMENTS(event_defs) ; i++) {
+	for(int i = 0; i < N_ELEMENTS(event_defs) ; i++)
+	{
 		const CommandDef *def = &event_defs[i];
 
 		/* Install window handlers only for kWINDOW events */
@@ -2608,6 +2627,7 @@ static void install_handlers(WindowRef w)
 static int funcGTE(int a, int b) { return a >= b; }
 static int funcConst(int a, int c) {return c; }
 
+
 /* This initializes all the menus with values that change unpredictably.
  * This function is called on every menu draw and therefore should be kept
  * light and fast; menus that change rarely are done at the time of change
@@ -2621,10 +2641,10 @@ static void validate_menus(void)
 	if(!td) return;
 
 	struct {
-		int menu;                /* Radio-style Menu ID to validate */
-		int cur;                /* Value in use (Compare to RefCon) */
-		int limit;                /* Constraint value */
-		int (*cmp) (int, int);    /* Filter function */
+		int menu;				/* Radio-style Menu ID to validate */
+		int cur;				/* Value in use (Compare to RefCon) */
+		int limit;				/* Constraint value */
+		int (*cmp) (int, int);	/* Filter function */
 	} funcs [] = {
 		{ kTileWidMenu, td->tile_wid, td->font_wid, funcGTE },
 		{ kTileHgtMenu, td->tile_hgt, td->font_hgt, funcGTE },
@@ -2638,14 +2658,17 @@ static void validate_menus(void)
 		EnableAllMenuItems(MyGetMenuHandle(kStyleMenu));
 	}
 
-	for(int i = 0; i < N_ELEMENTS(funcs); i++) {
+	for(int i = 0; i < N_ELEMENTS(funcs); i++)
+	{
 		m = MyGetMenuHandle(funcs[i].menu);
 		int n = CountMenuItems(m);
-		for(int j = 1; j <= n; j++) {
+		for(int j = 1; j <= n; j++)
+		{
 			UInt32 value;
 			GetMenuItemRefCon(m, j, &value);
 			CheckMenuItem(m, j, funcs[i].cur == value);
-			if(funcs[i].cmp(value, funcs[i].limit)) {
+			if(funcs[i].cmp(value, funcs[i].limit))
+			{
 				EnableMenuItem(m, j);
 			}
 			else
@@ -2729,6 +2752,7 @@ static void redrawRecentItemsMenu()
 	}
 }
 
+
 /* Add a savefile to the recent items list, or update its existing status */
 static void updateRecentItems(char *savefile)
 {
@@ -2789,6 +2813,7 @@ static void updateRecentItems(char *savefile)
 	/* Redraw the menu */
 	redrawRecentItemsMenu();
 }
+
 
 /* Handle a selection in the recent items menu */
 static OSStatus OpenRecentCommand(EventHandlerCallRef inCallRef,
@@ -2891,8 +2916,9 @@ static OSStatus openGame(int op)
 	return noErr;
 }
 
+
 /*
- *    Run the event loop and return a gameplay status to init_angband
+ * Run the event loop and return a gameplay status to init_angband
  */
 static errr get_cmd_init()
 {
@@ -2904,9 +2930,11 @@ static errr get_cmd_init()
 	prt("[Choose 'New', 'Open' or 'Import' from the 'File' menu]", 23, 11);
 	Term_fresh();
 
-	while (cmd.command == CMD_NULL) {
+	while (cmd.command == CMD_NULL)
+	{
 		err = ReceiveNextEvent(0, 0, kEventDurationForever, true, &event);
-		if(err == noErr) {
+		if(err == noErr)
+		{
 			SendEventToEventTarget (event, target);
 			ReleaseEvent(event);
 		}
@@ -2922,7 +2950,7 @@ static errr get_cmd_init()
 
 	/* Disable the file-handling options in the file menu.
 	 * This has to be done separately for new/open due to messages/prompts
-	 * which may delay open while the menus are still accessibile. */
+	 * which may delay open while the menus are still accessible. */
 	for(int i = kNew; i <= kImport; i++)
 		DisableMenuItem(MyGetMenuHandle(kFileMenu), i);
 
@@ -2936,6 +2964,7 @@ static errr get_cmd_init()
 	return 0;
 }
 
+
 static errr crb_get_cmd(cmd_context context, bool wait)
 {
 	if (context == CMD_INIT)
@@ -2943,6 +2972,7 @@ static errr crb_get_cmd(cmd_context context, bool wait)
 	else
 		return textui_get_cmd(context, wait);
 }
+
 
 static OSStatus QuitCommand(EventHandlerCallRef inCallRef,
 							EventRef inEvent, void *inUserData )
@@ -2952,6 +2982,7 @@ static OSStatus QuitCommand(EventHandlerCallRef inCallRef,
 	else Term_key_push(KTRL('x'));
 	return noErr;
 }
+
 
 static OSStatus CommandCommand(EventHandlerCallRef inCallRef,
 							EventRef inEvent, void *inUserData )
@@ -2963,7 +2994,8 @@ static OSStatus CommandCommand(EventHandlerCallRef inCallRef,
 	UInt32 attrib;
 	GetEventParameter( inEvent, kEventParamKeyModifiers, typeUInt32,
 							NULL, sizeof(attrib), NULL, &attrib);
-	switch(command.commandID) {
+	switch(command.commandID)
+	{
 	default:
 		return eventNotHandledErr;
 	case 'save':
@@ -3032,7 +3064,6 @@ static OSStatus CloseCommand(EventHandlerCallRef inCallRef,
 }
 
 
-
 static OSStatus ResizeCommand(EventHandlerCallRef inCallRef,
 							EventRef inEvent, void *inUserData )
 {
@@ -3074,7 +3105,6 @@ static OSStatus ResizeCommand(EventHandlerCallRef inCallRef,
 	td->rows = y / td->tile_hgt;
 	td->cols = x / td->tile_wid;
 
-
 	/* Apply and Verify */
 	term_data_check_size(td);
 
@@ -3095,6 +3125,7 @@ static OSStatus ResizeCommand(EventHandlerCallRef inCallRef,
 
 	return eventNotHandledErr;
 }
+
 
 static OSStatus GraphicsCommand(EventHandlerCallRef inCallRef,
 							EventRef inEvent, void *inUserData )
@@ -3147,6 +3178,7 @@ static void graphics_aux(int op)
 		/* reset transparency mode */
 		use_transparency = false;
 	}
+
 	/* Reset visuals, without updating the screen */
 	if (initialized && cmd.command != CMD_NULL)
 	{
@@ -3155,6 +3187,7 @@ static void graphics_aux(int op)
 	RevalidateGraphics(&data[0], FALSE);
 	Term_key_push(KTRL('R'));
 }
+
 
 static OSStatus TileSizeCommand(EventHandlerCallRef inCallRef,
 							EventRef inEvent, void *inUserData )
@@ -3167,15 +3200,18 @@ static OSStatus TileSizeCommand(EventHandlerCallRef inCallRef,
 	term_data *td = (term_data*) Term->data;
 	if(!td) return noErr;
 
-	if(GetMenuID(cmd.menu.menuRef) == kTileWidMenu) {
+	if(GetMenuID(cmd.menu.menuRef) == kTileWidMenu)
+	{
 		if(td->font_wid > newSize || newSize == td->tile_wid) return noErr;
 		else td->tile_wid = newSize;
 	}
-	else if(GetMenuID(cmd.menu.menuRef) == kTileHgtMenu) {
+	else if(GetMenuID(cmd.menu.menuRef) == kTileHgtMenu)
+	{
 		if(td->font_hgt > newSize || newSize == td->tile_hgt) return noErr;
 		else td->tile_hgt = newSize;
 	}
-	else {
+	else
+	{
 		return eventNotHandledErr;
 	}
 
@@ -3183,6 +3219,7 @@ static OSStatus TileSizeCommand(EventHandlerCallRef inCallRef,
 
 	return noErr;
 }
+
 
 static OSStatus RestoreCommand(EventHandlerCallRef inCallRef,
 							EventRef inEvent, void *inUserData)
@@ -3216,6 +3253,7 @@ static OSStatus RestoreCommand(EventHandlerCallRef inCallRef,
 
 	return noErr;
 }
+
 
 static OSStatus TerminalCommand(EventHandlerCallRef inCallRef,
 							EventRef inEvent, void *inUserData )
@@ -3263,6 +3301,7 @@ static OSStatus TerminalCommand(EventHandlerCallRef inCallRef,
 	return noErr;
 }
 
+
 static OSStatus RevalidateGraphics(term_data *td, bool reset_tilesize)
 {
 	if (!td) return noErr;
@@ -3291,6 +3330,7 @@ static OSStatus RevalidateGraphics(term_data *td, bool reset_tilesize)
 	return noErr;
 }
 
+
 static OSStatus UpdateCommand(EventHandlerCallRef inCallRef,
 								EventRef inEvent, void *inUserData)
 {
@@ -3310,6 +3350,7 @@ static OSStatus UpdateCommand(EventHandlerCallRef inCallRef,
 
 	return noErr;
 }
+
 
 /* Handle toggling sound via the menu option */
 static OSStatus SoundCommand(EventHandlerCallRef inCallRef,
@@ -3340,7 +3381,8 @@ static OSStatus ToggleCommand(EventHandlerCallRef inCallRef,
 		if(index == toggle_defs[i].menuItem && menuID == toggle_defs[i].menuID)
 		{
 			*toggle_defs[i].var = !(*toggle_defs[i].var);
-			if(toggle_defs[i].refresh == true) {
+			if(toggle_defs[i].refresh == true)
+			{
 				RevalidateGraphics(&data[0], FALSE);
 				/* Force redraw. */
 				Term_key_push(KTRL('R'));
@@ -3402,6 +3444,7 @@ static void FontChanged(UInt32 fontID, float size)
 	RevalidateGraphics(td, TRUE);
 }
 
+
 /*
  * Bookkeeping for font-related events.
  */
@@ -3428,7 +3471,8 @@ static OSStatus FontCommand(EventHandlerCallRef inHandlerCallRef, EventRef inEve
 		WindowRef w = 0;
 		GetEventParameter(inEvent, kEventParamCurrentWindow, typeWindowRef,
 							NULL, sizeof(w), NULL,  &w);
-		if(!GetWRefCon(w)) { /*  Window is Font Panel. */
+		if(!GetWRefCon(w)) /*  Window is Font Panel. */
+		{
 			w = 0;
 			GetEventParameter(inEvent, kEventParamPreviousWindow,
 								typeWindowRef, NULL, sizeof(w), NULL,  &w);
@@ -3436,13 +3480,15 @@ static OSStatus FontCommand(EventHandlerCallRef inHandlerCallRef, EventRef inEve
 		if(w) fontInfo.focus = w;
 		return noErr;
 	}
-	else if(class == 'font' && type == kEventFontPanelClosed) {
+	else if(class == 'font' && type == kEventFontPanelClosed)
+	{
 		SetMenuItemTextWithCFString(GetMenuHandle(kStyleMenu), kFonts, CFSTR("Show Fonts"));
 		return noErr;
 	}
 
 	return eventNotHandledErr;
 }
+
 
 static OSStatus MouseCommand ( EventHandlerCallRef inCallRef,
 	EventRef inEvent, void *inUserData )
@@ -3483,10 +3529,10 @@ static OSStatus MouseCommand ( EventHandlerCallRef inCallRef,
 	return noErr;
 }
 
+
 static OSStatus KeyboardCommand ( EventHandlerCallRef inCallRef,
 	EventRef inEvent, void *inUserData )
 {
-
 	EventRecord event;
 	ConvertEventRefToEventRecord(inEvent, &event);
 
@@ -3565,6 +3611,7 @@ static OSStatus KeyboardCommand ( EventHandlerCallRef inCallRef,
 	return noErr;
 }
 
+
 /* About angband... */
 static OSStatus AboutCommand(EventHandlerCallRef inCallRef, EventRef inEvent,
 	void *inUserData )
@@ -3587,13 +3634,15 @@ static OSStatus AboutCommand(EventHandlerCallRef inCallRef, EventRef inEvent,
 		NULL);
 
 	/* wait for user input */
-	for(;;) {
+	for(;;)
+	{
 		EventTargetRef target = GetEventDispatcherTarget();
 		EventRef event;
 		OSStatus err = ReceiveNextEvent(0, 0, kEventDurationForever, true, &event);
 		EventClass evc = GetEventClass(event);
 		EventType evt = GetEventKind(event);
-		if(err == noErr) {
+		if(err == noErr)
+		{
 			SendEventToEventTarget (event, target);
 			ReleaseEvent(event);
 		}
@@ -3609,6 +3658,7 @@ static OSStatus AboutCommand(EventHandlerCallRef inCallRef, EventRef inEvent,
 
 	return noErr;
 }
+
 
 static OSStatus ResumeCommand (EventHandlerCallRef inCallRef,
 								EventRef inEvent, void *inUserData )
@@ -3803,17 +3853,20 @@ static bool CheckEvents(int wait)
 	/* get an event (or null)  */
 	do {
 		err = ReceiveNextEvent(0, 0, wait ? kEventDurationForever : 0, true, &event);
-		if(show_events) {
+		if(show_events)
+		{
 			EventClass evc = GetEventClass(event);
 			EventType evt = GetEventKind(event);
 			if(evc != 'mous' || evt != kEventMouseDragged )
 				printf("%d (%4s) %d\n", (int)evc, (char*)&evc, (int)evt);
 		}
-		if(err == noErr) {
+		if(err == noErr)
+		{
 			err = SendEventToEventTarget (event, target);
 			ReleaseEvent(event);
 		}
-		else if(err != eventNotHandledErr && sleep_ticks >= 0) {
+		else if(err != eventNotHandledErr && sleep_ticks >= 0)
+		{
 			curticks = TickCount();
 			sleep_ticks -= curticks - lastticks;
 			lastticks = curticks;
@@ -3825,7 +3878,6 @@ static bool CheckEvents(int wait)
 
 
 /*** Some Hooks for various routines ***/
-
 
 
 /*

@@ -2304,17 +2304,17 @@ static s16b get_mimic_k_idx(int r_idx)
 			string_lower(mon_name);
 
 			/* Look for textual clues */
-			if (strstr(mon_name, " copper "))     	return (lookup_kind(TV_GOLD, SV_GOLD_COPPER));
-			if (strstr(mon_name, " silver "))     	return (lookup_kind(TV_GOLD, SV_GOLD_SILVER));
-			if (strstr(mon_name, " garnet"))       	return (lookup_kind(TV_GOLD, SV_GOLD_GARNET));
-			if (strstr(mon_name, " gold"))       	return (lookup_kind(TV_GOLD, SV_GOLD_GOLD));
-			if (strstr(mon_name, " mithril"))    	return (lookup_kind(TV_GOLD, SV_GOLD_MITHRIL));
-			if (strstr(mon_name, " opal"))    		return (lookup_kind(TV_GOLD, SV_GOLD_OPALS));
-			if (strstr(mon_name, " sapphire"))    	return (lookup_kind(TV_GOLD, SV_GOLD_SAPPHIRES));
-			if (strstr(mon_name, " ruby"))    		return (lookup_kind(TV_GOLD, SV_GOLD_RUBIES));
-			if (strstr(mon_name, " emerald"))    	return (lookup_kind(TV_GOLD, SV_GOLD_EMERALD));
-			if (strstr(mon_name, " diamond"))    	return (lookup_kind(TV_GOLD, SV_GOLD_DIAMOND));
-			if (strstr(mon_name, " adamantite ")) 	return (lookup_kind(TV_GOLD, SV_GOLD_ADAMANTITE));
+			if (strstr(mon_name, " copper "))		return (lookup_kind(TV_GOLD, SV_GOLD_COPPER));
+			if (strstr(mon_name, " silver "))		return (lookup_kind(TV_GOLD, SV_GOLD_SILVER));
+			if (strstr(mon_name, " garnet"))		return (lookup_kind(TV_GOLD, SV_GOLD_GARNET));
+			if (strstr(mon_name, " gold"))			return (lookup_kind(TV_GOLD, SV_GOLD_GOLD));
+			if (strstr(mon_name, " mithril"))		return (lookup_kind(TV_GOLD, SV_GOLD_MITHRIL));
+			if (strstr(mon_name, " opal"))			return (lookup_kind(TV_GOLD, SV_GOLD_OPALS));
+			if (strstr(mon_name, " sapphire"))		return (lookup_kind(TV_GOLD, SV_GOLD_SAPPHIRES));
+			if (strstr(mon_name, " ruby"))			return (lookup_kind(TV_GOLD, SV_GOLD_RUBIES));
+			if (strstr(mon_name, " emerald"))		return (lookup_kind(TV_GOLD, SV_GOLD_EMERALD));
+			if (strstr(mon_name, " diamond"))		return (lookup_kind(TV_GOLD, SV_GOLD_DIAMOND));
+			if (strstr(mon_name, " adamantite "))	return (lookup_kind(TV_GOLD, SV_GOLD_ADAMANTITE));
 			break;
 		}
 
@@ -3392,11 +3392,10 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 					/* Special placement of the moria monsters */
 					if (game_mode == GAME_NPPMORIA)
 					{
-						if(p_ptr->depth < q_ptr->base_level)	return (FALSE);
+						if(p_ptr->depth < q_ptr->base_level)  return (FALSE);
 					}
 
 					else if(p_ptr->depth != q_ptr->base_level)  return (FALSE);
-
 				}
 			}
 		}

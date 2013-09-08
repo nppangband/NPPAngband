@@ -45,7 +45,7 @@ static timed_effect effects[] =
 	/*TMD_SLOW*/
 	{ "You feel yourself moving slower!", "You feel yourself speed up.",
 			NULL, NULL,
-			0, PU_BONUS, 0, MSG_SLOW, FALSE  },
+			0, PU_BONUS, 0, MSG_SLOW, FALSE },
 	/*TMD_BLIND*/
 	{ "You are blind.", "You blink and your eyes clear.",
 			NULL, NULL,
@@ -69,99 +69,99 @@ static timed_effect effects[] =
 	/*TMD_POISONED*/
 	{ "You are poisoned!", "You are no longer poisoned.",
 			"You are more poisoned!", "You are less poisoned.",
-			0, 0, 0, MSG_POISONED, FALSE  },
-	/* TMD_CUT -- handled seperately */
+			0, 0, 0, MSG_POISONED, FALSE },
+	/* TMD_CUT -- handled separately */
 	{ NULL, NULL, NULL, NULL, 0, 0, 0 ,0, FALSE },
-   	/* TMD_STUN -- handled seperately */
+	/* TMD_STUN -- handled separately */
 	{ NULL, NULL, NULL, NULL, 0, 0, 0 ,0, FALSE },
 	/*TMD_PROTEVIL*/
 	{ "You feel safe from evil!", "You no longer feel safe from evil.",
 			"You feel even safer from evil!", "You feel less safe from evil.",
-			0, 0, 0, MSG_PROT_EVIL, FALSE  },
+			0, 0, 0, MSG_PROT_EVIL, FALSE },
 	/* TMD_INVULN */
 	{ "Your skin turns into steel!", "Your skin returns to normal.",
 			NULL, NULL,
-			0, PU_BONUS, 0, MSG_INVULN, FALSE  },
+			0, PU_BONUS, 0, MSG_INVULN, FALSE },
 	/* TMD_HERO */
 	{ "You feel like a hero!", "You no longer feel heroic.",
 			"You feel more like a hero!", "You feel less heroic.",
-			0, PU_BONUS, 0, MSG_HERO, FALSE  },
+			0, PU_BONUS, 0, MSG_HERO, FALSE },
 	/* TMD_SHERO */
 	{ "You feel like a killing machine!", "You no longer feel berserk.",
 			"You feel even more berserk!", "You feel less berserk.",
-			0, PU_BONUS, 0, MSG_BERSERK, FALSE  },
+			0, PU_BONUS, 0, MSG_BERSERK, FALSE },
 	/* TMD_SHIELD */
 	{ "A mystic shield forms around your body!", "Your mystic shield crumbles away.",
 			"The mystic shield strengthens.", "The mystic shield weakens.",
-			0, PU_BONUS, 0, MSG_SHIELD, FALSE  },
+			0, PU_BONUS, 0, MSG_SHIELD, FALSE },
 	/* TMD_BLESSED */
 	{ "You feel righteous!", "The prayer has expired.",
 			"You feel more righteous!", "You feel less righteous.",
-			0, PU_BONUS, 0, MSG_BLESSED, FALSE  },
+			0, PU_BONUS, 0, MSG_BLESSED, FALSE },
 	/* TMD_SINVIS */
 	{ "Your eyes feel very sensitive!", "Your eyes no longer feel so sensitive.",
 			"Your eyes feel more sensitive!", "Your eyes feel less sensitive.",
-			0, (PU_BONUS | PU_MONSTERS), 0, MSG_SEE_INVIS, FALSE  },
+			0, (PU_BONUS | PU_MONSTERS), 0, MSG_SEE_INVIS, FALSE },
 	/* TMD_SINFRA */
 	{ "Your eyes begin to tingle!", "Your eyes stop tingling.",
 			"Your eyes' tingling intensifies.", "Your eyes tingle less.",
-			0, (PU_BONUS | PU_MONSTERS), 0, MSG_INFRARED, FALSE  },
+			0, (PU_BONUS | PU_MONSTERS), 0, MSG_INFRARED, FALSE },
 	/* TMD_OPP_ACID */
 	{ "You feel resistant to acid!", "You are no longer resistant to acid.",
 			"You feel more resistant to acid!", "You feel less resistant to acid.",
-			PR_STATUS, 0, 0, MSG_RES_ACID, FALSE  },
+			PR_STATUS, 0, 0, MSG_RES_ACID, FALSE },
 	/* TMD_OPP_ELEC */
 	{ "You feel resistant to electricity!", "You are no longer resistant to electricity.",
 			"You feel more resistant to electricity!", "You feel less resistant to electricity.",
-			PR_STATUS, 0, 0, MSG_RES_ELEC, FALSE  },
+			PR_STATUS, 0, 0, MSG_RES_ELEC, FALSE },
 	/* TMD_OPP_FIRE */
 	{ "You feel resistant to fire!", "You are no longer resistant to fire.",
 			"You feel more resistant to fire!", "You feel less resistant to fire.",
-			PR_STATUS, 0, 0, MSG_RES_FIRE, FALSE  },
+			PR_STATUS, 0, 0, MSG_RES_FIRE, FALSE },
 	/* TMD_OPP_COLD */
 	{ "You feel resistant to cold!", "You are no longer resistant to cold.",
 			"You feel more resistant to cold!", "You feel less resistant to cold.",
-			PR_STATUS, 0, 0, MSG_RES_COLD, FALSE  },
+			PR_STATUS, 0, 0, MSG_RES_COLD, FALSE },
 	/* TMD_OPP_POIS */
 	{ "You feel resistant to poison!", "You are no longer resistant to poison.",
 			"You feel more resistant to poison!", "You feel less resistant to poison.",
-			0, 0, 0, MSG_RES_POIS, FALSE  },
+			0, 0, 0, MSG_RES_POIS, FALSE },
 	/* TMD_FLYING */
 	{ "You take flight!", "Your mystic wings disappear.",
 			NULL, NULL,
-			(PR_RESIST | PR_STATUS), PU_STEALTH, 0, 0, FALSE  },
+			(PR_RESIST | PR_STATUS), PU_STEALTH, 0, 0, FALSE },
 	/* TMD_NAT_LAVA */
 	{ "You feel native to lava terrains!", "You no longer feel native to lava terrains.",
 			NULL, NULL,
-			0, PU_NATIVE, 0, 0, FALSE  },
+			0, PU_NATIVE, 0, 0, FALSE },
 	/* TMD_NAT_OIL */
 	{ "You feel native to oil terrains!", "You no longer feel native to oil terrains.",
 			NULL, NULL,
-			0, PU_NATIVE, 0, 0, FALSE  },
+			0, PU_NATIVE, 0, 0, FALSE },
 	/* TMD_NAT_SAND */
 	{ "You feel native to sandy terrains!", "You no longer feel native to sandy terrains.",
 			NULL, NULL,
-			0, PU_NATIVE, 0, 0 , FALSE },
+			0, PU_NATIVE, 0, 0, FALSE },
 	/* TMD_NAT_TREE */
 	{ "You feel native to forest terrains!", "You no longer feel native to forest terrains.",
 			NULL, NULL,
-			0, PU_NATIVE, 0, 0, FALSE  },
+			0, PU_NATIVE, 0, 0, FALSE },
 	/* TMD_NAT_WATER */
 	{ "You feel native to water terrains!", "You no longer feel native to water terrains.",
 			NULL, NULL,
-			0, PU_NATIVE, 0, 0, FALSE  },
+			0, PU_NATIVE, 0, 0, FALSE },
 	/* TMD_NAT_MUD */
 	{ "You feel native to muddy terrains!", "You no longer feel native to muddy terrains.",
 			NULL, NULL,
-			0, PU_NATIVE, 0, 0, FALSE  },
+			0, PU_NATIVE, 0, 0, FALSE },
 	/* TMD_SLAY_ELEM */
 	{ "Your weapon glows with many colors!", "Your weapon returns to normal.",
 			NULL, NULL,
-			PR_RESIST, 0, 0, 0, FALSE  },
+			PR_RESIST, 0, 0, 0, FALSE },
 	/* TMD_CALL_HOURNS */
 	{ "You try to awake the trees around you!", "The trees are asleep now.",
 			NULL, NULL,
-			0, 0, 0, 0, FALSE  },
+			0, 0, 0, 0, FALSE },
 };
 
 
@@ -209,7 +209,6 @@ bool set_timed(int idx, int v, bool notify)
 		override_notify = TRUE;
 		notify = FALSE;
 	}
-
 
 	/* Find the effect */
 	effect = &effects[idx];
@@ -300,6 +299,7 @@ bool clear_timed(int idx, bool notify)
 {
 	return set_timed(idx, 0, notify);
 }
+
 
 /* Check to see if the player is in a state to repeat commands */
 bool player_can_repeat(void)

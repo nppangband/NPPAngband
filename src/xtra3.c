@@ -476,7 +476,7 @@ static void prt_health(int row, int col, const monster_type *m_ptr)
 		Term_putstr(col, row, 12, TERM_WHITE, "----------]");
 
 		Term_putstr(col, row, 11, TERM_WHITE, "----------]");
-				
+
 		Term_putstr(col+10, row, 1, monster_hilite_attr(m_ptr), "]");
 
 		/* Dump the current "health" (handle monster stunning, confusion) */
@@ -626,7 +626,6 @@ static void prt_feeling(int row, int col)
 }
 
 
-
 /*
  * Prints depth in stat area
  */
@@ -660,7 +659,7 @@ static void prt_depth(int row, int col)
 static void prt_mon_mana(int row, int col, const monster_type *m_ptr)
 {
 	byte hilite = monster_hilite_attr(m_ptr);
-	
+
 	/* Not alive, or no mana */
 	if (!m_ptr->r_idx)
 	{
@@ -690,7 +689,6 @@ static void prt_mon_mana(int row, int col, const monster_type *m_ptr)
 		/* Indicate that the monster health is "unknown" */
 		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
 	}
-
 	/* Tracking a visible monster */
 	else
 	{
@@ -715,16 +713,15 @@ static void prt_mon_mana(int row, int col, const monster_type *m_ptr)
 
 		/* Default to "unknown" */
 		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
-		
+
 		Term_putstr(col+11, row, 1, hilite, "]");
 		Term_putstr(col, row, 1, hilite, "[");
 
 		/* Dump the current "mana"*/
 		Term_putstr(col + 1, row, len, TERM_L_GREEN, "**********");
-
 	}
-
 }
+
 
 /* Print out monster health until we get to the bottom of the screen */
 static void prt_monsters(int row, int col)
@@ -782,7 +779,6 @@ static void prt_monsters(int row, int col)
 		sidebar_details[SIDEBAR_MON_MAX] = row;
 	}
 }
-
 
 
 /* Some simple wrapper functions */

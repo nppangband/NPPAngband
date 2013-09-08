@@ -1811,13 +1811,14 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp, bool use_d
 
 		if ((hp_changes_color) && (arg_graphics == GRAPHICS_NONE))
 		{
-			/* check for hunger first */
+			/* default to white */
 			a = TERM_WHITE;
+			/* check for hunger first */
 			if (p_ptr->food < PY_FOOD_ALERT)
 			{
 				a = TERM_L_UMBER;
 			}
-			
+
 			/* overwrite with health check */
 			switch(p_ptr->chp * 10 / p_ptr->mhp)
 			{

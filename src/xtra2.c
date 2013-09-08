@@ -131,10 +131,10 @@ void check_experience(void)
 		/* Handle stuff */
 		handle_stuff();
 	}
-	
+
 	/* Gain max levels while possible */
 	while ((p_ptr->max_lev < z_info->max_level) &&
-	       (p_ptr->max_exp >= (get_experience_by_level(p_ptr->max_lev-1) *
+	       (p_ptr->max_exp >= (get_experience_by_level(p_ptr->max_lev - 1) *
 	                           p_ptr->expfact / 100L)))
 	{
 		/* Gain max level */
@@ -390,7 +390,7 @@ static void mon_drop_loot(int m_idx)
 			number_drops -= 5;
 			object_level += 5;
 
-			/*Boundry Control*/
+			/* Boundary Control */
 			if (number_drops < 0) number_drops = 0;
 			if (object_level > MAX_DEPTH) object_level = MAX_DEPTH;
 		}
@@ -473,8 +473,6 @@ static void mon_drop_loot(int m_idx)
 
 		/* Drop it in the dungeon */
 		drop_near(i_ptr, -1, m_ptr->fy, m_ptr->fx);
-
-
 	}
 
 	/* Reset the object level */
@@ -489,7 +487,6 @@ static void mon_drop_loot(int m_idx)
 		/* Take notes on treasure */
 		lore_treasure(m_idx, dump_item, dump_gold);
 	}
-
 }
 
 /*
@@ -655,14 +652,14 @@ void monster_death(int m_idx, int who)
 			my_strcpy(note2, format("Destroyed %^s", player_ghost_name), sizeof (note2));
 		}
 
-		/*All other uniques*/
+		/* All other uniques */
 		else
 		{
 			/* Get the monster's real name for the notes file */
 			monster_desc_race(real_name, sizeof(real_name), m_ptr->r_idx);
 
 			/* Write note */
-       		if monster_nonliving(r_ptr) my_strcpy(note2, format("Destroyed %s", real_name), sizeof (note2));
+			if monster_nonliving(r_ptr) my_strcpy(note2, format("Destroyed %s", real_name), sizeof (note2));
 			else my_strcpy(note2, format("Killed %s", real_name), sizeof (note2));
 		}
 
@@ -763,7 +760,7 @@ static s32b calc_mon_exp(const monster_race *r_ptr)
 	if (new_exp < 1) return (0);
 
 	/*
-	 * Check to make sure player is at level 50, so no adjustmetn necessary,
+	 * Check to make sure player is at level 50, so no adjustment necessary,
 	 * also prevents next line from crashing the game
 	 */
 	while (new_level < z_info->max_level)
@@ -1547,6 +1544,8 @@ bool get_aim_dir(int *dp, bool target_trap)
 					inkey_scan = lazymove_delay;
 					ke = inkey_ex();
 				}
+
+				break;
 			}
 		}
 

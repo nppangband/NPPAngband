@@ -5183,7 +5183,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			if (seen) obvious = TRUE;
 
 			note_dies = MON_MSG_BURIED_ROCK;
-
 			break;
 		}
 

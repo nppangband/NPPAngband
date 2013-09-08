@@ -111,6 +111,7 @@ static bool older_than(int x, int y, int z)
 	return (FALSE);
 }
 
+
 /*
  * The following functions are used to load the basic building blocks
  * of savefiles.  They also maintain the "checksum" info.
@@ -133,10 +134,12 @@ static byte sf_get(void)
 	return (v);
 }
 
+
 static void rd_byte(byte *ip)
 {
 	*ip = sf_get();
 }
+
 
 static void rd_u16b(u16b *ip)
 {
@@ -144,10 +147,12 @@ static void rd_u16b(u16b *ip)
 	(*ip) |= ((u16b)(sf_get()) << 8);
 }
 
+
 static void rd_s16b(s16b *ip)
 {
 	rd_u16b((u16b*)ip);
 }
+
 
 static void rd_u32b(u32b *ip)
 {
@@ -312,7 +317,6 @@ static errr rd_item(object_type *o_ptr)
 
 		o_ptr->timeout = o_ptr->pval;
 		o_ptr->pval = k_ptr->pval * o_ptr->number;
-
 	}
 
 	/* Repair non "wearable" items */
@@ -335,7 +339,6 @@ static errr rd_item(object_type *o_ptr)
 		    (o_ptr->tval != TV_PRAYER_BOOK) &&
 		    (o_ptr->tval != TV_DRUID_BOOK))
 		{
-
 			/* Paranoia */
 			o_ptr->art_num = o_ptr->ego_num = 0;
 
@@ -365,7 +368,7 @@ static errr rd_item(object_type *o_ptr)
 		/* Paranoia */
 		if (o_ptr->art_num >= z_info->art_max)
 		{
-	    	return (-1);
+			return (-1);
 		}
 
 		/* Obtain the artifact info */
@@ -386,7 +389,7 @@ static errr rd_item(object_type *o_ptr)
 		/* Paranoia */
 		if (o_ptr->ego_num >= z_info->e_max)
 		{
-		    return (-1);
+			return (-1);
 		}
 
 		/* Obtain the ego-item info */
@@ -473,8 +476,6 @@ static errr rd_item(object_type *o_ptr)
 	/* Success */
 	return (0);
 }
-
-
 
 
 /*
@@ -604,7 +605,6 @@ static errr rd_extensions(void)
  */
 static errr rd_effect(void)
 {
-
 	int x_idx;
 	byte type;
 	u16b f_idx;
@@ -624,7 +624,6 @@ static errr rd_effect(void)
 	/*Read the effect*/
 	rd_byte(&type);
 	rd_u16b(&f_idx);
-
 
 	rd_byte(&y);
 	rd_byte(&x);
@@ -655,8 +654,6 @@ static errr rd_effect(void)
 	/* Success */
 	return (0);
 }
-
-
 
 
 /*
@@ -732,10 +729,7 @@ static void rd_monster_lore(int r_idx)
 	l_ptr->r_l_flags6 &= r_ptr->flags6;
 	l_ptr->r_l_flags7 &= r_ptr->flags7;
 	l_ptr->r_l_native &= r_ptr->r_native;
-
 }
-
-
 
 
 /*
@@ -764,7 +758,6 @@ static errr rd_store(int n)
 	/* Paranoia */
 	if (own >= z_info->b_max)
 	{
-
 		note("Illegal store owner!");
 		return (-1);
 	}
@@ -881,7 +874,6 @@ static errr rd_feature_lore(int f_idx)
 	rd_byte(&f_l_ptr->f_l_non_native_to_hit_adj);
 	rd_byte(&f_l_ptr->f_l_stealth_adj);
 
-
 	/* Success */
 	return (0);
 }
@@ -912,7 +904,6 @@ static void rd_randomizer(void)
 	/* Accept */
 	Rand_quick = FALSE;
 }
-
 
 
 /*
@@ -1033,8 +1024,8 @@ static void rd_options(void)
 
 	/* Set up the subwindows */
 	subwindows_set_flags(window_flag, ANGBAND_TERM_MAX);
-
 }
+
 
 static errr rd_player_spells(void)
 {
@@ -1304,7 +1295,6 @@ static errr rd_extra(void)
 	rd_u32b(&seed_ghost);
 
 
-
 	/* Special stuff */
 	rd_u16b(&p_ptr->panic_save);
 	rd_u16b(&p_ptr->total_winner);
@@ -1378,12 +1368,12 @@ static errr rd_extra(void)
 	return (0);
 }
 
+
 /*
  * Read the random artifacts
  */
 static errr rd_randarts(void)
 {
-
 	int i;
 	byte tmp8u;
 	s16b tmp16s;
@@ -1430,7 +1420,6 @@ static errr rd_randarts(void)
 		/* Read the artifacts */
 		for (i = begin; i < artifact_count; i++)
 		{
-
 			artifact_type *a_ptr = &a_info[i];
 
 			/*hack - if a new "normal artifact has been added in mid-game, don't erase it*/
@@ -1497,8 +1486,8 @@ static errr rd_randarts(void)
 	}
 
 	return (0);
-
 }
+
 
 /*
  * Read the notes. Every new savefile has at least NOTES_MARK.
@@ -1519,10 +1508,9 @@ static bool rd_notes(void)
 			return (TRUE);
 		}
 
-		/* Append the notes in the savefile to the tempfile*/
+		/* Append the notes in the savefile to the tempfile */
 		while (TRUE)
 		{
-
 			rd_string(tmpstr, sizeof(tmpstr));
 			/* Found the end? */
 			if (strstr(tmpstr, NOTES_MARK))
@@ -1552,10 +1540,6 @@ static bool rd_notes(void)
 
 	return (FALSE);
 }
-
-
-
-
 
 
 /*
@@ -1640,7 +1624,6 @@ static errr rd_inventory(void)
 	/* Success */
 	return (0);
 }
-
 
 
 /*
@@ -1853,7 +1836,6 @@ static errr rd_dungeon(void)
 	/* Load depth */
 	p_ptr->depth = depth;
 
-
 	/* Place player in dungeon */
 	if (!player_place(py, px))
 	{
@@ -2030,7 +2012,6 @@ static errr rd_dungeon(void)
 	/* Read the dungeon items */
 	for (i = 1; i < limit; i++)
 	{
-
 		/* Read the item */
 		if (rd_effect())
 		{
@@ -2048,6 +2029,7 @@ static errr rd_dungeon(void)
 	/* Success */
 	return (0);
 }
+
 
 /*
  * Actually read the savefile
@@ -2089,18 +2071,15 @@ static errr rd_savefile_new_aux(void)
 	/* Number of times played */
 	rd_u16b(&sf_saves);
 
-
 	/* Later use (always zero) */
 	rd_u32b(&tmp32u);
 
 	/* Later use (always zero) */
 	rd_u32b(&tmp32u);
-
 
 	/* Read RNG state */
 	rd_randomizer();
 	if (arg_fiddle) note("Loaded Randomizer Info");
-
 
 	/* Then the options */
 	rd_options();
@@ -2127,7 +2106,6 @@ static errr rd_savefile_new_aux(void)
 		rd_monster_lore(i);
 	}
 	if (arg_fiddle) note("Loaded Monster Memory");
-
 
 	/* Object Memory */
 	rd_u16b(&tmp16u);
@@ -2303,7 +2281,6 @@ static errr rd_savefile_new_aux(void)
 			note("Error reading dungeon data");
 			return (-1);
 		}
-
 	}
 
 	/* Save the checksum */
@@ -2460,7 +2437,6 @@ bool load_player(void)
 	/* Process file */
 	if (!err)
 	{
-
 		/* Read the first four bytes */
 		if (!file_read(fff, (char*)(vvv), 4)) err = -1;
 
@@ -2468,7 +2444,7 @@ bool load_player(void)
 		if (err) what = "Cannot read savefile";
 
 		rd_byte(&savefile_game);
-		
+
 		/* Close the file */
 		file_close(fff);
 	}
@@ -2642,19 +2618,19 @@ void load_gamemode(void)
 		if (!file_read(fff, (char*)(vvv), 4)) err = -1;
 
 		rd_byte(&savefile_game);
-		
+
 		/* Close the file */
 		file_close(fff);
 	}
-	
+
 	/* Need to clear checksums so they wont glitch out the real load */
 	xor_byte = 0;
 	v_check = 0L;
 	x_check = 0L;
-	
+
 	if (err)
 	{
-		return;	
+		return;
 	}
 
 	if (savefile_game == GAME_NPPMORIA)

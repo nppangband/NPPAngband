@@ -425,7 +425,6 @@ static cptr moria_desc_stat_res_pos[] =
 };
 
 
-
 /*
  * Restore lost "points" in a stat
  */
@@ -446,6 +445,7 @@ bool do_res_stat(int stat)
 	return (FALSE);
 }
 
+
 /*
  * Array of stat "descriptions"
  */
@@ -458,7 +458,6 @@ static cptr moria_desc_stat_inc_pos[] =
 	"You feel tingly for a moment.",
 	"Gee, ain't you cute!"
 };
-
 
 
 /*
@@ -496,6 +495,7 @@ bool do_inc_stat(int stat)
 	return (FALSE);
 }
 
+
 /*
  * Permanently gain a "point" in a stat
  */
@@ -516,6 +516,7 @@ void do_perm_stat_boost(int stat)
 	/* Redisplay the stats later */
 	p_ptr->redraw |= (PR_STATS);
 }
+
 
 /*
  * Identify everything being carried.
@@ -1325,7 +1326,7 @@ bool set_recall(void)
 	if (!p_ptr->word_recall)
 	{
 		/* Reset recall depth */
-		if ((p_ptr->depth > 0) && (p_ptr->depth != p_ptr->recall_depth) && (game_mode != GAME_NPPMORIA))
+		if ((game_mode != GAME_NPPMORIA) && (p_ptr->depth > 0) && (p_ptr->depth != p_ptr->recall_depth))
 		{
 			/*
 			 * ToDo: Add a new player_type field "recall_depth"
@@ -2418,7 +2419,6 @@ bool ident_spell(void)
 	/* Something happened */
 	return (TRUE);
 }
-
 
 
 /*
