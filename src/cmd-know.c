@@ -43,26 +43,6 @@ typedef struct
 } group_funcs;
 
 
-typedef struct
-{
-	/* Displays an entry at specified location, including kill-count and graphics */
-	void (*display_member)(int col, int row, bool cursor, int oid);
-
-	void (*lore)(int oid);		/* Displays lore for an oid */
-
-
-	/* Required only for objects with modifiable display attributes */
-	/* Unknown 'flavors' return flavor attributes */
-	char *(*xchar)(int oid);	/* Get character attr for OID (by address) */
-	byte *(*xattr)(int oid);	/* Get color attr for OID (by address) */
-
-	const char *(*xtra_prompt)(int oid);	/* Returns optional extra prompt */
-	void (*xtra_act)(char ch, int oid);		/* Handles optional extra actions */
-
-	bool is_visual;							/* Does this kind have visual editing? */
-} member_funcs;
-
-
 /* Helper class for generating joins */
 typedef struct join
 {
@@ -422,7 +402,7 @@ static const char *recall_prompt(int oid)
 }
 
 
-#define swap(a, b) (swapspace = (void*)(a)), ((a) = (b)), ((b) = swapspace)
+#define swap(a, b) (swapspace = (a)), ((a) = (b)), ((b) = swapspace)
 
 
 /*
@@ -476,7 +456,6 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 	menu_type *active_menu = &group_menu, *inactive_menu = &object_menu;
 	int panel = 0;
 
-	void *swapspace;
 	bool do_swap = FALSE;
 
 	bool flag = FALSE;
@@ -671,8 +650,12 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 		if (do_swap)
 		{
 			do_swap = FALSE;
-			swap(active_menu, inactive_menu);
-			swap(active_cursor, inactive_cursor);
+			menu_type *msw = active_menu;
+			active_menu = inactive_menu;
+			inactive_menu = msw;
+			int *isw = active_cursor;
+			active_cursor = inactive_cursor;
+			inactive_cursor = isw;
 			panel = 1 - panel;
 		}
 
@@ -726,8 +709,12 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 			/* Change active panels */
 			if (region_inside(&inactive_menu->boundary, &ke))
 			{
-				swap(active_menu, inactive_menu);
-				swap(active_cursor, inactive_cursor);
+				menu_type *msw = active_menu;
+				active_menu = inactive_menu;
+				inactive_menu = msw;
+				int *isw = active_cursor;
+				active_cursor = inactive_cursor;
+				inactive_cursor = isw;
 				panel = 1-panel;
 			}
 		}

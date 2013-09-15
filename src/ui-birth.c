@@ -182,17 +182,6 @@ static region roller_region = {ROLLER_COL, ROLLER_ROW, 36, 8};
    of bonuses, etc, corresponding to each race and class. */
 typedef void (*browse_f) (int oid, void *db, const region *l);
 
-/* We have one of these structures for each menu we display - it holds
-   the useful information for the menu - text of the menu items, "help"
-   text, current (or default) selection, and whether random selection
-   is allowed. */
-struct birthmenu_data
-{
-	const char **items;
-	const char *hint;
-	bool allow_random;
-};
-
 /* A custom "display" function for our menus that simply displays the
    text from our stored data in a different colour if it's currently
    selected. */
@@ -282,7 +271,7 @@ static void init_birth_menu(menu_type *menu, int n_choices, int initial_choice, 
 	menu->count = n_choices;
 
 	/* Allocate sufficient space for our own bits of menu information. */
-	menu_data = mem_alloc(sizeof *menu_data);
+	menu_data = (birthmenu_data *)mem_alloc(sizeof *menu_data);
 
 	/* Copy across the game's suggested initial selection, etc. */
 	menu->cursor = initial_choice;
@@ -290,7 +279,7 @@ static void init_birth_menu(menu_type *menu, int n_choices, int initial_choice, 
 
 	/* Allocate space for an array of menu item texts and help texts
 	   (where applicable) */
-	menu_data->items = mem_alloc(menu->count * sizeof *menu_data->items);
+	menu_data->items =(const char *)mem_alloc(menu->count * sizeof *menu_data->items);
 
 	/* Poke our menu data in to the assigned slot in the menu structure. */
 	menu->menu_data = menu_data;
@@ -1032,6 +1021,7 @@ errr get_birth_command(bool wait)
 		default:
 		{
 			/* Remove dodgy compiler warning, */
+			break;
 		}
 	}
 

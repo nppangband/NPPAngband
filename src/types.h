@@ -53,6 +53,7 @@ typedef struct ghost_template ghost_template;
 typedef struct artifact_type artifact_type;
 typedef struct artifact_lore artifact_lore;
 typedef struct ego_item_type ego_item_type;
+typedef struct ego_desc ego_desc;
 typedef struct monster_blow monster_blow;
 typedef struct monster_race monster_race;
 typedef struct monster_race_message monster_race_message;
@@ -80,6 +81,7 @@ typedef struct names_type names_type;
 typedef struct flavor_type flavor_type;
 typedef struct autoinscription autoinscription;
 typedef struct move_moment_type move_moment_type;
+typedef struct birthmenu_data birthmenu_data;
 typedef struct dynamic_grid_type dynamic_grid_type;
 typedef struct quiver_group_type quiver_group_type;
 typedef struct option_entry option_entry;
@@ -87,6 +89,7 @@ typedef struct dungeon_capabilities_type dungeon_capabilities_type;
 typedef struct slays_structure slays_structure;
 typedef struct brands_structure brands_structure;
 typedef struct mon_susceptibility_struct mon_susceptibility_struct;
+typedef struct squelch_choice squelch_choice;
 
 
 
@@ -721,6 +724,25 @@ struct alloc_entry
 };
 
 
+/* We have one of these structures for each menu we display - it holds
+   the useful information for the menu - text of the menu items, "help"
+   text, current (or default) selection, and whether random selection
+   is allowed. */
+struct birthmenu_data
+{
+	const char **items;
+	const char *hint;
+	bool allow_random;
+};
+
+
+struct ego_desc
+{
+	s16b e_idx;
+	const char *short_name;
+};
+
+
 /*
  * Structure for the "quests"
  */
@@ -742,8 +764,6 @@ struct quest_type
 
 	byte q_flags;		/* Various quest flags */
 };
-
-
 
 
 struct magic_type
@@ -1504,6 +1524,16 @@ struct slays_structure
 	u32b mon_flag;	/* Assumes in monster flag RF3 */
 	cptr slay_race;
 };
+
+/*
+ * menu struct for differentiating aware from unaware squelch
+ */
+struct squelch_choice
+{
+	s16b idx;
+	bool aware;
+};
+
 
 /* Currently assumes all flags are in TR1 (object) and RF1 (monster flags) */
 struct brands_structure
