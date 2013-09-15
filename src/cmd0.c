@@ -32,28 +32,10 @@
 
 /*** Big list of commands ***/
 
-/* Useful typedef */
-typedef void do_cmd_type(void);
-
-
 /* Forward declare these, because they're really defined later */
 static do_cmd_type do_cmd_wizard, do_cmd_try_debug,
 			do_cmd_mouseclick, do_cmd_port,
 			do_cmd_xxx_options, do_cmd_menu, do_cmd_monlist, do_cmd_itemlist;
-
-
-/*
- * Holds a generic command - if cmd is set to other than CMD_NULL
- * it simply pushes that command to the game, otherwise the hook
- * function will be called.
- */
-typedef struct
-{
-	const char *desc;
-	unsigned char key;
-	cmd_code cmd;
-	do_cmd_type *hook;
-} command_type;
 
 
 /* Magic use */
@@ -103,6 +85,7 @@ static command_type cmd_item_use[] =
 	{ "Throw an item",            'v', CMD_NULL, textui_cmd_throw },
 	{ "Use item",            	  '|', CMD_NULL, cmd_use_item  }
 };
+
 
 /* Item management commands */
 static command_type cmd_item_manage[] =
@@ -697,6 +680,7 @@ static void do_cmd_mouseclick(void)
 		case SIDEBAR_RACE:
 		{
 			char buf[80];
+
 			if (game_mode == GAME_NPPMORIA) strnfmt(buf, sizeof(buf), "m_raceclas.txt#%s", p_name + rp_ptr->name);
 			else strnfmt(buf, sizeof(buf), "raceclas.txt#%s", p_name + rp_ptr->name);
 			screen_save();
@@ -707,6 +691,7 @@ static void do_cmd_mouseclick(void)
 		case SIDEBAR_CLASS:
 		{
 			char buf[80];
+
 			if (game_mode == GAME_NPPMORIA) strnfmt(buf, sizeof(buf), "m_raceclas.txt#%s", c_name + cp_ptr->name);
 			else strnfmt(buf, sizeof(buf), "raceclas.txt#%s", c_name + cp_ptr->name);
 			screen_save();

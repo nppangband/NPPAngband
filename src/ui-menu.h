@@ -179,6 +179,45 @@ struct menu_iter
 };
 
 
+/* Useful typedef */
+typedef void do_cmd_type(void);
+
+struct member_funcs
+{
+	/* Displays an entry at specified location, including kill-count and graphics */
+	void (*display_member)(int col, int row, bool cursor, int oid);
+
+	void (*lore)(int oid);		/* Displays lore for an oid */
+
+
+	/* Required only for objects with modifiable display attributes */
+	/* Unknown 'flavors' return flavor attributes */
+	char *(*xchar)(int oid);	/* Get character attr for OID (by address) */
+	byte *(*xattr)(int oid);	/* Get color attr for OID (by address) */
+
+	const char *(*xtra_prompt)(int oid);	/* Returns optional extra prompt */
+	void (*xtra_act)(char ch, int oid);		/* Handles optional extra actions */
+
+	bool is_visual;							/* Does this kind have visual editing? */
+};
+
+typedef struct member_funcs member_funcs;
+
+/*
+ * Holds a generic command - if cmd is set to other than CMD_NULL
+ * it simply pushes that command to the game, otherwise the hook
+ * function will be called.
+ */
+struct command_type
+{
+	const char *desc;
+	unsigned char key;
+	cmd_code cmd;
+	do_cmd_type *hook;
+};
+typedef struct command_type command_type;
+
+
 /* A menu defines either an action
  * or db row event
  */
@@ -200,11 +239,12 @@ struct menu_type
 	/* IMPORTANT: this cannot intersect with cmd_keys */
 	const char *selections; 
 
-	int flags;              /* Flags specifying the behavior of this menu. */
-	int filter_count;       /* number of rows in current view */
-	const int *filter_list;       /* optional filter (view) of menu objects */
+	int flags;				/* Flags specifying the behavior of this menu. */
+	int filter_count;		/* number of rows in current view */
+	const int *filter_list;	/* optional filter (view) of menu objects */
 
-	int count;              /* number of rows in underlying data set */
+	int count;				/* number of rows in underlying data set */
+
 	void *menu_data;  /* the data used to access rows. */
 
   	/* auxiliary browser help function */

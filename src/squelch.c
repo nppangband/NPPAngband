@@ -206,17 +206,6 @@ static quality_name_struct quality_values[SQUELCH_MAX] =
 	{ SQUELCH_ALL,	"squelch all but artifacts" },
 };
 
-/*
- * menu struct for differentiating aware from unaware squelch
- */
-typedef struct
-{
-	s16b idx;
-	bool aware;
-} squelch_choice;
-
-
-
 
 /*** Autoinscription stuff ***/
 
@@ -797,12 +786,6 @@ static int tval_comp_func(const void *a_ptr, const void *b_ptr)
 	return a - b;
 }
 
-
-typedef struct ego_desc
-{
-	s16b e_idx;
-	const char *short_name;
-} ego_desc;
 
 /*
  * Skip common prefixes in ego-item names.
