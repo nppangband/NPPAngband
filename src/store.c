@@ -3383,7 +3383,7 @@ static void store_display_entry(menu_type *menu, int oid, bool cursor, int row, 
 	s32b x;
 	byte desc = ODESC_PREFIX;
 	int entry_type;
-   	int entry_num;
+	int entry_num;
 
 	char i_name[80];
 	char out_val[160];
@@ -3811,10 +3811,6 @@ static int find_inven(const object_type *o_ptr)
 			case TV_SOFT_ARMOR:
 			case TV_HARD_ARMOR:
 			case TV_DRAG_ARMOR:
-			{
-				/* Fall through */
-			}
-
 			/* Rings, Amulets, Lights */
 			case TV_RING:
 			case TV_AMULET:
@@ -4284,7 +4280,6 @@ bool item_tester_hook_flammable_book(const object_type *o_ptr)
 	/* Flammable spellbook */
 	return (TRUE);
 }
-
 
 
 #define DISPLAY_STAT_ROW		8
