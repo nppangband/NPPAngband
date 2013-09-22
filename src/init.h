@@ -3,9 +3,16 @@
 /*
  * Copyright (c) 2000 Robert Ruehlmann
  *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.
+ * This work is free software; you can redistribute it and/or modify it
+ * under the terms of either:
+ *
+ * a) the GNU General Public License as published by the Free Software
+ *    Foundation, version 2, or
+ *
+ * b) the "Angband licence":
+ *    This software may be copied and distributed for educational, research,
+ *    and not for profit purposes provided that this copyright and statement
+ *    are included in all such copies.  Other copyrights may also apply.
  */
 
 #ifndef INCLUDED_INIT_H
@@ -17,7 +24,7 @@
 /*
  * Parse errors
  */
-enum
+typedef enum
 {
 	PARSE_ERROR_GENERIC = 1,
 	PARSE_ERROR_INVALID_FLAG,
@@ -45,7 +52,7 @@ enum
 	PARSE_ERROR_NAME_TOO_LONG,
 
 	PARSE_ERROR_MAX
-};
+} PARSE_ERROR;
 
 
 typedef struct header header;
@@ -71,7 +78,7 @@ typedef errr (*emit_info_txt_always_func)(ang_file *fp, header *head);
  * Note that, on some machines, for example, the Macintosh, the standard
  * "malloc()" function cannot handle more than 32767 bytes at one time,
  * but we may assume that the "ralloc()" function can handle up to 65535
- * butes at one time.  We should not, however, assume that the "ralloc()"
+ * bytes at one time.  We should not, however, assume that the "ralloc()"
  * function can handle more than 65536 bytes at a time, since this might
  * result in segmentation problems on certain older machines, and in fact,
  * we should not assume that it can handle exactly 65536 bytes at a time,
@@ -79,7 +86,7 @@ typedef errr (*emit_info_txt_always_func)(ang_file *fp, header *head);
  *
  * In general, these problems occur only on machines (such as most personal
  * computers) which use 2 byte "int" values, and which use "int" for the
- * arguments to the relevent functions.
+ * arguments to the relevant functions.
  */
 struct header
 {
@@ -88,11 +95,9 @@ struct header
 	byte v_patch;		/* Version -- patch */
 	byte v_extra;		/* Version -- extra */
 
-
 	u16b info_num;		/* Number of "info" records */
 
 	u16b info_len;		/* Size of each "info" record */
-
 
 	u32b head_size;		/* Size of the "header" in bytes */
 
@@ -107,14 +112,13 @@ struct header
 	char *text_ptr;
 
 	parse_info_txt_func parse_info_txt;
-	
 };
 
+
 extern errr init_info_txt(ang_file *fp, char *buf, header *head,
-                          parse_info_txt_func parse_info_txt_line);
+						  parse_info_txt_func parse_info_txt_line);
 extern errr init_store_txt(ang_file *fp, char *buf);
 extern errr init_names_txt(ang_file *fp, char *buf);
-
 
 extern errr parse_z_info(char *buf, header *head);
 extern errr parse_v_info(char *buf, header *head);
