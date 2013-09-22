@@ -1,4 +1,3 @@
-/* File: z-form.c */
 /*
  * File: z-form.c
  * Purpose: Low-level text formatting (snprintf() replacement)
@@ -30,13 +29,13 @@
  *
  * The format strings allow the basic "sprintf()" format sequences, though
  * some of them are processed slightly more carefully or portably, as well
- * as a few "special" sequences, including the "capilitization" sequences of
+ * as a few "special" sequences, including the "capitalization" sequences of
  * "%C" and "%S".
  *
  * Note that some "limitations" are enforced by the current implementation,
  * for example, no "format sequence" can exceed 100 characters, including any
  * "length" restrictions, and the result of combining and "format sequence"
- * with the relevent "arguments" must not exceed 1000 characters.
+ * with the relevant "arguments" must not exceed 1000 characters.
  *
  * These limitations could be fixed by stealing some of the code from,
  * say, "vsprintf()" and placing it into my "vstrnfmt()" function.
@@ -138,9 +137,8 @@
  *
  * For example: "format("%^-.*s", i, txt)" will produce a string containing
  * the first "i" characters of "txt", left justified, with the first non-space
- * character capitilized, if reasonable.
+ * character capitalized, if reasonable.
  */
-
 
 
 /*
@@ -176,7 +174,7 @@
  * too short, not written a null, and forced the programmer to deal with
  * this special case, but I felt that it is better to at least give a
  * "usable" result when the buffer was too long instead of either giving
- * a memory overwrite like "sprintf()" or a non-terminted string like
+ * a memory overwrite like "sprintf()" or a non-terminated string like
  * "strncpy()".  Note that "strncpy()" also "null-pads" the result.
  *
  * Note that in most cases "just long enough" is probably "too short".
@@ -215,14 +213,11 @@ size_t vstrnfmt(char *buf, size_t max, cptr fmt, va_list vp)
 	/* Resulting string */
 	char tmp[1024];
 
-
 	/* Fatal error - no buffer length */
 	if (!max) quit("Called vstrnfmt() with empty buffer!");
 
-
 	/* Mega-Hack -- treat "no format" as "empty string" */
 	if (!fmt) fmt = "";
-
 
 	/* Begin the buffer */
 	n = 0;
@@ -288,7 +283,6 @@ size_t vstrnfmt(char *buf, size_t max, cptr fmt, va_list vp)
 			continue;
 		}
 
-
 		/* Begin the "aux" string */
 		q = 0;
 
@@ -304,18 +298,8 @@ size_t vstrnfmt(char *buf, size_t max, cptr fmt, va_list vp)
 		/* Build the "aux" string */
 		while (TRUE)
 		{
-			/* Error -- format sequence is not terminated */
-			if (!*s)
-			{
-				/* Terminate the buffer */
-				buf[0] = '\0';
-
-				/* Return "error" */
-				return (0);
-			}
-
-			/* Error -- format sequence may be too long */
-			if (q > 100)
+			/* Error -- format sequence is not terminated or may be too long */
+			if (!*s || q > 100)
 			{
 				/* Terminate the buffer */
 				buf[0] = '\0';
@@ -397,7 +381,6 @@ size_t vstrnfmt(char *buf, size_t max, cptr fmt, va_list vp)
 				}
 			}
 		}
-
 
 		/* Terminate "aux" */
 		aux[q] = '\0';
@@ -619,7 +602,6 @@ size_t vstrnfmt(char *buf, size_t max, cptr fmt, va_list vp)
 			}
 		}
 
-
 		/* Mega-Hack -- handle "capitalization" */
 		if (do_xtra)
 		{
@@ -648,7 +630,6 @@ size_t vstrnfmt(char *buf, size_t max, cptr fmt, va_list vp)
 			buf[n++] = tmp[q];
 		}
 	}
-
 
 	/* Terminate buffer */
 	buf[n] = '\0';
@@ -706,7 +687,7 @@ char *vformat(cptr fmt, va_list vp)
 	if (!fmt) return (format_buf);
 
 	/* Keep going until successful */
-	while (1)
+	while (TRUE)
 	{
 		size_t len;
 
@@ -779,8 +760,6 @@ char *format(cptr fmt, ...)
 }
 
 
-
-
 /*
  * Vararg interface to plog()
  */
@@ -801,7 +780,6 @@ void plog_fmt(cptr fmt, ...)
 	/* Call plog */
 	plog(res);
 }
-
 
 
 /*
