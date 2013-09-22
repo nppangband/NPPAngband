@@ -23,13 +23,13 @@ typedef struct _message_t
 	char *str;
 	struct _message_t *newer;
 	struct _message_t *older;
-	u16b type;
+	MessageType type;
 	u16b count;
 } message_t;
 
 typedef struct _msgcolor_t
 {
-	u16b type;
+	MessageType type;
 	byte color;
 	struct _msgcolor_t *next;
 } msgcolor_t;
@@ -46,6 +46,10 @@ typedef struct _msgqueue_t
 static msgqueue_t *messages = NULL;
 
 /* Functions operating on the entire list */
+
+/*
+ * Initialize the message structures
+ */
 errr messages_init(void)
 {
 	int i;
@@ -65,6 +69,10 @@ errr messages_init(void)
 	return 0;
 }
 
+
+/*
+ * Free message structures and data
+ */
 void messages_free(void)
 {
 	msgcolor_t *c = messages->colors;
@@ -90,6 +98,9 @@ void messages_free(void)
 	FREE(messages);
 }
 
+/*
+ * Return the number of messages
+ */
 u16b messages_num(void)
 {
 	return messages->count;
@@ -97,7 +108,14 @@ u16b messages_num(void)
 
 /* Functions for individual messages */
 
-void message_add(const char *str, u16b type)
+/**
+ * Save a new message into the memory buffer, with text `str` and type `type`.
+ *
+ * The new message may not be saved if it is identical to the one saved before
+ * it, in which case the "count" of the message will be increased instead.
+ * This count can be fetched using the message_count() function.
+ */
+void message_add(const char *str, const MessageType type)
 {
 	message_t *m;
 
@@ -136,6 +154,10 @@ void message_add(const char *str, u16b type)
 	}
 }
 
+
+/*
+ * Get a given message
+ */
 static message_t *message_get(u16b age)
 {
 	message_t *m = messages->head;
@@ -147,24 +169,51 @@ static message_t *message_get(u16b age)
 }
 
 
+/**
+ * Returns the text of the message of age `age`.  The age of the most recently
+ * saved message is 0, the one before that is of age 1, etc.
+ *
+ * Returns the empty string if the no messages of the age specified are
+ * available.
+ */
 const char *message_str(u16b age)
 {
 	message_t *m = message_get(age);
 	return (m ? m->str : "");
 }
 
+
+/**
+ * Returns the number of times the message of age `age` was saved. The age of
+ * the most recently saved message is 0, the one before that is of age 1, etc.
+ *
+ * In other words, if message_add() was called five times, one after the other,
+ * with the message "The orc sets your hair on fire.", then the text will only
+ * have one age (age = 0), but will have a count of 5.
+ */
 u16b message_count(u16b age)
 {
 	message_t *m = message_get(age);
 	return (m ? m->count : 0);
 }
 
-u16b message_type(u16b age)
+
+/**
+ * Returns the type of the message of age `age`.  The age of the most recently
+ * saved message is 0, the one before that is of age 1, etc.
+ */
+MessageType message_type(u16b age)
 {
 	message_t *m = message_get(age);
-	return (m ? m->type : 0);
+	return (m ? m->type : MSG_GENERIC);
 }
 
+
+/**
+ * Returns the display colour of the message memorised `age` messages ago.
+ * (i.e. age = 0 represents the last memorised message, age = 1 is the one
+ * before that, etc).
+ */
 byte message_color(u16b age)
 {
 	message_t *m = message_get(age);
@@ -174,7 +223,11 @@ byte message_color(u16b age)
 
 /* Message-color functions */
 
-errr message_color_define(u16b type, byte color)
+
+/**
+ * Defines the color `color` for the message type `type`.
+ */
+errr message_color_define(MessageType type, byte color)
 {
 	msgcolor_t *mc = messages->colors;
 
@@ -203,7 +256,11 @@ errr message_color_define(u16b type, byte color)
 	return 0;
 }
 
-byte message_type_color(u16b type)
+
+/**
+ * Returns the colour for the message type `type`.
+ */
+byte message_type_color(MessageType type)
 {
 	msgcolor_t *mc;
 	byte color = TERM_WHITE;
