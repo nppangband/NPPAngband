@@ -25,7 +25,9 @@
 #ifdef WINDOWS
 # include <windows.h>
 # include <io.h>
+#ifndef __CYGWIN__
 # include <direct.h>
+#endif
 #endif
 
 #ifdef MACH_O_CARBON
