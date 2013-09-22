@@ -68,29 +68,29 @@ void event_add_handler(game_event_type type, game_event_handler *fn, void *user)
 void event_remove_handler(game_event_type type, game_event_handler *fn, void *user)
 {
 	struct event_handler_entry *prev = NULL;
-	struct event_handler_entry *this = event_handlers[type];
+	struct event_handler_entry *curr = event_handlers[type];
 
 	/* Look for the entry in the list */
-	while (this)
+	while (curr)
 	{
 		/* Check if this is the entry we want to remove */
-		if (this->fn == fn && this->user == user)
+		if (curr->fn == fn && curr->user == user)
 		{
 			if (!prev)
 			{
-				event_handlers[type] = this->next;
+				event_handlers[type] = curr->next;
 			}
 			else
 			{
-				prev->next = this->next;
+				prev->next = curr->next;
 			}
 
-			mem_free(this);
+			mem_free(curr);
 			return;
 		}
 
-		prev = this;
-		this = this->next;
+		prev = curr;
+		curr = curr->next;
 	}
 }
 
