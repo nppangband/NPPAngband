@@ -2284,6 +2284,7 @@ static bool store_will_buy(int store_num, const object_type *o_ptr)
 				default:
 				return (FALSE);
 			}
+			break;
 		}
 	}
 
@@ -2456,6 +2457,8 @@ static int store_carry(int st, object_type *o_ptr)
 
 			/* Use recharged value only if greater */
 			if (charges > o_ptr->pval) o_ptr->pval = charges;
+
+			break;
 		}
 	}
 
@@ -2831,6 +2834,8 @@ void store_delete_index(int st, int what)
 				{
 					o_ptr->pval -= num * o_ptr->pval / o_ptr->number;
 				}
+
+				break;
 			}
 		}
 
@@ -3868,8 +3873,7 @@ static int find_inven(const object_type *o_ptr)
 		}
 
 		/* Different flags */
-		if ((f1 != j1) || (f2 != j2) || \
-			(f3 != j3) || (fn != jn)) continue;
+		if ((f1 != j1) || (f2 != j2) || (f3 != j3) || (fn != jn)) continue;
 
 		/* They match, so add up */
 		num += j_ptr->number;
@@ -3877,6 +3881,7 @@ static int find_inven(const object_type *o_ptr)
 
 	return num;
 }
+
 
 /*
  * Buy the item with the given index from the current store's inventory.
@@ -4007,6 +4012,7 @@ void do_cmd_buy(cmd_code code, cmd_arg args[])
 		}
 	}
 }
+
 
 /*
  * Retrieve the item with the given index from the home's inventory.
@@ -4255,6 +4261,7 @@ bool item_tester_hook_randart(const object_type *o_ptr)
 	return (FALSE);
 }
 
+
 /*
  * The flammable book tester
  */
@@ -4280,9 +4287,9 @@ bool item_tester_hook_flammable_book(const object_type *o_ptr)
 
 
 
-
 #define DISPLAY_STAT_ROW		8
 #define DISPLAY_STAT_COL		10
+
 
 /*
  * Buy an object or service from a store, or get a quest from the guild.
@@ -4353,7 +4360,6 @@ static bool store_purchase(int oid)
 		store_flags |= (STORE_FRAME_CHANGE | STORE_GOLD_CHANGE);
 
 		return (success);
-
 	}
 	/* else an object */
 
@@ -4398,8 +4404,8 @@ static bool store_purchase(int oid)
 	else
 	{
 		strnfmt(o_name, sizeof o_name, "%s how many%s? (max %d) ",
-	        (this_store == STORE_HOME) ? "Take" : "Buy",
-	        num ? format(" (you have %d)", num) : "", max_amount);
+				(this_store == STORE_HOME) ? "Take" : "Buy",
+					num ? format(" (you have %d)", num) : "", max_amount);
 
 		/* Get a quantity */
 		amount_purchased = get_quantity(o_name, max_amount);
@@ -4430,12 +4436,10 @@ static bool store_purchase(int oid)
 	}
 	else
 	{
-		u32b price;
 		bool response;
 
 		/* Extract the price for the entire stack */
-		price = price_item(i_ptr, FALSE) * i_ptr->number;
-
+		u32b price = price_item(i_ptr, FALSE) * i_ptr->number;
 
 		/* Describe the object (fully) */
 		object_desc(o_name, sizeof(o_name), i_ptr, ODESC_PREFIX | ODESC_FULL);
@@ -4463,10 +4467,8 @@ static bool store_purchase(int oid)
 
 	store_updates();
 
-
 	return TRUE;
 }
-
 
 
 /*
@@ -4480,6 +4482,7 @@ static bool store_will_buy_tester(const object_type *o_ptr)
 
 	return store_will_buy(this_store, o_ptr);
 }
+
 
 /*
  * Sell an item to the current store.
@@ -4519,7 +4522,6 @@ void do_cmd_sell(cmd_code code, cmd_arg args[])
 	/* Get a copy of the object representing the number being sold */
 	object_copy_amt(&sold_item, o_ptr, amt);
 
-
 	/* Check if the store has space for the items */
 	if (!store_check_num(current_store(), &sold_item))
 	{
@@ -4542,7 +4544,7 @@ void do_cmd_sell(cmd_code code, cmd_arg args[])
 
 	/* Redraw stuff */
 	p_ptr->redraw |= (PR_INVEN | PR_EQUIP | PR_RESIST | PR_EXP |
-			  PR_STATS | PU_NATIVE | PR_ITEMLIST);
+					  PR_STATS | PU_NATIVE | PR_ITEMLIST);
 
 	/* Get the "apparent" value */
 	dummy = object_value(&sold_item) * amt;
@@ -4585,8 +4587,8 @@ void do_cmd_sell(cmd_code code, cmd_arg args[])
 
 	/* The store gets that (known) object */
 	store_carry(current_store(), &sold_item);
-
 }
+
 
 /*
  * Stash an item in the home.
@@ -4640,8 +4642,8 @@ void do_cmd_stash(cmd_code code, cmd_arg args[])
 
 	/* Let the home carry it */
 	home_carry(&dropped_item);
-
 }
+
 
 /*
  * Sell an object, or drop if it we're in the home.
@@ -4657,7 +4659,6 @@ static bool store_sell(void)
 	object_type *i_ptr = &object_type_body;
 
 	char o_name[120];
-
 
 	const char *reject = "You have nothing that I want. ";
 	const char *prompt = "Sell which item? ";
@@ -4720,7 +4721,6 @@ static bool store_sell(void)
 
 	if (!store_check_num(this_store, i_ptr))
 	{
-
 		if (this_store == STORE_HOME)
 			msg_print("Your home is full.");
 
@@ -4754,7 +4754,6 @@ static bool store_sell(void)
 		screen_load();
 
 		cmd_insert(CMD_SELL, item, amt);
-
 	}
 
 	/* Player is at home */
@@ -4766,8 +4765,8 @@ static bool store_sell(void)
 	store_updates();
 
 	return (TRUE);
-
 }
+
 
 /*
  * Examine an item in a store
@@ -4838,7 +4837,6 @@ static void store_examine(int oid)
 }
 
 
-
 /*
  * Flee the store when it overflows.
  */
@@ -4905,6 +4903,7 @@ static bool store_overflow(void)
 	return FALSE;
 }
 
+
 /*
  * Process a command in a store
  *
@@ -4932,7 +4931,6 @@ static bool store_process_command(char cmd, void *db, int oid)
 		case 's':
 		case 'd':
 		{
-
 			command_processed = store_sell();
 			if (command_processed)
 			{
@@ -4976,7 +4974,6 @@ static bool store_process_command(char cmd, void *db, int oid)
 			command_processed = TRUE;
 			break;
 		}
-
 
 		/*** Inventory Commands ***/
 
@@ -5038,7 +5035,6 @@ static bool store_process_command(char cmd, void *db, int oid)
 			break;
 		}
 
-
 		/*** Various commands ***/
 
 		/* Identify an object */
@@ -5054,8 +5050,6 @@ static bool store_process_command(char cmd, void *db, int oid)
 			toggle_inven_equip();
 			break;
 		}
-
-
 
 		/*** Use various objects ***/
 
@@ -5086,7 +5080,6 @@ static bool store_process_command(char cmd, void *db, int oid)
 
 			break;
 		}
-
 
 		/*** Help and Such ***/
 
@@ -5122,7 +5115,6 @@ static bool store_process_command(char cmd, void *db, int oid)
 
 			break;
 		}
-
 
 		/*** Misc Commands ***/
 
@@ -5161,7 +5153,6 @@ static bool store_process_command(char cmd, void *db, int oid)
 
 		event_signal(EVENT_INVENTORY);
 		event_signal(EVENT_EQUIPMENT);
-
 	}
 
 	return command_processed;
@@ -5198,8 +5189,6 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
 	/* See if we are holding a quest item */
 	if (this_store == STORE_GUILD)
 	{
-
-
 		if ((q_ptr->q_type == QUEST_VAULT) && (!guild_quest_complete()))
 		{
 			/* The artifact has been returned, the quest is a success */
@@ -5242,7 +5231,6 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
 
 	/*** Inventory display ***/
 	{
-
 		static region items_region = { 1, 4, -1, -1 };
 		static const menu_iter store_menu = { NULL, NULL, store_display_entry, store_process_command };
 		const menu_iter *cur_menu = &store_menu;
@@ -5364,7 +5352,6 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
 			}
 			else
 			{
-
 				/* Display the store */
 				store_display_recalc(this_store);
 				store_redraw();
@@ -5381,7 +5368,6 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
 			/* Clear all current messages */
 			msg_flag = FALSE;
 		}
-
 	}
 
 	/* Switch back to the normal game view. */
