@@ -181,7 +181,7 @@ typedef enum {
 
 	MSG_MAX				= 153,
 
-	SOUND_MAX		 	= MSG_MAX
+	SOUND_MAX			= MSG_MAX
 } MessageType;
 
 /*** Functions ***/
