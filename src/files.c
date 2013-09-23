@@ -37,7 +37,7 @@ static cptr likert(int x, int y, byte *attr)
 	/* Negative value */
 	if (x < 0)
 	{
-		*attr = TERM_RED;
+		*attr = TERM_RED_RUST;
 		return ("Very Bad");
 	}
 
@@ -52,7 +52,7 @@ static cptr likert(int x, int y, byte *attr)
 		}
 		case 2:
 		{
-			*attr = TERM_RED;
+			*attr = TERM_ORANGE;
 			return ("Poor");
 		}
 		case 3:
@@ -91,12 +91,12 @@ static cptr likert(int x, int y, byte *attr)
 		case 16:
 		case 17:
 		{
-			*attr = TERM_L_GREEN;
+			*attr = TERM_WHITE;
 			return ("Heroic");
 		}
 		default:
 		{
-			*attr = TERM_L_GREEN;
+			*attr = TERM_VIOLET;
 			return ("Legendary");
 		}
 	}
