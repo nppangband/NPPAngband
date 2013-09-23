@@ -15,226 +15,127 @@
 #include "ui-event.h"
 
 
+typedef struct term_win term_win;
+
 /*
  * A term_win is a "window" for a Term
- *
- *	- Cursor Useless/Visible codes
- *	- Cursor Location (see "Useless")
- *
- *	- Array[h] -- Access to the attribute array
- *	- Array[h] -- Access to the character array
- *
- *	- Array[h*w] -- Attribute array
- *	- Array[h*w] -- Character array
- *
- *	- next screen saved
- *	- hook to be called on screen size change
  *
  * Note that the attr/char pair at (x,y) is a[y][x]/c[y][x]
  * and that the row of attr/chars at (0,y) is a[y]/c[y]
  */
-
-typedef struct term_win term_win;
-
 struct term_win
 {
-	bool cu, cv;
-	byte cx, cy;
+	bool cu, cv;	/* Cursor Useless/Visible codes */
+	byte cx, cy;	/* Cursor location - valid only when cu is false */
 
-	byte **a;
-	char **c;
+	byte **a;		/* Array[h] -- Access to the attribute array */
+	char **c;		/* Array[h] -- Access to the character array */
 
-	byte *va;
-	char *vc;
+	byte *va;		/* Array[h*w] -- Attribute array */
+	char *vc;		/* Array[h*w] -- Character array */
 
-	byte **ta;
-	char **tc;
+	byte **ta;		/* Array[h] -- Access to the terrain attribute array */
+	char **tc;		/* Array[h] -- Access to the terrain character array */
 
-	byte *vta;
-	char *vtc;
+	byte *vta;		/* Array[h*w] -- Terrain attribute array */
+	char *vtc;		/* Array[h*w] -- Terrain character array */
 
-	term_win *next;
+	term_win *next;	/* next screen saved */
 };
 
 
+typedef struct term term;
 
 /*
  * An actual "term" structure
- *
- *	- Extra "user" info (used by application)
- *
- *	- Extra "data" info (used by implementation)
- *
- *
- *	- Flag "user_flag"
- *	  An extra "user" flag (used by application)
- *
- *
- *	- Flag "data_flag"
- *	  An extra "data" flag (used by implementation)
- *
- *
- *	- Flag "active_flag"
- *	  This "term" is "active"
- *
- *	- Flag "mapped_flag"
- *	  This "term" is "mapped"
- *
- *	- Flag "total_erase"
- *	  This "term" should be fully erased
- *
- *	- Flag "fixed_shape"
- *	  This "term" is not allowed to resize
- *
- *	- Flag "icky_corner"
- *	  This "term" has an "icky" corner grid
- *
- *	- Flag "soft_cursor"
- *	  This "term" uses a "software" cursor
- *
- *	- Flag "always_pict"
- *	  Use the "Term_pict()" routine for all text
- *
- *	- Flag "higher_pict"
- *	  Use the "Term_pict()" routine for special text
- *
- *	- Flag "always_text"
- *	  Use the "Term_text()" routine for invisible text
- *
- *	- Flag "unused_flag"
- *	  Reserved for future use
- *
- *	- Flag "never_bored"
- *	  Never call the "TERM_XTRA_BORED" action
- *
- *	- Flag "never_frosh"
- *	  Never call the "TERM_XTRA_FROSH" action
- *
- *
- *	- Value "attr_blank"
- *	  Use this "attr" value for "blank" grids
- *
- *	- Value "char_blank"
- *	  Use this "char" value for "blank" grids
- *
- *
- *	- Ignore this pointer
- *
- *	- Keypress Queue -- various data
- *
- *	- Keypress Queue -- pending keys
- *
- *
- *	- Window Width (max 255)
- *	- Window Height (max 255)
- *
- *	- Minimum modified row
- *	- Maximum modified row
- *
- *	- Minimum modified column (per row)
- *	- Maximum modified column (per row)
- *
- *
- *	- Displayed screen image
- *	- Requested screen image
- *
- *	- Temporary screen image
- *	- Memorized screen image
- *
- *
- *	- Hook for init-ing the term
- *	- Hook for nuke-ing the term
- *
- *	- Hook for user actions
- *
- *	- Hook for extra actions
- *
- *	- Hook for placing the cursor
- *
- *	- Hook for drawing some blank spaces
- *
- *	- Hook for drawing a string of chars using an attr
- *
- *	- Hook for drawing a sequence of special attr/char pairs
- *
- *  - Hook for translating Latin-1 (8-bit) characters
  */
-
-typedef struct term term;
-
 struct term
 {
-	void *user;
+	void *user;			/* Extra "user" info (used by application) */
 
-	void *data;
+	void *data;			/* Extra "data" info (used by implementation) */
 
-	bool user_flag;
+	bool user_flag;		/* An extra "user" flag (used by application) */
 
-	bool data_flag;
+	bool data_flag;		/* An extra "data" flag (used by implementation) */
 
-	bool active_flag;
-	bool mapped_flag;
-	bool total_erase;
-	bool fixed_shape;
-	bool icky_corner;
-	bool soft_cursor;
-	bool always_pict;
-	bool higher_pict;
-	bool always_text;
-	bool unused_flag;
-	bool never_bored;
-	bool never_frosh;
+	bool active_flag;	/* This "term" is "active" */
+	bool mapped_flag;	/* This "term" is "mapped" */
+	bool total_erase;	/* This "term" should be fully erased */
 
-	byte attr_blank;
-	char char_blank;
+	/* Term capability and limitation flags */
+	bool fixed_shape;	/* This "term" is not allowed to resize */
+	bool icky_corner;	/* This "term" has an "icky" corner grid (writing to
+						   the grid in the lower right corner causes the
+						   screen to scroll) */
+	bool soft_cursor;	/* This "term" uses a "software" cursor */
+	bool always_pict;	/* Use the "Term_pict()" routine for all text */
+	bool higher_pict;	/* Use the "Term_pict()" routine for special text */
+	bool always_text;	/* Use the "Term_text()" routine for invisible text */
+	bool unused_flag;	/* Reserved for future use */
+	bool never_bored;	/* Never call the "TERM_XTRA_BORED" action */
+	bool never_frosh;	/* Never call the "TERM_XTRA_FROSH" action */
 
-	ui_event_data *key_queue;
+	byte attr_blank;	/* Use this "attr" value for "blank" grids */
+	char char_blank;	/* Use this "char" value for "blank" grids */
 
+	ui_event_data *key_queue;	/* Ignore this pointer */
+
+	/* Keypress Queue -- pending keys */
 	u16b key_head;
 	u16b key_tail;
+	/* Keypress Queue -- various data */
 	u16b key_xtra;
 	u16b key_size;
 
-	byte wid;
-	byte hgt;
+	byte wid;			/* Window Width (max 255) */
+	byte hgt;			/* Window Height (max 255) */
 
-	byte y1;
-	byte y2;
+	byte y1;			/* Minimum modified row */
+	byte y2;			/* Maximum modified row */
 
-	byte *x1;
-	byte *x2;
+	byte *x1;			/* Minimum modified column (per row) */
+	byte *x2;			/* Maximum modified column (per row) */
 
 	/* Offsets used by the map subwindows */
 	byte offset_x;
 	byte offset_y;
 
-	term_win *old;
-	term_win *scr;
+	term_win *old;		/* Displayed screen image */
+	term_win *scr;		/* Requested screen image */
 
-	term_win *tmp;
-	term_win *mem;
+	term_win *tmp;		/* Temporary screen image */
+	term_win *mem;		/* Memorized screen image */
 
+	/* Hook for init-ing the term */
 	void (*init_hook)(term *t);
+	/* Hook for nuke-ing the term */
 	void (*nuke_hook)(term *t);
 
+	/* Hook for user actions */
 	errr (*user_hook)(int n);
 
+	/* Hook for extra actions */
 	errr (*xtra_hook)(int n, int v);
 
+	/* Hook for placing the cursor */
 	errr (*curs_hook)(int x, int y);
 
+	/* Hook for placing the cursor */
 	errr (*bigcurs_hook)(int x, int y);
 
+	/* Hook for drawing some blank spaces */
 	errr (*wipe_hook)(int x, int y, int n);
 
+	/* Hook for drawing a string of chars using an attr */
 	errr (*text_hook)(int x, int y, int n, byte a, cptr s);
 
+	/* Hook for drawing a sequence of special attr/char pairs */
 	errr (*pict_hook)(int x, int y, int n, const byte *ap, const char *cp, const byte *tap, const char *tcp);
 
+	/* Hook for translating Latin-1 (8-bit) characters */
 	byte (*xchar_hook)(byte c);
 };
-
-
 
 
 /**** Available Constants ****/
@@ -256,19 +157,18 @@ struct term
  *
  * The other actions do not need a "v" code, so "zero" is used.
  */
-#define TERM_XTRA_EVENT    1    /* Process some pending events */
-#define TERM_XTRA_FLUSH 2    /* Flush all pending events */
-#define TERM_XTRA_CLEAR 3    /* Clear the entire window */
-#define TERM_XTRA_SHAPE 4    /* Set cursor shape (optional) */
-#define TERM_XTRA_FROSH 5    /* Flush one row (optional) */
-#define TERM_XTRA_FRESH 6    /* Flush all rows (optional) */
-#define TERM_XTRA_NOISE 7    /* Make a noise (optional) */
-#define TERM_XTRA_BORED 9    /* Handle stuff when bored (optional) */
-#define TERM_XTRA_REACT 10    /* React to global changes (optional) */
-#define TERM_XTRA_ALIVE 11    /* Change the "hard" level (optional) */
-#define TERM_XTRA_LEVEL 12    /* Change the "soft" level (optional) */
-#define TERM_XTRA_DELAY 13    /* Delay some milliseconds (optional) */
-
+#define TERM_XTRA_EVENT	1	/* Process some pending events */
+#define TERM_XTRA_FLUSH	2	/* Flush all pending events */
+#define TERM_XTRA_CLEAR	3	/* Clear the entire window */
+#define TERM_XTRA_SHAPE	4	/* Set cursor shape (optional) */
+#define TERM_XTRA_FROSH	5	/* Flush one row (optional) */
+#define TERM_XTRA_FRESH	6	/* Flush all rows (optional) */
+#define TERM_XTRA_NOISE	7	/* Make a noise (optional) */
+#define TERM_XTRA_BORED	9	/* Handle stuff when bored (optional) */
+#define TERM_XTRA_REACT	10	/* React to global changes (optional) */
+#define TERM_XTRA_ALIVE	11	/* Change the "hard" level (optional) */
+#define TERM_XTRA_LEVEL	12	/* Change the "soft" level (optional) */
+#define TERM_XTRA_DELAY	13	/* Delay some milliseconds (optional) */
 
 
 /*
@@ -278,32 +178,32 @@ struct term
  * and should "gamma corrected" on most (non-Macintosh) machines.
  */
 
-#define TERM_DARK		0	/* 'd' */	/* 0,0,0 */
-#define TERM_WHITE		1	/* 'w' */	/* 4,4,4 */
-#define TERM_SLATE		2	/* 's' */	/* 2,2,2 */
-#define TERM_ORANGE		3	/* 'o' */	/* 4,2,0 */
-#define TERM_RED		4	/* 'r' */	/* 3,0,0 */
-#define TERM_GREEN		5	/* 'g' */	/* 0,2,1 */
-#define TERM_BLUE		6	/* 'b' */	/* 0,0,4 */
-#define TERM_UMBER		7	/* 'u' */	/* 2,1,0 */
-#define TERM_L_DARK		8	/* 'D' */	/* 1,1,1 */
-#define TERM_L_WHITE	9	/* 'W' */	/* 3,3,3 */
-#define TERM_VIOLET		10	/* 'v' */	/* 4,0,4 */
-#define TERM_YELLOW		11	/* 'y' */	/* 4,4,0 */
-#define TERM_L_RED		12	/* 'R' */	/* 4,0,0 */
-#define TERM_L_GREEN	13	/* 'G' */	/* 0,4,0 */
-#define TERM_L_BLUE		14	/* 'B' */	/* 0,4,4 */
-#define TERM_L_UMBER	15	/* 'U' */	/* 3,2,1 */
+#define TERM_DARK			0	/* 'd' */	/* 0,0,0 */
+#define TERM_WHITE			1	/* 'w' */	/* 4,4,4 */
+#define TERM_SLATE			2	/* 's' */	/* 2,2,2 */
+#define TERM_ORANGE			3	/* 'o' */	/* 4,2,0 */
+#define TERM_RED			4	/* 'r' */	/* 3,0,0 */
+#define TERM_GREEN			5	/* 'g' */	/* 0,2,1 */
+#define TERM_BLUE			6	/* 'b' */	/* 0,0,4 */
+#define TERM_UMBER			7	/* 'u' */	/* 2,1,0 */
+#define TERM_L_DARK			8	/* 'D' */	/* 1,1,1 */
+#define TERM_L_WHITE		9	/* 'W' */	/* 3,3,3 */
+#define TERM_VIOLET			10	/* 'v' */	/* 4,0,4 */
+#define TERM_YELLOW			11	/* 'y' */	/* 4,4,0 */
+#define TERM_L_RED			12	/* 'R' */	/* 4,0,0 */
+#define TERM_L_GREEN		13	/* 'G' */	/* 0,4,0 */
+#define TERM_L_BLUE			14	/* 'B' */	/* 0,4,4 */
+#define TERM_L_UMBER		15	/* 'U' */	/* 3,2,1 */
 /*  16 is unused  */
-#define TERM_SNOW_WHITE  	17   	/* 'w1'*/
-#define TERM_SLATE_GRAY  	18   	/* 's1'*/
-#define TERM_ORANGE_PEEL 	19	 	/* 'o1' */
-#define TERM_RED_LAVA    	20	 	/* 'r1' */
-#define TERM_JUNGLE_GREEN	21	 	/* 'g1' */
+#define TERM_SNOW_WHITE		17		/* 'w1'*/
+#define TERM_SLATE_GRAY		18		/* 's1'*/
+#define TERM_ORANGE_PEEL 	19		/* 'o1' */
+#define TERM_RED_LAVA		20		/* 'r1' */
+#define TERM_JUNGLE_GREEN	21		/* 'g1' */
 #define TERM_NAVY_BLUE		22		/* 'b1' */
 #define TERM_AUBURN			23		/* 'u1' */
 #define TERM_TAUPE			24		/* 'D1' */
-#define TERM_L_WHITE_2	    25		/* 'W1' */
+#define TERM_L_WHITE_2		25		/* 'W1' */
 #define TERM_D_PURPLE		26		/* 'v1' */
 #define TERM_MAIZE			27		/* 'Y1' */
 #define TERM_RASPBERRY		28		/* 'R1' */
@@ -314,43 +214,40 @@ struct term
 /*  33 is unused  */
 #define TERM_SILVER			34		/* 's2' */
 #define TERM_MAHAGONY		35		/* 'o2' */
-#define TERM_RED_RUST    	36	 	/* 'r2' */
+#define TERM_RED_RUST		36		/* 'r2' */
 /*  37 is unused  */
 /*  38 is unused  */
-#define TERM_COPPER	    	39	 	/* 'u2' */
+#define TERM_COPPER			39		/* 'u2' */
 /*  40 is unused  */
 /*  41 is unused  */
 /*  42 is unused  */
-#define TERM_GOLD	    	43	 	/* 'Y2' */
-#define TERM_PINK	    	44	 	/* 'R2' */
+#define TERM_GOLD			43		/* 'Y2' */
+#define TERM_PINK			44		/* 'R2' */
 /*  45 is unused  */
 /*  46 is unused  */
-#define TERM_EARTH_YELLOW  	47	 	/* 'U2' */
+#define TERM_EARTH_YELLOW	47		/* 'U2' */
 
 /*
- * 47 and beyond is unused
+ * 47 and beyond are unused
  * Note that if a color is added beyond TERM_EARTH_YELLOW, then
  * MAX_COLOR_USED in defines.h needs to be modified
  */
 
 
-
-
 /* The following allow color 'translations' to support environments with a limited color depth
- * as well as translate colours to alternates for e.g. menu highlighting. */
+ * as well as translate colors to alternates for e.g. menu highlighting. */
 
-#define ATTR_FULL        0    /* full color translation */
-#define ATTR_MONO        1    /* mono color translation */
-#define ATTR_VGA         2    /* 16 color translation */
-#define ATTR_BLIND       3    /* "Blind" color translation */
-#define ATTR_LIGHT       4    /* "Torchlit" color translation */
-#define ATTR_DARK        5    /* "Dark" color translation */
-#define ATTR_HIGH        6    /* "Highlight" color translation */
-#define ATTR_METAL       7    /* "Metallic" color translation */
-#define ATTR_MISC        8    /* "Miscellaneous" color translation - see misc_to_attr */
+#define ATTR_FULL		0	/* full color translation */
+#define ATTR_MONO		1	/* mono color translation */
+#define ATTR_VGA		2	/* 16 color translation */
+#define ATTR_BLIND		3	/* "Blind" color translation */
+#define ATTR_LIGHT		4	/* "Torchlit" color translation */
+#define ATTR_DARK		5	/* "Dark" color translation */
+#define ATTR_HIGH		6	/* "Highlight" color translation */
+#define ATTR_METAL		7	/* "Metallic" color translation */
+#define ATTR_MISC		8	/* "Miscellaneous" color translation - see misc_to_attr */
 
-#define MAX_ATTR        9
-
+#define MAX_ATTR		9
 
 
 /**** Available Variables ****/
@@ -402,8 +299,5 @@ extern errr term_nuke(term *t);
 extern errr term_init(term *t, int w, int h, int k);
 
 
-
 #endif
-
-
 

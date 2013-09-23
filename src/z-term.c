@@ -15,8 +15,8 @@
  *    and not for profit purposes provided that this copyright and statement
  *    are included in all such copies.  Other copyrights may also apply.
  */
-#include "angband.h"
 
+#include "angband.h"
 
 
 /*
@@ -36,7 +36,7 @@
  *
  * This package was designed to help port the game "Angband" to a wide
  * variety of different platforms.  Angband, like many other games in
- * the "rogue-like" heirarchy, requires, at the minimum, the ability
+ * the "rogue-like" hierarchy, requires, at the minimum, the ability
  * to display "colored textual symbols" in a standard 80x24 "window",
  * such as that provided by most dumb terminals, and many old personal
  * computers, and to check for "keypresses" from the user.  The major
@@ -90,7 +90,7 @@
  * pair, with each ranging from 0 to 255, and makes very few assumptions
  * about the meaning of any attr/char values.  Normally, we assume that
  * "attr 0" is "black", with the semantics that "black" text should be
- * sent to "Term_wipe()" instead of "Term_text()", but this sematics is
+ * sent to "Term_wipe()" instead of "Term_text()", but this semantics is
  * modified if either the "always_pict" or the "always_text" flags are
  * set.  We assume that "char 0" is "dangerous", since placing such a
  * "char" in the middle of a string "terminates" the string, and usually
@@ -123,7 +123,7 @@
  * "term" to be initialized or destroyed, and which allow this package,
  * or a program, to access the special "hooks" defined for the current
  * "term", and a set of functions which those "hooks" can use to inform
- * this package of the results of certain occurances, for example, one
+ * this package of the results of certain occurrences, for example, one
  * such function allows this package to learn about user keypresses,
  * detected by one of the special "hooks".
  *
@@ -272,16 +272,10 @@
  */
 
 
-
-
-
-
 /*
  * The current "term"
  */
 term *Term = NULL;
-
-
 
 
 /*** Local routines ***/
@@ -394,11 +388,7 @@ static errr term_win_copy(term_win *s, term_win *f, int w, int h)
 }
 
 
-
 /*** External hooks ***/
-
-
-
 
 
 /*
@@ -413,6 +403,7 @@ errr Term_user(int n)
 	return ((*Term->user_hook)(n));
 }
 
+
 /*
  * Execute the "Term->xtra_hook" hook, if available (see above).
  */
@@ -424,7 +415,6 @@ errr Term_xtra(int n, int v)
 	/* Call the hook */
 	return ((*Term->xtra_hook)(n, v));
 }
-
 
 
 /*** Fake hooks ***/
@@ -442,6 +432,7 @@ static errr Term_curs_hack(int x, int y)
 	return (-1);
 }
 
+
 /*
  * Hack -- fake hook for "Term_wipe()" (see above)
  */
@@ -453,6 +444,7 @@ static errr Term_wipe_hack(int x, int y, int n)
 	/* Oops */
 	return (-1);
 }
+
 
 /*
  * Hack -- fake hook for "Term_text()" (see above)
@@ -586,7 +578,6 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
 }
 
 
-
 /*** Refresh routines ***/
 
 
@@ -683,7 +674,6 @@ static void Term_fresh_row_pict(int y, int x1, int x2)
 		                          &scr_taa[fx], &scr_tcc[fx]));
 	}
 }
-
 
 
 /*
@@ -981,19 +971,16 @@ static void Term_fresh_row_text(int y, int x1, int x2)
 }
 
 
-
-
-
 /*
  * Actually perform all requested changes to the window
  *
  * If absolutely nothing has changed, not even temporarily, or if the
- * current "Term" is not mapped, then this function will return 1 and
- * do absolutely nothing.
+ * current "Term" is not mapped, then this function returns 1 and does
+ * absolutely nothing.
  *
  * Note that when "soft_cursor" is true, we erase the cursor (if needed)
  * whenever anything has changed, and redraw it (if needed) after all of
- * the screen updates are complete.  This will induce a small amount of
+ * the screen updates are complete.  This induces a small amount of
  * "cursor flicker" but only when the screen has been updated.  If the
  * screen is updated and then restored, you may still get this flicker.
  *
@@ -1005,9 +992,9 @@ static void Term_fresh_row_text(int y, int x1, int x2)
  * Note that "Term_xtra(TERM_XTRA_CLEAR,0)" must erase the entire screen,
  * including the cursor, if needed, and may place the cursor anywhere.
  *
- * Note that "Term_xtra(TERM_XTRA_FROSH,y)" will be always be called
+ * Note that "Term_xtra(TERM_XTRA_FROSH,y)" should always be called
  * after any row "y" has been "flushed", unless the "Term->never_frosh"
- * flag is set, and "Term_xtra(TERM_XTRA_FRESH,0)" will be called after
+ * flag is set, and "Term_xtra(TERM_XTRA_FRESH,0)" should be called after
  * all of the rows have been "flushed".
  *
  * Note the use of three different functions to handle the actual flush,
@@ -1043,13 +1030,13 @@ static void Term_fresh_row_text(int y, int x1, int x2)
  * the grids between them are unchanged.
  *
  * If the "Term->always_pict" flag is set, then "Term_fresh_row_pict()"
- * will be used instead of "Term_fresh_row_text()".  This allows all the
+ * is used instead of "Term_fresh_row_text()".  This allows all of the
  * modified grids to be collected into stripes of attr/char pairs, which
  * are then sent to the "Term->pict_hook" hook, which can draw these pairs
  * in whatever way it would like.
  *
  * If the "Term->higher_pict" flag is set, then "Term_fresh_row_both()"
- * will be used instead of "Term_fresh_row_text()".  This allows all the
+ * is used instead of "Term_fresh_row_text()".  This allows all the
  * "special" attr/char pairs (in which both the attr and char have the
  * high-bit set) to be sent (one pair at a time) to the "Term->pict_hook"
  * hook, which can draw these pairs in whatever way it would like.
@@ -1061,18 +1048,18 @@ static void Term_fresh_row_text(int y, int x1, int x2)
  * the "Term_wipe()" function is used to display all "black" text, such
  * as the default "spaces" created by "Term_clear()" and "Term_erase()".
  *
- * Note that the "Term->always_text" flag will disable the use of the
- * "Term_wipe()" function hook entirely, and force all text, even text
+ * Note that the "Term->always_text" flag disables the use of the
+ * "Term_wipe()" function hook entirely, and forces all text, even text
  * drawn in the color "black", to be explicitly drawn.  This is useful
  * for machines which implement "Term_wipe()" by just drawing spaces.
  *
- * Note that the "Term->always_pict" flag will disable the use of the
- * "Term_wipe()" function entirely, and force everything, even text
+ * Note that the "Term->always_pict" flag disables the use of the
+ * "Term_wipe()" function entirely, and forces everything, even text
  * drawn in the attr "black", to be explicitly drawn.
  *
  * Note that if no "black" text is ever drawn, and if "attr_blank" is
- * not "zero", then the "Term_wipe" hook will never be used, even if
- * the "Term->always_text" flag is not set.
+ * not "zero", then the "Term_wipe" hook is never used, even if the
+ * "Term->always_text" flag is not set.
  *
  * This function does nothing unless the "Term" is "mapped", which allows
  * certain systems to optimize the handling of "closed" windows.
@@ -1082,10 +1069,10 @@ static void Term_fresh_row_text(int y, int x1, int x2)
  * The actual method for this is horrible, but there is very little that
  * we can do to simplify it efficiently.  XXX XXX XXX
  *
- * On systems with a "hard" cursor, we will "hide" the cursor before
- * flushing the output, if needed, to avoid a "flickery" refresh.  It
- * would be nice to *always* hide the cursor during the refresh, but
- * this might be expensive (and/or ugly) on some machines.
+ * On systems with a "hard" cursor, we "hide" the cursor before flushing
+ * the output, if needed, to avoid a "flickery" refresh.  It would be
+ * nice to *always* hide the cursor during the refresh, but this might
+ * be expensive (and/or ugly) on some machines.
  *
  * The "Term->icky_corner" flag is used to avoid calling "Term_wipe()"
  * or "Term_pict()" or "Term_text()" on the bottom right corner of the
@@ -1109,17 +1096,14 @@ errr Term_fresh(void)
 	term_win *old = Term->old;
 	term_win *scr = Term->scr;
 
-
 	/* Do nothing unless "mapped" */
 	if (!Term->mapped_flag) return (1);
 
 
 	/* Trivial Refresh */
 	if ((y1 > y2) &&
-	    (scr->cu == old->cu) &&
-	    (scr->cv == old->cv) &&
-	    (scr->cx == old->cx) &&
-	    (scr->cy == old->cy) &&
+	    (scr->cu == old->cu) && (scr->cv == old->cv) &&
+	    (scr->cx == old->cx) && (scr->cy == old->cy) &&
 	    !(Term->total_erase))
 	{
 		/* Nothing */
@@ -1133,7 +1117,6 @@ errr Term_fresh(void)
 	if (!Term->wipe_hook) Term->wipe_hook = Term_wipe_hack;
 	if (!Term->text_hook) Term->text_hook = Term_text_hack;
 	if (!Term->pict_hook) Term->pict_hook = Term_pict_hack;
-
 
 	/* Handle "total erase" */
 	if (Term->total_erase)
@@ -1182,7 +1165,6 @@ errr Term_fresh(void)
 		/* Forget "total erase" */
 		Term->total_erase = FALSE;
 	}
-
 
 	/* Cursor update -- Erase old Cursor */
 	if (Term->soft_cursor)
@@ -1242,7 +1224,6 @@ errr Term_fresh(void)
 		}
 	}
 
-
 	/* Something to update */
 	if (y1 <= y2)
 	{
@@ -1260,7 +1241,6 @@ errr Term_fresh(void)
 				}
 			}
 		}
-
 
 		/* Scan the "modified" rows */
 		for (y = y1; y <= y2; ++y)
@@ -1360,22 +1340,18 @@ errr Term_fresh(void)
 		}
 	}
 
-
 	/* Save the "cursor state" */
 	old->cu = scr->cu;
 	old->cv = scr->cv;
 	old->cx = scr->cx;
 	old->cy = scr->cy;
 
-
 	/* Actually flush the output */
 	Term_xtra(TERM_XTRA_FRESH, 0);
-
 
 	/* Success */
 	return (0);
 }
-
 
 
 /*** Output routines ***/
@@ -1457,10 +1433,10 @@ errr Term_draw(int x, int y, byte a, char c)
  *
  * We queue the given attr/char for display at the current
  * cursor location, and advance the cursor to the right,
- * marking it as unuable and returning "1" if it leaves
+ * marking it as unusable and returning "1" if it leaves
  * the screen, and otherwise returning "0".
  *
- * So when this function, or the following one, return a
+ * So when this function, or the following one, returns a
  * positive value, future calls to either function will
  * return negative ones.
  */
@@ -1506,7 +1482,7 @@ errr Term_addch(byte a, char c)
  * even if all of the given characters fit on the screen,
  * and mark the cursor as unusable for future attempts.
  *
- * So when this function, or the preceding one, return a
+ * So when this function, or the preceding one, returns a
  * positive value, future calls to either function will
  * return negative ones.
  */
@@ -1586,7 +1562,6 @@ errr Term_putstr(int x, int y, int n, byte a, cptr s)
 	/* Success */
 	return (0);
 }
-
 
 
 /*
@@ -1726,9 +1701,6 @@ errr Term_clear(void)
 }
 
 
-
-
-
 /*
  * Redraw (and refresh) the whole window.
  */
@@ -1746,7 +1718,7 @@ errr Term_redraw(void)
 
 
 /*
- * Redraw part of a widow.
+ * Redraw part of a window.
  */
 errr Term_redraw_section(int x1, int y1, int x2, int y2)
 {
@@ -1759,7 +1731,6 @@ errr Term_redraw_section(int x1, int y1, int x2, int y2)
 	if (x2 >= Term->wid) x2 = Term->wid - 1;
 	if (y1 < 0) y1 = 0;
 	if (x1 < 0) x1 = 0;
-
 
 	/* Set y limits */
 	Term->y1 = y1;
@@ -1790,9 +1761,6 @@ errr Term_redraw_section(int x1, int y1, int x2, int y2)
 	/* Success */
 	return (0);
 }
-
-
-
 
 
 /*** Access routines ***/
@@ -1865,7 +1833,6 @@ errr Term_what(int x, int y, byte *a, char *c)
 }
 
 
-
 /*** Input routines ***/
 
 
@@ -1890,23 +1857,23 @@ errr Term_flush(void)
  */
 errr Term_keypress(int k)
 {
-  /* Hack -- Refuse to enqueue non-keys */
-  if (!k) return (-1);
+	/* Hack -- Refuse to enqueue non-keys */
+	if (!k) return (-1);
 
-  /* Store the char, advance the queue */
-  Term->key_queue[Term->key_head].key = k;
-  Term->key_queue[Term->key_head].index = 0;
-  Term->key_queue[Term->key_head].type = EVT_KBRD;
-  Term->key_head++;
+	/* Store the char, advance the queue */
+	Term->key_queue[Term->key_head].key = k;
+	Term->key_queue[Term->key_head].index = 0;
+	Term->key_queue[Term->key_head].type = EVT_KBRD;
+	Term->key_head++;
 
-  /* Circular queue, handle wrap */
-  if (Term->key_head == Term->key_size) Term->key_head = 0;
+	/* Circular queue, handle wrap */
+	if (Term->key_head == Term->key_size) Term->key_head = 0;
 
-  /* Success (unless overflow) */
-  if (Term->key_head != Term->key_tail) return (0);
+	/* Success (unless overflow) */
+	if (Term->key_head != Term->key_tail) return (0);
 
-  /* Problem */
-  return (1);
+	/* Problem */
+	return (1);
 }
 
 
@@ -1915,27 +1882,27 @@ errr Term_keypress(int k)
  */
 errr Term_mousepress(int x, int y, char button)
 {
-  /* Store the char, advance the queue */
-  Term->key_queue[Term->key_head].key = DEFINED_XFF;
-  Term->key_queue[Term->key_head].mousex = x;
-  Term->key_queue[Term->key_head].mousey = y;
-  Term->key_queue[Term->key_head].index = button;
-  Term->key_queue[Term->key_head].type = EVT_MOUSE;
-  Term->key_head++;
+	/* Store the char, advance the queue */
+	Term->key_queue[Term->key_head].key = DEFINED_XFF;
+	Term->key_queue[Term->key_head].mousex = x;
+	Term->key_queue[Term->key_head].mousey = y;
+	Term->key_queue[Term->key_head].index = button;
+	Term->key_queue[Term->key_head].type = EVT_MOUSE;
+	Term->key_head++;
 
-  /* Circular queue, handle wrap */
-  if (Term->key_head == Term->key_size) Term->key_head = 0;
+	/* Circular queue, handle wrap */
+	if (Term->key_head == Term->key_size) Term->key_head = 0;
 
-  /* Success (unless overflow) */
-  if (Term->key_head != Term->key_tail) return (0);
+	/* Success (unless overflow) */
+	if (Term->key_head != Term->key_tail) return (0);
 
 #if 0
-  /* Hack -- Forget the oldest key */
-  if (++Term->key_tail == Term->key_size) Term->key_tail = 0;
+	/* Hack -- Forget the oldest key */
+	if (++Term->key_tail == Term->key_size) Term->key_tail = 0;
 #endif
 
-  /* Problem */
-  return (1);
+	/* Problem */
+	return (1);
 }
 
 
@@ -1978,9 +1945,6 @@ errr Term_event_push(const ui_event_data *ke)
 	/* Problem */
 	return (1);
 }
-
-
-
 
 
 /*
@@ -2040,7 +2004,6 @@ errr Term_inkey(ui_event_data *ch, bool wait, bool take)
 	/* Success */
 	return (0);
 }
-
 
 
 /*** Extra routines ***/
@@ -2122,7 +2085,6 @@ errr Term_load(void)
 }
 
 
-
 /*
  * React to a new physical window size.
  */
@@ -2142,18 +2104,14 @@ errr Term_resize(int w, int h)
 
 	ui_event_data evt = { EVT_RESIZE, 0, 0, 0, 0 };
 
-
 	/* Resizing is forbidden */
 	if (Term->fixed_shape) return (-1);
-
 
 	/* Ignore illegal changes */
 	if ((w < 1) || (h < 1)) return (-1);
 
-
 	/* Ignore non-changes */
 	if ((Term->wid == w) && (Term->hgt == h)) return (1);
-
 
 	/* Minimum dimensions */
 	wid = MIN(Term->wid, w);
@@ -2302,7 +2260,6 @@ errr Term_resize(int w, int h)
 }
 
 
-
 /*
  * Activate a new Term (and deactivate the current Term)
  *
@@ -2342,7 +2299,6 @@ errr Term_activate(term *t)
 	/* Success */
 	return (0);
 }
-
 
 
 /*
@@ -2422,7 +2378,6 @@ errr term_init(term *t, int w, int h, int k)
 	/* Wipe it */
 	(void)WIPE(t, term);
 
-
 	/* Prepare the input queue */
 	t->key_head = t->key_tail = 0;
 
@@ -2432,7 +2387,6 @@ errr term_init(term *t, int w, int h, int k)
 	/* Allocate the input queue */
 	t->key_queue = C_ZNEW(t->key_size, ui_event_data);
 
-
 	/* Save the size */
 	t->wid = w;
 	t->hgt = h;
@@ -2441,20 +2395,17 @@ errr term_init(term *t, int w, int h, int k)
 	t->x1 = C_ZNEW(h, byte);
 	t->x2 = C_ZNEW(h, byte);
 
-
 	/* Allocate "displayed" */
 	t->old = ZNEW(term_win);
 
 	/* Initialize "displayed" */
 	term_win_init(t->old, w, h);
 
-
 	/* Allocate "requested" */
 	t->scr = ZNEW(term_win);
 
 	/* Initialize "requested" */
 	term_win_init(t->scr, w, h);
-
 
 	/* Assume change */
 	for (y = 0; y < h; y++)
@@ -2471,12 +2422,11 @@ errr term_init(term *t, int w, int h, int k)
 	/* Force "total erase" */
 	t->total_erase = TRUE;
 
-
 	/* Default "blank" */
 	t->attr_blank = 0;
 	t->char_blank = ' ';
 
-
 	/* Success */
 	return (0);
 }
+
