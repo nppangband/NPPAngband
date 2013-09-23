@@ -1,4 +1,5 @@
 NPP 7.1.0:
+For Moria, use words to show the players speed ("fast", "slow") rather than numbers (+1, -1)
 Bugfix: Composite bows were not working properly.
 Bugfix: Fix swap weapons with the roguelike keyset
 Bugfix: Fix height and weight rangers for all Moria races.
