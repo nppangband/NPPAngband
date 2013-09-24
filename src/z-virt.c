@@ -115,7 +115,6 @@ void *mem_realloc(void *p, size_t len)
 }
 
 
-
 /*
  * Duplicates an existing string `str`, allocating as much memory as necessary.
  */
