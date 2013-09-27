@@ -7,6 +7,8 @@ Bugfix: Fix shortened names for Orcs ad Orc Warriors
 Bugfix: Rangers could not read or cast from the mage spellset.
 Bugfix: Create food spell was broken.
 Bugfix: Equipment activations for were not working.
+Bugfix: Cloaks of protection had the resist shards flag in Moria (there no shard attacks in Moria).
+Bugfix: Elves resisted light and half-orcs resisted darkness in Moria (neither attack exists in Moria)
 
 
 
