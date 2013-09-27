@@ -10,6 +10,7 @@ Bugfix(Moria): Equipment activations for were not working.
 Bugfix(Moria): Cloaks of protection had the resist shards flag (no shard attacks in Moria).
 Bugfix(Moria): Elves resisted light and half-orcs resisted darkness (neither attack exists in Moria)
 Bugfix(Moria): 10 Monsters who should have had the "teleport player to monster" spell had the "teleport monster to player" spell.
+Bugfix: The spit acid attack and last attack description was occasionally mixed up (found by "Runningaway")
 
 
 
