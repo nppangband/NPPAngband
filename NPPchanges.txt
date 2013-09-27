@@ -11,7 +11,7 @@ Bugfix(Moria): Cloaks of protection had the resist shards flag (no shard attacks
 Bugfix(Moria): Elves resisted light and half-orcs resisted darkness (neither attack exists in Moria)
 Bugfix(Moria): 10 Monsters who should have had the "teleport player to monster" spell had the "teleport monster to player" spell.
 Bugfix: The spit acid attack and last attack description was occasionally mixed up (found by "Runningaway")
-
+Bugfix: Several defective break statements allowed the monsters to learning about player resisistance to sound and chaos a little too quickly.
 
 
 NPP 7.0.0:
