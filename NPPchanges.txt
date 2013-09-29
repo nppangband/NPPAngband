@@ -2,7 +2,7 @@ NPP 7.1.0:
 (Moria) Use words to show the players speed ("fast", "slow") rather than numbers (+1, -1)
 Bugfix (Moria): Composite bows were not working properly.
 Bugfix: Fix swap weapons with the roguelike keyset
-Bugfix(Moria): Fix height and weight rangess for all Moria races.
+Bugfix(Moria): Fix height and weight ranges for all Moria races.
 Bugfix(Moria): Fix shortened names for Orcs ad Orc Warriors
 Bugfix(Moria): Rangers could not read or cast from the mage spellset.
 Bugfix(Moria): Create food spell was broken.
@@ -11,7 +11,7 @@ Bugfix(Moria): Cloaks of protection had the resist shards flag (no shard attacks
 Bugfix(Moria): Elves resisted light and half-orcs resisted darkness (neither attack exists in Moria)
 Bugfix(Moria): 10 Monsters who should have had the "teleport player to monster" spell had the "teleport monster to player" spell.
 Bugfix: The spit acid attack and last attack description was occasionally mixed up (found by "Runningaway")
-Bugfix: Several defective break statements allowed the monsters to learning about player resisistance to sound and chaos a little too quickly.
+Bugfix: Several defective break statements allowed the monsters to learning about player resistance to sound and chaos a little too quickly.
 
 
 NPP 7.0.0:
@@ -21,10 +21,10 @@ Reduced frequency of ghost challenges.
 Multiple sidebar and ui improvements by 'kaypy'.
 Code cleanup provided by dlevin.
 Reduced alertness for several Ainu uniques.
-Bugfix:  Fix inconcistency when describing damage from ammo.
+Bugfix:  Fix inconsistency when describing damage from ammo.
 Bugfix:  Fix display of equipment flags on equipment screen.
 Bugfix:  Fix bug in calculating monster speed variances (found by kaypy).
-Bugfix:  Commands could sucessfully be repeated while confused.
+Bugfix:  Commands could successfully be repeated while confused.
 Bugfix:  Fix multiple missing 'break' statements (found by "runningaway").
 Bugfix:  When using the look command, the cursor did not display when animate flicker option was on.
 
@@ -36,13 +36,13 @@ Bugfix: Fix missing break statement in generate_stats.
 Bugfix: Fix a bug that could cause the game to freeze while generating randarts.
 Bugfix: Fix bug that made game unplayable on 64 bit machines. (fix by Bardur Arantsson)
 Bugfix: Fix several other instances of code using C_WIPE similar to the one that caused crashes on 64 bit machines.
-Bugfix: Sometimes examining an item in the store, the description was intented wrong.
+Bugfix: Sometimes examining an item in the store, the description was indented wrong.
 
 Bugfix: Made max monster name longer, as some names were cut off.
 Bugfix: Player's weren't prompted to pick up unidentified items that whose squelch settings were set to "never pickup".
 Bugfix: The shortened name for a young blue dragon was for a white dragon. (by levind aka "runningaway")
 Bugfix: Fixed bug that caused the game to crash on 64 bit machines when examining a throwing weapon.
-Bugfix: Fixed but where cursor dissappeared when a monster was targeted.
+Bugfix: Fixed but where cursor disappeared when a monster was targeted.
 
 NPP 6.1.1 changes:
 Bugfix:  Fixed a bug where the game could crash when inspecting a weapon.
@@ -53,7 +53,7 @@ NPP 6.1.0 Changes:
 Special artifacts are no longer offered as quest rewards.
 Increase the potential bonus from deferred rewards by 50%.
 Added help file descriptions for the new quest rewards.
-Adjusted Ancient blue, green, and white dragons to 65 spellower (down from 100).
+Adjusted Ancient blue, green, and white dragons to 65 spellpower (down from 100).
 Added more appropriate messages for when breathing monsters use beam attacks.
 The object selection menu now includes object weight.
 verify_leave_quest now verifies before casting word of recall spell on quest level.
