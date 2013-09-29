@@ -638,7 +638,6 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 					break;
 				}
-				break;
 			}
 
 			case FEAT_MTRAP_POISON:
@@ -1304,7 +1303,7 @@ static int find_resist(int m_idx, int spell_lrn)
 			if (smart & (SM_RES_CONFU)) a += 10;
 			if (smart & (SM_PERF_SAVE)) a += 10;
 			else if (smart & (SM_GOOD_SAVE)) a += 5;
-			return (a);
+			else return (a);
 		}
 		/* Irresistible, but sound prevents stun */
 		case LRN_SOUND2:
@@ -1343,7 +1342,7 @@ static int find_resist(int m_idx, int spell_lrn)
 			if (smart & (SM_RES_CHAOS)) return(30);
 			if (smart & (SM_RES_NETHR))  a += 10;
 			if (smart & (SM_RES_CONFU))  a += 10;
-			return (a);
+			else return (a);
 		}
 		/* Disenchantment Spells */
 		case LRN_DISEN:
@@ -5643,7 +5642,7 @@ static s16b process_monster(monster_type *m_ptr)
 		if (!m_ptr->m_timed[MON_TMD_FEAR])
 		{
 
-			if ((m_ptr->mflag & (MFLAG_AGGRESSIVE | MFLAG_DESPERATE)) && (!r_ptr->freq_ranged))
+			if (m_ptr->mflag & (MFLAG_AGGRESSIVE | MFLAG_DESPERATE) && (!r_ptr->freq_ranged))
 			{
 				m_ptr->target_y = 0;
 				m_ptr->target_x = 0;
