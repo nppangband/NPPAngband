@@ -1587,6 +1587,9 @@ bool init_angband(void)
 			return FALSE;
 		}
 	}
+
+	/* compiler happiness, never actually gets here */
+	return FALSE;
 }
 
 
