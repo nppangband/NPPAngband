@@ -83,7 +83,6 @@ static void dump_pref_file(void (*dump)(ang_file *), const char *title, int row)
 }
 
 
-
 #define DUMP_COL	120
 #define MOD_COL		121
 
@@ -104,7 +103,6 @@ void do_cmd_redraw(void)
 
 	term *old = Term;
 
-
 	/* Low level flush */
 	Term_flush();
 
@@ -117,10 +115,8 @@ void do_cmd_redraw(void)
 	/* Hack -- React to changes */
 	Term_xtra(TERM_XTRA_REACT, 0);
 
-
 	/* Combine and Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER | PN_SORT_QUIVER);
-
 
 	/* Update torch */
 	p_ptr->update |= (PU_TORCH);
@@ -192,7 +188,6 @@ void do_cmd_change_name(void)
 	/* Forever */
 	while (1)
 	{
-
 		bool done = FALSE;
 
 		/* Menu buttons */
@@ -303,6 +298,7 @@ void do_cmd_change_name(void)
 			default:
 			{
 				bell("Illegal command for change name!");
+				break;
 			}
 		}
 
@@ -318,9 +314,6 @@ void do_cmd_change_name(void)
 	button_restore();
 	event_signal(EVENT_MOUSEBUTTONS);
 }
-
-
-
 
 
 /*
@@ -356,8 +349,6 @@ void do_cmd_messages(void)
 	int wid, hgt;
 
 	char shower[80] = "";
-
-
 
 	/* Total messages */
 	n = messages_num();
@@ -540,8 +531,6 @@ void do_cmd_messages(void)
 		}
 	}
 
-
-
 	/* Load screen */
 	screen_load();
 
@@ -549,6 +538,7 @@ void do_cmd_messages(void)
 	button_restore();
 	event_signal(EVENT_MOUSEBUTTONS);
 }
+
 
 /*** Options display and setting ***/
 
@@ -559,17 +549,22 @@ const char *option_name(int opt)
 	return options[opt].name;
 }
 
+
 const char *option_desc(int opt)
 {
 	if (opt >= OPT_MAX) return NULL;
 	return options[opt].description;
 }
 
+
 /* Setup functions */
+
+
 void option_set(int opt, bool on)
 {
 	op_ptr->opt[opt] = on;
 }
+
 
 void option_set_defaults(void)
 {
@@ -594,6 +589,7 @@ static void display_option(menu_type *menu, int oid,
 	                   op_ptr->opt[oid] ? "yes" : "no ", option_name(oid)),
 	                   row, col);
 }
+
 
 /*
  * Handle keypresses for an option entry.
@@ -638,6 +634,7 @@ static bool update_option (char key, void *pgdb, int oid)
 	return TRUE;
 }
 
+
 static const menu_iter options_toggle_iter =
 {
 	NULL,
@@ -645,6 +642,7 @@ static const menu_iter options_toggle_iter =
 	display_option,		/* label */
 	update_option		/* updater */
 };
+
 
 static menu_type option_toggle_menu;
 
@@ -686,7 +684,6 @@ void do_cmd_options_aux(void *vpage, cptr info)
 				opt[n++] = option_page_nppangband[page][i];
 			}
 		}
-
 	}
 
 	menu_set_filter(menu, opt, n);
@@ -736,10 +733,7 @@ void do_cmd_options_aux(void *vpage, cptr info)
 	}
 
 	screen_load();
-
 }
-
-
 
 
 /*
@@ -756,12 +750,11 @@ static void do_cmd_options_win(void)
 
 	u32b new_flags[ANGBAND_TERM_MAX];
 
- 	/* Set new flags to the old values */
+	/* Set new flags to the old values */
 	for (j = 0; j < ANGBAND_TERM_MAX; j++)
 	{
 		new_flags[j] = op_ptr->window_flag[j];
 	}
-
 
 	/* Clear screen */
 	clear_from(0);
@@ -771,7 +764,7 @@ static void do_cmd_options_win(void)
 	event_signal(EVENT_MOUSEBUTTONS);
 
 	/* Interact */
-	while (1)
+	while (TRUE)
 	{
 		/* Prompt */
 		prt("Window flags (<dir> to move, 't' to toggle, or ESC)", 0, 0);
@@ -876,7 +869,6 @@ static void do_cmd_options_win(void)
 			continue;
 		}
 
-
 		/* Extract direction */
 		d = target_dir(ke.key);
 
@@ -898,7 +890,6 @@ static void do_cmd_options_win(void)
 	subwindows_set_flags(new_flags, ANGBAND_TERM_MAX);
 	do_cmd_redraw();
 }
-
 
 
 /*
@@ -926,9 +917,9 @@ static void remove_old_dump(cptr orig_file, cptr mark)
 
 	if (!tmp_fff)
 	{
-	    msg_format("Failed to create temporary file %s.", temp_file);
-	    msg_print(NULL);
-	    return;
+		msg_format("Failed to create temporary file %s.", temp_file);
+		msg_print(NULL);
+		return;
 	}
 
 	strnfmt(expected_line, sizeof(expected_line),
@@ -1020,8 +1011,6 @@ static void remove_old_dump(cptr orig_file, cptr mark)
 }
 
 
-
-
 /*
  * Output the header of a pref-file dump
  */
@@ -1047,6 +1036,7 @@ static void pref_footer(ang_file *fff, cptr mark)
 	file_putf(fff, "%s end %s\n", dump_seperator, mark);
 }
 
+
 /*
  * Ask for a "user pref line" and process it
  */
@@ -1063,6 +1053,7 @@ void do_cmd_pref(void)
 	/* Process that pref command */
 	(void)process_pref_file_command(tmp);
 }
+
 
 /*
  * Ask for a "user pref file" and process it.
@@ -1102,7 +1093,6 @@ static void do_cmd_pref_file_hack(long row)
 		msg_format("Loaded '%s'.", ftmp);
 	}
 }
-
 
 
 /*** Interact with macros and keymaps ***/
@@ -1211,10 +1201,12 @@ static void macro_pref_load(void *unused, const char *title)
 	do_cmd_pref_file_hack(16);
 }
 
+
 static void macro_pref_append(void *unused, const char *title)
 {
 	(void)dump_pref_file(macro_dump, "Dump macros", 15);
 }
+
 
 static void macro_query(void *unused, const char *title)
 {
@@ -1257,6 +1249,7 @@ static void macro_query(void *unused, const char *title)
 	(void)inkey_ex();
 }
 
+
 static void macro_create(void *unused, const char *title)
 {
 	char pat[1024];
@@ -1290,9 +1283,9 @@ static void macro_create(void *unused, const char *title)
 		prt("", 0, 0);
 		prt("Added a macro.  Press any key to continue.", 22, 0);
 		(void)inkey_ex();
-
 	}
 }
+
 
 static void macro_remove(void *unused, const char *title)
 {
@@ -1311,13 +1304,14 @@ static void macro_remove(void *unused, const char *title)
 	prt("", 0, 0);
 	prt("Removed a macro.  Press any key to continue.", 19, 0);
 	(void)inkey_ex();
-
 }
+
 
 static void keymap_pref_append(void *unused, const char *title)
 {
 	(void)dump_pref_file(keymap_dump, "Dump keymaps", 13);
 }
+
 
 static void keymap_query(void *unused, const char *title)
 {
@@ -1359,6 +1353,7 @@ static void keymap_query(void *unused, const char *title)
 	}
 }
 
+
 static void keymap_create(void *unused, const char *title)
 {
 	char c;
@@ -1390,6 +1385,7 @@ static void keymap_create(void *unused, const char *title)
 	}
 }
 
+
 static void keymap_remove(void *unused, const char *title)
 {
 	char c;
@@ -1420,6 +1416,7 @@ static void keymap_remove(void *unused, const char *title)
 	(void)inkey_ex();
 }
 
+
 static void macro_enter(void *unused, const char *title)
 {
 	char tmp[1024];
@@ -1436,6 +1433,7 @@ static void macro_enter(void *unused, const char *title)
 	}
 }
 
+
 static void macro_browse_hook(int oid, void *db, const region *loc)
 {
 	char tmp[1024];
@@ -1446,19 +1444,21 @@ static void macro_browse_hook(int oid, void *db, const region *loc)
 	prt(tmp, 14, 0);
 }
 
+
 static menu_action macro_actions[] =
 {
-	{ 'l', "Load a user pref file",    	macro_pref_load, 	NULL },
-	{ 's', "Save macros to a file",  	macro_pref_append, 	NULL },
-	{ 'q', "Query a macro",            	macro_query,		NULL },
-	{ 'c', "Create a macro",           	macro_create,		NULL },
-	{ 'r', "Remove a macro",           	macro_remove,		NULL },
-	{ 'a', "Append keymaps to a file", 	keymap_pref_append,	NULL },
-	{ 'k', "Query a keymap",           	keymap_query,		NULL },
-	{ 'm', "Create a keymap",          	keymap_create,		NULL },
-	{ 'd', "Remove a keymap",          	keymap_remove,		NULL },
-	{ 'e', "Enter a new action",       	macro_enter,		NULL },
+	{ 'l', "Load a user pref file",		macro_pref_load,	NULL },
+	{ 's', "Save macros to a file",		macro_pref_append,	NULL },
+	{ 'q', "Query a macro",				macro_query,		NULL },
+	{ 'c', "Create a macro",			macro_create,		NULL },
+	{ 'r', "Remove a macro",			macro_remove,		NULL },
+	{ 'a', "Append keymaps to a file",	keymap_pref_append,	NULL },
+	{ 'k', "Query a keymap",			keymap_query,		NULL },
+	{ 'm', "Create a keymap",			keymap_create,		NULL },
+	{ 'd', "Remove a keymap",			keymap_remove,		NULL },
+	{ 'e', "Enter a new action",		macro_enter,		NULL },
 };
+
 
 /* Return the tag for a menu entry */
 static char macro_menu_tag(menu_type *menu, int oid)
@@ -1467,7 +1467,10 @@ static char macro_menu_tag(menu_type *menu, int oid)
 	return macro_actions[oid].id;
 }
 
-/* Display a menu entry */
+
+/*
+ * Display a menu entry
+ */
 static void macro_menu_display(menu_type *menu, int oid, bool cursor, int row, int col, int width)
 {
 	byte attr = curs_attrs[CURS_KNOWN][(int)cursor];
@@ -1476,6 +1479,7 @@ static void macro_menu_display(menu_type *menu, int oid, bool cursor, int row, i
 	c_prt(attr, macro_actions[oid].name, row, col);
 }
 
+
 static const menu_iter macro_iter =
 {
 		macro_menu_tag,
@@ -1483,6 +1487,7 @@ static const menu_iter macro_iter =
 		macro_menu_display,
 		NULL
 };
+
 
 static void do_cmd_macros(void)
 {
@@ -1496,7 +1501,6 @@ static void do_cmd_macros(void)
 
 	/* macro menu */
 	WIPE(&menu, menu);
-	menu.menu_data = macro_actions;
 	menu.title = "Interact with macros";
 	menu.cmd_keys = cmd_keys;
 	menu.menu_data = macro_actions;
@@ -1521,8 +1525,7 @@ static void do_cmd_macros(void)
 			if ((size_t) cursor < N_ELEMENTS(macro_actions))
 			{
 				macro_actions[cursor].action(macro_actions[cursor].data,
-							                              macro_actions[cursor].name);
-
+							                 macro_actions[cursor].name);
 			}
 		}
 		else if (evt.type == EVT_BUTTON)
@@ -1533,6 +1536,7 @@ static void do_cmd_macros(void)
 
 	screen_load();
 }
+
 
 #endif /* ALLOW_MACROS */
 
@@ -1550,20 +1554,24 @@ static void visuals_dump_monsters(void *unused, const char *title)
 	dump_pref_file(dump_monsters, title, 15);
 }
 
+
 static void visuals_dump_objects(void *unused, const char *title)
 {
 	dump_pref_file(dump_objects, title, 15);
 }
+
 
 static void visuals_dump_terrain(void *unused, const char *title)
 {
 	dump_pref_file(dump_features, title, 15);
 }
 
+
 static void visuals_dump_flavors(void *unused, const char *title)
 {
 	dump_pref_file(dump_flavors, title, 15);
 }
+
 
 #endif /* ALLOW_VISUALS */
 
@@ -1581,7 +1589,6 @@ static void visuals_reset(void *unused, const char *title)
 #ifdef ALLOW_VISUALS
 
 
-
 static int find_next_race(int r_idx, int increment)
 {
 	int next_r_idx = r_idx;
@@ -1592,7 +1599,7 @@ static int find_next_race(int r_idx, int increment)
 	{
 		next_r_idx += increment;
 
-		/* boundry_control */
+		/* boundary_control */
 		if (next_r_idx < 0) next_r_idx = z_info->r_max - 1;
 		else if (next_r_idx >= z_info->r_max) next_r_idx = 0;
 
@@ -1602,11 +1609,12 @@ static int find_next_race(int r_idx, int increment)
 		if (next_r_idx == r_idx) return (r_idx);
 
 		/* Skip non-entries */
-		if (!r_ptr->r_speed) continue;
-
-		return (next_r_idx);
+		if (r_ptr->r_speed) break;
 	}
+	
+	return (next_r_idx);
 }
+
 
 static int find_next_object(int k_idx, int increment)
 {
@@ -1618,7 +1626,7 @@ static int find_next_object(int k_idx, int increment)
 	{
 		next_k_idx += increment;
 
-		/* boundry_control */
+		/* boundary_control */
 		if (next_k_idx < 0) next_k_idx = z_info->k_max - 1;
 		else if (next_k_idx >= z_info->k_max) next_k_idx = 0;
 
@@ -1628,11 +1636,12 @@ static int find_next_object(int k_idx, int increment)
 		if (next_k_idx == k_idx) return (k_idx);
 
 		/* Skip non-entries */
-		if (!k_ptr->name) continue;
-
-		return (next_k_idx);
+		if (k_ptr->name) break;
 	}
+
+	return (next_k_idx);
 }
+
 
 static int find_next_terrain(int f_idx, int increment)
 {
@@ -1644,7 +1653,7 @@ static int find_next_terrain(int f_idx, int increment)
 	{
 		next_f_idx += increment;
 
-		/* boundry_control */
+		/* boundary_control */
 		if (next_f_idx < 0) next_f_idx = z_info->f_max - 1;
 		else if (next_f_idx >= z_info->f_max) next_f_idx = 0;
 
@@ -1654,11 +1663,12 @@ static int find_next_terrain(int f_idx, int increment)
 		if (next_f_idx == f_idx) return (f_idx);
 
 		/* Skip non-entries */
-		if (!f_ptr->name) continue;
-
-		return (next_f_idx);
+		if (f_ptr->name) break;
 	}
+
+	return (next_f_idx);
 }
+
 
 static byte find_next_color(byte color, signed char increment)
 {
@@ -1681,7 +1691,7 @@ static byte find_next_color(byte color, signed char increment)
 		/* Oops - should never happen, but avoid infinite loops just in case */
 		if (next_color == color) return (color);
 
-		/* Boundry control */
+		/* Boundary control */
 		if (next_color > max_color)
 		{
 			if (increment > 0) next_color = TERM_DARK;
@@ -1696,9 +1706,12 @@ static byte find_next_color(byte color, signed char increment)
 			continue;
 		}
 
-		return (next_color);
+		break;
 	}
+
+	return (next_color);
 }
+
 
 static u16b find_next_flavor(u16b flavor, s16b increment)
 {
@@ -1712,7 +1725,7 @@ static u16b find_next_flavor(u16b flavor, s16b increment)
 		 * make sure the value is 0 is handles properly */
 		if (!next_flavor && (increment < 0)) next_flavor = z_info->flavor_max - 1;
 		else next_flavor += increment;
-		/* boundry_control */
+		/* boundary_control */
 		if (next_flavor >= z_info->flavor_max) next_flavor = 0;
 
 		flavor_ptr = &flavor_info[next_flavor];
@@ -1721,10 +1734,10 @@ static u16b find_next_flavor(u16b flavor, s16b increment)
 		if (next_flavor == flavor) return (flavor);
 
 		/* Skip unknown flavors */
-		if (!flavor_ptr->text) continue;
-
-		return (next_flavor);
+		if (flavor_ptr->text) break;
 	}
+
+	return (next_flavor);
 }
 
 
@@ -1740,13 +1753,13 @@ static void change_monster_visuals(void *unused, const char *title)
 
 	button_kill_all();
 	button_add("ESC|", ESCAPE);
-	button_add("PREV_RACE|", 	'N');
-	button_add("NEXT_RACE|", 	'n');
-	button_add("PREV_COLOR|", 	'A');
-	button_add("NEXT_COLOR|", 	'a');
-	button_add("PREV_CHAR|", 	'C');
-	button_add("NEXT_CHAR", 	'c');
-	button_add("RESTORE", 		'r');
+	button_add("PREV_RACE|",	'N');
+	button_add("NEXT_RACE|",	'n');
+	button_add("PREV_COLOR|",	'A');
+	button_add("NEXT_COLOR|",	'a');
+	button_add("PREV_CHAR|",	'C');
+	button_add("NEXT_CHAR",		'c');
+	button_add("RESTORE",		'r');
 
 	/* Hack -- query until done */
 	while (TRUE)
@@ -1815,22 +1828,23 @@ static void change_monster_visuals(void *unused, const char *title)
 		/* Analyze */
 		switch (cx.key)
 		{
-			case 'n': 	{r_idx = find_next_race(r_idx,  1); break;}
+			case 'n':	{r_idx = find_next_race(r_idx,  1); break;}
 			case 'N':	{r_idx = find_next_race(r_idx, -1); break;}
-			case 'c': 	{r_ptr->x_char = (byte)(custom_char + 1); break;}
+			case 'c':	{r_ptr->x_char = (byte)(custom_char + 1); break;}
 			case 'C':	{r_ptr->x_char = (byte)(custom_char - 1); break;}
-			case 'a':   {r_ptr->x_attr = find_next_color(custom_color , 1); break;}
-			case 'A':   {r_ptr->x_attr = find_next_color(custom_color , -1); break;}
+			case 'a':	{r_ptr->x_attr = find_next_color(custom_color , 1); break;}
+			case 'A':	{r_ptr->x_attr = find_next_color(custom_color , -1); break;}
 			case 'r':
 			{
 				r_ptr->x_char = r_ptr->d_char;
 				r_ptr->x_attr = r_ptr->d_attr;
 				break;
 			}
-			default:  	break;
+			default:	break;
 		}
 	}
 }
+
 
 static void change_object_visuals(void *unused, const char *title)
 {
@@ -1843,14 +1857,14 @@ static void change_object_visuals(void *unused, const char *title)
 	prt("Command: Change object attr/chars", 15, 0);
 
 	button_kill_all();
-	button_add("ESC|", ESCAPE);
-	button_add("PREV_OBJECT|", 	'N');
-	button_add("NEXT_OBJECT|", 	'n');
-	button_add("PREV_COLOR|", 	'A');
-	button_add("NEXT_COLOR|", 	'a');
-	button_add("PREV_CHAR|", 	'C');
-	button_add("NEXT_CHAR|", 	'c');
-	button_add("RESTORE", 		'r');
+	button_add("ESC|",	ESCAPE);
+	button_add("PREV_OBJECT|",	'N');
+	button_add("NEXT_OBJECT|",	'n');
+	button_add("PREV_COLOR|",	'A');
+	button_add("NEXT_COLOR|",	'a');
+	button_add("PREV_CHAR|",	'C');
+	button_add("NEXT_CHAR|",	'c');
+	button_add("RESTORE",		'r');
 
 	/* Hack -- query until done */
 	while (TRUE)
@@ -1864,7 +1878,7 @@ static void change_object_visuals(void *unused, const char *title)
 
 		/* Label the object */
 		Term_putstr(5, 2, -1, TERM_WHITE, format("Object = %d, Name = %-40.40s",
-			    	k_idx, (k_name + k_ptr->name)));
+					k_idx, (k_name + k_ptr->name)));
 
 		/* Label the Default values */
 		Term_putstr(10, 4, -1, TERM_WHITE,
@@ -2192,6 +2206,7 @@ static const menu_iter visual_iter =
 		NULL
 };
 
+
 /*
  * Interact with "visuals"
  */
@@ -2207,7 +2222,6 @@ void do_cmd_visuals(void)
 
 	/* macro menu */
 	WIPE(&menu, menu);
-	menu.menu_data = visual_actions;
 	menu.title = "Interact with visuals";
 	menu.cmd_keys = cmd_keys;
 	menu.menu_data = visual_actions;
@@ -2237,7 +2251,6 @@ void do_cmd_visuals(void)
 		}
 		else if (evt.type == EVT_BUTTON)
 		{
-
 			if (evt.key == '?')
 			{
 				if (game_mode == GAME_NPPMORIA) show_file("m_options.txt", NULL, 0, 0);
@@ -2248,8 +2261,6 @@ void do_cmd_visuals(void)
 
 	screen_load();
 }
-
-
 
 
 static void colors_pref_load(void *unused, const char *title)
@@ -2342,6 +2353,7 @@ static void colors_pref_dump(void *unused, const char *title)
 	/* Message */
 	msg_print("Dumped color redefinitions.");
 }
+
 
 /*
  * Asks to the user for specific color values.
@@ -2887,7 +2899,6 @@ void do_cmd_colors(void)
 
 	/* macro menu */
 	WIPE(&menu, menu);
-	menu.menu_data = color_actions;
 	menu.title = "Interact with Colors";
 	menu.cmd_keys = cmd_keys;
 	menu.menu_data = color_actions;
@@ -3079,8 +3090,6 @@ static void do_cmd_lazymove_delay(void)
 }
 
 
-
-
 /*
  * Write options to a file.
  */
@@ -3132,6 +3141,7 @@ static char tag_opt_main(menu_type *menu, int oid)
 	return 0;
 }
 
+
 static int valid_opt_main(menu_type *menu, int oid)
 {
 	(void)menu;
@@ -3140,6 +3150,7 @@ static int valid_opt_main(menu_type *menu, int oid)
 
 	return 0;
 }
+
 
 static void display_opt_main(menu_type *menu, int oid, bool cursor, int row, int col, int width)
 {
@@ -3185,7 +3196,6 @@ void do_cmd_options(void)
 	screen_save();
 	menu_layout(&option_menu, &area);
 
-
 	while (c.key != ESCAPE)
 	{
 		clear_from(0);
@@ -3224,8 +3234,6 @@ void do_cmd_options(void)
 }
 
 
-
-
 /*
  * Take notes.  There are two ways this can happen, either in the message recall or
  * a file.  The command should be passed a string, which will automatically be
@@ -3235,20 +3243,20 @@ void do_cmd_note(char *note, int what_depth)
 {
 	char buf[120];
 	int length, length_info;
-    char info_note[40];
- 	char depths[10];
+	char info_note[40];
+	char depths[10];
 
 	/* Default */
 	my_strcpy(buf, "", sizeof(buf));
 
 	my_strcpy(buf, note, sizeof(buf));
 
- 	/* Ignore empty notes */
- 	if (!buf[0] || (buf[0] == ' ')) return;
+	/* Ignore empty notes */
+	if (!buf[0] || (buf[0] == ' ')) return;
 
 	/* If the note taking option is off, write it to the message recall.
- 	 */
- 	if (!adult_take_notes)
+	 */
+	if (!adult_take_notes)
 	{
 		msg_format("Note: %s", buf);
 
@@ -3262,28 +3270,28 @@ void do_cmd_note(char *note, int what_depth)
 	 *use player depth.
 	 */
 
-	/*get depth for recording\
+	/*get depth for recording
 	 *mark if item is a quest reward or a chest item
 	 */
- 	if (what_depth == 0)
- 	{
- 		my_strcpy(depths, " Town", sizeof(depths));
- 	}
- 	else if (what_depth == CHEST_LEVEL)
- 	{
- 		strnfmt(depths, sizeof(depths), "Chest");
- 	}
+	if (what_depth == 0)
+	{
+		my_strcpy(depths, " Town", sizeof(depths));
+	}
+	else if (what_depth == CHEST_LEVEL)
+	{
+		strnfmt(depths, sizeof(depths), "Chest");
+	}
 	else if (what_depth == QUEST_LEVEL)
- 	{
- 		strnfmt(depths, sizeof(depths), "Quest");
- 	}
+	{
+		strnfmt(depths, sizeof(depths), "Quest");
+	}
 	else
- 	{
- 		strnfmt(depths, sizeof(depths), " %4d", what_depth * 50);
- 	}
+	{
+		strnfmt(depths, sizeof(depths), " %4d", what_depth * 50);
+	}
 
- 	/* Make preliminary part of note */
-    strnfmt(info_note, sizeof(info_note), "|%9lu| %s | %2d  | ", turn, depths, p_ptr->lev);
+	/* Make preliminary part of note */
+	strnfmt(info_note, sizeof(info_note), "|%9lu| %s | %2d  | ", turn, depths, p_ptr->lev);
 
 	/*write the info note*/
 	file_putf(notes_file, info_note);
@@ -3301,7 +3309,6 @@ void do_cmd_note(char *note, int what_depth)
 
 		while (keep_going)
 		{
-
 			/*don't print more than the set linewrap amount*/
 			endpoint = startpoint + LINEWRAP - strlen(info_note) + 1;
 
@@ -3319,7 +3326,7 @@ void do_cmd_note(char *note, int what_depth)
 
 				/* Mark the most recent space or dash in the string */
 				else if ((buf[endpoint] == ' ') ||
-			    		 (buf[endpoint] == '-')) break;
+						 (buf[endpoint] == '-')) break;
 
 				/*no spaces in the line, so break in the middle of text*/
 				else if (endpoint == startpoint)
@@ -3345,7 +3352,6 @@ void do_cmd_note(char *note, int what_depth)
 
 				/* Write out the character */
 				file_putf(notes_file, "%c", ch);
-
 			}
 
 			/*break the line*/
@@ -3357,8 +3363,8 @@ void do_cmd_note(char *note, int what_depth)
 
 	}
 
- 	/* Add note to buffer */
- 	else
+	/* Add note to buffer */
+	else
 	{
 		file_putf(notes_file, "%s", buf);
 
@@ -3377,7 +3383,6 @@ void do_cmd_version(void)
 	msg_format("You are playing %s %s.  Type '?' for more info.",
 			VERSION_MODE_NAME, VERSION_STRING);
 }
-
 
 
 /*
@@ -3449,7 +3454,6 @@ void do_cmd_feeling(void)
 	/* Verify the feeling */
 	else if (feeling >= LEV_THEME_HEAD)
 	{
-
 		/*print out a message about a themed level*/
 		char note[100];
 		char mon_theme[80];
@@ -3470,8 +3474,6 @@ void do_cmd_feeling(void)
 	/* Redraw the feeling indicator */
 	p_ptr->redraw |= (PR_FEELING);
 }
-
-
 
 
 /*
@@ -3507,6 +3509,8 @@ void do_cmd_quest(void)
 	/* No quest at all */
 	else msg_print("You are not currently undertaking a quest.");
 }
+
+
 /*
  * Encode the screen colors
  */
@@ -3533,7 +3537,6 @@ void do_cmd_load_screen(void)
 
 	char buf[1024];
 
-
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
 
@@ -3543,21 +3546,17 @@ void do_cmd_load_screen(void)
 	/* Oops */
 	if (!fp) return;
 
-
 	/* Save screen */
 	screen_save();
 
-
 	/* Clear the screen */
 	Term_clear();
-
 
 	/* Load the screen */
 	for (y = 0; okay && (y < 24); y++)
 	{
 		/* Get a line of data */
 		if (!file_getl(fp, buf, sizeof(buf))) okay = FALSE;
-
 
 		/* Show each row */
 		for (x = 0; x < 79; x++)
@@ -3569,7 +3568,6 @@ void do_cmd_load_screen(void)
 
 	/* Get the blank line */
 	if (!file_getl(fp, buf, sizeof(buf))) okay = FALSE;
-
 
 	/* Dump the screen */
 	for (y = 0; okay && (y < 24); y++)
@@ -3595,20 +3593,16 @@ void do_cmd_load_screen(void)
 		}
 	}
 
-
 	/* Close it */
 	file_close(fp);
-
 
 	/* Message */
 	msg_print("Screen dump loaded.");
 	message_flush();
 
-
 	/* Load screen */
 	screen_load();
 }
-
 
 
 /*
@@ -3626,6 +3620,7 @@ void do_cmd_save_screen(void)
 	msg_print("Dump saved.");
 }
 
+
 /*
  * Create and return an empty file in writing mode to append notes.
  * It returns a copy of the file name in "path".
@@ -3634,7 +3629,6 @@ void do_cmd_save_screen(void)
  */
 void create_notes_file(void)
 {
-
 	char filename[1024];
 
 	/* Hack -- No base name yet */
@@ -3651,6 +3645,7 @@ void create_notes_file(void)
 
 	return;
 }
+
 
 /*
  * Close and destroy the notes file. notes_file and notes_fname variables are cleared
@@ -3673,9 +3668,4 @@ void delete_notes_file(void)
 		notes_fname[0] = '\0';
 	}
 }
-
-
-
-
-
 
