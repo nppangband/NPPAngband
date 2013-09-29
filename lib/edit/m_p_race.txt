@@ -78,7 +78,7 @@ X:8:120:3
 I:7:75:75
 H:60:4:54:4
 W:100:6:80:6
-F:SUST_DEX | RES_LIGHT
+F:SUST_DEX
 C:0|1|3|4
 
 N:3:Halfling
@@ -118,7 +118,6 @@ X:10:110:3
 I:19:11:4
 H:66:1:62:1
 W:150:5:120:5
-F:RES_DARK
 C:0|2|3
 
 N:7:Half-Troll
