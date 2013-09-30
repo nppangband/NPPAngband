@@ -4184,7 +4184,6 @@ static bool make_move(monster_type *m_ptr, int *ty, int *tx, bool fear,
 		}
 	}
 
-
 	/*
 	 * Now that we have an initial direction, we must determine which
 	 * grid to actually move into.
@@ -4199,7 +4198,6 @@ static bool make_move(monster_type *m_ptr, int *ty, int *tx, bool fear,
 			bool move_bash;
 		};
 		move_data moves_data[8];
-
 
 		/*
 		 * Scan each of the eight possible directions, in the order of
@@ -4227,7 +4225,6 @@ static bool make_move(monster_type *m_ptr, int *ty, int *tx, bool fear,
 				cave_passable_mon(m_ptr, ny, nx, bash);
 			moves_data[i].move_bash = *bash;
 
-
 			/* Confused monsters must choose the first grid */
 			if (m_ptr->m_timed[MON_TMD_CONF]) break;
 
@@ -4239,7 +4236,7 @@ static bool make_move(monster_type *m_ptr, int *ty, int *tx, bool fear,
 			{
 				/* Monster is having trouble navigating to its target. */
 				if ((m_ptr->target_y) && (m_ptr->target_x) && (i >= 2) &&
-				    (distance(m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x) > 1))
+					(distance(m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x) > 1))
 				{
 					/* Look for an adjacent grid leading to the target */
 					if (get_route_to_target(m_ptr, ty, tx))
@@ -4265,9 +4262,9 @@ static bool make_move(monster_type *m_ptr, int *ty, int *tx, bool fear,
 						 * We can't get to our hiding place.  We're in line of fire.
 						 * The only thing left to do is go down fighting.  XXX XXX
 						 */
-						 if ((m_ptr->ml) && (player_can_fire_bold(oy, ox)) &&
-								 ((m_ptr->mflag & (MFLAG_JUST_SCARED | MFLAG_DESPERATE)) == 0))
-						 {
+						if ((m_ptr->ml) && (player_can_fire_bold(oy, ox)) &&
+								((m_ptr->mflag & (MFLAG_JUST_SCARED | MFLAG_DESPERATE)) == 0))
+						{
 							char m_name[80];
 
 							m_ptr->mflag |= (MFLAG_DESPERATE);
@@ -4400,7 +4397,6 @@ static bool make_move(monster_type *m_ptr, int *ty, int *tx, bool fear,
 			if (i == 7) look_again = TRUE;
 		}
 
-
 		/* We've exhausted all the easy answers. */
 		if (look_again)
 		{
@@ -4467,6 +4463,7 @@ static bool make_move(monster_type *m_ptr, int *ty, int *tx, bool fear,
 	return (TRUE);
 }
 
+
 /*
  * If one monster moves into another monster's grid, they will
  * normally swap places.  If the second monster cannot exist in the
@@ -4525,6 +4522,7 @@ static bool push_aside(monster_type *m_ptr, monster_type *n_ptr)
 	return (FALSE);
 }
 
+
 /*
  * Process a monster's move.
  *
@@ -4562,7 +4560,6 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 	bool did_pass_wall = FALSE;
 	bool did_kill_wall = FALSE;
 
-
 	/* Remember where monster is */
 	oy = m_ptr->fy;
 	ox = m_ptr->fx;
@@ -4597,11 +4594,11 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 					{
 						msg_print("The rune of protection is broken!");
 					}
+
 					/* Destroy the rune */
 					delete_effect_idx(cave_x_idx[ny][nx]);
 				}
 			}
-
 
 			(void)make_attack_normal(m_ptr);
 		}
@@ -4613,7 +4610,6 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 	/* Can still move */
 	if (do_move)
 	{
-
 		/* Get the feature in the grid that the monster is trying to enter. */
 		feat = cave_feat[ny][nx];
 
@@ -4781,7 +4777,6 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 
 				/* Unlock the door */
 				cave_alter_feat(ny, nx, FS_OPEN);
-
 			}
 
 			/* Paranoia -- Ignore all features not added to this code */
@@ -4877,10 +4872,10 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 
 			/* XXX - Kill (much) weaker monsters */
 			if ((r_ptr->flags2 & (RF2_KILL_BODY)) &&
-			    (!(nr_ptr->flags1 & (RF1_UNIQUE))) &&
+				(!(nr_ptr->flags1 & (RF1_UNIQUE))) &&
 				(!holding_quest_artifact(n_ptr)) &&
 				(!(n_ptr->mflag & (MFLAG_QUEST))) &&
-			    (r_ptr->mexp > nr_ptr->mexp * 2))
+				(r_ptr->mexp > nr_ptr->mexp * 2))
 			{
 				/* Note that the monster killed another monster (if visible) */
 				did_kill_body = TRUE;
@@ -4906,7 +4901,6 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 		}
 	}
 
-
 	/* Monster can (still) move */
 	if (do_move)
 	{
@@ -4916,7 +4910,6 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 		/*Mark the movement in the terrain lore, if the player is in a state to do so*/
 		if (player_can_observe() && (m_ptr->ml) && (!(m_ptr->mflag & (MFLAG_FLYING))))
 		{
-
 			feature_lore *f_l_ptr = &f_l_list[cave_feat[m_ptr->fy][m_ptr->fx]];
 
 			/*Check if the monster is native*/
@@ -4971,8 +4964,8 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 		 * communicate this to similar monsters.
 		 */
 		if ((!player_has_los_bold(ny, nx)) && (r_ptr->flags1 & (RF1_FRIENDS)) &&
-		    (monster_can_smell(m_ptr)) && (get_scent(oy, ox) == -1) &&
-		    (!m_ptr->target_y) && (!m_ptr->target_x))
+			(monster_can_smell(m_ptr)) && (get_scent(oy, ox) == -1) &&
+			(!m_ptr->target_y) && (!m_ptr->target_x))
 		{
 			int i;
 			monster_type *n_ptr;
@@ -5014,7 +5007,6 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 		/* Monster is visible and not cloaked */
 		if (m_ptr->ml)
 		{
-
 			/* Player will always be disturbed if monster moves adjacent */
 			if (m_ptr->cdis == 1) disturb(1, 0);
 
@@ -5066,7 +5058,6 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 				/* Get the next object */
 				next_o_idx = o_ptr->next_o_idx;
 
-
 				/* Skip gold */
 				if (o_ptr->tval == TV_GOLD)
 				{
@@ -5089,7 +5080,7 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 
 				/* The object (or quest related mimic) cannot be picked up by the monster */
 				if (artifact_p(o_ptr) || (r_ptr->flags3 & flg3) ||
- 				   (f3 & (TR3_NEVER_PICKUP)))
+ 					(f3 & (TR3_NEVER_PICKUP)))
 				{
 					/* Only give a message for "take_item" */
 					if (r_ptr->flags2 & (RF2_TAKE_ITEM))
@@ -5174,8 +5165,6 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 		}
 	}             /* End of monster's move */
 
-
-
 	/* Notice changes in view */
 	if (do_view)
 	{
@@ -5240,7 +5229,10 @@ static s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
 	else return(f_info[cave_feat[m_ptr->fy][m_ptr->fx]].non_native_energy_move);
 }
 
-/*alert others in pack about something using the m_flag, and wake them up*/
+
+/*
+ * alert others in pack about something using the m_flag, and wake them up
+ */
 static void tell_allies(int y, int x, u32b flag)
 {
 	monster_type *m_ptr = &mon_list[cave_m_idx[y][x]];
@@ -5251,7 +5243,6 @@ static void tell_allies(int y, int x, u32b flag)
 	/* Scan all other monsters */
 	for (i = mon_max - 1; i >= 1; i--)
 	{
-
 		/* Access the monster */
 		monster_type *n_ptr = &mon_list[i];
 		monster_race *nr_ptr = &r_info[n_ptr->r_idx];
@@ -5271,7 +5262,6 @@ static void tell_allies(int y, int x, u32b flag)
 
 		/* Activate all other monsters and communicate to them */
 		n_ptr->mflag |= (MFLAG_ACTV | flag | MFLAG_DESPERATE);
-
 	}
 }
 
@@ -5327,7 +5317,6 @@ static s16b process_monster(monster_type *m_ptr)
 		}
 	}
 
-
 	/* Monster is in passive mode. */
 	else
 	{
@@ -5380,7 +5369,6 @@ static s16b process_monster(monster_type *m_ptr)
 
 		/*clear the flag*/
 		m_ptr->mflag &= ~(MFLAG_HIT_BY_RANGED);
-
 	}
 
 	/*This if the first turn a monster has after being attacked by the player*/
@@ -5415,7 +5403,6 @@ static s16b process_monster(monster_type *m_ptr)
 
 		/*clear the flag*/
 		m_ptr->mflag &= ~(MFLAG_HIT_BY_MELEE);
-
 	}
 
 	/* A monster in passive mode will end its turn at this point. */
@@ -5430,8 +5417,8 @@ static s16b process_monster(monster_type *m_ptr)
 
 	/* Attempt to multiply if able to and allowed */
 	if ((r_ptr->flags2 & (RF2_MULTIPLY)) &&
-	    (!m_ptr->m_timed[MON_TMD_CONF]) && (!m_ptr->m_timed[MON_TMD_FEAR]) &&
-	    (mon_cnt < z_info->m_max - 50) && (!(m_ptr->mflag & (MFLAG_STERILE))))
+		(!m_ptr->m_timed[MON_TMD_CONF]) && (!m_ptr->m_timed[MON_TMD_FEAR]) &&
+		(mon_cnt < z_info->m_max - 50) && (!(m_ptr->mflag & (MFLAG_STERILE))))
 	{
 		/* Count the adjacent monsters */
 		for (k = 0, y = m_ptr->fy - 1; y <= m_ptr->fy + 1; y++)
@@ -5489,7 +5476,6 @@ static s16b process_monster(monster_type *m_ptr)
 			if ((m_ptr->best_range >= m_ptr->cdis +2) &&
 				((m_ptr->best_range / 2) <= m_ptr->cdis))
 			{
-
 				/* Heavy spell casters will sit back and cast */
 				if (m_ptr->mana > r_ptr->mana / 5)
 				{
@@ -5511,15 +5497,14 @@ static s16b process_monster(monster_type *m_ptr)
 
 			/* Breathers like point blank range */
 			else if (((r_ptr->flags4 & (RF4_BREATH_MASK)) ||
-		     (r_ptr->flags5 & (RF5_BREATH_MASK)) ||
-		     (r_ptr->flags6 & (RF6_BREATH_MASK)) ||
-		     (r_ptr->flags7 & (RF7_BREATH_MASK))) &&
-		     (m_ptr->cdis < 6) &&
-		     (m_ptr->hp > m_ptr->maxhp / 2))
+				(r_ptr->flags5 & (RF5_BREATH_MASK)) ||
+				(r_ptr->flags6 & (RF6_BREATH_MASK)) ||
+				(r_ptr->flags7 & (RF7_BREATH_MASK))) &&
+				(m_ptr->cdis < 6) &&
+				(m_ptr->hp > m_ptr->maxhp / 2))
 			{
 				chance += (100 - chance) / 10;
 			}
-
 		}
 
 		/*Monsters marked as aggressive or Desperatedo the same*/
@@ -5604,12 +5589,11 @@ static s16b process_monster(monster_type *m_ptr)
 	if (!random_move)
 	{
 		/*
-	     * First, monsters who can't cast, are aggressive, and
+		 * First, monsters who can't cast, are aggressive, and
 		 * are not afraid just want to charge
 		 */
 		if (!m_ptr->m_timed[MON_TMD_FEAR])
 		{
-
 			if ((m_ptr->mflag & (MFLAG_AGGRESSIVE | MFLAG_DESPERATE)) && (!r_ptr->freq_ranged))
 			{
 				m_ptr->target_y = 0;
@@ -5628,7 +5612,8 @@ static s16b process_monster(monster_type *m_ptr)
 		 * Monster has a known target, but not only if the target is because
 		 * there is not a good flow
 		 */
-		if ((m_ptr->target_y) && (m_ptr->target_x) && !(m_ptr->using_flow == NEED_FLOW)) must_use_target = TRUE;
+		if ((m_ptr->target_y) && (m_ptr->target_x) && !(m_ptr->using_flow == NEED_FLOW))
+			must_use_target = TRUE;
 	}
 
 	/* Monster is using the special "townsman" AI */
@@ -5669,14 +5654,13 @@ static s16b process_monster(monster_type *m_ptr)
 	/* Monster isn't confused, just moving semi-randomly */
 	else if (random_move)
 	{
-
 		int start = rand_int(8);
 		bool dummy;
 
 		/* Is the monster scared? */
 		if ((!(r_ptr->flags1 & (RF1_NEVER_MOVE))) && ((m_ptr->mflag & (MFLAG_DESPERATE)) == 0) &&
-		    ((m_ptr->min_range >= FLEE_RANGE) ||
-		     (m_ptr->m_timed[MON_TMD_FEAR])))
+			((m_ptr->min_range >= FLEE_RANGE) ||
+			 (m_ptr->m_timed[MON_TMD_FEAR])))
 		{
 			fear = TRUE;
 		}
@@ -5701,7 +5685,7 @@ static s16b process_monster(monster_type *m_ptr)
 
 		/* Cannot move, target grid does not contain the character */
 		if ((r_ptr->flags1 & (RF1_NEVER_MOVE)) &&
-		    (cave_m_idx[ty][tx] >= 0))
+			(cave_m_idx[ty][tx] >= 0))
 		{
 			/* Cannot move */
 			return(BASE_ENERGY_MOVE);
@@ -5714,19 +5698,14 @@ static s16b process_monster(monster_type *m_ptr)
 		/* Choose a pair of target grids, or cancel the move. */
 		if (!get_move(m_ptr, &ty, &tx, &fear, must_use_target))
 			return(BASE_ENERGY_MOVE);
-
 	}
 
 	/* Calculate the actual move.  Cancel move on failure to enter grid. */
 	if (!make_move(m_ptr, &ty, &tx, fear, &bash)) return (BASE_ENERGY_MOVE);
 
-
 	/* Change terrain, move the monster, handle secondary effects, end turn. */
 	return (process_move(m_ptr, ty, tx, bash));
-
 }
-
-
 
 
 /*
@@ -5758,7 +5737,7 @@ static void recover_monster(monster_type *m_ptr)
 
 		int typ, dam, rad;
 
-	  	rad = (r_ptr->flags2 & (RF2_POWERFUL) ? 2 : 1);
+		rad = (r_ptr->flags2 & (RF2_POWERFUL) ? 2 : 1);
 
 		/*just a minimal of damage*/
 		dam = MAX(1, m_ptr->hp / 100);
@@ -5844,7 +5823,6 @@ static void recover_monster(monster_type *m_ptr)
 				/* Notice the "not waking up" */
 				if (visible)
 				{
-
 					/* Hack -- Count the ignores */
 					if (l_ptr->ignore < MAX_UCHAR)
 					{
@@ -5900,7 +5878,6 @@ static void recover_monster(monster_type *m_ptr)
 		}
 
 		else mon_dec_timed(m_idx, MON_TMD_STUN, 1 , MON_TMD_FLG_NOMESSAGE);
-
 	}
 
 	/* Recover from confusion */
@@ -5912,7 +5889,6 @@ static void recover_monster(monster_type *m_ptr)
 		}
 
 		else mon_dec_timed(m_idx, MON_TMD_CONF, 1 , MON_TMD_FLG_NOMESSAGE);
-
 	}
 
 	/* Recover courage */
@@ -5939,7 +5915,6 @@ static void recover_monster(monster_type *m_ptr)
 		}
 
 		else mon_dec_timed(m_idx, MON_TMD_FAST, 1 , MON_TMD_FLG_NOMESSAGE);
-
 	}
 
 	/*
@@ -5958,7 +5933,6 @@ static void recover_monster(monster_type *m_ptr)
 	/* Hack -- Update the health and mana bar (always) */
 	if ((p_ptr->health_who == m_idx)  || (m_ptr->sidebar))
 		p_ptr->redraw |= (PR_HEALTH | PR_MON_MANA);
-
 }
 
 
