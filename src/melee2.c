@@ -2009,28 +2009,28 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 		if (is_breath) cur_spell_rating = (cur_spell_rating * breath_hp) / breath_maxhp;
 
 		/* Bonus if want summon and this spell is helpful */
-		if (spell_desire[D_SUMM] && want_summon) cur_spell_rating +=
-						      want_summon * spell_desire[D_SUMM];
+		if (spell_desire[D_SUMM] && want_summon)
+			cur_spell_rating += want_summon * spell_desire[D_SUMM];
 
 		/* Bonus if wounded and this spell is helpful */
-		if (spell_desire[D_HURT] && want_hps) cur_spell_rating +=
-							want_hps * spell_desire[D_HURT];
+		if (spell_desire[D_HURT] && want_hps)
+			cur_spell_rating += want_hps * spell_desire[D_HURT];
 
 		/* Bonus if low on mana and this spell is helpful */
-		if (spell_desire[D_MANA] && want_mana) cur_spell_rating +=
-							 want_mana * spell_desire[D_MANA];
+		if (spell_desire[D_MANA] && want_mana)
+			cur_spell_rating += want_mana * spell_desire[D_MANA];
 
 		/* Bonus if want to flee and this spell is helpful */
-		if (spell_desire[D_ESC] && want_escape) cur_spell_rating +=
-							  want_escape * spell_desire[D_ESC];
+		if (spell_desire[D_ESC] && want_escape)
+			cur_spell_rating += want_escape * spell_desire[D_ESC];
 
 		/* Bonus if want a tactical move and this spell is helpful */
-		if (spell_desire[D_TACT] && want_tactic) cur_spell_rating +=
-							   want_tactic * spell_desire[D_TACT];
+		if (spell_desire[D_TACT] && want_tactic)
+			cur_spell_rating += want_tactic * spell_desire[D_TACT];
 
 		/* Penalty if this spell is resisted */
 		if (spell_desire[D_RES])
-		      cur_spell_rating = (cur_spell_rating * (100 - find_resist(m_idx, spell_desire[D_RES])))/100;
+			cur_spell_rating = (cur_spell_rating * (100 - find_resist(m_idx, spell_desire[D_RES])))/100;
 
 		/* Penalty for range if attack drops off in power */
 		if (spell_range)
@@ -2041,8 +2041,10 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 		}
 
 		/* Random factor; less random for smart monsters */
-		if (r_ptr->flags2 & (RF2_SMART)) cur_spell_rating *= 16 + rand_int(100);
-		else cur_spell_rating *= 12 + rand_int(50);
+		if (r_ptr->flags2 & (RF2_SMART))
+			cur_spell_rating *= 16 + rand_int(100);
+		else
+			cur_spell_rating *= 12 + rand_int(50);
 
 		/* Deflate for testing purposes */
 		cur_spell_rating /= 20;
@@ -2130,9 +2132,8 @@ bool cave_exist_mon(const monster_race *r_ptr, int y, int x,
 	/* Flying monsters can pass through dangerous terrain */
 	if (r_ptr->flags3 & (RF3_FLYING)) return (TRUE);
 
-	/*Monster will be damaged going there*/
+	/* Monster will be damaged going there */
 	return (FALSE);
-
 }
 
 
@@ -2226,8 +2227,7 @@ static int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash)
 		/* Glyphs are hard to break */
 		if (move_chance > glyph_chance)
 		{
-			 move_chance = glyph_chance;
-
+			move_chance = glyph_chance;
 		}
 	}
 
@@ -2247,15 +2247,14 @@ static int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash)
 		/* Will monster be significantly damaged by going there? */
 		else if ((f_info[feat].dam_non_native) > (m_ptr->hp / 15)) return (0);
 
-		/*desirability of the move is based on energy to go in square*/
+		/* desirability of the move is based on energy to go in square */
 		else move_chance = 10000 / f_info[feat].non_native_energy_move;
 
-		/*Never more than 100*/
+		/* Never more than 100 */
 		if (move_chance > 100) move_chance = 100;
-
 	}
 
-	/*Monster is native - movement based on 100 energy average*/
+	/* Monster is native - movement based on 100 energy average */
 	else
 	{
 		move_chance = 10000 / f_info[feat].native_energy_move;
@@ -2265,12 +2264,10 @@ static int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash)
 	}
 
 	/*no further analysis for monsters who pass or kill walls*/
-	if ((r_ptr->flags2 & (RF2_PASS_WALL)) ||
-	    (r_ptr->flags2 & (RF2_KILL_WALL)))
+	if ((r_ptr->flags2 & (RF2_PASS_WALL)) || (r_ptr->flags2 & (RF2_KILL_WALL)))
 	{
 		return (move_chance);
 	}
-
 
 	/*** Check passability of various features. ***/
 
@@ -2396,11 +2393,12 @@ static int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash)
 	 * A monster cannot both bash and unlock a door in the same
 	 * turn.  It needs to pick one of the two methods to use.
 	 */
-	if (unlock_chance > bash_chance) *bash = FALSE;
-	else *bash = TRUE;
+	if (unlock_chance > bash_chance)
+		*bash = FALSE;
+	else
+		*bash = TRUE;
 
 	return MIN(move_chance, (MAX(unlock_chance, bash_chance)));
-
 }
 
 
@@ -2421,7 +2419,7 @@ static void get_town_target(monster_type *m_ptr)
 	/* Hack -- Usually choose a random store, but not cats and dogs */
 	if ((r_ptr->d_char != 'f') && (r_ptr->d_char != 'C') && (!one_in_(3)))
 	{
-		/* shop base - note that shop power is teh shop -1*/
+		/* shop base - note that shop power is the shop -1*/
 		i = rand_int(MAX_STORES);
 
 		/* Try to find the store XXX XXX */
@@ -2431,7 +2429,6 @@ static void get_town_target(monster_type *m_ptr)
 			{
 				if (cave_shop_bold(y, x))
 				{
-
 					/* Is our store */
 					if (f_info[cave_feat[y][x]].f_power == i)
 					{
@@ -2462,7 +2459,6 @@ static void get_town_target(monster_type *m_ptr)
 
 					if (one_in_(2)) x = p_ptr->cur_map_wid - 2 ;
 					else            x = 2 ;
-
 				}
 				else
 				{
@@ -2490,7 +2486,10 @@ static void get_town_target(monster_type *m_ptr)
 	}
 }
 
-/*Returns true if the monster is holding a quest artifact, false if they aren't.*/
+
+/*
+ * Returns true if the monster is holding a quest artifact, false if they aren't.
+ */
 static bool holding_quest_artifact(const monster_type *m_ptr)
 {
 	s16b this_o_idx, next_o_idx = 0;
@@ -2508,12 +2507,12 @@ static bool holding_quest_artifact(const monster_type *m_ptr)
 
 		/*Monster is holding a quest item*/
 		if(o_ptr->ident & (IDENT_QUEST)) return (TRUE);
-
 	}
 
 	/*didn't find one*/
 	return (FALSE);
 }
+
 
 /*
  * Primary function for monsters that want to advance toward the character.
@@ -2557,9 +2556,9 @@ static void get_move_advance(monster_type *m_ptr, int *ty, int *tx)
 	/*
 	 * Monster can go through rocks should always try to head for the player, unless they
 	 * are obstructed.
-     */
+	 */
 	if ((((r_ptr->flags2 & (RF2_PASS_WALL)) ||
-	    (r_ptr->flags2 & (RF2_KILL_WALL)))) &&
+		(r_ptr->flags2 & (RF2_KILL_WALL)))) &&
 		(!(m_ptr->mflag & (MFLAG_NEED_PASS_WALL_FLOW))))
 	{
 		bool dummy;
@@ -2593,7 +2592,6 @@ static void get_move_advance(monster_type *m_ptr, int *ty, int *tx)
 			*ty = py;
 			*tx = px;
 			return;
-
 		}
 
 		else
@@ -2613,7 +2611,6 @@ static void get_move_advance(monster_type *m_ptr, int *ty, int *tx)
 	/* Use target information if available */
 	if ((m_ptr->target_y) && (m_ptr->target_x))
 	{
-
 		*ty = m_ptr->target_y;
 		*tx = m_ptr->target_x;
 		return;
@@ -2632,7 +2629,6 @@ static void get_move_advance(monster_type *m_ptr, int *ty, int *tx)
 		for (i = 7; i >= 0; i--)
 		{
 			int age;
-
 
 			/* Get the location */
 			y = y1 + ddy_ddd[i];
@@ -2663,14 +2659,12 @@ static void get_move_advance(monster_type *m_ptr, int *ty, int *tx)
 	 */
 	if (m_ptr->using_flow == NEED_FLOW)
 	{
-
 		*ty = p_ptr->py;
 		*tx = p_ptr->px;
 		return;
 	}
 
-
-	/*For efficiency, get the flow now*/
+	/* For efficiency, get the flow now */
 	flow_used = m_ptr->using_flow;
 
 	/*Do we prefer a clear path to the player*/
@@ -2687,9 +2681,8 @@ static void get_move_advance(monster_type *m_ptr, int *ty, int *tx)
 		if ((m_ptr->hp > (m_ptr->maxhp / 2)) || (m_ptr->hp > 750))
 		{
 				wants_shot = TRUE;
- 		}
+		}
 	}
-
 
 	/*We don't want to move further away from the player if we don't have to*/
 	if (cave_cost[flow_used][m_ptr->fy][m_ptr->fx])
@@ -2705,7 +2698,6 @@ static void get_move_advance(monster_type *m_ptr, int *ty, int *tx)
 	 */
 	for (i = 0; i < 8; i++)
 	{
-
 		/* Get the location */
 		y = y1 + ddy_ddd[i];
 		x = x1 + ddx_ddd[i];
@@ -2713,13 +2705,13 @@ static void get_move_advance(monster_type *m_ptr, int *ty, int *tx)
 		/* Check Bounds */
 		if (!in_bounds(y, x)) continue;
 
-		/*Is there a flow here?*/
+		/* Is there a flow here? */
 		if (cave_cost[flow_used][y][x])
 		{
 			int this_cost = cave_cost[flow_used][y][x];
 
 			/*
-			 * Is there a monster here?  If so, encourange a different path
+			 * Is there a monster here?  If so, encourage a different path
 			 * to the player.  Try to surround the player quickly.
 			 * Strongest monsters get the quickest path.
 			 */
@@ -2744,11 +2736,11 @@ static void get_move_advance(monster_type *m_ptr, int *ty, int *tx)
 				/* Death molds can be permanent barriers */
 				if (r2_ptr->flags1 & (RF1_NEVER_MOVE)) cost_add /= 2;
 
-
 				/*Apply the penalty*/
 				this_cost += cost_add;
 			}
-			/*avoid glyphs if possible*/
+
+			/* avoid glyphs if possible */
 			else if (cave_player_glyph_bold(y, x))
 			{
 				if (is_monster_native(y, x, r_ptr))
@@ -2757,10 +2749,11 @@ static void get_move_advance(monster_type *m_ptr, int *ty, int *tx)
 				}
 				else this_cost += (f_info[cave_feat[y][x]].non_native_energy_move);
 			}
-			/*Is it the best route?*/
+
+			/* Is it the best route? */
 			if (this_cost < lowest_cost)
 			{
-				/*Save the new closest distance*/
+				/* Save the new closest distance */
 				lowest_cost = this_cost;
 
 				/* Save the location */
@@ -2769,12 +2762,9 @@ static void get_move_advance(monster_type *m_ptr, int *ty, int *tx)
 				continue;
 			}
 
-			/*
-			 * Go in a straight path if energy is equal
-			 */
+			/* Go in a straight path if energy is equal */
 			else if (this_cost == lowest_cost)
 			{
-
 				bool better_spot = FALSE;
 
 				/*
@@ -2784,13 +2774,12 @@ static void get_move_advance(monster_type *m_ptr, int *ty, int *tx)
 				 * without using math.c (which uses floating point math), we can simply
 				 * compare the squared numbers to find out which route is more direct to
 				 * the player, thus making the monsters prefer the straight route
-				 * vs diaganols.  Since distance in Angband is measured in a square pattern
+				 * vs diagonals.  Since distance in Angband is measured in a square pattern
 				 * outward rather than a circular pattern, the monster could wobble
 				 * back and forth diagonally while advancing towards the player.
 				 * We can make the monster advance in a straighter path based on the
 				 * comparing the squares of the distance (A2 + B2) and not bother finding the square root.
 				 */
-
 				u32b distance_squared_best = (GET_SQUARE((py - *ty)) + GET_SQUARE((px - *tx)));
 				u32b distance_squared_new =  (GET_SQUARE((py - y)) + GET_SQUARE((px - x)));
 
@@ -2813,7 +2802,7 @@ static void get_move_advance(monster_type *m_ptr, int *ty, int *tx)
 						*ty = y;
 						*tx = x;
 
-					 	continue;
+						continue;
 					}
 
 					/*
@@ -2832,14 +2821,14 @@ static void get_move_advance(monster_type *m_ptr, int *ty, int *tx)
 						*ty = y;
 						*tx = x;
 
-					 	continue;
+						continue;
 					}
 				}
 
-				/*Don't "wobble" towards player*/
+				/* Don't "wobble" towards player */
 				if (distance_squared_new > distance_squared_best) continue;
 
-				/*50-50 shot, for pillar dancers*/
+				/* 50-50 shot, for pillar dancers */
 				if (distance_squared_new == distance_squared_best)
 				{
 					if (one_in_(2)) better_spot = TRUE;
@@ -2859,31 +2848,29 @@ static void get_move_advance(monster_type *m_ptr, int *ty, int *tx)
 
 					int shorter_axis_diff = 1;
 
-					/*Base it on the shorter axis*/
+					/* Base it on the shorter axis */
 					if (new_y_diff > new_x_diff) shorter_axis_diff = new_y_diff - new_x_diff;
 					else if (new_x_diff > new_y_diff) shorter_axis_diff = new_x_diff - new_y_diff;
 					else shorter_axis_diff = 1; /*Hack - straight diagonal path to the player, always take it*/
 
 					if (one_in_(shorter_axis_diff)) better_spot = TRUE;
-
 				}
 
 				if (better_spot)
 				{
-					/*Save the best square*/
+					/* Save the best square */
 					lowest_cost = this_cost;
 
 					/* Save the location */
 					*ty = y;
 					*tx = x;
-					 continue;
+					continue;
 				}
 			}
 		}
 		/*No flow here, continue*/
 	}
 }
-
 
 
 /*
@@ -2896,8 +2883,8 @@ static void get_move_advance(monster_type *m_ptr, int *ty, int *tx)
  *
  * Look outward from the monster's current position in a square-
  * shaped search pattern.  Calculate the approximate cost in monster
- * turns to get to each passable grid, using a crude route finder.  Penal-
- * ize grids close to or approaching the character.  Ignore hiding places
+ * turns to get to each passable grid, using a crude route finder.  Penalize
+ * grids close to or approaching the character.  Ignore hiding places
  * with no safe exit.  Once a passable grid is found that the character
  * can't see, the code will continue to search a little while longer,
  * depending on how pricey the first option seemed to be.
@@ -2959,7 +2946,7 @@ static bool find_safety(monster_type *m_ptr, int *ty, int *tx)
 
 	/* If the character's grid is in range, mark it as being off-limits */
 	if ((ABS(m_ptr->fy - p_ptr->py) <= scan_range) &&
-	    (ABS(m_ptr->fx - p_ptr->px) <= scan_range))
+		(ABS(m_ptr->fx - p_ptr->px) <= scan_range))
 	{
 		safe_cost[p_ptr->py + conv_y][p_ptr->px + conv_x] = BASE_FLOW_MAX;
 	}
@@ -3017,8 +3004,8 @@ static bool find_safety(monster_type *m_ptr, int *ty, int *tx)
 					 * with costs we have a chance of beating.
 					 */
 					if ((safe_cost[yy][xx] == 0) ||
-					      ((safe_cost[yy][xx] > parent_cost + 1) &&
-					       (safe_cost[yy][xx] < 100)))
+						((safe_cost[yy][xx] > parent_cost + 1) &&
+						 (safe_cost[yy][xx] < 100)))
 					{
 						/* The monster can hide here - best case scenario. */
 						if ((m_ptr->mflag & (MFLAG_HIDE)) &&
@@ -3030,8 +3017,9 @@ static bool find_safety(monster_type *m_ptr, int *ty, int *tx)
 						}
 
 						/* Get the cost to enter this grid */
-						else chance = cave_passable_mon(m_ptr, yy - conv_y,
-						         xx - conv_x, &dummy);
+						else
+							chance = cave_passable_mon(m_ptr, yy - conv_y,
+									xx - conv_x, &dummy);
 
 						/* Impassable */
 						if (!chance)
@@ -3046,7 +3034,7 @@ static bool find_safety(monster_type *m_ptr, int *ty, int *tx)
 
 						/* Next to character */
 						if (distance(yy - conv_y, xx - conv_x,
-						    p_ptr->py, p_ptr->px) <= 1)
+							p_ptr->py, p_ptr->px) <= 1)
 						{
 							/* Don't want to maneuver next to the character */
 							cost += 3;
@@ -3064,17 +3052,17 @@ static bool find_safety(monster_type *m_ptr, int *ty, int *tx)
 							if (ABS(p_ptr->py - (yy - conv_y)) <
 							    ABS(m_ptr->fy - (yy - conv_y)))
 							{
-								 this_cost *= 2;
+								this_cost *= 2;
 							}
 							if (ABS(p_ptr->px - (xx - conv_x)) <
 							    ABS(m_ptr->fx - (xx - conv_x)))
 							{
-								 this_cost *= 2;
+								this_cost *= 2;
 							}
 
 							/* Accept lower-cost, sometimes accept same-cost options */
 							if ((least_cost > this_cost) ||
-							    (least_cost == this_cost && one_in_(2)) || can_hide)
+								(least_cost == this_cost && one_in_(2)) || can_hide)
 							{
 								bool has_escape = FALSE;
 
@@ -3090,7 +3078,7 @@ static bool find_safety(monster_type *m_ptr, int *ty, int *tx)
 
 									/* Look for any passable grid that isn't in LOS */
 									if (((!player_can_see_bold(yyy, xxx)) &&
-									    (cave_passable_mon(m_ptr, yyy, xxx, &dummy))) ||
+										(cave_passable_mon(m_ptr, yyy, xxx, &dummy))) ||
 										((m_ptr->mflag & (MFLAG_HIDE)) &&
 										(cave_ff2_match(yyy, xxx, FF2_COVERED))))
 									{
@@ -3146,7 +3134,6 @@ static bool find_safety(monster_type *m_ptr, int *ty, int *tx)
 
 		return (TRUE);
 	}
-
 
 	/* No good place found */
 	return (FALSE);
@@ -3210,7 +3197,7 @@ static bool get_move_retreat(monster_type *m_ptr, int *ty, int *tx)
 
 			/* It's only out of LOS because of "knight's move" rules */
 			if (((dist_y == 2) && (dist_x == 1)) ||
-			    ((dist_y == 1) && (dist_x == 2)))
+				((dist_y == 1) && (dist_x == 2)))
 			{
 				/*
 				 * If there is another grid adjacent to the monster that
@@ -3230,7 +3217,7 @@ static bool get_move_retreat(monster_type *m_ptr, int *ty, int *tx)
 					if ((y == m_ptr->target_y) && (x == m_ptr->target_x)) continue;
 
 					if (cave_passable_mon(m_ptr, m_ptr->target_y, m_ptr->target_x, &dummy) >
-					    cave_passable_mon(m_ptr, y, x, &dummy)) continue;
+						cave_passable_mon(m_ptr, y, x, &dummy)) continue;
 
 					m_ptr->target_y = y;
 					m_ptr->target_x = x;
@@ -3350,11 +3337,10 @@ static bool get_move_retreat(monster_type *m_ptr, int *ty, int *tx)
 		 */
 		if ((player_has_los_bold(m_ptr->fy, m_ptr->fx)) &&
 			((m_ptr->mflag & (MFLAG_JUST_SCARED | MFLAG_DESPERATE)) == 0) &&
-		    ((m_ptr->cdis < TURN_RANGE) || (m_ptr->m_speed < p_ptr->state.p_speed)))
+			((m_ptr->cdis < TURN_RANGE) || (m_ptr->m_speed < p_ptr->state.p_speed)))
 		{
 			if (m_ptr->m_timed[MON_TMD_FEAR])
 			{
-
 				char m_name[80];
 
 				m_ptr->mflag |= (MFLAG_DESPERATE);
@@ -3385,6 +3371,7 @@ static bool get_move_retreat(monster_type *m_ptr, int *ty, int *tx)
 	/* We want to run away */
 	return (TRUE);
 }
+
 
 static void calc_vulnerability(void)
 {
@@ -3437,17 +3424,14 @@ static void calc_vulnerability(void)
 
 	/* Is seriously weakened -- go berserk */
 	if ((p_ptr->chp < 2 * p_ptr->mhp / 5) ||
-	/*or, very low on mana for spellcasters*/
+	/* or, very low on mana for spellcasters */
 		(p_ptr->csp < 2 * p_ptr->msp / 25))
 	{
 		p_ptr->vulnerability = 100;
 	}
-	/* Sometimes go berserk at random  XXX
-	 *
-	 */
+	/* Sometimes go berserk at random  XXX */
 	else if (p_ptr->vulnerability > 4)
 	{
-
 		bool berserk = FALSE;
 
 		if (p_ptr->vulnerability >= 15)
@@ -3528,7 +3512,6 @@ static bool get_move(monster_type *m_ptr, int *ty, int *tx, bool *fear,
 		/* Is character in range? */
 		if (m_ptr->cdis <= 1)
 		{
-
 			/* Monster can't melee either (pathetic little creature) */
 			if (r_ptr->flags1 & (RF1_NEVER_BLOW))
 			{
@@ -3608,7 +3591,7 @@ static bool get_move(monster_type *m_ptr, int *ty, int *tx, bool *fear,
 	{
 		/* The character is too close to avoid, and faster than we are */
 		if ((!m_ptr->m_timed[MON_TMD_FEAR]) && (m_ptr->cdis < TURN_RANGE) &&
-		     (p_ptr->state.p_speed > m_ptr->m_speed))
+			(p_ptr->state.p_speed > m_ptr->m_speed))
 		{
 			/* Recalculate range */
 			find_range(m_ptr);
@@ -3678,13 +3661,10 @@ static bool get_move(monster_type *m_ptr, int *ty, int *tx, bool *fear,
 	    (r_ptr->flags3 & (RF3_ANIMAL)) &&
 	    (!(r_ptr->flags2 & (RF2_PASS_WALL | RF2_KILL_WALL))))
 	{
-
 		/* Animal has to be willing to melee */
 		if (m_ptr->min_range == 1)
 		{
-			/*
-			 * Make sure player vurnerability is up to date
-			 */
+			/* Make sure player vulnerability is up to date */
 			calc_vulnerability();
 
 			/*
@@ -3746,15 +3726,12 @@ static bool get_move(monster_type *m_ptr, int *ty, int *tx, bool *fear,
 		get_move_advance(m_ptr, ty, tx);
 	}
 
-
 	/* No special moves made -- use standard movement */
 
 	/* Not frightened */
 	if (!*fear)
 	{
-		/*
-		 * The monster is advancing.
-		 */
+		/* The monster is advancing. */
 		get_move_advance(m_ptr, ty, tx);
 	}
 
@@ -3771,8 +3748,6 @@ static bool get_move(monster_type *m_ptr, int *ty, int *tx, bool *fear,
 	/* We want to move */
 	return (TRUE);
 }
-
-
 
 
 /*
@@ -4001,7 +3976,6 @@ static void make_confused_move(monster_type *m_ptr, int y, int x)
 	{
 		/* No changes */
 	}
-
 
 	/* Monster is frightened */
 	if ((!death) && (fear) && (seen))
