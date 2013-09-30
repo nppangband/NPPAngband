@@ -638,6 +638,7 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 					break;
 				}
+				break;
 			}
 
 			case FEAT_MTRAP_POISON:
@@ -2151,26 +2152,11 @@ bool cave_exist_mon(const monster_race *r_ptr, int y, int x,
  */
 static int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash)
 {
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-	/* Assume nothing in the grid other than the terrain hinders movement */
-	int move_chance = 100;
-
-	u16b feat;
-
-	bool is_native;
-
-	int unlock_chance = 0;
-	int bash_chance = 0;
-
 	/* Check Bounds */
 	if (!in_bounds(y, x)) return (0);
 
-	/* Check nativity */
-	is_native = is_monster_native(y, x, r_ptr);
-
 	/* Check location */
-	feat = cave_feat[y][x];
+	u16b feat = cave_feat[y][x];
 
 	/*
 	 * Don't move through permanent walls.
@@ -2181,18 +2167,26 @@ static int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash)
 		return (0);
 	}
 
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
 	/* The grid is occupied by the player. */
 	if (cave_m_idx[y][x] < 0)
 	{
 		/* Monster has no melee blows - character's grid is off-limits. */
 		if (r_ptr->flags1 & (RF1_NEVER_BLOW)) return (0);
-
-		/* Any monster with melee blows can attack the character. */
-		else move_chance = 100;
 	}
 
+	/* Assume nothing in the grid other than the terrain hinders movement */
+	int move_chance = 100;
+
+	int unlock_chance = 0;
+	int bash_chance = 0;
+
+	/* Check nativity */
+	bool is_native = is_monster_native(y, x, r_ptr);
+
 	/* The grid is occupied by a monster. */
-	else if ((cave_m_idx[y][x] > 0) && (is_native))
+	if ((cave_m_idx[y][x] > 0) && (is_native))
 	{
 		monster_type *n_ptr = &mon_list[cave_m_idx[y][x]];
 		monster_race *nr_ptr = &r_info[n_ptr->r_idx];
@@ -5642,7 +5636,7 @@ static s16b process_monster(monster_type *m_ptr)
 		if (!m_ptr->m_timed[MON_TMD_FEAR])
 		{
 
-			if (m_ptr->mflag & (MFLAG_AGGRESSIVE | MFLAG_DESPERATE) && (!r_ptr->freq_ranged))
+			if ((m_ptr->mflag & (MFLAG_AGGRESSIVE | MFLAG_DESPERATE)) && (!r_ptr->freq_ranged))
 			{
 				m_ptr->target_y = 0;
 				m_ptr->target_x = 0;
