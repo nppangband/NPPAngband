@@ -18,8 +18,7 @@
  * Terrified monsters will turn to fight if they are slower than the
  * character, and closer to him than this distance.
  */
-#define TURN_RANGE      3
-
+#define TURN_RANGE		3
 
 
 /*
@@ -42,7 +41,7 @@ static void find_range(monster_type *m_ptr)
 
 	/* Some monsters run when low on mana */
 	else if ((r_ptr->flags2 & (RF2_LOW_MANA_RUN)) &&
-	    (m_ptr->mana < r_ptr->mana / 6)) m_ptr->min_range = FLEE_RANGE;
+			 (m_ptr->mana < r_ptr->mana / 6)) m_ptr->min_range = FLEE_RANGE;
 
 	/* Hack -- townsmen go about their business */
 	else if (m_ptr->mflag & (MFLAG_TOWN)) m_ptr->min_range = 1;
@@ -109,7 +108,7 @@ static void find_range(monster_type *m_ptr)
 		/* Spellcasters that don't strike never like to get too close */
 		else if (r_ptr->flags1 & (RF1_NEVER_BLOW)) m_ptr->best_range = 8;
 
-		/*Monsters who have had unfair attacks happen to them charge or cast */
+		/* Monsters who have had unfair attacks happen to them charge or cast */
 		else if (m_ptr->mflag & (MFLAG_ATTACKED_BAD))
 		{
 			m_ptr->min_range = 1;
@@ -117,17 +116,17 @@ static void find_range(monster_type *m_ptr)
 
 		/* Breathers like point blank range */
 		else if (((r_ptr->flags4 & (RF4_BREATH_MASK)) ||
-		     (r_ptr->flags5 & (RF5_BREATH_MASK)) ||
-		     (r_ptr->flags6 & (RF6_BREATH_MASK)) ||
-		     (r_ptr->flags7 & (RF7_BREATH_MASK))) &&
-		    (m_ptr->best_range < 6) &&
-		    (m_ptr->hp > m_ptr->maxhp / 2))
+				  (r_ptr->flags5 & (RF5_BREATH_MASK)) ||
+				  (r_ptr->flags6 & (RF6_BREATH_MASK)) ||
+		 		  (r_ptr->flags7 & (RF7_BREATH_MASK))) &&
+				  (m_ptr->best_range < 6) &&
+				  (m_ptr->hp > m_ptr->maxhp / 2))
 		{
 			m_ptr->best_range = 7;
 		}
 	}
-
 }
+
 
 static void find_best_flow(monster_type *m_ptr)
 {
@@ -143,30 +142,26 @@ static void find_best_flow(monster_type *m_ptr)
 	/* Remember if the monster cannot handle doors */
 	if (MONSTER_HATES_DOORS(r_ptr)) allow_doors = FALSE;
 
-	/*Can the monster pass through walls?*/
+	/* Can the monster pass through walls? */
 	if (r_ptr->flags2 & (RF2_KILL_WALL | RF2_PASS_WALL))
 	{
-		/*Is there a flow here?*/
+		/* Is there a flow here? */
 		if (cave_cost[FLOW_PASS_WALLS][y][x])
 		{
-			/*
-			 * Is it the best route?
-			 */
+			/* Is it the best route? */
 			if (cave_cost[FLOW_PASS_WALLS][y][x] <= lowest_cost)
 			{
-
 				lowest_cost = cave_cost[FLOW_PASS_WALLS][y][x];
 
-				/*Mark which flow we are using */
+				/* Mark which flow we are using */
 				m_ptr->using_flow = FLOW_PASS_WALLS;
-
 			}
 		}
 
-		/*Why didn't we use this flow?*/
+		/* Why didn't we use this flow? */
 		if(m_ptr->using_flow != FLOW_PASS_WALLS)
 		{
-			/*The flow is not active*/
+			/* The flow is not active */
 			if (cost_at_center[FLOW_PASS_WALLS] == 0)
 			{
 				/* Full update of the flows, which should activate the FLOW_PASS_WALLS */
@@ -175,7 +170,7 @@ static void find_best_flow(monster_type *m_ptr)
 		}
 	}
 
-	/*Can the monster fly?*/
+	/* Can the monster fly? */
 	if (r_ptr->flags3 & (RF3_FLYING))
 	{
 		int flow;
@@ -184,33 +179,29 @@ static void find_best_flow(monster_type *m_ptr)
 		if (allow_doors) flow = FLOW_FLYING;
 		else flow = FLOW_FLYING_NO_DOORS;
 
-		/*Is there a flow here?*/
+		/* Is there a flow here?*/
 		if (cave_cost[flow][y][x])
 		{
-			/*
-			 * Is it the best route?
-			 */
+			/* Is it the best route? */
 			if (cave_cost[flow][y][x] <= lowest_cost)
 			{
 				lowest_cost = cave_cost[flow][y][x];
 
-				/*Mark which flow we are using */
+				/* Mark which flow we are using */
 				m_ptr->using_flow = flow;
-
 			}
 		}
 
 		/* Why wouldn't a flying creature use this flow, unless they are using the FLOW_PASS_WALLS flow. */
 		if((m_ptr->using_flow != flow) && (m_ptr->using_flow != FLOW_PASS_WALLS))
 		{
-			/*The flow is not active*/
+			/* The flow is not active */
 			if (cost_at_center[flow] == 0)
 			{
 				/* Full update of the flows, which should activate the FLOW_FLYING */
 				p_ptr->update |= (PU_FLOW_DOORS | PU_FLOW_NO_DOORS);
 			}
 		}
-
 	}
 
 	/*
@@ -218,21 +209,20 @@ static void find_best_flow(monster_type *m_ptr)
 	 */
 	if (r_ptr->flags2 & (RF2_OPEN_DOOR | RF2_BASH_DOOR))
 	{
-		/*Is the best flow*/
+		/* Is the best flow */
 		if (cave_cost[FLOW_PASS_DOORS][y][x])
 		{
 			if (cave_cost[FLOW_PASS_DOORS][y][x] < lowest_cost)
 			{
-
 				lowest_cost = cave_cost[FLOW_PASS_DOORS][y][x];
 
-				/*Mark which flow we are using */
+				/* Mark which flow we are using */
 				m_ptr->using_flow = FLOW_PASS_DOORS;
 			}
 		}
 	}
 
-	/*FLOW_NO_DOORS will never be quicker than FLOW_PASS_DOORS.*/
+	/* FLOW_NO_DOORS will never be quicker than FLOW_PASS_DOORS. */
 	else if (cave_cost[FLOW_NO_DOORS][y][x])
 	{
 		/*Is it the best route?*/
@@ -240,12 +230,12 @@ static void find_best_flow(monster_type *m_ptr)
 		{
 			lowest_cost = cave_cost[FLOW_NO_DOORS][y][x];
 
-			/*Mark which flow we are using */
+			/* Mark which flow we are using */
 			m_ptr->using_flow = FLOW_NO_DOORS;
 		}
 	}
 
-	/*Is the monster native to any terrains?*/
+	/* Is the monster native to any terrains? */
 	if (r_ptr->r_native & (TERRAIN_MASK))
 	{
 		int j;
@@ -269,16 +259,16 @@ static void find_best_flow(monster_type *m_ptr)
 
 		for (j = base; j <= tail; j++, which_elem_flow <<= 1)
 		{
-			/*Is the monster native to this terrain*/
+			/* Is the monster native to this terrain */
 			if (r_ptr->r_native & which_elem_flow)
 			{
-				/*Is there a flow here?*/
+				/* Is there a flow here? */
 				if (cave_cost[j][y][x])
 				{
-					/*Is it the best route?*/
+					/* Is it the best route? */
 					if (cave_cost[j][y][x] < lowest_cost)
 					{
-						/*Mark which flow we are using */
+						/* Mark which flow we are using */
 						m_ptr->using_flow = j;
 
 						lowest_cost = cave_cost[j][y][x];
@@ -288,7 +278,7 @@ static void find_best_flow(monster_type *m_ptr)
 		}
 	}
 
-	/*Monster is flying*/
+	/* Monster is flying */
 	if ((m_ptr->using_flow == FLOW_FLYING) ||
 		(m_ptr->using_flow == FLOW_FLYING_NO_DOORS)) m_ptr->mflag |= (MFLAG_FLYING);
 
@@ -296,9 +286,10 @@ static void find_best_flow(monster_type *m_ptr)
 	else if ((r_ptr->flags3 & (RF3_FLYING)) &&
 				!cave_no_dam_for_mon(y, x, r_ptr)) m_ptr->mflag |= (MFLAG_FLYING);
 
-	/*Not flying*/
+	/* Not flying */
 	else m_ptr->mflag &= ~(MFLAG_FLYING);
 }
+
 
 /*
  * Check the effect of the Rogue's monster trap.  Certain traps may be avoided by
@@ -322,7 +313,7 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 	/* Assume monster not frightened by trap */
 	bool fear = FALSE;
 
-	/*extra damage if monster fails to disarm trap*/
+	/* extra damage if monster fails to disarm trap */
 	bool fail_disarm = FALSE;
 
 	/* Assume the trap works */
@@ -340,29 +331,27 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 	if (mode == MODE_ACTION)
 	{
-
 		m_ptr = &mon_list[cave_m_idx[y][x]];
 		r_ptr = &r_info[m_ptr->r_idx];
 		l_ptr = &l_list[m_ptr->r_idx];
 		m_idx = get_mon_idx(m_ptr);
 	}
 
-	/*Count in the feature lore the number of times set off*/
+	/* Count in the feature lore the number of times set off */
 	if ((mode == MODE_ACTION) && (f_l_ptr->f_l_power < MAX_UCHAR))
 	{
 		f_l_ptr->f_l_power++;
 	}
-	/* Don't describe if not set off*/
+	/* Don't describe if not set off */
 	if ((mode == MODE_DESCRIBE) && (!f_l_ptr->f_l_power))
 	{
 		text_out("  The effects of this trap are unknown.");
 		return;
 	}
 
-	/*Skip all this unless we are setting off a trap*/
+	/* Skip all this unless we are setting off a trap */
 	if (mode == MODE_ACTION)
 	{
-
 		/* Get "the monster" or "it" */
 		monster_desc(m_name, sizeof(m_name),m_ptr, 0);
 
@@ -393,7 +382,7 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 		/* Other traps seldom affect ghosts. */
 		else if ((r_ptr->flags2 & (RF2_PASS_WALL)) &&
-	          (rand_int(4) != 1) && (mode == MODE_ACTION))
+				 (rand_int(4) != 1) && (mode == MODE_ACTION))
 		{
 			if (m_ptr->ml) msg_format("%^s passes through your trap.", m_name);
 			trap_hit = FALSE;
@@ -402,17 +391,17 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 		/* Find the monsters base skill at disarming */
 		dis_chance = 40 + (2 * r_ptr->level);
 
-		/*Hack - these traps are harder to disarm*/
+		/* Hack - these traps are harder to disarm */
 		if (f_idx == FEAT_MTRAP_PORTAL) dis_chance /= 2;
 
-		/*wary or smart creatures much more likely to disarm the trap*/
+		/* wary or smart creatures much more likely to disarm the trap */
 		if (r_ptr->flags2 & (RF2_SMART)) dis_chance *= 2;
 		if (m_ptr->mflag & (MFLAG_WARY)) dis_chance *= 2;
 
 		trap_skill = (p_ptr->state.skills[SKILL_DISARM] + p_ptr->lev - 15) / 2;
 	}
 
-	/*In decribe mode, we aren't hitting any trap*/
+	/* In decribe mode, we aren't hitting any trap */
 	if (mode == MODE_DESCRIBE) trap_hit = FALSE;
 
 	/* Monsters may attempts to disarm traps which would affect them,
@@ -422,7 +411,7 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 	{
 		if ((r_ptr->flags2 & (RF2_SMART)) && (randint(dis_chance) > trap_skill))
 		{
-			/*accidentally blows it up*/
+			/* accidentally blows it up */
 			if (one_in_(dis_chance / 15))
 			{
 				if (m_ptr->ml)
@@ -433,25 +422,23 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 				/* worked */
 				trap_hit = TRUE;
 
-				/*monster will get extra damage because trap was right in their face.*/
+				/* monster gets extra damage because trap was right in their face. */
 				fail_disarm = TRUE;
-
 			}
 
-  			/*succeeds in disarming*/
+			/* succeeds in disarming */
 			else
 			{
 				if (m_ptr->ml)
 				{
 					msg_format("%^s finds your trap and disarms it.", m_name);
-					}
+				}
 
 				/* Trap is gone */
 				trap_destroyed = TRUE;
 
 				/* Didn't work */
 				trap_hit = FALSE;
-
 			}
 		}
 
@@ -485,12 +472,11 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 		if (trap_hit)
 		{
-
 			/* Some monsters get "destroyed" */
 			if ((r_ptr->flags3 & (RF3_DEMON)) ||
-		    	(r_ptr->flags3 & (RF3_UNDEAD)) ||
-		    	(r_ptr->flags2 & (RF2_STUPID)) ||
-		    	(strchr("Evg", r_ptr->d_char)))
+				(r_ptr->flags3 & (RF3_UNDEAD)) ||
+				(r_ptr->flags2 & (RF2_STUPID)) ||
+				(strchr("Evg", r_ptr->d_char)))
 			{
 				/* Special note at death */
 				note_dies = " is destroyed.";
@@ -510,7 +496,7 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 				if ((!(f_idx == FEAT_MTRAP_CONFUSION)) && (!(f_idx == FEAT_MTRAP_SLOWING)) &&
 					(!(f_idx == FEAT_MTRAP_PORTAL)))
 				{
-		    		msg_print("You hear anguished yells in the distance.");
+					msg_print("You hear anguished yells in the distance.");
 				}
 			}
 
@@ -527,13 +513,14 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 			}
 
 			/* Most traps are destroyed 1 time in 3 */
-			else if (one_in_(reg_break)) trap_destroyed = TRUE;
+			else if (one_in_(reg_break))
+				trap_destroyed = TRUE;
 
 			/* Find the 'power' of the trap effect */
 			n = p_ptr->lev + ((p_ptr->lev * p_ptr->lev)/ 12);
 			trap_power = 3 + randint(n) + n;
 
-			/*the monster who fails to disarm gets a full blast at point-blank range*/
+			/* the monster who fails to disarm gets a full blast at point-blank range */
 			if (fail_disarm) trap_power *=3;
 
 			/* Monsters can be wary of traps */
@@ -561,15 +548,13 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 				if (mode == MODE_ACTION)
 				{
-
 					mon_take_hit(cave_m_idx[y][x], (trap_power / 3), &fear, note_dies, SOURCE_PLAYER);
-
 				}
 				break;
 			}
 
 			/* Confusion trap */
-			case  FEAT_MTRAP_CONFUSION:
+			case FEAT_MTRAP_CONFUSION:
 			{
 				if (mode == MODE_DESCRIBE)
 				{
@@ -594,7 +579,6 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 			/* Slow the monster */
 			case FEAT_MTRAP_SLOWING:
 			{
-
 				if (mode == MODE_DESCRIBE)
 				{
 					text_out("  This monster trap will attempt to slow any creature who walks into it.");
@@ -631,9 +615,7 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 				if (mode == MODE_ACTION)
 				{
-
-
-					/*ball of drain life*/
+					/* ball of drain life */
 					(void)explosion(SOURCE_PLAYER, rad, y, x, (3 * trap_power) / 4, GF_LIFE_DRAIN, PROJECT_KILL);
 
 					break;
@@ -654,11 +636,8 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 				if (mode == MODE_ACTION)
 				{
-
-
-					/*ball of poison*/
+					/* ball of poison */
 					(void)explosion(SOURCE_PLAYER, rad, y, x, (4 * trap_power) / 3, GF_POIS, (PROJECT_KILL | PROJECT_PLAY));
-
 				}
 
 				break;
@@ -677,9 +656,7 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 				if (mode == MODE_ACTION)
 				{
-
-					/*ball of electricity*/
-
+					/* ball of electricity */
 					(void)explosion(SOURCE_PLAYER, rad, y, x, (7 * trap_power) /8 , GF_ELEC, PROJECT_KILL);
 				}
 
@@ -700,13 +677,11 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 				if (mode == MODE_ACTION)
 				{
-
-					/*explosion of fire*/
+					/* explosion of fire */
 					(void)explosion(SOURCE_PLAYER, 3, y, x, trap_power, GF_PLASMA, PROJECT_KILL);
 
-					/*followed by shards*/
+					/* followed by shards */
 					(void)explosion(SOURCE_PLAYER, 3, y, x, trap_power, GF_SHARD, PROJECT_KILL);
-
 				}
 
 				break;
@@ -722,10 +697,10 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 				if (mode == MODE_ACTION)
 				{
-					/*teleport the monster*/
+					/* teleport the monster */
 					if (teleport_away(cave_m_idx[y][x], 5 + (trap_power / 10)))
 					{
-						/*give message if in LOS*/
+						/* give message if in LOS */
 						if (m_ptr->ml) msg_format("%^s is teleported.", m_name);
 					}
 				}
@@ -736,7 +711,6 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 			/* Dispel Monsters Trap */
 			case FEAT_MTRAP_DISPEL_M:
 			{
-
 				if (mode == MODE_DESCRIBE)
 				{
 					text_out("  This monster trap will damage any creature within");
@@ -746,8 +720,7 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 
 				if (mode == MODE_ACTION)
 				{
-
-					/*100% - 200% damage of trap power to all creatures within LOS of trap*/
+					/* 100% - 200% damage of trap power to all creatures within LOS of trap */
 					int dam = (trap_power + randint(trap_power) + randint(trap_power / 2));
 
 					/* Damage the target monster */
@@ -788,7 +761,7 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 			return;
 		}
 
-		/*make the monsters who saw wary*/
+		/* make the monsters who saw wary */
 		(void)project_los(y, x, 0, GF_MAKE_WARY);
 
 	}
@@ -803,7 +776,7 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 		/* Redraw the spot */
 		light_spot(y, x);
 
-		/*one less trap on level*/
+		/* one less trap on level */
 		num_trap_on_level--;
 
 		/* Stop resting */
@@ -813,7 +786,6 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
 	/* Return */
 	return;
 }
-
 
 
 /*
@@ -874,7 +846,7 @@ int get_scent(int y, int x)
 	/* Get age of scent */
 	age = scent - scent_when;
 
-	/*Hack - sound is recorded in multiples of 100 now*/
+	/* Hack - sound is recorded in multiples of 100 now */
 	age *= 100;
 
 	/* Return the age of the scent */
@@ -911,8 +883,7 @@ static bool monster_can_smell(monster_type *m_ptr)
 	}
 
 	/* So are the Nazgul */
-	else if ((strchr("W", r_ptr->d_char)) &&
-	         (r_ptr->flags1 & (RF1_UNIQUE)))
+	else if ((strchr("W", r_ptr->d_char)) && (r_ptr->flags1 & (RF1_UNIQUE)))
 	{
 		/* Bloodscent! */
 		return (TRUE);
@@ -927,7 +898,6 @@ static bool monster_can_smell(monster_type *m_ptr)
 			return (TRUE);
 		}
 	}
-
 
 	/* You're imagining things. */
 	return (FALSE);
@@ -969,10 +939,11 @@ static int summon_possible(int y1, int x1)
 	return (num_clear);
 }
 
+
 struct gf_type_match_flags
 {
 	int gf_type;	/* The GF type */
-	u32b gf_spell;		/* The monster flag */
+	u32b gf_spell;	/* The monster flag */
 	byte flag_set;	/* Which monster flag set */
 };
 
@@ -983,45 +954,45 @@ struct gf_type_match_flags
 static const struct gf_type_match_flags gf_and_flags[] =
 {
 	/* Ball spells */
-	{GF_ACID, 		RF5_BALL_ACID, 		5},
-	{GF_ELEC, 		RF5_BALL_ELEC, 		5},
-	{GF_FIRE, 		RF5_BALL_FIRE, 		5},
-	{GF_COLD, 		RF5_BALL_COLD, 		5},
-	{GF_POIS, 		RF5_BALL_POIS, 		5},
-	{GF_LIGHT, 		RF5_BALL_LIGHT, 	5},
-	{GF_DARK, 		RF5_BALL_DARK, 		5},
-	{GF_CONFUSION, 	RF5_BALL_CONFU, 	5},
-	{GF_SOUND, 		RF5_BALL_SOUND, 	5},
-	{GF_SHARD, 		RF5_BALL_SHARD, 	5},
-	{GF_WATER, 		RF5_BALL_STORM, 	5},
-	{GF_NETHER, 	RF5_BALL_NETHR, 	5},
-	{GF_CHAOS, 		RF5_BALL_CHAOS, 	5},
-	{GF_MANA, 		RF5_BALL_MANA, 		5},
-	{GF_WATER, 		RF5_BALL_WATER, 	5},
+	{GF_ACID,		RF5_BALL_ACID,	5},
+	{GF_ELEC,		RF5_BALL_ELEC,	5},
+	{GF_FIRE,		RF5_BALL_FIRE,	5},
+	{GF_COLD,		RF5_BALL_COLD,	5},
+	{GF_POIS,		RF5_BALL_POIS,	5},
+	{GF_LIGHT,		RF5_BALL_LIGHT,	5},
+	{GF_DARK,		RF5_BALL_DARK,	5},
+	{GF_CONFUSION,	RF5_BALL_CONFU,	5},
+	{GF_SOUND,		RF5_BALL_SOUND,	5},
+	{GF_SHARD,		RF5_BALL_SHARD,	5},
+	{GF_WATER,		RF5_BALL_STORM,	5},
+	{GF_NETHER,		RF5_BALL_NETHR,	5},
+	{GF_CHAOS,		RF5_BALL_CHAOS,	5},
+	{GF_MANA,		RF5_BALL_MANA,	5},
+	{GF_WATER,		RF5_BALL_WATER,	5},
 
-	{GF_ACID, 		RF4_BRTH_ACID, 		4},
-	{GF_ELEC, 		RF4_BRTH_ELEC, 		4},
-	{GF_FIRE, 		RF4_BRTH_FIRE, 		4},
-	{GF_COLD, 		RF4_BRTH_COLD, 		4},
-	{GF_POIS, 		RF4_BRTH_POIS, 		4},
-	{GF_LIGHT, 		RF4_BRTH_LIGHT, 	4},
-	{GF_DARK, 		RF4_BRTH_DARK , 	4},
-	{GF_CONFUSION, 	RF4_BRTH_CONFU, 	4},
-	{GF_SOUND, 		RF4_BRTH_SOUND, 	4},
-	{GF_SHARD, 		RF4_BRTH_SHARD, 	4},
-	{GF_NETHER, 	RF4_BRTH_NETHR, 	4},
-	{GF_CHAOS, 		RF4_BRTH_CHAOS, 	4},
-	{GF_MANA, 		RF4_BRTH_MANA, 		4},
-	{GF_DISENCHANT,	RF4_BRTH_DISEN, 	4},
-	{GF_NEXUS, 		RF4_BRTH_NEXUS, 	4},
-	{GF_TIME, 		RF4_BRTH_TIME, 		4},
-	{GF_INERTIA,	RF4_BRTH_INER, 		4},
-	{GF_GRAVITY,	RF4_BRTH_GRAV, 		4},
-	{GF_SHARD, 		RF4_BRTH_SHARD, 	4},
-	{GF_PLASMA,		RF4_BRTH_PLAS, 		4},
-	{GF_FORCE, 		RF4_BRTH_FORCE, 	4},
-	{GF_MANA, 		RF4_BRTH_MANA, 		4},
-
+	/* Breath spells */
+	{GF_ACID,		RF4_BRTH_ACID,	4},
+	{GF_ELEC,		RF4_BRTH_ELEC,	4},
+	{GF_FIRE,		RF4_BRTH_FIRE,	4},
+	{GF_COLD,		RF4_BRTH_COLD,	4},
+	{GF_POIS,		RF4_BRTH_POIS,	4},
+	{GF_LIGHT,		RF4_BRTH_LIGHT,	4},
+	{GF_DARK,		RF4_BRTH_DARK,	4},
+	{GF_CONFUSION,	RF4_BRTH_CONFU,	4},
+	{GF_SOUND,		RF4_BRTH_SOUND,	4},
+	{GF_SHARD,		RF4_BRTH_SHARD,	4},
+	{GF_NETHER,		RF4_BRTH_NETHR,	4},
+	{GF_CHAOS,		RF4_BRTH_CHAOS,	4},
+	{GF_MANA,		RF4_BRTH_MANA,	4},
+	{GF_DISENCHANT,	RF4_BRTH_DISEN,	4},
+	{GF_NEXUS,		RF4_BRTH_NEXUS,	4},
+	{GF_TIME,		RF4_BRTH_TIME,	4},
+	{GF_INERTIA,	RF4_BRTH_INER,	4},
+	{GF_GRAVITY,	RF4_BRTH_GRAV,	4},
+	{GF_SHARD,		RF4_BRTH_SHARD,	4},
+	{GF_PLASMA,		RF4_BRTH_PLAS,	4},
+	{GF_FORCE,		RF4_BRTH_FORCE,	4},
+	{GF_MANA,		RF4_BRTH_MANA,	4},
 };
 
 
