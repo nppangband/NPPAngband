@@ -1026,6 +1026,7 @@ bool race_breathes_element(const monster_race *r_ptr, int gf_type)
 	return FALSE;
 }
 
+
 /*
  * Return true if monster race 2 breathes all of the breaths
  * and ball spells that monster race 1 breathes.
@@ -1052,15 +1053,14 @@ bool race_similar_breaths(const monster_race *r_ptr, const monster_race *r2_ptr)
 	f7_2 &= (RF7_BREATH_MASK | RF7_BALL_MASK);
 
 	/* One of the monsters doesn't have any ball or breath spells. */
-	if ((!f4)   && (!f5)   && (!f6)   && (!f7))   return (FALSE);
-	if ((!f4_2) && (!f5_2) && (!f6_2) && (!f7_2)) return (FALSE);
+	if ((!f4)   && (!f5)   && (!f6)   && (!f7))		return (FALSE);
+	if ((!f4_2) && (!f5_2) && (!f6_2) && (!f7_2))	return (FALSE);
 
 	/* Filter second race breaths and ball spells to only what the first race casts */
 	f4_2 &= (f4);
 	f5_2 &= (f5);
 	f6_2 &= (f6);
 	f7_2 &= (f7);
-
 
 	/* Return false if any of the 4 flag sets don't match */
 	if (f4 != f4_2) return (FALSE);
@@ -1072,7 +1072,10 @@ bool race_similar_breaths(const monster_race *r_ptr, const monster_race *r2_ptr)
 	return (TRUE);
 }
 
-/* States if monsters on two separate coordinates are similar or not*/
+
+/*
+ * States if monsters on two separate coordinates are similar or not
+ */
 bool race_similar_monsters(int m_idx, int m2y, int m2x)
 {
 	monster_type *m_ptr = &mon_list[m_idx];
@@ -1083,7 +1086,7 @@ bool race_similar_monsters(int m_idx, int m2y, int m2x)
 	/* First check if there are monsters on the target coordinates. */
 	if (!(cave_m_idx[m2y][m2x] > 0)) return(FALSE);
 
-	/* Access monster 2*/
+	/* Access monster 2 */
 	m2_ptr = &mon_list[cave_m_idx[m2y][m2x]];
 	r2_ptr = &r_info[m2_ptr->r_idx];
 
@@ -1092,8 +1095,7 @@ bool race_similar_monsters(int m_idx, int m2y, int m2x)
 
 	/*
 	 * Same race (we are not checking orcs, giants, or
-	 * trolls because that would be true at
-	 * the symbol check
+	 * trolls because that would be true at the symbol check
 	 */
 	if ((r_ptr->flags3 & (RF3_DRAGON)) && (r2_ptr->flags3 & (RF3_DRAGON))) return(TRUE);
 	if ((r_ptr->flags3 & (RF3_DEMON)) && (r2_ptr->flags3 & (RF3_DEMON))) return(TRUE);
@@ -1155,6 +1157,7 @@ static void update_smart_cheat(int m_idx)
 	return;
 }
 
+
 /*
  * Used to determine the player's known level of resistance to a
  * particular spell.
@@ -1186,12 +1189,14 @@ static int find_resist(int m_idx, int spell_lrn)
 		{
 			return (0);
 		}
+
 		/* As above, but poisonous. */
 		case LRN_PARCH:
 		{
 			if ((smart & (SM_OPP_POIS)) || (smart & (SM_RES_POIS))) return (10);
 			else return (0);
 		}
+
 		/* Acid Spells */
 		case LRN_ACID:
 		{
@@ -1200,6 +1205,7 @@ static int find_resist(int m_idx, int spell_lrn)
 			else if ((smart & (SM_OPP_ACID)) || (smart & (SM_RES_ACID))) return (40);
 			else return (0);
 		}
+
 		/* Lightning Spells */
 		case LRN_ELEC:
 		{
@@ -1208,6 +1214,7 @@ static int find_resist(int m_idx, int spell_lrn)
 			else if ((smart & (SM_OPP_ELEC)) || (smart & (SM_RES_ELEC))) return (40);
 			else return (0);
 		}
+
 		/* Fire Spells */
 		case LRN_FIRE:
 		{
@@ -1216,6 +1223,7 @@ static int find_resist(int m_idx, int spell_lrn)
 			else if ((smart & (SM_OPP_FIRE)) || (smart & (SM_RES_FIRE))) return (40);
 			else return (0);
 		}
+
 		/* Cold Spells */
 		case LRN_COLD:
 		{
@@ -1224,10 +1232,11 @@ static int find_resist(int m_idx, int spell_lrn)
 			else if ((smart & (SM_OPP_COLD)) || (smart & (SM_RES_COLD))) return (40);
 			else return (0);
 		}
+
 		/* Ice Spells */
 		case LRN_ICE:
 		{
-			if (smart & (SM_IMM_COLD)) a=90;
+			if (smart & (SM_IMM_COLD)) a = 90;
 			else if ((smart & (SM_OPP_COLD)) && (smart & (SM_RES_COLD))) a = 60;
 			else if ((smart & (SM_OPP_COLD)) || (smart & (SM_RES_COLD))) a = 30;
 			else a = 0;
@@ -1236,6 +1245,7 @@ static int find_resist(int m_idx, int spell_lrn)
 			return (a);
 		}
 		/* Poison Spells */
+
 		case LRN_POIS:
 		{
 			if (smart & (SM_IMM_POIS)) return (100);
@@ -1243,30 +1253,35 @@ static int find_resist(int m_idx, int spell_lrn)
 			else if ((smart & (SM_OPP_POIS)) || (smart & (SM_RES_POIS))) return (55);
 			else return (0);
 		}
+
 		/* Plasma Spells */
 		case LRN_PLAS:
 		{
 			if (smart & (SM_RES_SHARD)) return (15);
 			else return (0);
 		}
+
 		/* Light Spells */
 		case LRN_LIGHT:
 		{
 			if (smart & (SM_RES_LIGHT)) return (30);
 			else return (0);
 		}
+
 		/* Darkness Spells */
 		case LRN_DARK:
 		{
 			if (smart & (SM_RES_DARK)) return (30);
 			else return (0);
 		}
+
 		/* Confusion Spells, damage dealing */
 		case LRN_CONFU:
 		{
 			if (smart & (SM_RES_CONFU)) return (30);
 			else return (0);
 		}
+
 		/* Sound Spells */
 		case LRN_SOUND:
 		{
@@ -1277,36 +1292,42 @@ static int find_resist(int m_idx, int spell_lrn)
 			else if (smart & (SM_GOOD_SAVE)) a += 5;
 			return (a);
 		}
+
 		/* Irresistible, but sound prevents stun */
 		case LRN_SOUND2:
 		{
 			if (smart & (SM_RES_SOUND)) return (5);
 			else return (0);
 		}
+
 		/* Shards Spells */
 		case LRN_SHARD:
 		{
 			if (smart & (SM_RES_SHARD)) return (30);
 			else return (0);
 		}
+
 		/* Nexus Spells */
 		case LRN_NEXUS:
 		{
 			if (smart & (SM_RES_NEXUS)) return (30);
 			else return (0);
 		}
+
 		/* Nether Spells */
 		case LRN_NETHR:
 		{
 			if (smart & (SM_RES_NETHR)) return (30);
 			else return (0);
 		}
-		/* Nether Spells */
+
+		/* Lava Spells */
 		case LRN_LAVA:
 		{
 			if (smart & (SM_NAT_LAVA)) return (70);
 			else return (0);
 		}
+
 		/* Chaos Spells */
 		case LRN_CHAOS:
 		{
@@ -1316,12 +1337,14 @@ static int find_resist(int m_idx, int spell_lrn)
 			if (smart & (SM_RES_CONFU))  a += 10;
 			return (a);
 		}
+
 		/* Disenchantment Spells */
 		case LRN_DISEN:
 		{
 			if (smart & (SM_RES_DISEN)) return (30);
 			else return (0);
 		}
+
 		/* Storm Spells */
 		case LRN_STORM:
 		{
@@ -1334,6 +1357,7 @@ static int find_resist(int m_idx, int spell_lrn)
 			if (smart & (SM_RES_CONFU)) a += 10;
 			return (a);
 		}
+
 		/* Water Spells */
 		case LRN_WATER:
 		{
@@ -1342,12 +1366,14 @@ static int find_resist(int m_idx, int spell_lrn)
 			if (smart & (SM_RES_SOUND)) a += 5;
 			return (a);
 		}
+
 		/* Spells that attack player mana */
 		case LRN_MANA:
 		{
 			if (smart & (SM_IMM_MANA)) return (100);
 			else return (0);
 		}
+
 		/* Spells Requiring Save or Resist Nexus */
 		case LRN_NEXUS_SAVE:
 		{
@@ -1356,6 +1382,7 @@ static int find_resist(int m_idx, int spell_lrn)
 			else if (smart & (SM_GOOD_SAVE)) return (30);
 			else return (0);
 		}
+
 		/* Spells Requiring Save or Resist Fear */
 		case LRN_FEAR_SAVE:
 		{
@@ -1369,6 +1396,7 @@ static int find_resist(int m_idx, int spell_lrn)
 			}
 			return (a);
 		}
+
 		/* Spells Requiring Save or Resist Blindness */
 		case LRN_BLIND_SAVE:
 		{
@@ -1382,6 +1410,7 @@ static int find_resist(int m_idx, int spell_lrn)
 			}
 			return (a);
 		}
+
 		/* Spells Requiring Save or Resist Confusion */
 		case LRN_CONFU_SAVE:
 		{
@@ -1395,6 +1424,7 @@ static int find_resist(int m_idx, int spell_lrn)
 			}
 			return (a);
 		}
+
 		/* Spells Requiring Save or Free Action */
 		case LRN_FREE_SAVE:
 		{
@@ -1499,8 +1529,8 @@ static void remove_expensive_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p, 
 	(*f5p) = f5;
 	(*f6p) = f6;
 	(*f7p) = f7;
-
 }
+
 
 /*
  * Intelligent monsters use this function to filter away spells
@@ -1544,6 +1574,7 @@ static void remove_useless_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p, u3
 	(*f6p) = f6;
 	(*f7p) = f7;
 }
+
 
 /*
  * Count the number of castable spells.
@@ -1634,6 +1665,7 @@ static int choose_attack_spell_fast(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p, 
 	return (spells[rand_int(num)]);
 }
 
+
 /*
  * Have a monster choose a spell.
  *
@@ -1674,10 +1706,10 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 	int i;
 	int breath_hp, breath_maxhp, path, spaces;
 
-	int want_hps=0, want_escape=0, want_mana=0, want_summon=0;
-	int want_tactic=0, cur_range=0;
+	int want_hps = 0, want_escape = 0, want_mana = 0, want_summon = 0;
+	int want_tactic = 0, cur_range = 0;
 
-	int best_spell=0, best_spell_rating=0;
+	int best_spell = 0, best_spell_rating = 0;
 	int cur_spell_rating;
 
 	char m_name[80];
@@ -1725,7 +1757,6 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 		f7 &= ~(dungeon_summon_mask_f7);
 	}
 
-
 	/* Check what kinds of spells can hit player */
 	path = projectable(fy, fx, p_ptr->py, p_ptr->px, PROJECT_CHCK);
 
@@ -1741,17 +1772,16 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 		monster_blocking = TRUE;
 		}
 
-		/*are we in range (and not stupid), and have access to ball spells?*/
+		/* are we in range (and not stupid), and have access to ball spells? */
 		else if ((m_ptr->cdis < MAX_RANGE) && (!(r_ptr->flags2 & (RF2_STUPID))) &&
 			 ((r_ptr->flags4 & (RF4_BALL_MASK)) ||
 			  (r_ptr->flags5 & (RF5_BALL_MASK)) ||
 			  (r_ptr->flags6 & (RF6_BALL_MASK)) ||
 			  (r_ptr->flags7 & (RF7_BALL_MASK))))
 		{
-
 			int alt_y, alt_x, alt_path, best_y, best_x, best_path;
 
-			/*start with no alternate shot*/
+			/* start with no alternate shot */
 			best_y =  best_x = best_path  = 0;
 
 			/* Check for impassable terrain */
@@ -1766,15 +1796,15 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 
 				if (alt_path == PROJECT_NOT_CLEAR)
 				{
-					/*we already have a NOT_CLEAR path*/
+					/* we already have a NOT_CLEAR path */
 					if ((best_path == PROJECT_NOT_CLEAR) && (one_in_(2))) continue;
 				}
 
 				/*
-			 	 * PROJECT_CLEAR, or monster has an
-			 	 * empty square or a square with a safe monster
-			 	 *  to lob a ball spell at player
-			  	 */
+				 * PROJECT_CLEAR, or monster has an
+				 * empty square or a square with a safe monster
+				 *  to lob a ball spell at player
+				 */
 				best_y = alt_y;
 				best_x = alt_x;
 				best_path = alt_path;
@@ -1805,7 +1835,7 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 			require_los = FALSE;
 		}
 
-		/*We don't have a reason to try a ball spell*/
+		/* We don't have a reason to try a ball spell */
 		if (clear_ball_spell)
 		{
 			f4 &= ~(RF4_BALL_MASK);
@@ -1826,7 +1856,7 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 		f7 &= (RF7_NO_PLAYER_MASK | RF7_BALL_MASK);
 	}
 
-	/*remove bolts and archery shots*/
+	/* remove bolts and archery shots */
 	else if ((path == PROJECT_NOT_CLEAR) || (monster_blocking))
 	{
 		f4 &= ~(RF4_BOLT_MASK);
@@ -1919,7 +1949,6 @@ static int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x)
 		f5 &= ~(RF5_SUMMON_MASK);
 		f6 &= ~(RF6_SUMMON_MASK);
 		f7 &= ~(RF7_SUMMON_MASK);
-
 	}
 
 	/* Check if no spells left */
