@@ -6023,7 +6023,6 @@ void process_entities(void)
 			/* Insert character into movement table */
 			mon_moment_info[move_moment_num].m_idx = -1;
 			mon_moment_info[move_moment_num++].moment = moment;
-
 		}
 	}
 
@@ -6102,7 +6101,6 @@ void process_entities(void)
 				/* Monster takes a turn */
 				m_ptr->m_energy -= process_monster(m_ptr);
 			}
-
 		}
 
 		/* This is the character */
@@ -6116,7 +6114,5 @@ void process_entities(void)
 			}
 		}
 	}
-
 }
-
 
