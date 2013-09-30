@@ -1774,6 +1774,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 
 			/*add the power*/
 			a_m_aux_2(o_ptr, lev, power);
+			break;
 		}
 
 
