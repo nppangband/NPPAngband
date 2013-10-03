@@ -83,7 +83,7 @@ int scan_effects_grid(int *effects, int size, int y, int x)
  */
 static bool effect_similar(const effect_type *x_ptr, const effect_type *x2_ptr)
 {
-	/*Require identical coordinates*/
+	/* Require identical coordinates */
 	if (x_ptr->x_cur_y != x2_ptr->x_cur_y)		return (FALSE);
 	if (x_ptr->x_cur_x != x2_ptr->x_cur_x)		return (FALSE);
 
@@ -112,7 +112,6 @@ static bool effect_similar(const effect_type *x_ptr, const effect_type *x2_ptr)
  */
 static void effect_absorb(effect_type *x_ptr, const effect_type *x2_ptr)
 {
-
 	switch (x_ptr->x_type)
 	{
 		case EFFECT_PERMANENT_CLOUD:
@@ -146,7 +145,6 @@ static void effect_absorb(effect_type *x_ptr, const effect_type *x2_ptr)
 			if (x_ptr->x_power > EFFECT_POWER_MAX) x_ptr->x_power = EFFECT_POWER_MAX;
 
 			break;
-
 		}
 		case EFFECT_LINGERING_CLOUD:
 		{
@@ -181,9 +179,7 @@ static void place_effect_idx(int x_idx, int y, int x)
 	/* Get this effect */
 	effect_type *x_ptr = &x_list[x_idx];
 
-	/*
-	 * Handle next_x_idx.  Traps (and glyphs) always have first priority.
-	 */
+	/* Handle next_x_idx.  Traps (and glyphs) always have first priority. */
 	if (cave_any_trap_bold(y, x))
 	{
 		x_ptr->next_x_idx = x_list[cave_x_idx[y][x]].next_x_idx;
@@ -220,7 +216,7 @@ void effect_prep(int x_idx, byte type, u16b f_idx, byte y, byte x, byte countdow
 	/* Wipe it */
 	effect_wipe(x_ptr);
 
-	/*Fill in the data*/
+	/* Fill in the data */
 	x_ptr->x_type = type;
 	x_ptr->x_f_idx = f_idx;
 	x_ptr->x_cur_y = y;
@@ -248,7 +244,7 @@ void effect_prep(int x_idx, byte type, u16b f_idx, byte y, byte x, byte countdow
 			/* Combine the items */
 			effect_absorb(x2_ptr, x_ptr);
 
-			/*We don't need it anymore*/
+			/* We don't need it anymore */
 			effect_wipe(x_ptr);
 
 			/* We didn't use the slot. */
@@ -260,7 +256,6 @@ void effect_prep(int x_idx, byte type, u16b f_idx, byte y, byte x, byte countdow
 			/* Result */
 			return;
 		}
-
 	}
 
 	/*Put it in the proper order*/
@@ -279,7 +274,7 @@ bool set_effect_lingering_cloud(int f_idx, byte y, byte x,	u16b power, s16b sour
 
 	feature_type *f_ptr = &f_info[f_idx];
 
-	/*All full*/
+	/* All full */
 	if (!x_idx) return (FALSE);
 
 	/* Determine how powerful this should be. */
@@ -372,7 +367,7 @@ bool set_effect_shimmering_cloud(int f_idx, byte y, byte x, byte repeats, u16b p
 	int countdown;
 	int effect_power;
 
-	/*All full*/
+	/* All full */
 	if (!x_idx) return (FALSE);
 
 	/* Determine how powerful this should be. */
@@ -402,7 +397,7 @@ bool set_effect_permanent_cloud(int f_idx, byte y, byte x,	u16b power, u16b flag
 {
 	int x_idx = x_pop();
 
-	/*All full*/
+	/* All full */
 	if (!x_idx) return (FALSE);
 
 	flag |= (EF1_PERMANENT  | EF1_HURT_PLAY);
@@ -419,12 +414,11 @@ bool set_effect_permanent_cloud(int f_idx, byte y, byte x,	u16b power, u16b flag
 bool set_effect_trap_passive(int f_idx, byte y, byte x)
 {
 	int x_idx = x_pop();
-	u16b flags = 0L;
 
-	/*All full*/
+	/* All full */
 	if (!x_idx) return (FALSE);
 
-	flags |= (EF1_TRAP_DUMB | EF1_PERMANENT | EF1_SKIP | EF1_HIDDEN | EF1_HURT_PLAY);
+	u16b flags = (EF1_TRAP_DUMB | EF1_PERMANENT | EF1_SKIP | EF1_HIDDEN | EF1_HURT_PLAY);
 
 	effect_prep(x_idx, EFFECT_TRAP_DUMB, f_idx, y, x, 1, 1, 0, SOURCE_TRAP, flags);
 
@@ -443,7 +437,7 @@ bool set_effect_trap_smart(int f_idx, byte y, byte x, u16b flags)
 
 	feature_type *f_ptr = &f_info[f_idx];
 
-	/*All full*/
+	/* All full */
 	if (!x_idx) return (FALSE);
 
 	trap_power = (f_ptr->x_damage * (MAX(1, effective_depth(p_ptr->depth))) / 100);
@@ -454,7 +448,7 @@ bool set_effect_trap_smart(int f_idx, byte y, byte x, u16b flags)
 	countdown = (f_ptr->x_timeout_set + rand_int(f_ptr->x_timeout_rand)) /2;
 	if (countdown <=3) countdown = 4;
 
-	/*Keep it in bounds*/
+	/* Keep it in bounds */
 	if (countdown >= MAX_UCHAR) countdown = MAX_UCHAR - 1;
 
 	flags |= (EF1_TRAP_SMART | EF1_PERMANENT | EF1_HIDDEN | EF1_HURT_PLAY);
@@ -471,12 +465,11 @@ bool set_effect_trap_smart(int f_idx, byte y, byte x, u16b flags)
 bool set_effect_trap_player(int f_idx, byte y, byte x)
 {
 	int x_idx = x_pop();
-	u16b flags = 0L;
 
-	/*All full*/
+	/* All full */
 	if (!x_idx) return (FALSE);
 
-	flags |= (EF1_TRAP_PLAYER | EF1_PERMANENT | EF1_SKIP);
+	u16b flags = (EF1_TRAP_PLAYER | EF1_PERMANENT | EF1_SKIP);
 
 	effect_prep(x_idx, EFFECT_TRAP_PLAYER, f_idx, y, x, 1, 1, 0, SOURCE_TRAP, flags);
 
@@ -493,12 +486,11 @@ bool set_effect_trap_player(int f_idx, byte y, byte x)
 bool set_effect_glyph(byte y, byte x)
 {
 	int x_idx = x_pop();
-	u16b flags = 0L;
 
-	/*All full*/
+	/* All full */
 	if (!x_idx) return (FALSE);
 
-	flags |= (EF1_GLYPH | EF1_PERMANENT | EF1_SKIP);
+	u16b flags = (EF1_GLYPH | EF1_PERMANENT | EF1_SKIP);
 
 	effect_prep(x_idx, EFFECT_GLYPH, FEAT_GLYPH, y, x, 1, 1, 0, SOURCE_TRAP, flags);
 
@@ -597,8 +589,8 @@ static bool found_smart_trap(int orig_y, int orig_x)
 	end_x = orig_x + 10;
 	if (end_x >= p_ptr->cur_map_wid) end_x = p_ptr->cur_map_wid - 1;
 
-	/*Search each grid for a smart trap that is projectable.  */
-    for (y = begin_y; y <= end_y; y++)
+	/* Search each grid for a smart trap that is projectable. */
+	for (y = begin_y; y <= end_y; y++)
 	{
 		for (x = begin_x; x <= end_x; x++)
 		{
@@ -610,7 +602,7 @@ static bool found_smart_trap(int orig_y, int orig_x)
 		}
 	}
 
-	/* No projectable smart trap found*/
+	/* No projectable smart trap found */
 	return (FALSE);
 }
 
@@ -625,22 +617,20 @@ void pick_and_set_trap(int y, int x, int mode)
 	/* No NPP terrains option turned on */
 	if (adult_simple_dungeons) mode = EFFECT_TRAP_DUMB;
 
-	/*Make sure there aren't too many smart traps in the same place*/
+	/* Make sure there aren't too many smart traps in the same place */
 	else if (mode != EFFECT_TRAP_DUMB)
 	{
-		/*There is a nearby trap in line of sight*/
+		/* There is a nearby trap in line of sight */
 		if (found_smart_trap(y, x)) mode = EFFECT_TRAP_DUMB;
 	}
 
 	/* Hack - find a trap to determine trap type. */
 	feat = pick_trap(y, x, mode);
 
-	/* Set either set a smart or dumb trap*/
+	/* Set either set a smart or dumb trap */
 	if (feat_ff2_match(feat, FF2_TRAP_SMART))
 	{
-		u16b flags = 0L;
-
-		flags |= (fire_trap_smart(feat, y, x, MODE_FLAGS));
+		u16b flags = (fire_trap_smart(feat, y, x, MODE_FLAGS));
 
 		set_effect_trap_smart(feat, y, x, flags);
 	}
@@ -764,7 +754,6 @@ void effect_wipe(effect_type *x_ptr)
 {
 	/* Wipe it */
 	WIPE(x_ptr, effect_type);
-
 }
 
 
@@ -842,8 +831,6 @@ void delete_effect_idx(int x_idx)
 }
 
 
-
-
 /*
  * Deletes all effects at given location
  */
@@ -884,7 +871,7 @@ void delete_effects(int y, int x)
 
 
 /*
- * Excise an effect from a stack of effectss
+ * Excise an effect from a stack of effects
  */
 void excise_effect_idx(int x_idx)
 {
@@ -1013,7 +1000,7 @@ static bool effect_burst(const effect_type *x_ptr)
 	int y = x_ptr->x_cur_y;
 	int x = x_ptr->x_cur_x;
 
-	/* Add the  bitflags */
+	/* Add the bitflags */
 	u32b flg = (PROJECT_JUMP | PROJECT_STOP | PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID);
 
 	/* We have now seen this feature */
@@ -1025,7 +1012,7 @@ static bool effect_burst(const effect_type *x_ptr)
 	/* Don't bother with graphics if the player is resting, running, etc. */
 	if (CHECK_DISTURB(FALSE)) flg |= (PROJECT_HIDE);
 
-	/* Leave grapchis for later in empty grids */
+	/* Leave graphics for later in empty grids */
 	else if ((op_ptr->delay_factor > 0) && !cave_m_idx[y][x] && player_has_los_bold(y, x) && panel_contains(y, x))
 	{
 		/* Don't display anything now */
@@ -1048,12 +1035,14 @@ static bool effect_burst(const effect_type *x_ptr)
 }
 
 
-/* Hit the monster or player at one spot*/
+/*
+ * Hit the monster or player at one spot
+ */
 static void effect_damage(const effect_type *x_ptr)
 {
 	feature_type *f_ptr = &f_info[x_ptr->x_f_idx];
 
-	/*Quick access to effect coordinates*/
+	/* Quick access to effect coordinates */
 	int y = x_ptr->x_cur_y;
 	int x = x_ptr->x_cur_x;
 
@@ -1067,23 +1056,22 @@ static void effect_damage(const effect_type *x_ptr)
 		source = SOURCE_EFFECT;
 	}
 
-	/*We have something here to damage*/
+	/* We have something here to damage */
 	if ((x_ptr->x_power > 0) && (cave_m_idx[y][x] != 0))
 	{
-		/*It is a creature*/
+		/* It is a creature */
 		if (cave_m_idx[y][x] > 0)
 		{
 			monster_type *m_ptr = &mon_list[cave_m_idx[y][x]];
 
-			/* Hack - Don't hurt the same race*/
+			/* Hack - Don't hurt the same race */
 			if (m_ptr->r_idx != x_ptr->x_source)
 			{
 				monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-				/*Check the HURT_EVIL flag first, then hurt the monster*/
+				/* Check the HURT_EVIL flag first, then hurt the monster */
 				if (!(x_ptr->x_flags & (EF1_HURT_EVIL)) || (r_ptr->flags3 & (RF3_EVIL)))
 				{
-
 					(void)project_m(source, y, x, x_ptr->x_power, f_ptr->x_gf_type, 0L);
 				}
 			}
@@ -1100,7 +1088,7 @@ static void effect_damage(const effect_type *x_ptr)
 
 			switch (x_ptr->x_f_idx)
 			{
-				/*Just a couple exceptions to the default, breathing*/
+				/* Just a couple exceptions to the default, breathing */
 				case FEAT_SPARKS:
 				case FEAT_STATIC:
 				{
@@ -1125,7 +1113,7 @@ static void effect_damage(const effect_type *x_ptr)
 					break;
 				}
 
-				/*Most cases*/
+				/* Most cases */
 				default: kb_str = format("breathing in %s", name);
 				break;
 			}
@@ -1139,7 +1127,7 @@ static void effect_damage(const effect_type *x_ptr)
 			else msg_format("The air is not safe here!");
 			message_flush();
 
-			/*Hit the player*/
+			/* Hit the player */
 			project_p(source, y, x, x_ptr->x_power, f_ptr->x_gf_type, kb_str);
 		}
 	}
@@ -1155,11 +1143,11 @@ static void process_effect(int x_idx)
 	/* Get this effect */
 	effect_type *x_ptr = &x_list[x_idx];
 
-	/*Quick access to effect coordinates*/
+	/* Quick access to effect coordinates */
 	int y = x_ptr->x_cur_y;
 	int x = x_ptr->x_cur_x;
 
-	/*reduce the timeout, if there is one*/
+	/* reduce the timeout, if there is one */
 	if ((x_ptr->x_countdown > 0) && (x_ptr->x_type != EFFECT_PERMANENT_CLOUD)) x_ptr->x_countdown--;
 
 	/* Handle active effects */
@@ -1167,12 +1155,11 @@ static void process_effect(int x_idx)
 	{
 		switch (x_ptr->x_type)
 		{
-
-			/*Hurt the player or monster on site*/
+			/* Hurt the player or monster on site */
 			case EFFECT_LINGERING_CLOUD:
 			case EFFECT_PERMANENT_CLOUD:
 			{
-				/*Hurt the creature at this spot*/
+				/* Hurt the creature at this spot */
 				effect_damage(x_ptr);
 
 				/* Animate the cloud */
@@ -1215,12 +1202,12 @@ static void process_effect(int x_idx)
 		}
 	}
 
-	/*We are ready for something to happen, or stop happening */
+	/* We are ready for something to happen, or stop happening */
 	else /*(!x_ptr->x_countdown)*/
 	{
 		switch (x_ptr->x_type)
 		{
-			/*Quick radius 1 burst at that site*/
+			/* Quick radius 1 burst at that site */
 			case EFFECT_SHIMMERING_CLOUD:
 			{
 				/*
@@ -1265,17 +1252,17 @@ static void process_effect(int x_idx)
 					/* Check what kinds of spells can hit player */
 					path = projectable(y, x, p_ptr->py, p_ptr->px, PROJECT_CHCK);
 
-					/*Not a clear shot*/
+					/* Not a clear shot */
 					if (path == PROJECT_NO) return;
 
-					/*Ball, orb, or beam spells only need to be in line of fire*/
+					/* Ball, orb, or beam spells only need to be in line of fire*/
 					if ((x_ptr->x_flags & (EF1_SM_TRAP_BALL)) ||
 						(x_ptr->x_flags & (EF1_SM_TRAP_BEAM)) ||
 						(x_ptr->x_flags & (EF1_SM_TRAP_ORB)))
 					{
 						if (path >= PROJECT_NOT_CLEAR)   fire = TRUE;
 					}
-					else /* handle EF1_SM_TRAP_BOLT - skip if statement for effeciency */
+					else /* handle EF1_SM_TRAP_BOLT - skip if statement for efficiency */
 					{
 						if (path == PROJECT_CLEAR) fire = TRUE;
 					}
@@ -1286,7 +1273,7 @@ static void process_effect(int x_idx)
 				{
 					fire_trap_smart(x_ptr->x_f_idx, x_ptr->x_cur_y, x_ptr->x_cur_x, MODE_ACTION);
 
-					/*Disturb the player*/
+					/* Disturb the player */
 					disturb (1,0);
 
 					/* Hack - Special handling for smart traps*/
@@ -1301,14 +1288,14 @@ static void process_effect(int x_idx)
 			default: break;
 		}
 
-		/*Re-set the effect*/
+		/* Re-set the effect */
 		if (x_ptr->x_repeats > 0)
 		{
-			/*reset the countdown*/
+			/* reset the countdown */
 			x_ptr->x_countdown = f_info[x_ptr->x_f_idx].x_timeout_set +
 								 randint(f_info[x_ptr->x_f_idx].x_timeout_rand);
 
-			/*Reduce the count, unless we shouldn't*/
+			/* Reduce the count, unless we shouldn't */
 			if (!(x_ptr->x_flags & (EF1_PERMANENT))) x_ptr->x_repeats--;
 		}
 	}
@@ -1404,7 +1391,7 @@ void process_effects(void)
 		if (x_list[i].x_type && x_list[i].next_x_idx &&
 			(size_mon_msg > 0)) flush_monster_messages();
 
-		/*continue*/;
+		/* continue */
 	}
 
 	/* Show the delayed burst effects, if any */
