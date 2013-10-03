@@ -33,10 +33,6 @@
 } while (0)
 
 
-
-
-
-
 /*
  * Strip an "object name" into a buffer.
  */
@@ -47,7 +43,6 @@ void strip_name(char *buf, int k_idx)
 	object_kind *k_ptr = &k_info[k_idx];
 
 	cptr str = (k_name + k_ptr->name);
-
 
 	/* Skip past leading characters */
 	while ((*str == ' ') || (*str == '&')) str++;
@@ -61,6 +56,7 @@ void strip_name(char *buf, int k_idx)
 	/* Terminate the new name */
 	*t = '\0';
 }
+
 
 static const char *obj_desc_get_modstr(const object_type *o_ptr)
 {
@@ -180,7 +176,6 @@ static const char *obj_desc_get_basename(const object_type *o_ptr, bool aware)
 }
 
 
-
 /*
  * Copy 'src' into 'buf, replacing '#' with 'modstr' (if found), putting a plural
  * in the place indicated by '~' if required, or using alternate...
@@ -247,7 +242,6 @@ static size_t obj_desc_name(char *buf, size_t max, size_t end,
 	{
 		strnfcat(buf, max, &end, "Well-balanced ");
 	}
-
 
 
 /*
@@ -361,7 +355,6 @@ static size_t obj_desc_name(char *buf, size_t max, size_t end,
 	/* 0-terminate, just in case XXX */
 	buf[end] = 0;
 
-
 	/** Append extra names of various kinds **/
 
 	if ((known) && o_ptr->art_num)
@@ -378,6 +371,7 @@ static size_t obj_desc_name(char *buf, size_t max, size_t end,
 
 	return end;
 }
+
 
 /*
  * Is o_ptr a weapon?
@@ -411,6 +405,7 @@ static bool obj_desc_show_weapon(const object_type *o_ptr)
 	return FALSE;
 }
 
+
 /*
  * Is o_ptr armor?
  */
@@ -437,6 +432,7 @@ static bool obj_desc_show_armor(const object_type *o_ptr)
 
 	return FALSE;
 }
+
 
 static size_t obj_desc_chest(const object_type *o_ptr, char *buf, size_t max, size_t end)
 {
@@ -503,6 +499,7 @@ static size_t obj_desc_chest(const object_type *o_ptr, char *buf, size_t max, si
 	return end;
 }
 
+
 static size_t obj_desc_combat(const object_type *o_ptr, char *buf, size_t max,
 		size_t end, bool spoil)
 {
@@ -564,7 +561,6 @@ static size_t obj_desc_combat(const object_type *o_ptr, char *buf, size_t max,
 		}
 	}
 
-
 	/* Show armor bonuses */
 	if (spoil || object_known_p(o_ptr))
 	{
@@ -581,14 +577,16 @@ static size_t obj_desc_combat(const object_type *o_ptr, char *buf, size_t max,
 	return end;
 }
 
+
 static size_t obj_desc_light(const object_type *o_ptr, char *buf, size_t max, size_t end)
 {
-	/* Fuelled light sources get number of remaining turns appended */
+	/* Fueled light sources get number of remaining turns appended */
 	if (fuelable_lite_p(o_ptr))
 		strnfcat(buf, max, &end, " (%d turns)", o_ptr->timeout);
 
 	return end;
 }
+
 
 static size_t obj_desc_pval(const object_type *o_ptr, char *buf, size_t max, size_t end)
 {
@@ -617,6 +615,7 @@ static size_t obj_desc_pval(const object_type *o_ptr, char *buf, size_t max, siz
 
 	return end;
 }
+
 
 static size_t obj_desc_charges(const object_type *o_ptr, char *buf, size_t max, size_t end)
 {
@@ -746,7 +745,6 @@ static size_t obj_desc_inscrip(const object_type *o_ptr, char *buf, size_t max, 
 }
 
 
-
 /*
  * Creates a description of the item "o_ptr", and stores it in "buf".
  *
@@ -796,7 +794,6 @@ size_t object_desc(char *buf, size_t max, const object_type *o_ptr, int mode)
 	/* Object is in the inventory of a store */
 	if (o_ptr->ident & IDENT_STORE)
 	{
-
 		/* Pretend known and aware */
 		aware = TRUE;
 		known = TRUE;
@@ -851,6 +848,7 @@ size_t object_desc(char *buf, size_t max, const object_type *o_ptr, int mode)
 
 }
 
+
 /*
  * Describe an item and pretend the item is fully known and has no flavor.
  */
@@ -896,7 +894,7 @@ void identify_random_gen(const object_type *o_ptr)
 		{
 			text_out(buf);
 
-		       	text_out("\n");
+			text_out("\n");
 		}
 	}
 
@@ -904,6 +902,4 @@ void identify_random_gen(const object_type *o_ptr)
 	text_out_indent = 0;
 	text_out_wrap = 0;
 }
-
-
 
