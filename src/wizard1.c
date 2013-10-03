@@ -806,7 +806,6 @@ static void spoil_features(cptr fname)
 	/* List all features in order. */
 	for (n = 0; n < count; n++)
 	{
-
 		int f_idx = who[n];
 		feature_type *f_ptr = &f_info[f_idx];
 

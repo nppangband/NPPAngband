@@ -801,7 +801,6 @@ static void wiz_reroll_item(object_type *o_ptr)
 		}
 	}
 
-
 	/* Notice change */
 	if (changed)
 	{
@@ -828,7 +827,6 @@ static void wiz_reroll_item(object_type *o_ptr)
 
 	}
 }
-
 
 
 /*
@@ -1054,7 +1052,6 @@ static void do_cmd_wiz_play(void)
 	cptr q, s;
 
 	bool changed = FALSE;
-
 
 	/* Get an item */
 	q = "Play with which object? ";
@@ -1968,7 +1965,6 @@ void do_cmd_debug(void)
 		}
 
 #endif
-
 
 		/* Hack -- Help */
 		case '?':
