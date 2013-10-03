@@ -212,7 +212,6 @@ void sense_inventory(void)
 
 	char o_name[80];
 
-
 	/*** Check for "sensing" ***/
 
 	/* No sensing when confused */
@@ -228,7 +227,6 @@ void sense_inventory(void)
 		if (0 != rand_int(cp_ptr->sense_base / (plev + cp_ptr->sense_div)))
 			return;
 	}
-
 
 	/*** Sense everything ***/
 
@@ -261,7 +259,7 @@ void sense_inventory(void)
 		/* 80% failure on inventory items */
 		if ((i < INVEN_WIELD) && (0 != rand_int(5))) continue;
 
-		/* Indestructible objects are either excellent or terrible */
+		/* Indestructable objects are either excellent or terrible */
 		if (o_ptr->discount == INSCRIP_INDESTRUCTIBLE)
 			heavy = TRUE;
 
@@ -330,5 +328,4 @@ void sense_inventory(void)
 		p_ptr->redraw |= (PR_INVEN | PR_EQUIP);
 	}
 }
-
 
