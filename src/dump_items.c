@@ -22,7 +22,6 @@
 #ifdef ALLOW_DATA_DUMP
 
 
-
 /*dumps any u32b flags to be easily parsed by a spreadsheet or database*/
 static void dump_flags(FILE *fff, u32b flag, int whatflag, int counter)
 {
@@ -36,7 +35,6 @@ static void dump_flags(FILE *fff, u32b flag, int whatflag, int counter)
 	/* using 32 assumes a u32b flag size */
 	for (i = 1; i <= 32; i++)
 	{
-
 		if (flag & is_true)
 		{
 			/*dump T for True*/
@@ -52,6 +50,7 @@ static void dump_flags(FILE *fff, u32b flag, int whatflag, int counter)
 
 	fprintf(fff, "\n");
 }
+
 
 /*
  * Use the monster racial information to a format easily parsed by a spreadsheet.
@@ -618,7 +617,6 @@ void write_e_info_txt(void)
 
 		/* Space between entries */
 		fprintf(fff, "\n\n\n");
-
 	}
 
 	/* Done */
@@ -736,23 +734,22 @@ void write_f_info_txt(void)
 			desc = (f_name + f_ptr->name);
 			/* Switch Back*/
 			f_ptr = &f_info[i];
-
 		}
 		else desc = NULL;
 
 		/* Write W: line */
 		fprintf(fff, "W:%d:%d:%d:%d:%d:\n", i, f_ptr->f_level, f_ptr->f_rarity,
-	    	f_ptr->priority, f_ptr->f_power);
+				f_ptr->priority, f_ptr->f_power);
 
 		/* Write C: line */
 		fprintf(fff, "C:%d:%d:%d:%d:%d:%d:%d:\n", i, f_ptr->dam_non_native, f_ptr->native_energy_move,
-	   	 	f_ptr->non_native_energy_move, f_ptr->native_to_hit_adj,
+			f_ptr->non_native_energy_move, f_ptr->native_to_hit_adj,
 			f_ptr->non_native_to_hit_adj, f_ptr->f_stealth_adj);
 
 
 		/* Write X: line */
 		fprintf(fff, "X:%d:%d:%d:%d:%d:%d:%d:%d:\n", i, f_ptr->f_level, f_ptr->f_rarity,
-	   	 	f_ptr->f_power, f_ptr->x_damage, f_ptr->x_gf_type,
+			f_ptr->f_power, f_ptr->x_damage, f_ptr->x_gf_type,
 			f_ptr->x_timeout_set, f_ptr->x_timeout_rand);
 
 
@@ -769,7 +766,6 @@ void write_f_info_txt(void)
 		/* Find the next empty state slot (if any) */
 		for (x = 0; x < MAX_FEAT_STATES; x++)
 		{
-
 			if (f_ptr->state[x].fs_action != FS_FLAGS_END)
 			{
 				char action_desc[80];
@@ -784,7 +780,6 @@ void write_f_info_txt(void)
 					desc = (f_name + f_ptr->name);
 					/* Switch Back*/
 					f_ptr = &f_info[i];
-
 				}
 				else desc = NULL;
 
@@ -854,7 +849,6 @@ void write_f_info_txt(void)
 
 		/* Space between entries */
 		fprintf(fff, "\n\n\n");
-
 	}
 
 	/* Done */
@@ -917,7 +911,6 @@ void write_a_info_txt(void)
 	/* Read and print out all the objects */
 	for (i = 0; i < z_info->art_norm_max; i++)
 	{
-
 		int counter = 1;
 		char o_name[80];
 		object_type *i_ptr;
@@ -944,7 +937,6 @@ void write_a_info_txt(void)
 		/* Write the complete name of the artifact*/
 		make_fake_artifact(i_ptr, i);
 
-		/*identify it*/
 		/* Identify it */
 		object_aware(i_ptr);
 		object_known(i_ptr);
@@ -1047,7 +1039,6 @@ void write_a_info_txt(void)
 
 		/* Space between entries */
 		fprintf(fff, "\n\n\n");
-
 	}
 
 	/* Done */
@@ -1208,7 +1199,6 @@ void write_mon_power(void)
 		fprintf(fff, "%3d:lvl: %3d power:%9d hp:%9d dam:%9d name: %s\n",
 						i, r_ptr->level, r_ptr->mon_power, r_ptr->mon_eval_hp,
 								r_ptr->mon_eval_dam,(r_name + r_ptr->name));
-
 	}
 
 	/*a few blank lines*/
@@ -1220,7 +1210,6 @@ void write_mon_power(void)
 		/* Write New/Number/Name */
 		fprintf(fff, "lvl: %3d unique_ave_power:%9d creature_ave_power:%9d \n", i,
 					mon_power_ave[i][CREATURE_UNIQUE], mon_power_ave[i][CREATURE_NON_UNIQUE]);
-
 	}
 
 	/* Done */
