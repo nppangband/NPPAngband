@@ -1102,14 +1102,13 @@ errr Term_fresh(void)
 
 	/* Trivial Refresh */
 	if ((y1 > y2) &&
-	    (scr->cu == old->cu) && (scr->cv == old->cv) &&
-	    (scr->cx == old->cx) && (scr->cy == old->cy) &&
-	    !(Term->total_erase))
+		(scr->cu == old->cu) && (scr->cv == old->cv) &&
+		(scr->cx == old->cx) && (scr->cy == old->cy) &&
+		!(Term->total_erase))
 	{
 		/* Nothing */
 		return (1);
 	}
-
 
 	/* Paranoia -- use "fake" hooks to prevent core dumps */
 	if (!Term->curs_hook) Term->curs_hook = Term_curs_hack;
@@ -1285,7 +1284,6 @@ errr Term_fresh(void)
 		Term->y1 = h;
 		Term->y2 = 0;
 	}
-
 
 	/* Cursor update -- Show new Cursor */
 	if (Term->soft_cursor)
@@ -2373,7 +2371,6 @@ errr term_nuke(term *t)
 errr term_init(term *t, int w, int h, int k)
 {
 	int y;
-
 
 	/* Wipe it */
 	(void)WIPE(t, term);
