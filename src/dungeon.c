@@ -122,7 +122,6 @@ static void remove_ironman_items(void)
 				/* Extract spells */
 				for (j = 0; j < SPELLS_PER_BOOK; j++)
 				{
-
 					s16b spell = get_spell_from_list(k_ptr->sval, j);
 
 					/*skip blank spell slots*/
@@ -130,7 +129,6 @@ static void remove_ironman_items(void)
 
 					/* Don't count Ironman Spells. */
 					p_ptr->spell_flags[spell] |= PY_SPELL_IRONMAN;
-
 				}
 			}
 		}
@@ -248,7 +246,7 @@ static void monster_terrain_damage(void)
 		/* Monsters in non-native terrain take damage, and isn't flying */
 		if ((f_ptr->dam_non_native > 0) &&
 			!is_monster_native(m_ptr->fy, m_ptr->fx, r_ptr) &&
-            !MONSTER_CAN_FLY(m_ptr, feat))
+			!MONSTER_CAN_FLY(m_ptr, feat))
  		{
 			int gf_type = 0;
 
@@ -351,7 +349,6 @@ static void regen_monsters(void)
 			/* Fully healed -> flag minimum range for recalculation */
 			if (m_ptr->hp == m_ptr->maxhp) m_ptr->min_range = 0;
 		}
-
 	}
 }
 
@@ -1128,7 +1125,6 @@ static void process_greater_vault_quest(void)
 		/* Update monster list window */
 		p_ptr->redraw |= PR_MONLIST;
 	}
-
 }
 
 
@@ -1189,7 +1185,6 @@ static void clear_square(int y, int x, bool do_wall, u16b feat)
 
 			/* Get the next object */
 			next_o_idx = o_ptr->next_o_idx;
-
 
 			/* Hack - don't destroy the object if it can exist in the new feature */
 			if (!do_wall)
@@ -1278,7 +1273,6 @@ static void process_wilderness_quest(void)
 			 */
 			for (i = 0; i < 8; i++)
 			{
-
 				int yy = y + ddy_ddd[i];
 				int xx = x + ddx_ddd[i];
 				u16b feat2 = cave_feat[yy][xx];
@@ -1317,14 +1311,14 @@ static void process_wilderness_quest(void)
 			/* Ice level */
 			if (ice_or_mud > 0)
 			{
-				if (do_wall)	new_feat =  FEAT_BWATER_WALL;
-				else			new_feat =  FEAT_BWATER;
+				if (do_wall)	new_feat = FEAT_BWATER_WALL;
+				else			new_feat = FEAT_BWATER;
 			}
 			/* Boiling Mud */
 			else
 			{
-				if (do_wall)	new_feat =  FEAT_BMUD_WALL;
-				else 			new_feat =  FEAT_BMUD;
+				if (do_wall)	new_feat = FEAT_BMUD_WALL;
+				else 			new_feat = FEAT_BMUD;
 			}
 
 			/* Clear off the square of objects, effects, and monsters */
@@ -1435,7 +1429,6 @@ static void process_guild_quests(void)
 
 			best_r_idx = r_idx;
 			r2_ptr = &r_info[best_r_idx];
-
 		}
 	}
 
@@ -1624,7 +1617,6 @@ static void recharge_objects(void)
 			else if (temp == o_ptr->number) recharged_notice(o_ptr, FALSE);
 
 			}
-
 		}
 	}
 
@@ -1664,7 +1656,6 @@ static void recharge_objects(void)
 
 			/* Boundary control. */
 			if (o_ptr->timeout < 0) o_ptr->timeout = 0;
-
 		}
 	}
 
@@ -1693,7 +1684,6 @@ static void recharge_objects(void)
 
 			/* Boundary control. */
 			if (o_ptr->timeout < 0) o_ptr->timeout = 0;
-
 		}
 		else if ((o_ptr->art_num) && (o_ptr->timeout))
 		{
@@ -1723,7 +1713,6 @@ static void play_ambient_sound(void)
 			/* It's night. */
 			sound(MSG_AMBIENT_NITE);
 		}
-
 	}
 
 	/* Dungeon level 1-20 */
@@ -1898,8 +1887,8 @@ static void process_world(void)
 		/* We are on the quest level */
 		else
 		{
-			if (q_ptr->q_type == QUEST_ARENA_LEVEL) 		process_arena_quest();
-			else if (q_ptr->q_type == QUEST_LABYRINTH) 		process_labyrinth_quest();
+			if (q_ptr->q_type == QUEST_ARENA_LEVEL)			process_arena_quest();
+			else if (q_ptr->q_type == QUEST_LABYRINTH)		process_labyrinth_quest();
 			else if (q_ptr->q_type == QUEST_WILDERNESS)		process_wilderness_quest();
 			else if (q_ptr->q_type == QUEST_GREATER_VAULT)	process_greater_vault_quest();
 			else if (!(turn % QUEST_TURNS)) process_guild_quests();
@@ -2214,7 +2203,6 @@ static void process_world(void)
 			msg_c_format(MSG_LOSING_FLYING, "You are about to stop flying.");
 
 			disturb(0, 0);
-
 		}
 	}
 
@@ -2230,10 +2218,8 @@ static void process_world(void)
 				msg_c_format(MSG_LOSING_NATIVITY, "You are about to lose nativity to lava.");
 
 				disturb(0, 0);
-
 			}
 		}
-
 	}
 
 	/* Native to Oil */
@@ -2246,7 +2232,6 @@ static void process_world(void)
 				msg_c_format(MSG_LOSING_NATIVITY, "You are about to lose nativity to oil.");
 
 				disturb(0, 0);
-
 			}
 		}
 	}
@@ -2355,7 +2340,6 @@ static void process_world(void)
 		}
 	}
 
-
 	/* Calculate torch radius */
 	p_ptr->update |= (PU_TORCH);
 
@@ -2380,7 +2364,6 @@ static void process_world(void)
 
 	/* Feel the inventory */
 	sense_inventory();
-
 
 	/*** Process Objects ***/
 
@@ -2467,7 +2450,6 @@ static void process_world(void)
 
 	/* Notice stuff */
 	notice_stuff();
-
 }
 
 
@@ -2522,7 +2504,6 @@ static void process_player_aux(void)
 	static byte old_blows[MONSTER_BLOW_MAX];
 
 	static byte	old_ranged = 0;
-
 
 	/* Tracking a monster */
 	if (p_ptr->monster_race_idx)
@@ -2618,7 +2599,6 @@ void process_player_terrain_damage(void)
 
 		/* Reset terrain damage */
 		p_ptr->cumulative_terrain_damage = 0;
-
 	}
 }
 
@@ -2662,7 +2642,6 @@ void process_player(void)
 	/* Complete resting */
 	if (p_ptr->resting < 0)
 	{
-
 		/* Basic resting */
 		if (p_ptr->resting == -1)
 		{
@@ -2731,7 +2710,6 @@ void process_player(void)
 			msg_print("Cancelled.");
 		}
 	}
-
 
 	/* Update buttons if player is on up stairs or down stairs */
 	basic_buttons();
@@ -2824,10 +2802,8 @@ void process_player(void)
 
 				/* Redraw the state */
 				p_ptr->redraw |= (PR_STATE);
-
 			}
 		}
-
 
 		/* Normal command */
 		else
@@ -2856,16 +2832,16 @@ void process_player(void)
 		/* hack - check for secret squares */
 		if (cave_info[p_ptr->py][p_ptr->px] & (CAVE_MARKED))
 		{
-			/* increase chance of altered inventory for around 100 turns*/
+			/* increase chance of altered inventory for around 100 turns */
 			altered_inventory_counter += 1;
 
-			/*unmark the square*/
+			/* unmark the square */
 			cave_info[p_ptr->py][p_ptr->px] &= ~(CAVE_MARKED);
 		}
 
 		/* Check for greater vault squares */
 		if ((cave_info[p_ptr->py][p_ptr->px] & (CAVE_G_VAULT)) &&
-		    (g_vault_name[0] != '\0'))
+			(g_vault_name[0] != '\0'))
 		{
 			msg_print(format("You have entered the %s", g_vault_name));
 
@@ -2890,7 +2866,6 @@ void process_player(void)
 
 			/* Use some energy */
 			p_ptr->p_energy -= p_ptr->p_energy_use;
-
 
 			/* Hack -- constant hallucination */
 			if (p_ptr->timed[TMD_IMAGE])
@@ -3081,7 +3056,6 @@ void process_player(void)
 	{
 		p_ptr->vulnerability = 0;
 	}
-
 
 	if (guild_quest_active())
 	{
@@ -3439,7 +3413,6 @@ static void process_some_user_pref_files(void)
 {
 	char buf[1024];
 
-
 	/* Process the "user.prf" file */
 	(void)process_pref_file("user.prf");
 
@@ -3794,7 +3767,6 @@ void play_game(void)
 
 				/* New depth */
 				dungeon_change_level(0);
-
 			}
 		}
 
