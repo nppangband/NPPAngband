@@ -42,7 +42,7 @@
 # G1 - Lime Green (bright green)
 # o  - Orange
 # o1 - Light Orange (Orange Peel)
-# 02 - Mahagony
+# 02 - Mahogany
 # r  - Red
 # R  - Light Red
 # r1 - Lava Red
@@ -65,12 +65,12 @@
 # y  - yellow
 # y1 - Maize (yellow shaded)
 # y2 - Gold
-#       
+#
 # (note that black is the same color as the screen background, and
 # thus anything will appear to be an empty black space if its
 # color is d.)
-#       
-#       
+#
+#
 # 'I' is for basic information. The tval is for the type of item, the
 # sval identifies the subtype and the pval indicates the amount of
 # effect the item has, if applicable (a fixed value: variable pvals
