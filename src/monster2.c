@@ -596,8 +596,6 @@ errr get_mon_num_prep(void)
  * than one of a lower level.  This is done by choosing several monsters
  * appropriate to the given level and keeping the "hardest" one.
  *
- * Disallow quest unique monster if not on quest level.
- *
  * Note that if no monsters are "appropriate", then this function will
  * fail, and re+turn zero, but this should *almost* never happen.
  */
@@ -632,7 +630,7 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 	/* Boost the level, but not for quest levels.  That has already been done */
 	if ((level > 0) && (!quest_level))
 	{
-		/* Occasional "nasty" monster */
+		/* Occasional "nasty" monste */
 		if (one_in_(NASTY_MON))
 		{
 			/* Pick a level bonus */
@@ -656,7 +654,7 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 	/* Reset total */
 	total = 0L;
 
-	/*enforce a minimum depth on monsters,
+	/*enforce a mininum depth on monsters,
 	 *which slowly drops if no monsters are available.
 	 */
 	if ((!(get_mon_num_hook)) || (quest_level)) mindepth = level / 5;
@@ -693,14 +691,6 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 			r_ptr = &r_info[r_idx];
 
 			if (r_ptr->cur_num >= r_ptr->max_num) continue;
-
-			/*
-			 * Hack -- if not the quest level and the monster is a unique and
-			 * the race matches the quest monster, do not use.
-			 */
-			if(!quest_level && (r_ptr->flags1 & (RF1_UNIQUE)) &&
-					(&r_info[q_ptr->mon_idx] == r_ptr))
-				continue;
 
 			/* Hack -- No low depth monsters monsters in deeper
 			 * parts of the dungeon, except uniques,
