@@ -1544,8 +1544,8 @@ void display_monlist(void)
  *   0x04 --> Full nominative name ("the kobold") or "something"
  *   0x80 --> Banishment resistance name ("the kobold")
  *   0x88 --> Killing name ("a kobold")
- *   0x22 --> Possessive, genderized if visable ("his") or "its"
- *   0x23 --> Reflexive, genderized if visable ("himself") or "itself"
+ *   0x22 --> Possessive, genderized if visible ("his") or "its"
+ *   0x23 --> Reflexive, genderized if visible ("himself") or "itself"
  */
 void monster_desc(char *desc, size_t max, const monster_type *m_ptr, int mode)
 {
@@ -1714,6 +1714,7 @@ void monster_desc_race(char *desc, size_t max, int r_idx)
 	my_strcpy(desc, name, max);
 }
 
+
 /*
  * Learn about a monster (by "probing" it)
  */
@@ -1829,11 +1830,8 @@ void lore_probe_monster_aux(int r_idx)
 			if (r_ptr->flags1 & RF1_ONLY_ITEM) l_ptr->drop_gold = 0;
 
 			break;
-
 		}
-
 	}
-
 }
 
 
@@ -2148,7 +2146,7 @@ void update_mon(int m_idx, bool full)
 			light_spot(fy, fx);
 
 			/* Update health bar as needed */
-			if ((p_ptr->health_who == m_idx)  || (m_ptr->sidebar))
+			if ((p_ptr->health_who == m_idx) || (m_ptr->sidebar))
 				p_ptr->redraw |= (PR_HEALTH | PR_MON_MANA);
 
 			/* Hack -- Count "fresh" sightings */
@@ -3444,7 +3442,7 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	{
 		n_ptr->maxhp = (r_ptr->hdice * r_ptr->hside);
 	}
-	/*assign hitpoints using dice rolls */
+	/* assign hitpoints using dice rolls */
 	else
 	{
 		n_ptr->maxhp = damroll(r_ptr->hdice, r_ptr->hside);
@@ -3710,10 +3708,12 @@ static bool place_monster_group(int y, int x, int r_idx, bool slp, s16b group_si
 	return (TRUE);
 }
 
+
 /*
  * Hack -- help pick an escort type
  */
 static int place_monster_idx = 0;
+
 
 /*
  * Hack -- help pick an escort type
