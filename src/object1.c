@@ -87,7 +87,6 @@ static const char *obj_desc_get_modstr(const object_type *o_ptr)
 }
 
 
-
 static const char *obj_desc_get_basename(const object_type *o_ptr, bool aware)
 {
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
@@ -243,16 +242,15 @@ static size_t obj_desc_name(char *buf, size_t max, size_t end,
 		strnfcat(buf, max, &end, "Well-balanced ");
 	}
 
-
-/*
- * Names have the following elements:
- *
- * '~' indicates where to place an 's' or an 'es'.  Other plural forms should
- * be handled with the syntax '|singular|plural|', e.g. "kni|fe|ves|".
- *
- * '#' indicates the position of the "modifier", e.g. the flavour or spellbook
- * name.
- */
+	/*
+	 * Names have the following elements:
+	 *
+	 * '~' indicates where to place an 's' or an 'es'.  Other plural forms should
+	 * be handled with the syntax '|singular|plural|', e.g. "kni|fe|ves|".
+	 *
+	 * '#' indicates the position of the "modifier", e.g. the flavour or spellbook
+	 * name.
+	 */
 
 	/* Copy the string */
 	while (*basename)
@@ -365,7 +363,6 @@ static size_t obj_desc_name(char *buf, size_t max, size_t end,
 		strnfcat(buf, max, &end, " %s", e_name + e_info[o_ptr->ego_num].name);
 	}
 
-
 	else if (aware && !artifact_p(o_ptr) && (k_ptr->flavor || k_ptr->tval == TV_SCROLL))
 		strnfcat(buf, max, &end, " of %s", k_name + k_ptr->name);
 
@@ -384,7 +381,8 @@ static bool obj_desc_show_weapon(const object_type *o_ptr)
 	if (f3 & TR3_SHOW_MODS) return TRUE;
 	if (o_ptr->to_h && o_ptr->to_d) return TRUE;
 
-	/* You need to list both to_h and to_d for things like unaware rings of accuracy and damage e.g. to differentiate (+8) */
+	/* You need to list both to_h and to_d for things like unaware rings of
+	 * accuracy and damage e.g. to differentiate (+8) */
 	if ((o_ptr->to_h || o_ptr->to_d) && !object_flavor_is_aware(o_ptr)) return TRUE;
 
 	switch (o_ptr->tval)
@@ -541,7 +539,6 @@ static size_t obj_desc_combat(const object_type *o_ptr, char *buf, size_t max,
 		}
 	}
 
-
 	/* Show weapon bonuses */
 	if (spoil || object_known_p(o_ptr))
 	{
@@ -549,10 +546,10 @@ static size_t obj_desc_combat(const object_type *o_ptr, char *buf, size_t max,
 		{
 			/* Make an exception for body armor with only a to-hit penalty */
 			if (o_ptr->to_h < 0 && o_ptr->to_d == 0 &&
-			    (o_ptr->tval == TV_SOFT_ARMOR ||
-			     o_ptr->tval == TV_HARD_ARMOR ||
-			     o_ptr->tval == TV_DRAG_ARMOR ||
-			     o_ptr->tval == TV_DRAG_SHIELD))
+				(o_ptr->tval == TV_SOFT_ARMOR ||
+				 o_ptr->tval == TV_HARD_ARMOR ||
+				 o_ptr->tval == TV_DRAG_ARMOR ||
+				 o_ptr->tval == TV_DRAG_SHIELD))
 				strnfcat(buf, max, &end, " (%+d)", o_ptr->to_h);
 
 			/* Otherwise, always use the full tuple */
@@ -639,7 +636,6 @@ static size_t obj_desc_charges(const object_type *o_ptr, char *buf, size_t max, 
 			/* Hack -- Dump " (# charging)" if relevant */
 			if (o_ptr->timeout >= 1)
 			{
-
 				/* Stacks of rods display an exact count of charging rods. */
 				if (o_ptr->number > 1)
 				{
@@ -649,10 +645,10 @@ static size_t obj_desc_charges(const object_type *o_ptr, char *buf, size_t max, 
 					if (k_ptr->pval == 0) k_ptr->pval = 1;
 
 					/* Find out how many rods are charging, by dividing
-				 	 * current timeout by each rod's maximum timeout.
-				 	 * Ensure that any remainder is rounded up.  Display
-				 	 * very discharged stacks as merely fully discharged.
-				 	 */
+					 * current timeout by each rod's maximum timeout.
+					 * Ensure that any remainder is rounded up.  Display
+					 * very discharged stacks as merely fully discharged.
+					 */
 					power = (o_ptr->timeout + (k_ptr->pval - 1)) / k_ptr->pval;
 
 					if (power > o_ptr->number) power = o_ptr->number;
@@ -661,18 +657,15 @@ static size_t obj_desc_charges(const object_type *o_ptr, char *buf, size_t max, 
 					strnfcat(buf, max, &end, " (%d charging)", power);
 				}
 
-
 				/* Display prettily */
 				else strnfcat(buf, max, &end, " (charging)");
 			}
 		}
 
-
 		/* Indicate "charging" objects, but not rods or lites */
 		if (known && o_ptr->timeout && o_ptr->tval != TV_ROD
-			    && !fuelable_lite_p(o_ptr))
+			&& !fuelable_lite_p(o_ptr))
 		{
-
 			/* Hack -- Dump " (charging)" if relevant */
 			strnfcat(buf, max, &end, " (charging)");
 		}
@@ -680,6 +673,7 @@ static size_t obj_desc_charges(const object_type *o_ptr, char *buf, size_t max, 
 
 	return end;
 }
+
 
 static size_t obj_desc_inscrip(const object_type *o_ptr, char *buf, size_t max, size_t end)
 {
@@ -845,7 +839,6 @@ size_t object_desc(char *buf, size_t max, const object_type *o_ptr, int mode)
 	}
 
 	return end;
-
 }
 
 
