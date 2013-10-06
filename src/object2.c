@@ -3011,7 +3011,6 @@ static bool kind_is_dungeon_magic_book(int k_idx)
 			if (k_ptr->sval >= SV_BOOK_MIN_GOOD) return (TRUE);
 			return(FALSE);
 		}
-
 	}
 	return (FALSE);
 }
@@ -3065,7 +3064,7 @@ static bool kind_is_great(int k_idx)
 		case TV_SHOT:
 		{
 			if ((object_generation_mode == OB_GEN_MODE_QUEST) ||
-			    (object_generation_mode == OB_GEN_MODE_RANDART)) return (FALSE);
+				(object_generation_mode == OB_GEN_MODE_RANDART)) return (FALSE);
 			return (TRUE);
 		}
 
@@ -3081,14 +3080,11 @@ static bool kind_is_great(int k_idx)
 		{
 			if (k_ptr->sval == SV_SCROLL_STAR_ACQUIREMENT) return (TRUE);
 			if ((k_ptr->sval == SV_SCROLL_CREATE_RANDART) &&
-			    (!adult_no_xtra_artifacts))   return (TRUE);
+				(!adult_no_xtra_artifacts))	return (TRUE);
 			return (FALSE);
 		}
 
-		/*
-		 * Stat gain potions can be great at the lower levels.
-		 */
-
+		/* Stat gain potions can be great at the lower levels. */
 		case TV_POTION:
 		{
 			switch (k_ptr->sval)
@@ -3114,7 +3110,7 @@ static bool kind_is_great(int k_idx)
 		case TV_CHEST:
 		{
 			if ((object_generation_mode == OB_GEN_MODE_QUEST) ||
-			    (object_generation_mode == OB_GEN_MODE_RANDART))  return (FALSE);
+				(object_generation_mode == OB_GEN_MODE_RANDART))  return (FALSE);
 			return (TRUE);
 		}
 		default:  break;
@@ -3141,12 +3137,12 @@ static bool kind_is_chest(int k_idx)
 		{
 			return (TRUE);
 		}
-
 	}
 
 	/* Assume not chest */
 	return (FALSE);
 }
+
 
 /*
  * Hack -- determine if a template is footwear.
@@ -3164,12 +3160,12 @@ static bool kind_is_boots(int k_idx)
 		{
 			return (TRUE);
 		}
-
 	}
 
 	/* Assume not footwear */
 	return (FALSE);
 }
+
 
 /*
  * Hack -- determine if a template is headgear.
@@ -3227,6 +3223,7 @@ static bool kind_is_armor(int k_idx)
 	/* Assume not armor */
 	return (FALSE);
 }
+
 
 /*
  * Hack -- determine if a template is wearable armor (all types).
@@ -3307,6 +3304,7 @@ static bool kind_is_body_armor(int k_idx)
 	return (FALSE);
 }
 
+
 /*
  * Hack -- determine if a template is Dragon Scale Mail or shield.
  *
@@ -3331,6 +3329,7 @@ static bool kind_is_dragarmor(int k_idx)
 	return (FALSE);
 }
 
+
 /*
  * Hack -- determine if a template is gloves.
  *
@@ -3353,6 +3352,7 @@ static bool kind_is_gloves(int k_idx)
 	/* Assume not suitable  */
 	return (FALSE);
 }
+
 
 /*
  * Hack -- determine if a template is a cloak.
@@ -3377,6 +3377,7 @@ static bool kind_is_cloak(int k_idx)
 	/* Assume not a suitable  */
 	return (FALSE);
 }
+
 
 /*
  * Hack -- determine if a template is a shield.
@@ -3403,6 +3404,7 @@ static bool kind_is_shield(int k_idx)
 	return (FALSE);
 }
 
+
 /*
  * Hack -- determine if a template is a bow/ammo.
  */
@@ -3414,7 +3416,6 @@ static bool kind_is_bow(int k_idx)
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-
 		/* All firing weapons and Ammo are suitable  */
 		case TV_BOW:
 		{
@@ -3427,11 +3428,10 @@ static bool kind_is_bow(int k_idx)
 		case TV_SHOT:
 		{
 			if ((object_generation_mode == OB_GEN_MODE_QUEST) ||
-			    (object_generation_mode == OB_GEN_MODE_RANDART))  return (FALSE);
+				(object_generation_mode == OB_GEN_MODE_RANDART))  return (FALSE);
 			return (TRUE);
 
 		}
-
 	}
 
 	/* Assume not suitable  */
@@ -3463,6 +3463,7 @@ static bool kind_is_hafted(int k_idx)
 	return (FALSE);
 }
 
+
 /*
  * Hack -- determine if a template is a "good" digging tool
  *
@@ -3474,7 +3475,6 @@ static bool kind_is_digging_tool(int k_idx)
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-
 		/* Diggers -- Good unless damaged */
 		case TV_DIGGING:
 		{
@@ -3482,12 +3482,12 @@ static bool kind_is_digging_tool(int k_idx)
 			if (k_ptr->to_d < 0) return (FALSE);
 			return (TRUE);
 		}
-
 	}
 
 	/* Assume not good */
 	return (FALSE);
 }
+
 
 /*
  * Hack -- determine if a template is a edged weapon.
@@ -3512,6 +3512,7 @@ static bool kind_is_edged(int k_idx)
 	return (FALSE);
 }
 
+
 /*
  * Hack -- determine if a template is a polearm.
  */
@@ -3534,6 +3535,7 @@ static bool kind_is_polearm(int k_idx)
 	/* Assume not suitable */
 	return (FALSE);
 }
+
 
 /*
  * Hack -- determine if a template is a weapon.
@@ -3559,6 +3561,7 @@ static bool kind_is_weapon(int k_idx)
 	/* Assume not suitable */
 	return (FALSE);
 }
+
 
 /*
  * Hack -- determine if a weapon is suitable for a moria chest.
@@ -3594,7 +3597,6 @@ static bool kind_is_moria_weapons(int k_idx)
 
 /*
  * Hack -- determine if a scroll is suitable for a chest.
- *
  */
 static bool kind_is_scroll(int k_idx)
 {
@@ -3603,13 +3605,12 @@ static bool kind_is_scroll(int k_idx)
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-
-		/*scrolls suitable for a chest*/
+		/* scrolls suitable for a chest */
 		case TV_SCROLL:
 		{
 			if (k_ptr->sval == SV_SCROLL_ACQUIREMENT) return (TRUE);
 			if ((k_ptr->sval == SV_SCROLL_CREATE_RANDART) &&
-			    (!adult_no_xtra_artifacts))   return (TRUE);
+				(!adult_no_xtra_artifacts))   return (TRUE);
 			if (k_ptr->sval == SV_SCROLL_STAR_ACQUIREMENT) return (TRUE);
 			if (k_ptr->sval == SV_SCROLL_BANISHMENT) return (TRUE);
 			if (k_ptr->sval == SV_SCROLL_MASS_BANISHMENT) return (TRUE);
@@ -3642,6 +3643,7 @@ static bool kind_is_scroll(int k_idx)
 	return (FALSE);
 }
 
+
 /*
  * Hack -- determine if a potion is good for a chest.
  * includes mushroom of restoring
@@ -3654,8 +3656,7 @@ static bool kind_is_potion(int k_idx)
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-
-		/*potions suitable for a chest*/
+		/* potions suitable for a chest */
 		case TV_POTION:
 		{
 			if (k_ptr->sval == SV_POTION_SPEED) return (TRUE);
@@ -3699,6 +3700,7 @@ static bool kind_is_potion(int k_idx)
 	return (FALSE);
 }
 
+
 /*
  * Hack -- determine if a rod/wand/staff is good for a chest.
  *
@@ -3710,10 +3712,8 @@ static bool kind_is_rod_wand_staff(int k_idx)
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-
 		/*wands suitable for a chest*/
 		case TV_WAND:
-
 		{
 			if ((k_ptr->sval == SV_WAND_TELEPORT_AWAY) &&
 				((k_ptr->k_level + 20) >= object_level )) return (TRUE);
@@ -3725,12 +3725,10 @@ static bool kind_is_rod_wand_staff(int k_idx)
 			if (k_ptr->sval == SV_WAND_DRAGON_BREATH) return (TRUE);
 
 			return (FALSE);
-
 		}
 
 		/*staffs suitable for a chest*/
 		case TV_STAFF:
-
 		{
 			if ((k_ptr->sval == SV_STAFF_TELEPORTATION) &&
 				((k_ptr->k_level + 20) >= object_level )) return (TRUE);
@@ -3748,7 +3746,6 @@ static bool kind_is_rod_wand_staff(int k_idx)
 
 		/*rods suitable for a chest*/
 		case TV_ROD:
-
 		{
 			if ((k_ptr->sval == SV_ROD_IDENTIFY) &&
 				((k_ptr->k_level + 20) >= object_level )) return (TRUE);
@@ -3765,16 +3762,15 @@ static bool kind_is_rod_wand_staff(int k_idx)
 				((k_ptr->k_level + 20) >= object_level )) return (TRUE);
 			return (FALSE);
 		}
-
 	}
 
 	/* Assume not suitable for a chest */
 	return (FALSE);
 }
 
+
 /*
  * Hack -- determine if a template is "jewelry for chests".
- *
  */
 static bool kind_is_jewelry(int k_idx)
 {
@@ -3799,15 +3795,13 @@ static bool kind_is_jewelry(int k_idx)
 
 		/* Some Amulets are suitable for a chest*/
 		case TV_AMULET:
-
 		{
-		  	if (k_ptr->sval == SV_AMULET_THE_MAGI) return (TRUE);
+			if (k_ptr->sval == SV_AMULET_THE_MAGI) return (TRUE);
 			if (k_ptr->sval == SV_AMULET_DEVOTION) return (TRUE);
 			if (k_ptr->sval == SV_AMULET_WEAPONMASTERY) return (TRUE);
 			if (k_ptr->sval == SV_AMULET_TRICKERY) return (TRUE);
 			return (FALSE);
 		}
-
 	}
 
 	/* Assume not suitable for a chest */
@@ -3817,7 +3811,6 @@ static bool kind_is_jewelry(int k_idx)
 
 /*
  * Hack -- determine if a rods/wands/staves are good for a moria chest.
- *
  */
 static bool kind_is_moria_items(int k_idx)
 {
@@ -3826,7 +3819,7 @@ static bool kind_is_moria_items(int k_idx)
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-		/*potions suitable for a moria chest*/
+		/* potions suitable for a moria chest */
 		case TV_POTION:
 		{
 			if (k_ptr->sval == SV_POTION_SPEED) return (TRUE);
@@ -3849,7 +3842,7 @@ static bool kind_is_moria_items(int k_idx)
 			return (FALSE);
 		}
 
-		/*wands suitable for a chest*/
+		/* wands suitable for a chest */
 		case TV_WAND:
 		{
 			if ((k_ptr->sval == SV_WAND_TELEPORT_AWAY) &&
@@ -3933,8 +3926,7 @@ static bool kind_is_good(int k_idx)
 
 		/* Books -- HACK - High level books are good only
 		 * if within 15 levels of being out of depth
-		 **/
-
+		 */
 		case TV_MAGIC_BOOK:
 		case TV_PRAYER_BOOK:
 		case TV_DRUID_BOOK:
@@ -3955,7 +3947,7 @@ static bool kind_is_good(int k_idx)
 		case TV_AMULET:
 
 		{
-		  	if (k_ptr->sval == SV_AMULET_THE_MAGI) return (TRUE);
+			if (k_ptr->sval == SV_AMULET_THE_MAGI) return (TRUE);
 			if (k_ptr->sval == SV_AMULET_DEVOTION) return (TRUE);
 			if (k_ptr->sval == SV_AMULET_WEAPONMASTERY) return (TRUE);
 			if (k_ptr->sval == SV_AMULET_TRICKERY) return (TRUE);
