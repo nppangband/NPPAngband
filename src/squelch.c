@@ -1024,7 +1024,6 @@ static bool ego_item_action(char cmd, void *db, int oid)
 	}
 
 	return FALSE;
-
 }
 
 
@@ -1118,11 +1117,9 @@ static void ego_item_menu(void *unused, const char *also_unused)
 					break;
 				}
 				case '?':	{show_file("options.txt#ego_squelch", NULL, 0, 0); break;}
-				default:  	break;
+				default:	break;
 			}
 		}
-
-
 	}
 
 	FREE(ego_choice);
@@ -1131,8 +1128,6 @@ static void ego_item_menu(void *unused, const char *also_unused)
 	screen_load();
 	return;
 }
-
-
 
 
 /*** Quality-squelch menu ***/
@@ -1182,17 +1177,18 @@ static void quality_display(menu_type *menu, int oid, bool cursor, int row, int 
 	byte attr = (cursor ? TERM_L_BLUE : TERM_WHITE);
 
 	c_put_str(attr, format("%-20s : %s", name, level_name), row, col);
-
-
 }
 
 
-/* Increase or decrease the squelch quality level by one for moria objects (no artifacts) */
+/*
+ * Increase or decrease the squelch quality level by one for moria objects
+ * (no artifacts)
+ */
 static void change_squelch_level_moria(int index, int change)
 {
-	/* only allowable options to be toggled through*/
+	/* only allowable options to be toggled through */
 
-	/*first do the rings and amulets*/
+	/* first do the rings and amulets */
 	if ((index == PS_TYPE_AMULET) || (index == PS_TYPE_RING))
 	{
 		/*
@@ -1203,7 +1199,6 @@ static void change_squelch_level_moria(int index, int change)
 		else squelch_level[index] = SQUELCH_NONE;
 	}
 
-
 	/*
 	 * Move up to the next squelch setting, or go back down to the lowest setting if
 	 * we are at the top.
@@ -1211,7 +1206,6 @@ static void change_squelch_level_moria(int index, int change)
 	else if (change > 0)
 	{
 		/* Weak Pseudo ID */
-
 		if (!(cp_ptr->flags & (CF_PSEUDO_ID_HEAVY)))
 		{
 			if (squelch_level[index] == SQUELCH_GOOD_STRONG) squelch_level[index] = SQUELCH_NONE;
@@ -1230,7 +1224,6 @@ static void change_squelch_level_moria(int index, int change)
 	}
 	else /* (change <=0) */
 	{
-
 		/* Weak Pseudo ID */
 		if (!(cp_ptr->flags & (CF_PSEUDO_ID_HEAVY)))
 		{
@@ -1261,9 +1254,9 @@ static void change_squelch_level(int index, int change)
 		return;
 	}
 
-	/* only allowable  options to be toggled through*/
+	/* only allowable options to be toggled through*/
 
-	/*first do the rings and amulets*/
+	/* first do the rings and amulets */
 	if ((index == PS_TYPE_AMULET) || (index == PS_TYPE_RING))
 	{
 		/*
@@ -1282,13 +1275,11 @@ static void change_squelch_level(int index, int change)
 			else if (squelch_level[index] == SQUELCH_ALL) squelch_level[index] = SQUELCH_CURSED;
 			else squelch_level[index] = SQUELCH_ALL;
 		}
-
 	}
 
 	/* Everything else*/
 	else
 	{
-
 		/*
 		 * Move up to the next squelch setting, or go back down to the lowest setting if
 		 * we are at the top.
@@ -1298,11 +1289,9 @@ static void change_squelch_level(int index, int change)
 			if (squelch_level[index] == SQUELCH_ALL) squelch_level[index] = SQUELCH_NONE;
 			else if (squelch_level[index] == SQUELCH_GOOD_STRONG) squelch_level[index] = SQUELCH_ALL;
 			else squelch_level[index]++;
-
 		}
 		else /* (change <=0) */
 		{
-
 			if (squelch_level[index] == SQUELCH_NONE) squelch_level[index] = SQUELCH_ALL;
 			else if (squelch_level[index] == SQUELCH_ALL) squelch_level[index] = SQUELCH_GOOD_STRONG;
 			else squelch_level[index]--;
@@ -1311,6 +1300,7 @@ static void change_squelch_level(int index, int change)
 
 	return;
 }
+
 
 /*
  * Handle keypresses.
@@ -1352,6 +1342,7 @@ static bool quality_action(char cmd, void *db, int oid)
 			squelch_level[index] = SQUELCH_CURSED;
 			break;
 		}
+
 		case 'C':
 		{
 			for (i = 0; i < SQUELCH_BYTES; i++)
@@ -1360,7 +1351,8 @@ static bool quality_action(char cmd, void *db, int oid)
 			}
 			break;
 		}
-			/* Set to squelch average and below */
+
+		/* Set to squelch average and below */
 		case 'v':
 		{
 			if ((index != PS_TYPE_AMULET)	&& (index != PS_TYPE_RING))
@@ -1374,7 +1366,7 @@ static bool quality_action(char cmd, void *db, int oid)
 		{
 			for (i = 0; i < SQUELCH_BYTES ; i++)
 			{
-				/* Aumulets and rings only have cursed and good settings */
+				/* Amulets and rings only have cursed and good settings */
 				if ((i == PS_TYPE_AMULET) || (i == PS_TYPE_RING)) continue;
 				/* The rest can be set to average */
 				squelch_level[i] = SQUELCH_AVERAGE;
@@ -1392,6 +1384,7 @@ static bool quality_action(char cmd, void *db, int oid)
 			else return (FALSE);
 			break;
 		}
+
 		case 'G':
 		{
 			for (i = 0; i < SQUELCH_BYTES; i++)
@@ -1401,6 +1394,7 @@ static bool quality_action(char cmd, void *db, int oid)
 			}
 				break;
 		}
+
 		/* Squelch to good (weak pseudo-id and below ) */
 		case 'w':
 		{
@@ -1451,11 +1445,10 @@ static bool quality_action(char cmd, void *db, int oid)
 			change_squelch_level(index, 1);
 			break;
 		}
-		default:  return (FALSE);
+		default:	return (FALSE);
 	}
 
 	return TRUE;
-
 }
 
 /*
@@ -1525,7 +1518,7 @@ static void quality_menu(void *unused, const char *also_unused)
 					break;
 				}
 				case '?':	{show_file("options.txt#qual_squelch", NULL, 0, 0); break;}
-				default:  	break;
+				default:	break;
 			}
 		}
 	}
@@ -1534,7 +1527,6 @@ static void quality_menu(void *unused, const char *also_unused)
 	screen_load();
 	return;
 }
-
 
 
 /*** Object Squelch Menu ***/
@@ -1571,6 +1563,7 @@ static void object_squelch_hook(int oid, void *db, const region *loc)
 	text_out_indent = 0;
 }
 
+
 /*
  * Display an entry on the sval menu
  */
@@ -1604,9 +1597,9 @@ static void object_squelch_display(menu_type *menu, int oid, bool cursor, int ro
 
 		c_put_str(color, format("[%c]", sq_mode), row, col);
 		if (inscrip) c_put_str(TERM_YELLOW, inscrip, row, (col + 40));
-
 	}
 }
+
 
 /*
  * Deal with events on the object squelch menu
@@ -1845,39 +1838,39 @@ static void init_tv_to_type(void)
 		tv_to_type[i] = TYPE_MAX;
 	}
 
-	tv_to_type[TV_SKELETON]=TYPE_MISC;
-	tv_to_type[TV_BOTTLE]=TYPE_MISC;
-	tv_to_type[TV_JUNK]=TYPE_MISC;
-	tv_to_type[TV_SPIKE]=TYPE_MISC;
-	tv_to_type[TV_CHEST]=TYPE_MISC;
-	tv_to_type[TV_SHOT]=TYPE_AMMO;
-	tv_to_type[TV_ARROW]=TYPE_AMMO;
-	tv_to_type[TV_BOLT]=TYPE_AMMO;
-	tv_to_type[TV_BOW]=TYPE_BOW;
-	tv_to_type[TV_DIGGING]=TYPE_WEAPON2;
-	tv_to_type[TV_HAFTED]=TYPE_WEAPON2;
-	tv_to_type[TV_POLEARM]=TYPE_WEAPON2;
-	tv_to_type[TV_SWORD]=TYPE_WEAPON1;
-	tv_to_type[TV_BOOTS]=TYPE_BOOTS;
-	tv_to_type[TV_GLOVES]=TYPE_GLOVES;
-	tv_to_type[TV_HELM]=TYPE_HELM;
-	tv_to_type[TV_CROWN]=TYPE_HELM;
-	tv_to_type[TV_SHIELD]=TYPE_SHIELD;
-	tv_to_type[TV_CLOAK]=TYPE_CLOAK;
+	tv_to_type[TV_SKELETON]	= TYPE_MISC;
+	tv_to_type[TV_BOTTLE]	= TYPE_MISC;
+	tv_to_type[TV_JUNK]		= TYPE_MISC;
+	tv_to_type[TV_SPIKE]	= TYPE_MISC;
+	tv_to_type[TV_CHEST]	= TYPE_MISC;
+	tv_to_type[TV_SHOT]		= TYPE_AMMO;
+	tv_to_type[TV_ARROW]	= TYPE_AMMO;
+	tv_to_type[TV_BOLT]		= TYPE_AMMO;
+	tv_to_type[TV_BOW]		= TYPE_BOW;
+	tv_to_type[TV_DIGGING]	= TYPE_WEAPON2;
+	tv_to_type[TV_HAFTED]	= TYPE_WEAPON2;
+	tv_to_type[TV_POLEARM]	= TYPE_WEAPON2;
+	tv_to_type[TV_SWORD]	= TYPE_WEAPON1;
+	tv_to_type[TV_BOOTS]	= TYPE_BOOTS;
+	tv_to_type[TV_GLOVES]	= TYPE_GLOVES;
+	tv_to_type[TV_HELM]		= TYPE_HELM;
+	tv_to_type[TV_CROWN]	= TYPE_HELM;
+	tv_to_type[TV_SHIELD]	= TYPE_SHIELD;
+	tv_to_type[TV_CLOAK]	= TYPE_CLOAK;
 	tv_to_type[TV_SOFT_ARMOR]=TYPE_BODY;
 	tv_to_type[TV_HARD_ARMOR]=TYPE_BODY;
 	tv_to_type[TV_DRAG_ARMOR]=TYPE_BODY;
 	tv_to_type[TV_DRAG_SHIELD]=TYPE_SHIELD;
-	tv_to_type[TV_LIGHT]=TYPE_MISC;
-	tv_to_type[TV_AMULET]=TYPE_AMULET;
-	tv_to_type[TV_RING]=TYPE_RING;
-	tv_to_type[TV_STAFF]=TYPE_STAFF;
-	tv_to_type[TV_WAND]=TYPE_WAND;
-	tv_to_type[TV_ROD]=TYPE_ROD;
-	tv_to_type[TV_SCROLL]=TYPE_SCROLL;
-	tv_to_type[TV_POTION]=TYPE_POTION;
-	tv_to_type[TV_FLASK]=TYPE_MISC;
-	tv_to_type[TV_FOOD]=TYPE_FOOD;
+	tv_to_type[TV_LIGHT]	= TYPE_MISC;
+	tv_to_type[TV_AMULET]	= TYPE_AMULET;
+	tv_to_type[TV_RING]		= TYPE_RING;
+	tv_to_type[TV_STAFF]	= TYPE_STAFF;
+	tv_to_type[TV_WAND]		= TYPE_WAND;
+	tv_to_type[TV_ROD]		= TYPE_ROD;
+	tv_to_type[TV_SCROLL]	= TYPE_SCROLL;
+	tv_to_type[TV_POTION]	= TYPE_POTION;
+	tv_to_type[TV_FLASK]	= TYPE_MISC;
+	tv_to_type[TV_FOOD]		= TYPE_FOOD;
 	tv_to_type[TV_MAGIC_BOOK]=TYPE_BOOK;
 	tv_to_type[TV_PRAYER_BOOK]=TYPE_BOOK;
 	tv_to_type[TV_DRUID_BOOK]=TYPE_BOOK;
@@ -1896,8 +1889,8 @@ static void init_tv_to_type(void)
 		/* Note that we have seen this type */
 		seen_type[tv_to_type[k_ptr->tval]] = TRUE;
 	}
-
 }
+
 
 static void squelch_prefs_save(void *unused, const char *also_unused)
 {
@@ -1971,10 +1964,9 @@ static void squelch_prefs_save(void *unused, const char *also_unused)
 			prt("Squelch file saved successfully.  (Hit a key.)", SROW, SCOL);
 			(void)inkey_ex();
 		}
-
 	}
-
 }
+
 
 static void squelch_prefs_load(void *unused, const char *also_unused)
 {
