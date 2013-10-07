@@ -61,6 +61,10 @@ const size_t squelch_size = SQUELCH_BYTES;
 static int tv_to_type[MAXTV_TO_TYPE];
 static bool seen_type[TYPE_MAX];
 
+/* Coordinates for menu displays */
+#define SCOL	26
+#define SROW	17
+
 /*
  * List of kinds of item, for pseudo-id squelch.
  */
@@ -105,7 +109,7 @@ typedef struct
  * "0 to SV_UNKNOWN" category, they will be grouped
  * with the rare items.
  */
-static quality_squelch_struct quality_mapping[] =
+static const quality_squelch_struct quality_mapping[] =
 {
 	{ PS_TYPE_EQUIP_RARE,		TV_SWORD,	SV_BLADE_OF_CHAOS,	SV_BLADE_OF_CHAOS },
 	{ PS_TYPE_WEAPON_SHARP,	TV_SWORD,	0,		SV_UNKNOWN },
@@ -143,7 +147,8 @@ typedef struct
 	const char *name;
 } quality_name_struct;
 
-static quality_name_struct quality_choices[PS_TYPE_MAX] =
+
+static const quality_name_struct quality_choices[PS_TYPE_MAX] =
 {
 	{ PS_TYPE_WEAPON_SHARP,	"Sharp Melee Weapons" },
 	{ PS_TYPE_WEAPON_BLUNT,	"Blunt Melee Weapons" },
@@ -169,7 +174,7 @@ static quality_name_struct quality_choices[PS_TYPE_MAX] =
 
 
 /* Categories for sval-dependent squelch. */
-static tval_desc tvals[] =
+static const tval_desc tvals[] =
 {
 	{TYPE_AMMO, 	"Missiles"},
 	{TYPE_BOW, 		"Missile Launchers"},
@@ -196,7 +201,7 @@ static tval_desc tvals[] =
 /*
  * The names for the various kinds of quality
  */
-static quality_name_struct quality_values[SQUELCH_MAX] =
+static const quality_name_struct quality_values[SQUELCH_MAX] =
 {
 	{ SQUELCH_NONE,		"none" },
 	{ SQUELCH_CURSED,	"squelch cursed" },
@@ -1869,8 +1874,6 @@ static void init_tv_to_type(void)
 
 static void squelch_prefs_save(void *unused, const char *also_unused)
 {
-	int col = 26;
-	int row = 17;
 	char ftmp[80];
 	char buf[80];
 	int i, tval, sval, squelch;
@@ -1878,10 +1881,10 @@ static void squelch_prefs_save(void *unused, const char *also_unused)
 	ang_file *fff;
 
 	/* Prompt */
-	prt("Command: Save Squelch Info", row, col);
+	prt("Command: Save Squelch Info", SROW, SCOL);
 
 	/* Prompt */
-	prt("File: ", row+1, col);
+	prt("File: ", SROW + 1, SCOL);
 
 	/* Default filename */
 	sprintf(ftmp, "%s.squ", op_ptr->base_name);
@@ -1938,7 +1941,7 @@ static void squelch_prefs_save(void *unused, const char *also_unused)
 			file_close(fff);
 
 			/* Ending message */
-			prt("Squelch file saved successfully.  (Hit a key.)", row, col);
+			prt("Squelch file saved successfully.  (Hit a key.)", SROW, SCOL);
 			(void)inkey_ex();
 		}
 
@@ -1948,15 +1951,13 @@ static void squelch_prefs_save(void *unused, const char *also_unused)
 
 static void squelch_prefs_load(void *unused, const char *also_unused)
 {
-	int col = 26;
-	int row = 17;
 	char ftmp[80];
 
 	/* Prompt */
-	prt("Command: Load squelch info from file", row, col);
+	prt("Command: Load squelch info from file", SROW, SCOL);
 
 	/* Prompt */
-	prt("File: ", row+1, col);
+	prt("File: ", SROW + 1, SCOL);
 
 	/* Default filename */
 	sprintf(ftmp, "%s.squ", op_ptr->base_name);
@@ -1968,12 +1969,12 @@ static void squelch_prefs_load(void *unused, const char *also_unused)
 		if (process_pref_file(ftmp))
 		{
 			/* Mention failure */
-			prt("Failed to load squelch file!  (Hit a key.)", row+1, col);
+			prt("Failed to load squelch file!  (Hit a key.)", SROW + 1, SCOL);
 		}
 		else
 		{
 			/* Mention success */
-			prt("Squelch data loaded!  (Hit a key.)",  row+1, col);
+			prt("Squelch data loaded!  (Hit a key.)", SROW + 1, SCOL);
 		}
 		(void)inkey_ex();
 	}
@@ -1981,8 +1982,6 @@ static void squelch_prefs_load(void *unused, const char *also_unused)
 
 static void autoinscribe_prefs_save(void *unused, const char *also_unused)
 {
-	int col = 26;
-	int row = 17;
 	char ftmp[80];
 	char buf[80];
 	int i;
@@ -1990,10 +1989,10 @@ static void autoinscribe_prefs_save(void *unused, const char *also_unused)
 	ang_file *fff;
 
 	/* Prompt */
-	prt("Command: Save Autoinscribe Info", row, col);
+	prt("Command: Save Autoinscribe Info", SROW, SCOL);
 
 	/* Prompt */
-	prt("File: ", row+1, col);
+	prt("File: ", SROW + 1, SCOL);
 
 	/* Default filename */
 	sprintf(ftmp, "%s.ins", op_ptr->base_name);
@@ -2035,7 +2034,7 @@ static void autoinscribe_prefs_save(void *unused, const char *also_unused)
 			file_close(fff);
 
 			/* Ending message */
-			prt("Autoinscribe file saved successfully.  (Hit a key.)", row+1, col);
+			prt("Autoinscribe file saved successfully.  (Hit a key.)", SROW + 1, SCOL);
 			(void)inkey_ex();
 		}
 	}
@@ -2043,15 +2042,13 @@ static void autoinscribe_prefs_save(void *unused, const char *also_unused)
 
 static void autoinscribe_prefs_load(void *unused, const char *also_unused)
 {
-	int col = 26;
-	int row = 17;
 	char ftmp[80];
 
 	/* Prompt */
-	prt("Command: Load Autoinscribe info from file", row, col);
+	prt("Command: Load Autoinscribe info from file", SROW, SCOL);
 
 	/* Prompt */
-	prt("File: ", row+1, col);
+	prt("File: ", SROW + 1, SCOL);
 
 	/* Default filename */
 	sprintf(ftmp, "%s.ins", op_ptr->base_name);
@@ -2063,16 +2060,15 @@ static void autoinscribe_prefs_load(void *unused, const char *also_unused)
 		if (process_pref_file(ftmp))
 		{
 			/* Mention failure */
-			prt("Failed to load autoinscribe file!  (Hit a key.)", row+1, col);
+			prt("Failed to load autoinscribe file!  (Hit a key.)", SROW + 1, SCOL);
 		}
 
 		else
 		{
 			/* Mention success */
-			prt("Autoinscribe data loaded!  (Hit a key.)", row+1, col);
+			prt("Autoinscribe data loaded!  (Hit a key.)", SROW + 1, SCOL);
 		}
 		(void)inkey_ex();
-
 	}
 }
 
@@ -2083,7 +2079,7 @@ struct
 	char tag;
 	const char *name;
 	void (*action)(void *unused, const char *also_unused);
-} extra_item_options[] =
+} const extra_item_options[] =
 {
 	{ 'Q', "Quality squelching options", quality_menu },
 	{ 'E', "Ego squelching options", ego_item_menu },
