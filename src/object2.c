@@ -4039,7 +4039,6 @@ void object_quantities(object_type *j_ptr)
 }
 
 
-
 /*
  * Attempt to make an object (normal or good/great)
  *
@@ -4130,7 +4129,6 @@ bool make_object(object_type *j_ptr, bool good, bool great, int objecttype, bool
 
 		/* Prepare the object */
 		object_prep(j_ptr, k_idx);
-
 	}
 
 	/* Apply magic (allow artifacts) */
@@ -4153,6 +4151,7 @@ bool make_object(object_type *j_ptr, bool good, bool great, int objecttype, bool
 	/* Success */
 	return (TRUE);
 }
+
 
 /*
  * Sets the object generation mode for the store, since in doing
@@ -4228,8 +4227,8 @@ bool prep_store_object(int storetype)
 	get_obj_num_prep();
 
 	return(TRUE);
-
 }
+
 
 /*
  * Set the object theme
@@ -4237,12 +4236,12 @@ bool prep_store_object(int storetype)
 
 
 /*
- * This is an imcomplete list of themes.  Returns false if theme not found.
+ * This is an incomplete list of themes.  Returns false if theme not found.
  * Used primarily for Randarts
  */
 bool prep_object_theme(int themetype)
 {
-	/*get the store creation mode*/
+	/* get the store creation mode */
 	switch (themetype)
 	{
 		case DROP_TYPE_SHIELD:
@@ -4315,11 +4314,10 @@ bool prep_object_theme(int themetype)
 		default: return (FALSE);
 	}
 
-	/*prepare the allocation table*/
+	/* prepare the allocation table */
 	get_obj_num_prep();
 
 	return(TRUE);
-
 }
 
 
@@ -4350,7 +4348,6 @@ int get_object_mimic_k_idx(const monster_race *r_ptr)
 	get_obj_num_prep();
 
 	return(k_idx);
-
 }
 
 
@@ -4367,7 +4364,7 @@ bool make_gold(object_type *j_ptr)
 	s32b value;
 	s32b mult = (birth_no_selling ? object_level : 1);
 
-	/* Boundry control for gold multiplier birth_no_selling option*/
+	/* Boundary control for gold multiplier birth_no_selling option*/
 	if (mult < 1) 		mult = 1;
 	else if (mult > 5) 	mult = 5;
 
@@ -4401,7 +4398,7 @@ bool make_gold(object_type *j_ptr)
 	/* Determine how much the treasure is "worth" */
 	value = (base + (8L * randint(base)) + randint((8 * mult)));
 
-	/*chests containing gold are very lucrative*/
+	/* chests containing gold are very lucrative */
 	if (object_generation_mode > 0)
 	{
 		value += ((randint((4 * mult)) + randint((4 * mult)) + object_level / 4 ) * 50);
@@ -4417,16 +4414,12 @@ bool make_gold(object_type *j_ptr)
 }
 
 
-
-
-
 /*
  * Attempt to place an object (normal or good/great) at the given location.
  */
 void place_object(int y, int x, bool good, bool great, int droptype)
 {
 	int tries = 0;
-
 
 	object_type *i_ptr;
 	object_type object_type_body;
@@ -4506,8 +4499,8 @@ bool place_quest_artifact(int y, int x)
 
 	/* Success */
 	return (TRUE);
-
 }
+
 
 /*
  * Places a treasure (Gold or Gems) at given location
@@ -4538,11 +4531,6 @@ void place_gold(int y, int x)
 }
 
 
-
-
-
-
-
 /* Steal from monster and make an object in the player inventory.
  * This whole function is basically an abbreviated object creation
  * routine.  Much of the object creation code can't be called because
@@ -4554,8 +4542,6 @@ void place_gold(int y, int x)
  * in the player's inventory, if there is room.  If not, drop it to the
  * floor, and finally, wipe the object. -JG
  */
-
-
 void steal_object_from_monster(int y, int x)
 {
 	monster_type *m_ptr = &mon_list[cave_m_idx[y][x]];
@@ -4584,7 +4570,6 @@ void steal_object_from_monster(int y, int x)
 	/* Make Gold */
 	if (do_gold && (!chest) && (!do_item || (rand_int(100) < 50)))
 	{
-
 		/*get coin type "flavor" if appropriate*/
 		coin_type = get_coin_type(r_ptr);
 
@@ -4612,7 +4597,6 @@ void steal_object_from_monster(int y, int x)
 
 		/* Reset "coin" type */
 		coin_type = 0;
-
 	}
 
 	/* Make Object */
@@ -4620,7 +4604,7 @@ void steal_object_from_monster(int y, int x)
 	{
 		bool sq_flag = FALSE;
 
-		/*Make an object, but make a chest if that is the theme*/
+		/* Make an object, but make a chest if that is the theme */
 		if (chest)
 		{
 			while (!make_object(i_ptr, good, great, DROP_TYPE_CHEST, FALSE)) continue;
@@ -4634,10 +4618,10 @@ void steal_object_from_monster(int y, int x)
 		/* Describe the object */
 		object_desc(o_name, sizeof(o_name), i_ptr, ODESC_PREFIX | ODESC_FULL);
 
-		/*update the monster lore*/
+		/* update the monster lore */
 		lore_treasure(cave_m_idx[y][x], 1, 0);
 
-		/*does the player want to squelch the item?*/
+		/* does the player want to squelch the item? */
 		sq_flag = ((k_info[i_ptr->k_idx].squelch == SQUELCH_ALWAYS) &&
  				   (k_info[i_ptr->k_idx].aware));
 
@@ -4701,20 +4685,16 @@ void steal_object_from_monster(int y, int x)
 				msg_format("You have burgled %s (%c).",
 			           o_name, index_to_label(item_new));
 			}
-
-
 		}
 
 		/*squelch it*/
 		else
 		{
-
 			/* At least let the player know they stole something */
 			msg_format("You have burgled %s.{squelched}", o_name);
 
 			/* Delete the object */
 			object_wipe(i_ptr);
-
 		}
 	}
 
@@ -4730,7 +4710,6 @@ void steal_object_from_monster(int y, int x)
 
 	return;
 }
-
 
 
 /*
@@ -4778,13 +4757,12 @@ void object_history(object_type *o_ptr, byte origin, s16b r_idx)
 				/* Store the name */
 				o_ptr->origin_m_name = quark_add(name);
 			}
-
-			/* Fall through */
 		}
+		/* no break */
 		case ORIGIN_ACQUIRE:
 		case ORIGIN_DROP_UNKNOWN:
 		case ORIGIN_FLOOR:
-	  	case ORIGIN_CHEST:
+		case ORIGIN_CHEST:
 		{
 			o_ptr->origin_dlvl = p_ptr->depth;
 			break;
@@ -4795,9 +4773,10 @@ void object_history(object_type *o_ptr, byte origin, s16b r_idx)
 
 /* The possible actions */
 
-#define KEEP_O		1
-#define KEEP_J		2
+#define KEEP_O	1
+#define KEEP_J	2
 #define MIX		3
+
 
 /*
  * Try to stack item histories
@@ -4883,7 +4862,7 @@ void format_object_flags(const object_type *o_ptr, char buf[], int max, bool onl
 		{TR2_IM_FIRE,		2,	"ImFire"},
 		{TR2_IM_COLD,		2,	"ImCold"},
 		{TR2_IM_POIS,		2,	"ImPois"},
-		{RBASE,			2,	"RBase"},
+		{RBASE,				2,	"RBase"},
 		{TR2_RES_ACID,		2,	"RAcid"},
 		{TR2_RES_ELEC,		2,	"RElec"},
 		{TR2_RES_FIRE,		2,	"RFire"},
@@ -4902,18 +4881,18 @@ void format_object_flags(const object_type *o_ptr, char buf[], int max, bool onl
 		{TR2_RES_DISEN,		2,	"RDisen"},
 		{TR3_SLOW_DIGEST,	3,	"S.Dig"},
 		{TR3_FEATHER,		3,	"Feath"},
-		{TR3_LIGHT,		3,	"PLite"},
-		{TR3_REGEN,		3,	"Regen"},
+		{TR3_LIGHT,			3,	"PLite"},
+		{TR3_REGEN,			3,	"Regen"},
 		{TR3_TELEPATHY,		3,	"Telep"},
 		{TR3_SEE_INVIS,		3,	"Invis"},
 		{TR3_FREE_ACT,		3,	"FrAct"},
 		{TR3_HOLD_LIFE,		3,	"HLife"},
-		{TR1_STR,		1,	"STR"},
-		{TR1_INT,		1,	"INT"},
-		{TR1_WIS,		1,	"WIS"},
-		{TR1_DEX,		1,	"DEX"},
-		{TR1_CON,		1,	"CON"},
-		{TR1_CHR,		1,	"CHR"},
+		{TR1_STR,			1,	"STR"},
+		{TR1_INT,			1,	"INT"},
+		{TR1_WIS,			1,	"WIS"},
+		{TR1_DEX,			1,	"DEX"},
+		{TR1_CON,			1,	"CON"},
+		{TR1_CHR,			1,	"CHR"},
 		{TR2_SUST_STR,		2,	"SustSTR"},
 		{TR2_SUST_INT,		2,	"SustINT"},
 		{TR2_SUST_WIS,		2,	"SustWIS"},
@@ -4995,7 +4974,6 @@ void format_object_flags(const object_type *o_ptr, char buf[], int max, bool onl
 	flags[2] = f2;
 	flags[3] = f3;
 	flags[4] = native;
-
 
 	/* Start with an empty string */
 	buf[0] = '\0';
@@ -5114,5 +5092,4 @@ void expand_inscription(const object_type *o_ptr, const char *src, char dest[], 
 	/* Append the trailing null character */
 	dest[j] = '\0';
 }
-
 
