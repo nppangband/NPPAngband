@@ -1999,6 +1999,7 @@ static void squelch_prefs_load(void *unused, const char *also_unused)
 	}
 }
 
+
 static void autoinscribe_prefs_save(void *unused, const char *also_unused)
 {
 	char ftmp[80];
@@ -2059,6 +2060,7 @@ static void autoinscribe_prefs_save(void *unused, const char *also_unused)
 	}
 }
 
+
 static void autoinscribe_prefs_load(void *unused, const char *also_unused)
 {
 	char ftmp[80];
@@ -2100,13 +2102,14 @@ struct
 	void (*action)(void *unused, const char *also_unused);
 } const extra_item_options[] =
 {
-	{ 'Q', "Quality squelching options", quality_menu },
-	{ 'E', "Ego squelching options", ego_item_menu },
-	{ 'S', "Save squelch values to pref file.", squelch_prefs_save},
-	{ 'L', "Load squelch values from pref file.", squelch_prefs_load},
-	{ 'B', "Save autoinscriptions to pref file.", autoinscribe_prefs_save},
-	{ 'G', "Load autoinscriptions from pref file.", autoinscribe_prefs_load},
+	{ 'Q', "Quality squelching options",			quality_menu },
+	{ 'E', "Ego squelching options",				ego_item_menu },
+	{ 'S', "Save squelch values to pref file.",		squelch_prefs_save},
+	{ 'L', "Load squelch values from pref file.",	squelch_prefs_load},
+	{ 'B', "Save autoinscriptions to pref file.",	autoinscribe_prefs_save},
+	{ 'G', "Load autoinscriptions from pref file.",	autoinscribe_prefs_load},
 };
+
 
 static char tag_options_item(menu_type *menu, int oid)
 {
@@ -2127,6 +2130,7 @@ static char tag_options_item(menu_type *menu, int oid)
 	return 0;
 }
 
+
 static int valid_options_item(menu_type *menu, int oid)
 {
 	size_t line = (size_t) oid;
@@ -2145,6 +2149,7 @@ static int valid_options_item(menu_type *menu, int oid)
 
 	return 0;
 }
+
 
 static void display_options_item(menu_type *menu, int oid, bool cursor, int row, int col, int width)
 {
@@ -2246,7 +2251,7 @@ void do_cmd_squelch_autoinsc(void *unused, cptr title)
 				case 'B':	{autoinscribe_prefs_save(NULL, NULL); break;}
 				case 'G':	{autoinscribe_prefs_load(NULL, NULL); break;}
 				case '?':	{show_file("options.txt#squelch", NULL, 0, 0); break;}
-				default:  	break;
+				default:	break;
 			}
 		}
 	}
@@ -2254,9 +2259,6 @@ void do_cmd_squelch_autoinsc(void *unused, cptr title)
 	/* Load screen and finish */
 	screen_load();
 
-
-
 	return;
 }
-
 
