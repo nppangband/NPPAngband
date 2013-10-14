@@ -615,6 +615,7 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 	bool quest_level = FALSE;
+	bool quest_active;
 
 	bool native_only = TRUE;
 
@@ -628,7 +629,7 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 	native_flags &= TERRAIN_MASK;
 
 	/* Check for an active quest */
-	bool quest_active = quest_themed(q_ptr);
+	quest_active = quest_themed(q_ptr);
 	if (quest_active && (guild_quest_level() == p_ptr->depth)) quest_level = TRUE;
 
 	/* Boost the level, but not for quest levels.  That has already been done */
@@ -1733,10 +1734,8 @@ void lore_probe_monster_aux(int r_idx)
 
 	int i;
 
-	i = randint (3);
-
 	/*learn 2 out of three of their basic flags.....*/
-	switch (i)
+	switch (randint(3))
 	{
 		case 1:
 		{
@@ -1761,10 +1760,8 @@ void lore_probe_monster_aux(int r_idx)
 		}
 	}
 
-	/*probing is now much more informative*/
-	i = randint (4);
-
-	switch (i)
+	/* probing is now much more informative */
+	switch (randint(4))
 	{
 		case 1:
 		{
@@ -1802,8 +1799,7 @@ void lore_probe_monster_aux(int r_idx)
 	if (l_ptr->sights < MAX_SHORT)	l_ptr->sights += (MAX_SHORT - l_ptr->sights) / 100;
 	if (l_ptr->ranged < MAX_UCHAR)	l_ptr->ranged += (MAX_UCHAR - l_ptr->ranged) / 5;
 
-	i = randint (3);
-	switch (i)
+	switch (randint(3))
 	{
 		case 1:
 		{
@@ -2416,8 +2412,7 @@ static s16b get_mimic_k_idx(int r_idx)
 			/* Mimic a powerful potion if they are all identified */
 			if (!final_value)
 			{
-				i = randint(5);
-				switch (i)
+				switch (randint(5))
 				{
 					case (1): 	return (lookup_kind(TV_POTION, SV_POTION_EXPERIENCE));
 					case (2): 	return (lookup_kind(TV_POTION, SV_POTION_LIFE));
@@ -2457,8 +2452,7 @@ static s16b get_mimic_k_idx(int r_idx)
 			/* Mimic a powerful ring if they are all identified */
 			if (!final_value)
 			{
-				i = randint(5);
-				switch (i)
+				switch (randint(5))
 				{
 					case (1): 	return (lookup_kind(TV_RING, SV_RING_SPEED));
 					case (2): 	return (lookup_kind(TV_RING, SV_RING_SPEED));
@@ -2499,8 +2493,7 @@ static s16b get_mimic_k_idx(int r_idx)
 			/* Mimic a powerful staff if they are all identified */
 			if (!final_value)
 			{
-				i = randint(5);
-				switch (i)
+				switch (randint(5))
 				{
 					case (1): 	return (lookup_kind(TV_STAFF, SV_STAFF_SPEED));
 					case (2): 	return (lookup_kind(TV_STAFF, SV_STAFF_DESTRUCTION));
@@ -2542,8 +2535,7 @@ static s16b get_mimic_k_idx(int r_idx)
 			/* Mimic a good mushroom if they are all identified */
 			if (!final_value)
 			{
-				i = randint(5);
-				switch (i)
+				switch (randint(5))
 				{
 					case (1): 	return (lookup_kind(TV_FOOD, SV_FOOD_RESTORING));
 					case (2): 	return (lookup_kind(TV_FOOD, SV_FOOD_CURE_SERIOUS));
@@ -2588,8 +2580,7 @@ static s16b get_mimic_k_idx(int r_idx)
 				/* Mimic a powerful wand if they are all identified */
 				if (!final_value)
 				{
-					i = randint(5);
-					switch (i)
+					switch (randint(5))
 					{
 						case (1): 	return (lookup_kind(TV_WAND, SV_WAND_TELEPORT_AWAY));
 						case (2): 	return (lookup_kind(TV_WAND, SV_WAND_DRAGON_FIRE));
@@ -2629,8 +2620,7 @@ static s16b get_mimic_k_idx(int r_idx)
 				/* Mimic a powerful rod if they are all identified */
 				if (!final_value)
 				{
-					i = randint(5);
-					switch (i)
+					switch (randint(5))
 					{
 						case (1): 	return (lookup_kind(TV_ROD, SV_ROD_DETECTION));
 						case (2): 	return (lookup_kind(TV_ROD, SV_ROD_HEALING));
@@ -2674,8 +2664,7 @@ static s16b get_mimic_k_idx(int r_idx)
 			/* Mimic a good amulet if they are all identified */
 			if (!final_value)
 			{
-				i = randint(5);
-				switch (i)
+				switch (randint(5))
 				{
 					case (1): 	return (lookup_kind(TV_AMULET, SV_AMULET_THE_MAGI));
 					case (2): 	return (lookup_kind(TV_AMULET, SV_AMULET_DEVOTION));
@@ -2961,17 +2950,11 @@ void monster_swap(int y1, int x1, int y2, int x2)
 		/*Automatically track the feature the player is on unless player is tracking a feature*/
 		if ((!p_ptr->target_set) || (p_ptr->target_who != 0)) feature_kind_track(cave_feat[y1][x1]);
 
-		/* Update the trap detection status, itemlist and monlist */
-		p_ptr->redraw |= (PR_DTRAP | PR_ITEMLIST | PR_MONLIST);
+		/* Update the trap detection status, itemlist and monlist, map, features */
+		p_ptr->redraw |= (PR_DTRAP | PR_ITEMLIST | PR_MONLIST | PR_MAP | PR_FEATURE);
 
-		/* Update the panel and player stealth */
-		p_ptr->update |= (PU_PANEL | PU_STEALTH);
-
-		/* Update the visuals (and monster distances) */
-		p_ptr->update |= (PU_UPDATE_VIEW | PU_DISTANCE);
-
-		/* Window stuff */
-		p_ptr->redraw |= (PR_MAP | PR_FEATURE);
+		/* Update the panel and player stealth, the visuals (and monster distances) */
+		p_ptr->update |= (PU_PANEL | PU_STEALTH | PU_UPDATE_VIEW | PU_DISTANCE);
 	}
 
 	/* Redraw */
