@@ -20,6 +20,9 @@
 #include "angband.h"
 
 
+
+
+
 /*
  * Choose an object kind that seems "appropriate" to the given level
  *
@@ -79,7 +82,7 @@ s16b get_obj_num(int level)
 
 		/* Hack -- prevent embedded chests, but allow them for quests*/
 		if ((object_generation_mode == OB_GEN_MODE_CHEST)
-			&& (k_ptr->tval == TV_CHEST)) continue;
+			    && (k_ptr->tval == TV_CHEST)) continue;
 
 		/* Accept */
 		table[i].prob3 = table[i].prob2;
@@ -103,6 +106,7 @@ s16b get_obj_num(int level)
 		/* Decrement */
 		value = value - table[i].prob3;
 	}
+
 
 	/* Power boost */
 	p = rand_int(100);
@@ -159,6 +163,7 @@ s16b get_obj_num(int level)
 
 
 /*
+ *
  * These attributes include tohit, todam, toac, cost, and pval (charges).
  *
  * Note that "knowing" an object gives you everything that an "awareness"
@@ -188,6 +193,7 @@ void object_known(object_type *o_ptr)
 }
 
 
+
 /*
  * The player is now aware of the effects of the given object.
  */
@@ -205,6 +211,7 @@ void object_aware(object_type *o_ptr)
 	{
 		/* Redraw map */
 		p_ptr->redraw |= (PR_MAP);
+
 	}
 
 	/* If newly aware and squelched, must rearrange stacks */
@@ -221,6 +228,7 @@ void object_aware(object_type *o_ptr)
 }
 
 
+
 /*
  * Something has been "sampled"
  */
@@ -229,6 +237,10 @@ void object_tried(object_type *o_ptr)
 	/* Mark it as tried (even if "aware") */
 	k_info[o_ptr->k_idx].tried = TRUE;
 }
+
+
+
+
 
 
 /*
@@ -278,6 +290,9 @@ void object_prep(object_type *o_ptr, int k_idx)
 	/* Hack -- extract the perfect_balance flag */
 	if (k_ptr->k_flags3 & (TR3_PERFECT_BALANCE)) o_ptr->ident |= (IDENT_PERFECT_BALANCE);
 }
+
+
+
 
 
 /*
@@ -442,11 +457,11 @@ static bool make_artifact_special(object_type *o_ptr)
 
 	int depth_check = ((object_generation_mode) ?  object_level : effective_depth(p_ptr->depth));
 
-	/* no artifacts while making items for stores*/
+	/*no artifacts while making items for stores*/
 	if ((object_generation_mode >= OB_GEN_STORE_HEAD) &&
 		(object_generation_mode <= OB_GEN_STORE_TAIL)) return (FALSE);
 
-	/* no special artifacts as quest rewards */
+	/*no special artifacts as quest rewards */
 	if (object_generation_mode == OB_GEN_MODE_QUEST) return (FALSE);
 
 	/* No artifacts, do nothing */
@@ -665,6 +680,7 @@ s16b charge_wand(object_type *o_ptr, int percent)
 }
 
 
+
 /*
  * Charge a new staff.
  */
@@ -703,7 +719,7 @@ s16b charge_staff(object_type *o_ptr, int percent)
 		case SV_STAFF_BANISHMENT:		pval = randint(2)  + 1; break;
 		case SV_STAFF_EARTHQUAKES:		pval = randint(5)  + 3; break;
 		case SV_STAFF_DESTRUCTION:		pval = randint(3)  + 1; break;
-		case SV_STAFF_MASS_IDENTIFY:	pval = randint(5)  + 5; break;
+		case SV_STAFF_MASS_IDENTIFY:	pval = randint(5) + 5; break;
 		case SV_STAFF_MASS_POLYMORPH:	pval = randint(5)  + 6; break;
 		case SV_STAFF_REMOVE_CURSE:		pval = randint(3)  + 4; break;
 	}
@@ -715,7 +731,6 @@ s16b charge_staff(object_type *o_ptr, int percent)
 	return (pval);
 }
 
-
 /*
  *
  * Determines the theme of a chest.  This function is called
@@ -724,18 +739,18 @@ s16b charge_staff(object_type *o_ptr, int percent)
  */
 static int choose_chest_contents (void)
 {
-	int chest_theme; /* the returned chest theme */
+	int chest_theme; /*the returned chest theme*/
 
-	int minlevel; /* helps keep low level themes from appearing at higher levels */
+	int minlevel; /*helps keep low level themes from appearing at higher levels*/
 
-	int chestlevel; /* random number which determines type of chest theme */
+	int chestlevel; /* random number which determines type of chest theme*/
 
-	int num; /* number used in random section */
+	int num; /*number used in random section*/
 
-	/* keep weaker themes out of deeper levels */
+	/*keep weaker themes out of deeper levels*/
 	minlevel = object_level / 4;
 
-	/*Hack - don't wan't results over 100 to keep dragon armor themed chests rare */
+	/*Hack - don't wan't results over 100 to keep dragon armor themed chests rare*/
 	if ((object_level + minlevel) > 100) num = 100 - minlevel;
 
 	else num = object_level;
@@ -753,7 +768,7 @@ static int choose_chest_contents (void)
 	/* Hack - simpler themes for Moria */
 	if (game_mode == GAME_NPPMORIA)
 	{
-		/* chest theme #1 is treasure, theme 16 is a chest, not used here. */
+		/* chest theme #1 is treasure, theme 16 is a chest, not used here.  */
 		if (chestlevel <= 10)		chest_theme = DROP_TYPE_GOLD;
 		else if (chestlevel <=25)	chest_theme = DROP_TYPE_MORIA_ITEMS;
 		else if (one_in_(3))		chest_theme = DROP_TYPE_MORIA_WEAPONS;
@@ -761,7 +776,7 @@ static int choose_chest_contents (void)
 		else						chest_theme = DROP_TYPE_MORIA_ARMOR_OTHER;
 	}
 
-	/* now determine the chest theme */
+	/*now determine the chest theme*/
 
 	/* chest theme #1 is treasure, theme 16 is a chest, not used here.  */
 	if (chestlevel <= 10) chest_theme = DROP_TYPE_GOLD;
@@ -814,9 +829,8 @@ static int choose_chest_contents (void)
 	 */
 	else chest_theme = DROP_TYPE_DRAGON_ARMOR;
 
-	return (chest_theme);
+	return(chest_theme);
 }
-
 
 /*
  * Apply magic to an item known to be a "weapon"
@@ -832,6 +846,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 
 	int tohit2 = m_bonus(10, level);
 	int todam2 = m_bonus(10, level);
+
 
 	/* Good */
 	if (power > 0)
@@ -867,6 +882,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 		/* Cursed (if "bad") */
 		if (o_ptr->to_h + o_ptr->to_d < 0) o_ptr->ident |= (IDENT_CURSED);
 	}
+
 
 	/* Analyze type */
 	switch (o_ptr->tval)
@@ -928,6 +944,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 
 			break;
 		}
+
 	}
 }
 
@@ -943,6 +960,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 	int toac1 = randint(5) + m_bonus(5, level);
 
 	int toac2 = m_bonus(10, level);
+
 
 	/* Good */
 	if (power > 0)
@@ -975,6 +993,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 		if (o_ptr->to_a < 0) o_ptr->ident |= (IDENT_CURSED);
 	}
 
+
 	/* Analyze type */
 	switch (o_ptr->tval)
 	{
@@ -988,6 +1007,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 		}
 	}
 }
+
 
 
 /*
@@ -1518,9 +1538,9 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power, bool good, bool 
 	}
 }
 
-
 void object_into_artifact(object_type *o_ptr, artifact_type *a_ptr)
 {
+
 	/* Extract the other fields */
 	o_ptr->pval = a_ptr->pval;
 	o_ptr->ac = a_ptr->ac;
@@ -1541,7 +1561,7 @@ void object_into_artifact(object_type *o_ptr, artifact_type *a_ptr)
 		o_ptr->xtra1 = p_ptr->depth;
 	}
 
-	/* hack - mark chest items with a special level so the notes patch
+	/*hack - mark chest items with a special level so the notes patch
 	 * knows where it is coming from.
 	 */
 	else if (object_generation_mode == OB_GEN_MODE_CHEST) o_ptr->xtra1 = CHEST_LEVEL;
@@ -1558,7 +1578,6 @@ void object_into_artifact(object_type *o_ptr, artifact_type *a_ptr)
 	/* Hack -- extract the "perfect balance" flag */
 	if (a_ptr->a_flags3 & (TR3_PERFECT_BALANCE)) o_ptr->ident |= (IDENT_PERFECT_BALANCE);
 }
-
 
 /*
  * Complete the "creation" of an object by applying "magic" to the item
@@ -1632,7 +1651,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 
 	/* Roll for "cursed if not opening a chest" */
 	else if ((rand_int(100) < test_good) && (!interesting) &&
-			 (object_generation_mode != OB_GEN_MODE_CHEST))
+		     (object_generation_mode != OB_GEN_MODE_CHEST))
 	{
 		/* Assume "cursed" */
 		power = -1;
@@ -1649,7 +1668,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 
 	/*
 	 * Get four rolls if good and great flags are true,
-	 * only 2 for quests since they are so repetitive
+	 * only 2 for quests ince they are so repetitive
 	 */
 	if ((good) && (great))
 	{
@@ -1692,6 +1711,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 		/* Done */
 		return;
 	}
+
 
 	/* Apply magic */
 	switch (o_ptr->tval)
@@ -1742,20 +1762,21 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 			break;
 		}
 
-		/* Dragon Armor or shield is always an ego-item */
+		/*Dragon Armor or shield is always an ego-item*/
 		case TV_DRAG_ARMOR:
 		case TV_DRAG_SHIELD:
 		{
-			/* Always great */
+			/*Always great*/
 			power = 2;
 
-			/* Continue until success */
+			/*Continue until success*/
 			while (!make_ego_item(o_ptr, TRUE, TRUE)) continue;
 
-			/* add the power */
+			/*add the power*/
 			a_m_aux_2(o_ptr, lev, power);
 			break;
 		}
+
 
 		case TV_RING:
 		case TV_AMULET:
@@ -1781,9 +1802,9 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 		case TV_PRAYER_BOOK:
 		case TV_DRUID_BOOK:
 		{
-			if ((power > 1) || (power < -1))
+		  	if ((power > 1) || (power < -1))
 			{
-				make_ego_item(o_ptr, (bool)(good || great), great);
+			  	make_ego_item(o_ptr, (bool)(good || great), great);
 			}
 
 			a_m_aux_4(o_ptr, lev, power, good, great);
@@ -1796,6 +1817,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 			break;
 		}
 	}
+
 
 	/* Hack -- analyze ego-items */
 	if (o_ptr->ego_num)
@@ -1815,7 +1837,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 			u32b flag_cur = 0;
 			int x;
 
-			/* Mark what type of extra feature we have here */
+			/*Mark what type of extra feature we have here*/
 			o_ptr->xtra1 = e_ptr->xtra;
 
 			switch (o_ptr->xtra1)
@@ -1843,7 +1865,6 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 					flag_cur = f3;
 					break;
 				}
-
 				case OBJECT_XTRA_TYPE_IMMUNITY:
 				{
 					size = OBJECT_XTRA_SIZE_IMMUNITY;
@@ -1851,7 +1872,6 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 					flag_cur = f2;
 					break;
 				}
-
 				case OBJECT_XTRA_TYPE_STAT_ADD:
 				{
 					size = OBJECT_XTRA_SIZE_STAT_ADD;
@@ -1865,7 +1885,6 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 					if (o_ptr->pval > 6) o_ptr->pval = 6;
 					break;
 				}
-
 				case OBJECT_XTRA_TYPE_SLAY:
 				{
 					size = OBJECT_XTRA_SIZE_SLAY;
@@ -1873,7 +1892,6 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 					flag_cur = f1;
 					break;
 				}
-
 				case OBJECT_XTRA_TYPE_KILL:
 				{
 					size = OBJECT_XTRA_SIZE_KILL;
@@ -1881,7 +1899,6 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 					flag_cur = f1;
 					break;
 				}
-
 				case OBJECT_XTRA_TYPE_BRAND:
 				{
 					size = OBJECT_XTRA_SIZE_BRAND;
@@ -1889,7 +1906,6 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 					flag_cur = f1;
 					break;
 				}
-
 				case OBJECT_XTRA_TYPE_LOW_RESIST:
 				{
 					size = OBJECT_XTRA_SIZE_LOW_RESIST;
@@ -1897,7 +1913,6 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 					flag_cur = f2;
 					break;
 				}
-
 				case OBJECT_XTRA_TYPE_NATIVE:
 				{
 					size = OBJECT_XTRA_SIZE_NATIVE;
@@ -1913,16 +1928,16 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 			/* Mark when there are no more flags to give */
 			max_flags = size;
 
-			/* Check to see if any object already has some of these flags */
+			/*Check to see if any object already has some of these flags*/
 			for (x = 0; x < size; x++)
 			{
-				/* Go to the flag */
+				/*Go to the flag*/
 				u32b current_bit = base << x;
 
-				/* Do we have this flag already? */
+				/* Do we have this flag already?*/
 				if (flag_cur & current_bit)
 				{
-					/* Mark it in xtra2 */
+					/*Mark it in xtra2*/
 					flag = 0x00000001L << x;
 
 					/* Assign the flag */
@@ -1931,6 +1946,8 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 					/* Note how many we have left */
 					max_flags--;
 				}
+
+
 			}
 
 			while (max_flags)
@@ -1947,8 +1964,9 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 				/* Note how many we have left */
 				max_flags--;
 
-				/* Another flag sometimes? */
-				if (!one_in_(EXTRA_FLAG_CHANCE)) break;
+			  	/* Another flag sometimes? */
+			  	if (!one_in_(EXTRA_FLAG_CHANCE)) break;
+
 			}
 		}
 
@@ -1983,7 +2001,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 
 			/* Hack -- obtain pval, unless one has already been assigned */
 			if ((e_ptr->max_pval > 0) && (o_ptr->pval == 0))
-				o_ptr->pval -= randint(e_ptr->max_pval);
+				  o_ptr->pval -= randint(e_ptr->max_pval);
 		}
 
 		/* Hack -- apply extra bonuses if needed */
@@ -1997,17 +2015,17 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 			/* Hack -- obtain pval */
 			if (e_ptr->max_pval > 0)
 			{
-				/* Handle stat pvals differently */
+				/*Handle stat pvals differently*/
 				if (e_ptr->flags1 & TR1_ALL_STATS)
 				{
 					byte bonus = m_bonus(e_ptr->max_pval, lev);
 
-					/* min of 1 */
+					/*min of 1*/
 					if (bonus < 1) bonus = 1;
 
 					o_ptr->pval += bonus;
 
-					/* hard limit */
+					/*hard limit*/
 					if(o_ptr->pval > 6) o_ptr->pval = 6;
 				}
 				else o_ptr->pval += randint(e_ptr->max_pval);
@@ -2023,6 +2041,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 		/* Done */
 		return;
 	}
+
 
 	/* Examine real objects */
 	if (o_ptr->k_idx)
