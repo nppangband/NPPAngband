@@ -105,6 +105,7 @@ s16b poly_r_idx(const monster_type *m_ptr)
 		return (base_idx);
 	}
 
+
 	/* Pick a monster */
 	value = rand_int(total);
 
@@ -121,6 +122,8 @@ s16b poly_r_idx(const monster_type *m_ptr)
 	/* Result */
 	return (table[i].index);
 }
+
+
 
 
 /*
@@ -194,6 +197,7 @@ void delete_monster_idx(int i)
 		delete_object_idx(this_o_idx);
 	}
 
+
 	/* Wipe the Monster */
 	(void)WIPE(m_ptr, monster_type);
 
@@ -231,8 +235,10 @@ static void compact_monsters_aux(int i1, int i2)
 
 	s16b this_o_idx, next_o_idx = 0;
 
+
 	/* Do nothing */
 	if (i1 == i2) return;
+
 
 	/* Old monster */
 	m_ptr = &mon_list[i1];
@@ -337,10 +343,9 @@ void compact_monsters(int size)
 				if ((r_ptr->flags1 & (RF1_QUESTOR)) || (m_ptr->mflag & (MFLAG_QUEST)))
 					mon_lev[i] += MAX_DEPTH * 3;
 
-				/* same with active quest monsters */
+				/*same with active quest monsters*/
 				else if (q_info[quest_num(p_ptr->depth)].mon_idx == m_ptr->r_idx)
 					mon_lev[i] += MAX_DEPTH * 3;
-
 				/* Uniques are protected */
 				else if (r_ptr->flags1 & (RF1_UNIQUE)) mon_lev[i] += MAX_DEPTH * 2;
 
@@ -356,7 +361,7 @@ void compact_monsters(int size)
 			mon_index[i] = i;
 		}
 
-		/* Sort all the monsters by (adjusted) level */
+	/* Sort all the monsters by (adjusted) level */
 		for (i = 0; i < mon_max - 1; i++)
 		{
 			for (j = 0; j < mon_max - 1; j++)
@@ -384,7 +389,6 @@ void compact_monsters(int size)
 		{
 			/* We've deleted enough monsters */
 			if (cnt >= size) break;
-
 			/* Get this monster, using our saved index */
 			m_ptr = &mon_list[mon_index[i]];
 
@@ -435,6 +439,7 @@ void wipe_mon_list(void)
 	for (i = mon_max - 1; i >= 1; i--)
 	{
 		monster_type *m_ptr = &mon_list[i];
+
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Skip dead monsters */
@@ -479,6 +484,7 @@ void wipe_mon_list(void)
 
 	/* Hack -- no more tracking */
 	health_track(0);
+
 }
 
 
@@ -507,6 +513,7 @@ s16b mon_pop(void)
 		return (i);
 	}
 
+
 	/* Recycle dead monsters */
 	for (i = 1; i < mon_max; i++)
 	{
@@ -524,6 +531,7 @@ s16b mon_pop(void)
 		/* Use this monster */
 		return (i);
 	}
+
 
 	/* Warn the player (except during dungeon creation) */
 	if (character_dungeon) msg_print("Too many monsters!");
@@ -566,6 +574,7 @@ errr get_mon_num_prep(void)
 }
 
 
+
 /*
  * Choose a monster race that seems "appropriate" to the given level
  *
@@ -606,21 +615,20 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 
 	quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 	bool quest_level = FALSE;
-	bool quest_active;
 
 	bool native_only = TRUE;
 
 	/* Cache damage to non-native monsters */
 	u16b dam_non_native = f_info[cave_feat[y][x]].dam_non_native;
 
-	/* Get the terrain native flags */
+	/*Get the terrain native flags*/
 	u32b native_flags = f_info[cave_feat[y][x]].f_flags3;
 
-	/* filter out non-terrain flags */
+	/*filter out non-terrain flags*/
 	native_flags &= TERRAIN_MASK;
 
 	/* Check for an active quest */
-	quest_active = quest_themed(q_ptr);
+	bool quest_active = quest_themed(q_ptr);
 	if (quest_active && (guild_quest_level() == p_ptr->depth)) quest_level = TRUE;
 
 	/* Boost the level, but not for quest levels.  That has already been done */
@@ -653,10 +661,8 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 	/*enforce a minimum depth on monsters,
 	 *which slowly drops if no monsters are available.
 	 */
-	if ((!(get_mon_num_hook)) || (quest_level))
-		mindepth = level / 5;
-	else
-		mindepth = level / 7;
+	if ((!(get_mon_num_hook)) || (quest_level)) mindepth = level / 5;
+	else mindepth = level / 7;
 
 	/*
 	 * Hack -- Allow any monster in elemental terrain. -DG-
@@ -720,7 +726,7 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 			{
 				bool do_continue = FALSE;
 
-				/* No player ghosts if the option is set, or not called for */
+				/*No player ghosts if the option is set, or not called for*/
 				if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
 				{
 					if (mp_flags & (MPLACE_NO_GHOST)) continue;
@@ -734,7 +740,7 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 						 (r_ptr->level < 60))	continue;
 				}
 
-				/* Check quests for uniques */
+				/* Check quests for uniques*/
 				for (k = 0; k < z_info->q_max; k++)
 				{
 					if (quest_slot_fixed(k))
@@ -768,16 +774,16 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 			{
 				u32b monster_native = r_ptr->r_native;
 
-				/* Filter out the non-relevant monster native flags */
+				/*Filter out the non-relevant monster native flags*/
 				monster_native &= native_flags;
 
-				/* Not a match */
+				/*Not a match*/
 				if (monster_native != native_flags)
 				{
-					/* On the first try, get native creatures only */
+					/*On the first try, get native creatures only*/
 					if (native_only) continue;
 
-					/* Or else just get a creature that won't be damaged */
+					/*Or else just get a creature that won't be damaged*/
 					else if ((dam_non_native > 0) && !(r_ptr->flags3 & (RF3_FLYING))) continue;
 				}
 			}
@@ -789,12 +795,13 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 			total += table[i].prob3;
 		}
 
-		/* slowly reduce if the mindepth is too high */
+		/*slowly reduce if the mindepth is too high*/
 		if (mindepth <= 6) mindepth --;
 		else mindepth -= 5;
 
-		/* We have gone through at least once */
+		/*We have gone through at least once*/
 		native_only = FALSE;
+
 	}
 
 	while ((total <= 0) && (mindepth > 0));
@@ -814,6 +821,7 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 		/* Decrement */
 		value = value - table[i].prob3;
 	}
+
 
 	/* Power boost */
 	p = rand_int(100);
@@ -868,7 +876,6 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 	return (table[i].index);
 }
 
-
 /*
  * Helper function for display monlist.  Prints the number of creatures, followed
  * by either a singular or plural version of the race name as appropriate.
@@ -915,10 +922,7 @@ static void get_mon_name(char *output_name, size_t max, int r_idx, int in_los)
 	my_strcat(output_name, race_name, max);
 }
 
-
-/*
- * Figure out which monsters to display in the sidebar
- */
+/* Figure out which monsters to display in the sidebar */
 void update_mon_sidebar_list(void)
 {
 	monster_type *m_ptr;
@@ -945,14 +949,14 @@ void update_mon_sidebar_list(void)
 	if (p_ptr->health_who)
 	{
 		/* Must be visible */
-		if (mon_list[p_ptr->health_who].ml)
-		{
-			sidebar_monsters[sidebar_count] = p_ptr->health_who;
-			sidebar_count++;
+	 	if (mon_list[p_ptr->health_who].ml)
+	 	{
+	 		sidebar_monsters[sidebar_count] = p_ptr->health_who;
+	 		sidebar_count++;
 
-			/* We are tracking this one */
-			mon_list[p_ptr->health_who].sidebar = TRUE;
-		}
+	 		/* We are tracking this one */
+	 		mon_list[p_ptr->health_who].sidebar = TRUE;
+	 	}
 	}
 
 	/* Scan the list of monsters on the level */
@@ -980,7 +984,6 @@ void update_mon_sidebar_list(void)
 			adj_count++;
 			continue;
 		}
-
 		/* Projectable ones next */
 		if (m_ptr->project)
 		{
@@ -1027,7 +1030,7 @@ void update_mon_sidebar_list(void)
 
 		sidebar_count++;
 
-		/* paranoia - would only happen if SIDEBAR_MONSTER_MAX was less than 10 */
+		/* paranoia - would only happen if SIDEBAR_MONSTER_MAX was less than 10*/
 		if (sidebar_count >= SIDEBAR_MONSTER_MAX)
 		{
 			/* Release the arrays */
@@ -1197,6 +1200,8 @@ void display_monlist(void)
 		if (!list[m_ptr->r_idx].count) type_count++;
 		if (!list[m_ptr->r_idx].s_attr)
 		{
+
+
 			list[m_ptr->r_idx].s_attr = m_ptr->m_attr ? m_ptr->m_attr : r_ptr->x_attr;
 		}
 
@@ -1211,6 +1216,7 @@ void display_monlist(void)
 
 			/* Check if asleep and increment accordingly */
 			if (m_ptr->m_timed[MON_TMD_SLEEP]) list[m_ptr->r_idx].los_asleep++;
+
 		}
 		/* Not in LOS so increment if asleep */
 		else if (m_ptr->m_timed[MON_TMD_SLEEP]) list[m_ptr->r_idx].asleep++;
@@ -1234,7 +1240,7 @@ void display_monlist(void)
 		/* Clear display and print note */
 		else c_prt(TERM_SLATE, "You see no monsters.", 0, 0);
 		if (!in_term)
-			Term_addstr(-1, TERM_WHITE, "  (Press any key to continue.)");
+		    Term_addstr(-1, TERM_WHITE, "  (Press any key to continue.)");
 
 		/* Free up memory */
 		FREE(list);
@@ -1289,7 +1295,7 @@ void display_monlist(void)
 		}
 	}
 
-	/* Message for monsters in LOS - even if there are none */
+   	/* Message for monsters in LOS - even if there are none */
 	if (!los_count) prt(format("You can see no monsters."), 0, 0);
 	else prt(format("You can see %d monster%s", los_count, (los_count == 1
 		? ":" : "s:")), 0, 0);
@@ -1304,6 +1310,7 @@ void display_monlist(void)
 
 		/* Skip if there are none of these in LOS */
 		if (!in_los) continue;
+
 
 		r_ptr = &r_info[r_idx];
 
@@ -1622,6 +1629,7 @@ void monster_desc(char *desc, size_t max, const monster_type *m_ptr, int mode)
 		my_strcpy(desc, res, max);
 	}
 
+
 	/* Handle visible monsters, "reflexive" request */
 	else if ((mode & 0x02) && (mode & 0x01))
 	{
@@ -1630,6 +1638,7 @@ void monster_desc(char *desc, size_t max, const monster_type *m_ptr, int mode)
 		else if (r_ptr->flags1 & (RF1_MALE)) my_strcpy(desc, "himself", max);
 		else my_strcpy(desc, "itself", max);
 	}
+
 
 	/* Handle all other visible monster requests */
 	else
@@ -1724,11 +1733,14 @@ void lore_probe_monster_aux(int r_idx)
 
 	int i;
 
+	i = randint (3);
+
 	/*learn 2 out of three of their basic flags.....*/
-	switch (randint(3))
+	switch (i)
 	{
 		case 1:
 		{
+
 			l_ptr->r_l_flags1 = r_ptr->flags1;
 			l_ptr->r_l_flags2 = r_ptr->flags2;
 			break;
@@ -1749,46 +1761,49 @@ void lore_probe_monster_aux(int r_idx)
 		}
 	}
 
-	/* probing is now much more informative */
-	switch (randint(4))
+	/*probing is now much more informative*/
+	i = randint (4);
+
+	switch (i)
 	{
 		case 1:
 		{
-			/* learn their breaths, and shrieking, firing arrows, etc..... */
+			/*learn their breaths, and shrieking, firing arrows, etc.....*/
 			l_ptr->r_l_flags4 = r_ptr->flags4;
 			break;
 		}
 
 		case 2:
 		{
-			/* learn many of monster's offensive spells */
+			/*learn many of monster's offensive spells*/
 			l_ptr->r_l_flags5 = r_ptr->flags5;
 			break;
 		}
 
 		case 3:
 		{
-			/* learn many of monster's offensive spells */
+			/*learn many of monster's offensive spells*/
 			l_ptr->r_l_flags6 = r_ptr->flags6;
 			break;
 		}
 
 		default:
 		{
-			/* learn many of their other spells */
+			/*learn many of their other spells*/
 			l_ptr->r_l_flags7 = r_ptr->flags7;
 			break;
 		}
 	}
 
-	/* learn the native terrain one in three times */
+	/*learn the native terrain one in three times*/
 	if (one_in_(3)) l_ptr->r_l_native = r_ptr->r_native;
 
-	/* Hack -- Increase the sightings, and ranged attacks */
+	/* Hack -- Increse the sightings, and ranged attacks */
 	if (l_ptr->sights < MAX_SHORT)	l_ptr->sights += (MAX_SHORT - l_ptr->sights) / 100;
 	if (l_ptr->ranged < MAX_UCHAR)	l_ptr->ranged += (MAX_UCHAR - l_ptr->ranged) / 5;
 
-	switch (randint(3))
+	i = randint (3);
+	switch (i)
 	{
 		case 1:
 		{
@@ -1817,12 +1832,12 @@ void lore_probe_monster_aux(int r_idx)
 		{
 			/* Hack -- know the treasure drops*/
 			l_ptr->drop_gold = l_ptr->drop_item =
-				(((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) +
-				 ((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) +
-				 ((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) +
-				 ((r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) +
-				 ((r_ptr->flags1 & RF1_DROP_90)  ? 1 : 0) +
-				 ((r_ptr->flags1 & RF1_DROP_60)  ? 1 : 0));
+			(((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) +
+	 		 ((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) +
+	  		 ((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) +
+	 		 ((r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) +
+	 		 ((r_ptr->flags1 & RF1_DROP_90)  ? 1 : 0) +
+	 		 ((r_ptr->flags1 & RF1_DROP_60)  ? 1 : 0));
 
 			/* Hack -- but only "valid" drops */
 			if (r_ptr->flags1 & RF1_ONLY_GOLD) l_ptr->drop_item = 0;
@@ -1836,7 +1851,6 @@ void lore_probe_monster_aux(int r_idx)
 
 }
 
-
 /*
  * Learn about a monster (by "probing" it)
  */
@@ -1844,7 +1858,7 @@ void lore_do_probe_monster(int m_idx)
 {
 	monster_type *m_ptr = &mon_list[m_idx];
 
-	/* increase the information */
+	/*increase the information*/
 	lore_probe_monster_aux(m_ptr->r_idx);
 
 	/* Update monster recall window */
@@ -1892,6 +1906,7 @@ void lore_treasure(int m_idx, int num_item, int num_gold)
 		p_ptr->redraw |= (PR_MONSTER);
 	}
 }
+
 
 
 /*
@@ -1946,7 +1961,7 @@ void lore_treasure(int m_idx, int num_item, int num_gold)
  *
  * Monsters which are not on the current panel may be "visible" to
  * the player, and their descriptions will include an "offscreen"
- * reference.  Currently, offscreen monsters cannot be targeted
+ * reference.  Currently, offscreen monsters cannot be targetted
  * or viewed directly, but old targets will remain set.  XXX XXX
  *
  * The player can choose to be disturbed by several things, including
@@ -2094,8 +2109,8 @@ void update_mon(int m_idx, bool full)
 				}
 			}
 
-			/* Use "lite carriers" */
-			if ((r_ptr->flags2 & (RF2_HAS_LIGHT)) &&
+	       /* Use "lite carriers" */
+		    if ((r_ptr->flags2 & (RF2_HAS_LIGHT)) &&
 				!(r_ptr->flags2 & (RF2_INVISIBLE))) easy = is_visible = TRUE;
 
 			/* Use "illumination" */
@@ -2133,6 +2148,7 @@ void update_mon(int m_idx, bool full)
 		}
 	}
 
+
 	/* The monster is now visible */
 	if (is_visible)
 	{
@@ -2148,8 +2164,7 @@ void update_mon(int m_idx, bool full)
 			light_spot(fy, fx);
 
 			/* Update health bar as needed */
-			if ((p_ptr->health_who == m_idx)  || (m_ptr->sidebar))
-				p_ptr->redraw |= (PR_HEALTH | PR_MON_MANA);
+			if ((p_ptr->health_who == m_idx)  || (m_ptr->sidebar)) p_ptr->redraw |= (PR_HEALTH | PR_MON_MANA);
 
 			/* Hack -- Count "fresh" sightings */
 			if (l_ptr->sights < MAX_SHORT) l_ptr->sights++;
@@ -2164,6 +2179,8 @@ void update_mon(int m_idx, bool full)
 				if (!(m_ptr->mflag & (MFLAG_TOWN)) || (p_ptr->lev < 10))
 				{
 					disturb(1, 0);
+
+
 				}
 			}
 
@@ -2200,6 +2217,7 @@ void update_mon(int m_idx, bool full)
 
 			/* Window stuff */
 			p_ptr->redraw |= PR_MONLIST;
+
 		}
 	}
 
@@ -2221,6 +2239,7 @@ void update_mon(int m_idx, bool full)
 					disturb(1, 0);
 				}
 			}
+
 		}
 	}
 
@@ -2245,6 +2264,7 @@ void update_mon(int m_idx, bool full)
 				/* Re-draw monster list window */
 				p_ptr->redraw |= PR_MONLIST;
 			}
+
 		}
 	}
 }
@@ -2268,6 +2288,7 @@ void update_monsters(bool full)
 		/* Update the monster */
 		update_mon(i, full);
 	}
+
 }
 
 
@@ -2324,6 +2345,7 @@ static s16b get_mimic_k_idx(int r_idx)
 			/* 	Handle scrolls first */
 			if (strstr(name, "Scroll"))
 			{
+
 				/* Analyze every object */
 				for (i = 1; i < z_info->k_max; i++)
 				{
@@ -2343,6 +2365,7 @@ static s16b get_mimic_k_idx(int r_idx)
 
 					/*we have a suitable object to mimic*/
 					if ((final_value == 0) || (one_in_(4))) final_value = i;
+
 				}
 
 				/* Mimic a powerful scroll if they are all identified */
@@ -2376,28 +2399,30 @@ static s16b get_mimic_k_idx(int r_idx)
 				/* Skip "empty" objects */
 				if (!k_ptr->name) continue;
 
-				/* skip all non-potions */
+				/*skip all non-potions*/
 				if (k_ptr->tval != TV_POTION) continue;
 
-				/* don't mimic known items */
+				/*don't mimic known items*/
 				if (k_ptr->aware) continue;
 
-				/* skip artifacts, let's not annoy the player */
+				/*skip artifacts, let's not annoy the player*/
 				if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
 
-				/* we have a suitable object to mimic */
+				/*we have a suitable object to mimic*/
 				if ((final_value == 0) || (one_in_(10))) final_value = i;
+
 			}
 
 			/* Mimic a powerful potion if they are all identified */
 			if (!final_value)
 			{
-				switch (randint(5))
+				i = randint(5);
+				switch (i)
 				{
-					case (1):	return (lookup_kind(TV_POTION, SV_POTION_EXPERIENCE));
-					case (2):	return (lookup_kind(TV_POTION, SV_POTION_LIFE));
-					case (3):	return (lookup_kind(TV_POTION, SV_POTION_STAR_HEALING));
-					case (4):	return (lookup_kind(TV_POTION, SV_POTION_RESTORE_MANA));
+					case (1): 	return (lookup_kind(TV_POTION, SV_POTION_EXPERIENCE));
+					case (2): 	return (lookup_kind(TV_POTION, SV_POTION_LIFE));
+					case (3): 	return (lookup_kind(TV_POTION, SV_POTION_STAR_HEALING));
+					case (4): 	return (lookup_kind(TV_POTION, SV_POTION_RESTORE_MANA));
 					default:	return (lookup_kind(TV_POTION, SV_POTION_HEALING));
 				}
 			}
@@ -2415,28 +2440,30 @@ static s16b get_mimic_k_idx(int r_idx)
 				/* Skip "empty" objects */
 				if (!k_ptr->name) continue;
 
-				/* skip all non-rings */
+				/*skip all non-rings*/
 				if (k_ptr->tval != TV_RING) continue;
 
-				/* don't mimic known items */
+				/*don't mimic known items*/
 				if (k_ptr->aware) continue;
 
-				/* skip artifacts, let's not annoy the player */
+				/*skip artifacts, let's not annoy the player*/
 				if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
 
-				/* we have a suitable object to mimic */
+				/*we have a suitable object to mimic*/
 				if ((final_value == 0) || (one_in_(5))) final_value = i;
+
 			}
 
 			/* Mimic a powerful ring if they are all identified */
 			if (!final_value)
 			{
-				switch (randint(5))
+				i = randint(5);
+				switch (i)
 				{
-					case (1):	return (lookup_kind(TV_RING, SV_RING_SPEED));
-					case (2):	return (lookup_kind(TV_RING, SV_RING_SPEED));
-					case (3):	return (lookup_kind(TV_RING, SV_RING_SPEED));
-					case (4):	return (lookup_kind(TV_RING, SV_RING_RESIST_NETHER));
+					case (1): 	return (lookup_kind(TV_RING, SV_RING_SPEED));
+					case (2): 	return (lookup_kind(TV_RING, SV_RING_SPEED));
+					case (3): 	return (lookup_kind(TV_RING, SV_RING_SPEED));
+					case (4): 	return (lookup_kind(TV_RING, SV_RING_RESIST_NETHER));
 					default:	return (lookup_kind(TV_RING, SV_RING_RESIST_POIS));
 				}
 			}
@@ -2455,28 +2482,30 @@ static s16b get_mimic_k_idx(int r_idx)
 				/* Skip "empty" objects */
 				if (!k_ptr->name) continue;
 
-				/* skip all non-staffs */
+				/*skip all non-staffs*/
 				if (k_ptr->tval != TV_STAFF) continue;
 
-				/* don't mimic known items */
+				/*don't mimic known items*/
 				if (k_ptr->aware) continue;
 
-				/* skip artifacts, let's not annoy the player */
+				/*skip artifacts, let's not annoy the player*/
 				if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
 
-				/* we have a suitable object to mimic */
+				/*we have a suitable object to mimic*/
 				if ((final_value == 0) || (one_in_(6))) final_value = i;
+
 			}
 
 			/* Mimic a powerful staff if they are all identified */
 			if (!final_value)
 			{
-				switch (randint(5))
+				i = randint(5);
+				switch (i)
 				{
-					case (1):	return (lookup_kind(TV_STAFF, SV_STAFF_SPEED));
-					case (2):	return (lookup_kind(TV_STAFF, SV_STAFF_DESTRUCTION));
-					case (3):	return (lookup_kind(TV_STAFF, SV_STAFF_HOLINESS));
-					case (4):	return (lookup_kind(TV_STAFF, SV_STAFF_BANISHMENT));
+					case (1): 	return (lookup_kind(TV_STAFF, SV_STAFF_SPEED));
+					case (2): 	return (lookup_kind(TV_STAFF, SV_STAFF_DESTRUCTION));
+					case (3): 	return (lookup_kind(TV_STAFF, SV_STAFF_HOLINESS));
+					case (4): 	return (lookup_kind(TV_STAFF, SV_STAFF_BANISHMENT));
 					default:	return (lookup_kind(TV_STAFF, SV_STAFF_MASS_IDENTIFY));
 				}
 			}
@@ -2495,18 +2524,19 @@ static s16b get_mimic_k_idx(int r_idx)
 				/* Skip "empty" objects */
 				if (!k_ptr->name) continue;
 
-				/* skip all non-mushrooms */
+				/*skip all non-mushrooms*/
 				if (k_ptr->tval != TV_FOOD) continue;
 				if (k_ptr->sval >= SV_FOOD_RATION) continue;
 
-				/* don't mimic known items */
+				/*don't mimic known items*/
 				if (k_ptr->aware) continue;
 
-				/* skip artifacts, let's not annoy the player */
+				/*skip artifacts, let's not annoy the player*/
 				if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
 
-				/* we have a suitable object to mimic */
+				/*we have a suitable object to mimic*/
 				if ((final_value == 0) || (one_in_(5))) final_value = i;
+
 			}
 
 			/* Mimic a good mushroom if they are all identified */
@@ -2515,10 +2545,10 @@ static s16b get_mimic_k_idx(int r_idx)
 				i = randint(5);
 				switch (i)
 				{
-					case (1):	return (lookup_kind(TV_FOOD, SV_FOOD_RESTORING));
-					case (2):	return (lookup_kind(TV_FOOD, SV_FOOD_CURE_SERIOUS));
-					case (3):	return (lookup_kind(TV_FOOD, SV_FOOD_BLINDNESS));
-					case (4):	return (lookup_kind(TV_FOOD, SV_FOOD_RESTORE_STR));
+					case (1): 	return (lookup_kind(TV_FOOD, SV_FOOD_RESTORING));
+					case (2): 	return (lookup_kind(TV_FOOD, SV_FOOD_CURE_SERIOUS));
+					case (3): 	return (lookup_kind(TV_FOOD, SV_FOOD_BLINDNESS));
+					case (4): 	return (lookup_kind(TV_FOOD, SV_FOOD_RESTORE_STR));
 					default:	return (lookup_kind(TV_FOOD, SV_FOOD_RESTORE_CON));
 				}
 			}
@@ -2526,7 +2556,7 @@ static s16b get_mimic_k_idx(int r_idx)
 			return(final_value);
 		}
 
-		/* rods and wands */
+		/*rods and wands*/
 		case '-':
 		{
 			cptr name = r_ptr->name_full;
@@ -2541,28 +2571,30 @@ static s16b get_mimic_k_idx(int r_idx)
 					/* Skip "empty" objects */
 					if (!k_ptr->name) continue;
 
-					/* skip all non-wands */
+					/*skip all non-wands*/
 					if (k_ptr->tval != TV_WAND) continue;
 
-					/* don't mimic known items */
+					/*don't mimic known items*/
 					if (k_ptr->aware) continue;
 
-					/* skip artifacts, let's not annoy the player */
+					/*skip artifacts, let's not annoy the player*/
 					if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
 
-					/* we have a suitable object to mimic */
+					/*we have a suitable object to mimic*/
 					if ((final_value == 0) || (one_in_(5))) final_value = i;
+
 				}
 
 				/* Mimic a powerful wand if they are all identified */
 				if (!final_value)
 				{
-					switch (randint(5))
+					i = randint(5);
+					switch (i)
 					{
-						case (1):	return (lookup_kind(TV_WAND, SV_WAND_TELEPORT_AWAY));
-						case (2):	return (lookup_kind(TV_WAND, SV_WAND_DRAGON_FIRE));
-						case (3):	return (lookup_kind(TV_WAND, SV_WAND_DRAGON_COLD));
-						case (4):	return (lookup_kind(TV_WAND, SV_WAND_TELEPORT_AWAY));
+						case (1): 	return (lookup_kind(TV_WAND, SV_WAND_TELEPORT_AWAY));
+						case (2): 	return (lookup_kind(TV_WAND, SV_WAND_DRAGON_FIRE));
+						case (3): 	return (lookup_kind(TV_WAND, SV_WAND_DRAGON_COLD));
+						case (4): 	return (lookup_kind(TV_WAND, SV_WAND_TELEPORT_AWAY));
 						default:	return (lookup_kind(TV_WAND, SV_WAND_DRAGON_BREATH));
 					}
 				}
@@ -2580,10 +2612,10 @@ static s16b get_mimic_k_idx(int r_idx)
 					/* Skip "empty" objects */
 					if (!k_ptr->name) continue;
 
-					/* skip all non-rods */
+					/*skip all non-rods*/
 					if (k_ptr->tval != TV_ROD) continue;
 
-					/* don't mimic known items */
+					/*don't mimic known items*/
 					if (k_ptr->aware) continue;
 
 					/*skip artifacts, let's not annoy the player*/
@@ -2611,7 +2643,7 @@ static s16b get_mimic_k_idx(int r_idx)
 				return(final_value);
 			}
 
-			/* can be 0 if all items are identified */
+			/*can be 0 if all items are identified*/
 			return(final_value);
 		}
 
@@ -2636,17 +2668,19 @@ static s16b get_mimic_k_idx(int r_idx)
 
 				/*we have a suitable object to mimic*/
 				if ((final_value == 0) || (one_in_(5))) final_value = i;
+
 			}
 
 			/* Mimic a good amulet if they are all identified */
 			if (!final_value)
 			{
-				switch (randint(5))
+				i = randint(5);
+				switch (i)
 				{
-					case (1):	return (lookup_kind(TV_AMULET, SV_AMULET_THE_MAGI));
-					case (2):	return (lookup_kind(TV_AMULET, SV_AMULET_DEVOTION));
-					case (3):	return (lookup_kind(TV_AMULET, SV_AMULET_WEAPONMASTERY));
-					case (4):	return (lookup_kind(TV_AMULET, SV_AMULET_TRICKERY));
+					case (1): 	return (lookup_kind(TV_AMULET, SV_AMULET_THE_MAGI));
+					case (2): 	return (lookup_kind(TV_AMULET, SV_AMULET_DEVOTION));
+					case (3): 	return (lookup_kind(TV_AMULET, SV_AMULET_WEAPONMASTERY));
+					case (4): 	return (lookup_kind(TV_AMULET, SV_AMULET_TRICKERY));
 					default:	return (lookup_kind(TV_AMULET, SV_AMULET_RESIST));
 				}
 			}
@@ -2668,16 +2702,16 @@ static s16b get_mimic_k_idx(int r_idx)
 		default: return (0);
 	}
 
+
 	/* Result */
 	return (0);
 }
 
 
-/*
- * Place an mimic object in the dungeon
- */
+/* Place an mimic object in the dungeon */
 static bool place_mimic_object(int y, int x, int r_idx)
 {
+
 	s16b k_idx = get_mimic_k_idx(r_idx);
 	object_type object_type_body;
 	object_type *o_ptr = &object_type_body;
@@ -2744,6 +2778,7 @@ s16b monster_carry(int m_idx, object_type *j_ptr)
 		}
 	}
 
+
 	/* Make an object */
 	o_idx = o_pop();
 
@@ -2778,7 +2813,6 @@ s16b monster_carry(int m_idx, object_type *j_ptr)
 	return (o_idx);
 }
 
-
 /*
  * Helper function for monster_swap.  When a player is being moved,
  * returns true if the old terrain is a different terrain type than the new
@@ -2799,7 +2833,6 @@ static bool player_terrain_changed(int y1, int x1, int y2, int x2)
 
 	return(FALSE);
 }
-
 
 /*
  * Swap the players/monsters (if any) at two locations XXX XXX XXX
@@ -2909,7 +2942,7 @@ void monster_swap(int y1, int x1, int y2, int x2)
 	/* Player 2 */
 	else if (m2 < 0)
 	{
-		/* Check if we need to update the status line */
+		/* Check if we need to update the statusline */
 		if (player_terrain_changed(y1, x1, y2, x2)) p_ptr->redraw |= (PR_STATUS);
 
 		/* Move player */
@@ -2952,6 +2985,7 @@ void monster_swap(int y1, int x1, int y2, int x2)
  */
 bool player_place(int y, int x)
 {
+
 	/* Paranoia XXX XXX */
 	if (cave_m_idx[y][x] != 0) return (FALSE);
 
@@ -2971,7 +3005,6 @@ bool player_place(int y, int x)
 	/* Success */
 	return (TRUE);
 }
-
 
 /*
  * Hide a monster in terrain, if possible
@@ -3031,6 +3064,7 @@ void monster_hide(monster_type *m_ptr)
 			{
 				msg_c_format(MSG_HIDE_UNHIDE, "%^s hides in the %s.", m_name, feat_name);
 			}
+
 		}
 
 		/* Mark the monster */
@@ -3052,7 +3086,6 @@ void monster_hide(monster_type *m_ptr)
 		}
 	}
 }
-
 
 /*
  * Unhide a monster in terrain, if possible
@@ -3175,7 +3208,7 @@ s16b monster_place(int y, int x, monster_type *n_ptr)
 			m_ptr->mflag |= (MFLAG_FLYING);
 		}
 
-		/* Count racial occurrences */
+		/* Count racial occurances */
 		r_ptr->cur_num++;
 
 		/* Place as hidden as appropriate */
@@ -3183,12 +3216,12 @@ s16b monster_place(int y, int x, monster_type *n_ptr)
 
 		/* Update the monster */
 		update_mon(m_idx, TRUE);
+
 	}
 
 	/* Result */
 	return (m_idx);
 }
-
 
 /*
  * Determine if a town-dweller is not a threat.
@@ -3219,16 +3252,14 @@ static bool no_threat(const monster_race *r_ptr)
 
 		/* Can steal from the character */
 		if ((effect == RBE_EAT_GOLD) || (effect == RBE_EAT_ITEM)) return (FALSE);
+
 	}
 
 	/* Harmless */
 	return (TRUE);
 }
 
-
-/*
- * calculate the monster_speed of a monster at a given location
- */
+/*calculate the monster_speed of a monster at a given location*/
 void calc_monster_speed(int y, int x)
 {
 	int speed, i;
@@ -3278,6 +3309,7 @@ void calc_monster_speed(int y, int x)
 }
 
 
+
 /*
  * Attempt to place a monster of the given race at the given location.
  *
@@ -3299,6 +3331,7 @@ void calc_monster_speed(int y, int x)
  */
 static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 {
+
 	monster_race *r_ptr;
 
 	monster_type *n_ptr;
@@ -3388,6 +3421,7 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 		return (FALSE);
 	}
 
+
 	/* Depth monsters may NOT be created out of depth */
 	if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (effective_depth(p_ptr->depth) < r_ptr->level))
 	{
@@ -3410,6 +3444,7 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	 */
 	if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
 	{
+
 		if (!prepare_ghost(r_idx))
 		{
 			return (FALSE);
@@ -3444,7 +3479,7 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	{
 		n_ptr->maxhp = (r_ptr->hdice * r_ptr->hside);
 	}
-	/*assign hitpoints using dice rolls */
+	/*assign hitpoints using dice rolls*/
 	else
 	{
 		n_ptr->maxhp = damroll(r_ptr->hdice, r_ptr->hside);
@@ -3459,7 +3494,9 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	/* And start out fully healthy */
 	n_ptr->hp = n_ptr->maxhp;
 
-	/* 75% non-unique monsters vary their speed */
+
+
+	/* 75% non-unique monsters vary their speed*/
 	if (!(r_ptr->flags1 & (RF1_UNIQUE)))
 	{
 		if (!(one_in_(4)))
@@ -3469,6 +3506,7 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 			else n_ptr->mflag |= (MFLAG_FASTER);
 		}
 	}
+
 
 	/* Force monster to wait for player */
 	if (r_ptr->flags1 & (RF1_FORCE_SLEEP))
@@ -3607,10 +3645,7 @@ static bool place_mimic_near(int y, int x, int r_idx, bool message, bool questor
 	return (success);
 }
 
-
-/*
- * reveal a mimic, re-light the spot, and print a message if asked for
- */
+/*reveal a mimic, re-light the spot, and print a message if asked for*/
 void reveal_mimic(int o_idx, bool message)
 {
 	/* Get the object */
@@ -3632,6 +3667,7 @@ void reveal_mimic(int o_idx, bool message)
 }
 
 
+
 /*
  * Maximum size of a group of monsters
  */
@@ -3645,7 +3681,7 @@ void reveal_mimic(int o_idx, bool message)
  */
 static bool place_monster_group(int y, int x, int r_idx, bool slp, s16b group_size)
 {
-	monster_race *r_ptr = &r_info[r_idx];
+ 	monster_race *r_ptr = &r_info[r_idx];
 
 	int old, n, i;
 	int start;
@@ -3653,19 +3689,19 @@ static bool place_monster_group(int y, int x, int r_idx, bool slp, s16b group_si
 
 	int hack_n = 0;
 
-	byte hack_y[GROUP_MAX];
-	byte hack_x[GROUP_MAX];
+ 	byte hack_y[GROUP_MAX];
+ 	byte hack_x[GROUP_MAX];
 
 	/* Hard monsters, smaller groups */
-	if (r_ptr->level > effective_depth(p_ptr->depth))
-	{
+ 	if (r_ptr->level > effective_depth(p_ptr->depth))
+ 	{
 		reduce = (r_ptr->level - effective_depth(p_ptr->depth)) / 2;
 		group_size -= randint(reduce);
-	}
+ 	}
 
 	if (group_size < 2) group_size = 2;
 
-	/* Maximum size */
+ 	/* Maximum size */
 	if (group_size > GROUP_MAX) group_size = GROUP_MAX;
 
 	/* Save the rating */
@@ -3741,6 +3777,8 @@ static bool place_monster_okay(int r_idx)
 }
 
 
+
+
 /*
  * Attempt to place an escort of monsters around the given location
  */
@@ -3783,6 +3821,7 @@ static void place_monster_escort(int y, int x, int leader_idx, bool slp)
 	/* Build monster table, get index of first escort */
 	escort_idx = get_mon_num(escort_monster_level, y, x, (MPLACE_NO_MIMIC | MPLACE_NO_GHOST));
 
+
 	while (!escort_idx)
 	{
 		/* Build monster table, get index of first escort */
@@ -3794,6 +3833,7 @@ static void place_monster_escort(int y, int x, int leader_idx, bool slp)
 		/* Avoid a game freeze if escorts aren't possible*/
 		else break;
 	}
+
 
 	/* Start on the monster */
 	hack_n = 1;
@@ -3994,6 +4034,8 @@ bool alloc_monster(int dis, byte mp_flags)
 }
 
 
+
+
 /*
  * Hack -- the "type" of the current "summon specific"
  */
@@ -4023,49 +4065,52 @@ static bool summon_specific_okay(int r_idx)
 		case SUMMON_ANT:
 		{
 			okay = ((r_ptr->d_char == 'a') &&
-					!(r_ptr->flags1 & (RF1_UNIQUE)));
+				!(r_ptr->flags1 & (RF1_UNIQUE)));
  			break;
  		}
+
 
 		case SUMMON_SPIDER:
 		{
 			okay = ((r_ptr->d_char == 'S') &&
-					!(r_ptr->flags1 & (RF1_UNIQUE)));
+			        !(r_ptr->flags1 & (RF1_UNIQUE)));
 			break;
 		}
 
 		case SUMMON_HOUND:
 		{
 			okay = (((r_ptr->d_char == 'C') || (r_ptr->d_char == 'Z')) &&
-					!(r_ptr->flags1 & (RF1_UNIQUE)));
+			        !(r_ptr->flags1 & (RF1_UNIQUE)));
 			break;
 		}
 
 		case SUMMON_HYDRA:
 		{
 			okay = ((r_ptr->d_char == 'M') &&
-					!(r_ptr->flags1 & (RF1_UNIQUE)));
+			        !(r_ptr->flags1 & (RF1_UNIQUE)));
 			break;
 		}
 
 		case SUMMON_AINU:
 		{
 			okay = ((r_ptr->d_char == 'A') &&
-					!(r_ptr->flags1 & (RF1_UNIQUE)));
+				!(r_ptr->flags1 & (RF1_UNIQUE)));
+
 			break;
 		}
 
 		case SUMMON_DEMON:
 		{
 			okay = ((r_ptr->flags3 & (RF3_DEMON)) &&
-					!(r_ptr->flags1 & (RF1_UNIQUE)));
+				!(r_ptr->flags1 & (RF1_UNIQUE)));
 			break;
 		}
+
 
 		case SUMMON_UNDEAD:
 		{
 			okay = ((r_ptr->flags3 & (RF3_UNDEAD)) &&
-					!(r_ptr->flags1 & (RF1_UNIQUE)));
+				!(r_ptr->flags1 & (RF1_UNIQUE)));
 
 			break;
 		}
@@ -4073,7 +4118,7 @@ static bool summon_specific_okay(int r_idx)
 		case SUMMON_DRAGON:
 		{
 			okay = ((r_ptr->flags3 & (RF3_DRAGON)) &&
-					!(r_ptr->flags1 & (RF1_UNIQUE)));
+				!(r_ptr->flags1 & (RF1_UNIQUE)));
 			break;
 		}
 
@@ -4087,10 +4132,11 @@ static bool summon_specific_okay(int r_idx)
 		case SUMMON_HI_UNDEAD:
 		{
 			okay = ((r_ptr->d_char == 'L') ||
-					(r_ptr->d_char == 'V') ||
-					(r_ptr->d_char == 'W'));
+			        (r_ptr->d_char == 'V') ||
+			        (r_ptr->d_char == 'W'));
 			break;
 		}
+
 
 		case SUMMON_HI_DRAGON:
 		{
@@ -4101,7 +4147,7 @@ static bool summon_specific_okay(int r_idx)
 		case SUMMON_WRAITH:
 		{
 			okay = ((r_ptr->d_char == 'W') &&
-					(r_ptr->flags1 & (RF1_UNIQUE)));
+			        (r_ptr->flags1 & (RF1_UNIQUE)));
 			break;
 		}
 
@@ -4118,6 +4164,7 @@ static bool summon_specific_okay(int r_idx)
 			break;
 		}
 
+
 		case SUMMON_KIN:
 		{
 			okay = ((r_ptr->d_char == summon_kin_type) &&
@@ -4128,7 +4175,7 @@ static bool summon_specific_okay(int r_idx)
 		case SUMMON_ANIMAL:
 		{
 			okay = ((r_ptr->flags3 & (RF3_ANIMAL)) &&
-					!(r_ptr->flags1 & (RF1_UNIQUE)));
+			        !(r_ptr->flags1 & (RF1_UNIQUE)));
 			break;
 		}
 
@@ -4141,6 +4188,7 @@ static bool summon_specific_okay(int r_idx)
 				   (strstr(r_ptr->name_full, "Tom" ))));
 			break;
 		}
+
 
 		case SUMMON_THIEF:
 		{
@@ -4161,12 +4209,12 @@ static bool summon_specific_okay(int r_idx)
 		{
 			break;
 		}
+
 	}
 
 	/* Result */
 	return (okay);
 }
-
 
 /*
  * Attempt to summon creatures who are already on the level.
@@ -4272,7 +4320,7 @@ bool summon_specific(int y1, int x1, int lev, int type, byte mp_flags)
 {
 	int i, x, y, r_idx;
 
-	/* No summoning on various levels, unless the override flag is present
+	/* No summoning on verious levels, unless the override flag is present
 	 * Override is used for actions such as for reading scrolls of summon monster or wands of polymorph
 	 */
 	if ((*dun_cap->limited_level_summoning)())
@@ -4338,19 +4386,20 @@ bool summon_specific(int y1, int x1, int lev, int type, byte mp_flags)
 }
 
 
+
 /*
  * Let the given monster attempt to reproduce.
  *
  * Note that "reproduction" REQUIRES empty space.
  *
- * Override is to ensure that the cloning happens on levels where multiplication is restricted
+ * Override is to ensure that the cloning happens on levels where multipication is restricted
  */
 bool multiply_monster(int m_idx, bool override)
 {
 	monster_type *m_ptr = &mon_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	byte mon_flags = 0;
+	byte mon_flags = 0L;
 
  	int i, y, x;
 
@@ -4396,7 +4445,6 @@ bool multiply_monster(int m_idx, bool override)
  	return (result);
 }
 
-
 /*
  * The NULL-terminated array of string actions used to format stacked messages.
  * Singular and plural modifiers are encoded in the same string. Example:
@@ -4411,23 +4459,23 @@ bool multiply_monster(int m_idx, bool override)
 static const char *msg_repository[MAX_MON_MSG + 1] =
 {
 	/* Dummy action */
-	"[is|are] hurt.",			/* MON_MSG_NONE */
+	"[is|are] hurt.",    		/* MON_MSG_NONE */
 
 	/* From message_pain */
 	"[is|are] unharmed.",		/* MON_MSG_UNHARMED  */
 	"barely notice[s].",		/* MON_MSG_BARELY_NOTICE  */
-	"flinch[es].",				/* MON_MSG_FLINCH */
+	"flinch[es].",				/*  MON_MSG_FLINCH */
 	"squelch[es].",				/* MON_MSG_SQUELCH  */
 	"quiver[s] in pain.",		/* MON_MSG_QUIVER  */
-	"writhe[s] about.",			/* MON_MSG_WRITHE_ABOUT */
+	"writhe[s] about.",			/*  MON_MSG_WRITHE_ABOUT */
 	"writhe[s] in agony.",		/* MON_MSG_WRITHE_IN_AGONY  */
 	"jerk[s].",					/* MON_MSG_JERK  */
-	"jerk[s] limply.",			/* MON_MSG_JERK_LIMPLY */
+	"jerk[s] limply.",			/*  MON_MSG_JERK_LIMPLY */
 	"jerk[s] in pain.",			/* MON_MSG_JERK_IN_PAIN  */
 	"jerk[s] in agony.",		/* MON_MSG_JERK_IN_AGONY  */
 	"jerk[s] feebly.", 			/* MON_MSG_JERK_FEEBLY */
-	"shrug[s] off the attack.",	/* MON_MSG_SHRUG_OFF */
-	"snarl[s].",				/* MON_MSG_SNARL */
+	"shrug[s] off the attack.",  /*  MON_MSG_SHRUG_OFF */
+	"snarl[s].",				/*  MON_MSG_SNARL */
 	"snarl[s] with pain.",		/* MON_MSG_SNARL_WITH_PAIN  */
 	"howl[s] in pain.",			/* MON_MSG_HOWL_IN_PAIN  */
 	"howl[s] in agony.",		/* MON_MSG_HOWL_IN_AGONY  */
@@ -4470,8 +4518,8 @@ static const char *msg_repository[MAX_MON_MSG + 1] =
 	"scream[s] in agony.",		/* MON_MSG_SCREAM_IN_AGONY  */
 	"[is|are] sterilized.",		/* MON_MSG_STERILIZE  */
 
-	/* From project_m */
-	"die[s].",					/* MON_MSG_DIE  */
+	/* From project_m */ 		/* MON_MSG_DIE */
+	"die[s].",   				/* MON_MSG_DIE  */
 	"[is|are] destroyed.",		/* MON_MSG_DESTROYED */
 	"[is|are] embedded in the wall.",	/* MON_MSG_BURIED_ROCK */
 	"resist[s] a lot.",			/* MON_MSG_RESIST_A_LOT */
@@ -4490,42 +4538,44 @@ static const char *msg_repository[MAX_MON_MSG + 1] =
 	"lose[s] some skin!",		/* MON_MSG_LOSE_SKIN */
 	"dissolve[s]!",				/* MON_MSG_DISSOLVE */
 	"catch[es] fire!",			/* MON_MSG_CATCH_FIRE */
-	"[is|are] badly frozen.",	/* MON_MSG_BADLY_FROZEN */
-	"[is|are] badly burned.",	/* MON_MSG_BADLY_BURNED */
-	"[is|are] severely poisoned.",	/* MON_MSG_BADLY_POISONED */
+	"[is|are] badly frozen.", 	 /* MON_MSG_BADLY_FROZEN */
+	"[is|are] badly burned.", 	 /* MON_MSG_BADLY_BURNED */
+	"[is|are] severely poisoned.", 	 /* MON_MSG_BADLY_POISONED */
 	"shudder[s].",				/* MON_MSG_SHUDDER */
 	"become[s] aware of your crafty abilities.",/* MON_MSG_AWARE_OF_CRAFTY_ABILITIES */
 	"take[s] heed of your cunning tactics.",/* MON_MSG_AWARE_OF_CUNNING_TACTICS  */
-	"sense[s] your crafty abilities.",	/* MON_MSG_SENSE_CRAFTY_ABILITIES */
+	"sense[s] your crafty abilities.",  /* MON_MSG_SENSE_CRAFTY_ABILITIES */
 	"sense[s] you are a cunning foe.",	/* MON_MSG_SENSE_CUNNING_FOE */
 	"change[s]!",				/* MON_MSG_CHANGE */
 	"disappear[s]!",			/* MON_MSG_DISAPPEAR */
-	"[is|are] even more stunned.",	/* MON_MSG_MORE_DAZED */
+	"[is|are] even more stunned.",		/* MON_MSG_MORE_DAZED */
 	"[is|are] stunned.",		/* MON_MSG_DAZED*/
 	"[is|are] no longer stunned.",	/* MON_MSG_NOT_DAZED */
 	"[is|are] more confused.",	/* MON_MSG_MORE_CONFUSED */
 	"[is|are] confused.",		/* MON_MSG_CONFUSED */
 	"[is|are] no longer confused.",/* MON_MSG_NOT_CONFUSED */
-	"[is|are] more slowed.",	/* MON_MSG_MORE_SLOWED */
+	"[is|are] more slowed.",		/* MON_MSG_MORE_SLOWED */
 	"[is|are] slowed.",			/* MON_MSG_SLOWED */
 	"speed[s] up.",				/* MON_SNG_NOT_SLOWED */
-	"[is|are] more hasted.",	/* MON_MSG_MORE_HASTED */
+	"[is|are] more hasted.",		/* MON_MSG_MORE_HASTED */
 	"[is|are] hasted.",			/* MON_MSG_HASTED */
 	"[is|are] no longer hasted.",/* MON_MSG_NOT_HASTED */
 	"[is|are] more terrified!",	/* MON_MSG_MORE_AFRAID */
 	"flee[s] in terror!",		/* MON_MSG_FLEE_IN_TERROR */
 	"[is|are] no longer afraid.",/* MON_MSG_NOT_AFRAID */
 	"~You hear [a|several] scream[|s] of agony!",/* MON_MSG_MORIA_DEATH */
-	"disintegrate[s]!",			/* MON_MSG_DISENTEGRATES */
-	"melt[s] away.",			/* MON_MSG_MELTS_AWAY */
-	"freeze[s] and shatter[s].",/* MON_MSG_FREEZE_SHATTER */
-	"choke[s] and die[s].",		/* MON_MSG_CHOKE_DIE */
+	"disintegrate[s]!",		/* MON_MSG_DISENTEGRATES */
+	"melt[s] away.",		/* MON_MSG_MELTS_AWAY */
+	"freeze[s] and shatter[s].",  /* MON_MSG_FREEZE_SHATTER */
+	"choke[s] and die[s].",  /* MON_MSG_CHOKE_DIE */
 	"lose[s] some mana!",		/* MON_MSG_MANA_DRAIN */
-	"~There [is|are] [a|several] mimic[|s]!",	/* MON_MSG_MIMIC_REVEAL */
+	"~There [is|are] [a|several] mimic[|s]!",		/* MON_MSG_MIMIC_REVEAL */
 	"appear[s]!",				/* MON_MSG_MIMIC_APPEARS */
+
 
 	NULL						/* MAX_MON_MSG */
 };
+
 
 
 /*
@@ -4792,12 +4842,13 @@ void message_pain(int m_idx, int dam)
 }
 
 
+
+
 #define SINGULAR_MON	1
 #define PLURAL_MON		2
 
-
 /*
- * Returns a pointer to a statically allocated string containing a formatted
+ * Returns a pointer to a statically allocatted string containing a formatted
  * message based on the given message code and the quantity flag.
  * The contents of the returned value will change with the next call
  * to this function
@@ -4900,7 +4951,6 @@ static void play_mon_msg_sound(u16b r_idx, byte msg_code)
 	}
 }
 
-
 /*
  * Tracks which monster has had which pain message stored, so redundant messages
  * don't happen due to monster attacks hitting other monsters.
@@ -4927,6 +4977,7 @@ static bool redundant_monster_message(int m_idx, int msg_code)
 
 	return (FALSE);
 }
+
 
 
 /*
@@ -5128,7 +5179,7 @@ void flush_monster_messages(void)
 			if (mon_msg[i].mon_flags & 0x02) my_strcat(buf, " (offscreen)", sizeof(buf));
 
 			/* Add the separator */
-			my_strcat(buf, " ", sizeof(buf));
+		    my_strcat(buf, " ", sizeof(buf));
 		}
 
 		/* Append the action to the message */
@@ -5181,6 +5232,7 @@ void flush_monster_messages(void)
  	/* Analyze the knowledge */
  	switch (what)
  	{
+
 		/* Slow/paralyze attacks learn about free action and saving throws */
 		case LRN_FREE_SAVE:
  		{
@@ -5213,7 +5265,7 @@ void flush_monster_messages(void)
  			break;
  		}
 
-		/* Electrical attacks learn about Electrical resists and immunities */
+		/* Electircal attacks learn about Electrical resists and immunities */
 		case LRN_ELEC:
  		{
  			if (p_ptr->state.resist_elec) m_ptr->smart |= (SM_RES_ELEC);
@@ -5401,7 +5453,7 @@ void flush_monster_messages(void)
 			break;
 		}
 
-		/* Ice attacks learn about sound/shards/cold resists and cold immunity */
+		/* Ice attacks learn aboyt sound/shards/cold resists and cold immunity */
 		case LRN_ICE:
 		{
 			if (p_ptr->state.resist_cold) m_ptr->smart |= (SM_RES_COLD);
@@ -5433,7 +5485,7 @@ void flush_monster_messages(void)
 		 }
 
 		/*
-		 * Some sounds attacks learn about sound resistance only
+		 * Some sounds attacks learna about sound resistance only
 		 * Others (above) do more
 		 */
 		case LRN_SOUND2:
@@ -5498,4 +5550,3 @@ void flush_monster_messages(void)
 		}
 	}
 }
-
