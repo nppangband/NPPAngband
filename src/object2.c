@@ -734,7 +734,7 @@ s16b charge_staff(object_type *o_ptr, int percent)
 /*
  *
  * Determines the theme of a chest.  This function is called
- * when the chest is being created. JG
+ *  when the chest is being created. JG
  *
  */
 static int choose_chest_contents (void)
@@ -769,11 +769,11 @@ static int choose_chest_contents (void)
 	if (game_mode == GAME_NPPMORIA)
 	{
 		/* chest theme #1 is treasure, theme 16 is a chest, not used here.  */
-		if (chestlevel <= 10)		chest_theme = DROP_TYPE_GOLD;
-		else if (chestlevel <=25)	chest_theme = DROP_TYPE_MORIA_ITEMS;
-		else if (one_in_(3))		chest_theme = DROP_TYPE_MORIA_WEAPONS;
-		else if (one_in_(2))		chest_theme = DROP_TYPE_MORIA_ARMOR_BODY;
-		else						chest_theme = DROP_TYPE_MORIA_ARMOR_OTHER;
+		if (chestlevel <= 10) 	chest_theme = DROP_TYPE_GOLD;
+		else if (chestlevel <=25) chest_theme = DROP_TYPE_MORIA_ITEMS;
+		else if (one_in_(3)) 	chest_theme = DROP_TYPE_MORIA_WEAPONS;
+		else if (one_in_(2)) 	chest_theme = DROP_TYPE_MORIA_ARMOR_BODY;
+		else 					chest_theme = DROP_TYPE_MORIA_ARMOR_OTHER;
 	}
 
 	/*now determine the chest theme*/
@@ -828,6 +828,8 @@ static int choose_chest_contents (void)
 	 * dragon armor scale mail.
 	 */
 	else chest_theme = DROP_TYPE_DRAGON_ARMOR;
+
+
 
 	return(chest_theme);
 }
@@ -2737,7 +2739,6 @@ static bool kind_is_alchemy(int k_idx)
 			if (k_ptr->sval == SV_POTION_RES_DEX) return (TRUE);
 			if (k_ptr->sval == SV_POTION_RES_CON) return (TRUE);
 			if (k_ptr->sval == SV_POTION_RES_CHR) return (TRUE);
-			break;
 		}
 
 	}
@@ -3248,7 +3249,6 @@ static bool kind_is_headgear(int k_idx)
 	return (FALSE);
 }
 
-
 /*
  * Hack -- determine if a template is wearable armor (all types).
  *
@@ -3305,7 +3305,6 @@ static bool kind_is_moria_armor_body(int k_idx)
 	/* Assume not armor */
 	return (FALSE);
 }
-
 
 /*
  * Hack -- determine if a template is wearable armor (all types).
@@ -3867,7 +3866,6 @@ static bool kind_is_jewelry(int k_idx)
 	return (FALSE);
 }
 
-
 /*
  * Hack -- determine if a rods/wands/staves are good for a moria chest.
  *
@@ -3904,16 +3902,19 @@ static bool kind_is_moria_items(int k_idx)
 
 		/*wands suitable for a chest*/
 		case TV_WAND:
+
 		{
 			if ((k_ptr->sval == SV_WAND_TELEPORT_AWAY) &&
 				((k_ptr->k_level + 20) >= object_level )) return (TRUE);
 			if ((k_ptr->sval == SV_WAND_STONE_TO_MUD) &&
 				((k_ptr->k_level + 20) >= object_level )) return (TRUE);
 			return (FALSE);
+
 		}
 
 		/*staffs suitable for a chest*/
 		case TV_STAFF:
+
 		{
 			if ((k_ptr->sval == SV_STAFF_TELEPORTATION) &&
 				((k_ptr->k_level + 20) >= object_level )) return (TRUE);
@@ -3929,6 +3930,8 @@ static bool kind_is_moria_items(int k_idx)
 	/* Assume not suitable */
 	return (FALSE);
 }
+
+
 
 
 /*
