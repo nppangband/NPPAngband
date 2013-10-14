@@ -2058,9 +2058,8 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 	}
 }
 
-
 /*
- * Hack -- determine if a template suitable for the dungeon.
+ * Hack -- determine if a template suitabel for the dungeon.
  * This is just to eliminate store_only items like wine and hard biscuits
   */
 static bool kind_is_dungeon(int k_idx)
@@ -2089,7 +2088,7 @@ static bool kind_is_gen_store_moria(int k_idx)
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-		/* Certain kinds of food are sold there */
+		/* Certain kinds of food is sold there*/
 		case TV_FOOD:
 		{
 			if (k_ptr->sval == SV_FOOD_RATION) return (TRUE);
@@ -2100,7 +2099,7 @@ static bool kind_is_gen_store_moria(int k_idx)
 			return (FALSE);
 		}
 
-		/* Non artifact Lite Sources are sold there */
+		/* Non artifact Lite Sources are sold there*/
 		case TV_LIGHT:
 		{
 			if (k_ptr->sval == SV_LIGHT_TORCH) return (TRUE);
@@ -2108,14 +2107,14 @@ static bool kind_is_gen_store_moria(int k_idx)
 			return (FALSE);
 		}
 
-		/* Flasks and Spikes are sold there */
+		/* Flasks and Spikes are sold there*/
 		case TV_FLASK:
 		case TV_SPIKE:
 		{
 			return (TRUE);
 		}
 
-		/* Shovels and Picks are sold there */
+		/* Shovels and Picks are sold there*/
 		case TV_DIGGING:
 		{
 			if (k_ptr->sval == SV_SHOVEL) return (TRUE);
@@ -2123,21 +2122,22 @@ static bool kind_is_gen_store_moria(int k_idx)
 			return (FALSE);
 		}
 
-		/* Robes are sold there */
 		case TV_SOFT_ARMOR:
 		{
 			if (k_ptr->sval == SV_ROBE) return (TRUE);
 			return (FALSE);
 		}
 
-		/* Normal Cloaks are sold there */
+		/*
+		 *  Normal Cloaks are sold there
+		 */
 		case TV_CLOAK:
 		{
 			if (k_ptr->sval == SV_CLOAK) return (TRUE);
 			return (FALSE);
 		}
 
-		/* Normal ammo is sold there */
+		/*Normal ammo is sold there*/
 		case TV_SHOT:
 		case TV_ARROW:
 		case TV_BOLT:
@@ -2151,6 +2151,7 @@ static bool kind_is_gen_store_moria(int k_idx)
 	/* Assume not good */
 	return (FALSE);
 }
+
 
 
 /*
@@ -2169,7 +2170,7 @@ static bool kind_is_gen_store(int k_idx)
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-		/* Certain kinds of food are sold there */
+		/* Certain kinds of food is sold there*/
 		case TV_FOOD:
 		{
 			if (allow_altered_inventory) return (TRUE);
@@ -2177,7 +2178,7 @@ static bool kind_is_gen_store(int k_idx)
 			return (FALSE);
 		}
 
-		/* Non artifact Lite Sources are sold there */
+		/* Non artifact Lite Sources are sold there*/
 		case TV_LIGHT:
 		{
 			if (k_ptr->sval == SV_LIGHT_TORCH) return (TRUE);
@@ -2185,14 +2186,14 @@ static bool kind_is_gen_store(int k_idx)
 			return (FALSE);
 		}
 
-		/* Flasks and Spikes are sold there */
+		/* Flasks and Spikes are sold there*/
 		case TV_FLASK:
 		case TV_SPIKE:
 		{
 			return (TRUE);
 		}
 
-		/* Normal ammo is sold there */
+		/*Normal ammo is sold there*/
 		case TV_SHOT:
 		case TV_ARROW:
 		case TV_BOLT:
@@ -2203,7 +2204,7 @@ static bool kind_is_gen_store(int k_idx)
 			return (FALSE);
 		}
 
-		/* Shovels and Picks are sold there */
+		/* Shovels and Picks are sold there*/
 		case TV_DIGGING:
 		{
 			if (allow_altered_inventory) return (TRUE);
@@ -2212,7 +2213,9 @@ static bool kind_is_gen_store(int k_idx)
 			return (FALSE);
 		}
 
-		/* Normal Cloaks are sold there */
+		/*
+		 *  Normal Cloaks are sold there
+		 */
 		case TV_CLOAK:
 		{
 			if (allow_altered_inventory) return (TRUE);
@@ -2224,6 +2227,7 @@ static bool kind_is_gen_store(int k_idx)
 	/* Assume not good */
 	return (FALSE);
 }
+
 
 
 /*
@@ -2252,8 +2256,8 @@ static bool kind_is_armoury(int k_idx)
 			if (k_ptr->sval == SV_DOUBLE_CHAIN_MAIL) return (TRUE);
 			if (k_ptr->sval == SV_METAL_BRIGANDINE_ARMOUR) return (TRUE);
 			return(FALSE);
-		}
 
+		}
 		case TV_SOFT_ARMOR:
 		{
 			if (allow_altered_inventory) return (TRUE);
@@ -2272,7 +2276,6 @@ static bool kind_is_armoury(int k_idx)
 			if (k_ptr->sval == SV_SMALL_METAL_SHIELD) return (TRUE);
 			return(FALSE);
 		}
-
 		case TV_BOOTS:
 		{
 			if (allow_altered_inventory) return (TRUE);
@@ -2280,7 +2283,6 @@ static bool kind_is_armoury(int k_idx)
 			if (k_ptr->sval == SV_PAIR_OF_HARD_LEATHER_BOOTS) return (TRUE);
 			return(FALSE);
 		}
-
 		case TV_GLOVES:
 		{
 			if (allow_altered_inventory) return (TRUE);
@@ -2288,7 +2290,6 @@ static bool kind_is_armoury(int k_idx)
 			if (k_ptr->sval == SV_SET_OF_GAUNTLETS) return (TRUE);
 			return(FALSE);
 		}
-
 		case TV_HELM:
 		{
 			if (allow_altered_inventory) return (TRUE);
@@ -2301,7 +2302,6 @@ static bool kind_is_armoury(int k_idx)
 	/* Assume not good */
 	return (FALSE);
 }
-
 
 /*
  * Hack -- determine if a template is suitable for the armoury.
@@ -2347,21 +2347,18 @@ static bool kind_is_armoury_moria(int k_idx)
 			if (k_ptr->sval == SV_SMALL_METAL_SHIELD) return (TRUE);
 			return(FALSE);
 		}
-
 		case TV_BOOTS:
 		{
 			if (k_ptr->sval == SV_PAIR_OF_SOFT_LEATHER_SHOES) return (TRUE);
 			if (k_ptr->sval == SV_PAIR_OF_SOFT_LEATHER_BOOTS) return (TRUE);
 			return(FALSE);
 		}
-
 		case TV_GLOVES:
 		{
 			if (k_ptr->sval == SV_SET_OF_LEATHER_GLOVES) return (TRUE);
 			if (k_ptr->sval == SV_SET_OF_GAUNTLETS) return (TRUE);
 			return(FALSE);
 		}
-
 		case TV_HELM:
 		{
 			if (k_ptr->sval == SV_HARD_LEATHER_CAP) return (TRUE);
@@ -2374,7 +2371,6 @@ static bool kind_is_armoury_moria(int k_idx)
 	/* Assume not good */
 	return (FALSE);
 }
-
 
 /*
  * Hack -- determine if a template is suitable for the weaponsmith.
@@ -2403,7 +2399,6 @@ static bool kind_is_weaponsmith_moria(int k_idx)
 			if (k_ptr->sval == SV_SMALL_SWORD) return (TRUE);
 			return (FALSE);
 		}
-
 		case TV_HAFTED:
 		{
 			if (k_ptr->sval == SV_MORNING_STAR) return (TRUE);
@@ -2411,7 +2406,6 @@ static bool kind_is_weaponsmith_moria(int k_idx)
 			if (k_ptr->sval == SV_WAR_HAMMER) return (TRUE);
 			return (FALSE);
 		}
-
 		case TV_POLEARM:
 		{
 
@@ -2421,7 +2415,6 @@ static bool kind_is_weaponsmith_moria(int k_idx)
 			if (k_ptr->sval == SV_BROAD_AXE) return (TRUE);
 			return (FALSE);
 		}
-
 		case TV_BOW:
 		{
 			if (k_ptr->sval == SV_SLING) return (TRUE);
@@ -2430,8 +2423,7 @@ static bool kind_is_weaponsmith_moria(int k_idx)
 			if (k_ptr->sval == SV_LIGHT_XBOW) return (TRUE);
 			return (FALSE);
 		}
-
-		/* Normal ammo is sold there */
+		/*Normal ammo is sold there*/
 		case TV_SHOT:
 		case TV_ARROW:
 		case TV_BOLT:
@@ -2440,6 +2432,7 @@ static bool kind_is_weaponsmith_moria(int k_idx)
 			if (k_ptr->sval == SV_AMMO_LIGHT) return (TRUE);
 			return (FALSE);
 		}
+
 	}
 
 	/* Assume not suitable */
@@ -2487,7 +2480,6 @@ static bool kind_is_weaponsmith(int k_idx)
 			if (k_ptr->sval == SV_WHIP) return (TRUE);
 			return (FALSE);
 		}
-
 		case TV_POLEARM:
 		{
 			if (allow_altered_inventory) return (TRUE);
@@ -2500,7 +2492,6 @@ static bool kind_is_weaponsmith(int k_idx)
 			if (k_ptr->sval == SV_BATTLE_AXE) return (TRUE);
 			return (FALSE);
 		}
-
 		case TV_BOW:
 		{
 			if (allow_altered_inventory) return (TRUE);
@@ -2510,8 +2501,7 @@ static bool kind_is_weaponsmith(int k_idx)
 			if (k_ptr->sval == SV_LIGHT_XBOW) return (TRUE);
 			return (FALSE);
 		}
-
-		/* Normal ammo is sold there */
+		/*Normal ammo is sold there*/
 		case TV_SHOT:
 		case TV_ARROW:
 		case TV_BOLT:
@@ -2521,12 +2511,12 @@ static bool kind_is_weaponsmith(int k_idx)
 			if (k_ptr->sval == SV_AMMO_LIGHT) return (TRUE);
 			return (FALSE);
 		}
+
 	}
 
 	/* Assume not suitable */
 	return (FALSE);
 }
-
 
 /*
  * Hack -- determine if a template is suitable for the temple.
@@ -2559,8 +2549,7 @@ static bool kind_is_temple(int k_idx)
 			if (k_ptr->sval == SV_LEAD_FILLED_MACE) return (TRUE);
 			return (FALSE);
 		}
-
-		/* scrolls suitable for the temple */
+		/*scrolls suitable for the temple*/
 		case TV_SCROLL:
 		{
 			if (allow_altered_inventory) return (TRUE);
@@ -2570,7 +2559,6 @@ static bool kind_is_temple(int k_idx)
 			if (k_ptr->sval == SV_SCROLL_HOLY_CHANT) return (TRUE);
 			return (FALSE);
 		}
-
 		case TV_POTION:
 		{
 			if (allow_altered_inventory) return (TRUE);
@@ -2582,12 +2570,12 @@ static bool kind_is_temple(int k_idx)
 			if (k_ptr->sval == SV_POTION_RESTORE_EXP) return (TRUE);
 			return (FALSE);
 		}
+
 	}
 
 	/* Assume not suitable */
 	return (FALSE);
 }
-
 
 /*
  * Hack -- determine if a template is suitable for the temple.
@@ -2605,7 +2593,7 @@ static bool kind_is_temple_moria(int k_idx)
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-		/* Hafted weapons only in the temple */
+		/* Hafted weapons only in the temple*/
 		case TV_HAFTED:
 		{
 			if (k_ptr->sval == SV_MORNING_STAR) return (TRUE);
@@ -2613,8 +2601,7 @@ static bool kind_is_temple_moria(int k_idx)
 			if (k_ptr->sval == SV_WAR_HAMMER) return (TRUE);
 			return (FALSE);
 		}
-
-		/* scrolls suitable for the temple */
+		/*scrolls suitable for the temple*/
 		case TV_SCROLL:
 		{
 
@@ -2623,7 +2610,6 @@ static bool kind_is_temple_moria(int k_idx)
 			if (k_ptr->sval == SV_SCROLL_BLESSING) return (TRUE);
 			return (FALSE);
 		}
-
 		case TV_POTION:
 		{
 			if (k_ptr->sval == SV_POTION_RES_WIS) return (TRUE);
@@ -2637,6 +2623,7 @@ static bool kind_is_temple_moria(int k_idx)
 			return (FALSE);
 		}
 
+
 		case TV_PRAYER_BOOK:
 		{
 			return (TRUE);
@@ -2646,7 +2633,6 @@ static bool kind_is_temple_moria(int k_idx)
 	/* Assume not suitable */
 	return (FALSE);
 }
-
 
 /*
  * Hack -- determine if a template is suitable for the alchemy shop.
@@ -2664,7 +2650,8 @@ static bool kind_is_alchemy_moria(int k_idx)
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-		/* scrolls suitable for the alchemy shop */
+
+		/*scrolls suitable for the alchemy shop*/
 		case TV_SCROLL:
 		{
 			if (k_ptr->sval == SV_SCROLL_ENCHANT_WEAPON_TO_HIT) return (TRUE);
@@ -2691,6 +2678,7 @@ static bool kind_is_alchemy_moria(int k_idx)
 			if (k_ptr->sval == SV_POTION_SLOW_POISON) return (TRUE);
 			return (FALSE);
 		}
+
 	}
 
 	/* Assume not suitable */
@@ -2714,7 +2702,8 @@ static bool kind_is_alchemy(int k_idx)
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-		/* scrolls suitable for the alchemy shop */
+
+		/*scrolls suitable for the alchemy shop*/
 		case TV_SCROLL:
 		{
 			if (allow_altered_inventory) return (TRUE);
@@ -2773,7 +2762,7 @@ static bool kind_is_magic_shop_moria(int k_idx)
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-		/* Rings suitable for the magic_shop */
+		/*Rings suitable for the magic_shop*/
 		case TV_RING:
 		{
 			if (k_ptr->sval == SV_RING_RESIST_FIRE) return (TRUE);
@@ -2782,7 +2771,7 @@ static bool kind_is_magic_shop_moria(int k_idx)
 			if (k_ptr->sval == SV_RING_PROTECTION) return (TRUE);
 			return (FALSE);
 		}
-		/* Amulets suitable for the magic_shop */
+		/*Amulets suitable for the magic_shop*/
 		case TV_AMULET:
 		{
 			if (k_ptr->sval == SV_AMULET_CHARISMA) return (TRUE);
@@ -2790,7 +2779,7 @@ static bool kind_is_magic_shop_moria(int k_idx)
 			if (k_ptr->sval == SV_AMULET_RESIST_ACID) return (TRUE);
 			return (FALSE);
 		}
-		/* Amulets suitable for the magic_shop */
+		/*Amulets suitable for the magic_shop*/
 		case TV_WAND:
 		{
 			if (k_ptr->sval == SV_WAND_LIGHT) return (TRUE);
@@ -2802,7 +2791,7 @@ static bool kind_is_magic_shop_moria(int k_idx)
 			if (k_ptr->sval == SV_WAND_DISARMING) return (TRUE);
 			return (FALSE);
 		}
-		/* Staves suitable for the magic_shop */
+		/*Staves suitable for the magic_shop*/
 		case TV_STAFF:
 		{
 			if (k_ptr->sval == SV_STAFF_LIGHT) return (TRUE);
@@ -2823,6 +2812,7 @@ static bool kind_is_magic_shop_moria(int k_idx)
 }
 
 
+
 /*
  * Hack -- determine if a template is suitable for the magic_shop.
  *
@@ -2839,7 +2829,7 @@ static bool kind_is_magic_shop(int k_idx)
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-		/* Rings suitable for the magic_shop */
+		/*Rings suitable for the magic_shop*/
 		case TV_RING:
 		{
 			if (allow_altered_inventory) return (TRUE);
@@ -2848,7 +2838,7 @@ static bool kind_is_magic_shop(int k_idx)
 			if (k_ptr->sval == SV_RING_PROTECTION) return (TRUE);
 			return (FALSE);
 		}
-		/* Amulets suitable for the magic_shop */
+		/*Amulets suitable for the magic_shop*/
 		case TV_AMULET:
 		{
 			if (allow_altered_inventory) return (TRUE);
@@ -2857,7 +2847,7 @@ static bool kind_is_magic_shop(int k_idx)
 			if (k_ptr->sval == SV_AMULET_RESIST_ACID) return (TRUE);
 			return (FALSE);
 		}
-		/* Amulets suitable for the magic_shop */
+		/*Amulets suitable for the magic_shop*/
 		case TV_WAND:
 		{
 			if (allow_altered_inventory) return (TRUE);
@@ -2869,7 +2859,7 @@ static bool kind_is_magic_shop(int k_idx)
 			if (k_ptr->sval == SV_WAND_WONDER) return (TRUE);
 			return (FALSE);
 		}
-		/* Staves suitable for the magic_shop */
+		/*Staves suitable for the magic_shop*/
 		case TV_STAFF:
 		{
 			if (allow_altered_inventory) return (TRUE);
@@ -2885,6 +2875,7 @@ static bool kind_is_magic_shop(int k_idx)
 			if (k_ptr->sval == SV_STAFF_IDENTIFY) return (TRUE);
 			return (FALSE);
 		}
+
 	}
 
 	/* Assume not suitable */
@@ -2965,6 +2956,7 @@ static bool kind_is_bookshop(int k_idx)
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
+
 		case TV_MAGIC_BOOK:
 		case TV_PRAYER_BOOK:
 		case TV_DRUID_BOOK:
@@ -2979,7 +2971,6 @@ static bool kind_is_bookshop(int k_idx)
 	/* Assume not suitable */
 	return (FALSE);
 }
-
 
 /*
  * Hack -- determine if a template is "a dungeon spellbook".
@@ -3004,8 +2995,8 @@ static bool kind_is_dungeon_spellbook(int k_idx)
 
 	}
 	return(FALSE);
-}
 
+}
 
 /*
  * Hack -- determine if a template is "a priestly dungeon prayerbook".
@@ -3030,7 +3021,6 @@ static bool kind_is_dungeon_prayer_book(int k_idx)
 
 }
 
-
 /*
  * Hack -- determine if a template is "a druid dungeon spellbook".
  *
@@ -3049,13 +3039,16 @@ static bool kind_is_dungeon_druid_book(int k_idx)
 			if (k_ptr->sval >= SV_BOOK_MIN_GOOD) return (TRUE);
 			return(FALSE);
 		}
+
 	}
 	return(FALSE);
+
 }
 
 
 /*
  * Hack -- determine if a template is "a mage dungeon spellbook".
+ *
  */
 static bool kind_is_dungeon_magic_book(int k_idx)
 {
