@@ -20,6 +20,7 @@
 #include "angband.h"
 #include "game-event.h"
 
+
 /*
  * Convert a decimal to a single digit hex number
  */
@@ -27,6 +28,7 @@ static char hexify(int i)
 {
 	return (hexsym[i % 16]);
 }
+
 
 /*
  * Convert a hexadecimal-digit into a decimal
@@ -499,6 +501,7 @@ char *find_roman_suffix_start(cptr buf)
 	}
 	return (char *)start;
 }
+
 
 /*
  * Converts an arabic numeral (int) to a roman numeral (char *).
@@ -1862,7 +1865,6 @@ void put_str(cptr str, int row, int col)
 }
 
 
-
 /*
  * Display a string on the screen using an attribute, and clear
  * to the end of the line.
@@ -2709,13 +2711,11 @@ s16b get_quantity(cptr prompt, int max)
 		/* Build a prompt if needed */
 		if (!prompt)
 		{
-
 			/* Build a prompt */
 			strnfmt(tmp, sizeof(tmp), "Quantity (0-%d, '*' or 'a' = all): ", max);
 
 			/* Use that prompt */
 			prompt = tmp;
-
 		}
 
 		/* Build the default */
@@ -3286,10 +3286,10 @@ void request_command(void)
 		{
 			switch (ke.key)
 			{
-				case ARROW_DOWN:    ke.key = '2'; break;
-				case ARROW_LEFT:    ke.key = '4'; break;
-				case ARROW_RIGHT:   ke.key = '6'; break;
-				case ARROW_UP:      ke.key = '8'; break;
+				case ARROW_DOWN:	ke.key = '2'; break;
+				case ARROW_LEFT:	ke.key = '4'; break;
+				case ARROW_RIGHT:	ke.key = '6'; break;
+				case ARROW_UP:		ke.key = '8'; break;
 			}
 		}
 
@@ -3510,22 +3510,22 @@ int color_text_to_attr(cptr name)
 
 static const char *short_color_names[MAX_BASE_COLORS] =
 {
-  "Dark",
-  "White",
-  "Slate",
-  "Orange",
-  "Red",
-  "Green",
-  "Blue",
-  "Umber",
-  "L.Dark",
-  "L.Slate",
-  "Violet",
-  "Yellow",
-  "L.Red",
-  "L.Green",
-  "L.Blue",
-  "L.Umber"
+	"Dark",
+	"White",
+	"Slate",
+	"Orange",
+	"Red",
+	"Green",
+	"Blue",
+	"Umber",
+	"L.Dark",
+	"L.Slate",
+	"Violet",
+	"Yellow",
+	"L.Red",
+	"L.Green",
+	"L.Blue",
+	"L.Umber"
 };
 
 
