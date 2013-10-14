@@ -13,7 +13,8 @@ Bugfix(Moria): Elves resisted light and half-orcs resisted darkness (neither att
 Bugfix(Moria): 10 Monsters who should have had the "teleport player to monster" spell had the "teleport monster to player" spell.
 Bugfix: The spit acid attack and last attack description was occasionally mixed up (found by "Runningaway")
 Bugfix: Several defective break statements allowed the monsters to learning about player resisistance to sound and chaos a little too quickly.
-
+Bugfix(Moria): The themes themed chests were not being calcualted correctly (found by "Runningaway").
+Bugfix: Uniques marked for a guild quest could still be placed outside of the quest level, potentially causing game crashes.
 
 NPP 7.0.0:
 Add moria game mode, based on Moria 5.5.2.
