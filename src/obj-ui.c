@@ -1592,6 +1592,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 			case EVT_BACK:
 			{
 				done = TRUE;
+				continue;
 			}
 
 			default:
@@ -2686,6 +2687,4 @@ void cmd_use_item(void)
 	message_flush();
 
 }
-
-
 
