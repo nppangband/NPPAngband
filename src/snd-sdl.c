@@ -59,7 +59,7 @@ static void close_audio(void)
 	/* Free all the sample data*/
 	for (i = 0; i < MSG_MAX; i++)
 	{
-  		sample_list *smp = &samples[i];
+		sample_list *smp = &samples[i];
 
 		/* Nuke all samples */
 		for (j = 0; j < smp->num; j++)
@@ -110,7 +110,6 @@ static bool open_audio(void)
 }
 
 
-
 /*
  * Read sound.cfg and map events to sounds; then load all the sounds into
  * memory to avoid I/O latency later.
@@ -121,11 +120,9 @@ static bool sound_sdl_init(bool no_cache)
 	char buffer[2048];
 	ang_file *fff;
 
-
 	/* Initialise the mixer  */
 	if (!open_audio())
-	    return FALSE;
-
+		return FALSE;
 
 	/* Build the "sound" path */
 	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
@@ -139,7 +136,7 @@ static bool sound_sdl_init(bool no_cache)
 	if (!fff)
 	{
 		plog_fmt("Failed to open sound config (%s):\n    %s", 
-		          path, strerror(errno));
+				 path, strerror(errno));
 		return FALSE;
 	}
 
@@ -159,22 +156,21 @@ static bool sound_sdl_init(bool no_cache)
 
 		/* Split the line into two: message name, and the rest */
 		search = strchr(buffer, ' ');
-        sample_list = strchr(search + 1, ' ');
+		sample_list = strchr(search + 1, ' ');
 		if (!search) continue;
-        if (!sample_list) continue;
+		if (!sample_list) continue;
 
 		/* Set the message name, and terminate at first space */
 		msg_name = buffer;
 		search[0] = '\0';
 
-
 		/* Make sure this is a valid event name */
 		for (event = MSG_MAX - 1; event >= 0; event--)
 		{
 			if (strcmp(msg_name, angband_sound_name[event]) == 0)
-			    break;
+				break;
 		}
-        if (event < 0) continue;
+		if (event < 0) continue;
 
 		/* Advance the sample list pointer so it's at the beginning of text */
 		sample_list++;
@@ -193,12 +189,12 @@ static bool sound_sdl_init(bool no_cache)
 			next_token = NULL;
 		}
 
-        /*
-         * Now we find all the sample names and add them one by one
-         */
-        while (cur_token)
-        {
-            int num = samples[event].num;
+		/*
+		 * Now we find all the sample names and add them one by one
+		 */
+		while (cur_token)
+		{
+			int num = samples[event].num;
 
 			/* Don't allow too many samples */
 			if (num >= MAX_SAMPLES) break;
@@ -224,7 +220,7 @@ static bool sound_sdl_init(bool no_cache)
 				}
 			}
 
-			/* Imcrement the sample count */
+			/* Increment the sample count */
 			samples[event].num++;
 
 		next_token:
@@ -254,10 +250,10 @@ static bool sound_sdl_init(bool no_cache)
 	/* Close the file */
 	file_close(fff);
 
-
 	/* Success */
 	return TRUE;
 }
+
 
 /*
  * Play a sound of type "event".
