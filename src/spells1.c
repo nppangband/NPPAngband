@@ -1999,9 +1999,10 @@ static int inven_damage(inven_func typ, int perc, bool protected)
 				           o_name, index_to_label(i),
 				           ((amt > 1) ? "were" : "was"));
 
-				/*hack, restore the proper number of charges after the messages have printed
-	 			 * so the proper number of charges are destroyed*/
-				 if (old_charges) o_ptr->pval = old_charges;
+				/* hack, restore the proper number of charges after the messages
+				 * have printed so the proper number of charges are destroyed
+				 */
+				if (old_charges) o_ptr->pval = old_charges;
 
 				/* Hack -- If rods,wand or staff are destroyed, the total maximum
 				 * timeout or charges of the stack needs to be reduced,
@@ -2028,8 +2029,6 @@ static int inven_damage(inven_func typ, int perc, bool protected)
 }
 
 
-
-
 /*
  * Acid has hit the player, attempt to affect some armor.
  *
@@ -2044,7 +2043,6 @@ static int minus_ac(void)
 	u32b f1, f2, f3, fn;
 
 	char o_name[80];
-
 
 	/* Pick a (possibly empty) inventory slot */
 	switch (randint(6))
@@ -2062,7 +2060,6 @@ static int minus_ac(void)
 
 	/* No damage left to be done */
 	if (o_ptr->ac + o_ptr->to_a <= 0) return (FALSE);
-
 
 	/* Describe */
 	object_desc(o_name, sizeof(o_name), o_ptr, ODESC_FULL);
@@ -2106,7 +2103,7 @@ void acid_dam(int dam, cptr kb_str)
 	/* Total Immunity */
 	if (p_ptr->state.immune_acid || (dam <= 0)) return;
 
-	/*inventory  gets protected better with double resistance*/
+	/* inventory gets protected better with double resistance */
 	if ((p_ptr->state.resist_acid) && (p_ptr->timed[TMD_OPP_ACID])) double_resist = TRUE;
 
 	/* Resist the damage */
@@ -2136,7 +2133,7 @@ void elec_dam(int dam, cptr kb_str)
 	/* Total immunity */
 	if (p_ptr->state.immune_elec || (dam <= 0)) return;
 
-	/*inventory gets protected better with double resistance*/
+	/* inventory gets protected better with double resistance */
 	if ((p_ptr->state.resist_elec) && (p_ptr->timed[TMD_OPP_ELEC])) double_resist = TRUE;
 
 	/* Resist the damage */
@@ -2151,8 +2148,6 @@ void elec_dam(int dam, cptr kb_str)
 }
 
 
-
-
 /*
  * Hurt the player with Fire
  */
@@ -2164,7 +2159,7 @@ void fire_dam(int dam, cptr kb_str)
 	/* Totally immune */
 	if (p_ptr->state.immune_fire || (dam <= 0)) return;
 
-	/*inventory  gets protected better with double resistance*/
+	/* inventory gets protected better with double resistance */
 	if ((p_ptr->state.resist_fire) && (p_ptr->timed[TMD_OPP_FIRE])) double_resist = TRUE;
 
 	/* Resist the damage */
@@ -2191,7 +2186,7 @@ void cold_dam(int dam, cptr kb_str)
 	/* Total immunity */
 	if (p_ptr->state.immune_cold || (dam <= 0)) return;
 
-	/*inventory  gets protected better with double resistance*/
+	/* inventory gets protected better with double resistance */
 	if ((p_ptr->state.resist_cold) && (p_ptr->timed[TMD_OPP_COLD])) double_resist = TRUE;
 
 	/* Resist the damage */
@@ -2229,6 +2224,7 @@ static void lava_dam(int dam, cptr kb_str, bool player_native)
 	inven_damage(set_lava_destroy, inv, double_resist);
 }
 
+
 /*
  * Hurt the player with Boiling Water
  */
@@ -2250,6 +2246,7 @@ static void boiling_water_dam(int dam, cptr kb_str, bool player_native)
 	/* Inventory damage */
 	inven_damage(set_boiling_water_destroy, inv, double_resist);
 }
+
 
 /*
  * Hurt the player with Boiling Mud
@@ -2344,9 +2341,8 @@ bool inc_stat(int stat)
 }
 
 
-
 /*
- * Decreases a stat by an amount indended to vary from 0 to 100 percent.
+ * Decreases a stat by an amount intended to vary from 0 to 100 percent.
  *
  * Note that "permanent" means that the *given* amount is permanent,
  * not that the new value becomes permanent.  This may not work exactly
@@ -2357,7 +2353,6 @@ bool inc_stat(int stat)
 bool dec_stat(int stat, int amount,bool permanent)
 {
 	int cur, max, loss, same, res = FALSE;
-
 
 	/* Get the current value */
 	cur = p_ptr->stat_cur[stat];
@@ -2490,6 +2485,7 @@ bool res_stat(int stat)
 	return (FALSE);
 }
 
+
 /*
  * Inflict disease on the character.
  */
@@ -2561,7 +2557,6 @@ void disease(int *damage)
 		}
 	}
 }
-
 
 
 /*
@@ -2671,7 +2666,6 @@ bool apply_disenchant(int mode)
  */
 static void apply_nexus(int who)
 {
-
 	int x, y, i;
 
 	int max1, cur1, max2, cur2, ii, jj;
@@ -2710,7 +2704,6 @@ static void apply_nexus(int who)
 
 		/*We are fine*/
 		break;
-
 	}
 
 	switch (i)
@@ -2796,8 +2789,7 @@ static bool temp_light(int y, int x)
 	/* Grid is in line of sight */
 	if (player_has_los_bold(y, x))
 	{
-		if (!(cave_info[y][x] & (CAVE_SEEN))
-		    && !(p_ptr->timed[TMD_BLIND]))
+		if (!(cave_info[y][x] & (CAVE_SEEN)) && !(p_ptr->timed[TMD_BLIND]))
 		{
 			/* Temporarily seen */
 			cave_info[y][x] |= (CAVE_SEEN);
@@ -2844,7 +2836,7 @@ static bool temp_light(int y, int x)
 /*
  * Apply bonuses/penalties to the damage made by spells, based on terrain.
  * You should supply the native element flags of the target, since we
- * inhibite some increments to damage based on those flags.
+ * inhibit some increments to damage based on those flags.
  * This function shouldn't be used if the source of the spell is the terrain
  * itself.
  * Set verbose_mode to TRUE if you want a message telling what happened to
@@ -2879,6 +2871,7 @@ static int terrain_adjust_damage(int dam, int spell_type, int y, int x,
 				if (one_in_(4)) dam += dam / 3;
 				else dam += dam / 5;
 			}
+
 			else if (((terrain_element == (ELEMENT_FIRE)) ||
 					(terrain_element == (ELEMENT_BMUD))) &&
 				!(target_native & (ELEMENT_FIRE | ELEMENT_LAVA)))
@@ -3012,7 +3005,6 @@ static int terrain_adjust_damage(int dam, int spell_type, int y, int x,
 
 			break;
 		}
-
 	}
 
 	/* Check bounds */
@@ -3243,7 +3235,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 				/* Check line of sight */
 				if (player_has_los_bold(y, x))
 				{
-					/*Mark the feature lore*/
+					/* Mark the feature lore */
 					feature_lore *f_l_ptr = &f_l_list[cave_feat[y][x]];
 					f_l_ptr->f_l_flags2 |= (FF2_HURT_FIRE);
 
@@ -3258,7 +3250,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 					}
 					else
 					{
- 					msg_format("The %s burns up.", name);
+					msg_format("The %s burns up.", name);
 					}
 
 					obvious = TRUE;
@@ -3280,7 +3272,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 				/* Check line of sight */
 				if (player_has_los_bold(y, x))
 				{
-					/*Mark the feature lore*/
+					/* Mark the feature lore */
 					feature_lore *f_l_ptr = &f_l_list[cave_feat[y][x]];
 					f_l_ptr->f_l_flags2 |= (FF2_HURT_COLD);
 
@@ -3301,7 +3293,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 				/* Check line of sight */
 				if (player_has_los_bold(y, x))
 				{
-					/*Mark the feature lore*/
+					/* Mark the feature lore */
 					feature_lore *f_l_ptr = &f_l_list[cave_feat[y][x]];
 					f_l_ptr->f_l_flags2 |= (FF2_HURT_ELEC);
 
@@ -3311,7 +3303,6 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 
 				/* Destroy the feature */
 				cave_alter_feat(y, x, FS_HURT_ELEC);
-
 			}
 
 			if (temp_light(y, x)) obvious = TRUE;
@@ -3325,7 +3316,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 				/* Check line of sight */
 				if (player_has_los_bold(y, x))
 				{
-					/*Mark the feature lore*/
+					/* Mark the feature lore */
 					feature_lore *f_l_ptr = &f_l_list[cave_feat[y][x]];
 					f_l_ptr->f_l_flags2 |= (FF2_HURT_COLD);
 
@@ -3351,7 +3342,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 				/* Check line of sight */
 				if (player_has_los_bold(y, x))
 				{
-					/*Mark the feature lore*/
+					/* Mark the feature lore */
 					feature_lore *f_l_ptr = &f_l_list[cave_feat[y][x]];
 					f_l_ptr->f_l_flags2 |= (FF2_HURT_WATER);
 
@@ -3392,11 +3383,11 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 				/* Check line of sight */
 				if (player_has_los_bold(y, x))
 				{
-					/*Mark the feature lore*/
+					/* Mark the feature lore */
 					feature_lore *f_l_ptr = &f_l_list[cave_feat[y][x]];
 					f_l_ptr->f_l_flags3 |= (FF3_HURT_BOIL_WATER);
 
-					msg_format("The %s evapourates.", name);
+					msg_format("The %s evaporates.", name);
 					obvious = TRUE;
 				}
 
@@ -3419,15 +3410,24 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 			delete_effects(y, x);
 
 			/* Now make it a wall, depending on the terrain below it */
-			if (cave_ff3_match(y, x, FF3_WATER)) feat = FEAT_LIMESTONE;
-			if (cave_ff3_match(y, x, FF3_SAND)) feat = FEAT_SANDSTONE;
-			if (cave_ff3_match(y, x, FF3_ICE)) feat = FEAT_ICE_WALL;
-			if (cave_ff3_match(y, x, FF3_OIL)) feat = FEAT_SHALE;
-			if (cave_ff3_match(y, x, FF3_LAVA)) feat = FEAT_LAVA_W;
-			if (cave_ff3_match(y, x, FF3_FOREST)) feat = FEAT_VINES;
-			if (cave_ff3_match(y, x, FF3_ACID)) feat = FEAT_ACID_WALL;
-			if (cave_ff3_match(y, x, (FF3_LAVA | FF3_WATER)) == (FF3_LAVA | FF3_WATER)) feat = FEAT_BWATER_WALL;
-			if (cave_ff3_match(y, x, (FF3_LAVA | FF3_MUD)) == (FF3_LAVA | FF3_MUD)) feat = FEAT_BMUD_WALL;
+			if (cave_ff3_match(y, x, FF3_WATER))
+				feat = FEAT_LIMESTONE;
+			if (cave_ff3_match(y, x, FF3_SAND))
+				feat = FEAT_SANDSTONE;
+			if (cave_ff3_match(y, x, FF3_ICE))
+				feat = FEAT_ICE_WALL;
+			if (cave_ff3_match(y, x, FF3_OIL))
+				feat = FEAT_SHALE;
+			if (cave_ff3_match(y, x, FF3_LAVA))
+				feat = FEAT_LAVA_W;
+			if (cave_ff3_match(y, x, FF3_FOREST))
+				feat = FEAT_VINES;
+			if (cave_ff3_match(y, x, FF3_ACID))
+				feat = FEAT_ACID_WALL;
+			if (cave_ff3_match(y, x, (FF3_LAVA | FF3_WATER)) == (FF3_LAVA | FF3_WATER))
+				feat = FEAT_BWATER_WALL;
+			if (cave_ff3_match(y, x, (FF3_LAVA | FF3_MUD)) == (FF3_LAVA | FF3_MUD))
+				feat = FEAT_BMUD_WALL;
 
 			cave_set_feat(y, x, feat);
 
@@ -3436,13 +3436,13 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 
 		case GF_BMUD:
 		{
-			/*Do nothing??*/
+			/* Do nothing?? */
 
 			break;
 		}
 		case GF_SAND:
 		{
-			/*Do nothing??*/
+			/* Do nothing?? */
 
 			break;
 		}
@@ -3453,7 +3453,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 				/* Check line of sight */
 				if (player_has_los_bold(y, x))
 				{
-					/*Mark the feature lore*/
+					/* Mark the feature lore */
 					feature_lore *f_l_ptr = &f_l_list[cave_feat[y][x]];
 					f_l_ptr->f_l_flags3 |= (FF3_HURT_POIS);
 
@@ -3518,7 +3518,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 				/* Check line of sound */
 				if (player_has_los_bold(y, x))
 				{
-					/*Mark the feature lore*/
+					/* Mark the feature lore */
 					feature_lore *f_l_ptr = &f_l_list[cave_feat[y][x]];
 					f_l_ptr->f_l_flags1 |= (FF1_CAN_OPEN);
 
@@ -3545,23 +3545,21 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 					/* Destroy the door */
 					if (cave_door_bold(y, x))
 					{
-						/*Mark the feature lore*/
+						/* Mark the feature lore */
 						feature_lore *f_l_ptr = &f_l_list[cave_feat[y][x]];
 						f_l_ptr->f_l_flags1 |= (FF1_CAN_TUNNEL);
 					}
 					/* Destroy the trap */
 					else
 					{
-						/*Mark the feature lore*/
+						/* Mark the feature lore */
 						feature_lore *f_l_ptr = &f_l_list[x_list[cave_x_idx[y][x]].x_f_idx];
 						f_l_ptr->f_l_flags1 |= (FF1_CAN_DISARM);
 					}
 
-
 					/* Message */
 					msg_print("There is a bright flash of light!");
 					obvious = TRUE;
-
 				}
 
 				/* Destroy the door */
@@ -3569,7 +3567,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 				{
 					cave_alter_feat(y, x, FS_TUNNEL);
 				}
-				/* Destroy the trap/effect*/
+				/* Destroy the trap/effect */
 				else
 				{
 					/* Destroy the trap */
@@ -3586,7 +3584,6 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 
 				/* Fully update the visuals */
 				p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS | PU_FLOW_DOORS);
-
 			}
 
 			break;
@@ -3604,7 +3601,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 				/* Check line of sight */
 				if (player_has_los_bold(y, x))
 				{
-					/*Mark the feature lore*/
+					/* Mark the feature lore */
 					feature_lore *f_l_ptr = &f_l_list[cave_feat[y][x]];
 					f_l_ptr->f_l_flags1 |= (FF1_CAN_CLOSE);
 
@@ -3626,7 +3623,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 				/* Check line of sight */
 				if (player_has_los_bold(y, x))
 				{
-					/*Mark the feature lore*/
+					/* Mark the feature lore */
 					feature_lore *f_l_ptr = &f_l_list[cave_feat[y][x]];
 					f_l_ptr->f_l_flags1 |= (FF1_CAN_SPIKE);
 
@@ -3652,13 +3649,12 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 				/* Check line of sight */
 				if (player_has_los_bold(y, x))
 				{
-					/*Mark the feature lore*/
+					/* Mark the feature lore */
 					feature_lore *f_l_ptr = &f_l_list[cave_feat[y][x]];
 					f_l_ptr->f_l_flags2 |= (FF2_HURT_ROCK);
 
 					msg_format("The %s dissolves.", name);
 					obvious = TRUE;
-
 				}
 
 				/* Destroy the wall/door */
@@ -3820,14 +3816,11 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 			/* All done */
 			break;
 		}
-
-
 	}
 
 	/* Return "Anything seen?" */
 	return (obvious);
 }
-
 
 
 /*
@@ -3874,7 +3867,7 @@ static bool project_o(int who, int y, int x, int dam, int typ)
 
 		cptr note_kill = NULL;
 
-		/* Get the object & object type*/
+		/* Get the object & object type */
 		o_ptr = &o_list[this_o_idx];
 		k_ptr = &k_info[o_ptr->k_idx];
 
@@ -3896,7 +3889,6 @@ static bool project_o(int who, int y, int x, int dam, int typ)
 			/* Acid -- Lots of things */
 			case GF_ACID:
 			{
-
 				if (hates_acid(o_ptr) && dam > rand_int(50))
 				{
 					do_kill = TRUE;
@@ -3910,7 +3902,6 @@ static bool project_o(int who, int y, int x, int dam, int typ)
 			/* Elec -- Rings, Rods, Wands */
 			case GF_ELEC:
 			{
-
 				if (hates_elec(o_ptr) && dam > rand_int(40))
 				{
 					do_kill = TRUE;
@@ -3923,7 +3914,6 @@ static bool project_o(int who, int y, int x, int dam, int typ)
 			/* Fire -- Flammable objects */
 			case GF_FIRE:
 			{
-
 				if (hates_fire(o_ptr) && dam > rand_int(40))
 				{
 					do_kill = TRUE;
@@ -3937,7 +3927,6 @@ static bool project_o(int who, int y, int x, int dam, int typ)
 			/* Cold -- potions and flasks */
 			case GF_COLD:
 			{
-
 				if (hates_cold(o_ptr) && dam > rand_int(40))
 				{
 					note_kill = (plural ? " shatter!" : " shatters!");
@@ -3958,6 +3947,7 @@ static bool project_o(int who, int y, int x, int dam, int typ)
 					if (f3 & (TR3_IGNORE_FIRE)) ignore = TRUE;
 					if (fn & (ELEMENT_LAVA)) ignore = TRUE;
 				}
+
 				if (hates_elec(o_ptr))
 				{
 					ignore = FALSE;
