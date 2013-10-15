@@ -49,7 +49,11 @@
 #endif
 
 #ifdef WINDOWS
+#ifdef __CYGWIN__
+# define my_mkdir(path, perms) mkdir(path, perms)
+#else
 # define my_mkdir(path, perms) mkdir(path)
+#endif
 #elif HAVE_MKDIR || MACH_O_CARBON
 # define my_mkdir(path, perms) mkdir(path, perms)
 #else
