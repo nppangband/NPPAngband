@@ -6057,7 +6057,6 @@ void process_entities(void)
 
 		/* Save it, go to next slot */
 		mon_moment_info[move_moment_num++].moment = moment;
-
 	}
 
 	/* Select the sort method */
@@ -6088,7 +6087,6 @@ void process_entities(void)
 			/*sleeping monsters don't get a move*/
 			if (m_ptr->m_timed[MON_TMD_SLEEP])
 			{
-
 				/*Burn some energy and continue*/
 				if (m_ptr->m_energy >= ENERGY_TO_MOVE) m_ptr->m_energy -= BASE_ENERGY_MOVE;
 
