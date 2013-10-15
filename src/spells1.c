@@ -35,8 +35,8 @@ bool teleport_away(int m_idx, int dis)
 	int my = m_ptr->fy;
 	int mx = m_ptr->fx;
 
-	byte x_location_tables [MAX_DUNGEON_AREA];
-	byte y_location_tables [MAX_DUNGEON_AREA];
+	byte x_location_tables[MAX_DUNGEON_AREA];
+	byte y_location_tables[MAX_DUNGEON_AREA];
 	int spot_counter = 0;
 
 	int d, d1, i, min, y, x;
@@ -75,7 +75,7 @@ bool teleport_away(int m_idx, int dis)
 		int x_min = mx - dis;
 		int x_max = mx + dis;
 
-		/* Boundry control */
+		/* Boundary control */
 		if (x_min < 0) x_min = 0;
 		if (y_min < 0) y_min = 0;
 		if (x_max > p_ptr->cur_map_wid) x_max = p_ptr->cur_map_wid;
@@ -86,7 +86,6 @@ bool teleport_away(int m_idx, int dis)
 		{
 			for (x = x_min; x < x_max; x++)
 			{
-
 				u32b dist_squared;
 
 				/* Require "start" floor space */
@@ -125,7 +124,6 @@ bool teleport_away(int m_idx, int dis)
 
 		/* Decrease the minimum distance */
 		min = min * 6 / 10;
-
 	}
 
 	i = randint0(spot_counter);
@@ -146,6 +144,7 @@ bool teleport_away(int m_idx, int dis)
 
 	return (TRUE);
 }
+
 
 /*
  * Teleport the player to a location up to "dis" grids away.
@@ -215,7 +214,7 @@ bool teleport_player(int dis, bool native)
 		int x_min = px - dis;
 		int x_max = px + dis;
 
-		/* Boundry control */
+		/* Boundary control */
 		if (x_min < 0) x_min = 0;
 		if (y_min < 0) y_min = 0;
 		if (x_max > p_ptr->cur_map_wid) x_max = p_ptr->cur_map_wid;
@@ -226,7 +225,6 @@ bool teleport_player(int dis, bool native)
 		{
 			for (x = x_min; x < x_max; x++)
 			{
-
 				u32b dist_squared;
 
 				/* Require "start" floor space */
@@ -272,7 +270,6 @@ bool teleport_player(int dis, bool native)
 
 		/* Decrease the minimum distance */
 		min = min * 6 / 10;
-
 	}
 
 	i = randint0(spot_counter);
@@ -292,6 +289,7 @@ bool teleport_player(int dis, bool native)
 
 	return (TRUE);
 }
+
 
 /*
  * Teleport player to a grid near the given location
@@ -313,10 +311,10 @@ void teleport_player_to(int ny, int nx)
 	x = px;
 
 	/* Find a usable location */
-	while (1)
+	while (TRUE)
 	{
 		/* Pick a nearby legal location */
-		while (1)
+		while (TRUE)
 		{
 			y = rand_spread(ny, dis);
 			x = rand_spread(nx, dis);
@@ -413,8 +411,6 @@ void teleport_towards(int oy, int ox, int ny, int nx)
 }
 
 
-
-
 /*
  * Teleport the player one level up or down (random when legal)
  * Returns false if the player chooses to stay on a quest level
@@ -449,11 +445,10 @@ bool teleport_player_level(int who)
 		go_up = TRUE;
 	}
 
-	/*Not fair to fail the quest if the monster teleports the player off*/
+	/* Not fair to fail the quest if the monster teleports the player off */
 	if ((who >= SOURCE_MONSTER_START) &&
 			(quest_might_fail_if_leave_level() || quest_shall_fail_if_leave_level()))
 	{
-
 		/*de-activate the quest*/
 		q_ptr->q_flags &= ~(QFLAG_STARTED);
 
@@ -473,21 +468,20 @@ bool teleport_player_level(int who)
 
 		/* Verify leaving normal quest level */
 		else if (quest_shall_fail_if_leave_level())
-
 		{
 			sprintf(out_val, "Really fail your quest? ");
 			if (!get_check(out_val)) return(FALSE);
 		}
 	}
 
-	/*We don't have a direction yet, pick one at random*/
+	/* We don't have a direction yet, pick one at random */
 	if ((!go_up) && (!go_down))
 	{
 		if (one_in_(2)) go_up = TRUE;
 		else go_down = TRUE;
 	}
 
-	/*up*/
+	/* up */
 	if (go_up == TRUE)
 	{
 		message(MSG_TPLEVEL, 0, "You rise up through the ceiling.");
@@ -505,9 +499,7 @@ bool teleport_player_level(int who)
 	}
 
 	return (TRUE);
-
 }
-
 
 
 /*
@@ -518,18 +510,19 @@ static byte mh_attr(void)
 {
 	switch (randint(8))
 	{
-		case 1:  return (TERM_RED);
-		case 2:  return (TERM_GREEN);
-		case 3:  return (TERM_BLUE);
-		case 4:  return (TERM_YELLOW);
-		case 5:  return (TERM_ORANGE);
-		case 6:  return (TERM_L_RED);
-		case 7:  return (TERM_L_GREEN);
-		case 8:  return (TERM_L_BLUE);
+		case 1:	return (TERM_RED);
+		case 2:	return (TERM_GREEN);
+		case 3:	return (TERM_BLUE);
+		case 4:	return (TERM_YELLOW);
+		case 5:	return (TERM_ORANGE);
+		case 6:	return (TERM_L_RED);
+		case 7:	return (TERM_L_GREEN);
+		case 8:	return (TERM_L_BLUE);
 	}
 
 	return (TERM_WHITE);
 }
+
 
 static byte acid_color(void)
 {
@@ -540,6 +533,7 @@ static byte acid_color(void)
 	}
 	return (TERM_WHITE);
 }
+
 
 static byte elec_color(void)
 {
@@ -556,6 +550,7 @@ static byte elec_color(void)
 	return (base);
 }
 
+
 static byte fire_color(void)
 {
 	byte base;
@@ -571,6 +566,7 @@ static byte fire_color(void)
 	return (base);
 }
 
+
 static byte cold_color(void)
 {
 	switch (rand_int(3))
@@ -581,6 +577,7 @@ static byte cold_color(void)
 	return (TERM_WHITE);
 }
 
+
 static byte pois_color(void)
 {
 	switch (rand_int(3))
@@ -590,6 +587,7 @@ static byte pois_color(void)
 	}
 	return (TERM_WHITE);
 }
+
 
 static byte plasma_color(void)
 {
@@ -602,6 +600,7 @@ static byte plasma_color(void)
 
 	return (TERM_WHITE);
 }
+
 
 static byte disen_color(void)
 {
@@ -628,6 +627,7 @@ static byte nexus_color(void)
 	return (TERM_WHITE);
 }
 
+
 static byte ice_color(void)
 {
 	switch (rand_int(3))
@@ -639,6 +639,7 @@ static byte ice_color(void)
 	return (TERM_WHITE);
 }
 
+
 static byte light_color(void)
 {
 	switch (rand_int(4))
@@ -649,6 +650,7 @@ static byte light_color(void)
 
 	return (TERM_WHITE);
 }
+
 
 static byte confu_color(void)
 {
@@ -662,6 +664,7 @@ static byte confu_color(void)
 	return (TERM_WHITE);
 }
 
+
 static byte spore_color(void)
 {
 	switch (rand_int(5))
@@ -673,6 +676,7 @@ static byte spore_color(void)
 
 	return (TERM_WHITE);
 }
+
 
 static byte sound_color(void)
 {
@@ -686,6 +690,7 @@ static byte sound_color(void)
 	return (TERM_WHITE);
 }
 
+
 static byte grav_color(void)
 {
 	switch (rand_int(4))
@@ -698,6 +703,7 @@ static byte grav_color(void)
 	return (TERM_WHITE);
 }
 
+
 static byte iner_color(void)
 {
 	switch (rand_int(5))
@@ -709,6 +715,7 @@ static byte iner_color(void)
 
 	return (TERM_WHITE);
 }
+
 
 static byte meteor_color(void)
 {
@@ -724,6 +731,7 @@ static byte meteor_color(void)
 	return (TERM_WHITE);
 }
 
+
 static byte water_color(void)
 {
 	switch (rand_int(5))
@@ -736,6 +744,7 @@ static byte water_color(void)
 	return (TERM_L_DARK);
 }
 
+
 static byte orb_color(void)
 {
 	switch (rand_int(4))
@@ -746,6 +755,7 @@ static byte orb_color(void)
 
 	return (TERM_L_DARK);
 }
+
 
 static byte mana_color(void)
 {
@@ -762,6 +772,7 @@ static byte mana_color(void)
 	return (base);
 }
 
+
 static byte fog_color(void)
 {
 	switch (rand_int(5))
@@ -772,6 +783,7 @@ static byte fog_color(void)
 
 	return (TERM_SLATE);
 }
+
 
 static byte bwater_color(void)
 {
@@ -788,12 +800,14 @@ static byte lava_color(void)
 	return (TERM_RED);
 }
 
+
 static byte smoke_color(void)
 {
 	if (one_in_(4)) return (TERM_L_RED);
 
 	return (TERM_L_DARK);
 }
+
 
 /*
  * Return a color to use for the bolt/ball spells
@@ -874,6 +888,7 @@ byte gf_color(int type)
 	return (TERM_WHITE);
 }
 
+
 /*
  * Helper function for bolt_pic.  For Adam Bolt's tileset, there are several series of
  * arrows pointed in all 8 directions.  This functions helps display the right one based
@@ -888,7 +903,7 @@ static int get_arrow_direction_new(int y, int x, int ny, int nx)
 	if (y == ny)
 	{
 		/* Headed left */
-		if (x > nx) 		adjust = 2;
+		if (x > nx)			adjust = 2;
 		/* Headed right */
 		else if (x < nx)	adjust = 3;
 	}
@@ -896,7 +911,7 @@ static int get_arrow_direction_new(int y, int x, int ny, int nx)
 	else if (x == nx)
 	{
 		/* Headed up */
-		if (y > ny) 		adjust = 0;
+		if (y > ny)			adjust = 0;
 
 		/* Headed down */
 		else /*if (y < ny)*/adjust = 1;
@@ -908,7 +923,7 @@ static int get_arrow_direction_new(int y, int x, int ny, int nx)
 		if (x > nx)			adjust = 7;
 
 		/* Diagonally left */
-		else if (x < nx)  	adjust = 6;
+		else if (x < nx)	adjust = 6;
 	}
 	/* headed up */
 	else /*if (y > ny) */
@@ -921,6 +936,7 @@ static int get_arrow_direction_new(int y, int x, int ny, int nx)
 	}
 	return (adjust);
 }
+
 
 /*
  * Helper function for bolt_pic.  For the DVG tileset, there are several series of
@@ -940,6 +956,7 @@ static int get_arrow_direction_dvg(int y, int x, int ny, int nx)
 		/* Headed right */
 		else if (x < nx)	adjust = 4;
 	}
+
 	/* On the same column */
 	else if (x == nx)
 	{
@@ -949,6 +966,7 @@ static int get_arrow_direction_dvg(int y, int x, int ny, int nx)
 		/* Headed down */
 		else /*if (y < ny)*/adjust = 1;
 	}
+
 	/* headed down */
 	else if (y < ny)
 	{
@@ -956,8 +974,9 @@ static int get_arrow_direction_dvg(int y, int x, int ny, int nx)
 		if (x > nx)			adjust = 0;
 
 		/* Diagonally left */
-		else if (x < nx)  	adjust = 2;
+		else if (x < nx)	adjust = 2;
 	}
+
 	/* headed up */
 	else /*if (y > ny) */
 	{
@@ -967,8 +986,10 @@ static int get_arrow_direction_dvg(int y, int x, int ny, int nx)
 		/* Diagonally left */
 		else if (x < nx)	adjust = 7;
 	}
+
 	return (adjust);
 }
+
 
 /*
  * Find the attr/char pair to use for a spell effect
@@ -1007,13 +1028,13 @@ u16b bolt_pict(int y, int x, int ny, int nx, int typ, u32b flg)
 		int k_idx = lookup_kind(TV_SHOT, SV_AMMO_NORMAL);
 		a = object_type_attr(k_idx);
 		c = object_type_char(k_idx);
-
 	}
 
 	else if (flg & (PROJECT_AMMO))
 	{
 		/* Special handling GRAPHICS_DAVID_GERVAIS and GRAPHICS_ADAM_BOLT graphics */
-		if (use_graphics && ((arg_graphics == GRAPHICS_DAVID_GERVAIS) || (arg_graphics == GRAPHICS_ADAM_BOLT)))
+		if (use_graphics && ((arg_graphics == GRAPHICS_DAVID_GERVAIS) ||
+			(arg_graphics == GRAPHICS_ADAM_BOLT)))
 		{
 			if (arg_graphics == GRAPHICS_DAVID_GERVAIS)
 			{
@@ -1036,7 +1057,6 @@ u16b bolt_pict(int y, int x, int ny, int nx, int typ, u32b flg)
 			int k_idx = lookup_kind(TV_ARROW, SV_AMMO_NORMAL);
 			a = object_type_attr(k_idx);
 			c = object_type_char(k_idx);
-
 		}
 	}
 
@@ -1196,27 +1216,26 @@ void take_hit(int dam, cptr kb_str)
 			char long_day[25];
 			char buf[120];
 
- 		  	/* Get time */
- 		  	(void)strftime(long_day, 25, "%m/%d/%Y at %I:%M %p", localtime(&ct));
+			/* Get time */
+			(void)strftime(long_day, 25, "%m/%d/%Y at %I:%M %p", localtime(&ct));
 
- 		  	/* Add note */
+			/* Add note */
 
-		  	file_putf(notes_file, "============================================================\n");
+			file_putf(notes_file, "============================================================\n");
 
 			/*killed by */
- 		  	sprintf(buf, "Killed by %s.", p_ptr->died_from);
+			sprintf(buf, "Killed by %s.", p_ptr->died_from);
 
 			/* Write message */
-            do_cmd_note(buf,  p_ptr->depth);
+			do_cmd_note(buf,  p_ptr->depth);
 
 			/* date and time*/
 			sprintf(buf, "Killed on %s.", long_day);
 
 			/* Write message */
-            do_cmd_note(buf,  p_ptr->depth);
+			do_cmd_note(buf,  p_ptr->depth);
 
 			file_putf(notes_file, "============================================================\n");
-
 		}
 
 		/* Dead */
@@ -1237,9 +1256,6 @@ void take_hit(int dam, cptr kb_str)
 		message_flush();
 	}
 }
-
-
-
 
 
 /*
@@ -1317,7 +1333,6 @@ static bool hates_elec(const object_type *o_ptr)
  */
 static bool hates_fire(const object_type *o_ptr)
 {
-
 	/* Analyze the type */
 	switch (o_ptr->tval)
 	{
@@ -1412,16 +1427,15 @@ static bool hates_sand(const object_type *o_ptr)
 	return (FALSE);
 }
 
+
 /*
  * Does a given object (usually) hate boiling mud?
  */
 static bool hates_boiling_mud(const object_type *o_ptr)
 {
-
 	/* Analyze the type */
 	switch (o_ptr->tval)
 	{
-
 		/* Scrolls get destroyed */
 		case TV_SCROLL:
 		case TV_PARCHMENT:
@@ -1433,16 +1447,15 @@ static bool hates_boiling_mud(const object_type *o_ptr)
 	return (FALSE);
 }
 
+
 /*
  * Does a given object (usually) hate boiling mud?
  */
 static bool hates_boiling_water(const object_type *o_ptr)
 {
-
 	/* Analyze the type */
 	switch (o_ptr->tval)
 	{
-
 		/* Potions and flasks get destroyed */
 		case TV_FLASK:
 		case TV_POTION:
@@ -1454,6 +1467,7 @@ static bool hates_boiling_water(const object_type *o_ptr)
 
 	return (FALSE);
 }
+
 
 /*
  * Does a given object (usually) hate lava?
@@ -1468,7 +1482,7 @@ static bool hates_lava(const object_type *o_ptr)
 	/* Ignore elements that resist fire damage */
 	if (f3 & (TR3_IGNORE_FIRE)) return (FALSE);
 
-	/*Most everything*/
+	/* Most everything */
 	switch (o_ptr->tval)
 	{
 		case TV_ARROW:
@@ -1539,25 +1553,27 @@ bool object_hates_feature(int feat, const object_type *o_ptr)
 	{
 		return (TRUE);
 	}
+
 	/* Check acid */
 	else if ((terrain_native & (ELEMENT_ACID)) &&
 		!(f3 & (TR3_IGNORE_ACID)) && hates_acid(o_ptr))
 	{
 		return (TRUE);
 	}
+
 	/* Check ice */
 	else if ((terrain_native & (ELEMENT_ICE)) &&
 		!(f3 & (TR3_IGNORE_COLD)) && hates_cold(o_ptr))
 	{
 		return (TRUE);
 	}
+
 	/* The object can exist in the grid */
 	else
 	{
 		return (FALSE);
 	}
 }
-
 
 
 /*
@@ -1569,6 +1585,7 @@ bool object_hates_location(int y, int x, const object_type *o_ptr)
 
 	return object_hates_feature(feat, o_ptr);
 }
+
 
 /*
  * destroy cursed items
@@ -1592,7 +1609,7 @@ static void holy_orb_destroy(int damage)
 		/* Hack -- for now, skip artifacts */
 		if (artifact_p(o_ptr)) continue;
 
-		/* Give any crused item a shot at destruction */
+		/* Give any cursed item a shot at destruction */
 		if ((cursed_p(o_ptr)) && (rand_int(100) < damage))
 		{
 			int amt = o_ptr->number;
@@ -1616,18 +1633,20 @@ static void holy_orb_destroy(int damage)
 }
 
 
-
-
 /*
  * Melt something
  */
 static int set_acid_destroy(const object_type *o_ptr)
 {
 	u32b f1, f2, f3, fn;
+
 	if (!hates_acid(o_ptr)) return (FALSE);
+
 	object_flags(o_ptr, &f1, &f2, &f3, &fn);
+
 	if (f3 & (TR3_IGNORE_ACID)) return (FALSE);
 	if (fn & (ELEMENT_ACID)) return (FALSE);
+
 	return (TRUE);
 }
 
@@ -1638,9 +1657,13 @@ static int set_acid_destroy(const object_type *o_ptr)
 static int set_elec_destroy(const object_type *o_ptr)
 {
 	u32b f1, f2, f3, fn;
+
 	if (!hates_elec(o_ptr)) return (FALSE);
+
 	object_flags(o_ptr, &f1, &f2, &f3, &fn);
+
 	if (f3 & (TR3_IGNORE_ELEC)) return (FALSE);
+
 	return (TRUE);
 }
 
@@ -1651,10 +1674,14 @@ static int set_elec_destroy(const object_type *o_ptr)
 static int set_fire_destroy(const object_type *o_ptr)
 {
 	u32b f1, f2, f3, fn;
+
 	if (!hates_fire(o_ptr)) return (FALSE);
+
 	object_flags(o_ptr, &f1, &f2, &f3, &fn);
+
 	if (f3 & (TR3_IGNORE_FIRE)) return (FALSE);
 	if (fn & (ELEMENT_LAVA)) return (FALSE);
+
 	return (TRUE);
 }
 
@@ -1665,12 +1692,17 @@ static int set_fire_destroy(const object_type *o_ptr)
 static int set_cold_destroy(const object_type *o_ptr)
 {
 	u32b f1, f2, f3, fn;
+
 	if (!hates_cold(o_ptr)) return (FALSE);
+
 	object_flags(o_ptr, &f1, &f2, &f3, &fn);
+
 	if (f3 & (TR3_IGNORE_COLD)) return (FALSE);
 	if (fn & (ELEMENT_ICE)) return (FALSE);
+
 	return (TRUE);
 }
+
 
 /*
  * Melt something
@@ -1678,11 +1710,16 @@ static int set_cold_destroy(const object_type *o_ptr)
 static int set_lava_destroy(const object_type *o_ptr)
 {
 	u32b f1, f2, f3, fn;
+
 	if (!hates_lava(o_ptr)) return (FALSE);
+
 	object_flags(o_ptr, &f1, &f2, &f3, &fn);
+
 	if (fn & (ELEMENT_LAVA)) return (FALSE);
+
 	return (TRUE);
 }
+
 
 /*
  * Destroy something
@@ -1690,11 +1727,16 @@ static int set_lava_destroy(const object_type *o_ptr)
 static int set_boiling_water_destroy(const object_type *o_ptr)
 {
 	u32b f1, f2, f3, fn;
+
 	if (!hates_boiling_water(o_ptr)) return (FALSE);
+
 	object_flags(o_ptr, &f1, &f2, &f3, &fn);
+
 	if ((fn & (ELEMENT_BWATER)) == ELEMENT_BWATER) return (FALSE);
+
 	return (TRUE);
 }
+
 
 /*
  * Destroy something
@@ -1702,11 +1744,16 @@ static int set_boiling_water_destroy(const object_type *o_ptr)
 static int set_boiling_mud_destroy(const object_type *o_ptr)
 {
 	u32b f1, f2, f3, fn;
+
 	if (!hates_boiling_mud(o_ptr)) return (FALSE);
+
 	object_flags(o_ptr, &f1, &f2, &f3, &fn);
+
 	if ((fn & (ELEMENT_BMUD)) == ELEMENT_BMUD) return (FALSE);
+
 	return (TRUE);
 }
+
 
 
 /* Drain an activation.
@@ -1717,26 +1764,27 @@ static bool drain_activation(object_type *o_ptr, int time)
 {
 	s16b old_timeout = o_ptr->timeout;
 
-	/*Add the penalty*/
+	/* Add the penalty */
 	o_ptr->timeout += (time / 5);
 
 	/* Limit timeout*/
 
-	/*Artifact*/
+	/* Artifact */
 	if ((o_ptr->art_num) && (o_ptr->art_num < z_info->art_norm_max))
 	{
 		artifact_type *a_ptr = &a_info[o_ptr->art_num];
 
 		if (o_ptr->timeout > (a_ptr->time + a_ptr->randtime)) o_ptr->timeout = a_ptr->time + a_ptr->randtime;
 	}
-	/*Dragon Armor*/
+
+	/* Dragon Armor */
 	else if ((o_ptr->tval == TV_DRAG_ARMOR) ||
 				(o_ptr->tval == TV_DRAG_SHIELD))
 	{
-		/*The *2 is the random time element of the dragon armor re-charge*/
+		/* The *2 is the random time element of the dragon armor re-charge */
 		u16b value = o_ptr->sval * 2;
 
-		/*Armor is more powerful than shields*/
+		/* Armor is more powerful than shields */
 		if (o_ptr->tval == TV_DRAG_ARMOR) value *= 2;
 
 		/* Branch on the sub-type */
@@ -1786,18 +1834,19 @@ static bool drain_activation(object_type *o_ptr, int time)
 		if (o_ptr->timeout > value) o_ptr->timeout = value;
 	}
 
-	/* Hack -- certain Rings - currently all the rings have the same actication timeout*/
+	/* Hack -- certain Rings - currently all the rings have the same activation timeout*/
 	else if (o_ptr->tval == TV_RING)
 	{
 		if (o_ptr->timeout > 100) o_ptr->timeout = 100;
 	}
 
-	/* The timeout was increased*/
+	/* The timeout was increased */
 	if (o_ptr->timeout > old_timeout) return (TRUE);
 
-	/*else*/
+	/* else */
 	return (FALSE);
 }
+
 
 /*
  * This seems like a pretty standard "typedef"
@@ -1805,7 +1854,7 @@ static bool drain_activation(object_type *o_ptr, int time)
 typedef int (*inven_func)(const object_type *);
 
 /*
- * Drain the chargable and activable items
+ * Drain the chargeable and activatable items
  *
  * Returns number of slots drained.
  */
@@ -1822,9 +1871,8 @@ static int inven_drain(int dam)
 	k = 0;
 
 	/* Scan through the equipment and slots backwards */
- 	for (i = 0; i < INVEN_TOTAL; i++)
+	for (i = 0; i < INVEN_TOTAL; i++)
 	{
-
 		o_ptr = &inventory[i];
 		k_ptr = &k_info[o_ptr->k_idx];
 
@@ -1861,13 +1909,11 @@ static int inven_drain(int dam)
 
 		/* Message */
 		msg_format("Your %s (%c) %s drained!", o_name, index_to_label(i), ((o_ptr->number > 1) ? "were" : "was"));
-
 	}
 
 	/* Return the casualty count */
 	return (k);
 }
-
 
 
 /*
@@ -1922,7 +1968,7 @@ static int inven_damage(inven_func typ, int perc, bool protected)
 				if (rand_int(percent) < perc) amt++;
 			}
 
-			/* Some casualities */
+			/* Some casualties */
 			if (amt)
 			{
 				int old_charges = 0;
@@ -1931,12 +1977,12 @@ static int inven_damage(inven_func typ, int perc, bool protected)
 				if (((o_ptr->tval == TV_WAND) ||
 					(o_ptr->tval == TV_STAFF) ||
 					(o_ptr->tval == TV_ROD))
-	    			&& (amt < o_ptr->number))
+					&& (amt < o_ptr->number))
 				{
-					/*save the number of charges*/
+					/* save the number of charges */
 					old_charges = o_ptr->pval;
 
-					/*distribute the charges*/
+					/* distribute the charges */
 					o_ptr->pval -= o_ptr->pval * amt / o_ptr->number;
 
 					o_ptr->pval = old_charges - o_ptr->pval;
