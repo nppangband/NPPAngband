@@ -15,14 +15,15 @@
 #include "ui-event.h"
 
 
-typedef struct term_win term_win;
-
 /*
  * A term_win is a "window" for a Term
  *
  * Note that the attr/char pair at (x,y) is a[y][x]/c[y][x]
  * and that the row of attr/chars at (0,y) is a[y]/c[y]
  */
+
+typedef struct term_win term_win;
+
 struct term_win
 {
 	bool cu, cv;	/* Cursor Useless/Visible codes */
