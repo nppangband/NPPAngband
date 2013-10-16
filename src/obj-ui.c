@@ -1647,6 +1647,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 				}
 				/* Do not use break */
 			}
+			/* no break */
 			case '.':
 			{
 				/*
@@ -1749,10 +1750,10 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 				bool verify;
 
 				/* Note verify */
-				verify = (isupper(evt.key) ? TRUE : FALSE);
+				verify = (isupper((int)evt.key) ? TRUE : FALSE);
 
 				/* Lowercase */
-				evt.key = tolower(evt.key);
+				evt.key = tolower((int)evt.key);
 
 				/* Convert letter to inventory index */
 				if (p_ptr->command_wrk == (USE_INVEN))
