@@ -785,6 +785,7 @@ ui_event_data menu_select(menu_type *menu, int *cursor, int no_handle)
 
 				/* return sometimes-interesting things here */
 			}
+			/* no break */
 
 			case EVT_MOVE:
 			{
@@ -792,6 +793,7 @@ ui_event_data menu_select(menu_type *menu, int *cursor, int no_handle)
 				if (ke.index < menu->filter_count && ke.index >= 0)
 					*cursor = menu->cursor;
 			}
+			/* no break */
 
 			case EVT_KBRD:
 			{
