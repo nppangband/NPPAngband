@@ -1957,10 +1957,12 @@ static void describe_monster_exp(int r_idx, const monster_lore *l_ptr)
 		/* Take account of annoying English */
 		p = "th";
 		i = p_ptr->lev % 10;
-		if ((p_ptr->lev / 10) == 1) /* nothing */;
-		else if (i == 1) p = "st";
-		else if (i == 2) p = "nd";
-		else if (i == 3) p = "rd";
+		if ((p_ptr->lev / 10) != 1) /* nothing */
+		{
+			if (i == 1) p = "st";
+			else if (i == 2) p = "nd";
+			else if (i == 3) p = "rd";
+		}
 
 		/* Take account of "leading vowels" in numbers */
 		q = "";
