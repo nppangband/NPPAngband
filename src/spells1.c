@@ -6017,8 +6017,8 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 		{
 			if (blind)
 			{
-			   if (!is_terrain) msg_print("You are hit by acid!");
-			   else msg_format("You are %s", msg);
+				if (!is_terrain) msg_print("You are hit by acid!");
+				else msg_format("You are %s", msg);
 			}
 
 			acid_dam(dam, killer);
@@ -6030,8 +6030,8 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 		{
 			if (blind)
 			{
-			   if (!is_terrain) msg_print("You are hit by fire!");
-			   else msg_format("You are %s", msg);
+				if (!is_terrain) msg_print("You are hit by fire!");
+				else msg_format("You are %s", msg);
 			}
 
 			fire_dam(dam, killer);
@@ -6043,8 +6043,8 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 		{
 			if (blind)
 			{
-			   if (!is_terrain) msg_print("You are hit by cold!");
-			   else msg_format("You are %s", msg);
+				if (!is_terrain) msg_print("You are hit by cold!");
+				else msg_format("You are %s", msg);
 			}
 
 			cold_dam(dam, killer);
@@ -6056,8 +6056,8 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 		{
 			if (blind)
 			{
-			   if (!is_terrain) msg_print("You are hit by lightning!");
-			   else msg_format("You are %s", msg);
+				if (!is_terrain) msg_print("You are hit by lightning!");
+				else msg_format("You are %s", msg);
 			}
 
 			elec_dam(dam, killer);
@@ -6091,16 +6091,13 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 		/* No resist to Lava damage, unless native. */
 		case GF_LAVA:
 		{
-
-			/*Player is native*/
+			/* Player is native */
 			if (p_ptr->p_native & (FF3_LAVA))
 			{
-
-				/*Nothing happens*/
+				/* Nothing happens */
 				if (is_terrain) return (FALSE);
 
 				player_native = TRUE;
-
 			}
 
 			if (blind) msg_format("You are %s", msg);
@@ -6115,25 +6112,24 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 				{
 					msg_print("You are hit by lava!");
 				}
-
 			}
 
 			lava_dam(dam, killer, player_native);
 			break;
 		}
 
-		/* Boiling water  */
+		/* Boiling water */
 		case GF_BWATER:
 		{
-			/*Player is native*/
+			/* Player is native */
 			if ((p_ptr->p_native & (ELEMENT_BWATER)) == ELEMENT_BWATER)
 			{
-				/*Nothing happens*/
+				/* Nothing happens */
 				if (is_terrain) return (FALSE);
 
 				player_native = TRUE;
 
-				/*Player is being hit by something.  Take nominal damage*/
+				/* Player is being hit by something.  Take nominal damage */
 				dam /= 9;
 			}
 
@@ -6149,26 +6145,24 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 				{
 					msg_print("You are hit with boiling water!");
 				}
-
 			}
 
 			boiling_water_dam(dam, killer, player_native);
 			break;
 		}
 
-		/* Boiling mud  */
+		/* Boiling mud */
 		case GF_BMUD:
 		{
-			/*Player is native*/
+			/* Player is native */
 			if ((p_ptr->p_native & (ELEMENT_BMUD)) == ELEMENT_BMUD)
 			{
-
-				/*Nothing happens*/
+				/* Nothing happens */
 				if (is_terrain) return (FALSE);
 
 				player_native = TRUE;
 
-				/*Player is being hit by something.  Take nominal damage*/
+				/* Player is being hit by something.  Take nominal damage */
 				dam /= 9;
 			}
 
@@ -6184,7 +6178,6 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 				{
 					msg_print("You are hit with boiling mud!");
 				}
-
 			}
 
 			boiling_mud_dam(dam, killer, player_native);
@@ -6200,12 +6193,11 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 			break;
 		}
 
-		/* Arrow --  */
+		/* Arrow -- */
 		case GF_ARROW:
 		{
 			if (who > SOURCE_MONSTER_START)
 			{
-
 				/* Source monster */
 				monster_type *m_ptr;
 				monster_race *r_ptr;
@@ -6218,7 +6210,7 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 
 				/* Test for a miss or armour deflection. */
 				if ((p_ptr->state.ac + ((p_ptr->state.to_a < 150) ? p_ptr->state.ac + p_ptr->state.to_a : 150)) >
-			   	  randint((10 + r_ptr->level) * 5))
+					randint((10 + r_ptr->level) * 5))
 				{
 					if ((p_ptr->state.ac > 9) && (one_in_(2)))
 					{
@@ -6237,7 +6229,6 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 				if ((inventory[INVEN_ARM].k_idx) &&
 					(inventory[INVEN_ARM].ac  > rand_int(50)))
 				{
-
 					msg_print("It ricochets off your shield.");
 
 					/* No damage. */
@@ -6260,7 +6251,7 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 		/* Plasma -- No resist XXX */
 		case GF_PLASMA:
 		{
-			if ((blind)  && (!is_terrain)) msg_print("You are hit by something!");
+			if ((blind) && (!is_terrain)) msg_print("You are hit by something!");
 			take_hit(dam, killer);
 			if (!p_ptr->state.resist_sound)
 			{
@@ -6447,7 +6438,7 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 			break;
 		}
 
-		/*Static - drain player mana, rods, wands, staves, activatable items*/
+		/* Static - drain player mana, rods, wands, staves, activatable items */
 		case GF_STATIC:
 		{
 			int drain = MAX(dam / 25,1);
@@ -6463,7 +6454,7 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 
 			take_hit(dam, killer);
 
-			/*Drain the inventory if needed*/
+			/* Drain the inventory if needed */
 			if (!p_ptr->is_dead) inven_drain(dam);
 
 			break;
@@ -6616,8 +6607,8 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 			bool native = ((p_ptr->p_native & (P_NATIVE_ICE)) ? TRUE : FALSE);
 			if (blind)
 			{
-			   if (!is_terrain) msg_print("You are hit by something sharp!");
-			   else msg_format("You are %s", msg);
+				if (!is_terrain) msg_print("You are hit by something sharp!");
+				else msg_format("You are %s", msg);
 			}
 
 			cold_dam(dam, killer);
@@ -6650,8 +6641,8 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 				r_ptr = &r_info[m_ptr->r_idx];
 
 				power = r_ptr->level;
-
 			}
+
 			else power = effective_depth(p_ptr->depth);
 
 			if (blind) msg_print("You feel spores all around you...");
@@ -6676,16 +6667,15 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 
 		case GF_SAND:
 		{
-			/*Player is native*/
+			/* Player is native */
 			if (p_ptr->p_native & (FF3_SAND))
 			{
-
-				/*Nothing happens*/
+				/* Nothing happens */
 				if (is_terrain) return (FALSE);
 
 				player_native = TRUE;
 
-				/*Player is being hit by something.  Reduce the damage a bit.*/
+				/* Player is being hit by something.  Reduce the damage a bit. */
 				dam /= 2;
 			}
 
@@ -6701,10 +6691,9 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 				{
 					msg_print("You are hit by sand!");
 				}
-
 			}
 
-			/*Sand wears down the equipment*/
+			/* Sand wears down the equipment */
 			apply_disenchant(TRUE);
 
 			take_hit(dam, killer);
@@ -6720,20 +6709,18 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 		}
 	}
 
-
 	/* Disturb */
 	disturb(1, 0);
-
 
 	/* Return "Anything seen?" */
 	return (obvious);
 }
 
+
 /*
  * Helper function for "project()" below.
  *
  * Create effects based on the spell type.
- *
  *
  * We return "TRUE" if any "obvious" effects were observed.
  *
@@ -6747,17 +6734,17 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
 
 	bool always = FALSE;
 
-	/* Player blind-ness */
+	/* Player blindness */
 	bool blind = (p_ptr->timed[TMD_BLIND] ? TRUE : FALSE);
 
 	int source = who;
 
 	if (project_flg & (PROJECT_CLOUD)) always = TRUE;
 
-	/*No effects in walls*/
+	/* No effects in walls */
 	if (!cave_ff1_match(y, x, FF1_MOVE)) return (FALSE);
 
-	/*We can't see this square*/
+	/* We can't see this square */
 	if (!player_can_see_bold(y, x)) obvious = FALSE;
 
 	if (game_mode == GAME_NPPMORIA)
@@ -6777,10 +6764,10 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
 	}
 
 	/* Remember if the player is the source. */
-	if (source == SOURCE_PLAYER) 		effect_flag |= EF1_CHARACTER;
-	if (project_flg & (PROJECT_PLAY)) 	effect_flag |= EF1_HURT_PLAY;
+	if (source == SOURCE_PLAYER)		effect_flag |= EF1_CHARACTER;
+	if (project_flg & (PROJECT_PLAY))	effect_flag |= EF1_HURT_PLAY;
 
-	/*If a monster, make the source the race of the monster*/
+	/* If a monster, make the source the race of the monster */
 	if (who > SOURCE_MONSTER_START)
 	{
 		monster_type *m_ptr = &mon_list[who];
@@ -6790,13 +6777,13 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
 	/* Analyze the damage */
 	switch (typ)
 	{
-
 		/* Fire and lava leave smoke */
 		case GF_FIRE:
 		case GF_LAVA:
 		{
-			/*Lingering Smoke Cloud*/
-			if ((dam > 1200) || always) (void)set_effect_lingering_cloud(FEAT_SMOKE, y, x, dam, source, effect_flag);
+			/* Lingering Smoke Cloud */
+			if ((dam > 1200) || always)
+				(void)set_effect_lingering_cloud(FEAT_SMOKE, y, x, dam, source, effect_flag);
 			break;
 		}
 		/* Fire leaves smoke */
@@ -6814,7 +6801,7 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
 		{
 			int feat = ((typ == GF_GRAVITY) ? FEAT_GRAVITY : FEAT_INERTIA);
 
-			/*Not noticed*/
+			/* Not noticed */
 			obvious = FALSE;
 
 			/*Leave residual effects if damage is high enough*/
@@ -6828,26 +6815,28 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
 			break;
 		}
 
-		/* Standard damage -- also poisons player */
+		/* Standard damage -- also freezes player */
 		case GF_COLD:
 		{
-			/*Lingering Poison Cloud*/
-			if ((dam > 250) || always)  (void)set_effect_lingering_cloud(FEAT_FROST_CLOUD, y, x, dam / 3, source, effect_flag);
+			/* Lingering Cold Cloud */
+			if ((dam > 250) || always)
+				(void)set_effect_lingering_cloud(FEAT_FROST_CLOUD, y, x, dam / 3, source, effect_flag);
 			break;
 		}
 
 		/* Standard damage -- also poisons player */
 		case GF_POIS:
 		{
-			/*Lingering Poison Cloud*/
-			if ((dam > 250) || always)  (void)set_effect_lingering_cloud(FEAT_POISON_CLOUD, y, x, dam / 3, source, effect_flag);
+			/* Lingering Poison Cloud */
+			if ((dam > 250) || always)
+				(void)set_effect_lingering_cloud(FEAT_POISON_CLOUD, y, x, dam / 3, source, effect_flag);
 			break;
 		}
 
 		/* Make traps */
 		case GF_MAKE_TRAP:
 		{
-			/*Not noticed*/
+			/* Not noticed */
 			obvious = FALSE;
 
 			place_trap(y, x, 0);
@@ -6860,17 +6849,18 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
 		case GF_BMUD:
 		{
 			/* Steam Cloud */
-			if ((dam > 250) || always)  (void)set_effect_lingering_cloud(FEAT_STEAM, y, x, dam, source, effect_flag);
+			if ((dam > 250) || always)
+				(void)set_effect_lingering_cloud(FEAT_STEAM, y, x, dam, source, effect_flag);
 			break;
 		}
 
-		/* Lite  */
+		/* Lite */
 		case GF_LIGHT:
 		case GF_DARK:
 		{
 			int feat = ((typ == GF_LIGHT) ? FEAT_LIGHT : FEAT_DARK);
 
-			/*Not noticed*/
+			/* Not noticed */
 			obvious = FALSE;
 
 			if ((dam > 200) || always)
@@ -6885,7 +6875,7 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
 
 		case GF_LIFE_DRAIN:
 		{
-			/*Leave residual effects if a player spell*/
+			/* Leave residual effects if a player spell */
 			if (always)
 			{
 				int dam1 = (dam * f_info[FEAT_LIFE_DRAIN].x_damage) / 100;
@@ -6898,9 +6888,9 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
 			break;
 		}
 
-		case GF_ELEC_BURST: /*repeated lightning strikes*/
+		case GF_ELEC_BURST: /* repeated lightning strikes */
 		{
-			/*Leave residual effects if a player spell*/
+			/* Leave residual effects if a player spell */
 			if (always)
 			{
 				int dam1 = (dam * f_info[FEAT_SPARKS].x_damage) / 100;
@@ -6913,9 +6903,9 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
 			break;
 		}
 
-		case GF_METEOR: /*repeated meteor strikes*/
+		case GF_METEOR: /* repeated meteor strikes */
 		{
-			/*Leave residual effects if a player spell*/
+			/* Leave residual effects if a player spell */
 			if (always)
 			{
 				int dam1 = (dam * f_info[FEAT_METEOR_BURST].x_damage) / 100;
@@ -6931,15 +6921,15 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
 		/* Spores - poison, */
 		case GF_SPORE:
 		{
-			/*Lingering Poison Cloud*/
-			if ((dam > 300) || always)  (void)set_effect_lingering_cloud(FEAT_POISON_CLOUD, y, x, dam, source, effect_flag);
+			/* Lingering Poison Cloud */
+			if ((dam > 300) || always)
+				(void)set_effect_lingering_cloud(FEAT_POISON_CLOUD, y, x, dam, source, effect_flag);
 			break;
 		}
 
-		/*Clear the air of cloud effects*/
+		/* Clear the air of cloud effects */
 		case GF_CLEAR_AIR:
 		{
-
 			/* Get the first effect */
 			u16b x_idx = cave_x_idx[y][x];
 
@@ -6961,19 +6951,15 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
 					/*Delete it*/
 					delete_effect_idx(this_x_idx);
 				}
-
-
 			}
 
 			break;
-
 		}
 
 		case GF_VAPOUR:
 		case GF_STEAM:
-
 		{
-			/*Lingering Steam Cloud*/
+			/* Lingering Steam Cloud */
 			(void)set_effect_lingering_cloud(FEAT_STEAM, y, x, dam, source, effect_flag);
 			break;
 		}
@@ -6984,9 +6970,10 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
 			(void)set_effect_lingering_cloud(FEAT_SMOKE, y, x, dam / 3, source, effect_flag);
 			break;
 		}
+
 		case GF_STATIC:
 		{
-			/*Not noticed*/
+			/* Not noticed */
 			obvious = FALSE;
 
 			if ((dam > 200) || always)
@@ -7009,18 +6996,19 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
 		{
 			int feat;
 
-			if (typ == GF_NETHER) 			feat = FEAT_NETHER;
-			else if (typ == GF_CHAOS) 		feat = FEAT_CHAOS;
-			else if (typ == GF_DISENCHANT) 		feat = FEAT_DISENCHANTMENT;
-			else if (typ == GF_NEXUS) 		feat = FEAT_NEXUS;
-			else if (typ == GF_TIME) 		feat = FEAT_TIME;
-			else if (typ == GF_CONFUSION) 	feat = FEAT_CONFUSION;
-			else if (typ == GF_SHARD) 	    feat = FEAT_SHARD;
+			if (typ == GF_NETHER)			feat = FEAT_NETHER;
+			else if (typ == GF_CHAOS)		feat = FEAT_CHAOS;
+			else if (typ == GF_DISENCHANT)	feat = FEAT_DISENCHANTMENT;
+			else if (typ == GF_NEXUS)		feat = FEAT_NEXUS;
+			else if (typ == GF_TIME)		feat = FEAT_TIME;
+			else if (typ == GF_CONFUSION)	feat = FEAT_CONFUSION;
+			else if (typ == GF_SHARD)		feat = FEAT_SHARD;
 			/*Paranoia*/
 			else break;
 
-			/*Lingering Cloud*/
-			if ((dam > 500) || always)  (void)set_effect_lingering_cloud(feat, y, x, (dam / 5), source, effect_flag);
+			/* Lingering Cloud */
+			if ((dam > 500) || always)
+				(void)set_effect_lingering_cloud(feat, y, x, (dam / 5), source, effect_flag);
 			break;
 		}
 
@@ -7035,6 +7023,7 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
 	return ((obvious) && (!blind));
 }
 
+
 /*
  * Calculate and store the arcs used to make starbursts.
  */
@@ -7044,7 +7033,6 @@ static void calc_starburst(int height, int width, byte *arc_first,
 	int i;
 	int size, dist, vert_factor;
 	int degree_first, center_of_arc;
-
 
 	/* Note the "size" */
 	size = 2 + div_round(width + height, 22);
@@ -7066,10 +7054,9 @@ static void calc_starburst(int height, int width, byte *arc_first,
 
 		/* Do not entirely leave the usual range */
 		if (degree_first < 180 * (i+1) / *arc_num)
-		    degree_first = 180 * (i+1) / *arc_num;
+			degree_first = 180 * (i+1) / *arc_num;
 		if (degree_first > (180 + *arc_num) * (i+1) / *arc_num)
-		    degree_first = (180 + *arc_num) * (i+1) / *arc_num;
-
+			degree_first = (180 + *arc_num) * (i+1) / *arc_num;
 
 		/* Get the center of the arc (convert from 180 to 360 circle). */
 		center_of_arc = degree_first + arc_first[i];
@@ -7118,6 +7105,7 @@ static void calc_starburst(int height, int width, byte *arc_first,
 		}
 	}
 }
+
 
 /*
  * Generic "beam"/"bolt"/"ball" projection routine.
@@ -7422,7 +7410,7 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 			{
 				/* Only do visuals if the player can "see" the projection */
 				if (panel_contains(y, x) && player_has_los_bold(y, x) &&
-				    (path_gx[i] < PATH_G_NONE))
+					(path_gx[i] < PATH_G_NONE))
 				{
 					u16b p;
 
@@ -7443,7 +7431,7 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 
 					if (op_ptr->delay_factor)
 					{
-					    Term_fresh();
+						Term_fresh();
 						handle_stuff();
 					}
 
@@ -7454,7 +7442,6 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 
 					}
 					else m = msec;
-
 
 					/* Delay */
 					Term_xtra(TERM_XTRA_DELAY, m);
@@ -7474,7 +7461,6 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 
 					/* Hack -- Activate delay */
 					visual = TRUE;
-
 				}
 
 				/* Hack -- Always delay for consistency */
@@ -7499,7 +7485,6 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 
 	/* Handle explosions */
 	else if (flg & (PROJECT_BOOM))
-
 	{
 		/* Some projection types always PROJECT_WALL. */
 		if (typ == GF_ACID)
@@ -7529,8 +7514,7 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 			for (i = 0; i < path_n; i++)
 			{
 				/* Grid is not skipped, and is not a wall */
-				if ((path_gx[i] < PATH_G_NONE) &&
-				    (path_gx[i] != PATH_G_WALL))
+				if ((path_gx[i] < PATH_G_NONE) && (path_gx[i] != PATH_G_WALL))
 				{
 					/* Save the grid */
 					gy[grids] = GRID_Y(path_g[i]);
@@ -7541,7 +7525,6 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 					cave_temp_mark(gy[grids-1], gx[grids-1], FALSE);
 				}
 			}
-
 
 			/* The radius of arcs cannot be more than 20 */
 			if (rad > 20) rad = 20;
@@ -7559,7 +7542,6 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 			/* Get the angle of the arc's centerline */
 			centerline = 90 - get_angle_to_grid[n1y][n1x];
 		}
-
 
 		/*
 		 * If the center of the explosion hasn't been
@@ -7591,7 +7573,6 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 
 				/* This is a non-projectable grid */
 				if (!cave_project_bold(y, x))
-
 				{
 					/* Spell with PROJECT_PASS ignore these grids */
 					if (!(flg & (PROJECT_PASS)))
@@ -7627,7 +7608,6 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 				/* Must be within maximum distance. */
 				dist = (distance(y2, x2, y, x));
 				if (dist > rad) continue;
-
 
 				/* Projection is a starburst */
 				if (flg & (PROJECT_STAR))
@@ -7777,7 +7757,6 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 		}
 	}
 
-
 	/* Display the blast area if allowed. (unless a bolt) */
 	if (!blind && !(flg & (PROJECT_HIDE)) && ((grids > 1) || (dist == 0)))
 	{
@@ -7879,7 +7858,6 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 		/* Scan for objects */
 		for (i = 0; i < grids; i++)
 		{
-
 			/* Get the grid location */
 			y = gy[i];
 			x = gx[i];
@@ -7888,7 +7866,6 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 			if (project_o(who, y, x, dam_at_dist[gd[i]], typ)) notice = TRUE;
 		}
 	}
-
 
 	/* Check monsters */
 	if (flg & (PROJECT_KILL))
@@ -7941,7 +7918,6 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 		/* Scan for player */
 		for (i = 0; i < grids; i++)
 		{
-
 			/* Get the grid location */
 			y = gy[i];
 			x = gx[i];
@@ -7949,7 +7925,6 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 			/* Player is in this grid */
 			if (cave_m_idx[y][x] < 0)
 			{
-
 				/* Affect the player */
 				if (project_p(who, y, x, dam_at_dist[gd[i]], typ, NULL))
 				{
@@ -7965,7 +7940,6 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 	/* Check features */
 	if (flg & (PROJECT_GRID))
 	{
-
 		/* Scan for features */
 		for (i = 0; i < grids; i++)
 		{
@@ -7982,7 +7956,6 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 	/* Check effects */
 	if (flg & (PROJECT_EFCT))
 	{
-
 		/* Scan for features */
 		for (i = 0; i < grids; i++)
 		{
@@ -8003,9 +7976,7 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 	notice_stuff();
 	handle_stuff();
 
-
 	/* Return "something was noticed" */
 	return (notice);
 }
-
 
