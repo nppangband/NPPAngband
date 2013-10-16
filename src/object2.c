@@ -4805,6 +4805,7 @@ void object_history(object_type *o_ptr, byte origin, s16b r_idx)
 
 			/* Fall through */
 		}
+		/* no break */
 		case ORIGIN_ACQUIRE:
 		case ORIGIN_DROP_UNKNOWN:
 		case ORIGIN_FLOOR:
