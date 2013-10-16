@@ -286,7 +286,7 @@ static void init_birth_menu(menu_type *menu, int n_choices, int initial_choice, 
 
 	/* Allocate space for an array of menu item texts and help texts
 	   (where applicable) */
-	menu_data->items =(const char *)mem_alloc(menu->count * sizeof *menu_data->items);
+	menu_data->items =(const char **)mem_alloc(menu->count * sizeof *menu_data->items);
 
 	/* Poke our menu data in to the assigned slot in the menu structure. */
 	menu->menu_data = menu_data;

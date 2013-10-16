@@ -2789,7 +2789,7 @@ int get_check_other(cptr prompt, cptr other_text, char other, cptr explain)
 		if (ke.key == ESCAPE) break;
 		if (ke.key == '\r') break;
 		if (strchr("YyNn", ke.key))	break;
-		if ((ke.key == tolower(other)) || (ke.key == toupper(other))) break;
+		if ((ke.key == tolower((int)other)) || (ke.key == toupper((int)other))) break;
 		bell("Illegal response to a 'yes/no' question!");
 	}
 
@@ -2803,7 +2803,7 @@ int get_check_other(cptr prompt, cptr other_text, char other, cptr explain)
 	/* Normal negation */
 	if ((ke.key == 'Y') || (ke.key == 'y') || ke.key == '\r')	return (TRUE);
 	/*other option*/
-	else if ((ke.key == toupper(other)) || (ke.key == tolower(other))) return (2);
+	else if ((ke.key == toupper((int)other)) || (ke.key == tolower((int)other))) return (2);
 	/*all else default to no*/
 
 	/* Negative result */
@@ -2987,9 +2987,9 @@ int get_menu_choice(s16b max, char *prompt)
 		ch = inkey();
 
 		/* Letters are used for selection */
-		if (isalpha(ch))
+		if (isalpha((int)ch))
 		{
-			if (islower(ch))
+			if (islower((int)ch))
 			{
 				choice = A2I(ch);
 			}
@@ -3443,7 +3443,7 @@ int color_text_to_attr(cptr name)
 
 	/* Separate the color name and the shade number */
 	/* Only letters can be part of the name */
-	for (i = 0; isalpha(name[i]); i++) ;
+	for (i = 0; isalpha((int)name[i]); i++) ;
 
 	/* Store the start of the shade number */
 	len = i;
@@ -3452,7 +3452,7 @@ int color_text_to_attr(cptr name)
 	while (name[i])
 	{
 		/* No digit, exit */
-		if (!isdigit(name[i])) return (-1);
+		if (!isdigit((int)name[i])) return (-1);
 		++i;
 	}
 
