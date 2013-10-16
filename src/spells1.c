@@ -4005,16 +4005,15 @@ static bool project_o(int who, int y, int x, int dam, int typ)
 			{
 				if (dam > rand_int(k_ptr->k_level * 2))
 				{
-
 					/*
-				 	 * No messages needed.
-				 	 * We do not notice this with objects sitting on the ground.
+					 * No messages needed.
+					 * We do not notice this with objects sitting on the ground.
 					 */
 					if (item_tester_hook_activate(o_ptr))
 					{
-
 						(void)drain_activation(o_ptr, dam);
 					}
+
 					/* Drain charged wands/staffs */
 					else if (item_tester_hook_recharge(o_ptr))
 					{
@@ -4023,7 +4022,6 @@ static bool project_o(int who, int y, int x, int dam, int typ)
 				}
 				break;
 			}
-
 
 			/* Holy Orb -- destroys cursed non-artifacts */
 			case GF_HOLY_ORB:
@@ -4067,20 +4065,20 @@ static bool project_o(int who, int y, int x, int dam, int typ)
 			/* Mass-identify */
 			case GF_MASS_IDENTIFY:
 			{
-			  	int squelch;
+				int squelch;
 
 				/* Ignore hidden objects */
-			  	if (!o_ptr->marked) continue;
+				if (!o_ptr->marked) continue;
 
-				/*Don't identify gold*/
+				/* Don't identify gold */
 				if (o_ptr->tval == TV_GOLD) continue;
 
 				/* Ignore known objects */
 				if (object_known_p(o_ptr)) continue;
 
-			  	/* Identify object and get squelch setting */
+				/* Identify object and get squelch setting */
 				/* Note the first argument */
-			  	squelch = do_ident_item(-1, o_ptr);
+				squelch = do_ident_item(-1, o_ptr);
 
 				/* Redraw purple dots */
 				light_spot(y, x);
@@ -4130,7 +4128,6 @@ static bool project_o(int who, int y, int x, int dam, int typ)
 				break;
 			}
 
-
 			case GF_LAVA:
 			{
 				if (hates_lava(o_ptr) && dam > rand_int(150))
@@ -4140,7 +4137,6 @@ static bool project_o(int who, int y, int x, int dam, int typ)
 				}
 				break;
 			}
-
 		}
 
 		/* Attempt to destroy the object */
@@ -4302,7 +4298,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 
 	int timed_flag = 0L;
 
-	/* Unused parameter*/
+	/* Unused parameter */
 	(void)flg;
 
 	/* Walls protect monsters */
@@ -4374,7 +4370,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 	/* Monster goes active */
 	m_ptr->mflag |= (MFLAG_ACTV);
 
-	/*Mark the monster as attacked by the player, if the player is in sight. */
+	/* Mark the monster as attacked by the player, if the player is in sight. */
 	if ((who == SOURCE_PLAYER) && player_has_los_bold(y, x)) m_ptr->mflag |= (MFLAG_HIT_BY_RANGED);
 
 	/* Adjust damage based on terrain */
@@ -4442,6 +4438,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 					if (r_ptr->r_native & (RN1_N_FIRE))l_ptr->r_l_native |= (RN1_N_FIRE);
 				}
 			}
+
 			else if (r_ptr->flags3 & (RF3_HURT_FIRE))
 			{
 				m_note = MON_MSG_CATCH_FIRE;
@@ -4463,6 +4460,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 				damage /= 9;
 				if (seen) l_ptr->r_l_flags3 |= (RF3_IM_COLD);
 			}
+
 			else if (r_ptr->flags3 & (RF3_HURT_COLD))
 			{
 				m_note = MON_MSG_BADLY_FROZEN;
@@ -4484,6 +4482,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 				damage /= 9;
 				if (seen) l_ptr->r_l_flags3 |= (RF3_IM_POIS);
 			}
+
 			else if (r_ptr->flags3 & (RF3_HURT_POIS))
 			{
 				m_note = MON_MSG_BADLY_POISONED;
@@ -4519,8 +4518,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 				damage *= 3; damage /= (randint(6)+6);
 				if (seen) l_ptr->r_l_flags3 |= (RF3_RES_PLAS);
 			}
-			else if (prefix(name, "Plasma") ||
-			    (r_ptr->flags4 & (RF4_BRTH_PLAS)))
+			else if (prefix(name, "Plasma") || (r_ptr->flags4 & (RF4_BRTH_PLAS)))
 			{
 				m_note = MON_MSG_RESIST;
 				damage *= 3; damage /= (randint(6)+6);
@@ -4554,6 +4552,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 				damage *= 3; damage /= (randint(6)+6);
 				if (seen) l_ptr->r_l_flags4 |= (RF4_BRTH_NETHR);
 			}
+
 			else if (r_ptr->flags3 & (RF3_EVIL))
 			{
 				damage /= 2;
@@ -4572,6 +4571,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 				m_note = MON_MSG_IMMUNE;
 				damage = 0;
 			}
+
 			else if ((r_ptr->flags3 & (RF3_RES_WATER)) ||
 					 (r_ptr->r_native & (RN1_N_WATER)))
 			{
@@ -4579,8 +4579,10 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 				damage /= 9;
 				if (seen)
 				{
-					if (r_ptr->flags3 & (RF3_RES_WATER)) l_ptr->r_l_flags3 |= (RF3_RES_WATER);
-					if (r_ptr->r_native & (RN1_N_WATER)) l_ptr->r_l_native |= (RN1_N_WATER);
+					if (r_ptr->flags3 & (RF3_RES_WATER))
+						l_ptr->r_l_flags3 |= (RF3_RES_WATER);
+					if (r_ptr->r_native & (RN1_N_WATER))
+						l_ptr->r_l_native |= (RN1_N_WATER);
 				}
 
 			}
@@ -4601,6 +4603,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 				do_poly = FALSE;
 				if (seen) l_ptr->r_l_flags3 |= (RF3_RES_CHAOS);
 			}
+
 			else if (r_ptr->flags4 & (RF4_BRTH_CHAOS))
 			{
 				damage *= 3; damage /= (randint(6)+6);
@@ -4628,6 +4631,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 		{
 			if (seen) obvious = TRUE;
 			do_stun = randint(damage > 300 ? 15 : damage / 20);
+
 			if (r_ptr->flags4 & (RF4_BRTH_SOUND))
 			{
 				m_note = MON_MSG_RESIST;
@@ -4642,11 +4646,13 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 		{
 			if (seen) obvious = TRUE;
 			do_conf = rand_range(20, 20 + (damage > 300 ? 15 : damage / 20));
+
 			if (r_ptr->flags4 & (RF4_BRTH_CONFU))
 			{
 				damage *= 2; damage /= (randint(6)+6);
 				l_ptr->r_l_flags4 |= (RF4_BRTH_CONFU);
 			}
+
 			else if (r_ptr->flags3 & (RF3_NO_CONF))
 			{
 
@@ -4666,8 +4672,8 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 				damage *= 3; damage /= (randint(6)+6);
 				if (seen) l_ptr->r_l_flags3 |= (RF3_RES_DISEN);
 			}
-			else if ((r_ptr->flags4 & (RF4_BRTH_DISEN)) ||
-			    prefix(name, "Disen"))
+
+			else if ((r_ptr->flags4 & (RF4_BRTH_DISEN)) || prefix(name, "Disen"))
 			{
 				m_note = MON_MSG_RESIST;
 				damage *= 3; damage /= (randint(6)+6);
@@ -4702,8 +4708,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 				damage *= 3; damage /= (randint(6)+6);
 				if (seen) l_ptr->r_l_flags3 |= (RF3_RES_NEXUS);
 			}
-			else if ((r_ptr->flags4 & (RF4_BRTH_NEXUS)) ||
-			    prefix(name, "Nexus"))
+			else if ((r_ptr->flags4 & (RF4_BRTH_NEXUS)) || prefix(name, "Nexus"))
 			{
 				m_note = MON_MSG_RESIST;
 				damage *= 3; damage /= (randint(6)+6);
@@ -4755,12 +4760,10 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 				else m_ptr->mana -= drain;
 
 				m_note = MON_MSG_MANA_DRAIN;
-
 			}
 
 			break;
 		}
-
 
 		/* Time -- breathers resist */
 		case GF_TIME:
@@ -4820,8 +4823,10 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 				damage /= 9;
 				if (seen)
 				{
-					if (r_ptr->flags3 & (RF3_IM_COLD)) l_ptr->r_l_flags3 |= (RF3_IM_COLD);
-					if (r_ptr->r_native & (RN1_N_ICE)) l_ptr->r_l_native |= (RN1_N_ICE);
+					if (r_ptr->flags3 & (RF3_IM_COLD))
+						l_ptr->r_l_flags3 |= (RF3_IM_COLD);
+					if (r_ptr->r_native & (RN1_N_ICE))
+						l_ptr->r_l_native |= (RN1_N_ICE);
 				}
 			}
 			else if (r_ptr->flags3 & (RF3_HURT_COLD))
@@ -4884,7 +4889,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			break;
 		}
 
-
 		/* Clone monsters (Ignore "dam") */
 		case GF_OLD_CLONE:
 		{
@@ -4908,13 +4912,12 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			break;
 		}
 
-
 		/* Heal Monster (use "dam" as amount of healing) */
 		case GF_OLD_HEAL:
 		{
 			bool healed = TRUE;
 
-			/*does monster need healing?*/
+			/* does monster need healing? */
 			if (m_ptr->hp == m_ptr->maxhp) healed = FALSE;
 
 			if (seen) obvious = TRUE;
@@ -4934,13 +4937,12 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			/* Redraw (later) if needed */
 			if ((p_ptr->health_who == mon_idx)  || (m_ptr->sidebar)) p_ptr->redraw |= (PR_HEALTH);
 
-			/*monster was at full hp to begin*/
+			/* monster was at full hp to begin */
 			if (!healed)
 			{
 				obvious = FALSE;
 
 				m_note = MON_MSG_UNAFFECTED;
-
 			}
 
 			/* Message */
@@ -4955,11 +4957,9 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			break;
 		}
 
-
 		/* Speed Monster (Ignore "dam") */
 		case GF_OLD_SPEED:
 		{
-
 			if (seen) obvious = TRUE;
 
 			/* Speed up */
@@ -4969,7 +4969,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			damage = 0;
 			break;
 		}
-
 
 		/* Slow Monster (Use "dam" as "power") */
 		case GF_OLD_SLOW:
@@ -5047,13 +5046,12 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			break;
 		}
 
-
 		/*
 		 * Lite -- opposite of Dark
 		 * Different kinds of light sensitive
 		 * monsters react differently to hard light.
 		 *
-		 * Undead or incorporeal monsters are particulary
+		 * Undead or incorporeal monsters are particularly
 		 * vulnerable, those with both traits especially
 		 * so.
 		 *
@@ -5103,7 +5101,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			break;
 		}
 
-
 		/* Dark -- opposite of Lite */
 		case GF_DARK:
 		{
@@ -5115,7 +5112,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			}
 			break;
 		}
-
 
 		/* Stone to Mud */
 		case GF_KILL_WALL:
@@ -5151,7 +5147,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			{
 				bool healed = TRUE;
 
-				/*does monster need healing?*/
+				/* does monster need healing? */
 				if (m_ptr->hp == m_ptr->maxhp) healed = FALSE;
 
 				/* Notice effect */
@@ -5222,7 +5218,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			break;
 		}
 
-
 		/* Teleport undead (Use "dam" as "power") */
 		case GF_AWAY_UNDEAD:
 		{
@@ -5245,7 +5240,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			damage = 0;
 			break;
 		}
-
 
 		/* Teleport evil (Use "dam" as "power") */
 		case GF_AWAY_EVIL:
@@ -5270,7 +5264,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			break;
 		}
 
-
 		/* Teleport monster (Use "dam" as "power") */
 		case GF_AWAY_ALL:
 		{
@@ -5284,7 +5277,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			damage= 0;
 			break;
 		}
-
 
 		/* Turn undead (Use "dam" as "power") */
 		case GF_TURN_UNDEAD:
@@ -5300,7 +5292,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 
 				/* Apply some fear */
 				do_fear = damroll(3, (damage / 2)) + 1;
-
 			}
 
 			/* Others ignore */
@@ -5314,7 +5305,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			damage = 0;
 			break;
 		}
-
 
 		/* Turn evil (Use "dam" as "power") */
 		case GF_TURN_EVIL:
@@ -5330,7 +5320,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 
 				/* Apply some fear */
 				do_fear = damroll(3, (damage / 2)) + 1;
-
 			}
 
 			/* Others ignore */
@@ -5344,7 +5333,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			damage = 0;
 			break;
 		}
-
 
 		/*
 		 * Turn monster (Use "dam" as "power")
@@ -5365,7 +5353,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			damage = 0;
 			break;
 		}
-
 
 		/* Dispel undead */
 		case GF_DISP_UNDEAD:
@@ -5396,7 +5383,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 
 			break;
 		}
-
 
 		/* Dispel evil */
 		case GF_DISP_EVIL:
@@ -5431,11 +5417,11 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 		/* make_wary */
 		case GF_MAKE_WARY:
 		{
-			/*Sleeping, confused, or afraid monsters never notice anything*/
+			/* Sleeping, confused, or afraid monsters never notice anything */
 			if ((m_ptr->m_timed[MON_TMD_SLEEP]) || (m_ptr->m_timed[MON_TMD_CONF]) ||
 				(m_ptr->m_timed[MON_TMD_FEAR])) skipped = TRUE;
 
-			/*certain monsters never notice anything either*/
+			/* certain monsters never notice anything either */
 			else if (r_ptr->flags2 & (RF2_STUPID)) skipped = TRUE;
 			else if (r_ptr->flags1 & (RF1_NEVER_MOVE)) skipped = TRUE;
 			else if (r_ptr->flags2 & (RF2_EMPTY_MIND)) skipped = TRUE;
@@ -5443,29 +5429,29 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			else if ((strchr("BFIJKSXabceijlrsmvwjz,", r_ptr->d_char)) &&
 				(!(r_ptr->flags2 & (RF2_SMART)))) skipped = TRUE;
 
-			/*don't make monsters wary again to avoid the message*/
-			else if (m_ptr->mflag & (MFLAG_WARY)) skipped = TRUE;;
+			/* don't make monsters wary again to avoid the message */
+			else if (m_ptr->mflag & (MFLAG_WARY)) skipped = TRUE;
 
 			/* Obvious */
 			if (seen) obvious = TRUE;
 
-			/*don't mention anything if they are already*/
+			/* don't mention anything if they are already */
 			if (!skipped)
 			{
 
 				m_ptr->mflag |= (MFLAG_WARY);
 
-				/*senitent beings get a more human-like message*/
+				/* sentient beings get a more human-like message */
 				if ((strchr("phntyPdDGLOoTuUvV", r_ptr->d_char)) || (r_ptr->flags2 & (RF2_SMART)))
 				{
 					if (one_in_(2))	m_note = MON_MSG_AWARE_OF_CRAFTY_ABILITIES;
 					else m_note = MON_MSG_AWARE_OF_CUNNING_TACTICS;
 				}
 
-				/* or else a more message based on instinct*/
+				/* or else a more message based on instinct */
 				else
 				{
-				    if (one_in_(2)) m_note = MON_MSG_SENSE_CRAFTY_ABILITIES;
+					if (one_in_(2)) m_note = MON_MSG_SENSE_CRAFTY_ABILITIES;
 					else m_note = MON_MSG_SENSE_CUNNING_FOE;
 				}
 
@@ -5473,7 +5459,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 
 			break;
 		}
-
 
 		/* Dispel monster */
 		case GF_DISP_ALL:
@@ -5544,7 +5529,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 
 			break;
 		}
-
 
 		/* Default */
 		default:
@@ -5675,7 +5659,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 			/* No resist message. They will get a damage message instead */
 		}
 
-		/*some creatures are resistant to stunning*/
+		/* some creatures are resistant to stunning */
 		else if ((r_ptr->flags3 & RF3_NO_STUN) || (r_ptr->flags4 & (RF4_BRTH_FORCE)))
 		{
 			stun_note = MON_MSG_UNAFFECTED;
@@ -5683,9 +5667,9 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 
 		else stun_note = MON_MSG_RESIST;
 
-		/*possibly update the monster health bar*/
-		if ((p_ptr->health_who == mon_idx) || (m_ptr->sidebar)) p_ptr->redraw |= (PR_HEALTH);
-
+		/* possibly update the monster health bar */
+		if ((p_ptr->health_who == mon_idx) || (m_ptr->sidebar))
+			p_ptr->redraw |= (PR_HEALTH);
 	}
 
 	/* Confusion and Chaos breathers (and sleepers) never confuse */
@@ -5716,7 +5700,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 		if (p_ptr->health_who == mon_idx) p_ptr->redraw |= (PR_HEALTH);
 	}
 
-	/*Slowing*/
+	/* Slowing */
 	else if (do_slow)
 	{
 		bool was_slowed = (m_ptr->m_timed[MON_TMD_SLOW] ? TRUE : FALSE);
@@ -5752,14 +5736,13 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 	/* Fear */
 	if (do_fear)
 	{
-
 		bool was_afraid = (m_ptr->m_timed[MON_TMD_FEAR] ? TRUE : FALSE);
 		if (mon_inc_timed(mon_idx, MON_TMD_FEAR, do_fear, (timed_flag | MON_TMD_FLG_NOMESSAGE)))
 		{
 			if (was_afraid) fear_note = MON_MSG_MORE_AFRAID;
 			else fear_note = MON_MSG_FLEE_IN_TERROR;
 
-			/*a monster can't be wary and afraid*/
+			/* a monster can't be wary and afraid */
 			m_ptr->mflag &= ~(MFLAG_WARY);
 			/* Monster is paniced */
 			m_ptr->min_range = PANIC_RANGE;
@@ -5857,7 +5840,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 		if (mon_take_hit(mon_idx, damage, &fear, "", who))
 		{
 			/* Dead monster. Empty statement */
-
 		}
 
 		/* Damaged monster */
@@ -5894,8 +5876,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 
 	if (!mon_died)
 	{
-
-		/* Do the effect messags here so they appear after the pain messages */
+		/* Do the effect messages here so they appear after the pain messages */
 		if (stun_note) add_monster_message(m_name, mon_idx, stun_note);
 		if (conf_note) add_monster_message(m_name, mon_idx, conf_note);
 		if (slow_note) add_monster_message(m_name, mon_idx, slow_note);
@@ -5942,10 +5923,6 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
 }
 
 
-
-
-
-
 /*
  * Helper function for "project()" below.
  *
@@ -5970,7 +5947,7 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 	/* Hack -- assume obvious */
 	bool obvious = TRUE;
 
-	/* Player blind-ness */
+	/* Player blindness */
 	bool blind = (p_ptr->timed[TMD_BLIND] ? TRUE : FALSE);
 
 	/* Monster name (for damage) */
@@ -6008,7 +5985,6 @@ bool project_p(int who, int y, int x, int dam, int typ, cptr msg)
 	}
 	else if (who == SOURCE_TRAP)
 	{
-
 		/* Get the effect name */
 		feature_desc(killer, sizeof(killer), x_list[cave_x_idx[y][x]].x_f_idx, TRUE, TRUE);
 	}
