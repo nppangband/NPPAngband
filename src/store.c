@@ -3821,9 +3821,9 @@ static int find_inven(const object_type *o_ptr)
 
 				/* Fall through */
 			}
+			/* no break */
 
-			/* Missiles */
-			case TV_BOLT:
+			case TV_BOLT: /* Missiles */
 			case TV_ARROW:
 			case TV_SHOT:
 			{
