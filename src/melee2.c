@@ -1304,7 +1304,7 @@ static int find_resist(int m_idx, int spell_lrn)
 		case LRN_SHARD:
 		{
 			if (smart & (SM_RES_SHARD)) return (30);
-			else return (0);
+			return (0);
 		}
 
 		/* Nexus Spells */
