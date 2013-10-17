@@ -2153,11 +2153,21 @@ bool cave_exist_mon(const monster_race *r_ptr, int y, int x,
  */
 static int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash)
 {
+	u16b feat;
+	monster_race *r_ptr;
+
+	int move_chance;
+
+	int unlock_chance;
+	int bash_chance;
+
+	bool is_native;
+
 	/* Check Bounds */
 	if (!in_bounds(y, x)) return (0);
 
 	/* Check location */
-	u16b feat = cave_feat[y][x];
+	feat = cave_feat[y][x];
 
 	/*
 	 * Don't move through permanent walls.
@@ -2168,7 +2178,7 @@ static int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash)
 		return (0);
 	}
 
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	r_ptr = &r_info[m_ptr->r_idx];
 
 	/* The grid is occupied by the player. */
 	if (cave_m_idx[y][x] < 0)
@@ -2178,13 +2188,13 @@ static int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash)
 	}
 
 	/* Assume nothing in the grid other than the terrain hinders movement */
-	int move_chance = 100;
+	move_chance = 100;
 
-	int unlock_chance = 0;
-	int bash_chance = 0;
+	unlock_chance = 0;
+	bash_chance = 0;
 
 	/* Check nativity */
-	bool is_native = is_monster_native(y, x, r_ptr);
+	is_native = is_monster_native(y, x, r_ptr);
 
 	/* The grid is occupied by a monster. */
 	if ((cave_m_idx[y][x] > 0) && (is_native))
