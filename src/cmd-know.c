@@ -649,11 +649,11 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 
 		if (do_swap)
 		{
-			menu_type *msw = active_menu;
-			int *isw = active_cursor;
-			active_menu = inactive_menu;
 			do_swap = FALSE;
+			menu_type *msw = active_menu;
+			active_menu = inactive_menu;
 			inactive_menu = msw;
+			int *isw = active_cursor;
 			active_cursor = inactive_cursor;
 			inactive_cursor = isw;
 			panel = 1 - panel;
@@ -710,9 +710,9 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 			if (region_inside(&inactive_menu->boundary, &ke))
 			{
 				menu_type *msw = active_menu;
-				int *isw = active_cursor;
 				active_menu = inactive_menu;
 				inactive_menu = msw;
+				int *isw = active_cursor;
 				active_cursor = inactive_cursor;
 				inactive_cursor = isw;
 				panel = 1-panel;

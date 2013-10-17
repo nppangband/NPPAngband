@@ -2990,7 +2990,7 @@ static void do_cmd_delay(void)
 			screen_load();
 			continue;
 		}
-		if (isdigit((int)ke.key)) delay = D2I(ke.key);
+		if (isdigit(ke.key)) delay = D2I(ke.key);
 		if (ke.key == '+') delay++;
 		else if (ke.key == '-') delay--;
 		if (delay > 15) delay = 15;
@@ -3036,7 +3036,7 @@ static void do_cmd_hp_warn(void)
 			screen_load();
 			continue;
 		}
-		if (isdigit((int)ke.key)) warn = D2I(ke.key);
+		if (isdigit(ke.key)) warn = D2I(ke.key);
 		if (ke.key == '+') warn++;
 		else if (ke.key == '-') warn--;
 		if (warn > 9) warn = 9;
@@ -3083,7 +3083,7 @@ static void do_cmd_lazymove_delay(void)
 			screen_load();
 			continue;
 		}
-		if (isdigit((int)ke.key)) lazymove_delay = D2I(ke.key);
+		if (isdigit(ke.key)) lazymove_delay = D2I(ke.key);
 		if (ke.key == '+') lazymove_delay++;
 		else if (ke.key == '-') lazymove_delay--;
 	}
@@ -3348,7 +3348,7 @@ void do_cmd_note(char *note, int what_depth)
 				char ch;
 
 				/* Ensure the character is printable */
-				ch = (isprint((int)buf[n]) ? buf[n] : ' ');
+				ch = (isprint(buf[n]) ? buf[n] : ' ');
 
 				/* Write out the character */
 				file_putf(notes_file, "%c", ch);
