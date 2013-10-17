@@ -1164,6 +1164,7 @@ static void quality_squelch_hook(int oid, void *db, const region *loc)
 	text_out(" are applicable settings.");
 }
 
+
 /*
  * Display an entry in the menu.
  */
