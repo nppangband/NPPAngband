@@ -262,6 +262,7 @@ static void class_help(int i, void *db, const region *l)
 	text_out_indent = 0;
 }
 
+
 /* Set up one of our menus ready to display choices for a birth question.
    This is slightly involved. */
 static void init_birth_menu(menu_type *menu, int n_choices, int initial_choice, const region *reg, bool allow_random, browse_f aux)
@@ -286,7 +287,7 @@ static void init_birth_menu(menu_type *menu, int n_choices, int initial_choice, 
 
 	/* Allocate space for an array of menu item texts and help texts
 	   (where applicable) */
-	menu_data->items =(const char *)mem_alloc(menu->count * sizeof *menu_data->items);
+	menu_data->items =(const char **)mem_alloc(menu->count * sizeof *menu_data->items);
 
 	/* Poke our menu data in to the assigned slot in the menu structure. */
 	menu->menu_data = menu_data;
