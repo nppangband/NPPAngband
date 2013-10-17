@@ -191,7 +191,7 @@ typedef void (*browse_f) (int oid, void *db, const region *l);
 static void birthmenu_display(menu_type *menu, int oid, bool cursor,
 							  int row, int col, int width)
 {
-	struct birthmenu_data *data = menu->menu_data;
+	struct birthmenu_data *data = menu->menu_data.birth;
 
 	byte attr = curs_attrs[CURS_KNOWN][0 != cursor];
 	c_put_str(attr, data->items[oid], row, col);
@@ -290,7 +290,7 @@ static void init_birth_menu(menu_type *menu, int n_choices, int initial_choice, 
 	menu_data->items =(const char **)mem_alloc(menu->count * sizeof *menu_data->items);
 
 	/* Poke our menu data in to the assigned slot in the menu structure. */
-	menu->menu_data = menu_data;
+	menu->menu_data.birth = menu_data;
 
 	/* Set up the "browse" hook to display help text (where applicable). */
 	menu->browse_hook = aux;
@@ -321,7 +321,7 @@ static void setup_menus(void)
 
 	/* Sex menu fairly straightforward */
 	init_birth_menu(&sex_menu, MAX_SEXES, p_ptr->psex, &gender_region, TRUE, NULL);
-	mdata = sex_menu.menu_data;
+	mdata = sex_menu.menu_data.birth;
 	for (i = 0; i < MAX_SEXES; i++)
 	{
 		mdata->items[i] = sex_info[i].title;
@@ -330,7 +330,7 @@ static void setup_menus(void)
 
 	/* Race menu more complicated. */
 	init_birth_menu(&race_menu, z_info->p_max, p_ptr->prace, &race_region, TRUE, race_help);
-	mdata = race_menu.menu_data;
+	mdata = race_menu.menu_data.birth;
 
 	for (i = 0; i < z_info->p_max; i++)
 	{
@@ -340,7 +340,7 @@ static void setup_menus(void)
 
 	/* Class menu similar to race. */
 	init_birth_menu(&class_menu, z_info->c_max, p_ptr->pclass, &class_region, TRUE, class_help);
-	mdata = class_menu.menu_data;
+	mdata = class_menu.menu_data.birth;
 
 	for (i = 0; i < z_info->c_max; i++)
 	{
@@ -350,7 +350,7 @@ static void setup_menus(void)
 
 	/* Birth option menu simple */
 	init_birth_menu(&birth_opt_menu, MAX_BIRTH_OPTONS, 0, &birth_opt_region, FALSE, NULL);
-	mdata = birth_opt_menu.menu_data;
+	mdata = birth_opt_menu.menu_data.birth;
 	for (i = 0; i < MAX_BIRTH_OPTONS; i++)
 	{
 		mdata->items[i] = option_choices[i];
@@ -359,7 +359,7 @@ static void setup_menus(void)
 
 	/* Roller menu straightforward again */
 	init_birth_menu(&roller_menu, MAX_BIRTH_ROLLERS, 0, &roller_region, TRUE, NULL);
-	mdata = roller_menu.menu_data;
+	mdata = roller_menu.menu_data.birth;
 	for (i = 0; i < MAX_BIRTH_ROLLERS; i++)
 	{
 		mdata->items[i] = roller_choices[i];
@@ -371,7 +371,7 @@ static void setup_menus(void)
 /* Cleans up our stored menu info when we've finished with it. */
 static void free_birth_menu(menu_type *menu)
 {
-	struct birthmenu_data *data = menu->menu_data;
+	struct birthmenu_data *data = menu->menu_data.birth;
 
 	if (data)
 	{
@@ -443,7 +443,7 @@ static void print_menu_instructions(void)
 static enum birth_stage menu_question(enum birth_stage current,
 		menu_type *current_menu, cmd_code choice_command)
 {
-	struct birthmenu_data *menu_data = current_menu->menu_data;
+	struct birthmenu_data *menu_data = current_menu->menu_data.birth;
 	int cursor = current_menu->cursor;
 	ui_event_data cx;
 

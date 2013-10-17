@@ -490,7 +490,7 @@ void death_screen(void)
 	/* Initialize the menu */
 	menu = &death_menu;
 	WIPE(menu, menu_type);
-	menu->menu_data = death_actions;
+	menu->menu_data.act = death_actions;
 	menu->flags = MN_CASELESS_TAGS;
 	menu->cmd_keys = cmd_keys;
 	menu->count = N_ELEMENTS(death_actions);

@@ -891,7 +891,7 @@ static void ego_item_display(menu_type *menu, int oid, bool cursor, int row, int
 	byte tval_table[EGO_TVALS_MAX];
 	int i;
 	int n = 0;
-	const ego_desc *ego_choice = menu->menu_data;
+	const ego_desc *ego_choice = menu->menu_data.ego;
 	int idx = ego_choice[oid].e_idx;
 	ego_item_type *e_ptr = &e_info[idx];
 	char buf[100] = "", *end;
@@ -1083,7 +1083,7 @@ static void ego_item_menu(void *unused, const char *also_unused)
 	WIPE(&menu, menu);
 
 	menu.cmd_keys = " \n\r";
-	menu.menu_data = ego_choice;
+	menu.menu_data.ego = ego_choice;
 	menu.count = num;
 	menu_init(&menu, MN_SKIN_SCROLL, &menu_f, &area);
 	menu.browse_hook = ego_squelch_hook;
@@ -1571,7 +1571,7 @@ static void object_squelch_hook(int oid, void *db, const region *loc)
 static void object_squelch_display(menu_type *menu, int oid, bool cursor, int row, int col, int width)
 {
 	char buf[80];
-	const squelch_choice *choice = (const squelch_choice *) menu->menu_data;
+	const squelch_choice *choice = menu->menu_data.squelch;
 	int idx = choice[oid].idx;
 	const char *inscrip = get_autoinscription(idx);
 
@@ -1761,7 +1761,7 @@ static bool object_sqelch_menu(int tval, const char *desc)
 	menu.cmd_keys = "ANLS{+-";
 	/*menu.selections = "abcdefghijklmnopqrstuvwxyzBCDEFGHIJKMOPQRTUVWXYZ1234567890[]!@#";*/
 	menu.count = num;
-	menu.menu_data = choice;
+	menu.menu_data.squelch = choice;
 	menu_init(&menu, MN_SKIN_SCROLL, &menu_f, &area);
 	menu.flags = MN_DBL_TAP;
 	menu.browse_hook = object_squelch_hook;

@@ -427,7 +427,7 @@ static int stats_menu(int service)
 	menu.count = count;
 	if (!adult_maximize) menu.title = "              Self        EB   Best";
 	else menu.title = "              Self RB CB  EB   Best";
-	menu.menu_data = stats;
+	menu.menu_data.ints = stats;
 	if (service == SERVICE_RESTORE_STAT)
 	{
 		my_strcpy(title, " Please select a stat to restore.", sizeof(title));
@@ -3381,7 +3381,7 @@ static bool object_ident_changed(object_type *o_ptr)
 static void store_display_entry(menu_type *menu, int oid, bool cursor, int row, int col, int width)
 {
 	s32b x;
-	byte desc = ODESC_PREFIX;
+	int desc = ODESC_PREFIX;
 	int entry_type;
 	int entry_num;
 

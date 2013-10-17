@@ -245,7 +245,22 @@ struct menu_type
 
 	int count;				/* number of rows in underlying data set */
 
-	void *menu_data;  /* the data used to access rows. */
+	/* menu_data comes in many different types */
+	union {
+		int integer;
+		int *ints;
+		byte *bytes;
+		char *chars;
+		const char **strings;
+		birthmenu_data *birth;
+		ego_desc *ego;
+		member_funcs *funcs;
+		menu_action *act;
+		menu_item *item;
+		squelch_choice *squelch;
+		command_type *cmd;
+		void *data;			/* the data used to access rows. */
+	} menu_data;
 
   	/* auxiliary browser help function */
 	void (*browse_hook)(int oid, void *db, const region *loc);

@@ -249,7 +249,7 @@ static void show_cmd_menu(void)
 	WIPE(&menu, menu);
 	menu.cmd_keys = "\x8B\x8C\n\r";
 	menu.count = poss;
-	menu.menu_data = comm;
+	menu.menu_data.data = comm;
 	menu_init(&menu, MN_SKIN_SCROLL, &commands_menu, &area);
 
 	/* Select an entry */
@@ -882,7 +882,7 @@ struct {
 static void cmd_sub_entry(menu_type *menu, int oid, bool cursor, int row, int col, int width)
 {
 	byte attr = (cursor ? TERM_L_BLUE : TERM_WHITE);
-	const command_type *commands = menu->menu_data;
+	const command_type *commands = menu->menu_data.cmd;
 
 	(void)width;
 
@@ -939,7 +939,7 @@ static bool cmd_menu(command_list *list, void *selection_p)
 	WIPE(&menu, menu);
 	menu.cmd_keys = "\x8B\x8C\n\r";
 	menu.count = list->len;
-	menu.menu_data = list->list;
+	menu.menu_data.cmd = list->list;
 	menu_init(&menu, MN_SKIN_SCROLL, &commands_menu, &area);
 
 	/* Set up the screen */
@@ -1006,7 +1006,7 @@ static void do_cmd_menu(void)
 	WIPE(&menu, menu);
 	menu.cmd_keys = "\x8B\x8C\n\r";
 	menu.count = N_ELEMENTS(cmds_all) - 1;
-	menu.menu_data = &chosen_command;
+	menu.menu_data.cmd = &chosen_command;
 	menu_init(&menu, MN_SKIN_SCROLL, &commands_menu, &area);
 
 	/* Set up the screen */

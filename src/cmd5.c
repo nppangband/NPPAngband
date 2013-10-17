@@ -481,7 +481,7 @@ int get_spell_menu(const object_type *o_ptr, int mode_dummy)
 	WIPE(&menu, menu);
 	menu.flags = MN_DBL_TAP;
 	menu.cmd_keys = "abcdefghi*MG? \n\r";
-	menu.menu_data = spells;
+	menu.menu_data.bytes = spells;
 	menu.count = num_spells;
 	menu.browse_hook = spell_menu_hook;
 

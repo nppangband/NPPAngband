@@ -58,7 +58,7 @@ static void display_action_aux(menu_action *act, byte color, int row, int col, i
 
 static void display_action(menu_type *menu, int oid, bool cursor, int row, int col, int width)
 {
-	menu_action *acts = (menu_action *) menu->menu_data;
+	menu_action *acts = menu->menu_data.act;
 	byte color = curs_attrs[CURS_KNOWN][0 != cursor];
 
 	display_action_aux(&acts[oid], color, row, col, width);
@@ -88,7 +88,7 @@ static bool handle_menu_item_action(char cmd, void *db, int oid)
 
 static int valid_menu_action(menu_type *menu, int oid)
 {
-	menu_action *acts = (menu_action *)menu->menu_data;
+	menu_action *acts = menu->menu_data.act;
 	return (NULL != acts[oid].name);
 }
 
@@ -115,14 +115,14 @@ const menu_iter menu_iter_actions =
 
 static char tag_menu_item(menu_type *menu, int oid)
 {
-	menu_item *items = (menu_item *)menu->menu_data;
+	menu_item *items = menu->menu_data.item;
 	return items[oid].sel;
 }
 
 
 static void display_menu_item(menu_type *menu, int oid, bool cursor, int row, int col, int width)
 {
-	menu_item *items = (menu_item *)menu->menu_data;
+	menu_item *items = menu->menu_data.item;
 	byte color = curs_attrs[!(items[oid].flags & (MN_GRAYED))][0 != cursor];
 
 	display_action_aux(&items[oid].act, color, row, col, width);
@@ -156,7 +156,7 @@ static bool handle_menu_item(char cmd, void *db, int oid)
 
 static int valid_menu_item(menu_type *menu, int oid)
 {
-	menu_item *items = (menu_item *)menu->menu_data;
+	menu_item *items = menu->menu_data.item;
 
 	if (items[oid].flags & MN_HIDDEN)
 		return 2;
@@ -186,7 +186,7 @@ const menu_iter menu_iter_items =
 static void display_string(menu_type *menu, int oid, bool cursor,
                int row, int col, int width)
 {
-	const char **items = (const char **)menu->menu_data;
+	const char **items = menu->menu_data.strings;
 	byte color = curs_attrs[CURS_KNOWN][0 != cursor];
 	Term_putstr(col, row, width, color, items[oid]);
 }
@@ -434,7 +434,7 @@ static bool handle_menu_key(char cmd, menu_type *menu, int cursor)
 		return FALSE;
 
 	if (menu->row_funcs->row_handler &&
-		menu->row_funcs->row_handler(cmd, (void *)menu->menu_data, oid))
+		menu->row_funcs->row_handler(cmd, menu->menu_data.data, oid))
 	{
 		ui_event_data ke;
 		ke.type = EVT_SELECT;
@@ -505,7 +505,7 @@ void menu_refresh(menu_type *menu)
 					TERM_WHITE, menu->prompt);
 
 	if (menu->browse_hook && oid >= 0)
-		menu->browse_hook(oid, (void*) menu->menu_data, loc);
+		menu->browse_hook(oid, menu->menu_data.data, loc);
 
 	menu->skin->display_list(menu, menu->cursor, &menu->top, &menu->active);
 }

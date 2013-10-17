@@ -1085,7 +1085,7 @@ static void item_prompt(menu_type *menu, int mode, cptr pmt)
  */
 static char get_item_tag(menu_type *menu, int oid)
 {
-	const int *choice = menu->menu_data;
+	const int *choice = menu->menu_data.ints;
 	int idx = choice[oid];
 
 	if (p_ptr->command_wrk == USE_FLOOR)  return I2A(oid);
@@ -1098,7 +1098,7 @@ static char get_item_tag(menu_type *menu, int oid)
 
 static void get_item_display(menu_type *menu, int oid, bool cursor, int row, int col, int width)
 {
-	const int *choice = menu->menu_data;
+	const int *choice = menu->menu_data.ints;
 	int idx = choice[oid];
 	char o_name[200];
 	char label;
@@ -1513,23 +1513,23 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 			/* Pick the right menu */
 			if (p_ptr->command_wrk == (USE_INVEN))
 			{
-				menu.menu_data = inven_items;
+				menu.menu_data.ints = inven_items;
 				num_entries = inven_count;
 			}
 			else if ((p_ptr->command_wrk == (USE_EQUIP)) && use_quiver && (!use_inven) && allow_quiver &&
 					 (mode & (QUIVER_FIRST)))
 			{
-				menu.menu_data = quiver_items;
+				menu.menu_data.ints = quiver_items;
 				num_entries = quiver_count;
 			}
 			else if (p_ptr->command_wrk == (USE_FLOOR))
 			{
-				menu.menu_data = floor_items;
+				menu.menu_data.ints = floor_items;
 				num_entries = floor_count;
 			}
 			else /* if (p_ptr->command_wrk == (USE_EQUIP)) */
 			{
-				menu.menu_data = equip_items;
+				menu.menu_data.ints = equip_items;
 				num_entries = equip_count;
 			}
 
@@ -1572,7 +1572,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 
 			case EVT_SELECT:
 			{
-				int *tmp = (int *) menu.menu_data;
+				int *tmp = menu.menu_data.ints;
 				if (p_ptr->command_wrk == (USE_FLOOR))	k = 0 - tmp[evt.index];
 				else k = tmp[evt.index];
 
@@ -2549,7 +2549,7 @@ void cmd_use_item(void)
 	WIPE(&menu, menu);
 	menu.cmd_keys = "\x8B\x8C\n\r";
 	menu.count = poss;
-	menu.menu_data = comm;
+	menu.menu_data.chars = comm;
 	menu_init(&menu, MN_SKIN_SCROLL, &commands_menu, &area);
 
 	/* We want to use all objects */
@@ -2625,7 +2625,7 @@ void cmd_use_item(void)
 			collect_commands(o_ptr, item);
 			/* Update the menu */
 			menu.count = poss;
-			menu.menu_data = comm;
+			menu.menu_data.chars = comm;
 			area.page_rows = poss + 3;
 
 			/* Find the column to start in */

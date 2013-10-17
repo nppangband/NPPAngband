@@ -373,7 +373,7 @@ static int logical_height(int height)
 static void display_group_member(menu_type *menu, int oid,
 						bool cursor, int row, int col, int wid)
 {
-	const member_funcs *o_funcs = menu->menu_data;
+	const member_funcs *o_funcs = menu->menu_data.funcs;
 	byte attr = curs_attrs[CURS_KNOWN][cursor == oid];
 
 	(void)wid;
@@ -525,10 +525,10 @@ static void display_knowledge(const char *title, int *obj_list, int o_count,
 	WIPE(&group_menu, menu_type);
 	group_menu.count = grp_cnt;
 	group_menu.cmd_keys = "\n\r6\x8C";  /* Ignore these as menu commands */
-	group_menu.menu_data = g_names;
+	group_menu.menu_data.strings = g_names;
 
 	WIPE(&object_menu, menu_type);
-	object_menu.menu_data = &o_funcs;
+	object_menu.menu_data.funcs = &o_funcs;
 	WIPE(&object_iter, object_iter);
 	object_iter.display_row = display_group_member;
 
@@ -2684,7 +2684,7 @@ void init_cmd_know(void)
 	menu_type *menu = &knowledge_menu;
 	WIPE(menu, menu_type);
 	menu->title = "Display current knowledge";
-	menu->menu_data = knowledge_actions;
+	menu->menu_data.item = knowledge_actions;
 	menu->count = N_ELEMENTS(knowledge_actions),
 	menu_init(menu, MN_SKIN_SCROLL, find_menu_iter(MN_ITER_ITEMS), &SCREEN_REGION);
 

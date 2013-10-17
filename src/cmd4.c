@@ -687,7 +687,7 @@ void do_cmd_options_aux(void *vpage, cptr info)
 	}
 
 	menu_set_filter(menu, opt, n);
-	menu->menu_data = vpage;
+	menu->menu_data.data = vpage;
 	menu->cmd_keys = "?Yy\n\rNnTt\x8C";  /*\x8c = ARROW_RIGHT*/
 	menu->selections = "abcdefghijklmopqrsuvwxz";
 	menu->count = OPT_PAGE_PER;
@@ -1503,7 +1503,7 @@ static void do_cmd_macros(void)
 	WIPE(&menu, menu);
 	menu.title = "Interact with macros";
 	menu.cmd_keys = cmd_keys;
-	menu.menu_data = macro_actions;
+	menu.menu_data.act = macro_actions;
 	menu.count = N_ELEMENTS(macro_actions);
 	menu_init(&menu, MN_SKIN_SCROLL, &macro_iter, &loc);
 	menu.browse_hook = macro_browse_hook;
@@ -2224,7 +2224,7 @@ void do_cmd_visuals(void)
 	WIPE(&menu, menu);
 	menu.title = "Interact with visuals";
 	menu.cmd_keys = cmd_keys;
-	menu.menu_data = visual_actions;
+	menu.menu_data.act = visual_actions;
 	menu.count = N_ELEMENTS(visual_actions);
 	menu_init(&menu, MN_SKIN_SCROLL, &visual_iter, &area);
 
@@ -2901,7 +2901,7 @@ void do_cmd_colors(void)
 	WIPE(&menu, menu);
 	menu.title = "Interact with Colors";
 	menu.cmd_keys = cmd_keys;
-	menu.menu_data = color_actions;
+	menu.menu_data.act = color_actions;
 	menu.count = N_ELEMENTS(color_actions);
 	menu_init(&menu, MN_SKIN_SCROLL, &color_iter, &area);
 
@@ -3187,7 +3187,7 @@ void do_cmd_options(void)
 	menu_type *menu = &option_menu;
 	WIPE(menu, menu_type);
 	menu->title = "Options Menu";
-	menu->menu_data = option_actions;
+	menu->menu_data.act = option_actions;
 	menu->flags = MN_CASELESS_TAGS;
 	menu->cmd_keys = cmd_keys;
 	menu->count = N_ELEMENTS(option_actions);
