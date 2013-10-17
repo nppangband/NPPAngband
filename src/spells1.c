@@ -59,7 +59,7 @@ bool teleport_away(int m_idx, int dis)
 	/* start with a realistic range*/
 	if (dis > d) dis = d;
 
-	/*must have a realistic minimum*/
+	/* must have a realistic minimum */
 	if (min > (d * 4 / 10))
 	{
 		min = (d * 4 / 10);
@@ -104,12 +104,12 @@ bool teleport_away(int m_idx, int dis)
 				x_location_tables[spot_counter] = x;
 				y_location_tables[spot_counter] = y;
 
-				/*increase the counter*/
+				/* increase the counter */
 				spot_counter++;
 			}
 		}
 
-		/*we have at least one random spot*/
+		/* we have at least one random spot */
 		if (spot_counter) break;
 
 		/* Make sure we aren't trapped in an infinite loop */
@@ -135,7 +135,7 @@ bool teleport_away(int m_idx, int dis)
 	/* Sound */
 	sound(MSG_TPOTHER);
 
-	/*the monster should re-evaluate their target*/
+	/* the monster should re-evaluate their target */
 	m_ptr->target_y = 0;
 	m_ptr->target_x = 0;
 
@@ -449,7 +449,7 @@ bool teleport_player_level(int who)
 	if ((who >= SOURCE_MONSTER_START) &&
 			(quest_might_fail_if_leave_level() || quest_shall_fail_if_leave_level()))
 	{
-		/*de-activate the quest*/
+		/* de-activate the quest */
 		q_ptr->q_flags &= ~(QFLAG_STARTED);
 
 		go_up = TRUE;
@@ -881,7 +881,7 @@ byte gf_color(int type)
 		case GF_BMUD:		return (TERM_ORANGE);
 		case GF_BWATER:		return (bwater_color());
 		case GF_LAVA:		return (lava_color());
-		case GF_LIFE_DRAIN:  return (TERM_VIOLET);
+		case GF_LIFE_DRAIN:	return (TERM_VIOLET);
 	}
 
 	/* Standard "color" */
@@ -1627,7 +1627,6 @@ static void holy_orb_destroy(int damage)
 			/* Destroy "amt" items */
 			inven_item_increase(i, -amt);
 			inven_item_optimize(i);
-
 		}
 	}
 }
@@ -1799,7 +1798,6 @@ static bool drain_activation(object_type *o_ptr, int time)
 			case EGO_DRAGON_GOLD:
 			{
 				value *= 50;
-
 				break;
 			}
 
@@ -1814,7 +1812,6 @@ static bool drain_activation(object_type *o_ptr, int time)
 			case EGO_DRAGON_LAW:
 			{
 				value *= 60;
-
 				break;
 			}
 
@@ -1888,10 +1885,10 @@ static int inven_drain(int dam)
 		 */
 		if (!(item_tester_hook_activate(o_ptr))) continue;
 
-		/*Allow objects a saving throw*/
+		/* Allow objects a saving throw */
 		if (rand_int((dam / 2)) <= k_ptr->k_level) continue;
 
-		/*Artifacts get another saving throw*/
+		/* Artifacts get another saving throw */
 		if (o_ptr->art_num)
 		{
 			artifact_type *a_ptr = &a_info[o_ptr->art_num];
@@ -1901,7 +1898,7 @@ static int inven_drain(int dam)
 
 		(void)drain_activation(o_ptr, dam);
 
-		/*Count it*/
+		/* Count it */
 		k++;
 
 		/* Get a description */
@@ -3212,7 +3209,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 				/* Check line of sight */
 				if (player_has_los_bold(y, x))
 				{
-					/*Mark the feature lore*/
+					/* Mark the feature lore */
 					feature_lore *f_l_ptr = &f_l_list[cave_feat[y][x]];
 					f_l_ptr->f_l_flags2 |= (FF2_HURT_ACID);
 
@@ -3250,7 +3247,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 					}
 					else
 					{
-					msg_format("The %s burns up.", name);
+						msg_format("The %s burns up.", name);
 					}
 
 					obvious = TRUE;
@@ -7238,8 +7235,6 @@ static void calc_starburst(int height, int width, byte *arc_first,
  *   teleports monsters and characters in marked grids.
  *
  *
-
-
  * Usage and graphics notes:
  *
  * If the delay factor is anything other
@@ -7344,7 +7339,6 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 	{
 		x = y0 = y1;
 		x = x0 = x1;
-
 	}
 
 	/* If a single grid is both source and destination, store it. */
@@ -7501,7 +7495,6 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
 
 			/* Mark the area nearby -- limit range, ignore rooms */
 			spread_cave_temp(y0, x0, rad, FALSE, (flg & (PROJECT_PASS)) != 0);
-
 		}
 
 		/* Pre-calculate some things for arcs. */
