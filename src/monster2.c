@@ -105,7 +105,6 @@ s16b poly_r_idx(const monster_type *m_ptr)
 		return (base_idx);
 	}
 
-
 	/* Pick a monster */
 	value = rand_int(total);
 
