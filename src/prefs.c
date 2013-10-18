@@ -95,7 +95,7 @@ static void remove_old_dump(const char *cur_fname, const char *mark)
 
 
 	/* Open current file */
-	cur_file = file_open(cur_fname, MODE_READ, -1);
+	cur_file = file_open(cur_fname, MODE_READ, FTYPE_TEXT);
 	if (!cur_file) return;
 
 	/* Open new file */
@@ -1061,7 +1061,7 @@ errr process_pref_file_command(char *buf)
  			if (read_byte_or_char(zz[1], &a, &c))   color = a;
  			else color = (byte)color_char_to_attr(c);
 
-			message_color_define(j, color);
+			message_color_define((MessageType)j, color);
 
 			/* Success */
 			return (0);
@@ -1310,7 +1310,7 @@ static errr process_pref_file_aux(cptr name)
 
 
 	/* Open the file */
-	fp = file_open(name, MODE_READ, -1);
+	fp = file_open(name, MODE_READ, FTYPE_TEXT);
 	if (!fp) return (-1);
 
 
