@@ -3344,7 +3344,7 @@ void load_player_ghost_file(void)
 	path_build(str, 1024, ANGBAND_DIR_BONE, "ghost_templates.txt");
 
 	/* Open the "Bones File" */
-	fp = file_open(str, MODE_READ, -1);
+	fp = file_open(str, MODE_READ, FTYPE_TEXT);
 
 	/* Not allowed to read it?  Weird. */
 	if (!fp) return;
