@@ -530,7 +530,11 @@ void moria_speed_labels(char *buf, int speed, size_t len)
 			my_strcpy (buf, "Fast", len);
 			return;
 		}
-		default: my_strcpy (buf, "Normal", len);
+		default:
+		{
+			my_strcpy (buf, "Normal", len);
+			break;
+		}
 	}
 }
 
@@ -1417,7 +1421,7 @@ static void trace_map_updates(game_event_type type, game_event_data *data, void 
 
 static void update_maps(game_event_type type, game_event_data *data, void *user)
 {
-	term *t = user;
+	term *t = (term *)user;
 
 	/* This signals a whole-map redraw. */
 	if (data->point.x == -1 && data->point.y == -1)
@@ -1501,7 +1505,7 @@ static void update_inven_subwindow(game_event_type type, game_event_data *data,
 				       void *user)
 {
 	term *old = Term;
-	term *inv_term = user;
+	term *inv_term = (term *)user;
 
 	/* Activate */
 	Term_activate(inv_term);
@@ -1521,7 +1525,7 @@ static void update_equip_subwindow(game_event_type type, game_event_data *data,
 				   void *user)
 {
 	term *old = Term;
-	term *inv_term = user;
+	term *inv_term = (term *)user;
 
 	/* Activate */
 	Term_activate(inv_term);
@@ -1579,7 +1583,7 @@ void toggle_inven_equip(void)
 static void update_itemlist_subwindow(game_event_type type, game_event_data *data, void *user)
 {
 	term *old = Term;
-	term *inv_term = user;
+	term *inv_term = (term *)user;
 
 	/* Activate */
 	Term_activate(inv_term);
@@ -1595,7 +1599,7 @@ static void update_itemlist_subwindow(game_event_type type, game_event_data *dat
 static void update_monlist_subwindow(game_event_type type, game_event_data *data, void *user)
 {
 	term *old = Term;
-	term *inv_term = user;
+	term *inv_term = (term *)user;
 
 	/* Activate */
 	Term_activate(inv_term);
@@ -1611,7 +1615,7 @@ static void update_monlist_subwindow(game_event_type type, game_event_data *data
 static void update_monster_subwindow(game_event_type type, game_event_data *data, void *user)
 {
 	term *old = Term;
-	term *inv_term = user;
+	term *inv_term = (term *)user;
 
 	/* Activate */
 	Term_activate(inv_term);
@@ -1630,7 +1634,7 @@ static void update_monster_subwindow(game_event_type type, game_event_data *data
 static void update_object_subwindow(game_event_type type, game_event_data *data, void *user)
 {
 	term *old = Term;
-	term *inv_term = user;
+	term *inv_term = (term *)user;
 
 	/* Activate */
 	Term_activate(inv_term);
@@ -1648,7 +1652,7 @@ static void update_object_subwindow(game_event_type type, game_event_data *data,
 static void update_feature_subwindow(game_event_type type, game_event_data *data, void *user)
 {
 	term *old = Term;
-	term *inv_term = user;
+	term *inv_term = (term *)user;
 
 	/* Activate */
 	Term_activate(inv_term);
@@ -1666,7 +1670,7 @@ static void update_feature_subwindow(game_event_type type, game_event_data *data
 static void update_messages_subwindow(game_event_type type, game_event_data *data, void *user)
 {
 	term *old = Term;
-	term *inv_term = user;
+	term *inv_term = (term *)user;
 
 	int i;
 	int w, h;
@@ -1716,7 +1720,7 @@ static struct minimap_flags
 
 static void update_minimap_subwindow(game_event_type type, game_event_data *data, void *user)
 {
-	struct minimap_flags *flags = user;
+	struct minimap_flags *flags = (struct minimap_flags *)user;
 
 	if (type == EVENT_MAP)
 	{
@@ -1754,7 +1758,7 @@ static void update_minimap_subwindow(game_event_type type, game_event_data *data
 static void update_player0_subwindow(game_event_type type, game_event_data *data, void *user)
 {
 	term *old = Term;
-	term *inv_term = user;
+	term *inv_term = (term *)user;
 
 	/* Activate */
 	Term_activate(inv_term);
@@ -1774,7 +1778,7 @@ static void update_player0_subwindow(game_event_type type, game_event_data *data
 static void update_player1_subwindow(game_event_type type, game_event_data *data, void *user)
 {
 	term *old = Term;
-	term *inv_term = user;
+	term *inv_term = (term *)user;
 
 	/* Activate */
 	Term_activate(inv_term);
@@ -1799,7 +1803,7 @@ static void update_player_compact_subwindow(game_event_type type, game_event_dat
 	int i;
 
 	term *old = Term;
-	term *inv_term = user;
+	term *inv_term = (term *)user;
 
 	/* Activate */
 	Term_activate(inv_term);
@@ -1849,7 +1853,7 @@ static void update_player_compact_subwindow(game_event_type type, game_event_dat
 static void flush_subwindow(game_event_type type, game_event_data *data, void *user)
 {
 	term *old = Term;
-	term *t = user;
+	term *t = (term *)user;
 
 	/* Activate */
 	Term_activate(t);
@@ -2114,7 +2118,7 @@ static void show_splashscreen(game_event_type type, game_event_data *data, void 
 	/* Open the News file */
 	if (game_mode == GAME_NPPANGBAND) path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "news.txt");
 	else path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "m_news.txt"); /*game_mode == GAME_MORIA*/
-	fp = file_open(buf, MODE_READ, -1);
+	fp = file_open(buf, MODE_READ, FTYPE_TEXT);
 
 	text_out_hook = text_out_to_screen;
 
