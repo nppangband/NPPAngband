@@ -1560,7 +1560,7 @@ static int message_column = 0;
  * Hack -- Note that "msg_print(NULL)" will clear the top line even if no
  * messages are pending.
  */
-static void msg_print_aux(u16b type, cptr msg)
+static void msg_print_aux(MessageType type, cptr msg)
 {
 	int n;
 	char *t;
@@ -1688,7 +1688,7 @@ void playtesting(cptr msg)
 /*
  * Display a formatted message of a given type, using "vstrnfmt()" and "msg_print()".
  */
-void msg_c_format(u16b mtype, const char *fmt, ...)
+void msg_c_format(const MessageType mtype, const char *fmt, ...)
 {
 	va_list vp;
 
@@ -1736,7 +1736,7 @@ void msg_format(cptr fmt, ...)
  *
  * The "extra" parameter is currently unused.
  */
-void message(u16b message_type, s16b extra, cptr message)
+void message(const MessageType message_type, s16b extra, cptr message)
 {
 	/* Unused parameter */
 	(void)extra;
@@ -1752,7 +1752,7 @@ void message(u16b message_type, s16b extra, cptr message)
  *
  * The "extra" parameter is currently unused.
  */
-void message_format(u16b message_type, s16b extra, cptr fmt, ...)
+void message_format(const MessageType message_type, s16b extra, cptr fmt, ...)
 {
 	va_list vp;
 

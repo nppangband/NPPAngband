@@ -218,7 +218,7 @@ bool make_attack_normal(monster_type *m_ptr)
 
 	bool blinked;
 
-	int sound_msg;
+	MessageType sound_msg;
 
 	bool player_on_glyph = FALSE;
 

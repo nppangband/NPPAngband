@@ -202,7 +202,7 @@ static bool put_object_in_quiver(object_type *o_ptr)
 	char o_name[80];
 	int slot;
 
-	u16b msgt = MSG_GENERIC;
+	MessageType msgt = MSG_GENERIC;
 
 	/*hack - don't pickup &nothings*/
 	if (!o_ptr->k_idx) return (FALSE);
@@ -274,7 +274,7 @@ bool put_object_in_inventory(object_type *o_ptr)
 {
 	char o_name[80];
 
-	u16b msgt = MSG_GENERIC;
+	MessageType msgt = MSG_GENERIC;
 
 	int slot = inven_carry(o_ptr);
 
@@ -482,7 +482,7 @@ void py_pickup_gold(void)
 	for (this_o_idx = cave_o_idx[py][px]; this_o_idx; this_o_idx = next_o_idx)
 	{
 		long gold;
-		int sound_msg;
+		MessageType sound_msg;
 
 		/* Get the object */
 		o_ptr = &o_list[this_o_idx];
@@ -755,7 +755,7 @@ void py_pickup(bool pickup)
 	/* Only one object */
 	if (objects_left == 1)
 	{
-		u16b msgt = MSG_GENERIC;
+		MessageType msgt = MSG_GENERIC;
 
 		/* Get the object */
 		o_ptr = &o_list[cave_o_idx[py][px]];

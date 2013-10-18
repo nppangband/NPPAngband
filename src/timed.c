@@ -25,7 +25,7 @@ typedef struct
   const char *on_increase;
   const char *on_decrease;
   u32b flag_redraw, flag_update, flag_window;
-  int msg;
+  MessageType msg;
   bool disable_repeat;
 } timed_effect;
 
@@ -71,9 +71,9 @@ static timed_effect effects[] =
 			"You are more poisoned!", "You are less poisoned.",
 			0, 0, 0, MSG_POISONED, FALSE },
 	/* TMD_CUT -- handled separately */
-	{ NULL, NULL, NULL, NULL, 0, 0, 0 ,0, FALSE },
+	{ NULL, NULL, NULL, NULL, 0, 0, 0 ,MSG_GENERIC, FALSE },
 	/* TMD_STUN -- handled separately */
-	{ NULL, NULL, NULL, NULL, 0, 0, 0 ,0, FALSE },
+	{ NULL, NULL, NULL, NULL, 0, 0, 0 ,MSG_GENERIC, FALSE },
 	/*TMD_PROTEVIL*/
 	{ "You feel safe from evil!", "You no longer feel safe from evil.",
 			"You feel even safer from evil!", "You feel less safe from evil.",
@@ -129,39 +129,39 @@ static timed_effect effects[] =
 	/* TMD_FLYING */
 	{ "You take flight!", "Your mystic wings disappear.",
 			NULL, NULL,
-			(PR_RESIST | PR_STATUS), PU_STEALTH, 0, 0, FALSE },
+			(PR_RESIST | PR_STATUS), PU_STEALTH, 0, MSG_LOSING_FLYING, FALSE },
 	/* TMD_NAT_LAVA */
 	{ "You feel native to lava terrains!", "You no longer feel native to lava terrains.",
 			NULL, NULL,
-			0, PU_NATIVE, 0, 0, FALSE },
+			0, PU_NATIVE, 0, MSG_LOSING_NATIVITY, FALSE },
 	/* TMD_NAT_OIL */
 	{ "You feel native to oil terrains!", "You no longer feel native to oil terrains.",
 			NULL, NULL,
-			0, PU_NATIVE, 0, 0, FALSE },
+			0, PU_NATIVE, 0, MSG_LOSING_NATIVITY, FALSE },
 	/* TMD_NAT_SAND */
 	{ "You feel native to sandy terrains!", "You no longer feel native to sandy terrains.",
 			NULL, NULL,
-			0, PU_NATIVE, 0, 0, FALSE },
+			0, PU_NATIVE, 0, MSG_LOSING_NATIVITY, FALSE },
 	/* TMD_NAT_TREE */
 	{ "You feel native to forest terrains!", "You no longer feel native to forest terrains.",
 			NULL, NULL,
-			0, PU_NATIVE, 0, 0, FALSE },
+			0, PU_NATIVE, 0, MSG_LOSING_NATIVITY, FALSE },
 	/* TMD_NAT_WATER */
 	{ "You feel native to water terrains!", "You no longer feel native to water terrains.",
 			NULL, NULL,
-			0, PU_NATIVE, 0, 0, FALSE },
+			0, PU_NATIVE, 0, MSG_LOSING_NATIVITY, FALSE },
 	/* TMD_NAT_MUD */
 	{ "You feel native to muddy terrains!", "You no longer feel native to muddy terrains.",
 			NULL, NULL,
-			0, PU_NATIVE, 0, 0, FALSE },
+			0, PU_NATIVE, 0, MSG_LOSING_NATIVITY, FALSE },
 	/* TMD_SLAY_ELEM */
 	{ "Your weapon glows with many colors!", "Your weapon returns to normal.",
 			NULL, NULL,
-			PR_RESIST, 0, 0, 0, FALSE },
+			PR_RESIST, 0, 0, MSG_GENERIC, FALSE },
 	/* TMD_CALL_HOURNS */
 	{ "You try to awake the trees around you!", "The trees are asleep now.",
 			NULL, NULL,
-			0, 0, 0, 0, FALSE },
+			0, 0, 0, MSG_GENERIC, FALSE },
 };
 
 

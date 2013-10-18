@@ -5516,7 +5516,7 @@ void identify_object(object_type *o_ptr, bool star_ident)
 int do_ident_item(int item, object_type *o_ptr)
 {
 	char o_name[80];
-	u16b msgt = MSG_GENERIC;
+	MessageType msgt = MSG_GENERIC;
 	int squelch = SQUELCH_NO;
 
 	/* In Moria, mark the item as fully known */

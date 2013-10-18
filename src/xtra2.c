@@ -855,7 +855,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note, int who)
 		char m_name[80];
 
 		/* Assume normal death sound */
-		int soundfx = MSG_KILL;
+		MessageType soundfx = MSG_KILL;
 
 		/* Play a special sound if the monster was unique */
 		if (r_ptr->flags1 & RF1_UNIQUE)
