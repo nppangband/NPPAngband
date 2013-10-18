@@ -63,7 +63,7 @@ errr messages_init(void)
 	 * */
 	for (i = 0; i < MSG_MAX; i++)
 	{
-		message_color_define(i, TERM_WHITE);
+		message_color_define((MessageType)i, TERM_WHITE);
 	}
 
 	return 0;
