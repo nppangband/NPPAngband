@@ -933,7 +933,7 @@ static bool cmd_menu(command_list *list, void *selection_p)
 
 	ui_event_data evt;
 	int cursor = 0;
-	command_type *selection = selection_p;
+	command_type *selection = (command_type *)selection_p;
 
 	/* Set up the menu */
 	WIPE(&menu, menu);
