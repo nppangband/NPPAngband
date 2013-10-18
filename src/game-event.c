@@ -34,34 +34,34 @@ struct event_handler_entry *event_handlers[N_GAME_EVENTS];
 
 static void game_event_dispatch(game_event_type type, game_event_data *data)
 {
-	struct event_handler_entry *this = event_handlers[type];
+	struct event_handler_entry *entry = event_handlers[type];
 
 	/*
 	 * Send the word out to all interested event handlers.
 	 */
-	while (this)
+	while (entry)
 	{
 		/* Call the handler with the relevant data */
-		this->fn(type, data, this->user);
-		this = this->next;
+		entry->fn(type, data, entry->user);
+		entry = entry->next;
 	}
 }
 
 
 void event_add_handler(game_event_type type, game_event_handler *fn, void *user)
 {
-	struct event_handler_entry *new;
+	struct event_handler_entry *entry;
 
 	assert(fn != NULL);
 
 	/* Make a new entry */
-	new = mem_alloc(sizeof *new);
-	new->fn = fn;
-	new->user = user;
+	entry = mem_alloc(sizeof *entry);
+	entry->fn = fn;
+	entry->user = user;
 
 	/* Add it to the head of the appropriate list */
-	new->next = event_handlers[type];
-	event_handlers[type] = new;
+	entry->next = event_handlers[type];
+	event_handlers[type] = entry;
 }
 
 
