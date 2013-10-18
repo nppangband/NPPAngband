@@ -513,7 +513,7 @@ void menu_refresh(menu_type *menu)
 /* The menu event loop, called as a handler from the event loop */
 static bool menu_handle_event(void *object, const ui_event_data *in)
 {
-	menu_type *menu = (menu_type *)object;
+	menu_type *menu = object;
 	int n = menu->filter_count;
 	int *cursor = &menu->cursor;
 	ui_event_data out;
