@@ -988,7 +988,7 @@ static u32b add_name(header *head, cptr buf)
  */
 errr parse_z_info(char *buf, header *head)
 {
-	maxima *z_info = head->info_ptr;
+	maxima *z_info = (maxima *)head->info_ptr;
 
 	/* Hack - Verify 'M:x:' format */
 	if (buf[0] != 'M') return (PARSE_ERROR_UNDEFINED_DIRECTIVE);
@@ -2331,7 +2331,7 @@ static errr build_prob(char *name, names_type *n_ptr)
  */
 errr parse_n_info(char *buf, header *head)
 {
-	names_type *n_ptr = head->info_ptr;
+	names_type *n_ptr = (names_type *)head->info_ptr;
 
 	/*
 	 * This function is called once, when the raw file does not exist.
