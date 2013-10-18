@@ -39,7 +39,7 @@ quark_t quark_add(const char *str)
 	if (nr_quarks == alloc_quarks)
 	{
 		alloc_quarks *= 2;
-		quarks = mem_realloc(quarks, alloc_quarks * sizeof(char *));
+		quarks =(char **) mem_realloc(quarks, alloc_quarks * sizeof(char *));
 	}
 	
 	q = nr_quarks++;
