@@ -1650,7 +1650,7 @@ static void rd_messages(void)
 		rd_u16b(&tmp16u);
 
 		/* Save the message */
-		message_add(buf, tmp16u);
+		message_add(buf, (MessageType)tmp16u);
 	}
 }
 
@@ -2325,7 +2325,7 @@ static errr rd_savefile(void)
 	safe_setuid_grab();
 
 	/* The savefile is a binary file */
-	fff = file_open(savefile, MODE_READ, -1);
+	fff = file_open(savefile, MODE_READ, FTYPE_RAW);
 
 	/* Drop permissions */
 	safe_setuid_drop();
@@ -2389,7 +2389,7 @@ bool load_player(void)
 	safe_setuid_grab();
 
 	/* Open the savefile */
-	fff = file_open(savefile, MODE_READ, -1);
+	fff = file_open(savefile, MODE_READ, FTYPE_RAW);
 	if (fff) fd = 0;
 	else fd = -1;
 
@@ -2417,7 +2417,7 @@ bool load_player(void)
 		safe_setuid_grab();
 
 		/* Open the savefile */
-		fff = file_open(savefile, MODE_READ, -1);
+		fff = file_open(savefile, MODE_READ, FTYPE_RAW);
 		if (fff)
 		{
 			fd = 0;
@@ -2597,7 +2597,7 @@ void load_gamemode(void)
 		safe_setuid_grab();
 
 		/* Open the savefile */
-		fff = file_open(savefile, MODE_READ, -1);
+		fff = file_open(savefile, MODE_READ, FTYPE_RAW);
 		if (fff)
 		{
 			fd = 0;
