@@ -699,7 +699,7 @@ char *vformat(cptr fmt, va_list vp)
 
 		/* Grow the buffer */
 		format_len = format_len * 2;
-		format_buf = mem_realloc(format_buf, format_len);
+		format_buf = (char *)mem_realloc(format_buf, format_len);
 	}
 
 	/* Return the new buffer */
