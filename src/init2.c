@@ -39,7 +39,7 @@ static void cmd_game_nppmoria(void *unused)
 
 
 /* Extra options on the "item options" menu */
-struct
+struct game_mode_menu
 {
 	char tag;
 	const char *name;
@@ -444,7 +444,7 @@ static errr init_info(cptr filename, header *head)
 	/*** Load the ascii template file ***/
 
 	/* Open the file */
-	fh = file_open(txt_file, MODE_READ, -1);
+	fh = file_open(txt_file, MODE_READ, FTYPE_TEXT);
 	if (!fh) quit(format("Cannot open '%s.txt' file.", filename));
 
 	/* Parse the file */
@@ -512,7 +512,7 @@ static errr init_z_info(void)
 	else err = init_info("m_limits", &z_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	z_info = z_head.info_ptr;
+	z_info = (maxima *)z_head.info_ptr;
 
 	return (err);
 }
@@ -534,7 +534,7 @@ static errr init_f_info(void)
 	err = init_info("terrain", &f_head);
 
 	/* Set the global variables */
-	f_info = f_head.info_ptr;
+	f_info = (feature_type *)f_head.info_ptr;
 	f_name = f_head.name_ptr;
 	f_text = f_head.text_ptr;
 
@@ -559,7 +559,7 @@ static errr init_k_info(void)
 	else err = init_info("m_object", &k_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	k_info = k_head.info_ptr;
+	k_info = (object_kind *)k_head.info_ptr;
 	k_name = k_head.name_ptr;
 	k_text = k_head.text_ptr;
 
@@ -583,7 +583,7 @@ static errr init_t_info(void)
 	err = init_info("player_ghost", &t_head);
 
 	/* Set the global variables */
-	t_info = t_head.info_ptr;
+	t_info = (ghost_template *)t_head.info_ptr;
 	t_name = t_head.name_ptr;
 	t_text = t_head.text_ptr;
 
@@ -608,7 +608,7 @@ static errr init_a_info(void)
 	else err = init_info("m_artifact", &a_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	a_info = a_head.info_ptr;
+	a_info = (artifact_type *)a_head.info_ptr;
 
 	a_text = a_head.text_ptr;
 
@@ -633,9 +633,10 @@ static errr init_e_info(void)
 	else err = init_info("m_ego_item", &e_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	e_info = e_head.info_ptr;
+	e_info = (ego_item_type *)e_head.info_ptr;
 	e_name = e_head.name_ptr;
 	e_text = e_head.text_ptr;
+
 	return (err);
 }
 
@@ -657,7 +658,7 @@ static errr init_r_info(void)
 	else err = init_info("m_monster", &r_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	r_info = r_head.info_ptr;
+	r_info = (monster_race *)r_head.info_ptr;
 	r_text = r_head.text_ptr;
 
 	return (err);
@@ -680,7 +681,7 @@ static errr init_v_info(void)
 	err = init_info("vault", &v_head);
 
 	/* Set the global variables */
-	v_info = v_head.info_ptr;
+	v_info = (vault_type *)v_head.info_ptr;
 	v_name = v_head.name_ptr;
 	v_text = v_head.text_ptr;
 
@@ -705,7 +706,7 @@ static errr init_p_info(void)
 	else err = init_info("m_p_race", &p_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	p_info = p_head.info_ptr;
+	p_info = (player_race *)p_head.info_ptr;
 	p_name = p_head.name_ptr;
 	p_text = p_head.text_ptr;
 
@@ -730,7 +731,7 @@ static errr init_c_info(void)
 	else err = init_info("m_p_class", &c_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	c_info = c_head.info_ptr;
+	c_info = (player_class *)c_head.info_ptr;
 	c_name = c_head.name_ptr;
 	c_text = c_head.text_ptr;
 
@@ -755,7 +756,7 @@ static errr init_h_info(void)
 	else err = init_info("m_p_hist", &h_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	h_info = h_head.info_ptr;
+	h_info = (hist_type *)h_head.info_ptr;
 	h_text = h_head.text_ptr;
 
 	return (err);
@@ -780,7 +781,7 @@ static errr init_b_info(void)
 	else err = init_info("m_shop_own", &b_head);
 
 	/* Set the global variables */
-	b_info = b_head.info_ptr;
+	b_info = (owner_type *)b_head.info_ptr;
 	b_name = b_head.name_ptr;
 	b_text = b_head.text_ptr;
 
@@ -805,7 +806,7 @@ static errr init_q_info(void)
 	else err = init_info("m_quest", &q_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	q_info = q_head.info_ptr;
+	q_info = (quest_type *)q_head.info_ptr;
 	q_name = q_head.name_ptr;
 
 	return (err);
@@ -827,7 +828,7 @@ static errr init_n_info(void)
 
 	err = init_info("names", &n_head);
 
-	n_info = n_head.info_ptr;
+	n_info = (names_type *)n_head.info_ptr;
 
 	return (err);
 }
@@ -849,7 +850,7 @@ static errr init_flavor_info(void)
 	err = init_info("flavor", &flavor_head);
 
 	/* Set the global variables */
-	flavor_info = flavor_head.info_ptr;
+	flavor_info = (flavor_type *)flavor_head.info_ptr;
 	flavor_name = flavor_head.name_ptr;
 	flavor_text = flavor_head.text_ptr;
 
