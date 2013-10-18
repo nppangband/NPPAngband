@@ -485,7 +485,7 @@ static enum birth_stage menu_question(enum birth_stage current,
 				{
 					/* Do a first roll of the stats */
 					cmd_insert(CMD_ROLL_STATS);
-					next = current + 2;
+					next = (enum birth_stage)(current + 2);
 				}
 				else
 				{
@@ -499,13 +499,13 @@ static enum birth_stage menu_question(enum birth_stage current,
 					 */
 					point_based_start();
 					cmd_insert(CMD_RESET_STATS, TRUE);
-					next = current + 1;
+					next = (enum birth_stage)(current + 1);
 				}
 			}
 			else
 			{
 				cmd_insert(choice_command, cursor);
-				next = current + 1;
+				next = (enum birth_stage)(current + 1);
 			}
 		}
 		/* '*' chooses an option at random from those the game's provided. */
@@ -515,7 +515,7 @@ static enum birth_stage menu_question(enum birth_stage current,
 			cmd_insert(choice_command, current_menu->cursor);
 
 			menu_refresh(current_menu);
-			next = current + 1;
+			next = (enum birth_stage)(current + 1);
 		}
 		else if (cx.key == '=')
 		{
@@ -972,7 +972,7 @@ errr get_birth_command(bool wait)
 			next = menu_question(current_stage, menu, command);
 
 			if (next == BIRTH_BACK)
-				next = current_stage - 1;
+				next = (enum birth_stage)(current_stage - 1);
 
 			/* Make sure that the character gets reset before quickstarting */
 			if (next == BIRTH_QUICKSTART)
