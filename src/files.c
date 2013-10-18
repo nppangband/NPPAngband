@@ -2373,7 +2373,7 @@ errr file_character(const char *path, bool full)
 		file_close(notes_file);
 
 		/* get the path for the notes file */
-		notes_file = file_open(notes_fname, MODE_READ, -1);
+		notes_file = file_open(notes_fname, MODE_READ, FTYPE_TEXT);
 
 		/* Write the contents of the notes file to the dump file line-by-line */
 		while (file_getl(notes_file, line, sizeof(line)))
@@ -2572,7 +2572,7 @@ bool show_file(cptr name, cptr what, int line, int mode)
 		my_strcpy(path, name, sizeof(path));
 
 		/* Open */
-		fff = file_open(path, MODE_READ, -1);
+		fff = file_open(path, MODE_READ, FTYPE_TEXT);
 	}
 
 	/* Look in "help" */
@@ -2585,7 +2585,7 @@ bool show_file(cptr name, cptr what, int line, int mode)
 		path_build(path, sizeof(path), ANGBAND_DIR_HELP, name);
 
 		/* Open the file */
-		fff = file_open(path, MODE_READ, -1);
+		fff = file_open(path, MODE_READ, FTYPE_TEXT);
 	}
 
 	/* Look in "info" */
@@ -2598,7 +2598,7 @@ bool show_file(cptr name, cptr what, int line, int mode)
 		path_build(path, sizeof(path), ANGBAND_DIR_INFO, name);
 
 		/* Open the file */
-		fff = file_open(path, MODE_READ, -1);
+		fff = file_open(path, MODE_READ, FTYPE_TEXT);
 	}
 
 	/* Oops */

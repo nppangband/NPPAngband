@@ -906,7 +906,7 @@ static void remove_old_dump(cptr orig_file, cptr mark)
 	char expected_line[1024];
 
 	/* Open an old dump file in read-only mode */
-	orig_fff = file_open(orig_file, MODE_READ, -1);
+	orig_fff = file_open(orig_file, MODE_READ, FTYPE_TEXT);
 
 	/* If original file does not exist, nothing to do */
 	if (!orig_fff) return;
@@ -994,7 +994,7 @@ static void remove_old_dump(cptr orig_file, cptr mark)
 	if (changed)
 	{
 		/* Copy contents of temporary file */
-		tmp_fff = file_open(temp_file, MODE_READ, -1);
+		tmp_fff = file_open(temp_file, MODE_READ, FTYPE_TEXT);
 		orig_fff = file_open(orig_file, MODE_WRITE, FTYPE_TEXT);
 
 		while (file_getl(tmp_fff, buf, sizeof(buf)))
@@ -3541,7 +3541,7 @@ void do_cmd_load_screen(void)
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
 
 	/* Open the file */
-	fp = file_open(buf, MODE_READ, -1);
+	fp = file_open(buf, MODE_READ, FTYPE_TEXT);
 
 	/* Oops */
 	if (!fp) return;
