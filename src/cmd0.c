@@ -141,26 +141,26 @@ static command_type cmd_util[] =
 /* Commands that shouldn't be shown to the user */
 static command_type cmd_hidden[] =
 {
-	{ "Take notes",               ':', CMD_NULL, do_cmd_dictate_note},
-	{ "Version info",             'V', CMD_NULL, do_cmd_version },
-	{ "Load a single pref line",  '"', CMD_NULL, do_cmd_pref },
-	{ "Mouse click",      DEFINED_XFF, CMD_NULL, do_cmd_mouseclick },
-	{ "Enter a store",            '_', CMD_ENTER_STORE, NULL },
-	{ "Toggle windows",     KTRL('E'), CMD_NULL, toggle_inven_equip }, /* XXX */
-	{ "Alter a grid",             '+', CMD_NULL, textui_cmd_alter },
-	{ "Walk",                     ';', CMD_NULL, textui_cmd_walk },
-	{ "Jump into a trap",         '-', CMD_NULL, textui_cmd_jump },
-	{ "Start running",            '.', CMD_NULL, textui_cmd_run },
-	{ "Stand still",              ',', CMD_HOLD, NULL },
-	{ "Check knowledge",          '~', CMD_NULL, do_cmd_knowledge },
+	{ "Take notes",                    ':', CMD_NULL, do_cmd_dictate_note},
+	{ "Version info",                  'V', CMD_NULL, do_cmd_version },
+	{ "Load a single pref line",       '"', CMD_NULL, do_cmd_pref },
+	{ "Mouse click",(unsigned char)DEFINED_XFF, CMD_NULL, do_cmd_mouseclick },
+	{ "Enter a store",                 '_', CMD_ENTER_STORE, NULL },
+	{ "Toggle windows",          KTRL('E'), CMD_NULL, toggle_inven_equip }, /* XXX */
+	{ "Alter a grid",                  '+', CMD_NULL, textui_cmd_alter },
+	{ "Walk",                          ';', CMD_NULL, textui_cmd_walk },
+	{ "Jump into a trap",              '-', CMD_NULL, textui_cmd_jump },
+	{ "Start running",                 '.', CMD_NULL, textui_cmd_run },
+	{ "Stand still",                   ',', CMD_HOLD, NULL },
+	{ "Check knowledge",               '~', CMD_NULL, do_cmd_knowledge },
 	{ "Display menu of actions", KTRL('H'), CMD_NULL, do_cmd_menu },
 	{ "Center map",              KTRL('L'), CMD_NULL, do_cmd_center_map },
 
-	{ "Toggle wizard mode",  KTRL('W'), CMD_NULL, do_cmd_wizard },
-	{ "Repeat previous command",  'n', CMD_REPEAT, NULL },
+	{ "Toggle wizard mode",      KTRL('W'), CMD_NULL, do_cmd_wizard },
+	{ "Repeat previous command",       'n', CMD_REPEAT, NULL },
 
 #ifdef ALLOW_DEBUG
-	{ "Debug mode commands", KTRL('A'), CMD_NULL, do_cmd_try_debug },
+	{ "Debug mode commands",     KTRL('A'), CMD_NULL, do_cmd_try_debug }
 #endif
 };
 
@@ -870,7 +870,7 @@ static void do_cmd_unknown(void)
 
 
 /* List indexed by char */
-struct {
+struct converted_list {
 	do_cmd_type *hook;
 	cmd_code cmd;
 } converted_list[UCHAR_MAX+1];
