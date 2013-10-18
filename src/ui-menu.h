@@ -225,7 +225,7 @@ struct menu_type
 {
 	/* menu inherits from panel */
 	event_listener target;
-	void (*refresh)();
+	void (*refresh)(menu_type *);
 	region boundary;
 
 	/* set of commands that may be performed on a menu item */
