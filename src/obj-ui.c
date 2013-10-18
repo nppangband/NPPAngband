@@ -2091,7 +2091,7 @@ static cmd_code find_command_line(cmd_code command)
 
 	for (i = 0; i < N_ELEMENTS(command_actions); i++)
 	{
-		if (command_actions[i].command == command) return i;
+		if (command_actions[i].command == command) return (cmd_code)i;
 	}
 
 	/*
@@ -2099,7 +2099,7 @@ static cmd_code find_command_line(cmd_code command)
 	 * harmless Inscribe command
 	 */
 
-	return (0);
+	return (CMD_NULL);
 }
 
 /*
