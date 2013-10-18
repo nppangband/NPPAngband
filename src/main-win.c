@@ -682,7 +682,7 @@ static void show_win_error(void)
 	              MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 	              (LPTSTR) &lpMsgBuf, 0, NULL);
 
-	MessageBox(NULL, lpMsgBuf, "Error", MB_OK | MB_ICONINFORMATION);
+	MessageBox(NULL, (LPCSTR)lpMsgBuf, "Error", MB_OK | MB_ICONINFORMATION);
 
 	LocalFree(lpMsgBuf);
 }
@@ -1146,7 +1146,7 @@ static int new_palette(void)
 	/* Use the bitmap */
 	if (hBmPal)
 	{
-		lppe = mem_alloc(256 * sizeof(PALETTEENTRY));
+		lppe = (LPPALETTEENTRY)mem_alloc(256 * sizeof(PALETTEENTRY));
 		nEntries = GetPaletteEntries(hBmPal, 0, 255, lppe);
 		if ((nEntries == 0) || (nEntries > 220))
 		{
@@ -1498,7 +1498,7 @@ static errr term_force_font(term_data *td, cptr path)
 
 		/* all this trouble to get the cell size */
 		hdcDesktop = GetDC(HWND_DESKTOP);
-		hfOld = SelectObject(hdcDesktop, td->font_id);
+		hfOld = (HFONT)SelectObject(hdcDesktop, td->font_id);
 		GetTextMetrics(hdcDesktop, &tm);
 		SelectObject(hdcDesktop, hfOld);
 		ReleaseDC(HWND_DESKTOP, hdcDesktop);
@@ -2285,7 +2285,7 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp, c
 
 	/* More info */
 	hdcSrc = CreateCompatibleDC(hdc);
-	hbmSrcOld = SelectObject(hdcSrc, infGraph.hBitmap);
+	hbmSrcOld = (HBITMAP)SelectObject(hdcSrc, infGraph.hBitmap);
 
 	if ((arg_graphics == GRAPHICS_ADAM_BOLT) ||
 	    (arg_graphics == GRAPHICS_DAVID_GERVAIS))
@@ -4718,7 +4718,7 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 		wc.hInstance		= hInst;
 		wc.hIcon			= hIcon = LoadIcon(hInst, "ANGBAND");
 		wc.hCursor			= LoadCursor(NULL, IDC_ARROW);
-		wc.hbrBackground	= GetStockObject(BLACK_BRUSH);
+		wc.hbrBackground	= (HBRUSH)GetStockObject(BLACK_BRUSH);
 		wc.lpszMenuName		= "ANGBAND";
 		wc.lpszClassName	= AppName;
 
