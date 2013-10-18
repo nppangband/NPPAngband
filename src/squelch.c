@@ -677,7 +677,7 @@ void rearrange_stack(int y, int x)
 
 bool squelch_item_ok(const object_type *o_ptr)
 {
-	object_kind *k_ptr = k_ptr = &k_info[o_ptr->k_idx];
+	object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
 	/* Always delete "nothings" */
 	if (!o_ptr->k_idx) return (TRUE);
@@ -833,8 +833,8 @@ static const char *strip_ego_name(const char *name)
  */
 static int ego_comp_func(const void *a_ptr, const void *b_ptr)
 {
-	const ego_desc *a = a_ptr;
-	const ego_desc *b = b_ptr;
+	const ego_desc *a = (const ego_desc *)a_ptr;
+	const ego_desc *b = (const ego_desc *)b_ptr;
 
 	/* Note the removal of common prefixes */
 	return (strcmp(a->short_name, b->short_name));
@@ -945,7 +945,7 @@ static void ego_item_display(menu_type *menu, int oid, bool cursor, int row, int
 		key.tval = tval_table[i];
 		key.desc = NULL;
 
-		result = bsearch(&key, raw_tvals, NUM_RAW_TVALS, sizeof(raw_tvals[0]), tval_comp_func);
+		result = (tval_desc *)bsearch(&key, raw_tvals, NUM_RAW_TVALS, sizeof(raw_tvals[0]), tval_comp_func);
 
 		if (result) tval_name = result->desc;
 		/* Paranoia */
@@ -1002,7 +1002,7 @@ static void ego_item_display(menu_type *menu, int oid, bool cursor, int row, int
  */
 static bool ego_item_action(char cmd, void *db, int oid)
 {
-	const ego_desc *ego_choice = db;
+	const ego_desc *ego_choice = (ego_desc *)db;
 
 	/* Get the selected ego-item type */
 	ego_item_type *e_ptr = &e_info[ego_choice[oid].e_idx];
