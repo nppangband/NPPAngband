@@ -55,7 +55,7 @@ void event_add_handler(game_event_type type, game_event_handler *fn, void *user)
 	assert(fn != NULL);
 
 	/* Make a new entry */
-	entry = mem_alloc(sizeof *entry);
+	entry = (struct event_handler_entry *)mem_alloc(sizeof *entry);
 	entry->fn = fn;
 	entry->user = user;
 
