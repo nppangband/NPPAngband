@@ -1919,7 +1919,7 @@ static int inven_drain(int dam)
  *
  * Returns number of items destroyed.
  */
-static int inven_damage(inven_func typ, int perc, bool protected)
+static int inven_damage(inven_func typ, int perc, bool prot)
 {
 	int i, j, k, amt;
 
@@ -1953,7 +1953,7 @@ static int inven_damage(inven_func typ, int perc, bool protected)
 				percent /= 3;
 			}
 
-			if (protected)
+			if (prot)
 			{
 				percent *= 5;
 				percent /= 3;
