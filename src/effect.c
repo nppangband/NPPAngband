@@ -489,7 +489,7 @@ bool set_effect_trap_player(int f_idx, byte y, byte x)
 bool set_effect_glyph(byte y, byte x)
 {
 	int x_idx = x_pop();
-	u16b flags = (EF1_GLYPH | EF1_PERMANENT | EF1_SKIP);;
+	u16b flags = (EF1_GLYPH | EF1_PERMANENT | EF1_SKIP);
 
 	/*All full*/
 	if (!x_idx) return (FALSE);
