@@ -4,9 +4,9 @@
 #include "z-type.h"
 
 #define TYPE_FUN(v2u, tv, T, v)	\
-type_union v2u(T v) { 		\
+type_union v2u(T v) {		\
 	type_union r;			\
-	r.u.v = v; 				\
+	r.u.v = v;				\
 	r.t = tv;				\
 	return r;				\
 }
