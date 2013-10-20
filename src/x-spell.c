@@ -2039,10 +2039,9 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 			break;
 		}
 
-
 		case DRUID_HEAL:
 		{
-			/*Not as powerful for Rangers*/
+			/* Not as powerful for Rangers */
 			if (cp_ptr->flags & (CF_ZERO_FAIL)) dam = 300;
 			else dam = 175;
 
@@ -2132,7 +2131,6 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 
 			break;
 		}
-
 
 		case DRUID_RESIST_ELEC:
 		{
@@ -2252,6 +2250,7 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 			{
 				if (!create_elements(p_ptr->py, p_ptr->px, rad)) return (NULL);
 			}
+
 			break;
 		}
 
@@ -2269,7 +2268,6 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 
 			break;
 		}
-
 
 		case DRUID_WORD_OF_RECALL:
 		{
@@ -2322,7 +2320,6 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 
 		case DRUID_REMEMBRANCE:
 		{
-
 			if (name) return ("Remembrance");
 			if (desc) return ("Restores experience to maximum.");
 			if (desc_short) return ("");
@@ -2355,7 +2352,6 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 
 		case DRUID_NATIVE_SAND:
 		{
-
 			dur = 50 + p_ptr->lev;
 			dur1 = 10;
 
@@ -2518,7 +2514,6 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 			}
 
 			break;
-
 		}
 
 		case DRUID_BRAND_WEAPON:
@@ -2573,7 +2568,6 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 				extra = " extra";
 				dam = plev / 10;
 			}
-
 
 			if (name) return ("Call Huorns");
 			if (desc) return (format("Make nearby trees attack foes for %d%s player turns.", dam, extra));
@@ -2643,7 +2637,7 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 	bool desc = (mode == MODE_SPELL_DESC);
 	bool desc_short = (mode == MODE_SPELL_DESC_SHORT);
 
-	/* Return the spell type name if that is what is being asked*/
+	/* Return the spell type name if that is what is being asked */
 	if (mode == MODE_SPELL_NOUN) return "prayer";
 	if (mode == MODE_SPELL_VERB) return "pray";
 
@@ -2694,7 +2688,6 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 				dur = 5;
 			}
 
-
 			if (name) return ("Bless");
 			if (desc) return (format("Bonus to fighting ability and armour class for %d+d%d%s turns.", dur, dur, extra));
 			if (desc_short) return (format("%d+d%d%s turns", dur, dur, extra));
@@ -2708,7 +2701,6 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 
 		case PRAYER_REMOVE_FEAR:
 		{
-
 			if (name) return ("Remove Fear");
 			if (desc) return ("Removes fear.");
 			if (desc_short) return ("");
@@ -2782,7 +2774,6 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 
 		case PRAYER_SCARE_MONSTER:
 		{
-
 			if (name) return ("Scare Monster");
 			if (desc) return ("Attempts to scare one monster.");
 			if (desc_short) return ("");
@@ -2792,7 +2783,6 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 			}
 
 			break;
-
 		}
 
 		case PRAYER_PORTAL:
@@ -2833,7 +2823,6 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 				(void)hp_player(damroll(dice, sides));
 				(void)set_cut((p_ptr->timed[TMD_CUT] / 2) - 20);
 			}
-
 
 			break;
 		}
@@ -2908,12 +2897,10 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 			if (desc_short) return (format("dur %d+1d%d turns.", dur, dur));
 			if (cast)
 			{
-
 				dur += randint1(dur);
 
 				(void)inc_timed(TMD_OPP_FIRE, dur, TRUE);
 				(void)inc_timed(TMD_OPP_COLD, dur, TRUE);
-
 			}
 
 			break;
@@ -2931,6 +2918,7 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 
 			break;
 		}
+
 		case PRAYER_ORB_OF_DRAINING:
 		{
 			dice = 10;
@@ -3050,8 +3038,8 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 			{
 				detect(DETECT_RADIUS + 5, DETECT_MAP);
 			}
-			break;
 
+			break;
 		}
 
 		case PRAYER_CURE_MORTAL_WOUNDS:
@@ -3092,8 +3080,8 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 			{
 				(void)turn_undead(p_ptr->lev);
 			}
-			break;
 
+			break;
 		}
 
 		case PRAYER_PRAYER:
@@ -3185,7 +3173,6 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 
 		case PRAYER_HOLY_WORD:
 		{
-
 			dam = dice = 150;
 
 			if (game_mode == GAME_NPPMORIA)
@@ -3441,8 +3428,8 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 				dam = dam1 + damroll(dice, sides);
 				fire_star(GF_HOLY_ORB, dam, rad, 0L);
 			}
-			break;
 
+			break;
 		}
 
 		case PRAYER_UNBARRING_WAYS:
@@ -3508,7 +3495,6 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 			}
 
 			break;
-
 		}
 
 		case PRAYER_ELEMENTAL_BRAND:
@@ -3537,7 +3523,6 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 			}
 
 			break;
-
 		}
 
 		case PRAYER_TELEPORT_SELF:
@@ -3579,7 +3564,6 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 			}
 
 			break;
-
 		}
 
 		case PRAYER_WORD_OF_RECALL:
@@ -3618,7 +3602,6 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 				}
 
 			}
-
 
 			break;
 		}
@@ -3678,14 +3661,15 @@ cptr do_priest_prayer(int mode, int spell, int dir)
 		}
 
 		case PRAYER_CREATE_FOOD:
-		 {
-		 	if (name) return ("Create Food");
-		 	if (desc) return ("Magically creates one ration of food.");
-		 	if (desc_short) return ("");
-		 	if (cast)
-		 	{
-		 		create_food();
-		 	}
+		{
+			if (name) return ("Create Food");
+			if (desc) return ("Magically creates one ration of food.");
+			if (desc_short) return ("");
+			if (cast)
+			{
+				create_food();
+			}
+
 			break;
 		}
 
@@ -3728,6 +3712,7 @@ cptr cast_spell(int mode, int tval, int index, int dir)
 	}
 }
 
+
 /*
  * Return the player realm for the spell_list table.  Assumes player is a spellcaster.
  * We don't return any error because this value is going to be looked up in a table,
@@ -3736,9 +3721,9 @@ cptr cast_spell(int mode, int tval, int index, int dir)
 int get_player_spell_realm(void)
 {
 	/* Mage or priest spells? */
-	if (cp_ptr->spell_book == TV_MAGIC_BOOK) 	return (MAGE_REALM);
+	if (cp_ptr->spell_book == TV_MAGIC_BOOK)	return (MAGE_REALM);
 	if (cp_ptr->spell_book == TV_PRAYER_BOOK)	return (PRIEST_REALM);
-	/*Druid Book*/								return (DRUID_REALM);
+	/* Druid Book */							return (DRUID_REALM);
 }
 
 
@@ -3751,3 +3736,4 @@ cptr get_spell_name(int tval, int spell)
 	/*TV_DRUID_BOOK*/
 	else return do_druid_incantation(MODE_SPELL_NAME, spell,0);
 }
+
