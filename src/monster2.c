@@ -2093,8 +2093,8 @@ void update_mon(int m_idx, bool full)
 				}
 			}
 
-	       /* Use "lite carriers" */
-		    if ((r_ptr->flags2 & (RF2_HAS_LIGHT)) &&
+			/* Use "lite carriers" */
+			if ((r_ptr->flags2 & (RF2_HAS_LIGHT)) &&
 				!(r_ptr->flags2 & (RF2_INVISIBLE))) easy = is_visible = TRUE;
 
 			/* Use "illumination" */
@@ -2132,7 +2132,6 @@ void update_mon(int m_idx, bool full)
 		}
 	}
 
-
 	/* The monster is now visible */
 	if (is_visible)
 	{
@@ -2148,7 +2147,8 @@ void update_mon(int m_idx, bool full)
 			light_spot(fy, fx);
 
 			/* Update health bar as needed */
-			if ((p_ptr->health_who == m_idx)  || (m_ptr->sidebar)) p_ptr->redraw |= (PR_HEALTH | PR_MON_MANA);
+			if ((p_ptr->health_who == m_idx) || (m_ptr->sidebar))
+				p_ptr->redraw |= (PR_HEALTH | PR_MON_MANA);
 
 			/* Hack -- Count "fresh" sightings */
 			if (l_ptr->sights < MAX_SHORT) l_ptr->sights++;
@@ -2163,8 +2163,6 @@ void update_mon(int m_idx, bool full)
 				if (!(m_ptr->mflag & (MFLAG_TOWN)) || (p_ptr->lev < 10))
 				{
 					disturb(1, 0);
-
-
 				}
 			}
 
@@ -2201,7 +2199,6 @@ void update_mon(int m_idx, bool full)
 
 			/* Window stuff */
 			p_ptr->redraw |= PR_MONLIST;
-
 		}
 	}
 
@@ -2223,7 +2220,6 @@ void update_mon(int m_idx, bool full)
 					disturb(1, 0);
 				}
 			}
-
 		}
 	}
 
@@ -2248,7 +2244,6 @@ void update_mon(int m_idx, bool full)
 				/* Re-draw monster list window */
 				p_ptr->redraw |= PR_MONLIST;
 			}
-
 		}
 	}
 }
@@ -2272,7 +2267,6 @@ void update_monsters(bool full)
 		/* Update the monster */
 		update_mon(i, full);
 	}
-
 }
 
 
@@ -2329,7 +2323,6 @@ static s16b get_mimic_k_idx(int r_idx)
 			/* 	Handle scrolls first */
 			if (strstr(name, "Scroll"))
 			{
-
 				/* Analyze every object */
 				for (i = 1; i < z_info->k_max; i++)
 				{
@@ -2349,7 +2342,6 @@ static s16b get_mimic_k_idx(int r_idx)
 
 					/*we have a suitable object to mimic*/
 					if ((final_value == 0) || (one_in_(4))) final_value = i;
-
 				}
 
 				/* Mimic a powerful scroll if they are all identified */
@@ -2383,18 +2375,17 @@ static s16b get_mimic_k_idx(int r_idx)
 				/* Skip "empty" objects */
 				if (!k_ptr->name) continue;
 
-				/*skip all non-potions*/
+				/* skip all non-potions */
 				if (k_ptr->tval != TV_POTION) continue;
 
-				/*don't mimic known items*/
+				/* don't mimic known items */
 				if (k_ptr->aware) continue;
 
-				/*skip artifacts, let's not annoy the player*/
+				/* skip artifacts, let's not annoy the player */
 				if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
 
-				/*we have a suitable object to mimic*/
+				/* we have a suitable object to mimic */
 				if ((final_value == 0) || (one_in_(10))) final_value = i;
-
 			}
 
 			/* Mimic a powerful potion if they are all identified */
@@ -2402,10 +2393,10 @@ static s16b get_mimic_k_idx(int r_idx)
 			{
 				switch (randint(5))
 				{
-					case (1): 	return (lookup_kind(TV_POTION, SV_POTION_EXPERIENCE));
-					case (2): 	return (lookup_kind(TV_POTION, SV_POTION_LIFE));
-					case (3): 	return (lookup_kind(TV_POTION, SV_POTION_STAR_HEALING));
-					case (4): 	return (lookup_kind(TV_POTION, SV_POTION_RESTORE_MANA));
+					case (1):	return (lookup_kind(TV_POTION, SV_POTION_EXPERIENCE));
+					case (2):	return (lookup_kind(TV_POTION, SV_POTION_LIFE));
+					case (3):	return (lookup_kind(TV_POTION, SV_POTION_STAR_HEALING));
+					case (4):	return (lookup_kind(TV_POTION, SV_POTION_RESTORE_MANA));
 					default:	return (lookup_kind(TV_POTION, SV_POTION_HEALING));
 				}
 			}
@@ -2423,18 +2414,17 @@ static s16b get_mimic_k_idx(int r_idx)
 				/* Skip "empty" objects */
 				if (!k_ptr->name) continue;
 
-				/*skip all non-rings*/
+				/* skip all non-rings */
 				if (k_ptr->tval != TV_RING) continue;
 
-				/*don't mimic known items*/
+				/* don't mimic known items */
 				if (k_ptr->aware) continue;
 
-				/*skip artifacts, let's not annoy the player*/
+				/* skip artifacts, let's not annoy the player */
 				if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
 
-				/*we have a suitable object to mimic*/
+				/* we have a suitable object to mimic */
 				if ((final_value == 0) || (one_in_(5))) final_value = i;
-
 			}
 
 			/* Mimic a powerful ring if they are all identified */
@@ -2442,10 +2432,10 @@ static s16b get_mimic_k_idx(int r_idx)
 			{
 				switch (randint(5))
 				{
-					case (1): 	return (lookup_kind(TV_RING, SV_RING_SPEED));
-					case (2): 	return (lookup_kind(TV_RING, SV_RING_SPEED));
-					case (3): 	return (lookup_kind(TV_RING, SV_RING_SPEED));
-					case (4): 	return (lookup_kind(TV_RING, SV_RING_RESIST_NETHER));
+					case (1):	return (lookup_kind(TV_RING, SV_RING_SPEED));
+					case (2):	return (lookup_kind(TV_RING, SV_RING_SPEED));
+					case (3):	return (lookup_kind(TV_RING, SV_RING_SPEED));
+					case (4):	return (lookup_kind(TV_RING, SV_RING_RESIST_NETHER));
 					default:	return (lookup_kind(TV_RING, SV_RING_RESIST_POIS));
 				}
 			}
@@ -2464,18 +2454,17 @@ static s16b get_mimic_k_idx(int r_idx)
 				/* Skip "empty" objects */
 				if (!k_ptr->name) continue;
 
-				/*skip all non-staffs*/
+				/* skip all non-staffs */
 				if (k_ptr->tval != TV_STAFF) continue;
 
-				/*don't mimic known items*/
+				/* don't mimic known items */
 				if (k_ptr->aware) continue;
 
-				/*skip artifacts, let's not annoy the player*/
+				/* skip artifacts, let's not annoy the player */
 				if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
 
-				/*we have a suitable object to mimic*/
+				/* we have a suitable object to mimic */
 				if ((final_value == 0) || (one_in_(6))) final_value = i;
-
 			}
 
 			/* Mimic a powerful staff if they are all identified */
@@ -2483,10 +2472,10 @@ static s16b get_mimic_k_idx(int r_idx)
 			{
 				switch (randint(5))
 				{
-					case (1): 	return (lookup_kind(TV_STAFF, SV_STAFF_SPEED));
-					case (2): 	return (lookup_kind(TV_STAFF, SV_STAFF_DESTRUCTION));
-					case (3): 	return (lookup_kind(TV_STAFF, SV_STAFF_HOLINESS));
-					case (4): 	return (lookup_kind(TV_STAFF, SV_STAFF_BANISHMENT));
+					case (1):	return (lookup_kind(TV_STAFF, SV_STAFF_SPEED));
+					case (2):	return (lookup_kind(TV_STAFF, SV_STAFF_DESTRUCTION));
+					case (3):	return (lookup_kind(TV_STAFF, SV_STAFF_HOLINESS));
+					case (4):	return (lookup_kind(TV_STAFF, SV_STAFF_BANISHMENT));
 					default:	return (lookup_kind(TV_STAFF, SV_STAFF_MASS_IDENTIFY));
 				}
 			}
@@ -2505,19 +2494,18 @@ static s16b get_mimic_k_idx(int r_idx)
 				/* Skip "empty" objects */
 				if (!k_ptr->name) continue;
 
-				/*skip all non-mushrooms*/
+				/* skip all non-mushrooms */
 				if (k_ptr->tval != TV_FOOD) continue;
 				if (k_ptr->sval >= SV_FOOD_RATION) continue;
 
-				/*don't mimic known items*/
+				/* don't mimic known items */
 				if (k_ptr->aware) continue;
 
-				/*skip artifacts, let's not annoy the player*/
+				/* skip artifacts, let's not annoy the player */
 				if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
 
-				/*we have a suitable object to mimic*/
+				/* we have a suitable object to mimic */
 				if ((final_value == 0) || (one_in_(5))) final_value = i;
-
 			}
 
 			/* Mimic a good mushroom if they are all identified */
@@ -2525,10 +2513,10 @@ static s16b get_mimic_k_idx(int r_idx)
 			{
 				switch (randint(5))
 				{
-					case (1): 	return (lookup_kind(TV_FOOD, SV_FOOD_RESTORING));
-					case (2): 	return (lookup_kind(TV_FOOD, SV_FOOD_CURE_SERIOUS));
-					case (3): 	return (lookup_kind(TV_FOOD, SV_FOOD_BLINDNESS));
-					case (4): 	return (lookup_kind(TV_FOOD, SV_FOOD_RESTORE_STR));
+					case (1):	return (lookup_kind(TV_FOOD, SV_FOOD_RESTORING));
+					case (2):	return (lookup_kind(TV_FOOD, SV_FOOD_CURE_SERIOUS));
+					case (3):	return (lookup_kind(TV_FOOD, SV_FOOD_BLINDNESS));
+					case (4):	return (lookup_kind(TV_FOOD, SV_FOOD_RESTORE_STR));
 					default:	return (lookup_kind(TV_FOOD, SV_FOOD_RESTORE_CON));
 				}
 			}
@@ -2536,7 +2524,7 @@ static s16b get_mimic_k_idx(int r_idx)
 			return(final_value);
 		}
 
-		/*rods and wands*/
+		/* rods and wands */
 		case '-':
 		{
 			cptr name = r_ptr->name_full;
@@ -2551,18 +2539,17 @@ static s16b get_mimic_k_idx(int r_idx)
 					/* Skip "empty" objects */
 					if (!k_ptr->name) continue;
 
-					/*skip all non-wands*/
+					/* skip all non-wands */
 					if (k_ptr->tval != TV_WAND) continue;
 
-					/*don't mimic known items*/
+					/* don't mimic known items */
 					if (k_ptr->aware) continue;
 
-					/*skip artifacts, let's not annoy the player*/
+					/* skip artifacts, let's not annoy the player */
 					if (k_ptr->k_flags3 & (TR3_INSTA_ART)) continue;
 
-					/*we have a suitable object to mimic*/
+					/* we have a suitable object to mimic */
 					if ((final_value == 0) || (one_in_(5))) final_value = i;
-
 				}
 
 				/* Mimic a powerful wand if they are all identified */
@@ -2570,10 +2557,10 @@ static s16b get_mimic_k_idx(int r_idx)
 				{
 					switch (randint(5))
 					{
-						case (1): 	return (lookup_kind(TV_WAND, SV_WAND_TELEPORT_AWAY));
-						case (2): 	return (lookup_kind(TV_WAND, SV_WAND_DRAGON_FIRE));
-						case (3): 	return (lookup_kind(TV_WAND, SV_WAND_DRAGON_COLD));
-						case (4): 	return (lookup_kind(TV_WAND, SV_WAND_TELEPORT_AWAY));
+						case (1):	return (lookup_kind(TV_WAND, SV_WAND_TELEPORT_AWAY));
+						case (2):	return (lookup_kind(TV_WAND, SV_WAND_DRAGON_FIRE));
+						case (3):	return (lookup_kind(TV_WAND, SV_WAND_DRAGON_COLD));
+						case (4):	return (lookup_kind(TV_WAND, SV_WAND_TELEPORT_AWAY));
 						default:	return (lookup_kind(TV_WAND, SV_WAND_DRAGON_BREATH));
 					}
 				}
@@ -2591,10 +2578,10 @@ static s16b get_mimic_k_idx(int r_idx)
 					/* Skip "empty" objects */
 					if (!k_ptr->name) continue;
 
-					/*skip all non-rods*/
+					/* skip all non-rods */
 					if (k_ptr->tval != TV_ROD) continue;
 
-					/*don't mimic known items*/
+					/* don't mimic known items */
 					if (k_ptr->aware) continue;
 
 					/*skip artifacts, let's not annoy the player*/
@@ -2621,7 +2608,7 @@ static s16b get_mimic_k_idx(int r_idx)
 				return(final_value);
 			}
 
-			/*can be 0 if all items are identified*/
+			/* can be 0 if all items are identified */
 			return(final_value);
 		}
 
@@ -2646,7 +2633,6 @@ static s16b get_mimic_k_idx(int r_idx)
 
 				/*we have a suitable object to mimic*/
 				if ((final_value == 0) || (one_in_(5))) final_value = i;
-
 			}
 
 			/* Mimic a good amulet if they are all identified */
@@ -2654,10 +2640,10 @@ static s16b get_mimic_k_idx(int r_idx)
 			{
 				switch (randint(5))
 				{
-					case (1): 	return (lookup_kind(TV_AMULET, SV_AMULET_THE_MAGI));
-					case (2): 	return (lookup_kind(TV_AMULET, SV_AMULET_DEVOTION));
-					case (3): 	return (lookup_kind(TV_AMULET, SV_AMULET_WEAPONMASTERY));
-					case (4): 	return (lookup_kind(TV_AMULET, SV_AMULET_TRICKERY));
+					case (1):	return (lookup_kind(TV_AMULET, SV_AMULET_THE_MAGI));
+					case (2):	return (lookup_kind(TV_AMULET, SV_AMULET_DEVOTION));
+					case (3):	return (lookup_kind(TV_AMULET, SV_AMULET_WEAPONMASTERY));
+					case (4):	return (lookup_kind(TV_AMULET, SV_AMULET_TRICKERY));
 					default:	return (lookup_kind(TV_AMULET, SV_AMULET_RESIST));
 				}
 			}
@@ -2679,16 +2665,16 @@ static s16b get_mimic_k_idx(int r_idx)
 		default: return (0);
 	}
 
-
 	/* Result */
 	return (0);
 }
 
 
-/* Place an mimic object in the dungeon */
+/*
+ * Place a mimic object in the dungeon
+ */
 static bool place_mimic_object(int y, int x, int r_idx)
 {
-
 	s16b k_idx = get_mimic_k_idx(r_idx);
 	object_type object_type_body;
 	object_type *o_ptr = &object_type_body;
@@ -2755,7 +2741,6 @@ s16b monster_carry(int m_idx, object_type *j_ptr)
 		}
 	}
 
-
 	/* Make an object */
 	o_idx = o_pop();
 
@@ -2790,6 +2775,7 @@ s16b monster_carry(int m_idx, object_type *j_ptr)
 	return (o_idx);
 }
 
+
 /*
  * Helper function for monster_swap.  When a player is being moved,
  * returns true if the old terrain is a different terrain type than the new
@@ -2810,6 +2796,7 @@ static bool player_terrain_changed(int y1, int x1, int y2, int x2)
 
 	return(FALSE);
 }
+
 
 /*
  * Swap the players/monsters (if any) at two locations XXX XXX XXX
@@ -2919,7 +2906,7 @@ void monster_swap(int y1, int x1, int y2, int x2)
 	/* Player 2 */
 	else if (m2 < 0)
 	{
-		/* Check if we need to update the statusline */
+		/* Check if we need to update the status line */
 		if (player_terrain_changed(y1, x1, y2, x2)) p_ptr->redraw |= (PR_STATUS);
 
 		/* Move player */
@@ -2956,7 +2943,6 @@ void monster_swap(int y1, int x1, int y2, int x2)
  */
 bool player_place(int y, int x)
 {
-
 	/* Paranoia XXX XXX */
 	if (cave_m_idx[y][x] != 0) return (FALSE);
 
@@ -2976,6 +2962,7 @@ bool player_place(int y, int x)
 	/* Success */
 	return (TRUE);
 }
+
 
 /*
  * Hide a monster in terrain, if possible
