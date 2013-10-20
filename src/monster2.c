@@ -4016,52 +4016,49 @@ static bool summon_specific_okay(int r_idx)
 		case SUMMON_ANT:
 		{
 			okay = ((r_ptr->d_char == 'a') &&
-				!(r_ptr->flags1 & (RF1_UNIQUE)));
+					!(r_ptr->flags1 & (RF1_UNIQUE)));
  			break;
  		}
-
 
 		case SUMMON_SPIDER:
 		{
 			okay = ((r_ptr->d_char == 'S') &&
-			        !(r_ptr->flags1 & (RF1_UNIQUE)));
+					!(r_ptr->flags1 & (RF1_UNIQUE)));
 			break;
 		}
 
 		case SUMMON_HOUND:
 		{
 			okay = (((r_ptr->d_char == 'C') || (r_ptr->d_char == 'Z')) &&
-			        !(r_ptr->flags1 & (RF1_UNIQUE)));
+					!(r_ptr->flags1 & (RF1_UNIQUE)));
 			break;
 		}
 
 		case SUMMON_HYDRA:
 		{
 			okay = ((r_ptr->d_char == 'M') &&
-			        !(r_ptr->flags1 & (RF1_UNIQUE)));
+					!(r_ptr->flags1 & (RF1_UNIQUE)));
 			break;
 		}
 
 		case SUMMON_AINU:
 		{
 			okay = ((r_ptr->d_char == 'A') &&
-				!(r_ptr->flags1 & (RF1_UNIQUE)));
-
+					!(r_ptr->flags1 & (RF1_UNIQUE)));
 			break;
 		}
 
 		case SUMMON_DEMON:
 		{
 			okay = ((r_ptr->flags3 & (RF3_DEMON)) &&
-				!(r_ptr->flags1 & (RF1_UNIQUE)));
+					!(r_ptr->flags1 & (RF1_UNIQUE)));
 			break;
 		}
-
 
 		case SUMMON_UNDEAD:
 		{
 			okay = ((r_ptr->flags3 & (RF3_UNDEAD)) &&
-				!(r_ptr->flags1 & (RF1_UNIQUE)));
+					!(r_ptr->flags1 & (RF1_UNIQUE)));
 
 			break;
 		}
@@ -4069,7 +4066,7 @@ static bool summon_specific_okay(int r_idx)
 		case SUMMON_DRAGON:
 		{
 			okay = ((r_ptr->flags3 & (RF3_DRAGON)) &&
-				!(r_ptr->flags1 & (RF1_UNIQUE)));
+					!(r_ptr->flags1 & (RF1_UNIQUE)));
 			break;
 		}
 
@@ -4083,11 +4080,10 @@ static bool summon_specific_okay(int r_idx)
 		case SUMMON_HI_UNDEAD:
 		{
 			okay = ((r_ptr->d_char == 'L') ||
-			        (r_ptr->d_char == 'V') ||
-			        (r_ptr->d_char == 'W'));
+					(r_ptr->d_char == 'V') ||
+					(r_ptr->d_char == 'W'));
 			break;
 		}
-
 
 		case SUMMON_HI_DRAGON:
 		{
@@ -4098,7 +4094,7 @@ static bool summon_specific_okay(int r_idx)
 		case SUMMON_WRAITH:
 		{
 			okay = ((r_ptr->d_char == 'W') &&
-			        (r_ptr->flags1 & (RF1_UNIQUE)));
+					(r_ptr->flags1 & (RF1_UNIQUE)));
 			break;
 		}
 
@@ -4115,7 +4111,6 @@ static bool summon_specific_okay(int r_idx)
 			break;
 		}
 
-
 		case SUMMON_KIN:
 		{
 			okay = ((r_ptr->d_char == summon_kin_type) &&
@@ -4126,7 +4121,7 @@ static bool summon_specific_okay(int r_idx)
 		case SUMMON_ANIMAL:
 		{
 			okay = ((r_ptr->flags3 & (RF3_ANIMAL)) &&
-			        !(r_ptr->flags1 & (RF1_UNIQUE)));
+					!(r_ptr->flags1 & (RF1_UNIQUE)));
 			break;
 		}
 
@@ -4139,7 +4134,6 @@ static bool summon_specific_okay(int r_idx)
 				   (strstr(r_ptr->name_full, "Tom" ))));
 			break;
 		}
-
 
 		case SUMMON_THIEF:
 		{
@@ -4160,12 +4154,12 @@ static bool summon_specific_okay(int r_idx)
 		{
 			break;
 		}
-
 	}
 
 	/* Result */
 	return (okay);
 }
+
 
 /*
  * Attempt to summon creatures who are already on the level.
@@ -4271,7 +4265,7 @@ bool summon_specific(int y1, int x1, int lev, int type, byte mp_flags)
 {
 	int i, x, y, r_idx;
 
-	/* No summoning on verious levels, unless the override flag is present
+	/* No summoning on various levels, unless the override flag is present
 	 * Override is used for actions such as for reading scrolls of summon monster or wands of polymorph
 	 */
 	if ((*dun_cap->limited_level_summoning)())
@@ -4337,20 +4331,19 @@ bool summon_specific(int y1, int x1, int lev, int type, byte mp_flags)
 }
 
 
-
 /*
  * Let the given monster attempt to reproduce.
  *
  * Note that "reproduction" REQUIRES empty space.
  *
- * Override is to ensure that the cloning happens on levels where multipication is restricted
+ * Override is to ensure that the cloning happens on levels where multiplication is restricted
  */
 bool multiply_monster(int m_idx, bool override)
 {
 	monster_type *m_ptr = &mon_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	byte mon_flags = 0L;
+	byte mon_flags = 0;
 
  	int i, y, x;
 
@@ -4396,6 +4389,7 @@ bool multiply_monster(int m_idx, bool override)
  	return (result);
 }
 
+
 /*
  * The NULL-terminated array of string actions used to format stacked messages.
  * Singular and plural modifiers are encoded in the same string. Example:
@@ -4410,23 +4404,23 @@ bool multiply_monster(int m_idx, bool override)
 static const char *msg_repository[MAX_MON_MSG + 1] =
 {
 	/* Dummy action */
-	"[is|are] hurt.",    		/* MON_MSG_NONE */
+	"[is|are] hurt.",			/* MON_MSG_NONE */
 
 	/* From message_pain */
 	"[is|are] unharmed.",		/* MON_MSG_UNHARMED  */
 	"barely notice[s].",		/* MON_MSG_BARELY_NOTICE  */
-	"flinch[es].",				/*  MON_MSG_FLINCH */
+	"flinch[es].",				/* MON_MSG_FLINCH */
 	"squelch[es].",				/* MON_MSG_SQUELCH  */
 	"quiver[s] in pain.",		/* MON_MSG_QUIVER  */
-	"writhe[s] about.",			/*  MON_MSG_WRITHE_ABOUT */
+	"writhe[s] about.",			/* MON_MSG_WRITHE_ABOUT */
 	"writhe[s] in agony.",		/* MON_MSG_WRITHE_IN_AGONY  */
 	"jerk[s].",					/* MON_MSG_JERK  */
-	"jerk[s] limply.",			/*  MON_MSG_JERK_LIMPLY */
+	"jerk[s] limply.",			/* MON_MSG_JERK_LIMPLY */
 	"jerk[s] in pain.",			/* MON_MSG_JERK_IN_PAIN  */
 	"jerk[s] in agony.",		/* MON_MSG_JERK_IN_AGONY  */
 	"jerk[s] feebly.", 			/* MON_MSG_JERK_FEEBLY */
-	"shrug[s] off the attack.",  /*  MON_MSG_SHRUG_OFF */
-	"snarl[s].",				/*  MON_MSG_SNARL */
+	"shrug[s] off the attack.",	/* MON_MSG_SHRUG_OFF */
+	"snarl[s].",				/* MON_MSG_SNARL */
 	"snarl[s] with pain.",		/* MON_MSG_SNARL_WITH_PAIN  */
 	"howl[s] in pain.",			/* MON_MSG_HOWL_IN_PAIN  */
 	"howl[s] in agony.",		/* MON_MSG_HOWL_IN_AGONY  */
@@ -4469,8 +4463,8 @@ static const char *msg_repository[MAX_MON_MSG + 1] =
 	"scream[s] in agony.",		/* MON_MSG_SCREAM_IN_AGONY  */
 	"[is|are] sterilized.",		/* MON_MSG_STERILIZE  */
 
-	/* From project_m */ 		/* MON_MSG_DIE */
-	"die[s].",   				/* MON_MSG_DIE  */
+	/* From project_m */
+	"die[s].",					/* MON_MSG_DIE  */
 	"[is|are] destroyed.",		/* MON_MSG_DESTROYED */
 	"[is|are] embedded in the wall.",	/* MON_MSG_BURIED_ROCK */
 	"resist[s] a lot.",			/* MON_MSG_RESIST_A_LOT */
@@ -4489,44 +4483,42 @@ static const char *msg_repository[MAX_MON_MSG + 1] =
 	"lose[s] some skin!",		/* MON_MSG_LOSE_SKIN */
 	"dissolve[s]!",				/* MON_MSG_DISSOLVE */
 	"catch[es] fire!",			/* MON_MSG_CATCH_FIRE */
-	"[is|are] badly frozen.", 	 /* MON_MSG_BADLY_FROZEN */
-	"[is|are] badly burned.", 	 /* MON_MSG_BADLY_BURNED */
-	"[is|are] severely poisoned.", 	 /* MON_MSG_BADLY_POISONED */
+	"[is|are] badly frozen.",	/* MON_MSG_BADLY_FROZEN */
+	"[is|are] badly burned.",	/* MON_MSG_BADLY_BURNED */
+	"[is|are] severely poisoned.",	/* MON_MSG_BADLY_POISONED */
 	"shudder[s].",				/* MON_MSG_SHUDDER */
 	"become[s] aware of your crafty abilities.",/* MON_MSG_AWARE_OF_CRAFTY_ABILITIES */
 	"take[s] heed of your cunning tactics.",/* MON_MSG_AWARE_OF_CUNNING_TACTICS  */
-	"sense[s] your crafty abilities.",  /* MON_MSG_SENSE_CRAFTY_ABILITIES */
+	"sense[s] your crafty abilities.",	/* MON_MSG_SENSE_CRAFTY_ABILITIES */
 	"sense[s] you are a cunning foe.",	/* MON_MSG_SENSE_CUNNING_FOE */
 	"change[s]!",				/* MON_MSG_CHANGE */
 	"disappear[s]!",			/* MON_MSG_DISAPPEAR */
-	"[is|are] even more stunned.",		/* MON_MSG_MORE_DAZED */
+	"[is|are] even more stunned.",	/* MON_MSG_MORE_DAZED */
 	"[is|are] stunned.",		/* MON_MSG_DAZED*/
 	"[is|are] no longer stunned.",	/* MON_MSG_NOT_DAZED */
 	"[is|are] more confused.",	/* MON_MSG_MORE_CONFUSED */
 	"[is|are] confused.",		/* MON_MSG_CONFUSED */
 	"[is|are] no longer confused.",/* MON_MSG_NOT_CONFUSED */
-	"[is|are] more slowed.",		/* MON_MSG_MORE_SLOWED */
+	"[is|are] more slowed.",	/* MON_MSG_MORE_SLOWED */
 	"[is|are] slowed.",			/* MON_MSG_SLOWED */
 	"speed[s] up.",				/* MON_SNG_NOT_SLOWED */
-	"[is|are] more hasted.",		/* MON_MSG_MORE_HASTED */
+	"[is|are] more hasted.",	/* MON_MSG_MORE_HASTED */
 	"[is|are] hasted.",			/* MON_MSG_HASTED */
 	"[is|are] no longer hasted.",/* MON_MSG_NOT_HASTED */
 	"[is|are] more terrified!",	/* MON_MSG_MORE_AFRAID */
 	"flee[s] in terror!",		/* MON_MSG_FLEE_IN_TERROR */
 	"[is|are] no longer afraid.",/* MON_MSG_NOT_AFRAID */
 	"~You hear [a|several] scream[|s] of agony!",/* MON_MSG_MORIA_DEATH */
-	"disintegrate[s]!",		/* MON_MSG_DISENTEGRATES */
-	"melt[s] away.",		/* MON_MSG_MELTS_AWAY */
-	"freeze[s] and shatter[s].",  /* MON_MSG_FREEZE_SHATTER */
-	"choke[s] and die[s].",  /* MON_MSG_CHOKE_DIE */
+	"disintegrate[s]!",			/* MON_MSG_DISENTEGRATES */
+	"melt[s] away.",			/* MON_MSG_MELTS_AWAY */
+	"freeze[s] and shatter[s].",/* MON_MSG_FREEZE_SHATTER */
+	"choke[s] and die[s].",		/* MON_MSG_CHOKE_DIE */
 	"lose[s] some mana!",		/* MON_MSG_MANA_DRAIN */
-	"~There [is|are] [a|several] mimic[|s]!",		/* MON_MSG_MIMIC_REVEAL */
+	"~There [is|are] [a|several] mimic[|s]!",	/* MON_MSG_MIMIC_REVEAL */
 	"appear[s]!",				/* MON_MSG_MIMIC_APPEARS */
-
 
 	NULL						/* MAX_MON_MSG */
 };
-
 
 
 /*
@@ -4793,13 +4785,12 @@ void message_pain(int m_idx, int dam)
 }
 
 
-
-
 #define SINGULAR_MON	1
 #define PLURAL_MON		2
 
+
 /*
- * Returns a pointer to a statically allocatted string containing a formatted
+ * Returns a pointer to a statically allocated string containing a formatted
  * message based on the given message code and the quantity flag.
  * The contents of the returned value will change with the next call
  * to this function
@@ -4902,6 +4893,7 @@ static void play_mon_msg_sound(u16b r_idx, byte msg_code)
 	}
 }
 
+
 /*
  * Tracks which monster has had which pain message stored, so redundant messages
  * don't happen due to monster attacks hitting other monsters.
@@ -4928,7 +4920,6 @@ static bool redundant_monster_message(int m_idx, int msg_code)
 
 	return (FALSE);
 }
-
 
 
 /*
@@ -5130,7 +5121,7 @@ void flush_monster_messages(void)
 			if (mon_msg[i].mon_flags & 0x02) my_strcat(buf, " (offscreen)", sizeof(buf));
 
 			/* Add the separator */
-		    my_strcat(buf, " ", sizeof(buf));
+			my_strcat(buf, " ", sizeof(buf));
 		}
 
 		/* Append the action to the message */
@@ -5183,7 +5174,6 @@ void flush_monster_messages(void)
  	/* Analyze the knowledge */
  	switch (what)
  	{
-
 		/* Slow/paralyze attacks learn about free action and saving throws */
 		case LRN_FREE_SAVE:
  		{
@@ -5216,7 +5206,7 @@ void flush_monster_messages(void)
  			break;
  		}
 
-		/* Electircal attacks learn about Electrical resists and immunities */
+		/* Electrical attacks learn about Electrical resists and immunities */
 		case LRN_ELEC:
  		{
  			if (p_ptr->state.resist_elec) m_ptr->smart |= (SM_RES_ELEC);
@@ -5404,7 +5394,7 @@ void flush_monster_messages(void)
 			break;
 		}
 
-		/* Ice attacks learn aboyt sound/shards/cold resists and cold immunity */
+		/* Ice attacks learn about sound/shards/cold resists and cold immunity */
 		case LRN_ICE:
 		{
 			if (p_ptr->state.resist_cold) m_ptr->smart |= (SM_RES_COLD);
@@ -5436,7 +5426,7 @@ void flush_monster_messages(void)
 		 }
 
 		/*
-		 * Some sounds attacks learna about sound resistance only
+		 * Some sounds attacks learn about sound resistance only
 		 * Others (above) do more
 		 */
 		case LRN_SOUND2:
@@ -5501,3 +5491,4 @@ void flush_monster_messages(void)
 		}
 	}
 }
+
