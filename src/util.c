@@ -2038,6 +2038,12 @@ void text_out_to_file(byte a, cptr str)
 	/* Wrap width */
 	int wrap = (text_out_wrap ? text_out_wrap : 75);
 
+	/* Output line buffer */
+	char *out;
+
+	/* Current position in output buffer */
+	int out_pos = 0;
+
 	/* We use either ascii or system-specific encoding */
  	int encoding = (xchars_to_file) ? SYSTEM_SPECIFIC : ASCII;
 
@@ -2046,6 +2052,8 @@ void text_out_to_file(byte a, cptr str)
 
 	/* Copy to a rewriteable string */
  	my_strcpy(buf, str, 1024);
+
+ 	out = (char *)mem_alloc((wrap + 1) * sizeof(char));
 
  	/* Translate it to 7-bit ASCII or system-specific format */
  	xstr_trans(buf, encoding);
@@ -2069,7 +2077,7 @@ void text_out_to_file(byte a, cptr str)
 			/* Output the indent */
 			for (i = 0; i < text_out_indent; i++)
 			{
-				file_writec(text_out_file, ' ');
+				out[out_pos++] = ' ';
 				pos++;
 			}
 		}
@@ -2104,6 +2112,7 @@ void text_out_to_file(byte a, cptr str)
 
 				/* Reset */
 				pos = 0;
+				out_pos = 0;
 
 				continue;
 			}
@@ -2123,18 +2132,25 @@ void text_out_to_file(byte a, cptr str)
 			/* Ensure the character is printable */
 			ch = (my_isprint((unsigned char) s[n]) ? s[n] : ' ');
 
-			/* Write out the character */
-			file_writec(text_out_file, ch);
+			/* Add to the buffer */
+			out[out_pos++] = ch;
 
 			/* Increment */
 			pos++;
 		}
 
+		/* Write out the buffer */
+		file_write(text_out_file, out, out_pos);
+
 		/* Move 's' past the stuff we've written */
 		s += len;
 
 		/* If we are at the end of the string, end */
-		if (*s == '\0') return;
+		if (*s == '\0')
+		{
+			mem_free(out);
+			return;
+		}
 
 		/* Skip newlines */
 		if (*s == '\n') s++;
@@ -2144,10 +2160,14 @@ void text_out_to_file(byte a, cptr str)
 
 		/* Reset */
 		pos = 0;
+		out_pos = 0;
 
 		/* Skip whitespace */
 		while (*s == ' ') s++;
 	}
+
+	/* free output buffer */
+	mem_free(out);
 
 	/* We are done */
 	return;
