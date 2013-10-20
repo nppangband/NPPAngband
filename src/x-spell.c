@@ -17,7 +17,6 @@
 #include "angband.h"
 
 
-
 /*
  * Helper function for casting the "Prismatic Spray" spell.
  */
@@ -29,7 +28,7 @@ static void cast_prismatic_spray(int dir, int dam)
 	{
 		/*
 		 * Should only be possible for level 50 and even then odds
-		 * should be 1/75 of this hapening. An easter egg type of
+		 * should be 1/75 of this happening. An easter egg type of
 		 * effect. :) -AR
 		 */
 		case (15):
@@ -150,7 +149,9 @@ static void cast_prismatic_spray(int dir, int dam)
 }
 
 
-
+/*
+ * Calculate the odds of a spell casting a beam
+ */
 static int beam_chance(void)
 {
 	int plev = p_ptr->lev;
@@ -158,9 +159,9 @@ static int beam_chance(void)
 }
 
 
-
-
-/* Report if a spell needs a target*/
+/*
+ * Report if a spell needs a target
+ */
 bool spell_needs_aim(int tval, int spell)
 {
 	if (tval == TV_MAGIC_BOOK)
@@ -235,7 +236,6 @@ bool spell_needs_aim(int tval, int spell)
 			default: return FALSE;
 		}
 
-
 	}
 	else if (tval == TV_PRAYER_BOOK)
 	{
@@ -296,7 +296,6 @@ cptr do_mage_spell(int mode, int spell, int dir)
 	{
 		case SPELL_MAGIC_MISSILE:
 		{
-
 			dice = 3 + ((plev - 1) / 5);
 			sides = 4;
 
@@ -457,16 +456,19 @@ cptr do_mage_spell(int mode, int spell, int dir)
 		}
 
 		/*
-		This spell is meant to be very strong at point blank range but then weaken fast as the range extends.
-		As such, it might make sense to boost the damage and broaden the arc to even wider than 60 degrees to
-		achieve the desired result. Considering how sound behaves in real life it might be fun to make the arc
-	   270 degrees and call it something like "Wail of the Banshee" or "War Cry" or something. -AR
+		 * This spell is meant to be very strong at point blank range but then
+		 * weaken fast as the range extends.
+		 * As such, it might make sense to boost the damage and broaden the arc
+		 * to even wider than 60 degrees to achieve the desired result.
+		 * Considering how sound behaves in real life it might be fun to make
+		 * the arc 270 degrees and call it something like "Wail of the Banshee"
+		 * or "War Cry" or something. -AR
 		*/
-
 		case SPELL_SHOCK_WAVE:
 		{
 			dam = 20;
-			dice = 1 + ((plev - 1 ) / 5); /*Reaches max damage (20+10d11, average 80) at plev 46. */
+			/* Reaches max damage (20+10d11, average 80) at plev 46. */
+			dice = 1 + ((plev - 1 ) / 5);
 			sides = 11;
 
 			if (name) return ("Shock Wave");
@@ -564,13 +566,13 @@ cptr do_mage_spell(int mode, int spell, int dir)
 		(partial resistance to ice) and RES_FIRE (partial resistance to plasma) could be used for that.
 		In many cases, by accident they already are. For example HURT_COLD keeps ICE bolt useful even
 		after Water Bolt has achieved 0% fail rate by offering a better damage per mana output against
-		Fire based mosters that are cold sensitive, most notably red dragons.
+		Fire based monsters that are cold sensitive, most notably red dragons.
 
-		Overall I hope to make Mages better than Druids at confonting single monsters while Druid
+		Overall I hope to make Mages better than Druids at confronting single monsters while Druid
 		out perform Mages at crowd control.
 
 		The fact that Orb does only 11.5 damage on average to non-evil is trivial due to the high % of
-	    evil in the dungeon. (As it should be, since it is Morgoth's dungeon, after all) -AR
+		evil in the dungeon. (As it should be, since it is Morgoth's dungeon, after all) -AR
 		*/
 
 		case SPELL_ICE_BOLT:
@@ -583,7 +585,7 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			if (desc_short) return (format("dam %dd%d", dice, sides));
 			if (cast)
 			{
-						fire_bolt_or_beam(beam, GF_ICE, dir, damroll(dice, sides));
+				fire_bolt_or_beam(beam, GF_ICE, dir, damroll(dice, sides));
 			}
 
 			break;
@@ -594,7 +596,7 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			dam = 20 + randint(30);
 
 			if (name) return ("Turn Stone to Mud");
-			if (desc) return ("Removes one section of a normal wall to floor.");
+			if (desc) return ("Removes one section of a normal wall to floor.  Also removes doors.");
 			if (desc_short) return ("");
 			if (cast)
 			{
@@ -699,15 +701,14 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			* damage listed below, according to terrain.txt
 			*
 			* I gave this a weird damage progression to in an attempt to
-			* make it more usefull for levels 30+ while keeping it at
-			* roughly the same powerlevel in the early game.
+			* make it more useful for levels 30+ while keeping it at
+			* roughly the same power level in the early game.
 			*/
 
 			dam = 20 + (plev * 6);
 
 			if (plev>30)
-			   dam+=(plev-30)*9;
-
+				dam+=(plev-30)*9;
 
 			dam1 = (dam * f_info[FEAT_SHARD].x_damage) / 100;
 
@@ -718,7 +719,6 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			{
 				fire_effect_orb(GF_SHARD, dir, dam, rad);
 			}
-
 
 			break;
 		}
@@ -743,8 +743,8 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			/*
 			 * Note the damage of the final static is 10% of the
 			 * damage listed below, according to terrain.txt
-			 * Final damage is double the damage od Drain Life Bursts
-			 * at double the mana cost, a big bang for bick bucks theme
+			 * Final damage is double the damage of Drain Life Bursts
+			 * at double the mana cost, a big bang for big bucks theme
 			 * I have for Mages. Maybe cut it down to 150% damage for 150%
 			 * mana later if it is too fast a damage dealing rate. -AR
 			 */
@@ -811,7 +811,6 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			{
 				fire_effect_orb(GF_CONFUSION, dir, dam, rad);
 			}
-
 
 			break;
 		}
@@ -931,11 +930,10 @@ cptr do_mage_spell(int mode, int spell, int dir)
 		{
 			dam = 50 + (plev * 4);
 			rad = 2;
-			/*Big damage for big mana. Final damage will be 12.5 points per mana,
-		    * a bit better than Druid Fire Ball, Druid Frost Ball is almost
-			* exactly 12.9. -AR
-		    */
-
+			/* Big damage for big mana. Final damage will be 12.5 points per mana,
+			 * a bit better than Druid Fire Ball, Druid Frost Ball is almost
+			 * exactly 12.9. -AR
+			 */
 
 			if (name) return ("Hurricane");
 			if (desc) return (format("Conjures forth a radius %d storm of wind and water for %d hp damage.", rad, dam));
@@ -957,7 +955,7 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			* damage listed below, according to terrain.txt
 			*
 			* Cloudkill is now a cloud of nether, double damage and cost
-			* of Shard Storm. It now reminds it's D&D 3.5 counterpart. -AR
+			* of Shard Storm. It now reminds of its D&D 3.5 counterpart. -AR
 			*/
 			dam = 60 + (plev * 4);
 
@@ -973,11 +971,14 @@ cptr do_mage_spell(int mode, int spell, int dir)
 				fire_effect_orb(GF_NETHER, dir, dam, rad);
 			}
 
-
 			break;
 		}
 
-		case SPELL_ICE_STORM: /* Moved down to make room for more powerful spells. Final damage ratio is 12 damage for 1 mana. -AR*/
+		/*
+		 * Moved down to make room for more powerful spells.  Final damage ratio
+		 * is 12 damage for 1 mana. -AR
+		 */
+		case SPELL_ICE_STORM:
 		{
 			dam = 160 + (plev * 4);
 			rad = 3;
@@ -993,7 +994,10 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			break;
 		}
 
-		case SPELL_PLASMA_BOLT: /*Most powerful bolt for pre-Kelek's Mages. -AR */
+		/*
+		 * Most powerful bolt for pre-Kelek's Mages. -AR
+		 */
+		case SPELL_PLASMA_BOLT:
 		{
 			dice =  15 + (plev / 2);
 			sides = 19;
@@ -1048,6 +1052,7 @@ cptr do_mage_spell(int mode, int spell, int dir)
 
 			break;
 		}
+
 		case SPELL_DETECT_INVISIBLE:
 		{
 			if (name) return ("Detect Invisible");
@@ -1075,14 +1080,14 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			break;
 		}
 
+		/* A ball of GF_LIGHT allows a Mage to light up a distant area and hit
+		 * vulnerable creatures for good damage. 8/1 final damage/mana for
+		 * normals, 20/1 for vulnerable creatures. Might be out of flavour for
+		 * mages though, so considering GF_PLASMA or possibly something else
+		 * with a different spell name. -AR
+		 */
 		case SPELL_NOVA:
 			{
-			/* A ball of GF_LIGHT allows a Mage to light up a distant area and hit
-		    * vulnerable creatures for good damage. 8/1 final damage/mana for
-			* normals, 20/1 for vulnerable creatures. Might be out of flavour for
-			* mages though, so considering GF_PLASMA or possibly something else
-			* with a different spell name. -AR
-			*/
 			dam = 60 + ((plev * 6) / 5);
 			rad = 2;
 
@@ -1102,11 +1107,11 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			dice =  10 + ((plev * 2) / 5);
 			sides = 19;
 
-			/*Has greater than 20/1 final damage ratio, 25/1 but
-			* balanced by the fact that EVIL monsters resist. Take
-		    * that Hydras! ;) Might tone down damage and mana costs
-			* both. -AR*/
-
+			/* Has greater than 20/1 final damage ratio, 25/1 but
+			 * balanced by the fact that EVIL monsters resist. Take
+			 * that Hydras! ;) Might tone down damage and mana costs
+			 * both. -AR
+			 */
 			if (name) return ("Rend Soul");
 			if (desc) return (format("Fires a bolt or beam of nether for %dd%d hp damage.", dice, sides));
 			if (desc_short) return (format("dam %dd%d", dice, sides));
@@ -1308,14 +1313,13 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			break;
 		}
 
+		/*
+		 * A Storm type spell while waiting for Mana Storm, picked GF_DARK
+		 * because I wanted to mimic monster spells. 12 for 1 final ratio.
+		 * -AR
+		 */
 		case SPELL_DARKNESS_STORM:
 		{
-			/*
-			* A Storm type spell while waiting for Mana Storm, picked GF_DARK
-			* because I wanted to mimic monster spells. 12 for 1 final ratio.
-			* -AR
-			*/
-
 			dam = 280 + (plev * 4);
 			rad = 3;
 
@@ -1380,7 +1384,7 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			if (cast)
 			{
 				(void)enchant_spell(rand_int(4) + plev / 20,
-			                     rand_int(4) + plev / 20, 0);
+									rand_int(4) + plev / 20, 0);
 			}
 
 			break;
@@ -1414,128 +1418,129 @@ cptr do_mage_spell(int mode, int spell, int dir)
 			break;
 		}
 
- 		case SPELL_LIGHTNING_BOLT:
- 		{
- 			dice =  4;
- 			sides = 8;
+		case SPELL_LIGHTNING_BOLT:
+		{
+			dice =  4;
+			sides = 8;
 
- 			if (name) return ("Lightning Bolt");
- 			if (desc) return (format("Fires a bolt or beam of lightning for %dd%d hp damage.", dice, sides));
- 			if (desc_short) return (format("dam %dd%d", dice, sides));
- 			if (cast)
- 			{
- 				fire_bolt_or_beam(beam, GF_ELEC, dir, damroll(dice, sides));
- 			}
-
- 			break;
- 		}
-
- 		case SPELL_REMOVE_CURSE:
- 		{
- 			if (name) return ("Remove Curse");
- 			if (desc) return ("Removes standard curses.");
- 			if (desc_short) return ("");
- 			if (cast)
- 			{
- 				remove_curse(FALSE);
- 			}
+			if (name) return ("Lightning Bolt");
+			if (desc) return (format("Fires a bolt or beam of lightning for %dd%d hp damage.", dice, sides));
+			if (desc_short) return (format("dam %dd%d", dice, sides));
+			if (cast)
+			{
+				fire_bolt_or_beam(beam, GF_ELEC, dir, damroll(dice, sides));
+			}
 
 			break;
 		}
- 		case SPELL_SLEEP_II:
- 		{
 
- 			if (name) return ("Sleep II");
- 			if (desc) return ("Attempts to sleep all adjacent monsters.");
- 			if (desc_short) return ("");
- 			if (cast)
- 			{
- 				(void)sleep_monsters_touch();
- 			}
+		case SPELL_REMOVE_CURSE:
+		{
+			if (name) return ("Remove Curse");
+			if (desc) return ("Removes standard curses.");
+			if (desc_short) return ("");
+			if (cast)
+			{
+				remove_curse(FALSE);
+			}
 
- 			break;
+			break;
+		}
+		case SPELL_SLEEP_II:
+		{
+
+			if (name) return ("Sleep II");
+			if (desc) return ("Attempts to sleep all adjacent monsters.");
+			if (desc_short) return ("");
+			if (cast)
+			{
+				(void)sleep_monsters_touch();
+			}
+
+			break;
  		}
 
- 		case SPELL_FROST_BOLT:
- 		 {
- 		 	dice =  6;
- 		 	sides = 8;
+		case SPELL_FROST_BOLT:
+		{
+			dice =  6;
+			sides = 8;
 
- 		 	if (name) return ("Frost Bolt");
- 		 	if (desc) return (format("Fires a bolt or beam of cold for %dd%d hp damage.", dice, sides));
- 		 	if (desc_short) return (format("dam %dd%d", dice, sides));
- 		 	if (cast)
- 		 	{
- 		 		fire_bolt_or_beam(beam, GF_COLD, dir, damroll(dice, sides));
- 		 	}
+			if (name) return ("Frost Bolt");
+			if (desc) return (format("Fires a bolt or beam of cold for %dd%d hp damage.", dice, sides));
+			if (desc_short) return (format("dam %dd%d", dice, sides));
+			if (cast)
+			{
+				fire_bolt_or_beam(beam, GF_COLD, dir, damroll(dice, sides));
+			}
 
- 		 	break;
- 		 }
-
- 		case SPELL_CREATE_FOOD:
- 		{
- 			if (name) return ("Create Food");
- 			if (desc) return ("Magically creates one ration of food.");
- 			if (desc_short) return ("");
- 			if (cast)
- 			{
- 				create_food();
- 			}
 			break;
 		}
 
- 		case SPELL_FIRE_BOLT:
- 		{
- 		 	dice =  9;
- 		 	sides = 8;
+		case SPELL_CREATE_FOOD:
+		{
+			if (name) return ("Create Food");
+			if (desc) return ("Magically creates one ration of food.");
+			if (desc_short) return ("");
+			if (cast)
+			{
+				create_food();
+			}
+			break;
+		}
 
- 		 	if (name) return ("Fire Bolt");
- 		 	if (desc) return (format("Fires a bolt or beam of fire for %dd%d hp damage.", dice, sides));
- 		 	if (desc_short) return (format("dam %dd%d", dice, sides));
- 		 	if (cast)
- 		 	{
- 		 		fire_bolt_or_beam(beam, GF_FIRE, dir, damroll(dice, sides));
- 		 	}
+		case SPELL_FIRE_BOLT:
+		{
+			dice =  9;
+			sides = 8;
 
- 		 	break;
- 		}
- 		case SPELL_FROST_BALL:
- 		{
- 			dam = 48;
- 			rad = 2;
+			if (name) return ("Fire Bolt");
+			if (desc) return (format("Fires a bolt or beam of fire for %dd%d hp damage.", dice, sides));
+			if (desc_short) return (format("dam %dd%d", dice, sides));
+			if (cast)
+			{
+				fire_bolt_or_beam(beam, GF_FIRE, dir, damroll(dice, sides));
+			}
 
- 			if (name) return ("Frost Ball");
- 			if (desc) return (format("Fire a radius %d ball of frost for %d hp damage.", rad, dam));
- 			if (desc_short) return (format("rad %d dam %d", rad, dam));
- 			if (cast)
- 			{
- 				fire_ball(GF_COLD, dir, dam, rad);
- 			}
+			break;
+		}
 
- 			break;
- 		}
- 		case SPELL_FIRE_BALL:
- 		{
- 			dam = 72;
- 			rad = 2;
+		case SPELL_FROST_BALL:
+		{
+			dam = 48;
+			rad = 2;
 
- 			if (name) return ("Fire Ball");
- 			if (desc) return (format("Fire a radius %d ball of fire for %d hp damage.", rad, dam));
- 			if (desc_short) return (format("rad %d dam %d", rad, dam));
- 			if (cast)
- 			{
- 				fire_ball(GF_FIRE, dir, dam, rad);
- 			}
+			if (name) return ("Frost Ball");
+			if (desc) return (format("Fire a radius %d ball of frost for %d hp damage.", rad, dam));
+			if (desc_short) return (format("rad %d dam %d", rad, dam));
+			if (cast)
+			{
+				fire_ball(GF_COLD, dir, dam, rad);
+			}
 
- 			break;
- 		}
+			break;
+		}
+
+		case SPELL_FIRE_BALL:
+		{
+			dam = 72;
+			rad = 2;
+
+			if (name) return ("Fire Ball");
+			if (desc) return (format("Fire a radius %d ball of fire for %d hp damage.", rad, dam));
+			if (desc_short) return (format("rad %d dam %d", rad, dam));
+			if (cast)
+			{
+				fire_ball(GF_FIRE, dir, dam, rad);
+			}
+
+			break;
+		}
 
 	}
 
 	/* Success */
 	return ("Success!");
 }
-
 
 
 /*
@@ -1560,7 +1565,7 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 	bool desc = (mode == MODE_SPELL_DESC);
 	bool desc_short = (mode == MODE_SPELL_DESC_SHORT);
 
-	/* Return the spell type name if that is what is being asked*/
+	/* Return the spell type name if that is what is being asked */
 	if (mode == MODE_SPELL_NOUN) return "incantation";
 	if (mode == MODE_SPELL_VERB) return "recite";
 
@@ -1596,6 +1601,7 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 				(void)hp_player(damroll(dice, sides));
 				set_cut(p_ptr->timed[TMD_CUT] - 15);
 			}
+
 			break;
 		}
 
@@ -1671,7 +1677,6 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 			if (desc_short) return (format("rad %d dam %d", rad, dam1));
 			if (cast)
 			{
-
 				fire_effect_orb(GF_POIS, dir, dam, rad);
 			}
 
@@ -1695,7 +1700,6 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 			}
 
 			break;
-
 		}
 
 		case DRUID_BARKSKIN:
@@ -1863,7 +1867,7 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 			{
 				u32b flg = PROJECT_BOOM | PROJECT_WALL | PROJECT_GRID | PROJECT_EFCT;
 
-				/* Try to put out fires*/
+				/* Try to put out fires */
 				project(SOURCE_PLAYER, rad, py, px, py, px, (plev * 75), GF_EXTINGUISH, flg, 0,0);
 			}
 
@@ -1917,7 +1921,6 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 			}
 
 			break;
-
 		}
 
 		case DRUID_CLEAR_AIR:
@@ -1931,7 +1934,7 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 			{
 				u32b flg = PROJECT_BOOM | PROJECT_WALL | PROJECT_EFCT;
 
-				/* Clear the air of effects*/
+				/* Clear the air of effects */
 				project(SOURCE_PLAYER, rad, py, px, py, px, 1, GF_CLEAR_AIR, flg, 0,0);
 			}
 
@@ -1942,7 +1945,7 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 		{
 			if (name)
 			{
-			       	return ("Detect Terrain");
+				return ("Detect Terrain");
 			}
 			if (desc)
 			{
@@ -1956,8 +1959,8 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 				(void)detect(DETECT_RADIUS, DETECT_TERRAIN);
 				if (plev >= 30) read_minds();
 			}
-			break;
 
+			break;
 		}
 
 		case DRUID_EARTHQUAKE:
@@ -1983,7 +1986,7 @@ cptr do_druid_incantation(int mode, int spell, int dir)
 			 * Note the damage of the final static is 30% of the
 			 * damage listed below, according to terrain.txt
 			 */
-			dam = 400 + (plev * 6);  /*120 + plev times 2 damage*/
+			dam = 400 + (plev * 6);  /*120 + plev times 2 damage */
 			dam1 = (dam * f_info[FEAT_LIFE_DRAIN].x_damage) / 100;
 
 			if (name) return ("Life draining bursts");
