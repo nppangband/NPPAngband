@@ -3022,7 +3022,6 @@ void monster_hide(monster_type *m_ptr)
 			{
 				msg_c_format(MSG_HIDE_UNHIDE, "%^s hides in the %s.", m_name, feat_name);
 			}
-
 		}
 
 		/* Mark the monster */
@@ -3044,6 +3043,7 @@ void monster_hide(monster_type *m_ptr)
 		}
 	}
 }
+
 
 /*
  * Unhide a monster in terrain, if possible
@@ -3166,7 +3166,7 @@ s16b monster_place(int y, int x, monster_type *n_ptr)
 			m_ptr->mflag |= (MFLAG_FLYING);
 		}
 
-		/* Count racial occurances */
+		/* Count racial occurrences */
 		r_ptr->cur_num++;
 
 		/* Place as hidden as appropriate */
@@ -3174,12 +3174,12 @@ s16b monster_place(int y, int x, monster_type *n_ptr)
 
 		/* Update the monster */
 		update_mon(m_idx, TRUE);
-
 	}
 
 	/* Result */
 	return (m_idx);
 }
+
 
 /*
  * Determine if a town-dweller is not a threat.
@@ -3210,14 +3210,16 @@ static bool no_threat(const monster_race *r_ptr)
 
 		/* Can steal from the character */
 		if ((effect == RBE_EAT_GOLD) || (effect == RBE_EAT_ITEM)) return (FALSE);
-
 	}
 
 	/* Harmless */
 	return (TRUE);
 }
 
-/*calculate the monster_speed of a monster at a given location*/
+
+/*
+ * Calculate the monster_speed of a monster at a given location
+ */
 void calc_monster_speed(int y, int x)
 {
 	int speed, i;
@@ -3267,7 +3269,6 @@ void calc_monster_speed(int y, int x)
 }
 
 
-
 /*
  * Attempt to place a monster of the given race at the given location.
  *
@@ -3289,7 +3290,6 @@ void calc_monster_speed(int y, int x)
  */
 static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 {
-
 	monster_race *r_ptr;
 
 	monster_type *n_ptr;
@@ -3379,7 +3379,6 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 		return (FALSE);
 	}
 
-
 	/* Depth monsters may NOT be created out of depth */
 	if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (effective_depth(p_ptr->depth) < r_ptr->level))
 	{
@@ -3402,7 +3401,6 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	 */
 	if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
 	{
-
 		if (!prepare_ghost(r_idx))
 		{
 			return (FALSE);
@@ -3437,7 +3435,7 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	{
 		n_ptr->maxhp = (r_ptr->hdice * r_ptr->hside);
 	}
-	/*assign hitpoints using dice rolls*/
+	/* assign hitpoints using dice rolls */
 	else
 	{
 		n_ptr->maxhp = damroll(r_ptr->hdice, r_ptr->hside);
@@ -3452,9 +3450,7 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 	/* And start out fully healthy */
 	n_ptr->hp = n_ptr->maxhp;
 
-
-
-	/* 75% non-unique monsters vary their speed*/
+	/* 75% non-unique monsters vary their speed */
 	if (!(r_ptr->flags1 & (RF1_UNIQUE)))
 	{
 		if (!(one_in_(4)))
@@ -3464,7 +3460,6 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
 			else n_ptr->mflag |= (MFLAG_FASTER);
 		}
 	}
-
 
 	/* Force monster to wait for player */
 	if (r_ptr->flags1 & (RF1_FORCE_SLEEP))
@@ -3603,7 +3598,10 @@ static bool place_mimic_near(int y, int x, int r_idx, bool message, bool questor
 	return (success);
 }
 
-/*reveal a mimic, re-light the spot, and print a message if asked for*/
+
+/*
+ * Reveal a mimic, re-light the spot, and print a message if asked for
+ */
 void reveal_mimic(int o_idx, bool message)
 {
 	/* Get the object */
@@ -3625,7 +3623,6 @@ void reveal_mimic(int o_idx, bool message)
 }
 
 
-
 /*
  * Maximum size of a group of monsters
  */
@@ -3639,7 +3636,7 @@ void reveal_mimic(int o_idx, bool message)
  */
 static bool place_monster_group(int y, int x, int r_idx, bool slp, s16b group_size)
 {
- 	monster_race *r_ptr = &r_info[r_idx];
+	monster_race *r_ptr = &r_info[r_idx];
 
 	int old, n, i;
 	int start;
@@ -3647,19 +3644,19 @@ static bool place_monster_group(int y, int x, int r_idx, bool slp, s16b group_si
 
 	int hack_n = 0;
 
- 	byte hack_y[GROUP_MAX];
- 	byte hack_x[GROUP_MAX];
+	byte hack_y[GROUP_MAX];
+	byte hack_x[GROUP_MAX];
 
 	/* Hard monsters, smaller groups */
- 	if (r_ptr->level > effective_depth(p_ptr->depth))
- 	{
+	if (r_ptr->level > effective_depth(p_ptr->depth))
+	{
 		reduce = (r_ptr->level - effective_depth(p_ptr->depth)) / 2;
 		group_size -= randint(reduce);
- 	}
+	}
 
 	if (group_size < 2) group_size = 2;
 
- 	/* Maximum size */
+	/* Maximum size */
 	if (group_size > GROUP_MAX) group_size = GROUP_MAX;
 
 	/* Save the rating */
@@ -3704,10 +3701,12 @@ static bool place_monster_group(int y, int x, int r_idx, bool slp, s16b group_si
 	return (TRUE);
 }
 
+
 /*
  * Hack -- help pick an escort type
  */
 static int place_monster_idx = 0;
+
 
 /*
  * Hack -- help pick an escort type
@@ -3733,8 +3732,6 @@ static bool place_monster_okay(int r_idx)
 	/* Okay */
 	return (TRUE);
 }
-
-
 
 
 /*
@@ -3779,7 +3776,6 @@ static void place_monster_escort(int y, int x, int leader_idx, bool slp)
 	/* Build monster table, get index of first escort */
 	escort_idx = get_mon_num(escort_monster_level, y, x, (MPLACE_NO_MIMIC | MPLACE_NO_GHOST));
 
-
 	while (!escort_idx)
 	{
 		/* Build monster table, get index of first escort */
@@ -3791,7 +3787,6 @@ static void place_monster_escort(int y, int x, int leader_idx, bool slp)
 		/* Avoid a game freeze if escorts aren't possible*/
 		else break;
 	}
-
 
 	/* Start on the monster */
 	hack_n = 1;
@@ -3990,8 +3985,6 @@ bool alloc_monster(int dis, byte mp_flags)
 	/* Nope */
 	return (FALSE);
 }
-
-
 
 
 /*
