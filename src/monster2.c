@@ -1027,7 +1027,7 @@ void update_mon_sidebar_list(void)
 
 		sidebar_count++;
 
-		/* paranoia - would only happen if SIDEBAR_MONSTER_MAX was less than 10*/
+		/* paranoia - would only happen if SIDEBAR_MONSTER_MAX was less than 10 */
 		if (sidebar_count >= SIDEBAR_MONSTER_MAX)
 		{
 			/* Release the arrays */
@@ -1197,8 +1197,6 @@ void display_monlist(void)
 		if (!list[m_ptr->r_idx].count) type_count++;
 		if (!list[m_ptr->r_idx].s_attr)
 		{
-
-
 			list[m_ptr->r_idx].s_attr = m_ptr->m_attr ? m_ptr->m_attr : r_ptr->x_attr;
 		}
 
@@ -1213,7 +1211,6 @@ void display_monlist(void)
 
 			/* Check if asleep and increment accordingly */
 			if (m_ptr->m_timed[MON_TMD_SLEEP]) list[m_ptr->r_idx].los_asleep++;
-
 		}
 		/* Not in LOS so increment if asleep */
 		else if (m_ptr->m_timed[MON_TMD_SLEEP]) list[m_ptr->r_idx].asleep++;
@@ -1237,7 +1234,7 @@ void display_monlist(void)
 		/* Clear display and print note */
 		else c_prt(TERM_SLATE, "You see no monsters.", 0, 0);
 		if (!in_term)
-		    Term_addstr(-1, TERM_WHITE, "  (Press any key to continue.)");
+			Term_addstr(-1, TERM_WHITE, "  (Press any key to continue.)");
 
 		/* Free up memory */
 		FREE(list);
@@ -1292,7 +1289,7 @@ void display_monlist(void)
 		}
 	}
 
-   	/* Message for monsters in LOS - even if there are none */
+	/* Message for monsters in LOS - even if there are none */
 	if (!los_count) prt(format("You can see no monsters."), 0, 0);
 	else prt(format("You can see %d monster%s", los_count, (los_count == 1
 		? ":" : "s:")), 0, 0);
@@ -1307,7 +1304,6 @@ void display_monlist(void)
 
 		/* Skip if there are none of these in LOS */
 		if (!in_los) continue;
-
 
 		r_ptr = &r_info[r_idx];
 
@@ -1503,6 +1499,7 @@ void display_monlist(void)
 
 }
 
+
 /*
  * Build a string describing a monster in some way.
  *
@@ -1548,8 +1545,8 @@ void display_monlist(void)
  *   0x04 --> Full nominative name ("the kobold") or "something"
  *   0x80 --> Banishment resistance name ("the kobold")
  *   0x88 --> Killing name ("a kobold")
- *   0x22 --> Possessive, genderized if visable ("his") or "its"
- *   0x23 --> Reflexive, genderized if visable ("himself") or "itself"
+ *   0x22 --> Possessive, genderized if visible ("his") or "its"
+ *   0x23 --> Reflexive, genderized if visible ("himself") or "itself"
  */
 void monster_desc(char *desc, size_t max, const monster_type *m_ptr, int mode)
 {
@@ -1626,7 +1623,6 @@ void monster_desc(char *desc, size_t max, const monster_type *m_ptr, int mode)
 		my_strcpy(desc, res, max);
 	}
 
-
 	/* Handle visible monsters, "reflexive" request */
 	else if ((mode & 0x02) && (mode & 0x01))
 	{
@@ -1635,7 +1631,6 @@ void monster_desc(char *desc, size_t max, const monster_type *m_ptr, int mode)
 		else if (r_ptr->flags1 & (RF1_MALE)) my_strcpy(desc, "himself", max);
 		else my_strcpy(desc, "itself", max);
 	}
-
 
 	/* Handle all other visible monster requests */
 	else
@@ -1720,6 +1715,7 @@ void monster_desc_race(char *desc, size_t max, int r_idx)
 	my_strcpy(desc, name, max);
 }
 
+
 /*
  * Learn about a monster (by "probing" it)
  */
@@ -1735,7 +1731,6 @@ void lore_probe_monster_aux(int r_idx)
 	{
 		case 1:
 		{
-
 			l_ptr->r_l_flags1 = r_ptr->flags1;
 			l_ptr->r_l_flags2 = r_ptr->flags2;
 			break;
@@ -1761,37 +1756,37 @@ void lore_probe_monster_aux(int r_idx)
 	{
 		case 1:
 		{
-			/*learn their breaths, and shrieking, firing arrows, etc.....*/
+			/* learn their breaths, and shrieking, firing arrows, etc..... */
 			l_ptr->r_l_flags4 = r_ptr->flags4;
 			break;
 		}
 
 		case 2:
 		{
-			/*learn many of monster's offensive spells*/
+			/* learn many of monster's offensive spells */
 			l_ptr->r_l_flags5 = r_ptr->flags5;
 			break;
 		}
 
 		case 3:
 		{
-			/*learn many of monster's offensive spells*/
+			/* learn many of monster's offensive spells */
 			l_ptr->r_l_flags6 = r_ptr->flags6;
 			break;
 		}
 
 		default:
 		{
-			/*learn many of their other spells*/
+			/* learn many of their other spells */
 			l_ptr->r_l_flags7 = r_ptr->flags7;
 			break;
 		}
 	}
 
-	/*learn the native terrain one in three times*/
+	/* learn the native terrain one in three times */
 	if (one_in_(3)) l_ptr->r_l_native = r_ptr->r_native;
 
-	/* Hack -- Increse the sightings, and ranged attacks */
+	/* Hack -- Increase the sightings, and ranged attacks */
 	if (l_ptr->sights < MAX_SHORT)	l_ptr->sights += (MAX_SHORT - l_ptr->sights) / 100;
 	if (l_ptr->ranged < MAX_UCHAR)	l_ptr->ranged += (MAX_UCHAR - l_ptr->ranged) / 5;
 
@@ -1824,24 +1819,22 @@ void lore_probe_monster_aux(int r_idx)
 		{
 			/* Hack -- know the treasure drops*/
 			l_ptr->drop_gold = l_ptr->drop_item =
-			(((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) +
-	 		 ((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) +
-	  		 ((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) +
-	 		 ((r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) +
-	 		 ((r_ptr->flags1 & RF1_DROP_90)  ? 1 : 0) +
-	 		 ((r_ptr->flags1 & RF1_DROP_60)  ? 1 : 0));
+				(((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) +
+				 ((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) +
+				 ((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) +
+				 ((r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) +
+				 ((r_ptr->flags1 & RF1_DROP_90)  ? 1 : 0) +
+				 ((r_ptr->flags1 & RF1_DROP_60)  ? 1 : 0));
 
 			/* Hack -- but only "valid" drops */
 			if (r_ptr->flags1 & RF1_ONLY_GOLD) l_ptr->drop_item = 0;
 			if (r_ptr->flags1 & RF1_ONLY_ITEM) l_ptr->drop_gold = 0;
 
 			break;
-
 		}
-
 	}
-
 }
+
 
 /*
  * Learn about a monster (by "probing" it)
@@ -1850,7 +1843,7 @@ void lore_do_probe_monster(int m_idx)
 {
 	monster_type *m_ptr = &mon_list[m_idx];
 
-	/*increase the information*/
+	/* increase the information */
 	lore_probe_monster_aux(m_ptr->r_idx);
 
 	/* Update monster recall window */
@@ -1898,7 +1891,6 @@ void lore_treasure(int m_idx, int num_item, int num_gold)
 		p_ptr->redraw |= (PR_MONSTER);
 	}
 }
-
 
 
 /*
@@ -1953,7 +1945,7 @@ void lore_treasure(int m_idx, int num_item, int num_gold)
  *
  * Monsters which are not on the current panel may be "visible" to
  * the player, and their descriptions will include an "offscreen"
- * reference.  Currently, offscreen monsters cannot be targetted
+ * reference.  Currently, offscreen monsters cannot be targeted
  * or viewed directly, but old targets will remain set.  XXX XXX
  *
  * The player can choose to be disturbed by several things, including
