@@ -123,8 +123,6 @@ s16b poly_r_idx(const monster_type *m_ptr)
 }
 
 
-
-
 /*
  * Delete a monster by index.
  *
@@ -196,7 +194,6 @@ void delete_monster_idx(int i)
 		delete_object_idx(this_o_idx);
 	}
 
-
 	/* Wipe the Monster */
 	(void)WIPE(m_ptr, monster_type);
 
@@ -234,10 +231,8 @@ static void compact_monsters_aux(int i1, int i2)
 
 	s16b this_o_idx, next_o_idx = 0;
 
-
 	/* Do nothing */
 	if (i1 == i2) return;
-
 
 	/* Old monster */
 	m_ptr = &mon_list[i1];
@@ -342,9 +337,10 @@ void compact_monsters(int size)
 				if ((r_ptr->flags1 & (RF1_QUESTOR)) || (m_ptr->mflag & (MFLAG_QUEST)))
 					mon_lev[i] += MAX_DEPTH * 3;
 
-				/*same with active quest monsters*/
+				/* same with active quest monsters */
 				else if (q_info[quest_num(p_ptr->depth)].mon_idx == m_ptr->r_idx)
 					mon_lev[i] += MAX_DEPTH * 3;
+
 				/* Uniques are protected */
 				else if (r_ptr->flags1 & (RF1_UNIQUE)) mon_lev[i] += MAX_DEPTH * 2;
 
@@ -360,7 +356,7 @@ void compact_monsters(int size)
 			mon_index[i] = i;
 		}
 
-	/* Sort all the monsters by (adjusted) level */
+		/* Sort all the monsters by (adjusted) level */
 		for (i = 0; i < mon_max - 1; i++)
 		{
 			for (j = 0; j < mon_max - 1; j++)
@@ -388,6 +384,7 @@ void compact_monsters(int size)
 		{
 			/* We've deleted enough monsters */
 			if (cnt >= size) break;
+
 			/* Get this monster, using our saved index */
 			m_ptr = &mon_list[mon_index[i]];
 
@@ -438,7 +435,6 @@ void wipe_mon_list(void)
 	for (i = mon_max - 1; i >= 1; i--)
 	{
 		monster_type *m_ptr = &mon_list[i];
-
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Skip dead monsters */
@@ -483,7 +479,6 @@ void wipe_mon_list(void)
 
 	/* Hack -- no more tracking */
 	health_track(0);
-
 }
 
 
@@ -512,7 +507,6 @@ s16b mon_pop(void)
 		return (i);
 	}
 
-
 	/* Recycle dead monsters */
 	for (i = 1; i < mon_max; i++)
 	{
@@ -530,7 +524,6 @@ s16b mon_pop(void)
 		/* Use this monster */
 		return (i);
 	}
-
 
 	/* Warn the player (except during dungeon creation) */
 	if (character_dungeon) msg_print("Too many monsters!");
@@ -571,7 +564,6 @@ errr get_mon_num_prep(void)
 	/* Success */
 	return (0);
 }
-
 
 
 /*
@@ -621,10 +613,10 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 	/* Cache damage to non-native monsters */
 	u16b dam_non_native = f_info[cave_feat[y][x]].dam_non_native;
 
-	/*Get the terrain native flags*/
+	/* Get the terrain native flags */
 	u32b native_flags = f_info[cave_feat[y][x]].f_flags3;
 
-	/*filter out non-terrain flags*/
+	/* filter out non-terrain flags */
 	native_flags &= TERRAIN_MASK;
 
 	/* Check for an active quest */
@@ -661,8 +653,10 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 	/*enforce a minimum depth on monsters,
 	 *which slowly drops if no monsters are available.
 	 */
-	if ((!(get_mon_num_hook)) || (quest_level)) mindepth = level / 5;
-	else mindepth = level / 7;
+	if ((!(get_mon_num_hook)) || (quest_level))
+		mindepth = level / 5;
+	else
+		mindepth = level / 7;
 
 	/*
 	 * Hack -- Allow any monster in elemental terrain. -DG-
@@ -726,7 +720,7 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 			{
 				bool do_continue = FALSE;
 
-				/*No player ghosts if the option is set, or not called for*/
+				/* No player ghosts if the option is set, or not called for */
 				if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
 				{
 					if (mp_flags & (MPLACE_NO_GHOST)) continue;
@@ -740,7 +734,7 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 						 (r_ptr->level < 60))	continue;
 				}
 
-				/* Check quests for uniques*/
+				/* Check quests for uniques */
 				for (k = 0; k < z_info->q_max; k++)
 				{
 					if (quest_slot_single_r_idx(k))
@@ -774,16 +768,16 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 			{
 				u32b monster_native = r_ptr->r_native;
 
-				/*Filter out the non-relevant monster native flags*/
+				/* Filter out the non-relevant monster native flags */
 				monster_native &= native_flags;
 
-				/*Not a match*/
+				/* Not a match */
 				if (monster_native != native_flags)
 				{
-					/*On the first try, get native creatures only*/
+					/* On the first try, get native creatures only */
 					if (native_only) continue;
 
-					/*Or else just get a creature that won't be damaged*/
+					/* Or else just get a creature that won't be damaged */
 					else if ((dam_non_native > 0) && !(r_ptr->flags3 & (RF3_FLYING))) continue;
 				}
 			}
@@ -795,13 +789,12 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 			total += table[i].prob3;
 		}
 
-		/*slowly reduce if the mindepth is too high*/
+		/* slowly reduce if the mindepth is too high */
 		if (mindepth <= 6) mindepth --;
 		else mindepth -= 5;
 
-		/*We have gone through at least once*/
+		/* We have gone through at least once */
 		native_only = FALSE;
-
 	}
 
 	while ((total <= 0) && (mindepth > 0));
@@ -821,7 +814,6 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 		/* Decrement */
 		value = value - table[i].prob3;
 	}
-
 
 	/* Power boost */
 	p = rand_int(100);
@@ -876,6 +868,7 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
 	return (table[i].index);
 }
 
+
 /*
  * Helper function for display monlist.  Prints the number of creatures, followed
  * by either a singular or plural version of the race name as appropriate.
@@ -922,7 +915,10 @@ static void get_mon_name(char *output_name, size_t max, int r_idx, int in_los)
 	my_strcat(output_name, race_name, max);
 }
 
-/* Figure out which monsters to display in the sidebar */
+
+/*
+ * Figure out which monsters to display in the sidebar
+ */
 void update_mon_sidebar_list(void)
 {
 	monster_type *m_ptr;
@@ -949,14 +945,14 @@ void update_mon_sidebar_list(void)
 	if (p_ptr->health_who)
 	{
 		/* Must be visible */
-	 	if (mon_list[p_ptr->health_who].ml)
-	 	{
-	 		sidebar_monsters[sidebar_count] = p_ptr->health_who;
-	 		sidebar_count++;
+		if (mon_list[p_ptr->health_who].ml)
+		{
+			sidebar_monsters[sidebar_count] = p_ptr->health_who;
+			sidebar_count++;
 
-	 		/* We are tracking this one */
-	 		mon_list[p_ptr->health_who].sidebar = TRUE;
-	 	}
+			/* We are tracking this one */
+			mon_list[p_ptr->health_who].sidebar = TRUE;
+		}
 	}
 
 	/* Scan the list of monsters on the level */
@@ -984,6 +980,7 @@ void update_mon_sidebar_list(void)
 			adj_count++;
 			continue;
 		}
+
 		/* Projectable ones next */
 		if (m_ptr->project)
 		{
