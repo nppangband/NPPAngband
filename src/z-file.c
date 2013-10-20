@@ -185,7 +185,6 @@ static void path_process(char *buf, size_t len, size_t *cur_len, const char *pat
 }
 
 
-
 /*
  * Create a new path string by appending a 'leaf' to 'base'.
  *
@@ -206,7 +205,6 @@ size_t path_build(char *buf, size_t len, const char *base, const char *leaf)
 
 		return cur_len;
 	}
-
 
 	/*
 	 * If the leafname starts with the seperator,
@@ -251,7 +249,6 @@ struct ang_file
 	char *fname;
 	file_mode mode;
 };
-
 
 
 /** Utility functions **/
@@ -616,6 +613,7 @@ bool file_getl(ang_file *f, char *buf, size_t len)
 	return TRUE;
 }
 
+
 /*
  * Append a line of text 'buf' to the end of file 'f', using system-dependent
  * line ending.
@@ -624,6 +622,7 @@ bool file_put(ang_file *f, const char *buf)
 {
 	return file_write(f, buf, strlen(buf));
 }
+
 
 /*
  * Append a formatted line of text to the end of file 'f'.
@@ -639,7 +638,6 @@ bool file_putf(ang_file *f, const char *fmt, ...)
 
 	return file_put(f, buf);
 }
-
 
 
 /*
@@ -700,7 +698,7 @@ bool dir_create(const char *path)
 	 * create the path segment if it doesn't already exist. */
 	for (ptr = path; *ptr; ptr++)
 	{
-		if (*ptr == PATH_SEPC)
+	if (*ptr == PATH_SEPC)
 		{
 			/* Find the length of the parent path string */
 			size_t len = (size_t)(ptr - path);
@@ -792,7 +790,7 @@ bool my_dread(ang_dir *dir, char *fname, size_t len)
 		if (!ok) return FALSE;
 
 		/* Skip directories */
-		if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ||
+		if ((fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
 		    strcmp(fd.cFileName, ".") == 0 ||
 		    strcmp(fd.cFileName, "..") == 0)
 			continue;
