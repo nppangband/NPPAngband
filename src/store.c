@@ -1986,59 +1986,58 @@ static bool store_object_similar(const object_type *o_ptr, const object_type *j_
 	object_flags(j_ptr, &j1, &j2, &j3, &jn);
 
 	/* Hack -- Identical items cannot be stacked */
-	if (o_ptr == j_ptr) return (0);
+	if (o_ptr == j_ptr) return (FALSE);
 
 	/* Different objects cannot be stacked */
-	if (o_ptr->k_idx != j_ptr->k_idx) return (0);
+	if (o_ptr->k_idx != j_ptr->k_idx) return (FALSE);
 
 	/* Different charges (etc) cannot be stacked, except for staves, wands and rods. */
 	if ((o_ptr->pval != j_ptr->pval) &&
 		(o_ptr->tval != TV_WAND) &&
 		(o_ptr->tval != TV_ROD) &&
-		(o_ptr->tval != TV_STAFF)) return (0);
+		(o_ptr->tval != TV_STAFF)) return (FALSE);
 
-	/* Require many identical values */
-	if (o_ptr->to_h != j_ptr->to_h) return (0);
-	if (o_ptr->to_d != j_ptr->to_d) return (0);
-	if (o_ptr->to_a != j_ptr->to_a) return (0);
+	/* Require identical bonuses */
+	if (o_ptr->to_h != j_ptr->to_h) return (FALSE);
+	if (o_ptr->to_d != j_ptr->to_d) return (FALSE);
+	if (o_ptr->to_a != j_ptr->to_a) return (FALSE);
 
 	/* Require identical "artifact" names */
-	if (o_ptr->art_num != j_ptr->art_num) return (0);
+	if (o_ptr->art_num != j_ptr->art_num) return (FALSE);
 
 	/* Require identical "ego-item" names */
-	if (o_ptr->ego_num != j_ptr->ego_num) return (0);
+	if (o_ptr->ego_num != j_ptr->ego_num) return (FALSE);
 
 	/* Hack -- Never stack "powerful" items */
-	if (o_ptr->xtra1 || j_ptr->xtra1) return (0);
+	if (o_ptr->xtra1 || j_ptr->xtra1) return (FALSE);
 
 	/* Mega-Hack -- Handle lites */
 	if (fuelable_light_p(o_ptr))
 	{
-		if (o_ptr->timeout != j_ptr->timeout) return 0;
+		if (o_ptr->timeout != j_ptr->timeout) return (FALSE);
 	}
 
 	/* Hack -- Never stack recharging items */
-	else if (o_ptr->timeout || j_ptr->timeout) return (0);
+	else if (o_ptr->timeout || j_ptr->timeout) return (FALSE);
 
 	/* Require many identical values */
-	if (o_ptr->ac != j_ptr->ac) return (0);
-	if (o_ptr->dd != j_ptr->dd) return (0);
-	if (o_ptr->ds != j_ptr->ds) return (0);
+	if (o_ptr->ac != j_ptr->ac) return (FALSE);
+	if (o_ptr->dd != j_ptr->dd) return (FALSE);
+	if (o_ptr->ds != j_ptr->ds) return (FALSE);
 
 	/* Hack -- Never stack chests */
-	if (o_ptr->tval == TV_CHEST) return (0);
+	if (o_ptr->tval == TV_CHEST) return (FALSE);
 
 	/* Require matching "discount" fields */
-	if (o_ptr->discount != j_ptr->discount) return (0);
+	if (o_ptr->discount != j_ptr->discount) return (FALSE);
 
-	/*Allow well balanced items to stack only with other
-			 *well balanced items*/
+	/* Allow well-balanced items to stack only with other
+	 * well-balanced items*/
 	if ((o_ptr->ident & IDENT_PERFECT_BALANCE) !=
-        (o_ptr->ident & IDENT_PERFECT_BALANCE)) return (FALSE);
+		(j_ptr->ident & IDENT_PERFECT_BALANCE)) return (FALSE);
 
 	/* Different flags */
-	if ((f1 != j1) || (f2 != j2) || \
-		(f3 != j3) || (fn != jn)) return(FALSE);
+	if ((f1 != j1) || (f2 != j2) || (f3 != j3) || (fn != jn)) return(FALSE);
 
 	/* They match, so they must be similar */
 	return (TRUE);
