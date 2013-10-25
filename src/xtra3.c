@@ -301,16 +301,27 @@ void prt_ac(int row, int col)
  */
 byte player_hp_attr(void)
 {
-	byte attr;
-
 	if (p_ptr->chp >= p_ptr->mhp)
-		attr = TERM_L_GREEN;
-	else if (p_ptr->chp > (p_ptr->mhp * op_ptr->hitpoint_warn) / 10)
-		attr = TERM_YELLOW;
+		return TERM_L_GREEN;
+	else if (p_ptr->chp <= (p_ptr->mhp * op_ptr->hitpoint_warn) / 10)
+		return TERM_RED;
 	else
-		attr = TERM_RED;
+		/* overwrite with health check */
+		switch(p_ptr->chp * 10 / p_ptr->mhp)
+		{
+			case  9:
+			case  8:
+			case  7:	return TERM_YELLOW;	break;
+			case  6:
+			case  5:	return TERM_ORANGE;	break;
+			case  4:
+			case  3:	return TERM_L_RED;	break;
+			case  2:
+			case  1:
+			case  0:	return TERM_VIOLET;	break;
+		}
 
-	return attr;
+	return TERM_WHITE;
 }
 
 /*
