@@ -268,6 +268,7 @@ struct object_kind
 	u32b k_flags2;		/* Flags, set 2 */
 	u32b k_flags3;		/* Flags, set 3 */
 	u32b k_native;		/* Flags, native */
+	u32b k_store;		/* Flags, sold in a store */
 
 	u16b effect;         /**< Effect this item produces (effects.c) */
 

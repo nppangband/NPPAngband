@@ -1020,6 +1020,20 @@
 #define TN1_NATIVE_UNUSED 	0x0200
 
 
+/* * Store bit definitions What objects are sold in stores */
+#define SF1_GENERAL_STORE  	0x00000001
+#define SF1_ARMORY		0x00000002
+#define SF1_WEAPONSMITH 0x00000004
+#define SF1_TEMPLE		0x00000008
+#define SF1_ALCHEMIST	0x00000010
+#define SF1_MAGIC_SHOP  0x00000020
+#define SF1_BLACK_MARKET	0x00000040
+/* Home is not valid for stock objects */
+/* Guild is not valid for stock objects */
+#define SF1_BOOKSHOP    0x00000080
+#define SF1_STORE_UNUSED    0x00000100
+
+
 
 
 /*

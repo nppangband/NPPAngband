@@ -140,19 +140,20 @@ struct flag_name
 #define TR2 1
 #define TR3 2
 #define TN1	3
-#define RN1 4
-#define RF1 5
-#define RF2 6
-#define RF3 7
-#define RF4 8
-#define RF5 9
-#define RF6 10
-#define RF7 11
-#define CF1 12
-#define FF1 13
-#define FF2 14
-#define FF3 15
-#define MAX_FLAG_SETS	16
+#define SF1	4
+#define RN1 5
+#define RF1 6
+#define RF2 7
+#define RF3 8
+#define RF4 9
+#define RF5 10
+#define RF6 11
+#define RF7 12
+#define CF1 13
+#define FF1 14
+#define FF2 15
+#define FF3 16
+#define MAX_FLAG_SETS	17
 
 
 
@@ -626,6 +627,43 @@ static flag_name info_flags[] =
 	{"NATIVE_UNUSED", TN1, TN1_NATIVE_UNUSED},
 	{"NATIVE_UNUSED", TN1, TN1_NATIVE_UNUSED},
 
+/*
+ * Sold in Store flags 1
+ */
+
+	{"GENERAL_STORE", SF1, SF1_GENERAL_STORE},
+	{"ARMORY", SF1, SF1_ARMORY},
+	{"WEAPONSMITH", SF1, SF1_WEAPONSMITH},
+	{"TEMPLE", SF1, SF1_TEMPLE},
+	{"ALCHEMIST", SF1, SF1_ALCHEMIST},
+	{"MAGIC_SHOP", SF1, SF1_MAGIC_SHOP},
+	{"BLACK_MARKET", SF1, SF1_BLACK_MARKET},
+	{"BOOKSHOP", SF1, SF1_BOOKSHOP},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
+	{"STORE_UNUSED", SF1, SF1_STORE_UNUSED},
 
 /* Terrain flags */
 
@@ -1762,6 +1800,7 @@ static errr grab_one_kind_flag(object_kind *ptr, cptr what)
 	f[TR2] = &(ptr->k_flags2);
 	f[TR3] = &(ptr->k_flags3);
 	f[TN1] = &(ptr->k_native);
+	f[SF1] = &(ptr->k_store);
 	return grab_one_flag(f, "object", what);
 }
 
