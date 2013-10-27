@@ -16,6 +16,7 @@
 #define EGO_TVALS_MAX 3
 
 
+
 /*
  * There is a 1/20 (5%) chance of inflating the requested object_level
  * during the creation of an object (see "get_obj_num()" in "object.c").
@@ -62,6 +63,7 @@
 
 #define CHEST_LEVEL			130
 #define QUEST_LEVEL			131
+
 
 
 /*** Important artifact indexes (see "lib/edit/artifact.txt") ***/
@@ -124,57 +126,58 @@
  * only armor and weapons and a few other items use any of these flags.
  */
 
-#define TV_SKELETON		 1	/* Skeletons ('s') */
+#define TV_SKELETON      1	/* Skeletons ('s') */
 #define TV_BOTTLE		 2	/* Empty bottles ('!') */
-#define TV_JUNK			 3	/* Sticks, Pottery, etc ('~') */
-#define TV_SPIKE		 5	/* Spikes ('~') */
-#define TV_CHEST		 7	/* Chests ('~') */
+#define TV_JUNK          3	/* Sticks, Pottery, etc ('~') */
+#define TV_SPIKE         5	/* Spikes ('~') */
+#define TV_CHEST         7	/* Chests ('~') */
 #define TV_SHOT			16	/* Ammo for slings */
-#define TV_ARROW		17	/* Ammo for bows */
-#define TV_BOLT			18	/* Ammo for x-bows */
-#define TV_BOW			19	/* Slings/Bows/Xbows */
-#define TV_DIGGING		20	/* Shovels/Picks */
-#define TV_HAFTED		21	/* Priest Weapons */
-#define TV_POLEARM		22	/* Axes and Pikes */
-#define TV_SWORD		23	/* Edged Weapons */
-#define TV_BOOTS		30	/* Boots */
-#define TV_GLOVES		31	/* Gloves */
-#define TV_HELM			32	/* Helms */
-#define TV_CROWN		33	/* Crowns */
-#define TV_SHIELD		34	/* Shields */
-#define TV_CLOAK		35	/* Cloaks */
-#define TV_SOFT_ARMOR	36	/* Soft Armor */
-#define TV_HARD_ARMOR	37	/* Hard Armor */
+#define TV_ARROW        17	/* Ammo for bows */
+#define TV_BOLT         18	/* Ammo for x-bows */
+#define TV_BOW          19	/* Slings/Bows/Xbows */
+#define TV_DIGGING      20	/* Shovels/Picks */
+#define TV_HAFTED       21	/* Priest Weapons */
+#define TV_POLEARM      22	/* Axes and Pikes */
+#define TV_SWORD        23	/* Edged Weapons */
+#define TV_BOOTS        30	/* Boots */
+#define TV_GLOVES       31	/* Gloves */
+#define TV_HELM         32	/* Helms */
+#define TV_CROWN        33	/* Crowns */
+#define TV_SHIELD       34	/* Shields */
+#define TV_CLOAK        35	/* Cloaks */
+#define TV_SOFT_ARMOR   36	/* Soft Armor */
+#define TV_HARD_ARMOR   37	/* Hard Armor */
 #define TV_DRAG_ARMOR	38	/* Dragon Scale Mail */
-#define TV_LIGHT		39	/* Lights (including Specials) */
-#define TV_AMULET		40	/* Amulets (including Specials) */
+#define TV_LIGHT         39	/* Lights (including Specials) */
+#define TV_AMULET       40	/* Amulets (including Specials) */
 #define TV_DRAG_SHIELD	41	/* Dragon Scale Shield*/
-#define TV_RING			45	/* Rings (including Specials) */
-#define TV_STAFF		55
-#define TV_WAND			65
-#define TV_ROD			66
-#define TV_SCROLL		70
-#define TV_PARCHMENT	71	/* Scrap of a scroll collected by the adventurer's guild */
-#define TV_POTION		75
-#define TV_FLASK		77
-#define TV_FOOD			80
-#define TV_MAGIC_BOOK	90
-#define TV_PRAYER_BOOK	91
+#define TV_RING         45	/* Rings (including Specials) */
+#define TV_STAFF        55
+#define TV_WAND         65
+#define TV_ROD          66
+#define TV_SCROLL       70
+#define TV_PARCHMENT    71  /* Scrap of a scroll collected by the adventurer's guild */
+#define TV_POTION       75
+#define TV_FLASK        77
+#define TV_FOOD         80
+#define TV_MAGIC_BOOK   90
+#define TV_PRAYER_BOOK  91
 #define TV_DRUID_BOOK	92
-#define TV_GOLD			100	/* Gold can only be picked up by players */
+#define TV_GOLD         100	/* Gold can only be picked up by players */
 
 /* The "sval" codes for TV_JUNK */
-#define SV_SKELETON_RAT			1
-#define SV_SKELETON_CENTIPEDE	2
-#define SV_EMPTY_BOTTLE			4
-#define SV_POTTERY_SHARDS		5
-#define SV_SKELETON_HUMAN		7
-#define SV_SKELETON_DWARF		8
-#define SV_SKELETON_ELF			9
-#define SV_SKELETON_GNOME		10
-#define SV_BROKEN_TEETH			11
-#define SV_BROKEN_BONE			12
-#define SV_BROKEN_STICK			13
+#define SV_SKELETON_RAT				1
+#define SV_SKELETON_CENTIPEDE		2
+#define SV_EMPTY_BOTTLE				4
+#define SV_POTTERY_SHARDS			5
+#define SV_SKELETON_HUMAN			7
+#define SV_SKELETON_DWARF			8
+#define SV_SKELETON_ELF				9
+#define SV_SKELETON_GNOME			10
+#define SV_BROKEN_TEETH				11
+#define SV_BROKEN_BONE				12
+#define SV_BROKEN_STICK				13
+
 
 
 /* The "sval" codes for TV_SHOT/TV_ARROW/TV_BOLT */
@@ -352,6 +355,9 @@
 #define EGO_DRAGON_GOLD			30
 
 
+
+
+
 /* The sval codes for TV_LIGHT */
 #define SV_LIGHT_TORCH		0
 #define SV_LIGHT_LANTERN		1
@@ -383,7 +389,7 @@
 #define SV_AMULET_WEAPONMASTERY	19
 #define SV_AMULET_TRICKERY		20
 #define SV_AMULET_INFRAVISION		21
-#define SV_AMULET_RESIST_LIGHTNING	22
+#define SV_AMULET_RESIST_LIGHTNING  22
 #define SV_AMULET_WOE				23
 
 
@@ -752,10 +758,10 @@
 /*Squelch Modes for k_info->squelch*/
 
 
-#define SQUELCH_NEVER				0 /*allow pickup, but defer to OPT_always_pickup*/
+#define SQUELCH_NEVER   			0 /*allow pickup, but defer to OPT_always_pickup*/
 #define NO_SQUELCH_NEVER_PICKUP		1 /*never pickup, override OPT_always_pickup*/
-#define NO_SQUELCH_ALWAYS_PICKUP	2 /*always pickup, override pickup and floor query options*/
-#define SQUELCH_ALWAYS				3 /*destroy when player walks over*/
+#define NO_SQUELCH_ALWAYS_PICKUP 	2/*always pickup, override pickup and floor query options*/
+#define SQUELCH_ALWAYS  			3 /*destroy when player walks over*/
 #define SQUELCH_OPT_MAX				4
 
 
@@ -770,19 +776,18 @@
  * 5 ---> squelch open chests
  */
 
-#define SQUELCH_NONE			0
-#define SQUELCH_CURSED			1
-#define SQUELCH_AVERAGE			2
-#define SQUELCH_GOOD_STRONG		3
+#define SQUELCH_NONE     		0
+#define SQUELCH_CURSED   		1
+#define SQUELCH_AVERAGE  		2
+#define SQUELCH_GOOD_STRONG     3
 #define SQUELCH_GOOD_WEAK		4
-#define SQUELCH_ALL				5
+#define SQUELCH_ALL      		5
 #define SQUELCH_MAX				6
 
+/*number of bytes used in squelch sub-quality array*/
+#define SQUELCH_BYTES    24
 
-/*
- * number of bytes used in squelch sub-quality array
- */
-#define SQUELCH_BYTES		24
+
 
 
 /*
@@ -798,9 +803,11 @@
 #define USE_FLOOR		0x04	/* Allow floor items */
 #define USE_QUIVER		0x08	/* Allow quiver items, forbid classic equipment */
 #define NOUN_VERB		0x10	/* We are choosing the item first, then the command */
-#define IS_HARMLESS		0x20	/* Ignore generic warning inscriptions */
-#define QUIVER_FIRST	0x40	/* Show item prices in item lists */
-#define SHOW_FAIL		0x80 	/* Show device failure in item lists */
+#define IS_HARMLESS   	0x20	/* Ignore generic warning inscriptions */
+#define QUIVER_FIRST 	0x40	/* Show item prices in item lists */
+#define SHOW_FAIL     	0x80 	/* Show device failure in item lists */
+
+
 
 
 /*** Object flags ***/
@@ -820,38 +827,40 @@
 /*
  * Special object flags
  */
-#define IDENT_SENSE				0x00000001	/* Item has been "sensed" */
+#define IDENT_SENSE     		0x00000001	/* Item has been "sensed" */
 #define IDENT_CONFIRMED_USE		0x00000002	/* Weapon is confirmed to be used (for swap weapons, attacking with bow, shovel, etc )*/
-#define IDENT_EMPTY				0x00000004	/* Item charges are known */
-#define IDENT_KNOWN				0x00000008	/* Item abilities are known */
-#define IDENT_STORE				0x00000010	/* Item is in the inventory of a store */
-#define IDENT_MENTAL			0x00000020	/* Item information is known */
-#define IDENT_CURSED			0x00000040	/* Item is temporarily cursed */
-#define IDENT_BROKEN			0x00000080	/* Item is permanently worthless */
-#define IDENT_QUEST				0x00000100	/* Item is a quest object (quest artifact or mimicing quest monster */
-#define IDENT_PERFECT_BALANCE	0x00000200	/* Item has perfect balance */
+#define IDENT_EMPTY     		0x00000004	/* Item charges are known */
+#define IDENT_KNOWN     		0x00000008	/* Item abilities are known */
+#define IDENT_STORE     		0x00000010	/* Item is in the inventory of a store */
+#define IDENT_MENTAL    		0x00000020	/* Item information is known */
+#define IDENT_CURSED    		0x00000040	/* Item is temporarily cursed */
+#define IDENT_BROKEN    		0x00000080	/* Item is permanently worthless */
+#define IDENT_QUEST     		0x00000100	/* Item is a quest object (quest artifact or mimicing quest monster */
+#define IDENT_PERFECT_BALANCE   0x00000200	/* Item has perfect balance */
 #define IDENT_HIDE_CARRY		0x00000400	/* Don't reveal the object is being carried by a creature*/
 #define IDENT_EFFECT 			0x00000800	/* Know item activation/effect */
-#define IDENT_FIRED				0x00001000	/* Has been used as a missile */
-#define IDENT_INDESTRUCT		0x00002000	/* Tried to destroy it and failed */
-#define IDENT_NAME				0x00004000	/* Know the name of ego or artifact if there is one */
-#define IDENT_NOTART			0x00008000	/* Item is known not to be an artifact */
-#define IDENT_QUIVER			0x00010000	/* Ammo goes in quiver */
-#define IDENT_UNUSED_XXX2XXXX	0x00020000	/* Unused */
-#define IDENT_UNUSED_XXX4XXXX	0x00040000	/* Unused */
-#define IDENT_UNUSED_XXX8XXXX	0x00080000	/* Unused */
-#define IDENT_UNUSED_XX1XXXXX	0x00100000	/* Unused */
-#define IDENT_UNUSED_XX2XXXXX	0x00200000	/* Unused */
-#define IDENT_UNUSED_XX4XXXXX	0x00400000	/* Unused */
-#define IDENT_UNUSED_XX8XXXXX	0x00800000	/* Unused */
-#define IDENT_UNUSED_X1XXXXXX	0x01000000	/* Unused */
-#define IDENT_UNUSED_X2XXXXXX	0x02000000	/* Unused */
-#define IDENT_UNUSED_X4XXXXXX	0x04000000	/* Unused */
-#define IDENT_UNUSED_X8XXXXXX	0x08000000	/* Unused */
-#define IDENT_UNUSED_1XXXXXXX	0x10000000	/* Unused */
-#define IDENT_UNUSED_2XXXXXXX	0x20000000	/* Unused */
-#define IDENT_UNUSED_4XXXXXXX	0x40000000	/* Unused */
-#define IDENT_UNUSED_8XXXXXXX	0x80000000	/* Unused */
+#define IDENT_FIRED			    0x00001000	/* Has been used as a missile */
+#define IDENT_INDESTRUCT	    0x00002000	/* Tried to destroy it and failed */
+#define IDENT_NAME			    0x00004000	/* Know the name of ego or artifact if there is one */
+#define IDENT_NOTART		    0x00008000	/* Item is known not to be an artifact */
+#define IDENT_QUIVER		    0x00010000	/* Ammo goes in quiver */
+#define IDENT_UNUSED_XXX2XXXX   0x00020000	/* Unused */
+#define IDENT_UNUSED_XXX4XXXX   0x00040000	/* Unused */
+#define IDENT_UNUSED_XXX8XXXX   0x00080000	/* Unused */
+#define IDENT_UNUSED_XX1XXXXX   0x00100000	/* Unused */
+#define IDENT_UNUSED_XX2XXXXX   0x00200000	/* Unused */
+#define IDENT_UNUSED_XX4XXXXX   0x00400000	/* Unused */
+#define IDENT_UNUSED_XX8XXXXX   0x00800000	/* Unused */
+#define IDENT_UNUSED_X1XXXXXX   0x01000000	/* Unused */
+#define IDENT_UNUSED_X2XXXXXX   0x02000000	/* Unused */
+#define IDENT_UNUSED_X4XXXXXX   0x04000000	/* Unused */
+#define IDENT_UNUSED_X8XXXXXX   0x08000000	/* Unused */
+#define IDENT_UNUSED_1XXXXXXX   0x10000000	/* Unused */
+#define IDENT_UNUSED_2XXXXXXX   0x20000000	/* Unused */
+#define IDENT_UNUSED_4XXXXXXX   0x40000000	/* Unused */
+#define IDENT_UNUSED_8XXXXXXX   0x80000000	/* Unused */
+
+
 
 
 
@@ -861,12 +870,14 @@
 #define MAX_INSCRIP			12
 
 
+
+
 /*
  * As of 2.7.8, the "object flags" are valid for all objects, and as
  * of 2.7.9, these flags are not actually stored with the object, but
  * rather in the object_kind, ego_item, and artifact structures.
  *
- * Note that "flags1" contains all flags dependent on "pval" (including
+ * Note that "flags1" contains all flags dependant on "pval" (including
  * stat bonuses, but NOT stat sustainers), plus all "extra attack damage"
  * flags (SLAY_XXX and BRAND_XXX).
  *
@@ -881,76 +892,76 @@
  * Kills need to come right after slays for the randart code to work right
  */
 
-#define TR1_STR				0x00000001L /* STR += "pval" */
-#define TR1_INT				0x00000002L /* INT += "pval" */
-#define TR1_WIS				0x00000004L /* WIS += "pval" */
-#define TR1_DEX				0x00000008L /* DEX += "pval" */
-#define TR1_CON				0x00000010L /* CON += "pval" */
-#define TR1_CHR				0x00000020L /* CHR += "pval" */
-#define TR1_TR1XXX1			0x00000040L /* (reserved) */
-#define TR1_TR1XXX2			0x00000080L /* (reserved) */
-#define TR1_STEALTH			0x00000100L /* Stealth += "pval" */
-#define TR1_SEARCH			0x00000200L /* Search += "pval" */
-#define TR1_INFRA			0x00000400L /* Infra += "pval" */
-#define TR1_TUNNEL			0x00000800L /* Tunnel += "pval" */
-#define TR1_SPEED			0x00001000L /* Speed += "pval" */
-#define TR1_BLOWS			0x00002000L /* Blows += "pval" */
-#define TR1_SHOTS			0x00004000L /* Shots += "pval" */
-#define TR1_MIGHT			0x00008000L /* Might += "pval" */
-#define TR1_SLAY_ANIMAL		0x00010000L /* Weapon slays animals */
-#define TR1_SLAY_EVIL		0x00020000L /* Weapon slays evil */
-#define TR1_SLAY_UNDEAD		0x00040000L /* Weapon slays undead */
-#define TR1_SLAY_DEMON		0x00080000L /* Weapon slays demon */
-#define TR1_SLAY_ORC		0x00100000L /* Weapon slays orc */
-#define TR1_SLAY_TROLL		0x00200000L /* Weapon slays troll */
-#define TR1_SLAY_GIANT		0x00400000L /* Weapon slays giant */
-#define TR1_SLAY_DRAGON		0x00800000L /* Weapon slays dragon */
-#define TR1_KILL_DRAGON		0x01000000L /* Weapon kills dragon */
-#define TR1_KILL_DEMON		0x02000000L /* Weapon kills demon */
-#define TR1_KILL_UNDEAD		0x04000000L /* Weapon "kills" undead */
-#define TR1_BRAND_ACID		0x08000000L /* Weapon has poison brand */
-#define TR1_BRAND_ELEC		0x10000000L /* Weapon has acid brand */
-#define TR1_BRAND_FIRE		0x20000000L /* Weapon has elec brand */
-#define TR1_BRAND_COLD		0x40000000L /* Weapon has fire brand */
-#define TR1_BRAND_POIS		0x80000000L /* Weapon has cold brand */
+#define TR1_STR             0x00000001L /* STR += "pval" */
+#define TR1_INT             0x00000002L /* INT += "pval" */
+#define TR1_WIS             0x00000004L /* WIS += "pval" */
+#define TR1_DEX             0x00000008L /* DEX += "pval" */
+#define TR1_CON             0x00000010L /* CON += "pval" */
+#define TR1_CHR             0x00000020L /* CHR += "pval" */
+#define TR1_TR1XXX1		    0x00000040L /* (reserved) */
+#define TR1_TR1XXX2         0x00000080L /* (reserved) */
+#define TR1_STEALTH         0x00000100L /* Stealth += "pval" */
+#define TR1_SEARCH          0x00000200L /* Search += "pval" */
+#define TR1_INFRA           0x00000400L /* Infra += "pval" */
+#define TR1_TUNNEL          0x00000800L /* Tunnel += "pval" */
+#define TR1_SPEED           0x00001000L /* Speed += "pval" */
+#define TR1_BLOWS           0x00002000L /* Blows += "pval" */
+#define TR1_SHOTS           0x00004000L /* Shots += "pval" */
+#define TR1_MIGHT           0x00008000L /* Might += "pval" */
+#define TR1_SLAY_ANIMAL     0x00010000L /* Weapon slays animals */
+#define TR1_SLAY_EVIL       0x00020000L /* Weapon slays evil */
+#define TR1_SLAY_UNDEAD     0x00040000L /* Weapon slays undead */
+#define TR1_SLAY_DEMON      0x00080000L /* Weapon slays demon */
+#define TR1_SLAY_ORC        0x00100000L /* Weapon slays orc */
+#define TR1_SLAY_TROLL      0x00200000L /* Weapon slays troll */
+#define TR1_SLAY_GIANT      0x00400000L /* Weapon slays giant */
+#define TR1_SLAY_DRAGON     0x00800000L /* Weapon slays dragon */
+#define TR1_KILL_DRAGON     0x01000000L /* Weapon kills dragon */
+#define TR1_KILL_DEMON      0x02000000L /* Weapon kills demon */
+#define TR1_KILL_UNDEAD     0x04000000L /* Weapon "kills" undead */
+#define TR1_BRAND_ACID      0x08000000L /* Weapon has poison brand */
+#define TR1_BRAND_ELEC      0x10000000L /* Weapon has acid brand */
+#define TR1_BRAND_FIRE      0x20000000L /* Weapon has elec brand */
+#define TR1_BRAND_COLD      0x40000000L /* Weapon has fire brand */
+#define TR1_BRAND_POIS      0x80000000L /* Weapon has cold brand */
 
 
 /*TR1 Uber-Flags*/
 #define TR1_ALL_STATS	(TR1_STR | TR1_INT | TR1_WIS | TR1_DEX | TR1_CON | TR1_CHR)
 
 
-#define TR2_SUST_STR		0x00000001L /* Sustain STR */
-#define TR2_SUST_INT		0x00000002L /* Sustain INT */
-#define TR2_SUST_WIS		0x00000004L /* Sustain WIS */
-#define TR2_SUST_DEX		0x00000008L /* Sustain DEX */
-#define TR2_SUST_CON		0x00000010L /* Sustain CON */
-#define TR2_SUST_CHR		0x00000020L /* Sustain CHR */
-#define TR2_TR2XXX1			0x00000040L /* (reserved) */
-#define TR2_TR2XXX2			0x00000080L /* (reserved) */
-#define TR2_TR2XXX3			0x00000100L /* (reserved) */
-#define TR2_TR2XXX4			0x00000200L /* (reserved) */
-#define TR2_TR2XXX5			0x00000400L /* (reserved) */
-#define TR2_IM_ACID			0x00000800L /* Immunity to acid */
-#define TR2_IM_ELEC			0x00001000L /* Immunity to elec */
-#define TR2_IM_FIRE			0x00002000L /* Immunity to fire */
-#define TR2_IM_COLD			0x00004000L /* Immunity to cold */
-#define TR2_IM_POIS			0x00008000L /* Immunity to poison */
-#define TR2_RES_ACID		0x00010000L /* Resist acid */
-#define TR2_RES_ELEC		0x00020000L /* Resist elec */
-#define TR2_RES_FIRE		0x00040000L /* Resist fire */
-#define TR2_RES_COLD		0x00080000L /* Resist cold */
-#define TR2_RES_POIS		0x00100000L /* Resist poison */
-#define TR2_RES_FEAR		0x00200000L /* Resist fear */
-#define TR2_RES_LIGHT		0x00400000L /* Resist light */
-#define TR2_RES_DARK		0x00800000L /* Resist dark */
-#define TR2_RES_BLIND		0x01000000L /* Resist blind */
-#define TR2_RES_CONFU		0x02000000L /* Resist confusion */
-#define TR2_RES_SOUND		0x04000000L /* Resist sound */
-#define TR2_RES_SHARD		0x08000000L /* Resist shards */
-#define TR2_RES_NEXUS		0x10000000L /* Resist nexus */
-#define TR2_RES_NETHR		0x20000000L /* Resist nether */
-#define TR2_RES_CHAOS		0x40000000L /* Resist chaos */
-#define TR2_RES_DISEN		0x80000000L /* Resist disenchant */
+#define TR2_SUST_STR        0x00000001L /* Sustain STR */
+#define TR2_SUST_INT        0x00000002L /* Sustain INT */
+#define TR2_SUST_WIS        0x00000004L /* Sustain WIS */
+#define TR2_SUST_DEX        0x00000008L /* Sustain DEX */
+#define TR2_SUST_CON        0x00000010L /* Sustain CON */
+#define TR2_SUST_CHR        0x00000020L /* Sustain CHR */
+#define TR2_TR2XXX1         0x00000040L /* (reserved) */
+#define TR2_TR2XXX2         0x00000080L /* (reserved) */
+#define TR2_TR2XXX3         0x00000100L /* (reserved) */
+#define TR2_TR2XXX4         0x00000200L /* (reserved) */
+#define TR2_TR2XXX5         0x00000400L /* (reserved) */
+#define TR2_IM_ACID         0x00000800L /* Immunity to acid */
+#define TR2_IM_ELEC         0x00001000L /* Immunity to elec */
+#define TR2_IM_FIRE         0x00002000L /* Immunity to fire */
+#define TR2_IM_COLD         0x00004000L /* Immunity to cold */
+#define TR2_IM_POIS         0x00008000L /* Immunity to poison */
+#define TR2_RES_ACID        0x00010000L /* Resist acid */
+#define TR2_RES_ELEC        0x00020000L /* Resist elec */
+#define TR2_RES_FIRE        0x00040000L /* Resist fire */
+#define TR2_RES_COLD        0x00080000L /* Resist cold */
+#define TR2_RES_POIS        0x00100000L /* Resist poison */
+#define TR2_RES_FEAR        0x00200000L /* Resist fear */
+#define TR2_RES_LIGHT       0x00400000L /* Resist light */
+#define TR2_RES_DARK        0x00800000L /* Resist dark */
+#define TR2_RES_BLIND       0x01000000L /* Resist blind */
+#define TR2_RES_CONFU       0x02000000L /* Resist confusion */
+#define TR2_RES_SOUND       0x04000000L /* Resist sound */
+#define TR2_RES_SHARD       0x08000000L /* Resist shards */
+#define TR2_RES_NEXUS       0x10000000L /* Resist nexus */
+#define TR2_RES_NETHR       0x20000000L /* Resist nether */
+#define TR2_RES_CHAOS       0x40000000L /* Resist chaos */
+#define TR2_RES_DISEN       0x80000000L /* Resist disenchant */
 
 /*TR2 Uber-Flags*/
 #define TR2_SUST_STATS	(TR2_SUST_STR | TR2_SUST_INT | TR2_SUST_WIS | TR2_SUST_DEX | \
@@ -960,79 +971,60 @@
 
 
 
-#define TR3_SLOW_DIGEST		0x00000001L /* Slow digest */
-#define TR3_FEATHER			0x00000002L /* Feather Falling */
-#define TR3_LIGHT			0x00000004L /* Perma-Light */
-#define TR3_REGEN			0x00000008L /* Regeneration */
-#define TR3_TELEPATHY		0x00000010L /* Telepathy */
-#define TR3_SEE_INVIS		0x00000020L /* See Invis */
-#define TR3_FREE_ACT		0x00000040L /* Free action */
-#define TR3_HOLD_LIFE		0x00000080L /* Hold life */
-#define TR3_NEVER_PICKUP	0x00000100L /* monsters can't pickup*/
-#define TR3_IRONMAN_ONLY	0x00000200L	/* Ironman object */
-#define TR3_STORE_ONLY		0x00000400L /* Do not generate object in a dungeon */
-#define TR3_TR3XXX4			0x00000800L
-#define TR3_IMPACT			0x00001000L /* Earthquake blows */
-#define TR3_TELEPORT		0x00002000L /* Random teleportation */
-#define TR3_AGGRAVATE		0x00004000L /* Aggravate monsters */
-#define TR3_DRAIN_EXP		0x00008000L /* Experience drain */
-#define TR3_IGNORE_ACID		0x00010000L /* Item ignores Acid Damage */
-#define TR3_IGNORE_ELEC		0x00020000L /* Item ignores Elec Damage */
-#define TR3_IGNORE_FIRE		0x00040000L /* Item ignores Fire Damage */
-#define TR3_IGNORE_COLD		0x00080000L /* Item ignores Cold Damage */
-#define TR3_THROWING		0x00100000L /* Can be thrown for additional damage */
-#define TR3_SLOW_DIGEST		0x00000001L /* Slow digest */
-#define TR3_FEATHER			0x00000002L /* Feather Falling */
-#define TR3_LIGHT			0x00000004L /* Perma-Light */
-#define TR3_REGEN			0x00000008L /* Regeneration */
-#define TR3_TELEPATHY		0x00000010L /* Telepathy */
-#define TR3_SEE_INVIS		0x00000020L /* See Invis */
-#define TR3_FREE_ACT		0x00000040L /* Free action */
-#define TR3_HOLD_LIFE		0x00000080L /* Hold life */
-#define TR3_NEVER_PICKUP	0x00000100L /* monsters can't pickup*/
-#define TR3_IRONMAN_ONLY	0x00000200L	/* Ironman object */
-#define TR3_STORE_ONLY		0x00000400L /* Do not generate object in a dungeon */
-#define TR3_TR3XXX4			0x00000800L
-#define TR3_IMPACT			0x00001000L /* Earthquake blows */
-#define TR3_TELEPORT		0x00002000L /* Random teleportation */
-#define TR3_AGGRAVATE		0x00004000L /* Aggravate monsters */
-#define TR3_DRAIN_EXP		0x00008000L /* Experience drain */
-#define TR3_IGNORE_ACID		0x00010000L /* Item ignores Acid Damage */
-#define TR3_IGNORE_ELEC		0x00020000L /* Item ignores Elec Damage */
-#define TR3_IGNORE_FIRE		0x00040000L /* Item ignores Fire Damage */
-#define TR3_IGNORE_COLD		0x00080000L /* Item ignores Cold Damage */
-#define TR3_THROWING		0x00100000L /* Can be thrown for additional damage */
+#define TR3_SLOW_DIGEST     0x00000001L /* Slow digest */
+#define TR3_FEATHER         0x00000002L /* Feather Falling */
+#define TR3_LIGHT            0x00000004L /* Perma-Light */
+#define TR3_REGEN           0x00000008L /* Regeneration */
+#define TR3_TELEPATHY       0x00000010L /* Telepathy */
+#define TR3_SEE_INVIS       0x00000020L /* See Invis */
+#define TR3_FREE_ACT        0x00000040L /* Free action */
+#define TR3_HOLD_LIFE       0x00000080L /* Hold life */
+#define TR3_NEVER_PICKUP    0x00000100L /* monsters can't pickup*/
+#define TR3_IRONMAN_ONLY    0x00000200L	/* Ironman object */
+#define TR3_STORE_ONLY      0x00000400L /* Do not generate object in a dungeon */
+#define TR3_TR3XXX4         0x00000800L
+#define TR3_IMPACT          0x00001000L /* Earthquake blows */
+#define TR3_TELEPORT        0x00002000L /* Random teleportation */
+#define TR3_AGGRAVATE       0x00004000L /* Aggravate monsters */
+#define TR3_DRAIN_EXP       0x00008000L /* Experience drain */
+#define TR3_IGNORE_ACID     0x00010000L /* Item ignores Acid Damage */
+#define TR3_IGNORE_ELEC     0x00020000L /* Item ignores Elec Damage */
+#define TR3_IGNORE_FIRE     0x00040000L /* Item ignores Fire Damage */
+#define TR3_IGNORE_COLD     0x00080000L /* Item ignores Cold Damage */
+#define TR3_THROWING        0x00100000L /* Can be thrown for additional damage */
 #define TR3_PERFECT_BALANCE	0x00200000L /* item with perfect balance  */
-#define TR3_BLESSED			0x00400000L /* Item has been blessed */
-#define TR3_ACTIVATE		0x00800000L /* Item can be activated */
-#define TR3_INSTA_ART		0x01000000L /* Item makes an artifact */
-#define TR3_EASY_KNOW		0x02000000L /* Item is known if aware */
-#define TR3_HIDE_TYPE		0x04000000L /* Item hides description */
-#define TR3_SHOW_MODS		0x08000000L /* Item shows Tohit/Todam */
-#define TR3_TR3XXX7			0x10000000L /* (reserved) */
-#define TR3_LIGHT_CURSE		0x20000000L /* Item has Light Curse */
-#define TR3_HEAVY_CURSE		0x40000000L /* Item has Heavy Curse */
-#define TR3_PERMA_CURSE		0x80000000L /* Item has Perma Curse */
+#define TR3_BLESSED         0x00400000L /* Item has been blessed */
+#define TR3_ACTIVATE        0x00800000L /* Item can be activated */
+#define TR3_INSTA_ART       0x01000000L /* Item makes an artifact */
+#define TR3_EASY_KNOW       0x02000000L /* Item is known if aware */
+#define TR3_HIDE_TYPE       0x04000000L /* Item hides description */
+#define TR3_SHOW_MODS       0x08000000L /* Item shows Tohit/Todam */
+#define TR3_TR3XXX7         0x10000000L /* (reserved) */
+#define TR3_LIGHT_CURSE     0x20000000L /* Item has Light Curse */
+#define TR3_HEAVY_CURSE     0x40000000L /* Item has Heavy Curse */
+#define TR3_PERMA_CURSE     0x80000000L /* Item has Perma Curse */
 
 /*TR3 Uber-Flags*/
 #define TR3_IGNORE_ALL (TR3_IGNORE_ACID | TR3_IGNORE_ELEC | TR3_IGNORE_FIRE | TR3_IGNORE_COLD)
 
 /* Native flags - extracted from feature flags */
-#define TN1_NATIVE_LAVA		ELEMENT_LAVA
-#define TN1_NATIVE_ICE		ELEMENT_ICE
-#define TN1_NATIVE_OIL		ELEMENT_OIL
-#define TN1_NATIVE_FIRE		ELEMENT_FIRE
-#define TN1_NATIVE_SAND		ELEMENT_SAND
+#define TN1_NATIVE_LAVA 	ELEMENT_LAVA
+#define TN1_NATIVE_ICE  	ELEMENT_ICE
+#define TN1_NATIVE_OIL   	ELEMENT_OIL
+#define TN1_NATIVE_FIRE   	ELEMENT_FIRE
+#define TN1_NATIVE_SAND 	ELEMENT_SAND
 #define TN1_NATIVE_FOREST	ELEMENT_FOREST
-#define TN1_NATIVE_WATER	ELEMENT_WATER
-#define TN1_NATIVE_ACID		ELEMENT_ACID
-#define TN1_NATIVE_MUD		ELEMENT_MUD
-#define TN1_NATIVE_UNUSED	0x0200
+#define TN1_NATIVE_WATER 	ELEMENT_WATER
+#define TN1_NATIVE_ACID   	ELEMENT_ACID
+#define TN1_NATIVE_MUD 		ELEMENT_MUD
+#define TN1_NATIVE_UNUSED 	0x0200
+
+
 
 
 /*
- * Hack -- flag set 1 -- mask for "pval-dependent" flags.
- * Note that all "pval" dependent flags must be in "flags1".
+ * Hack -- flag set 1 -- mask for "pval-dependant" flags.
+ * Note that all "pval" dependant flags must be in "flags1".
  */
 #define TR1_PVAL_MASK \
 	(TR1_STR | TR1_INT | TR1_WIS | TR1_DEX | \
@@ -1045,7 +1037,7 @@
  */
 #define TR3_IGNORE_MASK \
 	(TR3_IGNORE_ACID | TR3_IGNORE_ELEC | TR3_IGNORE_FIRE | \
-	 TR3_IGNORE_COLD)
+	 TR3_IGNORE_COLD )
 
 /*
  * Stat sustain flags
@@ -1061,7 +1053,7 @@
 	(0L)
 
 #define TN1_STAT_MOD_MASK \
-	(0L)
+		(0L)
 
 /*
  * Stat add flags
@@ -1076,7 +1068,7 @@
 	(0L)
 
 #define TN1_STAT_SUST_MASK \
-	(0L)
+		(0L)
 
 
 /*
@@ -1092,7 +1084,7 @@
 	(0L)
 
 #define TN1_IMMUNITIES_MASK \
-	(0L)
+		(0L)
 
 
 /*
@@ -1108,8 +1100,7 @@
 	(0L)
 
 #define TN1_LOW_RESIST_MASK \
-	(0L)
-
+		(0L)
 
 /*
  * Medium Resist flags
@@ -1127,7 +1118,6 @@
 #define TN1_MED_RESIST_MASK \
 		(0L)
 
-
 /*
  * High Resist flags
  */
@@ -1135,7 +1125,7 @@
 	(0L)
 
 #define TR2_HIGH_RESIST_MASK \
-	(TR2_RES_NETHR | TR2_RES_CHAOS | TR2_RES_DISEN)
+	(TR2_RES_NETHR |  TR2_RES_CHAOS | TR2_RES_DISEN)
 
 #define TR3_HIGH_RESIST_MASK \
 	(0L)
@@ -1158,7 +1148,6 @@
 #define TN1_RESISTANCES_MASK \
 		(TN1_LOW_RESIST_MASK |  TN1_MED_RESIST_MASK | TN1_HIGH_RESIST_MASK)
 
-
 /*low level abilities*/
 
 #define TR1_LOW_ABILITIES_MASK \
@@ -1173,7 +1162,6 @@
 
 #define TN1_LOW_ABILITIES_MASK \
 		(0L)
-
 
 /*high level abilities*/
 
@@ -1209,7 +1197,7 @@
 
 #define TR1_SLAY_MASK \
 	(TR1_SLAY_ANIMAL | TR1_SLAY_EVIL | TR1_SLAY_UNDEAD | TR1_SLAY_DEMON | TR1_SLAY_ORC | TR1_SLAY_TROLL | \
-     TR1_SLAY_GIANT | TR1_SLAY_DRAGON)
+         TR1_SLAY_GIANT | TR1_SLAY_DRAGON)
 
 #define TR2_SLAY_MASK \
 	(0L)
@@ -1219,7 +1207,6 @@
 
 #define TN1_SLAY_MASK \
 		(0L)
-
 
 /*Kill weapon types*/
 
@@ -1235,7 +1222,6 @@
 #define TN1_KILL_MASK \
 		(0L)
 
-
 /* Elemental Brand weapon types*/
 
 #define TR1_BRAND_MASK \
@@ -1250,7 +1236,6 @@
 #define TN1_BRAND_MASK \
 		(0L)
 
-
 /* All weapon Multipliars*/
 
 #define TR1_ALL_WEAPON_EGO_MASK \
@@ -1264,7 +1249,6 @@
 
 #define TN1_ALL_WEAPON_EGO_MASK \
 		(TN1_SLAY_MASK | TN1_KILL_MASK | TN1_BRAND_MASK)
-
 
 /* Native to Element types*/
 
@@ -1299,14 +1283,14 @@
  * Hack -- special "xtra" object flag info (base flag value)
  */
 #define OBJECT_XTRA_BASE_SUSTAIN	TR2_SUST_STR
-#define OBJECT_XTRA_BASE_HIGH_RESIST	TR2_RES_POIS
+#define OBJECT_XTRA_BASE_HIGH_RESIST		TR2_RES_POIS
 #define OBJECT_XTRA_BASE_POWER		TR3_SLOW_DIGEST
 #define OBJECT_XTRA_BASE_IMMUNITY	TR2_IM_ACID
 #define OBJECT_XTRA_BASE_STAT_ADD	TR1_STR
 #define OBJECT_XTRA_BASE_SLAY		TR1_SLAY_ANIMAL
 #define OBJECT_XTRA_BASE_KILL		TR1_KILL_DRAGON
 #define OBJECT_XTRA_BASE_BRAND		TR1_BRAND_ACID
-#define OBJECT_XTRA_BASE_LOW_RESIST	TR2_RES_ACID
+#define OBJECT_XTRA_BASE_LOW_RESIST		TR2_RES_ACID
 #define OBJECT_XTRA_BASE_NATIVE		TN1_NATIVE_LAVA
 
 /*
@@ -1326,9 +1310,9 @@
 /*Chance of adding additional flags after the first one*/
 #define EXTRA_FLAG_CHANCE			20
 
-#define EGO_AMMO_FLAME			99
-#define EGO_AMMO_FROST			100
-#define EGO_AMMO_VENOM			97
+#define EGO_AMMO_FLAME		99
+#define EGO_AMMO_FROST		100
+#define EGO_AMMO_VENOM		97
 
 #define EGO_BRAND_ELEMENTS		41
 #define BRAND_OFFSET_FLAME		2
@@ -1341,12 +1325,12 @@
 #define EGO_BLASTED		144
 
 
+
 /*
  * Determine if a given inventory item is "aware"
  */
 #define object_aware_p(T) \
 	(k_info[(T)->k_idx].aware)
-
 
 /*
  * Determine if a given inventory item is "tried"
@@ -1365,12 +1349,11 @@
 	 ((k_info[(T)->k_idx].k_flags3 & (TR3_EASY_KNOW)) && \
 	  k_info[(T)->k_idx].aware))
 
-
-/*
- * Determine if the attr and char should consider the item's flavor
- *
- * Identified scrolls should use their own tile.
- */
+ /*
+  * Determine if the attr and char should consider the item's flavor
+  *
+  * Identified scrolls should use their own tile.
+  */
 #define use_flavor_glyph(T) \
 	((k_info[(T)->k_idx].flavor) && \
 	 !((k_info[(T)->k_idx].tval == TV_SCROLL) && object_aware_p(T)))
@@ -1386,16 +1369,15 @@
 	 (flavor_info[k_info[(T)->k_idx].flavor].x_attr) : \
 	 (k_info[(T)->k_idx].x_attr))
 
-
 /*
  * Return the "attr" for a given item.
  * Use "flavor" if available.
  * Use default definitions.
  */
 #define object_attr_default(T) \
-	((k_info[(T)->k_idx].flavor) ? \
-	 (flavor_info[k_info[(T)->k_idx].flavor].d_attr) : \
-	 (k_info[(T)->k_idx].d_attr))
+       ((k_info[(T)->k_idx].flavor) ? \
+        (flavor_info[k_info[(T)->k_idx].flavor].d_attr) : \
+        (k_info[(T)->k_idx].d_attr))
 
 
 /*
@@ -1408,19 +1390,18 @@
 	 (flavor_info[k_info[T].flavor].x_attr) : \
 	 (k_info[T].x_attr))
 
-
 /*
  * Return the "attr" for a k_idx.
  * Use "flavor" if available.
  * Use default definitions.
  */
 #define object_type_attr_default(T) \
-	((k_info[T].flavor) ? \
-	 (flavor_info[k_info[T].flavor].d_attr) : \
-	 (k_info[T].d_attr))
+       ((k_info[T].flavor) ? \
+        (flavor_info[k_info[T].flavor].d_attr) : \
+        (k_info[T].d_attr))
 
 
-/*
+		/*
  * Return the "attr" for a given item kind.
  * Use "flavor" if available.
  * Default to user definitions.
@@ -1429,7 +1410,6 @@
 	(use_flavor_glyph(K) ? \
 	 (flavor_info[k_info[(K)].flavor].x_attr) : \
 	 (k_info[(K)].x_attr))
-
 
 /*
  * Return the "char" for a given item kind.
@@ -1452,7 +1432,6 @@
 	 (flavor_info[k_info[(T)->k_idx].flavor].x_char) : \
 	 (k_info[(T)->k_idx].x_char))
 
-
 /*
  * Return the "char" for a given item.
  * Use "flavor" if available.
@@ -1462,7 +1441,6 @@
 	((k_info[(T)->k_idx].flavor) ? \
 	 (flavor_info[k_info[(T)->k_idx].flavor].d_char) : \
 	 (k_info[(T)->k_idx].d_char))
-
 
 /*
  * Return the "char" for a k_idx.
@@ -1474,17 +1452,15 @@
 	 (flavor_info[k_info[T].flavor].x_char) : \
 	 (k_info[T].x_char))
 
-
 /*
  * Return the "char" for a k_idx.
  * Use "flavor" if available.
  * Use default definitions.
  */
 #define object_type_char_default(T) \
-	((k_info[T].flavor) ? \
-	 (flavor_info[k_info[T].flavor].d_char) : \
-	 (k_info[T].d_char))
-
+       ((k_info[T].flavor) ? \
+        (flavor_info[k_info[T].flavor].d_char) : \
+        (k_info[T].d_char))
 
 /*
  * Find out if we have to show the prompts for auto(un)inscribe object kinds
@@ -1504,18 +1480,15 @@ object_aware_p(o_ptr) && \
 !ammo_p(o_ptr))
 
 
+
  /*
  * Rings and Amulets
  */
 #define object_is_jewelry(T) \
 	(((T)->tval == TV_RING) || ((T)->tval == TV_AMULET))
 
-
-/*
- * Returns TRUE if T is a torch or a lantern
- */
+/* Returns TRUE if T is a torch or a lantern */
 #define fuelable_lite_p(T) (((T)->tval == TV_LIGHT) && (!artifact_p(T)))
-
 
 /*
  * Artifacts use the "art_num" field
@@ -1528,7 +1501,6 @@ object_aware_p(o_ptr) && \
             			(T)->discount == INSCRIP_TERRIBLE || \
             			(T)->discount == INSCRIP_INDESTRUCTIBLE || \
             			(T)->discount == INSCRIP_SPECIAL ))
-
 
 /*
  * Ego-Items use the "ego_name" field
@@ -1543,13 +1515,11 @@ object_aware_p(o_ptr) && \
 #define broken_p(T) \
 	((T)->ident & (IDENT_BROKEN))
 
-
 /*
  * Cursed items.
  */
 #define cursed_p(T) \
 	((T)->ident & (IDENT_CURSED))
-
 
 /*
  * Ammo.
@@ -1566,18 +1536,18 @@ object_aware_p(o_ptr) && \
 
 
 /* Object origins */
-#define ORIGIN_NONE				0
-#define ORIGIN_BIRTH			1
-#define ORIGIN_STORE			2
-#define ORIGIN_FLOOR			3
-#define ORIGIN_DROP_UNKNOWN		4
-#define ORIGIN_DROP_KNOWN		5
-#define ORIGIN_REWARD			6
-#define ORIGIN_ACQUIRE			7
-#define ORIGIN_MORGOTH			8
-#define ORIGIN_CHEAT			9
-#define ORIGIN_MIXED			10
-#define ORIGIN_CHEST			11
+#define ORIGIN_NONE             0
+#define ORIGIN_BIRTH            1
+#define ORIGIN_STORE            2
+#define ORIGIN_FLOOR            3
+#define ORIGIN_DROP_UNKNOWN     4
+#define ORIGIN_DROP_KNOWN       5
+#define ORIGIN_REWARD           6
+#define ORIGIN_ACQUIRE          7
+#define ORIGIN_MORGOTH          8
+#define ORIGIN_CHEAT            9
+#define ORIGIN_MIXED            10
+#define ORIGIN_CHEST            11
 #define ORIGIN_MAGIC			12
 
 /*
@@ -1593,12 +1563,11 @@ object_aware_p(o_ptr) && \
 /*
  * Max sizes of the following arrays.
  */
-#define MAX_TITLES		55	/* Used with scrolls (min 48) */
+#define MAX_TITLES     55       /* Used with scrolls (min 48) */
 
 
 /** The titles of scrolls, ordered by sval. */
 extern char scroll_adj[MAX_TITLES][16];
-
 
 /*
  * Objects in the quiver are stored in groups. Each group has its own set of tags ranging from 0 to 9.
@@ -1611,7 +1580,6 @@ extern char scroll_adj[MAX_TITLES][16];
  */
 #define OBJECT_FLAGS_FULL   1 /* Full info */
 #define OBJECT_FLAGS_KNOWN  2 /* Only flags known to the player */
-
 
 /*** Constants ***/
 
@@ -1634,12 +1602,13 @@ extern char scroll_adj[MAX_TITLES][16];
  * Modes for item lists in "show_inven()"  "show_equip()" and "show_floor()"
  */
 #define		OLIST_NONE   0x00   /* No options */
-#define		OLIST_WINDOW 0x01   /* Display list in a sub-term (left-align) */
-#define		OLIST_QUIVER 0x02   /* Display quiver lines */
-#define		OLIST_GOLD   0x04   /* Include gold in the list */
+#define   	OLIST_WINDOW 0x01   /* Display list in a sub-term (left-align) */
+#define   	OLIST_QUIVER 0x02   /* Display quiver lines */
+#define   	OLIST_GOLD   0x04   /* Include gold in the list */
 #define		OLIST_WEIGHT 0x08   /* Show item weight */
 #define		OLIST_PRICE  0x10   /* Show item price */
-#define		OLIST_FAIL   0x20   /* Show device failure */
+#define		OLIST_FAIL   0x20    /* Show device failure */
+
 
 
 /**
@@ -1651,27 +1620,28 @@ extern char scroll_adj[MAX_TITLES][16];
 #define	OINFO_FULL   = 0x04 /* Treat object as if fully IDd */
 #define	OINFO_DUMMY  = 0x08 /* Object does not exist (e.g. knowledge menu) */
 
+
+
 /**
  * Pseudo-ID markers.
  */
 typedef enum
 {
-	INSCRIP_NULL		=	100,
-	INSCRIP_TERRIBLE	=	101,
-	INSCRIP_WORTHLESS	=	102,
-	INSCRIP_CURSED		=	103,
-	INSCRIP_BROKEN		=	104,
-	INSCRIP_AVERAGE		=	105,
-	INSCRIP_GOOD_STRONG	=	106,
-	INSCRIP_GOOD_WEAK	=	107,
-	INSCRIP_EXCELLENT	=	108,
-	INSCRIP_SPECIAL		=	109,
-	INSCRIP_UNCURSED	=	110,
+	INSCRIP_NULL = 100,
+	INSCRIP_TERRIBLE   =    101,
+	INSCRIP_WORTHLESS  =    102,
+	INSCRIP_CURSED     =    103,
+	INSCRIP_BROKEN     =    104,
+	INSCRIP_AVERAGE    =    105,
+	INSCRIP_GOOD_STRONG=    106,
+	INSCRIP_GOOD_WEAK  =	107,
+	INSCRIP_EXCELLENT  =    108,
+	INSCRIP_SPECIAL    =    109,
+	INSCRIP_UNCURSED   =    110,
 	INSCRIP_INDESTRUCTIBLE =111,
 
-	INSCRIP_MAX					/*!< Maximum number of pseudo-ID markers */
+	INSCRIP_MAX                  /*!< Maximum number of pseudo-ID markers */
 } obj_pseudo_t;
-
 
 /*
  * Objects in the quiver are stored in groups. Each group has its own set of tags ranging from 0 to 9.
