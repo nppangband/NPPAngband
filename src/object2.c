@@ -2078,90 +2078,7 @@ static bool kind_is_dungeon(int k_idx)
 /*
  * Hack -- determine if a template is suitable for a general store.
  *
- * Note that this test only applies to the object *kind*, so it is
- * possible to cause the object to be cursed.
- */
-static bool kind_is_gen_store_moria(int k_idx)
-{
-	object_kind *k_ptr = &k_info[k_idx];
-
-	/* No "worthless" items */
-	if (k_ptr->cost < 0) return (FALSE);
-
-	/* Analyze the item type */
-	switch (k_ptr->tval)
-	{
-		/* Certain kinds of food is sold there*/
-		case TV_FOOD:
-		{
-			if (k_ptr->sval == SV_FOOD_RATION) return (TRUE);
-			if (k_ptr->sval == SV_FOOD_BISCUIT) return (TRUE);
-			if (k_ptr->sval == SV_FOOD_BEEF_JERKY) return (TRUE);
-			if (k_ptr->sval == SV_FOOD_FINE_ALE) return (TRUE);
-			if (k_ptr->sval == SV_FOOD_FINE_WINE) return (TRUE);
-			return (FALSE);
-		}
-
-		/* Non artifact Lite Sources are sold there*/
-		case TV_LIGHT:
-		{
-			if (k_ptr->sval == SV_LIGHT_TORCH) return (TRUE);
-			if (k_ptr->sval == SV_LIGHT_LANTERN) return (TRUE);
-			return (FALSE);
-		}
-
-		/* Flasks and Spikes are sold there*/
-		case TV_FLASK:
-		case TV_SPIKE:
-		{
-			return (TRUE);
-		}
-
-		/* Shovels and Picks are sold there*/
-		case TV_DIGGING:
-		{
-			if (k_ptr->sval == SV_SHOVEL) return (TRUE);
-			if (k_ptr->sval == SV_PICK) return (TRUE);
-			return (FALSE);
-		}
-
-		case TV_SOFT_ARMOR:
-		{
-			if (k_ptr->sval == SV_ROBE) return (TRUE);
-			return (FALSE);
-		}
-
-		/*
-		 *  Normal Cloaks are sold there
-		 */
-		case TV_CLOAK:
-		{
-			if (k_ptr->sval == SV_CLOAK) return (TRUE);
-			return (FALSE);
-		}
-
-		/*Normal ammo is sold there*/
-		case TV_SHOT:
-		case TV_ARROW:
-		case TV_BOLT:
-		{
-			if (k_ptr->sval == SV_AMMO_NORMAL) return (TRUE);
-			if (k_ptr->sval == SV_AMMO_LIGHT) return (TRUE);
-			return (FALSE);
-		}
-	}
-
-	/* Assume not good */
-	return (FALSE);
-}
-
-
-
-/*
- * Hack -- determine if a template is suitable for a general store.
- *
- * Note that this test only applies to the object *kind*, so it is
- * possible to cause the object to be cursed.
+ * Flag needs to be specified in the object.txt file.
  */
 static bool kind_is_gen_store(int k_idx)
 {
@@ -2170,61 +2087,25 @@ static bool kind_is_gen_store(int k_idx)
 	/* No "worthless" items */
 	if (k_ptr->cost < 0) return (FALSE);
 
+	if (k_ptr->k_store & (SF1_GENERAL_STORE)) return (TRUE);
+
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-		/* Certain kinds of food is sold there*/
 		case TV_FOOD:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_FOOD_RATION) return (TRUE);
-			return (FALSE);
-		}
-
-		/* Non artifact Lite Sources are sold there*/
 		case TV_LIGHT:
-		{
-			if (k_ptr->sval == SV_LIGHT_TORCH) return (TRUE);
-			if (k_ptr->sval == SV_LIGHT_LANTERN) return (TRUE);
-			return (FALSE);
-		}
-
-		/* Flasks and Spikes are sold there*/
 		case TV_FLASK:
 		case TV_SPIKE:
-		{
-			return (TRUE);
-		}
-
-		/*Normal ammo is sold there*/
 		case TV_SHOT:
 		case TV_ARROW:
 		case TV_BOLT:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_AMMO_NORMAL) return (TRUE);
-			if (k_ptr->sval == SV_AMMO_LIGHT) return (TRUE);
-			return (FALSE);
-		}
-
-		/* Shovels and Picks are sold there*/
 		case TV_DIGGING:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_SHOVEL) return (TRUE);
-			if (k_ptr->sval == SV_PICK) return (TRUE);
-			return (FALSE);
-		}
-
-		/*
-		 *  Normal Cloaks are sold there
-		 */
 		case TV_CLOAK:
 		{
 			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_CLOAK) return (TRUE);
-			return (FALSE);
+			break;
 		}
+		default: break;
 	}
 
 	/* Assume not good */
@@ -2236,8 +2117,7 @@ static bool kind_is_gen_store(int k_idx)
 /*
  * Hack -- determine if a template is suitable for the armoury.
  *
- * Note that this test only applies to the object *kind*, so it is
- * possible to cause the object to be cursed.
+ * Flag needs to be specified in the object.txt file.
  */
 static bool kind_is_armoury(int k_idx)
 {
@@ -2246,129 +2126,22 @@ static bool kind_is_armoury(int k_idx)
 	/* No "worthless" items */
 	if (k_ptr->cost < 0) return (FALSE);
 
-	/* Analyze the item type */
-	switch (k_ptr->tval)
-	{
-		/* Armor -- Good unless damaged */
-		case TV_HARD_ARMOR:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_METAL_SCALE_MAIL) return (TRUE);
-			if (k_ptr->sval == SV_CHAIN_MAIL) return (TRUE);
-			if (k_ptr->sval == SV_AUGMENTED_CHAIN_MAIL) return (TRUE);
-			if (k_ptr->sval == SV_DOUBLE_CHAIN_MAIL) return (TRUE);
-			if (k_ptr->sval == SV_METAL_BRIGANDINE_ARMOUR) return (TRUE);
-			return(FALSE);
-
-		}
-		case TV_SOFT_ARMOR:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_ROBE) return (TRUE);
-			if (k_ptr->sval == SV_SOFT_LEATHER_ARMOR) return (TRUE);
-			if (k_ptr->sval == SV_HARD_LEATHER_ARMOR) return (TRUE);
-			if (k_ptr->sval == SV_HARD_STUDDED_LEATHER) return (TRUE);
-			if (k_ptr->sval == SV_LEATHER_SCALE_MAIL) return (TRUE);
-			return(FALSE);
-		}
-
-		case TV_SHIELD:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_SMALL_LEATHER_SHIELD) return (TRUE);
-			if (k_ptr->sval == SV_SMALL_METAL_SHIELD) return (TRUE);
-			return(FALSE);
-		}
-		case TV_BOOTS:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_PAIR_OF_SOFT_LEATHER_BOOTS) return (TRUE);
-			if (k_ptr->sval == SV_PAIR_OF_HARD_LEATHER_BOOTS) return (TRUE);
-			return(FALSE);
-		}
-		case TV_GLOVES:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_SET_OF_LEATHER_GLOVES) return (TRUE);
-			if (k_ptr->sval == SV_SET_OF_GAUNTLETS) return (TRUE);
-			return(FALSE);
-		}
-		case TV_HELM:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_HARD_LEATHER_CAP) return (TRUE);
-			if (k_ptr->sval == SV_IRON_HELM) return (TRUE);
-			return(FALSE);
-		}
-	}
-
-	/* Assume not good */
-	return (FALSE);
-}
-
-/*
- * Hack -- determine if a template is suitable for the armoury.
- *
- * Note that this test only applies to the object *kind*, so it is
- * possible to cause the object to be cursed.
- */
-static bool kind_is_armoury_moria(int k_idx)
-{
-	object_kind *k_ptr = &k_info[k_idx];
-
-	/* No "worthless" items */
-	if (k_ptr->cost < 0) return (FALSE);
+	if (k_ptr->k_store & (SF1_ARMORY)) return (TRUE);
 
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-		/* Armor -- Good unless damaged */
 		case TV_HARD_ARMOR:
-		{
-			if (k_ptr->sval == SV_METAL_SCALE_MAIL) return (TRUE);
-			if (k_ptr->sval == SV_CHAIN_MAIL) return (TRUE);
-			if (k_ptr->sval == SV_DOUBLE_CHAIN_MAIL) return (TRUE);
-			if (k_ptr->sval == SV_BAR_CHAIN_MAIL) return (TRUE);
-			return(FALSE);
-
-		}
 		case TV_SOFT_ARMOR:
-		{
-			if (k_ptr->sval == SV_SOFT_LEATHER_ARMOR) return (TRUE);
-			if (k_ptr->sval == SV_SOFT_STUDDED_LEATHER) return (TRUE);
-			if (k_ptr->sval == SV_HARD_LEATHER_ARMOR) return (TRUE);
-			if (k_ptr->sval == SV_HARD_STUDDED_LEATHER) return (TRUE);
-			if (k_ptr->sval == SV_LEATHER_RING_MAIL_HARD) return (TRUE);
-			if (k_ptr->sval == SV_LEATHER_SCALE_MAIL) return (TRUE);
-			return(FALSE);
-		}
-
 		case TV_SHIELD:
-		{
-			if (k_ptr->sval == SV_SMALL_LEATHER_SHIELD) return (TRUE);
-			if (k_ptr->sval == SV_MEDIUM_LEATHER_SHIELD) return (TRUE);
-			if (k_ptr->sval == SV_SMALL_METAL_SHIELD) return (TRUE);
-			return(FALSE);
-		}
 		case TV_BOOTS:
-		{
-			if (k_ptr->sval == SV_PAIR_OF_SOFT_LEATHER_SHOES) return (TRUE);
-			if (k_ptr->sval == SV_PAIR_OF_SOFT_LEATHER_BOOTS) return (TRUE);
-			return(FALSE);
-		}
 		case TV_GLOVES:
-		{
-			if (k_ptr->sval == SV_SET_OF_LEATHER_GLOVES) return (TRUE);
-			if (k_ptr->sval == SV_SET_OF_GAUNTLETS) return (TRUE);
-			return(FALSE);
-		}
 		case TV_HELM:
 		{
-			if (k_ptr->sval == SV_HARD_LEATHER_CAP) return (TRUE);
-			if (k_ptr->sval == SV_SOFT_LEATHER_CAP) return (TRUE);
-			if (k_ptr->sval == SV_METAL_CAP) return (TRUE);
-			return(FALSE);
+			if (allow_altered_inventory) return (TRUE);
+			break;
 		}
+		default: break;
 	}
 
 	/* Assume not good */
@@ -2378,76 +2151,7 @@ static bool kind_is_armoury_moria(int k_idx)
 /*
  * Hack -- determine if a template is suitable for the weaponsmith.
  *
- * Note that this test only applies to the object *kind*, so it is
- * possible to cause the object to be cursed.
- */
-static bool kind_is_weaponsmith_moria(int k_idx)
-{
-	object_kind *k_ptr = &k_info[k_idx];
-
-	/* No "worthless" items */
-	if (k_ptr->cost < 0) return (FALSE);
-
-	/* Analyze the item type */
-	switch (k_ptr->tval)
-	{
-		/* Weapons -- suitable  unless damaged */
-		case TV_SWORD:
-		{
-			if (k_ptr->sval == SV_DAGGER_STILLETO) return (TRUE);
-			if (k_ptr->sval == SV_DAGGER_MISERICORDE) return (TRUE);
-			if (k_ptr->sval == SV_BASTARD_SWORD) return (TRUE);
-			if (k_ptr->sval == SV_BROAD_SWORD) return (TRUE);
-			if (k_ptr->sval == SV_LONG_SWORD) return (TRUE);
-			if (k_ptr->sval == SV_SMALL_SWORD) return (TRUE);
-			return (FALSE);
-		}
-		case TV_HAFTED:
-		{
-			if (k_ptr->sval == SV_MORNING_STAR) return (TRUE);
-			if (k_ptr->sval == SV_MACE) return (TRUE);
-			if (k_ptr->sval == SV_WAR_HAMMER) return (TRUE);
-			return (FALSE);
-		}
-		case TV_POLEARM:
-		{
-
-			if (k_ptr->sval == SV_HALBERD) return (TRUE);
-			if (k_ptr->sval == SV_PIKE) return (TRUE);
-			if (k_ptr->sval == SV_SPEAR) return (TRUE);
-			if (k_ptr->sval == SV_BROAD_AXE) return (TRUE);
-			return (FALSE);
-		}
-		case TV_BOW:
-		{
-			if (k_ptr->sval == SV_SLING) return (TRUE);
-			if (k_ptr->sval == SV_SHORT_BOW) return (TRUE);
-			if (k_ptr->sval == SV_LONG_BOW) return (TRUE);
-			if (k_ptr->sval == SV_LIGHT_XBOW) return (TRUE);
-			return (FALSE);
-		}
-		/*Normal ammo is sold there*/
-		case TV_SHOT:
-		case TV_ARROW:
-		case TV_BOLT:
-		{
-			if (k_ptr->sval == SV_AMMO_NORMAL) return (TRUE);
-			if (k_ptr->sval == SV_AMMO_LIGHT) return (TRUE);
-			return (FALSE);
-		}
-
-	}
-
-	/* Assume not suitable */
-	return (FALSE);
-}
-
-
-/*
- * Hack -- determine if a template is suitable for the weaponsmith.
- *
- * Note that this test only applies to the object *kind*, so it is
- * possible to cause the object to be cursed.
+ * Flag needs to be specified in the object.txt file.
  */
 static bool kind_is_weaponsmith(int k_idx)
 {
@@ -2456,65 +2160,23 @@ static bool kind_is_weaponsmith(int k_idx)
 	/* No "worthless" items */
 	if (k_ptr->cost < 0) return (FALSE);
 
+	if (k_ptr->k_store & (SF1_WEAPONSMITH)) return (TRUE);
+
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-		/* Weapons -- suitable  unless damaged */
 		case TV_SWORD:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_DAGGER) return (TRUE);
-			if (k_ptr->sval == SV_MAIN_GAUCHE) return (TRUE);
-			if (k_ptr->sval == SV_RAPIER) return (TRUE);
-			if (k_ptr->sval == SV_SMALL_SWORD) return (TRUE);
-			if (k_ptr->sval == SV_SHORT_SWORD) return (TRUE);
-			if (k_ptr->sval == SV_SABRE) return (TRUE);
-			if (k_ptr->sval == SV_CUTLASS) return (TRUE);
-			if (k_ptr->sval == SV_BROAD_SWORD) return (TRUE);
-			if (k_ptr->sval == SV_LONG_SWORD) return (TRUE);
-			if (k_ptr->sval == SV_SCIMITAR) return (TRUE);
-			if (k_ptr->sval == SV_KATANA) return (TRUE);
-			if (k_ptr->sval == SV_BASTARD_SWORD) return (TRUE);
-			return (FALSE);
-		}
 		case TV_HAFTED:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_WHIP) return (TRUE);
-			return (FALSE);
-		}
 		case TV_POLEARM:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_SPEAR) return (TRUE);
-			if (k_ptr->sval == SV_AWL_PIKE) return (TRUE);
-			if (k_ptr->sval == SV_TRIDENT) return (TRUE);
-			if (k_ptr->sval == SV_PIKE) return (TRUE);
-			if (k_ptr->sval == SV_BEAKED_AXE) return (TRUE);
-			if (k_ptr->sval == SV_BROAD_AXE) return (TRUE);
-			if (k_ptr->sval == SV_BATTLE_AXE) return (TRUE);
-			return (FALSE);
-		}
 		case TV_BOW:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_SLING) return (TRUE);
-			if (k_ptr->sval == SV_SHORT_BOW) return (TRUE);
-			if (k_ptr->sval == SV_LONG_BOW) return (TRUE);
-			if (k_ptr->sval == SV_LIGHT_XBOW) return (TRUE);
-			return (FALSE);
-		}
-		/*Normal ammo is sold there*/
 		case TV_SHOT:
 		case TV_ARROW:
 		case TV_BOLT:
 		{
 			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_AMMO_NORMAL) return (TRUE);
-			if (k_ptr->sval == SV_AMMO_LIGHT) return (TRUE);
-			return (FALSE);
+			break;
 		}
-
+		default: break;
 	}
 
 	/* Assume not suitable */
@@ -2524,8 +2186,7 @@ static bool kind_is_weaponsmith(int k_idx)
 /*
  * Hack -- determine if a template is suitable for the temple.
  *
- * Note that this test only applies to the object *kind*, so it is
- * possible to cause the object to be cursed.
+ * Flag needs to be specified in the object.txt file.
  */
 static bool kind_is_temple(int k_idx)
 {
@@ -2534,163 +2195,32 @@ static bool kind_is_temple(int k_idx)
 	/* No "worthless" items */
 	if (k_ptr->cost < 0) return (FALSE);
 
+	if (k_ptr->k_store & (SF1_TEMPLE)) return (TRUE);
+
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-		/* Hafted weapons only in the temple*/
 		case TV_HAFTED:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_WHIP) return (TRUE);
-			if (k_ptr->sval == SV_QUARTERSTAFF) return (TRUE);
-			if (k_ptr->sval == SV_MACE) return (TRUE);
-			if (k_ptr->sval == SV_BALL_AND_CHAIN) return (TRUE);
-			if (k_ptr->sval == SV_WAR_HAMMER) return (TRUE);
-			if (k_ptr->sval == SV_LUCERN_HAMMER) return (TRUE);
-			if (k_ptr->sval == SV_MORNING_STAR) return (TRUE);
-			if (k_ptr->sval == SV_FLAIL) return (TRUE);
-			if (k_ptr->sval == SV_LEAD_FILLED_MACE) return (TRUE);
-			return (FALSE);
-		}
-		/*scrolls suitable for the temple*/
 		case TV_SCROLL:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_REMOVE_CURSE) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_IDENTIFY) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_BLESSING) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_HOLY_CHANT) return (TRUE);
-			return (FALSE);
-		}
 		case TV_POTION:
 		{
 			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_POTION_BOLDNESS) return (TRUE);
-			if (k_ptr->sval == SV_POTION_HEROISM) return (TRUE);
-			if (k_ptr->sval == SV_POTION_CURE_LIGHT) return (TRUE);
-			if (k_ptr->sval == SV_POTION_CURE_SERIOUS) return (TRUE);
-			if (k_ptr->sval == SV_POTION_CURE_CRITICAL) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RESTORE_EXP) return (TRUE);
-			return (FALSE);
+			break;
 		}
-
+		default: break;
 	}
+
 
 	/* Assume not suitable */
 	return (FALSE);
 }
 
-/*
- * Hack -- determine if a template is suitable for the temple.
- *
- * Note that this test only applies to the object *kind*, so it is
- * possible to cause the object to be cursed.
- */
-static bool kind_is_temple_moria(int k_idx)
-{
-	object_kind *k_ptr = &k_info[k_idx];
 
-	/* No "worthless" items */
-	if (k_ptr->cost < 0) return (FALSE);
-
-	/* Analyze the item type */
-	switch (k_ptr->tval)
-	{
-		/* Hafted weapons only in the temple*/
-		case TV_HAFTED:
-		{
-			if (k_ptr->sval == SV_MORNING_STAR) return (TRUE);
-			if (k_ptr->sval == SV_MACE) return (TRUE);
-			if (k_ptr->sval == SV_WAR_HAMMER) return (TRUE);
-			return (FALSE);
-		}
-		/*scrolls suitable for the temple*/
-		case TV_SCROLL:
-		{
-
-			if (k_ptr->sval == SV_SCROLL_REMOVE_CURSE) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_WORD_OF_RECALL) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_BLESSING) return (TRUE);
-			return (FALSE);
-		}
-		case TV_POTION:
-		{
-			if (k_ptr->sval == SV_POTION_RES_WIS) return (TRUE);
-			if (k_ptr->sval == SV_POTION_CURE_LIGHT) return (TRUE);
-			if (k_ptr->sval == SV_POTION_CURE_SERIOUS) return (TRUE);
-			if (k_ptr->sval == SV_POTION_CURE_CRITICAL) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RESTORE_EXP) return (TRUE);
-			if (k_ptr->sval == SV_POTION_CURE_POISON) return (TRUE);
-			if (k_ptr->sval == SV_POTION_HEROISM) return (TRUE);
-			if (k_ptr->sval == SV_POTION_BOLDNESS) return (TRUE);
-			return (FALSE);
-		}
-
-
-		case TV_PRAYER_BOOK:
-		{
-			return (TRUE);
-		}
-	}
-
-	/* Assume not suitable */
-	return (FALSE);
-}
 
 /*
  * Hack -- determine if a template is suitable for the alchemy shop.
  *
- * Note that this test only applies to the object *kind*, so it is
- * possible to cause the object to be cursed.
- */
-static bool kind_is_alchemy_moria(int k_idx)
-{
-	object_kind *k_ptr = &k_info[k_idx];
-
-	/* No "worthless" items */
-	if (k_ptr->cost < 0) return (FALSE);
-
-	/* Analyze the item type */
-	switch (k_ptr->tval)
-	{
-
-		/*scrolls suitable for the alchemy shop*/
-		case TV_SCROLL:
-		{
-			if (k_ptr->sval == SV_SCROLL_ENCHANT_WEAPON_TO_HIT) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_ENCHANT_WEAPON_TO_DAM) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_RECHARGING) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_ENCHANT_ARMOR) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_IDENTIFY) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_LIGHT) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_PHASE_DOOR) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_MAPPING) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_DETECT_GOLD) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_DETECT_ITEM) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_WORD_OF_RECALL) return (TRUE);
-			return (FALSE);
-		}
-		case TV_POTION:
-		{
-			if (k_ptr->sval == SV_POTION_RES_STR) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RES_INT) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RES_WIS) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RES_DEX) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RES_CON) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RES_CHR) return (TRUE);
-			if (k_ptr->sval == SV_POTION_SLOW_POISON) return (TRUE);
-			return (FALSE);
-		}
-
-	}
-
-	/* Assume not suitable */
-	return (FALSE);
-}
-
-
-/*
- * Hack -- determine if a template is suitable for the alchemy shop.
+ *  Flag needs to be specified in the object.txt file.
  *
  * Note that this test only applies to the object *kind*, so it is
  * possible to cause the object to be cursed.
@@ -2702,46 +2232,18 @@ static bool kind_is_alchemy(int k_idx)
 	/* No "worthless" items */
 	if (k_ptr->cost < 0) return (FALSE);
 
+	if (k_ptr->k_store & (SF1_ALCHEMIST)) return (TRUE);
+
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-
-		/*scrolls suitable for the alchemy shop*/
 		case TV_SCROLL:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_ENCHANT_WEAPON_TO_HIT) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_ENCHANT_WEAPON_TO_DAM) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_ENCHANT_ARMOR) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_IDENTIFY) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_LIGHT) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_PHASE_DOOR) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_MONSTER_CONFUSION) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_MAPPING) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_DETECT_TRAP) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_DETECT_ITEM) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_DETECT_DOOR) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_DETECT_INVIS) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_RECHARGING) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_SATISFY_HUNGER) return (TRUE);
-			if (k_ptr->sval == SV_SCROLL_WORD_OF_RECALL) return (TRUE);
-			return (FALSE);
-		}
 		case TV_POTION:
 		{
 			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RESIST_HEAT) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RESIST_COLD) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RESIST_ELECTRICITY) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RESIST_ACID) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RES_STR) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RES_INT) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RES_WIS) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RES_DEX) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RES_CON) return (TRUE);
-			if (k_ptr->sval == SV_POTION_RES_CHR) return (TRUE);
+			break;
 		}
-
+		default: break;
 	}
 
 	/* Assume not suitable */
@@ -2751,75 +2253,8 @@ static bool kind_is_alchemy(int k_idx)
 /*
  * Hack -- determine if a template is suitable for the magic_shop.
  *
- * Note that this test only applies to the object *kind*, so it is
- * possible to cause the object to be cursed.
- */
-static bool kind_is_magic_shop_moria(int k_idx)
-{
-	object_kind *k_ptr = &k_info[k_idx];
-
-	/* No "worthless" items */
-	if (k_ptr->cost < 0) return (FALSE);
-
-	/* Analyze the item type */
-	switch (k_ptr->tval)
-	{
-		/*Rings suitable for the magic_shop*/
-		case TV_RING:
-		{
-			if (k_ptr->sval == SV_RING_RESIST_FIRE) return (TRUE);
-			if (k_ptr->sval == SV_RING_RESIST_COLD) return (TRUE);
-			if (k_ptr->sval == SV_RING_FEATHER_FALL) return (TRUE);
-			if (k_ptr->sval == SV_RING_PROTECTION) return (TRUE);
-			return (FALSE);
-		}
-		/*Amulets suitable for the magic_shop*/
-		case TV_AMULET:
-		{
-			if (k_ptr->sval == SV_AMULET_CHARISMA) return (TRUE);
-			if (k_ptr->sval == SV_AMULET_SLOW_DIGEST) return (TRUE);
-			if (k_ptr->sval == SV_AMULET_RESIST_ACID) return (TRUE);
-			return (FALSE);
-		}
-		/*Amulets suitable for the magic_shop*/
-		case TV_WAND:
-		{
-			if (k_ptr->sval == SV_WAND_LIGHT) return (TRUE);
-			if (k_ptr->sval == SV_WAND_ELEC_BALL) return (TRUE);
-			if (k_ptr->sval == SV_WAND_STINKING_CLOUD) return (TRUE);
-			if (k_ptr->sval == SV_WAND_WONDER) return (TRUE);
-			if (k_ptr->sval == SV_WAND_MAGIC_MISSILE) return (TRUE);
-			if (k_ptr->sval == SV_WAND_ELEC_BOLT) return (TRUE);
-			if (k_ptr->sval == SV_WAND_DISARMING) return (TRUE);
-			return (FALSE);
-		}
-		/*Staves suitable for the magic_shop*/
-		case TV_STAFF:
-		{
-			if (k_ptr->sval == SV_STAFF_LIGHT) return (TRUE);
-			if (k_ptr->sval == SV_STAFF_DETECT_TRAP) return (TRUE);
-			if (k_ptr->sval == SV_STAFF_DETECT_DOOR) return (TRUE);
-			if (k_ptr->sval == SV_STAFF_DETECT_INVIS) return (TRUE);
-			if (k_ptr->sval == SV_STAFF_IDENTIFY) return (TRUE);
-			return (FALSE);
-		}
-		case TV_MAGIC_BOOK:
-		{
-			return (TRUE);
-		}
-	}
-
-	/* Assume not suitable */
-	return (FALSE);
-}
-
-
-
-/*
- * Hack -- determine if a template is suitable for the magic_shop.
+ * Flag needs to be specified in the object.txt file.
  *
- * Note that this test only applies to the object *kind*, so it is
- * possible to cause the object to be cursed.
  */
 static bool kind_is_magic_shop(int k_idx)
 {
@@ -2831,54 +2266,18 @@ static bool kind_is_magic_shop(int k_idx)
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-		/*Rings suitable for the magic_shop*/
 		case TV_RING:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_RING_SEARCHING) return (TRUE);
-			if (k_ptr->sval == SV_RING_FEATHER_FALL) return (TRUE);
-			if (k_ptr->sval == SV_RING_PROTECTION) return (TRUE);
-			return (FALSE);
-		}
-		/*Amulets suitable for the magic_shop*/
 		case TV_AMULET:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_AMULET_CHARISMA) return (TRUE);
-			if (k_ptr->sval == SV_AMULET_SLOW_DIGEST) return (TRUE);
-			if (k_ptr->sval == SV_AMULET_RESIST_ACID) return (TRUE);
-			return (FALSE);
-		}
-		/*Amulets suitable for the magic_shop*/
 		case TV_WAND:
-		{
-			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_WAND_SLOW_MONSTER) return (TRUE);
-			if (k_ptr->sval == SV_WAND_CONFUSE_MONSTER) return (TRUE);
-			if (k_ptr->sval == SV_WAND_SLEEP_MONSTER) return (TRUE);
-			if (k_ptr->sval == SV_WAND_MAGIC_MISSILE) return (TRUE);
-			if (k_ptr->sval == SV_WAND_STINKING_CLOUD) return (TRUE);
-			if (k_ptr->sval == SV_WAND_WONDER) return (TRUE);
-			return (FALSE);
-		}
-		/*Staves suitable for the magic_shop*/
 		case TV_STAFF:
 		{
 			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval == SV_STAFF_LIGHT) return (TRUE);
-			if (k_ptr->sval == SV_STAFF_MAPPING) return (TRUE);
-			if (k_ptr->sval == SV_STAFF_DETECT_TRAP) return (TRUE);
-			if (k_ptr->sval == SV_STAFF_DETECT_DOOR) return (TRUE);
-			if (k_ptr->sval == SV_STAFF_DETECT_GOLD) return (TRUE);
-			if (k_ptr->sval == SV_STAFF_DETECT_ITEM) return (TRUE);
-			if (k_ptr->sval == SV_STAFF_DETECT_INVIS) return (TRUE);
-			if (k_ptr->sval == SV_STAFF_DETECT_EVIL) return (TRUE);
-			if (k_ptr->sval == SV_STAFF_TELEPORTATION) return (TRUE);
-			if (k_ptr->sval == SV_STAFF_IDENTIFY) return (TRUE);
-			return (FALSE);
+			break;
 		}
-
+		default: break;
 	}
+
+	if (k_ptr->k_store & (SF1_MAGIC_SHOP)) return (TRUE);
 
 	/* Assume not suitable */
 	return (FALSE);
@@ -2895,51 +2294,9 @@ static bool kind_is_black_market(int k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
-	/* First non-damaged weapons and armor are all good..... */
-	switch (k_ptr->tval)
-	{
-		/* Armor -- Good unless damaged */
-		case TV_HARD_ARMOR:
-		case TV_SOFT_ARMOR:
-		case TV_DRAG_ARMOR:
-		case TV_DRAG_SHIELD:
-		case TV_SHIELD:
-		case TV_CLOAK:
-		case TV_BOOTS:
-		case TV_GLOVES:
-		case TV_HELM:
-		case TV_CROWN:
-		{
-			if (k_ptr->to_a < 0) return (FALSE);
-			return (TRUE);
-		}
+	if (k_ptr->k_store & (SF1_BLACK_MARKET)) return (TRUE);
 
-		case TV_CHEST:
-		{
-			return (FALSE);
-		}
-
-		/* Weapons -- Good unless damaged */
-		case TV_BOW:
-		case TV_SWORD:
-		case TV_HAFTED:
-		case TV_POLEARM:
-		case TV_DIGGING:
-		case TV_BOLT:
-		case TV_ARROW:
-		case TV_SHOT:
-		{
-			if (k_ptr->to_h < 0) return (FALSE);
-			if (k_ptr->to_d < 0) return (FALSE);
-			return (TRUE);
-		}
-	}
-
-	/* Otherwise -- No "cheap" base items */
-	if (k_ptr->cost < 10) return (FALSE);
-
-	/* Otherwise suitable at this point*/
-	return (TRUE);
+	return (FALSE);
 }
 
 /*
@@ -2955,19 +2312,19 @@ static bool kind_is_bookshop(int k_idx)
 	/* No "worthless" items */
 	if (k_ptr->cost < 0) return (FALSE);
 
+	if (k_ptr->k_store & (SF1_BOOKSHOP)) return (TRUE);
+
 	/* Analyze the item type */
 	switch (k_ptr->tval)
 	{
-
 		case TV_MAGIC_BOOK:
 		case TV_PRAYER_BOOK:
 		case TV_DRUID_BOOK:
 		{
 			if (allow_altered_inventory) return (TRUE);
-			if (k_ptr->sval < SV_BOOK_MIN_GOOD) return (TRUE);
-			return (FALSE);
+			break;
 		}
-
+		default: break;
 	}
 
 	/* Assume not suitable */
@@ -2976,7 +2333,6 @@ static bool kind_is_bookshop(int k_idx)
 
 /*
  * Hack -- determine if a template is "a dungeon spellbook".
- *
  */
 static bool kind_is_dungeon_spellbook(int k_idx)
 {
@@ -4234,43 +3590,37 @@ bool prep_store_object(int storetype)
 		case STORE_GENERAL:
 		{
 			object_generation_mode = OB_GEN_MODE_GEN_ST;
-			if (game_mode == GAME_NPPMORIA) get_obj_num_hook = kind_is_gen_store_moria;
-			else get_obj_num_hook = kind_is_gen_store;
+			get_obj_num_hook = kind_is_gen_store;
 			break;
 		}
 		case STORE_ARMOR:
 		{
 			object_generation_mode = OB_GEN_MODE_ARMOURY;
-			if (game_mode == GAME_NPPMORIA) get_obj_num_hook = kind_is_armoury_moria;
-			else get_obj_num_hook = kind_is_armoury;
+			get_obj_num_hook = kind_is_armoury;
 			break;
 		}
 		case STORE_WEAPON:
 		{
 			object_generation_mode = OB_GEN_MODE_WEAPONSMITH;
-			if (game_mode == GAME_NPPMORIA) get_obj_num_hook = kind_is_weaponsmith_moria;
-			else get_obj_num_hook = kind_is_weaponsmith;
+			get_obj_num_hook = kind_is_weaponsmith;
 			break;
 		}
 		case STORE_TEMPLE:
 		{
 			object_generation_mode = OB_GEN_MODE_TEMPLE;
-			if (game_mode == GAME_NPPMORIA) get_obj_num_hook = kind_is_temple_moria;
-			else get_obj_num_hook = kind_is_temple;
+			get_obj_num_hook = kind_is_temple;
 			break;
 		}
 		case STORE_ALCHEMY:
 		{
 			object_generation_mode = OB_GEN_MODE_ALCHEMY;
-			if (game_mode == GAME_NPPMORIA) get_obj_num_hook = kind_is_alchemy_moria;
-			else get_obj_num_hook = kind_is_alchemy;
+			get_obj_num_hook = kind_is_alchemy;
 			break;
 		}
 		case STORE_MAGIC:
 		{
 			object_generation_mode = OB_GEN_MODE_MAGIC_SHOP;
-			if (game_mode == GAME_NPPMORIA) get_obj_num_hook = kind_is_magic_shop_moria;
-			else get_obj_num_hook = kind_is_magic_shop;
+			get_obj_num_hook = kind_is_magic_shop;
 			break;
 		}
 		case STORE_B_MARKET:
@@ -5179,5 +4529,4 @@ void expand_inscription(const object_type *o_ptr, const char *src, char dest[], 
 	/* Append the trailing null character */
 	dest[j] = '\0';
 }
-
 
