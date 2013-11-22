@@ -2605,9 +2605,9 @@ static bool zap_rod(object_type *o_ptr, bool *ident, int dir)
 	{
 
 		if (o_ptr->number == 1)
-			msg_print("The rod is still charging");
+			msg_print("The rod is still charging.");
 		else
-			msg_print("The rods are all still charging");
+			msg_print("The rods are all still charging.");
 
  		return FALSE;
 	}
