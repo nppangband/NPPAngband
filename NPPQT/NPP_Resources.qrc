@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>lib/icons/close_game.png</file>
+        <file>lib/icons/Exit.png</file>
+        <file>lib/icons/New_game_NPPAngband.png</file>
+        <file>lib/icons/New_Game_NPPMoria.png</file>
+        <file>lib/icons/open_savefile.png</file>
+        <file>lib/icons/save.png</file>
+        <file>lib/icons/save_as.png</file>
+    </qresource>
+</RCC>
