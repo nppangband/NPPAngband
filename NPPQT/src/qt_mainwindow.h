@@ -15,8 +15,12 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+
+
 public:
     MainWindow();
+
+
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -51,7 +55,8 @@ private:
     // Functions that initialize the file menu of the main window.
     void create_actions();
     void create_menus();
-    void create_directories();
+    void create_toolbars();
+
 
     // Remember the game settings
     void read_settings();
@@ -65,16 +70,16 @@ private:
     void set_current_savefile(const QString &fileName);
     void update_recent_savefiles();
     QString stripped_name(const QString &fullFileName);
-    QString current_savefile;
     QStringList recent_savefiles;
     QAction *recent_savefile_actions[MAX_RECENT_SAVEFILES];
 
 
 
-    //  Holds the actual commands for the file menu.
+    //  Holds the actual commands for the file menu and toolbar.
     QMenu *file_menu;
     QMenu *recent_files_menu;
     QMenu *help_menu;
+    QToolBar *file_toolbar;
     QAction *new_game_nppangband;
     QAction *new_game_nppmoria;
     QAction *open_savefile;
@@ -89,14 +94,6 @@ private:
     QAction *about_act;
     QAction *about_Qt_act;
     QAction *separator_act;
-
-    //Various directories used by NPP
-    QString NPP_DIR_BASE;
-    QString NPP_DIR_EDIT;
-    QString NPP_DIR_HELP;
-    QString NPP_DIR_ICON;
-    QString NPP_DIR_PREF;
-    QString NPP_DIR_SAVE;
 
 };
 

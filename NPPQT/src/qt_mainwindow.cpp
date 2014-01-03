@@ -3,6 +3,7 @@
 
 #include "src/qt_mainwindow.h"
 #include "src/npp.h"
+#include "src/init.h"
 
 
 // The main function - intitalize the main window and set the menus.
@@ -16,16 +17,18 @@ MainWindow::MainWindow()
     create_actions();
     update_file_menu_game_inactive();
     create_menus();
+    create_toolbars();
     create_directories();
     (void)statusBar();
 
     read_settings();
 
 
-
     setWindowFilePath(QString());
 
 }
+
+
 
 
 //  Support functions for the file menu.
@@ -34,16 +37,22 @@ MainWindow::MainWindow()
 void MainWindow::start_game_nppangband()
 {
     game_mode = GAME_NPPANGBAND;
+
     setWindowTitle(tr("NPPAngband"));
     update_file_menu_game_active();
+
+   init_npp_games();
 }
 
 // Prepare to play a game of NPPMoria.
 void MainWindow::start_game_nppmoria()
 {
     game_mode = GAME_NPPMORIA;
+
     setWindowTitle(tr("NPPMoria"));
     update_file_menu_game_active();
+
+    init_npp_games();
 }
 
 void MainWindow::open_current_savefile()
@@ -55,6 +64,12 @@ void MainWindow::open_current_savefile()
         load_file(fileName);
         update_file_menu_game_active();
     }
+
+    // Later, read a savefile and extract the game mode
+    game_mode = GAME_NPPANGBAND;
+
+    if (game_mode == GAME_NPPANGBAND) start_game_nppmoria();
+    else if (game_mode == GAME_NPPMORIA) start_game_nppmoria();
 }
 
 void MainWindow::save_character()
@@ -82,6 +97,7 @@ void MainWindow::save_and_close()
     // close game
     set_current_savefile("");
 
+    cleanup_npp_games();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -92,6 +108,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     write_settings();
     event->accept();
+
 
 }
 
@@ -256,20 +273,26 @@ void MainWindow::create_menus()
     help_menu->addAction(about_Qt_act);
 }
 
-//Initialize the various directories used by NPP
-void MainWindow::create_directories()
+// Create the toolbars
+void MainWindow::create_toolbars()
 {
-    NPP_DIR_BASE = QDir::currentPath();
-    NPP_DIR_BASE.append ("/NPPQT");
-    NPP_DIR_EDIT = NPP_DIR_HELP = NPP_DIR_ICON = NPP_DIR_PREF = NPP_DIR_SAVE = NPP_DIR_BASE;
-    NPP_DIR_EDIT.append ("/lib/edit");
-    NPP_DIR_HELP.append ("/lib/help");
-    NPP_DIR_ICON.append ("/lib/icons");
-    NPP_DIR_PREF.append ("/lib/pref");
-    NPP_DIR_SAVE.append ("/lib/save");
+    file_toolbar = addToolBar(tr("&File"));
 
+    file_toolbar->addAction(new_game_nppangband);
+    file_toolbar->addAction(new_game_nppmoria);
+    file_toolbar->addAction(open_savefile);
+    file_toolbar->addSeparator();
+    file_toolbar->addAction(save_cur_char);
+    file_toolbar->addAction(save_cur_char_as);
+    file_toolbar->addAction(close_cur_char);
+    file_toolbar->addSeparator();
+    file_toolbar->addAction(exit_npp);
 }
 
+
+
+// Read and write the game settings.
+// Every entry in write-settings should ahve a corresponding entry in read_settings.
 void MainWindow::read_settings()
 {
     QSettings settings("NPPGames", "NPPQT");
@@ -279,8 +302,6 @@ void MainWindow::read_settings()
 
     recent_savefiles = settings.value("recentFiles").toStringList();
     update_recent_savefiles();
-
-
 }
 
 void MainWindow::write_settings()
@@ -352,6 +373,7 @@ void MainWindow::set_current_savefile(const QString &file_name)
     }
 }
 
+// Update the 5 most recently played savefile list.
 void MainWindow::update_recent_savefiles()
 {
     QMutableStringListIterator i(recent_savefiles);

@@ -1,0 +1,1752 @@
+# File: flavor.txt
+
+
+# This file is used to initialize the "lib/data/flavor.raw" file, which is
+# used to initialize the "flavor" information for the Angband game.
+
+# Do not modify this file unless you know exactly what you are doing,
+# unless you wish to risk possible system crashes and broken savefiles.
+# After modifying this file, delete the "lib/data/flavor.raw" file.
+
+# N:<index>:<tval>:<sval>
+# G:<char>:<attr>
+# D:<text>
+
+# Version stamp (required)
+
+V:7.1.0
+
+# Plain Gold Ring     Fixed - The One Ring
+N:1:45:37
+G:=:y2
+D:Plain Gold
+
+# Azurite Ring     
+N:2:45
+G:=:b
+D:Azurite
+
+# Sapphire Ring     
+N:3:45
+G:=:b
+D:Sapphire
+
+# Engagement Ring     
+N:4:45
+G:=:B
+D:Engagement
+
+# Mithril Ring     
+N:5:45
+G:=:B
+D:Mithril
+
+# Lapis Lazulii Ring     
+N:6:45
+G:=:b1
+D:Lapis Lazulii
+
+# Apatite Ring     
+N:7:45
+G:=:B1
+D:Apatite
+
+# Aquamarine Ring     
+N:8:45
+G:=:B1
+D:Aquamarine
+
+# Moonstone Ring     
+N:9:45
+G:=:B1
+D:Moonstone
+
+# Opal Ring     
+N:10:45
+G:=:B1
+D:Opal
+
+# Granite Ring     
+N:11:45
+G:=:D
+D:Granite
+
+# Hematite Ring     
+N:12:45
+G:=:D
+D:Hematite
+
+# Obsidian Ring     
+N:13:45
+G:=:D
+D:Obsidian
+
+# Onyx Ring     
+N:14:45
+G:=:D
+D:Onyx
+
+# Emerald Ring     
+N:15:45
+G:=:g
+D:Emerald
+
+# Fluorite Ring     
+N:16:45
+G:=:g
+D:Fluorite
+
+# Kornerupine Ring     
+N:17:45
+G:=:g
+D:Kornerupine
+
+# Fucite Ring     
+N:18:45
+G:=:G
+D:Fucite
+
+# Adamantite Ring     
+N:19:45
+G:=:g1
+D:Adamantite
+
+# Bloodstone Ring     
+N:20:45
+G:=:g1
+D:Bloodstone
+
+# Jade Ring     
+N:21:45
+G:=:g1
+D:Jade
+
+# Clinohumite Ring     
+N:22:45
+G:=:o
+D:Clinohumite
+
+# Clinohumite Ring     
+N:23:45
+G:=:o
+D:Clinohumite
+
+# Rhodonite Ring     
+N:24:45
+G:=:o
+D:Rhodonite
+
+# Tortoise Shell Ring     
+N:25:45
+G:=:o
+D:Tortoise Shell
+
+# Jasper Ring     
+N:26:45
+G:=:r
+D:Jasper
+
+# Agate Ring     
+N:27:45
+G:=:R
+D:Agate
+
+# Carnelian Ring     
+N:28:45
+G:=:r1
+D:Carnelian
+
+# Garnet Ring     
+N:29:45
+G:=:r1
+D:Garnet
+
+# Ruby Ring     
+N:30:45
+G:=:r1
+D:Ruby
+
+# Tiger Eye Ring     
+N:31:45
+G:=:R1
+D:Tiger Eye
+
+# Steel Ring     
+N:32:45
+G:=:s
+D:Steel
+
+# Corundum Ring     
+N:33:45
+G:=:s1
+D:Corundum
+
+# Quartzite Ring     
+N:34:45
+G:=:s1
+D:Quartzite
+
+# Silver Ring     
+N:35:45
+G:=:s2
+D:Silver
+
+# Zircon Ring     
+N:36:45
+G:=:u
+D:Zircon
+
+# Serpent Ring     
+N:37:45
+G:=:U
+D:Serpent
+
+# Bronze Ring     
+N:38:45
+G:=:u2
+D:Bronze
+
+# Tanzanite Ring     
+N:39:45
+G:=:v
+D:Tanzanite
+
+# Amethyst Ring     
+N:40:45
+G:=:v1
+D:Amethyst
+
+# Calcite Ring     
+N:41:45
+G:=:w
+D:Calcite
+
+# Diamond Ring     
+N:42:45
+G:=:w
+D:Diamond
+
+# Mother of Pearl Ring     
+N:43:45
+G:=:w
+D:Mother of Pearl
+
+# Platinum Ring     
+N:44:45
+G:=:w
+D:Platinum
+
+# Alexandrite Ring     
+N:45:45
+G:=:W
+D:Alexandrite
+
+# Marble Ring     
+N:46:45
+G:=:W
+D:Marble
+
+# Beryl Ring     
+N:47:45
+G:=:w1
+D:Beryl
+
+# Pearl Ring     
+N:48:45
+G:=:W1
+D:Pearl
+
+# Quartz Ring     
+N:49:45
+G:=:y
+D:Quartz
+
+# Yellow Gold Ring     
+N:50:45
+G:=:y
+D:Yellow Gold
+
+# Kyanite Amulet     
+N:51:40
+G:":b
+D:Kyanite
+
+# Saphire Amulet     
+N:52:40
+G:":b
+D:Saphire
+
+# Apatite Amulet     
+N:53:40
+G:":B1
+D:Apatite
+
+# Blue Topaz Amulet     
+N:54:40
+G:":B1
+D:Blue Topaz
+
+# Onyx Amulet     
+N:55:40
+G:":D
+D:Onyx
+
+# Tektite Amulet     
+N:56:40
+G:":D
+D:Tektite
+
+# Emerald Amulet     
+N:57:40
+G:":G
+D:Emerald
+
+# Jasper Amulet     
+N:58:40
+G:":G1
+D:Jasper
+
+# Amber Amulet     
+N:59:40
+G:":o
+D:Amber
+
+# Sunstone Amulet     
+N:60:40
+G:":o
+D:Sunstone
+
+# Tourmaline Amulet     
+N:61:40
+G:":o
+D:Tourmaline
+
+# Citrine Amulet     
+N:62:40
+G:":o1
+D:Citrine
+
+# Ruby Amulet     
+N:63:40
+G:":r
+D:Ruby
+
+# Fire Opal Amulet     
+N:64:40
+G:":R
+D:Fire Opal
+
+# Cuprite Amulet     
+N:65:40
+G:":r1
+D:Cuprite
+
+# Red Garnet Amulet     
+N:66:40
+G:":r1
+D:Red Garnet
+
+# Pewter Amulet     
+N:67:40
+G:":s1
+D:Pewter
+
+# Calcite Amulet     
+N:68:40
+G:":s2
+D:Calcite
+
+# Silver Amulet     
+N:69:40
+G:":s2
+D:Silver
+
+# Copper Amulet     
+N:70:40
+G:":u2
+D:Copper
+
+# Amethyst Amulet     
+N:71:40
+G:":v
+D:Amethyst
+
+# Lilac Stone Amulet     
+N:72:40
+G:":v
+D:Lilac Stone
+
+# Titanium Amulet     
+N:73:40
+G:":v1
+D:Titanium
+
+# Bone Amulet     
+N:74:40
+G:":w
+D:Bone
+
+# Cirtine Amulet     
+N:75:40
+G:":w
+D:Cirtine
+
+# Ivory Amulet     
+N:76:40
+G:":w
+D:Ivory
+
+# Snow Quartz Amulet     
+N:77:40
+G:":w
+D:Snow Quartz
+
+# Agate Amulet     
+N:78:40
+G:":W
+D:Agate
+
+# Riverstone Amulet     
+N:79:40
+G:":W1
+D:Riverstone
+
+# Golden Amulet     
+N:80:40
+G:":y2
+D:Golden
+
+# Ice tipped Staff     
+N:81:55
+G:_:b1
+D:Ice tipped
+
+# Saphire Fir Staff     
+N:82:55
+G:_:B1
+D:Saphire Fir
+
+# Saphire Maple Staff     
+N:83:55
+G:_:B1
+D:Saphire Maple
+
+# Saphire Pine Staff     
+N:84:55
+G:_:B1
+D:Saphire Pine
+
+# Teak Staff     
+N:85:55
+G:_:D1
+D:Teak
+
+# Emerald Ashen Staff     
+N:86:55
+G:_:g
+D:Emerald Ashen
+
+# Emerald Cedar Staff     
+N:87:55
+G:_:g
+D:Emerald Cedar
+
+# Emerald Pine Staff     
+N:88:55
+G:_:g
+D:Emerald Pine
+
+# Mistletoe Staff     
+N:89:55
+G:_:g
+D:Mistletoe
+
+# Emerald Birch Staff     
+N:90:55
+G:_:G
+D:Emerald Birch
+
+# Emerald Elm Staff     
+N:91:55
+G:_:g1
+D:Emerald Elm
+
+# Emerald Oak Staff     
+N:92:55
+G:_:g1
+D:Emerald Oak
+
+# Hemlock Staff     
+N:93:55
+G:_:g1
+D:Hemlock
+
+# Fir Staff     
+N:94:55
+G:_:G1
+D:Fir
+
+# Willow Staff     
+N:95:55
+G:_:G1
+D:Willow
+
+# Gnarled Staff     
+N:96:55
+G:_:o
+D:Gnarled
+
+# Elm Staff     
+N:97:55
+G:_:o2
+D:Elm
+
+# Mahogany Staff     
+N:98:55
+G:_:o2
+D:Mahogany
+
+# Rosewood Staff     
+N:99:55
+G:_:R
+D:Rosewood
+
+# Sycamore Staff     
+N:100:55
+G:_:R
+D:Sycamore
+
+# Cedar Staff     
+N:101:55
+G:_:r1
+D:Cedar
+
+# Fire Tipped Staff     
+N:102:55
+G:_:r1
+D:Fire Tipped
+
+# Ironwood Staff     
+N:103:55
+G:_:r1
+D:Ironwood
+
+# Ashen Staff     
+N:104:55
+G:_:R1
+D:Ashen
+
+# Cypress Staff     
+N:105:55
+G:_:R1
+D:Cypress
+
+# Locust Staff     
+N:106:55
+G:_:R1
+D:Locust
+
+# Redwood Staff     
+N:107:55
+G:_:r2
+D:Redwood
+
+# Silver Staff     
+N:108:55
+G:_:s2
+D:Silver
+
+# Silver Painted Staff     
+N:109:55
+G:_:s2
+D:Silver Painted
+
+# Maple Staff     
+N:110:55
+G:_:u
+D:Maple
+
+# Mulberry Staff     
+N:111:55
+G:_:u
+D:Mulberry
+
+# Oak Staff     
+N:112:55
+G:_:u
+D:Oak
+
+# Pine Staff     
+N:113:55
+G:_:u
+D:Pine
+
+# Aspen Staff     
+N:114:55
+G:_:U
+D:Aspen
+
+# Bamboo Staff     
+N:115:55
+G:_:U
+D:Bamboo
+
+# Birch Staff     
+N:116:55
+G:_:U
+D:Birch
+
+# Cottonwood Staff     
+N:117:55
+G:_:U
+D:Cottonwood
+
+# Dogwood Staff     
+N:118:55
+G:_:U
+D:Dogwood
+
+# Eucalyptus Staff     
+N:119:55
+G:_:U
+D:Eucalyptus
+
+# Hawthorn Staff     
+N:120:55
+G:_:U
+D:Hawthorn
+
+# Hickory Staff     
+N:121:55
+G:_:u1
+D:Hickory
+
+# Walnut Staff     
+N:122:55
+G:_:u1
+D:Walnut
+
+# Jeweled Balsa Staff     
+N:123:55
+G:_:U1
+D:Jeweled Balsa
+
+# Jeweled Oak Staff     
+N:124:55
+G:_:U1
+D:Jeweled Oak
+
+# Spruce Staff     
+N:125:55
+G:_:U1
+D:Spruce
+
+# Garnet Maple Staff     
+N:126:55
+G:_:v
+D:Garnet Maple
+
+# Purple Stained Staff     
+N:127:55
+G:_:v
+D:Purple Stained
+
+# Ivory Staff     
+N:128:55
+G:_:w
+D:Ivory
+
+# White bleached Staff     
+N:129:55
+G:_:W1
+D:White bleached
+
+# Golden Staff     
+N:130:55
+G:_:y2
+D:Golden
+
+# Blue Tipped Wand     
+N:131:65
+G:-:b
+D:Blue Tipped
+
+# Aluminium Wand     
+N:132:65
+G:-:B
+D:Aluminium
+
+# Mithril Wand     
+N:133:65
+G:-:B
+D:Mithril
+
+# Aluminum-Plated Wand     
+N:134:65
+G:-:B1
+D:Aluminum-Plated
+
+# Mithril-Plated Wand     
+N:135:65
+G:-:B1
+D:Mithril-Plated
+
+# Green Tipped Wand     
+N:136:65
+G:-:g
+D:Green Tipped
+
+# Green Tipped Wand     
+N:137:65
+G:-:G
+D:Green Tipped
+
+# Red Tipped Wand     
+N:138:65
+G:-:r
+D:Red Tipped
+
+# Iron Wand     
+N:139:65
+G:-:s
+D:Iron
+
+# Lead Wand     
+N:140:65
+G:-:s
+D:Lead
+
+# Lead-Plated Wand     
+N:141:65
+G:-:s
+D:Lead-Plated
+
+# Pewter Wand     
+N:142:65
+G:-:s
+D:Pewter
+
+# Steel Wand     
+N:143:65
+G:-:s
+D:Steel
+
+# Chromium Wand     
+N:144:65
+G:-:s1
+D:Chromium
+
+# Nickel Plated Wand     
+N:145:65
+G:-:s1
+D:Nickel Plated
+
+# Cadmium Wand     
+N:146:65
+G:-:s2
+D:Cadmium
+
+# Silver Wand     
+N:147:65
+G:-:s2
+D:Silver
+
+# Silver-Plated Wand     
+N:148:65
+G:-:s2
+D:Silver-Plated
+
+# Brown Painted Wand     
+N:149:65
+G:-:u
+D:Brown Painted
+
+# Brass Wand     
+N:150:65
+G:-:U
+D:Brass
+
+# Bronze Wand     
+N:151:65
+G:-:U
+D:Bronze
+
+# Nickel-Plated Wand     
+N:152:65
+G:-:U
+D:Nickel-Plated
+
+# Nickel Wand     
+N:153:65
+G:-:U1
+D:Nickel
+
+# Copper Wand     
+N:154:65
+G:-:u2
+D:Copper
+
+# Copper-Plated Wand     
+N:155:65
+G:-:u2
+D:Copper-Plated
+
+# Steel-Plated Wand     
+N:156:65
+G:-:W
+D:Steel-Plated
+
+# Zinc Wand     
+N:157:65
+G:-:W
+D:Zinc
+
+# Zinc-Plated Wand     
+N:158:65
+G:-:W
+D:Zinc-Plated
+
+# Platinum Wand     
+N:159:65
+G:-:w1
+D:Platinum
+
+# Magnesium Wand     
+N:160:65
+G:-:W1
+D:Magnesium
+
+# Ruby Tipped Wand     
+N:161:65
+G:-:W1
+D:Ruby Tipped
+
+# Tin-Plated Wand     
+N:162:65
+G:-:W1
+D:Tin-Plated
+
+# Yellow Painted Wand     
+N:163:65
+G:-:y
+D:Yellow Painted
+
+# Gold Wand     
+N:164:65
+G:-:y2
+D:Gold
+
+# Gold Covered Wand     
+N:165:65
+G:-:y2
+D:Gold Covered
+
+# Gold-Plated Wand     
+N:166:65
+G:-:y2
+D:Gold-Plated
+
+# Sapphire Tipped Rod     
+N:167:66
+G:-:b
+D:Sapphire Tipped
+
+# Aluminum Rod     
+N:168:66
+G:-:B
+D:Aluminum
+
+# Mithril Rod     
+N:169:66
+G:-:B
+D:Mithril
+
+# Aluminum-Plated Rod     
+N:170:66
+G:-:B1
+D:Aluminum-Plated
+
+# Mithril-Plated Rod     
+N:171:66
+G:-:B1
+D:Mithril-Plated
+
+# Cast Iron Rod     
+N:172:66
+G:-:D
+D:Cast Iron
+
+# Cirtine Tipped Rod     
+N:173:66
+G:-:o
+D:Cirtine Tipped
+
+# Orange Tipped Rod     
+N:174:66
+G:-:o
+D:Orange Tipped
+
+# Rust Tipped Rod     
+N:175:66
+G:-:o
+D:Rust Tipped
+
+# Red Tipped Rod     
+N:176:66
+G:-:r
+D:Red Tipped
+
+# Ruby Tipped Rod     
+N:177:66
+G:-:r
+D:Ruby Tipped
+
+# Iron Rod     
+N:178:66
+G:-:s
+D:Iron
+
+# Lead Rod     
+N:179:66
+G:-:s
+D:Lead
+
+# Pewter Rod     
+N:180:66
+G:-:s
+D:Pewter
+
+# Lead-Plated Rod     
+N:181:66
+G:-:s1
+D:Lead-Plated
+
+# Steel Rod     
+N:182:66
+G:-:s1
+D:Steel
+
+# Steel-Plated Rod     
+N:183:66
+G:-:s1
+D:Steel-Plated
+
+# Chromium Rod     
+N:184:66
+G:-:s2
+D:Chromium
+
+# Silver Rod     
+N:185:66
+G:-:s2
+D:Silver
+
+# Silver-Plated Rod     
+N:186:66
+G:-:s2
+D:Silver-Plated
+
+# Brown Tipped Rod     
+N:187:66
+G:-:u
+D:Brown Tipped
+
+# Solid Brown Rod     
+N:188:66
+G:-:u
+D:Solid Brown
+
+# Brass Rod     
+N:189:66
+G:-:U
+D:Brass
+
+# Bronze Rod     
+N:190:66
+G:-:U
+D:Bronze
+
+# Nickel-Plated Rod     
+N:191:66
+G:-:U1
+D:Nickel-Plated
+
+# Copper Rod     
+N:192:66
+G:-:u2
+D:Copper
+
+# Copper-Plated Rod     
+N:193:66
+G:-:u2
+D:Copper-Plated
+
+# Purple Tipped Rod     
+N:194:66
+G:-:v
+D:Purple Tipped
+
+# Blue Tipped Rod     
+N:195:66
+G:-:w
+D:Blue Tipped
+
+# Titanium Rod     
+N:196:66
+G:-:w
+D:Titanium
+
+# Tungsten Rod     
+N:197:66
+G:-:w
+D:Tungsten
+
+# Molybdenum Rod     
+N:198:66
+G:-:W
+D:Molybdenum
+
+# Tin-Plated Rod     
+N:199:66
+G:-:W
+D:Tin-Plated
+
+# Zinc-Plated Rod     
+N:200:66
+G:-:W
+D:Zinc-Plated
+
+# Gold Rod     
+N:201:66
+G:-:y
+D:Gold
+
+# Gold-Tipped Rod     
+N:202:66
+G:-:y1
+D:Gold-Tipped
+
+# Dark Blue Mushroom     
+N:203:80
+G:,:b
+D:Dark Blue
+
+# Light Blue Mushroom     
+N:204:80
+G:,:B
+D:Light Blue
+
+# Blue Mushroom     
+N:205:80
+G:,:b1
+D:Blue
+
+# Black Mushroom     
+N:206:80
+G:,:D
+D:Black
+
+# Black Spotted Mushroom     
+N:207:80
+G:,:D
+D:Black Spotted
+
+# Green Mushroom     
+N:208:80
+G:,:g
+D:Green
+
+# Light Green Mushroom     
+N:209:80
+G:,:G
+D:Light Green
+
+# Dark Green Mushroom     
+N:210:80
+G:,:g1
+D:Dark Green
+
+# Orange Mushroon     
+N:211:80
+G:,:o
+D:Orange
+
+# Slimy Mushroom     
+N:212:80
+G:,:o
+D:Slimy
+
+# Red Mushroom     
+N:213:80
+G:,:r
+D:Red
+
+# Dark Red Mushroom     
+N:214:80
+G:,:r1
+D:Dark Red
+
+# Pink Mushroon     
+N:215:80
+G:,:R2
+D:Pink
+
+# Grey Mushroom     
+N:216:80
+G:,:s
+D:Grey
+
+# Wrinkled Mushroom     
+N:217:80
+G:,:u
+D:Wrinkled
+
+# Light Brown Mushroom     
+N:218:80
+G:,:U
+D:Light Brown
+
+# Tan Mushroom     
+N:219:80
+G:,:U
+D:Tan
+
+# Violet Mushroom     
+N:220:80
+G:,:v
+D:Violet
+
+# White Mushroom     
+N:221:80
+G:,:w
+D:White
+
+# White Spotted Mushroom     
+N:222:80
+G:,:w
+D:White Spotted
+
+# Furry Mushroom     
+N:223:80
+G:,:W
+D:Furry
+
+# Yellow Mushroom     
+N:224:80
+G:,:y
+D:Yellow
+
+# Clear Potion     Fixed - Water
+N:225:75:0
+G:!:w
+D:Clear
+
+# Light Brown Potion     Fixed - Apple Juice
+N:226:75:1
+G:!:U
+D:Light Brown
+
+# Icky Green Potion     Fixed - Slime Mold Juice
+N:227:75:2
+G:!:g
+D:Icky Green
+
+# Blue Potion     
+N:228:75
+G:!:b
+D:Blue
+
+# Blueberry Potion     
+N:229:75
+G:!:b
+D:Blueberry
+
+# Dark Blue Potion     
+N:230:75
+G:!:b
+D:Dark Blue
+
+# Metallic Blue Potion     
+N:231:75
+G:!:b
+D:Metallic Blue
+
+# Cyan Potion     
+N:232:75
+G:!:B
+D:Cyan
+
+# Blue Speckled Potion     
+N:233:75
+G:!:b1
+D:Blue Speckled
+
+# Navy Blue Potion     
+N:234:75
+G:!:b1
+D:Navy Blue
+
+# Sparkling Navy Blue Potion     
+N:235:75
+G:!:b1
+D:Sparkling Navy Blue
+
+# Azure Potion     
+N:236:75
+G:!:B1
+D:Azure
+
+# Sparkling Sky Blue Potion     
+N:237:75
+G:!:B1
+D:Sparkling Sky Blue
+
+# Black Potion     
+N:238:75
+G:!:D
+D:Black
+
+# Cloudy Potion     
+N:239:75
+G:!:D
+D:Cloudy
+
+# Dark Green Potion     
+N:240:75
+G:!:g
+D:Dark Green
+
+# Gloopy Green Potion     
+N:241:75
+G:!:g
+D:Gloopy Green
+
+# Green Potion     
+N:242:75
+G:!:g
+D:Green
+
+# Green Speckled Potion     
+N:243:75
+G:!:g
+D:Green Speckled
+
+# Thick Green Potion     
+N:244:75
+G:!:g
+D:Thick Green
+
+# Chartreuse Potion     
+N:245:75
+G:!:G
+D:Chartreuse
+
+# Metallic Green Potion     
+N:246:75
+G:!:g1
+D:Metallic Green
+
+# Orange Potion     
+N:247:75
+G:!:o
+D:Orange
+
+# Light Orange Potion     
+N:248:75
+G:!:o1
+D:Light Orange
+
+# Orange Speckled Potion     
+N:249:75
+G:!:o1
+D:Orange Speckled
+
+# Tangerine Potion     
+N:250:75
+G:!:o1
+D:Tangerine
+
+# Clotted Red Potion     
+N:251:75
+G:!:r
+D:Clotted Red
+
+# Dark Red Potion     
+N:252:75
+G:!:r
+D:Dark Red
+
+# Red Potion     
+N:253:75
+G:!:r
+D:Red
+
+# Red Speckled Potion     
+N:254:75
+G:!:r
+D:Red Speckled
+
+# Bubbling Red Potion     
+N:255:75
+G:!:R
+D:Bubbling Red
+
+# Crimson Potion     
+N:256:75
+G:!:r1
+D:Crimson
+
+# Metallic Red Potion     
+N:257:75
+G:!:r1
+D:Metallic Red
+
+# Sparkling Red Potion     
+N:258:75
+G:!:r1
+D:Sparkling Red
+
+# Vermilion Potion     
+N:259:75
+G:!:r1
+D:Vermilion
+
+# Coagulated Crimson Potion     
+N:260:75
+G:!:R1
+D:Coagulated Crimson
+
+# Raspberry Potion     
+N:261:75
+G:!:R1
+D:Raspberry
+
+# Sparkling Raspberry Potion     
+N:262:75
+G:!:R1
+D:Sparkling Raspberry
+
+# Carnation Potion     
+N:263:75
+G:!:R2
+D:Carnation
+
+# Pink Potion     
+N:264:75
+G:!:R2
+D:Pink
+
+# Viscous Pink Potion     
+N:265:75
+G:!:R2
+D:Viscous Pink
+
+# Grey Potion     
+N:266:75
+G:!:s
+D:Grey
+
+# Grey Speckled Potion     
+N:267:75
+G:!:s
+D:Grey Speckled
+
+# Smoky Potion     
+N:268:75
+G:!:s
+D:Smoky
+
+# Gainsboro Potion     
+N:269:75
+G:!:s1
+D:Gainsboro
+
+# Metallic Silver Potion     
+N:270:75
+G:!:s2
+D:Metallic Silver
+
+# Silver Speckled Potion     
+N:271:75
+G:!:s2
+D:Silver Speckled
+
+# Brown Potion     
+N:272:75
+G:!:u
+D:Brown
+
+# Copper Potion     
+N:273:75
+G:!:u2
+D:Copper
+
+# Copper Speckled Potion     
+N:274:75
+G:!:u2
+D:Copper Speckled
+
+# Metallic Purple Potion     
+N:275:75
+G:!:v
+D:Metallic Purple
+
+# Puce Potion     
+N:276:75
+G:!:v
+D:Puce
+
+# Purple Potion     
+N:277:75
+G:!:v
+D:Purple
+
+# Bubbling Purple Potion     
+N:278:75
+G:!:v1
+D:Bubbling Purple
+
+# Dark Purple Potion     
+N:279:75
+G:!:v1
+D:Dark Purple
+
+# Indigo Potion     
+N:280:75
+G:!:v1
+D:Indigo
+
+# Magenta Potion     
+N:281:75
+G:!:v1
+D:Magenta
+
+# Violet Potion     
+N:282:75
+G:!:v1
+D:Violet
+
+# Violet Speckled Potion     
+N:283:75
+G:!:v1
+D:Violet Speckled
+
+# White Potion     
+N:284:75
+G:!:w
+D:White
+
+# Bubbling Potion     
+N:285:75
+G:!:W
+D:Bubbling
+
+# Hazy Potion     
+N:286:75
+G:!:W
+D:Hazy
+
+# Misty Potion     
+N:287:75
+G:!:W
+D:Misty
+
+# Gold Potion     
+N:288:75
+G:!:y
+D:Gold
+
+# Oily Yellow Potion     
+N:289:75
+G:!:y
+D:Oily Yellow
+
+# Sparkling Lemon Potion     
+N:290:75
+G:!:y
+D:Sparkling Lemon
+
+# Yellow Potion     
+N:291:75
+G:!:y
+D:Yellow
+
+# Bubbling Yellow Potion     
+N:292:75
+G:!:y1
+D:Bubbling Yellow
+
+# Gold Speckled Potion     
+N:293:75
+G:!:y1
+D:Gold Speckled
+
+# Maize Potion     
+N:294:75
+G:!:y1
+D:Maize
+
+# Yellow Speckled Potion     
+N:295:75
+G:!:y1
+D:Yellow Speckled
+
+# Sparkling Gold Potion     
+N:296:75
+G:!:y2
+D:Sparkling Gold
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:297:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:298:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:299:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:300:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:301:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:302:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:303:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:304:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:305:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:306:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:307:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:308:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:309:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:310:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:311:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:312:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:313:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:314:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:315:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:316:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:317:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:318:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:319:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:320:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:321:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:322:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:323:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:324:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:325:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:326:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:327:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:328:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:329:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:330:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:331:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:332:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:333:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:334:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:335:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:336:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:337:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:338:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:339:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:340:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:341:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:342:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:343:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:344:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:345:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:346:70
+G:?:w
+
+
+#  Scroll     - Scrolls assigned random names at character startup
+N:347:70
+G:?:w
+

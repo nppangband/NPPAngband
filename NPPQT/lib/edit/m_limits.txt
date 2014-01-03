@@ -1,0 +1,77 @@
+# File: limits.txt
+
+
+# This file is used to initialize the "array sizes" information for the NPPMoria game.
+
+# Do not modify this file unless you know exactly what you are doing,
+# unless you wish to risk possible system crashes and broken savefiles.
+#
+# These numbers are all actually the maximum + 1, not counting the artifact non-total numbers
+
+
+# Version stamp (required)
+
+V:7.1.0
+
+
+
+# Maximum number of feature types
+F:207
+
+# Maximum number of object kinds
+K:408
+
+# 
+# Maximum number of total artifacts (special + normal + pre-made random + in-game random)
+# special artifacts (1 to this number - 1)
+# normal artifacts ((special) to (special + this number - 1))
+# max random artfiacts ((normal artifacts) to (normal artfiacts + this number - 1))
+# total artifacts will equal special + normal + random + 1 slot for a fake quest artifact
+# reads M:A:special:normal:random
+# changing these numbers will almost always break savefile compatibility
+#
+A:2:2:2
+
+# Maximum number of ego-item types
+E:69
+
+# Maximum number of monster races
+R:282
+
+# Maximum number of effects
+X:750
+
+# Maximum number of permanant maintainer ghost templates (in *angband/lib/bones)
+# followed by the max number of player ghost templates
+G:25:20
+
+# Maximum number of vaults
+T:61
+
+# Maximum number of player races
+P:8
+
+
+# For Moria only, this number is also hard-coded in player.h, and will need to be changed if changed here.
+# Maximum number of player classes
+C:6
+
+# Maximum number of player history lines
+H:128
+
+# Maximum number of owners per store
+B:3
+
+# Maximum number of quests (including a slot for random quests)
+Q:2
+
+# Maximum number of flavors
+L:348
+
+# Maximum number of objects on the level
+O:1024
+
+# Maximum number of monsters on the level
+M:1024
+
+
