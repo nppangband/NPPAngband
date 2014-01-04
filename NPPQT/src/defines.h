@@ -731,4 +731,69 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 #define PIT_HEIGHT			5
 
 
+//Needs to correspond with the colors table list in tables.c
+enum
+{
+    // darkest colors
+    TERM_DARK,
+    TERM_L_DARK,
+    TERM_SLATE,
+    TERM_SLATE_GRAY,
+    TERM_TAUPE,
+
+    // White
+    TERM_WHITE,
+    TERM_LIGHT_GRAY,
+    TERM_SNOW_WHITE,
+
+    //Red
+    TERM_RED,
+    TERM_L_RED,
+    TERM_RED_LAVA,
+    TERM_RASPBERRY,
+    TERM_RED_RUST,
+    TERM_PINK,
+
+    //Orange
+    TERM_ORANGE,
+    TERM_ORANGE_PEEL,
+    TERM_MAHAGONY,
+
+    //Green
+    TERM_GREEN,
+    TERM_L_GREEN,
+    TERM_JUNGLE_GREEN,
+    TERM_LIME_GREEN,
+
+    //Blue
+    TERM_BLUE,
+    TERM_L_BLUE,
+    TERM_NAVY_BLUE,
+    TERM_SKY_BLUE,
+
+    //Brown
+    TERM_UMBER,
+    TERM_L_UMBER,
+    TERM_AUBURN,
+    TERM_L_BROWN,
+
+    //Yellow
+    TERM_YELLOW,
+    TERM_MAIZE,
+    TERM_EARTH_YELLOW,
+
+    // Purple
+    TERM_VIOLET,
+    TERM_PURPLE,
+
+    // Other
+    TERM_GOLD,
+    TERM_SILVER,
+    TERM_COPPER,
+
+    MAX_COLORS
+};
+
+
+
 #endif // DEFINES_H

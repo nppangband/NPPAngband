@@ -103,6 +103,8 @@ extern byte spell_desire_RF4[32][8];
 extern byte spell_desire_RF5[32][8];
 extern byte spell_desire_RF6[32][8];
 extern byte spell_desire_RF7[32][8];
+extern const colors_preset preset_colors[MAX_COLORS];
+
 
 // Utilities.cpp
 extern int letter_to_number (QChar let);

@@ -10,7 +10,7 @@
 #include "src/structures.h"
 #include "src/globals.h"
 #include "src/function_declarations.h"
-#include "src/colors.h"
+
 
 /*
  * Copyright (c) 2000 Robert Ruehlmann

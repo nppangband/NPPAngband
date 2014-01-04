@@ -2925,12 +2925,50 @@ byte spell_desire_RF7[32][8] =
     { 0,   18,  0,   0,	0,   0,	   0	  ,  100}  /* RF7_S_WRAITH  */
 };
 
-
-
-
-
-
-
+//Needs to correspond with the colors #defines list in defines.h
+// Values should range from 0-255 for Red, green, blue.
+// Each slot should match the #defines name, so it can be referred to
+//  ex.  defined_colors[TERM_WHITE]
+const colors_preset preset_colors [MAX_COLORS] =
+{//     name                red  green  blue
+    { "TERM_DARK",            0,    0 ,   0 },
+    { "TERM_L_DARK",         96 ,  96 ,  96 },
+    { "TERM_SLATE" ,        128 , 128 , 128 },
+    { "TERM_SLATE_GRAY",    112 , 128 , 144 },
+    { "TERM_TAUPE" ,        139 , 133 , 137 },
+    { "TERM_WHITE" ,        255 , 255 , 255 },
+    { "TERM_LIGHT_GRAY",    192 , 192 , 192 },
+    { "TERM_SNOW_WHITE",    255 , 250 , 250 },
+    { "TERM_RED",           192 ,   0 ,   0 },
+    { "TERM_L_RED",         255 ,  64 ,  64 },
+    { "TERM_RED_LAVA",      207 ,  16 ,  32 },
+    { "TERM_RASPBERRY",     227 ,  11 ,  92 },
+    { "TERM_RED_RUST",      183 ,  65 ,  14 },
+    { "TERM_PINK",          255 ,  20 , 147 },
+    { "TERM_ORANGE",        255 , 128 ,   0 },
+    { "TERM_ORANGE_PEEL",   255 , 159 ,   0 },
+    { "TERM_MAHAGONY",      192 ,  64 ,   0 },
+    { "TERM_GREEN",           0 , 128 ,  64 },
+    { "TERM_L_GREEN",         0 , 255 ,   0 },
+    { "TERM_JUNGLE_GREEN",   41 , 171 , 135 },
+    { "TERM_LIME_GREEN",    191 , 255 ,   0 },
+    { "TERM_BLUE",            0 ,  64 , 255 },
+    { "TERM_L_BLUE",          0 , 255 , 255 },
+    { "TERM_NAVY_BLUE",      76 ,  76 , 166 },
+    { "TERM_SKY_BLUE",        0 , 191 , 255 },
+    { "TERM_UMBER",         128 ,  64 ,   0 },
+    { "TERM_L_UMBER",       192 , 128 ,  64 },
+    { "TERM_AUBURN",        109 ,  53 ,  26 },
+    { "TERM_L_BROWN",       193 , 154 , 107 },
+    { "TERM_YELLOW",        255 , 255 ,   0 },
+    { "TERM_EARTH_YELLOW",  225 , 169 ,  95 },
+    { "TERM_MAIZE",         251 , 236 ,  93 },
+    { "TERM_VIOLET",        255 ,   0 , 255 },
+    { "TERM_PURPLE",        165 ,   0 , 255 },
+    { "TERM_GOLD",          255 , 215 ,   0 },
+    { "TERM_SILVER",        192 , 192 , 192 },
+    { "TERM_COPPER",        184 , 115 ,  51 },
+};
 
 
 QString squelch_status[SQUELCH_OPT_MAX] =

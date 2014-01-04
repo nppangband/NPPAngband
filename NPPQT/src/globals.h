@@ -55,6 +55,7 @@ extern alloc_entry *alloc_feat_table;
 
 extern option_entry options[OPT_MAX];
 
+
 //Various directories used by NPP
 extern QString NPP_DIR_BASE;
 extern QString NPP_DIR_EDIT;
@@ -98,6 +99,9 @@ extern byte dyna_center_x;
 
 extern u16b cave_cost[MAX_FLOWS][MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 extern int cost_at_center[MAX_FLOWS];
+
+//pre-defined colors - loaded at startup
+extern QColor defined_colors[MAX_COLORS];
 
 
 #endif // GLOBALS_H

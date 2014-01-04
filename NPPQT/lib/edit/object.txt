@@ -13,7 +13,7 @@
 # === Understanding object.txt ===
 
 # N: serial number : & object name~
-# G: symbol : color
+# G: symbol : color {alternatively} G: symbol : red : green : blue
 # I: tval : sval : pval
 # W: depth : rarity : weight : cost
 # P: base armor class : base damage : plus to-hit : plus to-dam : plus to-ac
@@ -26,49 +26,50 @@
 # include articles and pluralization as necessary to ensure
 # grammatical correctness in object descriptions.
 
-# 'G' is for graphics - symbol and color. There are 37 colors, 
-# with up to 256 customizable colors, as follows:
+# 'G' is for graphics - symbol and color. Colors can be entered in
+# red-green-blue format (values from 0-255, or any of the preset
+# colors below may be used.  
 
-# b  - Blue
-# b1 - Navy Blue 
-# B  - Light Blue 
-# B1 - Deep Sky Blue
-# d  - Black(default background)
-# D  - Dark Gray (Light Dark)
-# D1 - Taupe (Light Gray Shaded
-# g  - Green
-# G  - Light Green
-# g1 - Jungle Green
-# G1 - Lime Green (bright green)
-# o  - Orange
-# o1 - Light Orange (Orange Peel)
-# 02 - Mahagony
-# r  - Red
-# R  - Light Red
-# r1 - Lava Red
-# R1 - Light Red (raspberry)
-# R2 - Pink
-# s  - Slate (gray)
-# s1 - Slate Gray (light slate)
-# s2 - Silver
-# u  - Brown
-# U  - Light Brown
-# u1 - Auburn (brown shaded)
-# U1 - Fallow (light brown shaded)
-# u2 - Copper
-# v  - Violet
-# v1 - Violet shaded
-# w  - White
-# W  - Light gray (white shaded)
-# w1 - Snow White
-# W1 - Light White (Light Gray shaded)
-# y  - yellow
-# y1 - Maize (yellow shaded)
-# y2 - Gold
+# TERM_DARK is defined as 0-0-0 and nothing will appear onscreen
+
+# TERM_DARK - {see note above - should not be used
+# TERM_L_DARK
+# TERM_SLATE
+# TERM_SLATE_GRAY
+# TERM_TAUPE
+# TERM_WHITE
+# TERM_LIGHT_GRAY
+# TERM_SNOW_WHITE
+# TERM_RED
+# TERM_L_RED
+# TERM_RED_LAVA
+# TERM_RASPBERRY
+# TERM_RED_RUST
+# TERM_PINK
+# TERM_ORANGE
+# TERM_ORANGE_PEEL
+# TERM_MAHAGONY
+# TERM_GREEN
+# TERM_L_GREEN
+# TERM_JUNGLE_GREEN
+# TERM_LIME_GREEN
+# TERM_BLUE
+# TERM_L_BLUE
+# TERM_NAVY_BLUE
+# TERM_SKY_BLUE
+# TERM_UMBER
+# TERM_L_UMBER
+# TERM_AUBURN
+# TERM_L_BROWN
+# TERM_YELLOW
+# TERM_MAIZE
+# TERM_EARTH_YELLOW
+# TERM_VIOLET
+# TERM_PURPLE
+# TERM_GOLD
+# TERM_SILVER
+# TERM_COPPER
 #       
-# (note that black is the same color as the screen background, and
-# thus anything will appear to be an empty black space if its
-# color is d.)
 #       
 #       
 # 'I' is for basic information. The tval is for the type of item, the
@@ -101,11 +102,6 @@
 # ends or the beginning of the next line to prevent words from running
 # together.
 
-# Accented characters may be used in an object's name or description.
-# Use the proper code, enclosed between square brackets, to enter an accented
-# character. For example: Palant['i]r or Palant[iacute]r are both valid ways to
-# get an acute accent on the i in Palantir. All valid codes can be found in
-# util.c.
 
 # Version stamp (required)
 
@@ -115,7 +111,7 @@ V:7.1.0
 ##### Non-kind (contains the 'pile' picture) #####
 
 N:0:<pile>
-G:&:w
+G:&:TERM_WHITE
 
 
 
@@ -167,7 +163,7 @@ G:&:w
 # The Gem of Amon Sul -- see artifact list
 
 N:1:& Phial~
-G:~:y
+G:~:TERM_YELLOW
 I:39:4:0
 W:5:0:10:10000
 P:0:1d1:0:0:0
@@ -175,7 +171,7 @@ F:INSTA_ART
 
 
 N:2:& Star~
-G:~:y
+G:~:TERM_YELLOW
 I:39:5:0
 W:30:0:5:25000
 P:0:1d1:0:0:0
@@ -183,7 +179,7 @@ F:INSTA_ART
 
 
 N:3:& Arkenstone~
-G:~:y
+G:~:TERM_YELLOW
 I:39:6:0
 W:50:0:5:50000
 P:0:1d1:0:0:0
@@ -191,7 +187,7 @@ F:INSTA_ART
 
 
 N:4:& Amulet~
-G:":d
+G:":TERM_DARK
 I:40:10:0
 W:50:0:3:60000
 P:0:0d0:0:0:0
@@ -199,7 +195,7 @@ F:INSTA_ART
 
 
 N:5:& Amulet~
-G:":d
+G:":TERM_DARK
 I:40:11:0
 W:65:0:3:90000
 P:0:0d0:0:0:0
@@ -207,15 +203,15 @@ F:INSTA_ART
 
 
 N:6:& Necklace~
-G:":y
+G:":TERM_YELLOW
 I:40:12:0
 W:70:0:3:75000
 P:0:0d0:0:0:0
 F:INSTA_ART
 
 
-N:7:& Palant['i]r~
-G:~:y
+N:7:& Palantír~
+G:~:TERM_YELLOW
 I:39:7:0
 W:75:0:200:100000
 P:0:10d10:0:0:0
@@ -223,7 +219,7 @@ F:INSTA_ART
 
 
 N:8:& Elfstone~
-G:":g
+G:":TERM_GREEN
 I:40:16:0
 W:60:0:3:50000
 P:0:0d0:0:0:0
@@ -231,7 +227,7 @@ F:INSTA_ART
 
 
 N:9:& Jewel~
-G:":w
+G:":TERM_WHITE
 I:40:17:0
 W:40:0:3:25000
 P:0:0d0:0:0:0
@@ -239,7 +235,7 @@ F:INSTA_ART
 
 
 N:10:& Gem~
-G:~:r
+G:~:TERM_RED
 I:39:8:3
 W:75:0:200:100000
 P:2:10d10:2:2:0
@@ -247,7 +243,7 @@ F:INSTA_ART
 
 
 N:11:& Ring~
-G:=:d
+G:=:TERM_DARK
 I:45:32:0
 W:50:0:2:65000
 P:0:0d0:0:0:0
@@ -255,7 +251,7 @@ F:INSTA_ART
 
 
 N:12:& Ring~
-G:=:d
+G:=:TERM_DARK
 I:45:33:0
 W:70:0:2:150000
 P:0:0d0:0:0:0
@@ -263,7 +259,7 @@ F:INSTA_ART
 
 
 N:13:& Ring~
-G:=:d
+G:=:TERM_DARK
 I:45:34:0
 W:70:0:2:100000
 P:0:0d0:0:0:0
@@ -271,7 +267,7 @@ F:INSTA_ART
 
 
 N:14:& Ring~
-G:=:d
+G:=:TERM_DARK
 I:45:35:0
 W:80:0:2:200000
 P:0:0d0:0:0:0
@@ -279,7 +275,7 @@ F:INSTA_ART
 
 
 N:15:& Ring~
-G:=:d
+G:=:TERM_DARK
 I:45:36:0
 W:90:0:2:300000
 P:0:0d0:0:0:0
@@ -287,7 +283,7 @@ F:INSTA_ART
 
 
 N:16:& Ring~
-G:=:y
+G:=:TERM_YELLOW
 I:45:37:0
 W:100:0:2:5000000
 P:0:0d0:0:0:0
@@ -307,7 +303,7 @@ F:INSTA_ART
 # code for killing the winner monster
 
 N:19:& Mighty Hammer~
-G:\:D
+G:\:TERM_L_DARK
 I:21:50:0
 W:15:0:200:1000
 P:0:3d9:0:0:0
@@ -315,7 +311,7 @@ F:INSTA_ART | SHOW_MODS
 
 
 N:20:& Massive Iron Crown~
-G:]:D
+G:]:TERM_L_DARK
 I:33:50:0
 W:44:0:20:1000
 P:0:1d1:0:0:0
@@ -326,7 +322,7 @@ F:INSTA_ART
 ##### Armor #####
 
 N:21:& Filthy Rag~
-G:(:D
+G:(:TERM_L_DARK
 I:36:1:0
 W:0:0:20:1
 P:1:0d0:0:0:-1
@@ -334,7 +330,7 @@ A:0/1
 
 
 N:22:& Robe~
-G:(:b
+G:(:TERM_BLUE
 I:36:2:0
 W:1:0:20:4
 P:2:0d0:0:0:0
@@ -343,7 +339,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:23:Soft Leather Armour~
-G:(:U
+G:(:TERM_L_UMBER
 I:36:4:0
 W:3:0:80:18
 P:4:0d0:0:0:0
@@ -352,7 +348,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:24:Soft Studded Leather~
-G:(:U1
+G:(:TERM_L_BROWN
 I:36:5:0
 W:3:0:90:35
 P:5:1d1:0:0:0
@@ -361,7 +357,7 @@ F:BLACK_MARKET
 
 
 N:25:Hard Leather Armour~
-G:(:U
+G:(:TERM_L_UMBER
 I:36:6:0
 W:5:0:100:150
 P:6:1d1:-1:0:0
@@ -370,7 +366,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:26:Hard Studded Leather~
-G:(:U1
+G:(:TERM_L_BROWN
 I:36:7:0
 W:10:0:110:200
 P:7:1d2:-1:0:0
@@ -379,7 +375,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:27:Leather Scale Mail~
-G:(:U
+G:(:TERM_L_UMBER
 I:36:11:0
 W:15:0:140:450
 P:11:1d1:-1:0:0
@@ -388,7 +384,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:28:Rusty Chain Mail~
-G:[:r
+G:[:TERM_RED
 I:37:1:0
 W:25:0:200:550
 P:14:1d4:-5:0:-8
@@ -396,7 +392,7 @@ A:25/1
 
 
 N:29:Metal Scale Mail~
-G:[:s
+G:[:TERM_SLATE
 I:37:3:0
 W:25:0:250:550
 P:13:1d4:-2:0:0
@@ -405,7 +401,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:30:Chain Mail~
-G:[:s
+G:[:TERM_SLATE
 I:37:4:0
 W:25:0:220:750
 P:14:1d4:-2:0:0
@@ -414,7 +410,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:31:Augmented Chain Mail~
-G:[:s1
+G:[:TERM_SLATE_GRAY
 I:37:6:0
 W:30:0:270:900
 P:16:1d4:-2:0:0
@@ -423,7 +419,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:32:Double Chain Mail~
-G:[:s
+G:[:TERM_SLATE
 I:37:7:0
 W:30:0:250:850
 P:16:1d4:-2:0:0
@@ -432,7 +428,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:33:Metal Brigandine Armour~
-G:[:s1
+G:[:TERM_SLATE_GRAY
 I:37:9:0
 W:35:0:290:1100
 P:19:1d4:-3:0:0
@@ -441,7 +437,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:34:Partial Plate Armour~
-G:[:W
+G:[:TERM_LIGHT_GRAY
 I:37:12:0
 W:45:0:260:1200
 P:22:1d6:-3:0:0
@@ -450,7 +446,7 @@ F:BLACK_MARKET
 
 
 N:35:Metal Lamellar Armour~
-G:[:W
+G:[:TERM_LIGHT_GRAY
 I:37:13:0
 W:45:0:340:1250
 P:23:1d6:-3:0:0
@@ -459,7 +455,7 @@ F:BLACK_MARKET
 
 
 N:36:Full Plate Armour~
-G:[:W
+G:[:TERM_LIGHT_GRAY
 I:37:15:0
 W:45:0:380:1350
 P:25:2d4:-3:0:0
@@ -468,7 +464,7 @@ F:BLACK_MARKET
 
 
 N:37:Ribbed Plate Armour~
-G:[:W
+G:[:TERM_LIGHT_GRAY
 I:37:18:0
 W:50:0:380:1500
 P:28:2d4:-3:0:0
@@ -477,7 +473,7 @@ F:BLACK_MARKET
 
 
 N:38:Mithril Chain Mail~
-G:[:B
+G:[:TERM_L_BLUE
 I:37:20:0
 W:55:0:150:7000
 P:28:1d4:-1:0:0
@@ -486,7 +482,7 @@ F:IGNORE_ACID | BLACK_MARKET
 
 
 N:39:Mithril Plate Mail~
-G:[:B1
+G:[:TERM_SKY_BLUE
 I:37:25:0
 W:60:0:300:15000
 P:35:2d4:-3:0:0
@@ -495,7 +491,7 @@ F:IGNORE_ACID | BLACK_MARKET
 
 
 N:40:Adamantite Plate Mail~
-G:[:G
+G:[:TERM_L_GREEN
 I:37:30:0
 W:75:0:420:20000
 P:40:2d4:-4:0:0
@@ -507,7 +503,7 @@ F:IGNORE_ACID | BLACK_MARKET
 ##### Shields #####
 
 N:41:& Small Leather Shield~
-G:):U
+G:):TERM_L_UMBER
 I:34:2:0
 W:3:0:50:30
 P:2:1d1:0:0:0
@@ -516,7 +512,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:42:& Small Metal Shield~
-G:):s
+G:):TERM_SLATE
 I:34:3:0
 W:10:0:65:50
 P:3:1d2:0:0:0
@@ -525,7 +521,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:43:& Large Leather Shield~
-G:):U
+G:):TERM_L_UMBER
 I:34:4:0
 W:15:0:100:120
 P:4:1d2:0:0:0
@@ -534,7 +530,7 @@ F:BLACK_MARKET
 
 
 N:44:& Large Metal Shield~
-G:):s1
+G:):TERM_SLATE_GRAY
 I:34:5:0
 W:30:0:120:200
 P:5:1d3:0:0:0
@@ -543,7 +539,7 @@ F:BLACK_MARKET
 
 
 N:45:& Shield~ of Deflection
-G:):B
+G:):TERM_L_BLUE
 I:34:10:0
 W:70:0:100:10000
 P:10:1d1:0:0:10
@@ -555,7 +551,7 @@ F:IGNORE_ACID | BLACK_MARKET
 ##### Dragon Armor #####
 
 N:46:Dragon Scale Mail~
-G:[:o
+G:[:TERM_ORANGE
 I:38:1:0
 W:30:0:80:10000
 P:5:1d1:-1:0:5
@@ -565,7 +561,7 @@ D:A set of armor made from the scales of a young dragon.
 
 
 N:47:Mature Dragon Scale Mail~
-G:[:U
+G:[:TERM_L_UMBER
 I:38:2:0
 W:40:0:100:30000
 P:12:1d1:-2:0:10
@@ -575,7 +571,7 @@ D:A set of armor made from the scales of a mature dragon.
 
 
 N:48:Ancient Dragon Scale Mail~
-G:[:R
+G:[:TERM_L_RED
 I:38:3:0
 W:60:0:200:60000
 P:30:1d1:-3:0:15
@@ -585,7 +581,7 @@ D:A set of armor made from the scales of an ancient dragon.
 
 
 N:49:Great Wyrm Scale Mail~
-G:[:v
+G:[:TERM_VIOLET
 I:38:4:0
 W:90:0:240:100000
 P:45:1d1:-4:0:25
@@ -598,7 +594,7 @@ D:A set of armor made from the scales of a great wyrm.
 ##### Dragon Shields #####
 
 N:50:Dragon Scale Shield~
-G:):o
+G:):TERM_ORANGE
 I:41:1:0
 W:30:0:30:5000
 P:3:1d1:0:0:5
@@ -608,7 +604,7 @@ D:A shield made from the scales of a young dragon.
 
 
 N:51:Mature Dragon Scale Shield~
-G:):U
+G:):TERM_L_UMBER
 I:41:2:0
 W:40:0:40:20000
 P:7:1d1:0:0:5
@@ -618,7 +614,7 @@ D:A shield made from the scales of a mature dragon.
 
 
 N:52:Ancient Dragon Scale Shield~
-G:):R
+G:):TERM_L_RED
 I:41:3:0
 W:60:0:60:40000
 P:10:1d1:0:0:10
@@ -628,7 +624,7 @@ D:A shield made from the scales of an ancient dragon.
 
 
 N:53:Great Wyrm Scale Shield~
-G:):v
+G:):TERM_VIOLET
 I:41:4:0
 W:90:0:80:80000
 P:12:1d1:0:0:15
@@ -641,7 +637,7 @@ D:A shield made from the scales of a great wyrm.
 ##### Edged Weapons #####
 
 N:54:& Broken Dagger~
-G:|:D
+G:|:TERM_L_DARK
 I:23:1:0
 W:0:0:5:1
 P:0:1d1:-2:-4:0
@@ -650,7 +646,7 @@ F:SHOW_MODS
 
 
 N:55:& Broken Sword~
-G:|:D
+G:|:TERM_L_DARK
 I:23:2:0
 W:0:0:30:2
 P:0:1d2:-2:-4:0
@@ -659,7 +655,7 @@ F:SHOW_MODS
 
 
 N:56:& Dagger~
-G:|:W
+G:|:TERM_LIGHT_GRAY
 I:23:4:0
 W:0:0:12:10
 P:0:1d4:0:0:0
@@ -668,7 +664,7 @@ F:THROWING | SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:57:& Main Gauche~
-G:|:W
+G:|:TERM_LIGHT_GRAY
 I:23:5:0
 W:3:0:30:25
 P:0:1d5:0:0:0
@@ -677,7 +673,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:58:& Rapier~
-G:|:W
+G:|:TERM_LIGHT_GRAY
 I:23:7:0
 W:5:0:40:42
 P:0:1d6:0:0:0
@@ -686,7 +682,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:59:& Small Sword~
-G:|:W
+G:|:TERM_LIGHT_GRAY
 I:23:8:0
 W:5:0:75:48
 P:0:1d6:0:0:0
@@ -695,7 +691,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:60:& Short Sword~
-G:|:W
+G:|:TERM_LIGHT_GRAY
 I:23:10:0
 W:5:0:80:90
 P:0:1d7:0:0:0
@@ -704,7 +700,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:61:& Sabre~
-G:|:W
+G:|:TERM_LIGHT_GRAY
 I:23:11:0
 W:5:0:50:50
 P:0:1d7:0:0:0
@@ -713,7 +709,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:62:& Cutlass~
-G:|:W
+G:|:TERM_LIGHT_GRAY
 I:23:12:0
 W:5:0:110:85
 P:0:1d7:0:0:0
@@ -722,7 +718,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:63:& Broad Sword~
-G:|:W
+G:|:TERM_LIGHT_GRAY
 I:23:16:0
 W:10:0:150:255
 P:0:2d5:0:0:0
@@ -731,7 +727,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:64:& Long Sword~
-G:|:W
+G:|:TERM_LIGHT_GRAY
 I:23:17:0
 W:10:0:130:300
 P:0:2d5:0:0:0
@@ -740,7 +736,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:65:& Scimitar~
-G:|:W
+G:|:TERM_LIGHT_GRAY
 I:23:18:0
 W:10:0:130:250
 P:0:2d5:0:0:0
@@ -749,7 +745,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:66:& Katana~
-G:|:W
+G:|:TERM_LIGHT_GRAY
 I:23:20:0
 W:20:0:120:400
 P:0:3d4:0:0:0
@@ -758,7 +754,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:67:& Bastard Sword~
-G:|:W
+G:|:TERM_LIGHT_GRAY
 I:23:21:0
 W:15:0:140:350
 P:0:3d4:0:0:0
@@ -767,7 +763,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:68:& Two-Handed Sword~
-G:|:W
+G:|:TERM_LIGHT_GRAY
 I:23:25:0
 W:30:0:200:775
 P:0:3d6:0:0:0
@@ -776,7 +772,7 @@ F:SHOW_MODS | BLACK_MARKET
 
 
 N:69:& Executioner's Sword~
-G:|:r
+G:|:TERM_RED
 I:23:28:0
 W:40:0:260:850
 P:0:4d5:0:0:0
@@ -785,7 +781,7 @@ F:SHOW_MODS | BLACK_MARKET
 
 
 N:70:& Blade~ of Chaos
-G:|:v
+G:|:TERM_VIOLET
 I:23:30:0
 W:70:0:180:14000
 P:0:6d5:0:0:0
@@ -797,7 +793,7 @@ F:RES_CHAOS | SHOW_MODS | BLACK_MARKET
 ##### Polearms #####
 
 N:71:& Spear~
-G:/:s
+G:/:TERM_SLATE
 I:22:2:0
 W:5:0:50:36
 P:0:1d6:0:0:0
@@ -806,7 +802,7 @@ F:THROWING | SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:72:& Awl-Pike~
-G:/:s
+G:/:TERM_SLATE
 I:22:4:0
 W:10:0:160:340
 P:0:1d8:0:0:0
@@ -815,7 +811,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:73:& Trident~
-G:/:y
+G:/:TERM_YELLOW
 I:22:5:0
 W:5:0:70:120
 P:0:1d8:0:0:0
@@ -824,7 +820,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:74:& Pike~
-G:/:s
+G:/:TERM_SLATE
 I:22:8:0
 W:15:0:160:358
 P:0:2d5:0:0:0
@@ -833,7 +829,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:75:& Beaked Axe~
-G:/:s
+G:/:TERM_SLATE
 I:22:10:0
 W:15:0:180:408
 P:0:2d6:0:0:0
@@ -842,7 +838,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:76:& Broad Axe~
-G:/:s
+G:/:TERM_SLATE
 I:22:11:0
 W:15:0:160:304
 P:0:2d6:0:0:0
@@ -851,7 +847,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:77:& Throwing Axe~
-G:/:s
+G:/:TERM_SLATE
 I:22:12:0
 W:25:0:40:150
 P:0:2d4:0:0:0
@@ -860,7 +856,7 @@ F:THROWING | SHOW_MODS | BLACK_MARKET
 
 
 N:78:& Glaive~
-G:/:s
+G:/:TERM_SLATE
 I:22:13:0
 W:20:0:190:363
 P:0:2d6:0:0:0
@@ -869,7 +865,7 @@ F:SHOW_MODS | BLACK_MARKET
 
 
 N:79:& Halberd~
-G:/:s
+G:/:TERM_SLATE
 I:22:15:0
 W:25:0:190:430
 P:0:3d5:0:0:0
@@ -878,7 +874,7 @@ F:SHOW_MODS | BLACK_MARKET
 
 
 N:80:& Scythe~
-G:/:s
+G:/:TERM_SLATE
 I:22:17:0
 W:45:0:250:2800
 P:0:5d3:0:0:0
@@ -887,7 +883,7 @@ F:SHOW_MODS | BLACK_MARKET
 
 
 N:81:& Battle Axe~
-G:/:s
+G:/:TERM_SLATE
 I:22:22:0
 W:15:0:170:334
 P:0:2d8:0:0:0
@@ -896,7 +892,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:82:& Great Axe~
-G:/:s
+G:/:TERM_SLATE
 I:22:25:0
 W:40:0:230:500
 P:0:4d4:0:0:0
@@ -905,7 +901,7 @@ F:SHOW_MODS | BLACK_MARKET
 
 
 N:83:& Lochaber Axe~
-G:/:D
+G:/:TERM_L_DARK
 I:22:28:0
 W:45:0:250:750
 P:0:3d8:0:0:0
@@ -914,7 +910,7 @@ F:SHOW_MODS | BLACK_MARKET
 
 
 N:84:& Scythe~ of Slicing
-G:/:r
+G:/:TERM_RED
 I:22:30:0
 W:60:0:250:3500
 P:0:8d4:0:0:0
@@ -926,7 +922,7 @@ F:SHOW_MODS | BLACK_MARKET
 ##### Blunt Weapons #####
 
 N:85:& Whip~
-G:\:D
+G:\:TERM_L_DARK
 I:21:2:0
 W:3:0:30:30
 P:0:1d3:0:0:0
@@ -935,7 +931,7 @@ F:SHOW_MODS | WEAPONSMITH | TEMPLE | BLACK_MARKET
 
 
 N:86:& Quarterstaff~
-G:\:U
+G:\:TERM_L_UMBER
 I:21:3:0
 W:10:0:150:200
 P:0:1d9:0:0:0
@@ -944,7 +940,7 @@ F:SHOW_MODS | TEMPLE | BLACK_MARKET
 
 
 N:87:& Mace~
-G:\:D
+G:\:TERM_L_DARK
 I:21:5:0
 W:5:0:120:130
 P:0:2d4:0:0:0
@@ -953,7 +949,7 @@ F:SHOW_MODS | TEMPLE | BLACK_MARKET
 
 
 N:88:& Ball-and-Chain~
-G:\:D
+G:\:TERM_L_DARK
 I:21:6:0
 W:20:0:150:200
 P:0:2d4:0:0:0
@@ -962,7 +958,7 @@ F:SHOW_MODS | TEMPLE | BLACK_MARKET
 
 
 N:89:& War Hammer~
-G:\:D
+G:\:TERM_L_DARK
 I:21:8:0
 W:5:0:120:225
 P:0:3d3:0:0:0
@@ -971,7 +967,7 @@ F:SHOW_MODS | TEMPLE | BLACK_MARKET
 
 
 N:90:& Lucerne Hammer~
-G:\:B
+G:\:TERM_L_BLUE
 I:21:10:0
 W:10:0:120:376
 P:0:2d5:0:0:0
@@ -980,7 +976,7 @@ F:SHOW_MODS | TEMPLE | BLACK_MARKET
 
 
 N:91:& Throwing Hammer~
-G:\:D
+G:\:TERM_L_DARK
 I:21:11:0
 W:40:0:55:250
 P:0:2d5:0:0:0
@@ -989,7 +985,7 @@ F:THROWING | SHOW_MODS | BLACK_MARKET
 
 
 N:92:& Morning Star~
-G:\:D
+G:\:TERM_L_DARK
 I:21:12:0
 W:10:0:150:396
 P:0:2d6:0:0:0
@@ -998,7 +994,7 @@ F:SHOW_MODS | TEMPLE | BLACK_MARKET
 
 
 N:93:& Flail~
-G:\:D
+G:\:TERM_L_DARK
 I:21:13:0
 W:10:0:150:353
 P:0:2d6:0:0:0
@@ -1007,7 +1003,7 @@ F:SHOW_MODS | TEMPLE | BLACK_MARKET
 
 
 N:94:& Lead-Filled Mace~
-G:\:D
+G:\:TERM_L_DARK
 I:21:15:0
 W:15:0:180:502
 P:0:3d4:0:0:0
@@ -1016,7 +1012,7 @@ F:SHOW_MODS | TEMPLE | BLACK_MARKET
 
 
 N:95:& Mace~ of Disruption
-G:\:v
+G:\:TERM_VIOLET
 I:21:20:0
 W:80:0:400:14300
 P:0:5d8:0:0:0
@@ -1028,7 +1024,7 @@ F:SLAY_UNDEAD | SHOW_MODS | BLACK_MARKET
 ##### Digging Tools #####
 
 N:96:& Shovel~
-G:\:s
+G:\:TERM_SLATE
 I:20:1:1
 W:1:0:60:10
 P:0:1d2:0:0:0
@@ -1037,7 +1033,7 @@ F:TUNNEL | SHOW_MODS | GENERAL_STORE | BLACK_MARKET
 
 
 N:97:& Pick~
-G:\:s1
+G:\:TERM_SLATE_GRAY
 I:20:4:1
 W:5:0:150:50
 P:0:1d3:0:0:0
@@ -1046,7 +1042,7 @@ F:TUNNEL | SHOW_MODS | GENERAL_STORE | BLACK_MARKET
 
 
 N:98:& Mattock~
-G:\:D
+G:\:TERM_L_DARK
 I:20:7:3
 W:50:0:250:700
 P:0:1d8:0:0:0
@@ -1058,7 +1054,7 @@ F:TUNNEL | SHOW_MODS | BLACK_MARKET
 ##### Helms/Crowns #####
 
 N:99:& Hard Leather Cap~
-G:]:u
+G:]:TERM_UMBER
 I:32:2:0
 W:3:0:15:12
 P:2:0d0:0:0:0
@@ -1067,7 +1063,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:100:& Metal Cap~
-G:]:s
+G:]:TERM_SLATE
 I:32:3:0
 W:10:0:20:30
 P:3:1d1:0:0:0
@@ -1076,7 +1072,7 @@ F:BLACK_MARKET
 
 
 N:101:& Iron Helm~
-G:]:s1
+G:]:TERM_SLATE_GRAY
 I:32:5:0
 W:20:0:75:75
 P:5:1d3:0:0:0
@@ -1085,7 +1081,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:102:& Steel Helm~
-G:]:W
+G:]:TERM_LIGHT_GRAY
 I:32:6:0
 W:40:0:60:200
 P:6:1d3:0:0:0
@@ -1094,7 +1090,7 @@ F:BLACK_MARKET
 
 
 N:103:& Iron Crown~
-G:]:s
+G:]:TERM_SLATE
 I:33:10:0
 W:45:0:20:500
 P:0:1d1:0:0:0
@@ -1103,7 +1099,7 @@ F:BLACK_MARKET
 
 
 N:104:& Golden Crown~
-G:]:y
+G:]:TERM_YELLOW
 I:33:11:0
 W:45:0:30:1000
 P:0:1d1:0:0:0
@@ -1112,7 +1108,7 @@ F:IGNORE_ACID | BLACK_MARKET
 
 
 N:105:& Jewel Encrusted Crown~
-G:]:v
+G:]:TERM_VIOLET
 I:33:12:0
 W:50:0:40:2000
 P:0:1d1:0:0:0
@@ -1124,7 +1120,7 @@ F:IGNORE_ACID | BLACK_MARKET
 ##### Cloaks #####
 
 N:106:& Cloak~
-G:(:g
+G:(:TERM_GREEN
 I:35:1:0
 W:1:0:10:3
 P:1:0d0:0:0:0
@@ -1133,7 +1129,7 @@ F:GENERAL_STORE | BLACK_MARKET
 
 
 N:107:& Shadow Cloak~
-G:(:D
+G:(:TERM_L_DARK
 I:35:6:0
 W:60:0:5:4000
 P:6:0d0:0:0:4
@@ -1145,7 +1141,7 @@ F:BLACK_MARKET
 ##### Bows/Crowssbows/Slings #####
 
 N:108:& Sling~
-G:}:u
+G:}:TERM_UMBER
 I:19:2:0
 W:1:0:5:5
 P:0:0d0:0:0:0
@@ -1154,7 +1150,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:109:& Short Bow~
-G:}:U
+G:}:TERM_L_UMBER
 I:19:12:0
 W:3:0:30:50
 P:0:0d0:0:0:0
@@ -1163,7 +1159,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:110:& Long Bow~
-G:}:U1
+G:}:TERM_L_BROWN
 I:19:13:0
 W:10:0:40:120
 P:0:0d0:0:0:0
@@ -1172,7 +1168,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:111:& Light Crossbow~
-G:}:s
+G:}:TERM_SLATE
 I:19:23:0
 W:15:0:110:140
 P:0:0d0:0:0:0
@@ -1181,7 +1177,7 @@ F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
 
 N:112:& Heavy Crossbow~
-G:}:s1
+G:}:TERM_SLATE_GRAY
 I:19:24:0
 W:30:0:200:300
 P:0:0d0:0:0:0
@@ -1190,7 +1186,7 @@ F:SHOW_MODS | BLACK_MARKET
 
 
 N:113:& Rounded Pebble~
-G:{:s1
+G:{:TERM_SLATE_GRAY
 I:16:0:0
 W:0:0:4:1
 P:0:1d2:0:0:0
@@ -1200,7 +1196,7 @@ D:It can be shot with a sling.
 
 
 N:114:& Iron Shot~
-G:{:s
+G:{:TERM_SLATE
 I:16:1:0
 W:1:0:5:2
 P:0:1d4:0:0:0
@@ -1210,7 +1206,7 @@ D:It can be shot with a sling.
 
 
 N:115:& Mithril Shot~
-G:{:B
+G:{:TERM_L_BLUE
 I:16:2:0
 W:40:0:4:20
 P:0:2d4:5:5:0
@@ -1223,7 +1219,7 @@ D:It can be shot with a sling.
 ##### Missiles/Ammunition #####
 
 N:116:& Arrow~
-G:{:U
+G:{:TERM_L_UMBER
 I:17:1:0
 W:3:0:2:1
 P:0:1d4:0:0:0
@@ -1233,7 +1229,7 @@ D:It can be shot with a bow.
 
 
 N:117:& Seeker Arrow~
-G:{:G
+G:{:TERM_L_GREEN
 I:17:2:0
 W:55:0:2:20
 P:0:4d4:0:0:0
@@ -1243,7 +1239,7 @@ D:It can be shot with a bow.
 
 
 N:118:& Mithril Arrow~
-G:{:B
+G:{:TERM_L_BLUE
 I:17:3:0
 W:55:0:2:25
 P:0:3d4:0:0:0
@@ -1253,7 +1249,7 @@ D:It can be shot with a bow.
 
 
 N:119:& Bolt~
-G:{:s
+G:{:TERM_SLATE
 I:18:1:0
 W:3:0:3:2
 P:0:1d5:0:0:0
@@ -1263,7 +1259,7 @@ D:It can be shot with a crossbow.
 
 
 N:120:& Seeker Bolt~
-G:{:g
+G:{:TERM_GREEN
 I:18:2:0
 W:65:0:3:25
 P:0:4d5:0:0:0
@@ -1273,7 +1269,7 @@ D:It can be shot with a crossbow.
 
 
 N:121:& Mithril Bolt~
-G:{:B
+G:{:TERM_L_BLUE
 I:18:3:0
 W:50:0:2:30
 P:0:3d5:0:0:0
@@ -1286,7 +1282,7 @@ D:It can be shot with a crossbow.
 ##### Boots #####
 
 N:122:& Pair~ of Soft Leather Boots
-G:]:U
+G:]:TERM_L_UMBER
 I:30:2:0
 W:3:0:20:7
 P:2:1d1:0:0:0
@@ -1295,7 +1291,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:123:& Pair~ of Hard Leather Boots
-G:]:U1
+G:]:TERM_L_BROWN
 I:30:3:0
 W:5:0:40:12
 P:3:1d1:0:0:0
@@ -1304,7 +1300,7 @@ F:BLACK_MARKET
 
 
 N:124:& Pair~ of Metal Shod Boots
-G:]:s
+G:]:TERM_SLATE
 I:30:6:0
 W:20:0:80:50
 P:6:1d1:0:0:0
@@ -1316,7 +1312,7 @@ F:BLACK_MARKET
 ##### Gloves #####
 
 N:125:& Set~ of Leather Gloves
-G:]:U
+G:]:TERM_L_UMBER
 I:31:1:0
 W:1:0:5:3
 P:1:0d0:0:0:0
@@ -1325,7 +1321,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:126:& Set~ of Gauntlets
-G:]:W
+G:]:TERM_LIGHT_GRAY
 I:31:2:0
 W:10:0:25:35
 P:2:1d1:0:0:0
@@ -1334,7 +1330,7 @@ F:ARMORY | BLACK_MARKET
 
 
 N:127:& Set~ of Cesti
-G:]:W
+G:]:TERM_LIGHT_GRAY
 I:31:5:0
 W:50:0:40:100
 P:5:1d1:0:0:0
@@ -1343,7 +1339,7 @@ F:BLACK_MARKET
 
 
 N:128:& Wooden Torch~
-G:~:u
+G:~:TERM_UMBER
 I:39:0:0
 W:1:0:30:2
 P:0:1d1:0:0:0
@@ -1355,7 +1351,7 @@ D: light.
 
 
 N:129:& Brass Lantern~
-G:~:U
+G:~:TERM_L_UMBER
 I:39:1:0
 W:3:0:50:35
 P:0:1d1:0:0:0
@@ -1369,7 +1365,7 @@ D: also be used to fuel another lantern.
 ##### Amulets #####
 
 N:130:DOOM
-G:":d
+G:":TERM_DARK
 I:40:0:-5
 W:50:0:3:0
 P:0:0d0:0:0:0
@@ -1379,7 +1375,7 @@ F:CHR | HIDE_TYPE | LIGHT_CURSE
 
 
 N:131:Teleportation
-G:":d
+G:":TERM_DARK
 I:40:1:0
 W:10:0:3:0
 P:0:0d0:0:0:0
@@ -1388,7 +1384,7 @@ F:TELEPORT | EASY_KNOW | LIGHT_CURSE
 
 
 N:132:Adornment
-G:":d
+G:":TERM_DARK
 I:40:2:0
 W:10:0:3:20
 P:0:0d0:0:0:0
@@ -1397,7 +1393,7 @@ F:EASY_KNOW | BLACK_MARKET
 
 
 N:133:Slow Digestion
-G:":d
+G:":TERM_DARK
 I:40:3:0
 W:15:0:3:200
 P:0:0d0:0:0:0
@@ -1406,7 +1402,7 @@ F:SLOW_DIGEST | EASY_KNOW | MAGIC_SHOP | BLACK_MARKET
 
 
 N:134:Resist Acid
-G:":d
+G:":TERM_DARK
 I:40:4:0
 W:10:0:3:300
 P:0:0d0:0:0:0
@@ -1415,7 +1411,7 @@ F:RES_ACID | IGNORE_ACID | EASY_KNOW | MAGIC_SHOP | BLACK_MARKET
 
 
 N:135:Searching
-G:":d
+G:":TERM_DARK
 I:40:5:0
 W:15:0:3:600
 P:0:0d0:0:0:0
@@ -1424,7 +1420,7 @@ F:SEARCH | HIDE_TYPE | BLACK_MARKET
 
 
 N:136:Wisdom
-G:":d
+G:":TERM_DARK
 I:40:6:0
 W:30:0:3:500
 P:0:0d0:0:0:0
@@ -1433,7 +1429,7 @@ F:WIS | SUST_WIS | HIDE_TYPE | BLACK_MARKET
 
 
 N:137:Charisma
-G:":d
+G:":TERM_DARK
 I:40:7:0
 W:30:0:3:500
 P:0:0d0:0:0:0
@@ -1442,7 +1438,7 @@ F:CHR | SUST_CHR | HIDE_TYPE | MAGIC_SHOP | BLACK_MARKET
 
 
 N:138:the Magi
-G:":d
+G:":TERM_DARK
 I:40:8:0
 W:70:0:3:30000
 P:0:0d0:0:0:3
@@ -1453,7 +1449,7 @@ F:HIDE_TYPE | BLACK_MARKET
 
 
 N:139:Sustenance
-G:":d
+G:":TERM_DARK
 I:40:9:0
 W:60:0:3:20000
 P:0:0d0:0:0:0
@@ -1464,7 +1460,7 @@ F:IGNORE_FIRE | IGNORE_COLD | EASY_KNOW | BLACK_MARKET
 
 
 N:140:ESP
-G:":d
+G:":TERM_DARK
 I:40:13:0
 W:50:0:3:25000
 P:0:0d0:0:0:0
@@ -1474,7 +1470,7 @@ F:IGNORE_COLD | HIDE_TYPE | BLACK_MARKET
 
 
 N:141:Resistance
-G:":d
+G:":TERM_DARK
 I:40:14:0
 W:60:0:3:20000
 P:0:0d0:0:0:0
@@ -1484,7 +1480,7 @@ F:IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | EASY_KNOW | BLACK_MARKET
 
 
 N:142:Regeneration
-G:":d
+G:":TERM_DARK
 I:40:15:0
 W:30:0:3:600
 P:0:0d0:0:0:0
@@ -1493,7 +1489,7 @@ F:REGEN | EASY_KNOW | BLACK_MARKET
 
 
 N:143:Devotion
-G:":d
+G:":TERM_DARK
 I:40:18:0
 W:70:0:3:30000
 P:0:0d0:0:0:0
@@ -1504,7 +1500,7 @@ F:BLACK_MARKET
 
 
 N:144:Weaponmastery
-G:":d
+G:":TERM_DARK
 I:40:19:0
 W:70:0:3:30000
 P:0:0d0:0:0:0
@@ -1514,7 +1510,7 @@ F:FREE_ACT | HIDE_TYPE | BLACK_MARKET
 
 
 N:145:Trickery
-G:":d
+G:":TERM_DARK
 I:40:20:1
 W:70:0:3:30000
 P:0:0d0:0:0:0
@@ -1524,7 +1520,7 @@ F:SUST_DEX | RES_POIS | RES_NEXUS | HIDE_TYPE | BLACK_MARKET
 
 
 N:146:Infravision
-G:":d
+G:":TERM_DARK
 I:40:21:0
 W:10:0:3:200
 P:0:0d0:0:0:0
@@ -1533,7 +1529,7 @@ F:INFRA | HIDE_TYPE | BLACK_MARKET
 
 
 N:147:Resist Lightning
-G:":d
+G:":TERM_DARK
 I:40:22:0
 W:10:0:3:300
 P:0:0d0:0:0:0
@@ -1545,7 +1541,7 @@ F:RES_ELEC | IGNORE_ELEC | EASY_KNOW | BLACK_MARKET
 ##### Rings #####
 
 N:148:Woe
-G:=:d
+G:=:TERM_DARK
 I:45:0:-5
 W:50:0:2:0
 P:0:0d0:0:0:0
@@ -1554,7 +1550,7 @@ F:WIS | CHR | TELEPORT | HIDE_TYPE | LIGHT_CURSE
 
 
 N:149:Aggravate Monster
-G:=:d
+G:=:TERM_DARK
 I:45:1:0
 W:5:0:2:0
 P:0:0d0:0:0:0
@@ -1563,7 +1559,7 @@ F:AGGRAVATE | EASY_KNOW | LIGHT_CURSE
 
 
 N:150:Weakness
-G:=:d
+G:=:TERM_DARK
 I:45:2:-5
 W:5:0:2:0
 P:0:0d0:0:0:0
@@ -1572,7 +1568,7 @@ F:STR | HIDE_TYPE | LIGHT_CURSE
 
 
 N:151:Stupidity
-G:=:d
+G:=:TERM_DARK
 I:45:3:-5
 W:5:0:2:0
 P:0:0d0:0:0:0
@@ -1581,7 +1577,7 @@ F:INT | HIDE_TYPE | LIGHT_CURSE
 
 
 N:152:Teleportation
-G:=:d
+G:=:TERM_DARK
 I:45:4:0
 W:5:0:2:0
 P:0:0d0:0:0:0
@@ -1590,7 +1586,7 @@ F:TELEPORT | EASY_KNOW | LIGHT_CURSE
 
 
 N:153:Slow Digestion
-G:=:d
+G:=:TERM_DARK
 I:45:6:0
 W:5:0:2:150
 P:0:0d0:0:0:0
@@ -1599,7 +1595,7 @@ F:SLOW_DIGEST | EASY_KNOW | BLACK_MARKET
 
 
 N:154:Feather Falling
-G:=:d
+G:=:TERM_DARK
 I:45:7:0
 W:5:0:2:200
 P:0:0d0:0:0:0
@@ -1608,7 +1604,7 @@ F:FEATHER | EASY_KNOW | MAGIC_SHOP | BLACK_MARKET
 
 
 N:155:Resist Fire
-G:=:d
+G:=:TERM_DARK
 I:45:8:0
 W:10:0:2:250
 P:0:0d0:0:0:0
@@ -1617,7 +1613,7 @@ F:RES_FIRE | IGNORE_FIRE | EASY_KNOW | BLACK_MARKET
 
 
 N:156:Resist Cold
-G:=:d
+G:=:TERM_DARK
 I:45:9:0
 W:10:0:2:250
 P:0:0d0:0:0:0
@@ -1626,7 +1622,7 @@ F:RES_COLD | IGNORE_COLD | EASY_KNOW | BLACK_MARKET
 
 
 N:157:Sustain Strength
-G:=:d
+G:=:TERM_DARK
 I:45:10:0
 W:20:0:2:400
 P:0:0d0:0:0:0
@@ -1635,7 +1631,7 @@ F:SUST_STR | EASY_KNOW | BLACK_MARKET
 
 
 N:158:Sustain Intelligence
-G:=:d
+G:=:TERM_DARK
 I:45:11:0
 W:20:0:2:400
 P:0:0d0:0:0:0
@@ -1644,7 +1640,7 @@ F:SUST_INT | EASY_KNOW | BLACK_MARKET
 
 
 N:159:Sustain Wisdom
-G:=:d
+G:=:TERM_DARK
 I:45:12:0
 W:20:0:2:400
 P:0:0d0:0:0:0
@@ -1653,7 +1649,7 @@ F:SUST_WIS | EASY_KNOW | BLACK_MARKET
 
 
 N:160:Sustain Constitution
-G:=:d
+G:=:TERM_DARK
 I:45:13:0
 W:20:0:2:400
 P:0:0d0:0:0:0
@@ -1662,7 +1658,7 @@ F:SUST_CON | EASY_KNOW | BLACK_MARKET
 
 
 N:161:Sustain Dexterity
-G:=:d
+G:=:TERM_DARK
 I:45:14:0
 W:20:0:2:400
 P:0:0d0:0:0:0
@@ -1671,7 +1667,7 @@ F:SUST_DEX | EASY_KNOW | BLACK_MARKET
 
 
 N:162:Sustain Charisma
-G:=:d
+G:=:TERM_DARK
 I:45:15:0
 W:20:0:2:400
 P:0:0d0:0:0:0
@@ -1680,7 +1676,7 @@ F:SUST_CHR | EASY_KNOW | BLACK_MARKET
 
 
 N:163:Protection
-G:=:d
+G:=:TERM_DARK
 I:45:16:0
 W:10:0:2:500
 P:0:0d0:0:0:0
@@ -1690,7 +1686,7 @@ D:It increases your armor class.
 
 
 N:164:Acid
-G:=:d
+G:=:TERM_DARK
 I:45:17:0
 W:50:0:2:3000
 P:0:0d0:0:0:15
@@ -1699,7 +1695,7 @@ F:RES_ACID | IGNORE_ACID | ACTIVATE | BLACK_MARKET
 
 
 N:165:Flames
-G:=:d
+G:=:TERM_DARK
 I:45:18:0
 W:50:0:2:3000
 P:0:0d0:0:0:15
@@ -1708,7 +1704,7 @@ F:RES_FIRE | IGNORE_FIRE | ACTIVATE | BLACK_MARKET
 
 
 N:166:Ice
-G:=:d
+G:=:TERM_DARK
 I:45:19:0
 W:50:0:2:3000
 P:0:0d0:0:0:15
@@ -1717,7 +1713,7 @@ F:RES_COLD | IGNORE_COLD | ACTIVATE | BLACK_MARKET
 
 
 N:167:Resist Poison
-G:=:d
+G:=:TERM_DARK
 I:45:20:0
 W:40:0:2:16000
 P:0:0d0:0:0:0
@@ -1726,7 +1722,7 @@ F:RES_POIS | EASY_KNOW | BLACK_MARKET
 
 
 N:168:Resist Nether
-G:=:d
+G:=:TERM_DARK
 I:45:39:0
 W:40:0:2:16000
 P:0:0d0:0:0:0
@@ -1735,7 +1731,7 @@ F:RES_NETHR | EASY_KNOW | BLACK_MARKET
 
 
 N:169:Free Action
-G:=:d
+G:=:TERM_DARK
 I:45:21:0
 W:20:0:2:1500
 P:0:0d0:0:0:0
@@ -1744,7 +1740,7 @@ F:FREE_ACT | EASY_KNOW | BLACK_MARKET
 
 
 N:170:See Invisible
-G:=:d
+G:=:TERM_DARK
 I:45:22:0
 W:30:0:2:340
 P:0:0d0:0:0:0
@@ -1753,7 +1749,7 @@ F:SEE_INVIS | EASY_KNOW | BLACK_MARKET
 
 
 N:171:Searching
-G:=:d
+G:=:TERM_DARK
 I:45:23:0
 W:5:0:2:250
 P:0:0d0:0:0:0
@@ -1762,7 +1758,7 @@ F:SEARCH | HIDE_TYPE | MAGIC_SHOP | BLACK_MARKET
 
 
 N:172:Strength
-G:=:d
+G:=:TERM_DARK
 I:45:24:0
 W:30:0:2:500
 P:0:0d0:0:0:0
@@ -1771,7 +1767,7 @@ F:STR | SUST_STR | HIDE_TYPE | BLACK_MARKET
 
 
 N:173:Intelligence
-G:=:d
+G:=:TERM_DARK
 I:45:25:0
 W:30:0:2:500
 P:0:0d0:0:0:0
@@ -1780,7 +1776,7 @@ F:INT | SUST_INT | HIDE_TYPE | BLACK_MARKET
 
 
 N:174:Dexterity
-G:=:d
+G:=:TERM_DARK
 I:45:26:0
 W:30:0:2:500
 P:0:0d0:0:0:0
@@ -1789,7 +1785,7 @@ F:DEX | SUST_DEX | HIDE_TYPE | BLACK_MARKET
 
 
 N:175:Constitution
-G:=:d
+G:=:TERM_DARK
 I:45:27:0
 W:30:0:2:500
 P:0:0d0:0:0:0
@@ -1798,7 +1794,7 @@ F:CON | SUST_CON | HIDE_TYPE | BLACK_MARKET
 
 
 N:176:Accuracy
-G:=:d
+G:=:TERM_DARK
 I:45:28:0
 W:20:0:2:500
 P:0:0d0:0:0:0
@@ -1808,7 +1804,7 @@ D:It boosts your to-hit value.
 
 
 N:177:Damage
-G:=:d
+G:=:TERM_DARK
 I:45:29:0
 W:20:0:2:500
 P:0:0d0:0:0:0
@@ -1818,7 +1814,7 @@ D:It boosts your to-dam value.
 
 
 N:178:Slaying
-G:=:d
+G:=:TERM_DARK
 I:45:30:0
 W:40:0:2:1000
 P:0:0d0:0:0:0
@@ -1828,7 +1824,7 @@ D:It boosts your to-hit and to-dam values.
 
 
 N:179:Speed
-G:=:d
+G:=:TERM_DARK
 I:45:31:0
 W:75:0:2:100000
 P:0:0d0:0:0:0
@@ -1837,7 +1833,7 @@ F:SPEED | HIDE_TYPE | BLACK_MARKET
 
 
 N:180:Lightning
-G:=:d
+G:=:TERM_DARK
 I:45:38:0
 W:50:0:2:5000
 P:0:0d0:0:0:0
@@ -1849,7 +1845,7 @@ F:RES_ELEC | IGNORE_ELEC | ACTIVATE | BLACK_MARKET
 ##### Staves #####
 
 N:181:Darkness
-G:_:d
+G:_:TERM_DARK
 I:55:0:0
 W:5:0:50:0
 P:0:1d2:0:0:0
@@ -1860,7 +1856,7 @@ D: you have resistance to blindness.
 
 
 N:182:Slowness
-G:_:d
+G:_:TERM_DARK
 I:55:1:0
 W:40:0:50:0
 P:0:1d2:0:0:0
@@ -1870,7 +1866,7 @@ D: cumulative with other temporary slowing enchantments.
 
 
 N:183:Haste Monsters
-G:_:d
+G:_:TERM_DARK
 I:55:2:0
 W:10:0:50:0
 P:0:1d2:0:0:0
@@ -1879,7 +1875,7 @@ D:It hastes all monsters within line of sight.
 
 
 N:184:Summoning
-G:_:d
+G:_:TERM_DARK
 I:55:3:0
 W:10:0:50:0
 P:0:1d2:0:0:0
@@ -1891,7 +1887,7 @@ D: escorts.
 
 
 N:185:Teleportation
-G:_:d
+G:_:TERM_DARK
 I:55:4:0
 W:20:0:50:2000
 P:0:1d2:0:0:0
@@ -1901,7 +1897,7 @@ D:It teleports you randomly with a maximum range of 100 squares.
 
 
 N:186:Perception
-G:_:d
+G:_:TERM_DARK
 I:55:5:0
 W:10:0:50:400
 P:0:1d2:0:0:0
@@ -1912,7 +1908,7 @@ D: (The spell may be aborted without using up a charge.)
 
 
 N:187:Starlight
-G:_:d
+G:_:TERM_DARK
 I:55:7:0
 W:20:0:50:800
 P:0:1d2:0:0:0
@@ -1924,7 +1920,7 @@ D: of damage.
 
 
 N:188:Light
-G:_:d
+G:_:TERM_DARK
 I:55:8:0
 W:5:0:50:250
 P:0:1d2:0:0:0
@@ -1936,7 +1932,7 @@ D: any light-sensitive creatures within the radius of the spell.
 
 
 N:189:Magic Mapping
-G:_:d
+G:_:TERM_DARK
 I:55:9:0
 W:20:0:50:750
 P:0:1d2:0:0:0
@@ -1946,7 +1942,7 @@ D:It maps out a portion of the level centered on you.
 
 
 N:190:Treasure Location
-G:_:d
+G:_:TERM_DARK
 I:55:10:0
 W:5:0:50:200
 P:0:1d2:0:0:0
@@ -1956,7 +1952,7 @@ D:It detects all treasure in the immediate area.
 
 
 N:191:Object Location
-G:_:d
+G:_:TERM_DARK
 I:55:11:0
 W:5:0:50:200
 P:0:1d2:0:0:0
@@ -1966,7 +1962,7 @@ D:It detects all objects in the immediate area.
 
 
 N:192:Trap Location
-G:_:d
+G:_:TERM_DARK
 I:55:12:0
 W:10:0:50:350
 P:0:1d2:0:0:0
@@ -1976,7 +1972,7 @@ D:It detects all traps in the immediate area.
 
 
 N:193:Door/Stair Location
-G:_:d
+G:_:TERM_DARK
 I:55:13:0
 W:10:0:50:350
 P:0:1d2:0:0:0
@@ -1986,7 +1982,7 @@ D:It detects all doors and stairs in the immediate area.
 
 
 N:194:Detect Invisible
-G:_:d
+G:_:TERM_DARK
 I:55:14:0
 W:5:0:50:200
 P:0:1d2:0:0:0
@@ -1996,7 +1992,7 @@ D:It detects all invisible monsters in the immediate area.
 
 
 N:195:Detect Evil
-G:_:d
+G:_:TERM_DARK
 I:55:15:0
 W:20:0:50:350
 P:0:1d2:0:0:0
@@ -2006,7 +2002,7 @@ D:It detects all evil monsters in the immediate area.
 
 
 N:196:Cure Light Wounds
-G:_:d
+G:_:TERM_DARK
 I:55:16:0
 W:5:0:50:350
 P:0:1d2:0:0:0
@@ -2016,7 +2012,7 @@ D:It cures 2d10 points of damage.
 
 
 N:197:Curing
-G:_:d
+G:_:TERM_DARK
 I:55:17:0
 W:25:0:50:1000
 P:0:1d2:0:0:0
@@ -2027,7 +2023,7 @@ D: cures blindness and confusion.
 
 
 N:198:Healing
-G:_:d
+G:_:TERM_DARK
 I:55:18:0
 W:70:0:50:5000
 P:0:1d2:0:0:0
@@ -2038,7 +2034,7 @@ D: damage.
 
 
 N:199:the Magi
-G:_:d
+G:_:TERM_DARK
 I:55:19:0
 W:70:0:50:4500
 P:0:1d2:0:0:0
@@ -2049,7 +2045,7 @@ D: both are currently below maximum.
 
 
 N:200:Sleep Monsters
-G:_:d
+G:_:TERM_DARK
 I:55:20:0
 W:10:0:50:700
 P:0:1d2:0:0:0
@@ -2059,7 +2055,7 @@ D:It attempts to put all monsters within line of sight to sleep.
 
 
 N:201:Slow Monsters
-G:_:d
+G:_:TERM_DARK
 I:55:21:0
 W:10:0:50:800
 P:0:1d2:0:0:0
@@ -2069,7 +2065,7 @@ D:It attempts to slow down all monsters within line of sight.
 
 
 N:202:Speed
-G:_:d
+G:_:TERM_DARK
 I:55:22:0
 W:40:0:50:1000
 P:0:1d2:0:0:0
@@ -2081,7 +2077,7 @@ D: enchantment).
 
 
 N:203:Probing
-G:_:d
+G:_:TERM_DARK
 I:55:23:0
 W:30:0:50:2000
 P:0:1d2:0:0:0
@@ -2093,7 +2089,7 @@ D: characteristics and abilities.  Can also probe any feature on the map.
 
 
 N:204:Dispel Evil
-G:_:d
+G:_:TERM_DARK
 I:55:24:0
 W:50:0:50:1200
 P:0:1d2:0:0:0
@@ -2104,7 +2100,7 @@ D: sight.
 
 
 N:205:Power
-G:_:d
+G:_:TERM_DARK
 I:55:25:0
 W:70:0:50:4000
 P:0:1d2:0:0:0
@@ -2114,7 +2110,7 @@ D:It inflicts 120 points of damage on all monsters within line of sight.
 
 
 N:206:Holiness
-G:_:d
+G:_:TERM_DARK
 I:55:26:0
 W:70:0:50:4500
 P:0:1d2:0:0:0
@@ -2128,7 +2124,7 @@ D: three times your character level.
 
 
 N:207:Banishment
-G:_:d
+G:_:TERM_DARK
 I:55:27:0
 W:70:0:50:3500
 P:0:1d2:0:0:0
@@ -2140,7 +2136,7 @@ D: damage for every monster removed.
 
 
 N:208:Earthquakes
-G:_:d
+G:_:TERM_DARK
 I:55:28:0
 W:40:0:50:350
 P:0:1d2:0:0:0
@@ -2155,7 +2151,7 @@ D: lost inside the rock forever if they cannot.
 
 
 N:209:*Destruction*
-G:_:d
+G:_:TERM_DARK
 I:55:29:0
 W:50:0:50:2500
 P:0:1d2:0:0:0
@@ -2173,7 +2169,7 @@ D: blindness or light. Quest monsters are unaffected.
 ##### Wands #####
 
 N:210:Heal Monster
-G:-:d
+G:-:TERM_DARK
 I:65:0:0
 W:3:0:10:0
 P:0:1d1:0:0:0
@@ -2182,7 +2178,7 @@ D:It cures a single monster for 4d6 points of damage.
 
 
 N:211:Haste Monster
-G:-:d
+G:-:TERM_DARK
 I:65:1:0
 W:3:0:10:0
 P:0:1d1:0:0:0
@@ -2191,7 +2187,7 @@ D:It hastes a single monster.
 
 
 N:212:Clone Monster
-G:-:d
+G:-:TERM_DARK
 I:65:2:0
 W:15:0:10:0
 P:0:1d1:0:0:0
@@ -2202,7 +2198,7 @@ D: be created.
 
 
 N:213:Teleport Other
-G:-:d
+G:-:TERM_DARK
 I:65:3:0
 W:20:0:10:350
 P:0:1d1:0:0:0
@@ -2213,7 +2209,7 @@ D: squares away.
 
 
 N:214:Disarming
-G:-:d
+G:-:TERM_DARK
 I:65:4:0
 W:20:0:10:700
 P:0:1d1:0:0:0
@@ -2224,7 +2220,7 @@ D: and reveals all secret doors.
 
 
 N:215:Trap/Door Destruction
-G:-:d
+G:-:TERM_DARK
 I:65:5:0
 W:10:0:10:100
 P:0:1d1:0:0:0
@@ -2234,7 +2230,7 @@ D:It destroys all doors and disarms all traps in a line.
 
 
 N:216:Stone to Mud
-G:-:d
+G:-:TERM_DARK
 I:65:6:0
 W:10:0:10:300
 P:0:1d1:0:0:0
@@ -2247,7 +2243,7 @@ D: take 20+1d30 points of damage.
 
 
 N:217:Light
-G:-:d
+G:-:TERM_DARK
 I:65:7:0
 W:3:0:10:200
 P:0:1d1:0:0:0
@@ -2258,7 +2254,7 @@ D: light-sensitive creatures on the line.
 
 
 N:218:Sleep Monster
-G:-:d
+G:-:TERM_DARK
 I:65:8:0
 W:5:0:10:500
 P:0:1d1:0:0:0
@@ -2268,7 +2264,7 @@ D:It attempts to put a single monster to sleep.
 
 
 N:219:Slow Monster
-G:-:d
+G:-:TERM_DARK
 I:65:9:0
 W:5:0:10:500
 P:0:1d1:0:0:0
@@ -2278,7 +2274,7 @@ D:It attempts to slow down a single monster.
 
 
 N:220:Confuse Monster
-G:-:d
+G:-:TERM_DARK
 I:65:10:0
 W:5:0:10:500
 P:0:1d1:0:0:0
@@ -2288,7 +2284,7 @@ D:It attempts to confuse a single monster.
 
 
 N:221:Scare Monster
-G:-:d
+G:-:TERM_DARK
 I:65:11:0
 W:10:0:10:500
 P:0:1d1:0:0:0
@@ -2298,7 +2294,7 @@ D:It attempts to scare a single monster.
 
 
 N:222:Drain Life
-G:-:d
+G:-:TERM_DARK
 I:65:12:0
 W:50:0:10:1200
 P:0:1d1:0:0:0
@@ -2309,7 +2305,7 @@ D: undead, a demon, an elemental, a golem, or a vortex.
 
 
 N:223:Polymorph
-G:-:d
+G:-:TERM_DARK
 I:65:13:0
 W:20:0:10:400
 P:0:1d1:0:0:0
@@ -2319,7 +2315,7 @@ D:It attempts to polymorph a single monster.  Uniques are unaffected.
 
 
 N:224:Stinking Cloud
-G:-:d
+G:-:TERM_DARK
 I:65:14:0
 W:5:0:10:400
 P:0:1d1:0:0:0
@@ -2330,7 +2326,7 @@ D: its center.
 
 
 N:225:Magic Missile
-G:-:d
+G:-:TERM_DARK
 I:65:15:0
 W:3:0:10:200
 P:0:1d1:0:0:0
@@ -2341,7 +2337,7 @@ D: with a 20 percent chance of getting a magic beam.
 
 
 N:226:Acid Bolts
-G:-:d
+G:-:TERM_DARK
 I:65:16:0
 W:30:0:10:950
 P:0:1d1:0:0:0
@@ -2352,7 +2348,7 @@ D: percent chance of getting an acid beam.
 
 
 N:227:Lightning Bolts
-G:-:d
+G:-:TERM_DARK
 I:65:17:0
 W:15:0:10:600
 P:0:1d1:0:0:0
@@ -2363,7 +2359,7 @@ D: 20 percent chance of getting a lightning beam.
 
 
 N:228:Fire Bolts
-G:-:d
+G:-:TERM_DARK
 I:65:18:0
 W:30:0:10:1000
 P:0:1d1:0:0:0
@@ -2374,7 +2370,7 @@ D: percent chance of getting a fire beam.
 
 
 N:229:Frost Bolts
-G:-:d
+G:-:TERM_DARK
 I:65:19:0
 W:20:0:10:800
 P:0:1d1:0:0:0
@@ -2385,7 +2381,7 @@ D: percent chance of getting a cold beam.
 
 
 N:230:Acid Balls
-G:-:d
+G:-:TERM_DARK
 I:65:20:0
 W:50:0:10:1650
 P:0:1d1:0:0:0
@@ -2396,7 +2392,7 @@ D: its center.
 
 
 N:231:Lightning Balls
-G:-:d
+G:-:TERM_DARK
 I:65:21:0
 W:35:0:10:1200
 P:0:1d1:0:0:0
@@ -2407,7 +2403,7 @@ D: at its center.
 
 
 N:232:Fire Balls
-G:-:d
+G:-:TERM_DARK
 I:65:22:0
 W:50:0:10:1800
 P:0:1d1:0:0:0
@@ -2418,7 +2414,7 @@ D: its center.
 
 
 N:233:Cold Balls
-G:-:d
+G:-:TERM_DARK
 I:65:23:0
 W:40:0:10:1500
 P:0:1d1:0:0:0
@@ -2429,7 +2425,7 @@ D: its center.
 
 
 N:234:Wonder
-G:-:d
+G:-:TERM_DARK
 I:65:24:0
 W:3:0:10:250
 P:0:1d1:0:0:0
@@ -2441,7 +2437,7 @@ D: Dragon's Flame, Dragon's Frost, Dragon's Breath, Annihilation.
 
 
 N:235:Annihilation
-G:-:d
+G:-:TERM_DARK
 I:65:25:0
 W:60:0:10:3000
 P:0:1d1:0:0:0
@@ -2452,7 +2448,7 @@ D: undead, a demon, an elemental, a golem, or a vortex.
 
 
 N:236:Dragon's Flame
-G:-:d
+G:-:TERM_DARK
 I:65:26:0
 W:50:0:10:2400
 P:0:1d1:0:0:0
@@ -2463,7 +2459,7 @@ D: its center.
 
 
 N:237:Dragon's Frost
-G:-:d
+G:-:TERM_DARK
 I:65:27:0
 W:50:0:10:2400
 P:0:1d1:0:0:0
@@ -2474,7 +2470,7 @@ D: its center.
 
 
 N:238:Dragon's Breath
-G:-:d
+G:-:TERM_DARK
 I:65:28:0
 W:60:0:10:2400
 P:0:1d1:0:0:0
@@ -2491,7 +2487,7 @@ D: type chosen at random).
 ##### Due to Divide by 0 errors #####
 
 N:239:Trap Location
-G:-:d
+G:-:TERM_DARK
 I:66:0:50
 W:5:0:15:100
 P:0:1d1:0:0:0
@@ -2501,7 +2497,7 @@ D:It detects all traps in the immediate area.
 
 
 N:240:Door/Stair Location
-G:-:d
+G:-:TERM_DARK
 I:66:1:70
 W:15:0:15:1000
 P:0:1d1:0:0:0
@@ -2511,7 +2507,7 @@ D:It detects all secret doors and stairs in the immediate area.
 
 
 N:241:Perception
-G:-:d
+G:-:TERM_DARK
 I:66:2:10
 W:50:0:15:13000
 P:0:1d1:0:0:0
@@ -2522,7 +2518,7 @@ D: (The spell may be aborted without using up a charge.)
 
 
 N:242:Recall
-G:-:d
+G:-:TERM_DARK
 I:66:3:60
 W:30:0:15:4000
 P:0:1d1:0:0:0
@@ -2532,7 +2528,7 @@ D:It invokes the spell of recall.
 
 
 N:243:Illumination
-G:-:d
+G:-:TERM_DARK
 I:66:4:30
 W:20:0:15:1000
 P:0:1d1:0:0:0
@@ -2544,7 +2540,7 @@ D: any light-sensitive creatures within the radius of the spell.
 
 
 N:244:Magic Mapping
-G:-:d
+G:-:TERM_DARK
 I:66:5:99
 W:65:0:15:10000
 P:0:1d1:0:0:0
@@ -2554,7 +2550,7 @@ D:It maps out a portion of the level centered on you.
 
 
 N:245:Detection
-G:-:d
+G:-:TERM_DARK
 I:66:6:99
 W:30:0:15:5000
 P:0:1d1:0:0:0
@@ -2565,7 +2561,7 @@ D: monsters in the immediate area.
 
 
 N:246:Probing
-G:-:d
+G:-:TERM_DARK
 I:66:7:50
 W:40:0:15:4000
 P:0:1d1:0:0:0
@@ -2577,7 +2573,7 @@ D: characteristics and abilities.  Can also probe any feature on the map.
 
 
 N:247:Curing
-G:-:d
+G:-:TERM_DARK
 I:66:8:999
 W:65:0:15:15000
 P:0:1d1:0:0:0
@@ -2588,7 +2584,7 @@ D: cures blindness and confusion.
 
 
 N:248:Healing
-G:-:d
+G:-:TERM_DARK
 I:66:9:999
 W:80:0:15:20000
 P:0:1d1:0:0:0
@@ -2599,7 +2595,7 @@ D: damage.
 
 
 N:249:Restoration
-G:-:d
+G:-:TERM_DARK
 I:66:10:999
 W:80:0:15:25000
 P:0:1d1:0:0:0
@@ -2610,7 +2606,7 @@ D: are below maximum.
 
 
 N:250:Speed
-G:-:d
+G:-:TERM_DARK
 I:66:11:99
 W:95:0:15:50000
 P:0:1d1:0:0:0
@@ -2622,7 +2618,7 @@ D: enchantment).
 
 
 N:251:Stone to Mud
-G:-:d
+G:-:TERM_DARK
 I:66:12:30
 W:35:0:15:1500
 P:0:1d1:0:0:0
@@ -2635,7 +2631,7 @@ D: take 20+1d30 points of damage.
 
 
 N:252:Teleport Other
-G:-:d
+G:-:TERM_DARK
 I:66:13:25
 W:45:0:15:1400
 P:0:1d1:0:0:0
@@ -2646,7 +2642,7 @@ D: squares away.
 
 
 N:253:Disarming
-G:-:d
+G:-:TERM_DARK
 I:66:14:30
 W:35:0:15:2100
 P:0:1d1:0:0:0
@@ -2657,7 +2653,7 @@ D: and reveals all secret doors.
 
 
 N:254:Light
-G:-:d
+G:-:TERM_DARK
 I:66:15:9
 W:10:0:15:500
 P:0:1d1:0:0:0
@@ -2668,7 +2664,7 @@ D: light-sensitive creatures on the line.
 
 
 N:255:Sleep Monster
-G:-:d
+G:-:TERM_DARK
 I:66:16:18
 W:30:0:15:1500
 P:0:1d1:0:0:0
@@ -2678,7 +2674,7 @@ D:It attempts to put a single monster to sleep.  Uniques are unaffected.
 
 
 N:256:Slow Monster
-G:-:d
+G:-:TERM_DARK
 I:66:17:20
 W:30:0:15:1500
 P:0:1d1:0:0:0
@@ -2688,7 +2684,7 @@ D:It attempts to slow down a single monster.  Uniques are unaffected.
 
 
 N:257:Drain Life
-G:-:d
+G:-:TERM_DARK
 I:66:18:23
 W:75:0:15:3600
 P:0:1d1:0:0:0
@@ -2699,7 +2695,7 @@ D: undead, a demon, an elemental, a golem, or a vortex.
 
 
 N:258:Polymorph
-G:-:d
+G:-:TERM_DARK
 I:66:19:25
 W:35:0:15:1200
 P:0:1d1:0:0:0
@@ -2709,7 +2705,7 @@ D:It attempts to polymorph a single monster.  Uniques are unaffected.
 
 
 N:259:Acid Bolts
-G:-:d
+G:-:TERM_DARK
 I:66:20:12
 W:40:0:15:3500
 P:0:1d1:0:0:0
@@ -2720,7 +2716,7 @@ D: percent chance of getting an acid beam.
 
 
 N:260:Lightning Bolts
-G:-:d
+G:-:TERM_DARK
 I:66:21:11
 W:20:0:15:2000
 P:0:1d1:0:0:0
@@ -2731,7 +2727,7 @@ D: 10 percent chance of getting a lightning beam.
 
 
 N:261:Fire Bolts
-G:-:d
+G:-:TERM_DARK
 I:66:22:15
 W:30:0:15:3000
 P:0:1d1:0:0:0
@@ -2742,7 +2738,7 @@ D: percent chance of getting a fire beam.
 
 
 N:262:Frost Bolts
-G:-:d
+G:-:TERM_DARK
 I:66:23:13
 W:25:0:15:2500
 P:0:1d1:0:0:0
@@ -2753,7 +2749,7 @@ D: percent chance of getting a frost beam.
 
 
 N:263:Acid Balls
-G:-:d
+G:-:TERM_DARK
 I:66:24:27
 W:70:0:15:5500
 P:0:1d1:0:0:0
@@ -2764,7 +2760,7 @@ D: its center.
 
 
 N:264:Lightning Balls
-G:-:d
+G:-:TERM_DARK
 I:66:25:23
 W:55:0:15:4000
 P:0:1d1:0:0:0
@@ -2775,7 +2771,7 @@ D: at its center.
 
 
 N:265:Fire Balls
-G:-:d
+G:-:TERM_DARK
 I:66:26:30
 W:75:0:15:5000
 P:0:1d1:0:0:0
@@ -2786,7 +2782,7 @@ D: its center.
 
 
 N:266:Cold Balls
-G:-:d
+G:-:TERM_DARK
 I:66:27:25
 W:60:0:15:4500
 P:0:1d1:0:0:0
@@ -2800,7 +2796,7 @@ D: its center.
 ##### Scrolls #####
 
 N:267:Darkness
-G:?:w
+G:?:TERM_WHITE
 I:70:0:0
 W:1:0:5:0
 P:0:0d0:0:0:0
@@ -2812,7 +2808,7 @@ D: you have resistance to blindness.
 
 
 N:268:Aggravate Monster
-G:?:w
+G:?:TERM_WHITE
 I:70:1:0
 W:5:0:5:0
 P:0:0d0:0:0:0
@@ -2823,7 +2819,7 @@ D: all monsters within line of sight unless they are already hasted.
 
 
 N:269:Curse Armor
-G:?:w
+G:?:TERM_WHITE
 I:70:2:0
 W:50:0:5:0
 P:0:0d0:0:0:0
@@ -2836,7 +2832,7 @@ D: chance to resist.
 
 
 N:270:Curse Weapon
-G:?:w
+G:?:TERM_WHITE
 I:70:3:0
 W:50:0:5:0
 P:0:0d0:0:0:0
@@ -2848,7 +2844,7 @@ D: both to -2d5.  Artifacts have a 1 in 2 chance to resist.
 
 
 N:271:Summon Monster
-G:?:w
+G:?:TERM_WHITE
 I:70:4:0
 W:1:0:5:0
 P:0:0d0:0:0:0
@@ -2861,7 +2857,7 @@ D: escorts.
 
 
 N:272:Summon Undead
-G:?:w
+G:?:TERM_WHITE
 I:70:5:0
 W:15:0:5:0
 P:0:0d0:0:0:0
@@ -2874,7 +2870,7 @@ D: appear with escorts.
 
 
 N:273:Summon Unique
-G:?:w
+G:?:TERM_WHITE
 I:70:6:0
 W:25:0:5:0
 P:0:0d0:0:0:0
@@ -2885,7 +2881,7 @@ D: normally has escorts, it will appear with escorts.
 
 
 N:274:Trap Creation
-G:?:w
+G:?:TERM_WHITE
 I:70:7:0
 W:10:0:5:0
 P:0:0d0:0:0:0
@@ -2895,7 +2891,7 @@ D:It creates traps on all empty squares within a 1-square radius of you.
 
 
 N:275:Phase Door
-G:?:w
+G:?:TERM_WHITE
 I:70:8:0
 W:1:0:5:15
 P:0:0d0:0:0:0
@@ -2905,7 +2901,7 @@ D:It teleports you randomly up to 10 squares away.
 
 
 N:276:Teleportation
-G:?:w
+G:?:TERM_WHITE
 I:70:9:0
 W:10:0:5:40
 P:0:0d0:0:0:0
@@ -2915,7 +2911,7 @@ D:It teleports you randomly up to 100 squares away.
 
 
 N:277:Teleport Level
-G:?:w
+G:?:TERM_WHITE
 I:70:10:0
 W:20:0:5:50
 P:0:0d0:0:0:0
@@ -2929,7 +2925,7 @@ D: effect when the "Ironman" option is set.
 
 
 N:278:Word of Recall
-G:?:w
+G:?:TERM_WHITE
 I:70:11:0
 W:5:0:5:150
 P:0:0d0:0:0:0
@@ -2942,7 +2938,7 @@ D: spell can be canceled by reading a second scroll.
 
 
 N:279:Identify
-G:?:w
+G:?:TERM_WHITE
 I:70:12:0
 W:1:0:5:50
 P:0:0d0:0:0:0
@@ -2953,7 +2949,7 @@ D: (The spell may be aborted without using up the scroll.)
 
 
 N:280:*Identify*
-G:?:w
+G:?:TERM_WHITE
 I:70:13:0
 W:30:0:5:1000
 P:0:0d0:0:0:0
@@ -2966,7 +2962,7 @@ D: aborted without using up the scroll.)
 
 
 N:281:Remove Curse
-G:?:w
+G:?:TERM_WHITE
 I:70:14:0
 W:10:0:5:100
 P:0:0d0:0:0:0
@@ -2977,7 +2973,7 @@ D: permanent curses are unaffected.
 
 
 N:282:*Remove Curse*
-G:?:w
+G:?:TERM_WHITE
 I:70:15:0
 W:50:0:5:8000
 P:0:0d0:0:0:0
@@ -2988,7 +2984,7 @@ D: Permanent curses are unaffected.
 
 
 N:283:Enchant Armor
-G:?:w
+G:?:TERM_WHITE
 I:70:16:0
 W:15:0:5:125
 P:0:0d0:0:0:0
@@ -2998,7 +2994,7 @@ D:It attempts to enchant a piece of armor once.
 
 
 N:284:Enchant Weapon To-Hit
-G:?:w
+G:?:TERM_WHITE
 I:70:17:0
 W:15:0:5:125
 P:0:0d0:0:0:0
@@ -3008,7 +3004,7 @@ D:It attempts to magically enhance a weapon's to-hit bonus once.
 
 
 N:285:Enchant Weapon To-Dam
-G:?:w
+G:?:TERM_WHITE
 I:70:18:0
 W:15:0:5:125
 P:0:0d0:0:0:0
@@ -3018,7 +3014,7 @@ D:It attempts to magically enhance a weapon's to-dam bonus once.
 
 
 N:286:*Enchant Armor*
-G:?:w
+G:?:TERM_WHITE
 I:70:20:0
 W:50:0:5:500
 P:0:0d0:0:0:0
@@ -3028,7 +3024,7 @@ D:It attempts to enchant a piece of armor 2+1d3 times.
 
 
 N:287:*Enchant Weapon*
-G:?:w
+G:?:TERM_WHITE
 I:70:21:0
 W:50:0:5:500
 P:0:0d0:0:0:0
@@ -3039,7 +3035,7 @@ D: 1d3 times each.
 
 
 N:288:Recharging
-G:?:w
+G:?:TERM_WHITE
 I:70:22:0
 W:40:0:5:200
 P:0:0d0:0:0:0
@@ -3058,7 +3054,7 @@ D: destroyed by a re-charge attempt.
 
 
 N:289:*Recharging*
-G:?:w
+G:?:TERM_WHITE
 I:70:23:0
 W:50:0:5:2000
 P:0:0d0:0:0:0
@@ -3071,7 +3067,7 @@ D: speed) to recharge fully.
 
 
 N:290:Light
-G:?:w
+G:?:TERM_WHITE
 I:70:24:0
 W:0:0:5:15
 P:0:0d0:0:0:0
@@ -3083,7 +3079,7 @@ D: any light-sensitive creatures within the radius of the spell.
 
 
 N:291:Magic Mapping
-G:?:w
+G:?:TERM_WHITE
 I:70:25:0
 W:5:0:5:40
 P:0:0d0:0:0:0
@@ -3093,7 +3089,7 @@ D:It maps out a portion of the level centered on you.
 
 
 N:292:Treasure Detection
-G:?:w
+G:?:TERM_WHITE
 I:70:26:0
 W:0:0:5:15
 P:0:0d0:0:0:0
@@ -3103,7 +3099,7 @@ D:It detects all treasure in the immediate area.
 
 
 N:293:Object Detection
-G:?:w
+G:?:TERM_WHITE
 I:70:27:0
 W:0:0:5:15
 P:0:0d0:0:0:0
@@ -3113,7 +3109,7 @@ D:It detects all objects in the immediate area.
 
 
 N:294:Trap Detection
-G:?:w
+G:?:TERM_WHITE
 I:70:28:0
 W:5:0:5:35
 P:0:0d0:0:0:0
@@ -3123,7 +3119,7 @@ D:It detects all traps in the immediate area.
 
 
 N:295:Door/Stair Location
-G:?:w
+G:?:TERM_WHITE
 I:70:29:0
 W:5:0:5:35
 P:0:0d0:0:0:0
@@ -3133,7 +3129,7 @@ D:It detects all stairs and doors in the immediate area.
 
 
 N:296:Detect Invisible
-G:?:w
+G:?:TERM_WHITE
 I:70:30:0
 W:1:0:5:15
 P:0:0d0:0:0:0
@@ -3143,7 +3139,7 @@ D:It detects all invisible monsters in the immediate area.
 
 
 N:297:Satisfy Hunger
-G:?:w
+G:?:TERM_WHITE
 I:70:32:0
 W:5:0:5:10
 P:0:0d0:0:0:0
@@ -3154,7 +3150,7 @@ D: cure a bloated stomach.
 
 
 N:298:Blessing
-G:?:w
+G:?:TERM_WHITE
 I:70:33:0
 W:1:0:5:15
 P:0:0d0:0:0:0
@@ -3165,7 +3161,7 @@ D: 6+1d12 turns.
 
 
 N:299:Holy Chant
-G:?:w
+G:?:TERM_WHITE
 I:70:34:0
 W:10:0:5:40
 P:0:0d0:0:0:0
@@ -3176,7 +3172,7 @@ D: 12+1d24 turns.
 
 
 N:300:Holy Prayer
-G:?:w
+G:?:TERM_WHITE
 I:70:35:0
 W:25:0:5:80
 P:0:0d0:0:0:0
@@ -3187,7 +3183,7 @@ D: 24+1d48 turns.
 
 
 N:301:Monster Confusion
-G:?:w
+G:?:TERM_WHITE
 I:70:36:0
 W:5:0:5:30
 P:0:0d0:0:0:0
@@ -3199,7 +3195,7 @@ D: at that moment an attempt is made to confuse the monster.
 
 
 N:302:Protection from Evil
-G:?:w
+G:?:TERM_WHITE
 I:70:37:0
 W:30:0:5:50
 P:0:0d0:0:0:0
@@ -3210,7 +3206,7 @@ D: equal to 1d25 plus three times your character level.
 
 
 N:303:Rune of Protection
-G:?:w
+G:?:TERM_WHITE
 I:70:38:0
 W:60:0:5:500
 P:0:0d0:0:0:0
@@ -3223,7 +3219,7 @@ D: still be attacked if you are standing on the glyph!
 
 
 N:304:Trap/Door Destruction
-G:?:w
+G:?:TERM_WHITE
 I:70:39:0
 W:10:0:5:50
 P:0:0d0:0:0:0
@@ -3233,7 +3229,7 @@ D:It destroys all traps and doors within a 1-square radius of you.
 
 
 N:305:Create Monster Trap
-G:?:w
+G:?:TERM_WHITE
 I:70:40:0
 W:40:0:5:1000
 P:0:0d0:0:0:0
@@ -3243,7 +3239,7 @@ D: It creates a trap that can cause damage to a monster.
 
 
 N:306:*Destruction*
-G:?:w
+G:?:TERM_WHITE
 I:70:41:0
 W:40:0:5:250
 P:0:0d0:0:0:0
@@ -3258,7 +3254,7 @@ D: blindness or light.  Quest monsters are unaffected.
 
 
 N:307:Dispel Undead
-G:?:w
+G:?:TERM_WHITE
 I:70:42:0
 W:40:0:5:200
 P:0:0d0:0:0:0
@@ -3269,7 +3265,7 @@ D: sight.
 
 
 N:308:Create Artifact
-G:?:w
+G:?:TERM_WHITE
 I:70:43:0
 W:20:0:32:150000
 P:0:0d0:0:0:0
@@ -3279,7 +3275,7 @@ D:It creates a random artifact on the ground near you.
 
 
 N:309:Banishment
-G:?:w
+G:?:TERM_WHITE
 I:70:44:0
 W:40:0:5:750
 P:0:0d0:0:0:0
@@ -3291,7 +3287,7 @@ D: damage for every monster removed.
 
 
 N:310:Mass Banishment
-G:?:w
+G:?:TERM_WHITE
 I:70:45:0
 W:50:0:5:1000
 P:0:0d0:0:0:0
@@ -3303,7 +3299,7 @@ D: monster removed.
 
 
 N:311:Acquirement
-G:?:w
+G:?:TERM_WHITE
 I:70:46:0
 W:20:0:5:100000
 P:0:0d0:0:0:0
@@ -3313,7 +3309,7 @@ D:It creates one good object on the floor near you.
 
 
 N:312:*Acquirement*
-G:?:w
+G:?:TERM_WHITE
 I:70:47:0
 W:60:0:5:200000
 P:0:0d0:0:0:0
@@ -3326,7 +3322,7 @@ D:It creates 1+1d2 good objects on the ground near you.
 ##### Potions #####
 
 N:313:Water
-G:!:d
+G:!:TERM_DARK
 I:75:0:200
 W:0:0:4:1
 P:0:1d1:0:0:0
@@ -3337,7 +3333,7 @@ D: under normal conditions).  Note: These are always Clear Potions.
 
 
 N:314:Apple Juice
-G:!:d
+G:!:TERM_DARK
 I:75:1:250
 W:0:0:4:1
 P:0:1d1:0:0:0
@@ -3348,7 +3344,7 @@ D: under normal conditions).  Note: These are always Light Brown Potions.
 
 
 N:315:Slime Mold Juice
-G:!:d
+G:!:TERM_DARK
 I:75:2:400
 W:0:0:4:2
 P:0:1d1:0:0:0
@@ -3359,7 +3355,7 @@ D: under normal conditions).  Note: These are always Icky Green Potions.
 
 
 N:316:Slowness
-G:!:d
+G:!:TERM_DARK
 I:75:4:50
 W:1:0:4:0
 P:0:1d1:0:0:0
@@ -3371,7 +3367,7 @@ D: provides nourishment for about 25 turns under normal conditions.
 
 
 N:317:Salt Water
-G:!:d
+G:!:TERM_DARK
 I:75:5:0
 W:0:0:4:0
 P:0:1d1:0:0:0
@@ -3383,7 +3379,7 @@ D: even if you have free action.
 
 
 N:318:Poison
-G:!:d
+G:!:TERM_DARK
 I:75:6:0
 W:3:0:4:0
 P:0:1d1:0:0:0
@@ -3394,7 +3390,7 @@ D: you have resistance to poison.
 
 
 N:319:Blindness
-G:!:d
+G:!:TERM_DARK
 I:75:7:0
 W:0:0:4:0
 P:0:1d1:0:0:0
@@ -3405,7 +3401,7 @@ D: blindness.
 
 
 N:320:Confusion
-G:!:d
+G:!:TERM_DARK
 I:75:9:50
 W:0:0:4:0
 P:0:1d1:0:0:0
@@ -3417,7 +3413,7 @@ D: normal conditions.
 
 
 N:321:Sleep
-G:!:d
+G:!:TERM_DARK
 I:75:11:100
 W:0:0:4:0
 P:0:1d1:0:0:0
@@ -3429,7 +3425,7 @@ D: conditions.
 
 
 N:322:Lose Memories
-G:!:d
+G:!:TERM_DARK
 I:75:13:0
 W:10:0:4:0
 P:0:1d1:0:0:0
@@ -3440,7 +3436,7 @@ D: life.
 
 
 N:323:Drain Mana
-G:!:d
+G:!:TERM_DARK
 I:75:14:0
 W:20:0:4:0
 P:0:1d1:0:0:0
@@ -3450,7 +3446,7 @@ D:It drains your current mana by half.
 
 
 N:324:Ruination
-G:!:d
+G:!:TERM_DARK
 I:75:15:0
 W:40:0:4:0
 P:0:1d1:0:0:0
@@ -3461,7 +3457,7 @@ D: (even if you have stat sustains).
 
 
 N:325:Weakness
-G:!:d
+G:!:TERM_DARK
 I:75:16:0
 W:3:0:4:0
 P:0:1d1:0:0:0
@@ -3471,7 +3467,7 @@ D:It reduces strength (unless you have sustain strength).
 
 
 N:326:Stupidity
-G:!:d
+G:!:TERM_DARK
 I:75:17:0
 W:20:0:4:0
 P:0:1d1:0:0:0
@@ -3481,7 +3477,7 @@ D:It reduces intelligence (unless you have sustain intelligence).
 
 
 N:327:Naivety
-G:!:d
+G:!:TERM_DARK
 I:75:18:0
 W:20:0:4:0
 P:0:1d1:0:0:0
@@ -3491,7 +3487,7 @@ D:It reduces wisdom (unless you have sustain wisdom).
 
 
 N:328:Clumsiness
-G:!:d
+G:!:TERM_DARK
 I:75:19:0
 W:5:0:4:0
 P:0:1d1:0:0:0
@@ -3501,7 +3497,7 @@ D:It reduces dexterity (unless you have sustain dexterity).
 
 
 N:329:Sickliness
-G:!:d
+G:!:TERM_DARK
 I:75:20:0
 W:10:0:4:0
 P:0:1d1:0:0:0
@@ -3511,7 +3507,7 @@ D:It reduces constitution (unless you have sustain constitution).
 
 
 N:330:Ugliness
-G:!:d
+G:!:TERM_DARK
 I:75:21:0
 W:20:0:4:0
 P:0:1d1:0:0:0
@@ -3521,7 +3517,7 @@ D:It reduces charisma (unless you have sustain charisma).
 
 
 N:331:Detonations
-G:!:d
+G:!:TERM_DARK
 I:75:22:0
 W:60:0:4:10000
 P:0:25d25:0:0:0
@@ -3533,7 +3529,7 @@ D: counter).
 
 
 N:332:Death
-G:!:d
+G:!:TERM_DARK
 I:75:23:0
 W:55:0:4:0
 P:0:1d1:0:0:0
@@ -3545,7 +3541,7 @@ D: the current version of Angband.
 
 
 N:333:Infravision
-G:!:d
+G:!:TERM_DARK
 I:75:24:0
 W:3:0:4:20
 P:0:1d1:0:0:0
@@ -3556,7 +3552,7 @@ D: turns.
 
 
 N:334:Detect Invisible
-G:!:d
+G:!:TERM_DARK
 I:75:25:0
 W:3:0:4:50
 P:0:1d1:0:0:0
@@ -3566,7 +3562,7 @@ D:It enables you to see invisible creatures for 12+1d12 turns.
 
 
 N:335:Slow Poison
-G:!:d
+G:!:TERM_DARK
 I:75:26:0
 W:1:0:4:25
 P:0:1d1:0:0:0
@@ -3576,7 +3572,7 @@ D:It halves the severity of any current poisoning.
 
 
 N:336:Neutralize Poison
-G:!:d
+G:!:TERM_DARK
 I:75:27:0
 W:5:0:4:75
 P:0:1d1:0:0:0
@@ -3586,7 +3582,7 @@ D:It neutralizes poison.
 
 
 N:337:Boldness
-G:!:d
+G:!:TERM_DARK
 I:75:28:0
 W:1:0:4:10
 P:0:1d1:0:0:0
@@ -3596,7 +3592,7 @@ D:It removes fear.
 
 
 N:338:Speed
-G:!:d
+G:!:TERM_DARK
 I:75:29:0
 W:1:0:4:75
 P:0:1d1:0:0:0
@@ -3608,7 +3604,7 @@ D: enchantment).
 
 
 N:339:Resist Heat
-G:!:d
+G:!:TERM_DARK
 I:75:30:0
 W:1:0:4:30
 P:0:1d1:0:0:0
@@ -3621,7 +3617,7 @@ D: with other magic providing temporary fire resistance.
 
 
 N:340:Resist Cold
-G:!:d
+G:!:TERM_DARK
 I:75:31:0
 W:1:0:4:30
 P:0:1d1:0:0:0
@@ -3634,7 +3630,7 @@ D: with other magic providing temporary cold resistance.
 
 
 N:341:Heroism
-G:!:d
+G:!:TERM_DARK
 I:75:32:0
 W:1:0:4:35
 P:0:1d1:0:0:0
@@ -3645,7 +3641,7 @@ D: (resistance to fear, and a bonus of +12 to-hit) for 25+1d25 turns.
 
 
 N:342:Berserk Strength
-G:!:d
+G:!:TERM_DARK
 I:75:33:0
 W:3:0:4:100
 P:0:1d1:0:0:0
@@ -3657,7 +3653,7 @@ D: -10 to AC) for 25+1d25 turns.
 
 
 N:343:Cure Light Wounds
-G:!:d
+G:!:TERM_DARK
 I:75:34:50
 W:0:0:4:20
 P:0:1d1:0:0:0
@@ -3669,7 +3665,7 @@ D: under normal conditions.
 
 
 N:344:Cure Serious Wounds
-G:!:d
+G:!:TERM_DARK
 I:75:35:100
 W:3:0:4:45
 P:0:1d1:0:0:0
@@ -3681,7 +3677,7 @@ D: provides nourishment for about 50 turns under normal conditions.
 
 
 N:345:Cure Critical Wounds
-G:!:d
+G:!:TERM_DARK
 I:75:36:100
 W:5:0:4:115
 P:0:1d1:0:0:0
@@ -3693,7 +3689,7 @@ D: also provides nourishment for about 50 turns under normal conditions.
 
 
 N:346:Healing
-G:!:d
+G:!:TERM_DARK
 I:75:37:200
 W:15:0:4:350
 P:0:1d1:0:0:0
@@ -3706,7 +3702,7 @@ D: conditions.
 
 
 N:347:*Healing*
-G:!:d
+G:!:TERM_DARK
 I:75:38:0
 W:40:0:4:1500
 P:0:1d1:0:0:0
@@ -3717,7 +3713,7 @@ D: damage, neutralizes poison, and cures blindness and confusion.
 
 
 N:348:Life
-G:!:d
+G:!:TERM_DARK
 I:75:39:0
 W:60:0:4:5000
 P:0:1d1:0:0:0
@@ -3729,7 +3725,7 @@ D: stops hallucination, and cures blindness and confusion.
 
 
 N:349:Restore Mana
-G:!:d
+G:!:TERM_DARK
 I:75:40:0
 W:25:0:4:350
 P:0:1d1:0:0:0
@@ -3740,7 +3736,7 @@ D: maximum.
 
 
 N:350:Restore Life Levels
-G:!:d
+G:!:TERM_DARK
 I:75:41:0
 W:40:0:4:400
 P:0:1d1:0:0:0
@@ -3750,7 +3746,7 @@ D:It restores experience to maximum if it is currently below maximum.
 
 
 N:351:Restore Strength
-G:!:d
+G:!:TERM_DARK
 I:75:42:0
 W:25:0:4:300
 P:0:1d1:0:0:0
@@ -3760,7 +3756,7 @@ D:It restores strength to maximum if it is currently below maximum.
 
 
 N:352:Restore Intelligence
-G:!:d
+G:!:TERM_DARK
 I:75:43:0
 W:25:0:4:300
 P:0:1d1:0:0:0
@@ -3770,7 +3766,7 @@ D:It restores intelligence to maximum if it is currently below maximum.
 
 
 N:353:Restore Wisdom
-G:!:d
+G:!:TERM_DARK
 I:75:44:0
 W:25:0:4:300
 P:0:1d1:0:0:0
@@ -3780,7 +3776,7 @@ D:It restores wisdom to maximum if it is currently below maximum.
 
 
 N:354:Restore Dexterity
-G:!:d
+G:!:TERM_DARK
 I:75:45:0
 W:25:0:4:300
 P:0:1d1:0:0:0
@@ -3790,7 +3786,7 @@ D:It restores dexterity to maximum if it is currently below maximum.
 
 
 N:355:Restore Constitution
-G:!:d
+G:!:TERM_DARK
 I:75:46:0
 W:25:0:4:300
 P:0:1d1:0:0:0
@@ -3800,7 +3796,7 @@ D:It restores constution to maximum if it is currently below maximum.
 
 
 N:356:Restore Charisma
-G:!:d
+G:!:TERM_DARK
 I:75:47:0
 W:20:0:4:300
 P:0:1d1:0:0:0
@@ -3810,7 +3806,7 @@ D:It restores charisma to maximum if it is currently below maximum.
 
 
 N:357:Strength
-G:!:d
+G:!:TERM_DARK
 I:75:48:0
 W:30:0:4:8000
 P:0:1d1:0:0:0
@@ -3821,7 +3817,7 @@ D: increases strength.
 
 
 N:358:Intelligence
-G:!:d
+G:!:TERM_DARK
 I:75:49:0
 W:30:0:4:8000
 P:0:1d1:0:0:0
@@ -3832,7 +3828,7 @@ D: increases intelligence.
 
 
 N:359:Wisdom
-G:!:d
+G:!:TERM_DARK
 I:75:50:0
 W:30:0:4:8000
 P:0:1d1:0:0:0
@@ -3843,7 +3839,7 @@ D: increases wisdom.
 
 
 N:360:Dexterity
-G:!:d
+G:!:TERM_DARK
 I:75:51:0
 W:30:0:4:8000
 P:0:1d1:0:0:0
@@ -3854,7 +3850,7 @@ D: increases dexterity.
 
 
 N:361:Constitution
-G:!:d
+G:!:TERM_DARK
 I:75:52:0
 W:30:0:4:8000
 P:0:1d1:0:0:0
@@ -3865,7 +3861,7 @@ D: increases constitution.
 
 
 N:362:Charisma
-G:!:d
+G:!:TERM_DARK
 I:75:53:0
 W:20:0:4:1000
 P:0:1d1:0:0:0
@@ -3876,7 +3872,7 @@ D: increases charisma.
 
 
 N:363:Augmentation
-G:!:d
+G:!:TERM_DARK
 I:75:55:0
 W:40:0:4:60000
 P:0:1d1:0:0:0
@@ -3887,7 +3883,7 @@ D: increases all stats.
 
 
 N:364:Enlightenment
-G:!:d
+G:!:TERM_DARK
 I:75:56:0
 W:25:0:4:800
 P:0:1d1:0:0:0
@@ -3897,7 +3893,7 @@ D:It completely lights up and magically maps the current dungeon level.
 
 
 N:365:*Enlightenment*
-G:!:d
+G:!:TERM_DARK
 I:75:57:0
 W:70:0:4:80000
 P:0:1d1:0:0:0
@@ -3910,7 +3906,7 @@ D: and traps in the immediate area.
 
 
 N:366:Self Knowledge
-G:!:d
+G:!:TERM_DARK
 I:75:58:0
 W:40:0:4:2000
 P:0:1d1:0:0:0
@@ -3921,7 +3917,7 @@ D: temporary, or provided by a magical item) that you currently possess.
 
 
 N:367:Experience
-G:!:d
+G:!:TERM_DARK
 I:75:59:0
 W:65:0:4:25000
 P:0:1d1:0:0:0
@@ -3932,7 +3928,7 @@ D: experience point total plus 10, whichever is less.
 
 
 N:368:Resist Acid
-G:!:d
+G:!:TERM_DARK
 I:75:60:0
 W:15:0:4:80
 P:0:1d1:0:0:0
@@ -3945,7 +3941,7 @@ D: with other magic providing temporary acid resistance.
 
 
 N:369:Resist Electricity
-G:!:d
+G:!:TERM_DARK
 I:75:61:0
 W:15:0:4:80
 P:0:1d1:0:0:0
@@ -3958,7 +3954,7 @@ D: with other magic providing temporary electricity resistance.
 
 
 N:370:Resist Poison
-G:!:d
+G:!:TERM_DARK
 I:75:62:0
 W:35:0:4:300
 P:0:1d1:0:0:0
@@ -3971,7 +3967,7 @@ D: with other magic providing temporary poison resistance.
 
 
 N:371:Resistance
-G:!:d
+G:!:TERM_DARK
 I:75:63:0
 W:25:0:4:900
 P:0:1d1:0:0:0
@@ -3988,7 +3984,7 @@ D: temporary sources  of resistance.
 ##### Chests #####
 
 N:372:& Small wooden chest~
-G:~:U
+G:~:TERM_L_UMBER
 I:7:1:0
 W:5:0:200:20
 P:0:2d3:0:0:0
@@ -3996,7 +3992,7 @@ A:5/4
 
 
 N:373:& Small iron chest~
-G:~:s
+G:~:TERM_SLATE
 I:7:2:0
 W:25:0:250:100
 P:0:2d4:0:0:0
@@ -4005,7 +4001,7 @@ F:IGNORE_ACID | IGNORE_FIRE
 
 
 N:374:& Small steel chest~
-G:~:s1
+G:~:TERM_SLATE_GRAY
 I:7:3:0
 W:45:0:250:200
 P:0:2d4:0:0:0
@@ -4014,7 +4010,7 @@ F:IGNORE_ACID | IGNORE_FIRE
 
 
 N:375:& Large wooden chest~
-G:~:U
+G:~:TERM_L_UMBER
 I:7:5:0
 W:15:0:500:60
 P:0:2d5:0:0:0
@@ -4022,7 +4018,7 @@ A:15/16
 
 
 N:376:& Large iron chest~
-G:~:s
+G:~:TERM_SLATE
 I:7:6:0
 W:35:0:750:150
 P:0:2d6:0:0:0
@@ -4031,7 +4027,7 @@ F:IGNORE_ACID | IGNORE_FIRE
 
 
 N:377:& Large steel chest~
-G:~:s1
+G:~:TERM_SLATE_GRAY
 I:7:7:0
 W:55:0:750:250
 P:0:2d6:0:0:0
@@ -4040,7 +4036,7 @@ F:IGNORE_ACID | IGNORE_FIRE
 
 
 N:378:& Large Jeweled chest~
-G:~:v
+G:~:TERM_VIOLET
 I:7:8:0
 W:55:0:750:250
 P:0:0d0:0:0:0
@@ -4052,7 +4048,7 @@ F:IGNORE_ACID | IGNORE_FIRE
 ##### Mushrooms #####
 
 N:379:Poison
-G:,:d
+G:,:TERM_DARK
 I:80:0:500
 W:5:0:1:0
 P:0:0d0:0:0:0
@@ -4064,7 +4060,7 @@ D: about 250 turns under normal conditions.
 
 
 N:380:Blindness
-G:,:d
+G:,:TERM_DARK
 I:80:1:500
 W:5:0:1:0
 P:0:0d0:0:0:0
@@ -4076,7 +4072,7 @@ D: turns under normal conditions.
 
 
 N:381:Paranoia
-G:,:d
+G:,:TERM_DARK
 I:80:2:500
 W:5:0:1:0
 P:0:0d0:0:0:0
@@ -4088,7 +4084,7 @@ D: turns under normal conditions.
 
 
 N:382:Confusion
-G:,:d
+G:,:TERM_DARK
 I:80:3:500
 W:5:0:1:0
 P:0:0d0:0:0:0
@@ -4100,7 +4096,7 @@ D: turns under normal conditions.
 
 
 N:383:Hallucination
-G:,:d
+G:,:TERM_DARK
 I:80:4:500
 W:10:0:1:0
 P:0:0d0:0:0:0
@@ -4112,7 +4108,7 @@ D: turns under normal conditions.
 
 
 N:384:Paralysis
-G:,:d
+G:,:TERM_DARK
 I:80:5:500
 W:20:0:1:0
 P:0:0d0:0:0:0
@@ -4124,7 +4120,7 @@ D: normal conditions.
 
 
 N:385:Weakness
-G:,:d
+G:,:TERM_DARK
 I:80:6:500
 W:10:0:1:0
 P:0:0d0:0:0:0
@@ -4136,7 +4132,7 @@ D: turns under normal conditions.
 
 
 N:386:Sickness
-G:,:d
+G:,:TERM_DARK
 I:80:7:500
 W:10:0:1:0
 P:0:0d0:0:0:0
@@ -4148,7 +4144,7 @@ D: about 250 turns under normal conditions.
 
 
 N:387:Stupidity
-G:,:d
+G:,:TERM_DARK
 I:80:8:500
 W:15:0:1:0
 P:0:0d0:0:0:0
@@ -4160,7 +4156,7 @@ D: about 250 turns under normal conditions.
 
 
 N:388:Naivety
-G:,:d
+G:,:TERM_DARK
 I:80:9:500
 W:15:0:1:0
 P:0:0d0:0:0:0
@@ -4172,7 +4168,7 @@ D: turns under normal conditions.
 
 
 N:389:Unhealth
-G:,:d
+G:,:TERM_DARK
 I:80:10:500
 W:15:0:1:50
 P:0:10d10:0:0:0
@@ -4185,7 +4181,7 @@ D: about 250 turns under normal conditions.
 
 
 N:390:Disease
-G:,:d
+G:,:TERM_DARK
 I:80:11:500
 W:20:0:1:50
 P:0:10d10:0:0:0
@@ -4198,7 +4194,7 @@ D: under normal conditions.
 
 
 N:391:Cure Poison
-G:,:d
+G:,:TERM_DARK
 I:80:12:500
 W:10:0:1:60
 P:0:0d0:0:0:0
@@ -4209,7 +4205,7 @@ D: turns under normal conditions.
 
 
 N:392:Cure Blindness
-G:,:d
+G:,:TERM_DARK
 I:80:13:500
 W:10:0:1:50
 P:0:0d0:0:0:0
@@ -4220,7 +4216,7 @@ D: under normal conditions.
 
 
 N:393:Cure Paranoia
-G:,:d
+G:,:TERM_DARK
 I:80:14:500
 W:10:0:1:25
 P:0:0d0:0:0:0
@@ -4231,7 +4227,7 @@ D: turns under normal conditions.
 
 
 N:394:Cure Confusion
-G:,:d
+G:,:TERM_DARK
 I:80:15:500
 W:10:0:1:50
 P:0:0d0:0:0:0
@@ -4242,7 +4238,7 @@ D: under normal conditions.
 
 
 N:395:Cure Serious Wounds
-G:,:d
+G:,:TERM_DARK
 I:80:16:500
 W:15:0:1:75
 P:0:0d0:0:0:0
@@ -4253,7 +4249,7 @@ D: about 250 turns under normal conditions.
 
 
 N:396:Restore Strength
-G:,:d
+G:,:TERM_DARK
 I:80:17:500
 W:20:0:1:350
 P:0:0d0:0:0:0
@@ -4265,7 +4261,7 @@ D: conditions.
 
 
 N:397:Restore Constitution
-G:,:d
+G:,:TERM_DARK
 I:80:18:500
 W:20:0:1:350
 P:0:0d0:0:0:0
@@ -4277,7 +4273,7 @@ D: conditions.
 
 
 N:398:Restoring
-G:,:d
+G:,:TERM_DARK
 I:80:19:500
 W:20:0:1:1000
 P:0:0d0:0:0:0
@@ -4289,7 +4285,7 @@ D: conditions.
 
 
 N:399:& Ration~ of Food
-G:,:U
+G:,:TERM_L_UMBER
 I:80:35:5000
 W:0:0:10:3
 P:0:0d0:0:0:0
@@ -4299,7 +4295,7 @@ D:It provides nourishment for about 2500 turns under normal conditions.
 
 
 N:400:& Slime Mold~
-G:,:g
+G:,:TERM_GREEN
 I:80:36:3000
 W:1:0:5:2
 P:0:0d0:0:0:0
@@ -4309,7 +4305,7 @@ D:It provides nourishment for about 1500 turns under normal conditions.
 
 
 N:401:& Piece~ of Elvish Waybread
-G:,:B
+G:,:TERM_L_BLUE
 I:80:37:7500
 W:5:0:3:10
 P:0:0d0:0:0:0
@@ -4320,7 +4316,7 @@ D: nourishment for about 3750 turns under normal conditions.
 
 
 N:402:& Flask~ of oil
-G:!:y
+G:!:TERM_YELLOW
 I:77:0:7500
 W:1:0:10:3
 P:0:2d6:0:0:0
@@ -4336,7 +4332,7 @@ D: creatures resistant to fire).
 ##### Various Stuff #####
 
 N:403:& Iron Spike~
-G:~:W
+G:~:TERM_LIGHT_GRAY
 I:5:0:0
 W:1:0:10:1
 P:0:1d1:0:0:0
@@ -4352,126 +4348,126 @@ D: spikes in one door will not have any further effect.
 ##### Gold/Gems #####
 
 N:404:copper
-G:$:u
+G:$:TERM_UMBER
 I:100:1:0
 W:1:0:0:3
 P:0:0d0:0:0:0
 
 
 N:405:copper
-G:$:u
+G:$:TERM_UMBER
 I:100:2:0
 W:1:0:0:4
 P:0:0d0:0:0:0
 
 
 N:406:copper
-G:$:u
+G:$:TERM_UMBER
 I:100:3:0
 W:1:0:0:5
 P:0:0d0:0:0:0
 
 
 N:407:silver
-G:$:s
+G:$:TERM_SLATE
 I:100:4:0
 W:1:0:0:5
 P:0:0d0:0:0:0
 
 
 N:408:silver
-G:$:s
+G:$:TERM_SLATE
 I:100:5:0
 W:1:0:0:6
 P:0:0d0:0:0:0
 
 
 N:409:silver
-G:$:s
+G:$:TERM_SLATE
 I:100:6:0
 W:1:0:0:7
 P:0:0d0:0:0:0
 
 
 N:410:garnets
-G:$:r1
+G:$:TERM_RED_LAVA
 I:100:7:0
 W:1:0:0:8
 P:0:0d0:0:0:0
 
 
 N:411:garnets
-G:$:r1
+G:$:TERM_RED_LAVA
 I:100:8:0
 W:1:0:0:9
 P:0:0d0:0:0:0
 
 
 N:412:gold
-G:$:y
+G:$:TERM_YELLOW
 I:100:9:0
 W:1:0:0:10
 P:0:0d0:0:0:0
 
 
 N:413:gold
-G:$:y
+G:$:TERM_YELLOW
 I:100:10:0
 W:1:0:0:11
 P:0:0d0:0:0:0
 
 
 N:414:gold
-G:$:y
+G:$:TERM_YELLOW
 I:100:11:0
 W:1:0:0:12
 P:0:0d0:0:0:0
 
 
 N:415:opals
-G:$:W
+G:$:TERM_LIGHT_GRAY
 I:100:12:0
 W:1:0:0:14
 P:0:0d0:0:0:0
 
 
 N:416:sapphires
-G:$:b
+G:$:TERM_BLUE
 I:100:13:0
 W:1:0:0:16
 P:0:0d0:0:0:0
 
 
 N:417:rubies
-G:$:r
+G:$:TERM_RED
 I:100:14:0
 W:1:0:0:18
 P:0:0d0:0:0:0
 
 
 N:418:diamonds
-G:$:w
+G:$:TERM_WHITE
 I:100:15:0
 W:1:0:0:20
 P:0:0d0:0:0:0
 
 
 N:419:emeralds
-G:$:g
+G:$:TERM_GREEN
 I:100:16:0
 W:1:0:0:25
 P:0:0d0:0:0:0
 
 
 N:420:mithril
-G:$:B
+G:$:TERM_L_BLUE
 I:100:17:0
 W:1:0:0:32
 P:0:0d0:0:0:0
 
 
 N:421:adamantite
-G:$:G
+G:$:TERM_L_GREEN
 I:100:18:0
 W:1:0:0:50
 P:0:0d0:0:0:0
@@ -4481,7 +4477,7 @@ P:0:0d0:0:0:0
 ##### Basic Books #####
 
 N:422:[Magic for Beginners]
-G:?:R
+G:?:TERM_L_RED
 I:90:0:0
 W:5:0:30:25
 P:0:1d1:0:0:0
@@ -4490,7 +4486,7 @@ F:EASY_KNOW | BLACK_MARKET | BOOKSHOP
 
 
 N:423:[Conjurings and Tricks]
-G:?:R
+G:?:TERM_L_RED
 I:90:1:0
 W:10:0:30:100
 P:0:1d1:0:0:0
@@ -4499,7 +4495,7 @@ F:EASY_KNOW | BLACK_MARKET | BOOKSHOP
 
 
 N:424:[Incantations and Illusions]
-G:?:R
+G:?:TERM_L_RED
 I:90:2:0
 W:20:0:30:400
 P:0:1d1:0:0:0
@@ -4508,7 +4504,7 @@ F:EASY_KNOW | BLACK_MARKET | BOOKSHOP
 
 
 N:425:[Sorcery and Evocations]
-G:?:R
+G:?:TERM_L_RED
 I:90:3:0
 W:30:0:30:800
 P:0:1d1:0:0:0
@@ -4520,7 +4516,7 @@ F:EASY_KNOW | BLACK_MARKET | BOOKSHOP
 ##### Special Books (note resistances) #####
 
 N:426:[Resistances of Scarabtarices]
-G:?:r
+G:?:TERM_RED
 I:90:4:0
 W:20:0:30:10000
 P:0:1d1:0:0:0
@@ -4530,7 +4526,7 @@ F:BLACK_MARKET
 
 
 N:427:[Raal's Tome of Destruction]
-G:?:r
+G:?:TERM_RED
 I:90:5:0
 W:30:0:30:20000
 P:0:1d1:0:0:0
@@ -4540,7 +4536,7 @@ F:BLACK_MARKET
 
 
 N:428:[Mordenkainen's Escapes]
-G:?:r
+G:?:TERM_RED
 I:90:6:0
 W:40:0:30:30000
 P:0:1d1:0:0:0
@@ -4550,7 +4546,7 @@ F:BLACK_MARKET
 
 
 N:429:[Tenser's Transformations]
-G:?:r
+G:?:TERM_RED
 I:90:7:0
 W:60:0:30:50000
 P:0:1d1:0:0:0
@@ -4560,7 +4556,7 @@ F:EASY_KNOW | BLACK_MARKET
 
 
 N:430:[Kelek's Grimoire of Power]
-G:?:r
+G:?:TERM_RED
 I:90:8:0
 W:70:0:30:90000
 P:0:1d1:0:0:0
@@ -4570,7 +4566,7 @@ F:BLACK_MARKET
 
 
 N:431:[Beginners Handbook]
-G:?:B
+G:?:TERM_L_BLUE
 I:91:0:0
 W:5:0:30:25
 P:0:1d1:0:0:0
@@ -4579,7 +4575,7 @@ F:EASY_KNOW | BLACK_MARKET | BOOKSHOP
 
 
 N:432:[Words of Wisdom]
-G:?:B
+G:?:TERM_L_BLUE
 I:91:1:0
 W:10:0:30:100
 P:0:1d1:0:0:0
@@ -4588,7 +4584,7 @@ F:EASY_KNOW | BLACK_MARKET | BOOKSHOP
 
 
 N:433:[Chants and Blessings]
-G:?:B
+G:?:TERM_L_BLUE
 I:91:2:0
 W:20:0:30:300
 P:0:1d1:0:0:0
@@ -4597,7 +4593,7 @@ F:EASY_KNOW | BLACK_MARKET | BOOKSHOP
 
 
 N:434:[Exorcism and Dispelling]
-G:?:B
+G:?:TERM_L_BLUE
 I:91:3:0
 W:30:0:30:900
 P:0:1d1:0:0:0
@@ -4606,7 +4602,7 @@ F:EASY_KNOW | BLACK_MARKET | BOOKSHOP
 
 
 N:435:[Ethereal Openings]
-G:?:b
+G:?:TERM_BLUE
 I:91:4:0
 W:20:0:30:5000
 P:0:1d1:0:0:0
@@ -4616,7 +4612,7 @@ F:BLACK_MARKET
 
 
 N:436:[Godly Insights]
-G:?:b
+G:?:TERM_BLUE
 I:91:5:0
 W:30:0:30:10000
 P:0:1d1:0:0:0
@@ -4626,7 +4622,7 @@ F:BLACK_MARKET
 
 
 N:437:[Purifications and Healing]
-G:?:b
+G:?:TERM_BLUE
 I:91:6:0
 W:40:0:30:30000
 P:0:1d1:0:0:0
@@ -4636,7 +4632,7 @@ F:BLACK_MARKET
 
 
 N:438:[Holy Infusions]
-G:?:b
+G:?:TERM_BLUE
 I:91:7:0
 W:60:0:30:50000
 P:0:1d1:0:0:0
@@ -4646,7 +4642,7 @@ F:EASY_KNOW | BLACK_MARKET
 
 
 N:439:[Wrath of God]
-G:?:b
+G:?:TERM_BLUE
 I:91:8:0
 W:70:0:30:100000
 P:0:1d1:0:0:0
@@ -4656,7 +4652,7 @@ F:BLACK_MARKET
 
 
 N:440:& Broken Bone~
-G:~:w
+G:~:TERM_WHITE
 I:1:2:0
 W:0:0:2:0
 P:0:1d1:0:0:0
@@ -4664,7 +4660,7 @@ F:EASY_KNOW
 
 
 N:441:Mass Identify
-G:_:d
+G:_:TERM_DARK
 I:55:30:0
 W:40:0:50:1000
 P:0:1d1:0:0:0
@@ -4676,7 +4672,7 @@ D: within a 3 square radius.
 
 
 N:442:*Identify*
-G:-:d
+G:-:TERM_DARK
 I:66:28:50
 W:50:0:15:35000
 P:0:1d1:0:0:0
@@ -4689,7 +4685,7 @@ D: aborted without zapping the rod.)
 
 
 N:443:Mass Identify
-G:-:d
+G:-:TERM_DARK
 I:66:29:50
 W:60:0:15:35000
 P:0:1d1:0:0:0
@@ -4701,7 +4697,7 @@ D: within a 3 square radius.
 
 
 N:444:[Call of the Wild]
-G:?:G
+G:?:TERM_L_GREEN
 I:92:0:0
 W:5:0:30:25
 P:0:1d1:0:0:0
@@ -4710,7 +4706,7 @@ F:EASY_KNOW | BLACK_MARKET | BOOKSHOP
 
 
 N:445:[Environmental Adjurations]
-G:?:G
+G:?:TERM_L_GREEN
 I:92:1:0
 W:10:0:30:100
 P:0:1d1:0:0:0
@@ -4719,7 +4715,7 @@ F:EASY_KNOW | BLACK_MARKET | BOOKSHOP
 
 
 N:446:[Commanding Nature]
-G:?:G
+G:?:TERM_L_GREEN
 I:92:2:0
 W:20:0:30:300
 P:0:1d1:0:0:0
@@ -4728,7 +4724,7 @@ F:EASY_KNOW | BLACK_MARKET | BOOKSHOP
 
 
 N:447:[Lore of Engagement]
-G:?:G
+G:?:TERM_L_GREEN
 I:92:3:0
 W:30:0:30:900
 P:0:1d1:0:0:0
@@ -4737,7 +4733,7 @@ F:EASY_KNOW | BLACK_MARKET | BOOKSHOP
 
 
 N:448:[Radagast's Protections]
-G:?:g
+G:?:TERM_GREEN
 I:92:4:0
 W:20:0:30:5000
 P:0:1d1:0:0:0
@@ -4747,7 +4743,7 @@ F:BLACK_MARKET
 
 
 N:449:[Melian's Reformations]
-G:?:g
+G:?:TERM_GREEN
 I:92:5:0
 W:30:0:30:10000
 P:0:1d1:0:0:0
@@ -4757,7 +4753,7 @@ F:BLACK_MARKET
 
 
 N:450:[Arda's Habitats]
-G:?:g
+G:?:TERM_GREEN
 I:92:6:0
 W:40:0:30:30000
 P:0:1d1:0:0:0
@@ -4767,7 +4763,7 @@ F:BLACK_MARKET
 
 
 N:451:[Natural Infusions]
-G:?:g
+G:?:TERM_GREEN
 I:92:7:0
 W:60:0:30:50000
 P:0:1d1:0:0:0
@@ -4777,7 +4773,7 @@ F:EASY_KNOW | BLACK_MARKET
 
 
 N:452:[Nature's Fury]
-G:?:g
+G:?:TERM_GREEN
 I:92:8:0
 W:70:0:30:100000
 P:0:1d1:0:0:0
@@ -4787,7 +4783,7 @@ F:BLACK_MARKET
 
 
 N:453:& Faded Scroll Fragment~
-G:?:y
+G:?:TERM_YELLOW
 I:71:1:0
 W:10:0:5:0
 P:0:0d0:0:0:0

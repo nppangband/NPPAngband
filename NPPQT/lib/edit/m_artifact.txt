@@ -84,7 +84,7 @@ P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | ACTIVATE
 F:INSTA_ART
 A:ILLUMINATION:10:10
-D:A small crystal phial, with the light of E["a]rendil's Star contained
+D:A small crystal phial, with the light of Eärendil's Star contained
 D: inside.  Its light is imperishable, and near it darkness cannot
 D: endure.
 

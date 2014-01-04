@@ -42,65 +42,7 @@
  * of the platforms that we currently support.
  */
 
-/*
- * Accept a color index character; if legal, return the color.  -LM-
- *
- * Assumes the strong color is only one character long
- */
-static int color_char_to_attr(QString color)
-{
 
-    QChar color_char = color.at(0);
-
-    if (color_char == 'd') return (TERM_DARK);
-    if (color_char == 'w') return (TERM_WHITE);
-    if (color_char == 's') return (TERM_SLATE);
-    if (color_char == 'o') return (TERM_ORANGE);
-    if (color_char == 'r') return (TERM_RED);
-    if (color_char == 'g') return (TERM_GREEN);
-    if (color_char == 'b') return (TERM_BLUE);
-    if (color_char == 'u') return (TERM_UMBER);
-
-    if (color_char == 'D') return (TERM_L_DARK);
-    if (color_char == 'W') return (TERM_L_WHITE);
-    if (color_char == 'v') return (TERM_VIOLET);
-    if (color_char == 'y') return (TERM_YELLOW);
-    if (color_char == 'R') return (TERM_L_RED);
-    if (color_char == 'G') return (TERM_L_GREEN);
-    if (color_char == 'B') return (TERM_L_BLUE);
-
-    if (color_char == 'U') return (TERM_L_UMBER);
-
-
-    return (TERM_WHITE);
-}
-
-
-/*
- * Converts a string to a terminal color byte.
- *should be only a letter followed by a number.
- */
-static int color_text_to_attr(QString color_name)
-{
-    int shade;
-    int color_num;
-
-    // Separate the first symbol
-    QString color_base = color_name.left(1);
-    color_name.remove(0,1);
-
-    QTextStream line_string (&color_name);
-
-    line_string >> shade;
-
-    color_num = color_char_to_attr(color_base);
-
-    /* Check bounds */
-    if ((shade < 0) || (shade > MAX_SHADES - 1)) return (-1);
-
-    return (MAKE_EXTENDED_COLOR(color_num, shade));
-
-}
 
 
 /*** Helper arrays for parsing ascii template files ***/
@@ -1325,10 +1267,11 @@ static int verify_version(QString read_line)
 }
 
 // Process G:{G:{Character}:{U}Color line.  Assumes G: has been chopped.
-static QChar process_graphics_line(QString line_info, int *error_return, int *color_return)
+static QChar process_graphics_line(QString line_info, int *error_return, QColor *color_return)
 {
     QChar symbol;
-    int color;
+    QColor color;
+    int count;
 
     *error_return = 0;
 
@@ -1336,30 +1279,51 @@ static QChar process_graphics_line(QString line_info, int *error_return, int *co
     symbol = line_info.at(0);
     line_info.remove(0,2);
 
+    // The color can be entered as text or in RGB format.
+    count = line_info.count(':');
+
     if (!line_info.length())
     {
         *error_return = PARSE_ERROR_MISSING_FIELD;
         return ('a');
     }
 
-    /* If we have a longer string than expected ... */
-    if (line_info.length() > 1)
+    /* Color entered in RGB format */
+    if (count == 2)
     {
-            /* Extract the colour */
-            color = color_text_to_attr(line_info);
-    }
-    else
-    {
-        /* Extract the attr */
-        color = color_char_to_attr(line_info);
-    }
+        int red, green, blue;
 
-    /* Paranoia */
-    if (color < 0)
-    {
-        *error_return = PARSE_ERROR_GENERIC;
-        return ('a');
+        process_3_ints(line_info, &red, &green, &blue);
+
+        // Verify the colors are in the right ranget
+        if ((red < 0) || (red > 255) ||
+            (green < 0) || (green > 255) ||
+            (blue < 0) ||  (blue > 255))
+        {
+            *error_return = PARSE_ERROR_GENERIC;
+
+        }
+
+        else color.setRgb(red, green, blue, 255);
+
     }
+    else if (!count)//color entered by name.
+    {
+        bool color_found = FALSE;
+        for (int i = 0; i < MAX_COLORS; i++)
+        {
+            // Not a match.
+            if (!line_info.contains(preset_colors[i].color_name)) continue;
+
+            //load the color and finish.
+            color_found = TRUE;
+            color.setRgb(preset_colors[i].red, preset_colors[i].green, preset_colors[i].blue, 255);
+            break;
+        }
+
+        if (!color_found) *error_return = PARSE_ERROR_GENERIC;
+    }
+    else *error_return = PARSE_ERROR_GENERIC;
 
     // success
     *color_return = color;
@@ -1897,19 +1861,19 @@ int parse_f_info(QString line_info)
     else if (command == 'G')
     {
         QChar d_char;
-        int d_attr;
+        QColor d_color;
         int error;
 
         /* There better be a current f_ptr */
         if (!f_ptr) return (PARSE_ERROR_MISSING_RECORD_HEADER);
 
-        d_char = process_graphics_line(line_info, &error, &d_attr);
+        d_char = process_graphics_line(line_info, &error, &d_color);
 
         /* Paranoia */
         if (error > 0) return (PARSE_ERROR_GENERIC);
 
         /* Save the values */
-        f_ptr->d_attr = d_attr;
+        f_ptr->d_color = d_color;
         f_ptr->d_char = d_char;
     }
 
@@ -2155,19 +2119,19 @@ int parse_k_info(QString line_info)
     else if (command == 'G')
     {        
         QChar d_char;
-        int d_attr;
+        QColor d_color;
         int error;
 
         /* There better be a current k_ptr */
         if (!k_ptr) return (PARSE_ERROR_MISSING_RECORD_HEADER);
 
-        d_char = process_graphics_line(line_info, &error, &d_attr);
+        d_char = process_graphics_line(line_info, &error, &d_color);
 
         /* Paranoia */
         if (error > 0) return (PARSE_ERROR_GENERIC);
 
         /* Save the values */
-        k_ptr->d_attr = d_attr;
+        k_ptr->d_color = d_color;
         k_ptr->d_char = d_char;
     }
 
@@ -2974,19 +2938,19 @@ int parse_r_info(QString line_info)
     else if (command == 'G')
     {
         QChar d_char;
-        int d_attr;
+        QColor d_color;
         int error;
 
         /* There better be a current r_ptr */
         if (!r_ptr) return (PARSE_ERROR_MISSING_RECORD_HEADER);
 
-        d_char = process_graphics_line(line_info, &error, &d_attr);
+        d_char = process_graphics_line(line_info, &error, &d_color);
 
         /* Paranoia */
         if (error > 0) return (PARSE_ERROR_GENERIC);
 
         /* Save the values */
-        r_ptr->d_attr = d_attr;
+        r_ptr->d_color = d_color;
         r_ptr->d_char = d_char;
     }
 
@@ -3452,6 +3416,17 @@ int parse_c_info(QString line_info)
     QChar command = line_info.at(0);
     line_info.remove(0,2);
 
+
+    // First check if we need to point to a current entry.
+    if (command != 'N')
+    {
+        if (last_idx > -1)
+        {
+            /* Point at the "info" */
+             pc_ptr =& c_info[last_idx];
+        }
+    }
+
     // First check if we need to point to a current entry.
     if (command != 'N')
     {
@@ -3628,15 +3603,15 @@ int parse_c_info(QString line_info)
         /* There better be a current pc_ptr */
         if (!pc_ptr) return (PARSE_ERROR_MISSING_RECORD_HEADER);
 
+        /* Limit number of titles */
+        if (cur_title > z_info->max_titles)
+            return (PARSE_ERROR_TOO_MANY_ARGUMENTS);
+
         /* Store the text */
         pc_ptr->cl_title[cur_title] = line_info;
 
         /* Next title */
         cur_title++;
-
-        /* Limit number of titles */
-        if (cur_title > z_info->max_titles)
-            return (PARSE_ERROR_TOO_MANY_ARGUMENTS);
     }
 
     /* Process 'E' for "Starting Equipment" */
@@ -4057,19 +4032,19 @@ int parse_flavor_info(QString line_info)
     else if (command == 'G')
     {
         QChar d_char;
-        int d_attr;
+        QColor d_color;
         int error;
 
         /* There better be a current flavor_ptr */
         if (!flavor_ptr) return (PARSE_ERROR_MISSING_RECORD_HEADER);
 
-        d_char = process_graphics_line(line_info, &error, &d_attr);
+        d_char = process_graphics_line(line_info, &error, &d_color);
 
         /* Paranoia */
         if (error > 0) return (PARSE_ERROR_GENERIC);
 
         /* Save the values */
-        flavor_ptr->d_attr = d_attr;
+        flavor_ptr->d_color= d_color;
         flavor_ptr->d_char = d_char;
     }
 

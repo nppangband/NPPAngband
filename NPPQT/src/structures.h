@@ -13,6 +13,7 @@
 
 
 typedef struct maxima maxima;
+typedef struct colors_preset colors_preset;
 typedef struct feature_state feature_state;
 typedef struct feature_type feature_type;
 typedef struct feature_lore feature_lore;
@@ -106,6 +107,13 @@ struct feature_state
     u16b fs_power;
 };
 
+struct colors_preset
+{
+    QString color_name;
+    int red;
+    int green;
+    int blue;
+};
 
 
 /*
@@ -136,10 +144,10 @@ struct feature_type
 
     u16b unused;		/* Unused */
 
-    byte d_attr;		/* Default feature color */
+    QColor d_color;		/* Default feature color */
     QChar d_char;		/* Default feature character */
 
-    byte x_attr;		/* Desired feature color */
+    QColor x_color;		/* Desired feature color */
     QChar x_char;		/* Desired feature character */
 
     bool f_everseen;	/* Used to despoilify knowledge screens */
@@ -243,11 +251,11 @@ struct object_kind
     byte extra;			/* Something */
 
 
-    byte d_attr;		/* Default object attribute */
+    QColor d_color;		/* Default feature color */
     QChar d_char;		/* Default object character */
 
 
-    byte x_attr;		/* Desired object attribute */
+    QColor x_color;    /* Desired object color */
     QChar x_char;		/* Desired object character */
 
     QString autoinscribe;  //Default inscription for this object
@@ -381,9 +389,6 @@ struct monster_blow
 /*
  * Monster "race" information, including racial memories
  *
- * Note that "d_attr" and "d_char" are used for MORE than "visual" stuff.
- *
- * Note that "x_attr" and "x_char" are used ONLY for "visual" stuff.
  *
  * Note that "cur_num" (and "max_num") represent the number of monsters
  * of the given race currently on (and allowed on) the current level.
@@ -444,10 +449,10 @@ struct monster_race
     byte level;				/* Level of creature */
     byte rarity;			/* Rarity of creature */
 
-    byte d_attr;			/* Default monster attribute */
+    QColor d_color;         /* Default monster color */
     QChar d_char;			/* Default monster character */
 
-    byte x_attr;			/* Desired monster attribute */
+    QColor x_color;        /* Desired monster color */
     QChar x_char;			/* Desired monster character */
 
     byte max_num;			/* Maximum population allowed per level */
@@ -650,7 +655,7 @@ struct monster_type
     byte cdis;			/* Current dis from player */
 
     u32b mflag;			/* Extra monster flags */
-    byte m_attr;			/* used only for shimmering monsters - current color */
+    QColor m_color;			/* used only for shimmering monsters - current color */
     bool ml;			/* Monster is "visible" */
     bool project;		/* Player projectables can hit the monster (not quite the same as
                             being visible. */
@@ -1206,10 +1211,10 @@ struct flavor_type
     byte tval;      /* Associated object type */
     byte sval;      /* Associated object sub-type */
 
-    byte d_attr;    /* Default flavor attribute */
+    QColor d_color;		/* Default flavor color */
     QChar d_char;    /* Default flavor character */
 
-    byte x_attr;    /* Desired flavor attribute */
+    QColor x_color;    /* Desired flavor color */
     QChar x_char;    /* Desired flavor character */
 };
 

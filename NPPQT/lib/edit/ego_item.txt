@@ -1,11 +1,9 @@
-#ego.txt
+#ego_item.txt
 
-# This file is used to initialize the 'lib / Data / ego_item.raw' file, which is
-# used to initialize the 'ego - Item' information for the Angband game.
+# This file is used to initialize the 'ego - Item' information for the Angband game.
 
 # Do not modify this file unless you know exactly what you are doing,
 # unless you wish to risk possible system crashes and broken savefiles.
-# After modifying this file, delete the 'lib / Data / ego_item.raw' file.
 
 # The ego-item indexes are defined in 'defines.h', and must not be changed
 # or savefile compatibility will be lost.
@@ -59,10 +57,6 @@
 
 # Version stamp (required)
 
-# Accented characters may be used in an ego item/s name.  Use the proper code,
-# enclosed between square brackets, to enter an accented character. For example:
-# Lothl['o]rien or Lothl[oacute]rien are both valid ways to get an acute accent
-# on the o in Lothlorien . All valid codes can be found in util.c.
 
 V:7.1.0
 
@@ -669,7 +663,7 @@ F:STR | DEX | CON | LIGHT_CURSE
 
 N:75:of Aman
 X:20:4 
-W:30:8:0:30000
+W:30:6:0:30000
 C:0:0:20:3
 T:35:0:99
 F:STEALTH | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
@@ -747,7 +741,7 @@ F:DEX | SHOTS | MIGHT | IGNORE_ACID | IGNORE_FIRE
 F:HIDE_TYPE
 
 
-N:86:of Lothl['o]rien
+N:86:of Lothlórien
 X:30:3 
 W:50:4:0:20000
 C:10:10:0:2
@@ -790,7 +784,7 @@ D:It has no special abilities, but its to-dam value may be unusually
 D: high.
 
 
-N:91:of the Nazg[^u]l
+N:91:of the Nazgûl
 X:0:0 
 W:0:2:0:0
 C:10:10:0:0
@@ -1123,7 +1117,8 @@ W:0:1:0:1000
 C:0:0:0:0
 T:39:1:1
 F:RES_DARK
-D: The unusual brghtness of this lantern increases the light radius by one.
+D:The unusual brghtness of this lantern increases the light radius by
+D: one.
 
 
 N:133:of Stealth

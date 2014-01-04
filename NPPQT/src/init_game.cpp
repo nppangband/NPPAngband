@@ -220,6 +220,24 @@ static int init_z_info(void)
     return (err);
 }
 
+/*
+ * Initialize the "preset" color array
+ * This function should never fail, unless the table preset colors has
+ * been set up incorrectly (which would cause a crash.
+ *
+ */
+static int init_color_info(void)
+{
+    for (int i = 0; i < MAX_COLORS; i++)
+    {
+        // Load each color into the color array.  255 is the alpha consistency.
+        defined_colors[i].setRgb(preset_colors[i].red, preset_colors[i].green, preset_colors[i].blue, 255);
+    }
+
+    return (0);
+}
+
+
 
 /*
  * Initialize the "f_info" array
@@ -1098,7 +1116,11 @@ void init_npp_games(void)
 
     if (game_mode == GAME_NPPANGBAND) init_nppangband();
     else if (game_mode == GAME_NPPMORIA) init_nppmoria();
-    else return;  //Something would have to be wrong with the setup for this to happen.
+    else return;  //Something would be broken with the setup for this to happen.
+
+    /* Initialize color info */
+    status_update.setText (QString(QObject::tr("Initializing colors...")));
+    if (init_color_info()) quit_npp_games(QObject::tr("Cannot initialize colors"));
 
     /* Initialize feature info */
     status_update.setText (QString(QObject::tr("Initializing arrays... (features)")));

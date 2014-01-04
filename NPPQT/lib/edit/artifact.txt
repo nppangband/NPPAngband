@@ -1,12 +1,10 @@
 # File: artifact.txt
 
 
-# This file is used to initialize the 'lib/data/artifact.raw' file, which
-# is used to initialize the 'artifact' information for the Angband game.
+# This file is used to initialize 'artifact' information for the Angband game.
 
 # Do not modify this file unless you know exactly what you are doing,
 # unless you wish to risk possible system crashes and broken savefiles.
-# After modifying this file, delete the 'lib/data/artifact.raw' file.
 
 # The artifact indexes are defined in 'defines.h', and must not be changed.
 
@@ -66,11 +64,6 @@
 # object, or a new one at the end of the file, you must also amend object.txt
 # or limits.txt.)
 
-# (4.) Accented characters may be used in an artifact's name or description.
-# Use the proper code, enclosed between square brackets, to enter an accented
-# character. For example: L['u]thien or L[uacute]thien are both valid ways to
-# get an acute accent on the u in Luthien. All valid codes can be found in
-# util.c.
 
 # Version stamp (required)
 
@@ -91,7 +84,7 @@ P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | ACTIVATE
 F:INSTA_ART
 A:ILLUMINATION:10:10
-D:A small crystal phial, with the light of E["a]rendil's Star contained
+D:A small crystal phial, with the light of Eärendil's Star contained
 D: inside.  Its light is imperishable, and near it darkness cannot
 D: endure.
 
@@ -108,9 +101,9 @@ A:MAGIC_MAP:50:50
 D:The shining Star of the West, a treasured heirloom of Elendil's house.
 
 
-# The Arkenstone of Thrain
+# The Arkenstone of Thráin
 
-N:3:of Thr['a]in
+N:3:of Thráin
 I:39:6:0
 W:50:50:5:50000
 P:0:1d1:0:0:0
@@ -135,9 +128,9 @@ D:A fiery circle of bronze, with mighty spells to ward off and banish
 D: evil.
 
 
-# The Amulet of Ingwe
+# The Amulet of Ingwë
 
-N:5:of Ingw["e]
+N:5:of Ingwë
 I:40:11:3
 W:65:30:3:90000
 P:0:0d0:0:0:0
@@ -146,8 +139,8 @@ F:RES_ELEC | RES_COLD | SEE_INVIS | FREE_ACT | IGNORE_ACID
 F:IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | ACTIVATE | INSTA_ART
 F:HIDE_TYPE
 A:DISP_EVIL:50:50
-D:The ancient heirloom of Ingw["e], high lord of the Vanyar, against
-D: whom nothing of evil could stand.
+D:The ancient heirloom of Ingwë, high lord of the Vanyar, against whom
+D: nothing of evil could stand.
 
 
 # The Necklace of the Dwarves
@@ -159,8 +152,8 @@ P:0:0d0:0:0:0
 F:STR | CON | INFRA | RES_FEAR | LIGHT
 F:REGEN | SEE_INVIS | FREE_ACT | IGNORE_ACID | IGNORE_ELEC
 F:IGNORE_FIRE | IGNORE_COLD | INSTA_ART | HIDE_TYPE
-D:The Nauglam['i]r; a carencet of gold set with a multitude of shining
-D: gems of Valinor, accenting a radiant Silmaril.  The sturdy spirits of
+D:The Nauglamír; a carencet of gold set with a multitude of shining gems
+D: of Valinor, accenting a radiant Silmaril.  The sturdy spirits of
 D: Dwarvish craftsmen who labored long in mountain smithies lie within
 D: it still, and as gossamer it rests upon the bearer.
 
@@ -366,7 +359,7 @@ D:The robe of a powerful mage whose daring and bravery is legendary in
 D: the NPPAngband world.
 
 
-# The Soft Leather Armour 'H[^i]thl['o]m[^i]r'
+# The Soft Leather Armour 'Hithlomir''
 
 N:23:'Hithlomir'
 I:36:4:4
@@ -559,17 +552,17 @@ D: once protected Celegorm, Lord of Himlad; around it a mystic balance
 D: lies, containing the conflicts of the elements.
 
 
-# The Large Metal Shield of Anarion
+# The Large Metal Shield of Anárion
 
-N:36:of An['a]rion
+N:36:of Anárion
 I:34:5:0
 W:40:10:120:160000
 P:5:1d3:0:0:20
 F:SUST_STR | SUST_INT | SUST_WIS | SUST_DEX | SUST_CON
 F:SUST_CHR | RES_ACID | RES_ELEC | RES_FIRE | RES_COLD
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
-D:The great metal-bound shield of An['a]rion, son of Elendil, whom
-D: Sauron found himself powerless to wither or diminish.
+D:The great metal-bound shield of Anárion, son of Elendil, whom Sauron
+D: found himself powerless to wither or diminish.
 
 
 
@@ -648,8 +641,8 @@ P:0:1d7:6:8:0
 F:BLOWS | SLAY_ANIMAL | SLAY_ORC | SLAY_TROLL | SLAY_GIANT
 F:KILL_DRAGON | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 F:HIDE_TYPE | SHOW_MODS
-D:An heirloom of the dauntless Lords of Rh[^u]n far to the east, and a
-D: name of dismay to creatures natural and unnatural.
+D:An heirloom of the dauntless Lords of Rhûn far to the east, and a name
+D: of dismay to creatures natural and unnatural.
 
 
 # The Cutlass 'Gondricam'
@@ -666,9 +659,9 @@ D: blade with a perfect edge shining cleanly in the sun, an object of
 D: hate to the men of Umbar who met it in combat.
 
 
-# The Broad Sword 'Aranruth'
+# The Broad Sword 'Aranrúth'
 
-N:43:'Aranr['u]th'
+N:43:'Aranrúth'
 I:23:16:4
 W:20:45:150:50000
 P:0:3d5:20:12:0
@@ -742,9 +735,9 @@ D: unwillingly to meet it of old; his lame foot will remind him of its
 D: might should he face it again.
 
 
-# The Long Sword 'Anduril'
+# The Long Sword 'Andúril'
 
-N:48:'And['u]ril'
+N:48:'Andúril'
 I:23:17:4
 W:20:40:130:80000
 P:0:3d5:10:15:10
@@ -769,8 +762,8 @@ F:STR | CON | SPEED | SLAY_EVIL | KILL_DEMON
 F:BRAND_POIS | RES_ELEC | RES_LIGHT | RES_DARK | LIGHT
 F:SEE_INVIS | FREE_ACT | AGGRAVATE | IGNORE_ACID | IGNORE_ELEC
 F:IGNORE_FIRE | IGNORE_COLD | HIDE_TYPE | SHOW_MODS
-D:Forged of black galvorn by the Dark-Elven smith E["o]l, and as deadly
-D: as any other blade he forged.
+D:Forged of black galvorn by the Dark-Elven smith Eöl, and as deadly as
+D: any other blade he forged.
 
 
 # The Long Sword 'Elvagil'
@@ -812,9 +805,9 @@ D: effortlessly slices rock and bone and spells to render the wearer
 D: lithe and nimble.  It is combat incarnate.
 
 
-# The Bastard Sword of Eowyn
+# The Bastard Sword of Éowyn
 
-N:53:of ['E]owyn
+N:53:of Éowyn
 I:23:21:4
 W:30:100:140:120000
 P:0:4d4:12:16:0
@@ -866,7 +859,7 @@ P:0:3d6:13:17:0
 F:STR | KILL_DRAGON | BRAND_FIRE | BRAND_POIS | RES_FIRE
 F:RES_POIS | SLOW_DIGEST | REGEN | FREE_ACT | IGNORE_ACID
 F:IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | HIDE_TYPE | SHOW_MODS
-D:A giant sword once wielded by mighty T['u]rin, and an even greater
+D:A giant sword once wielded by mighty Túrin, and an even greater
 D: dragonbane; for what wyrm could stand against the blade that bathed
 D: in Glaurung's blood?
 
@@ -888,7 +881,7 @@ D: drink the very lifeblood of its wielder.
 
 # The Executioner's Sword 'Crisdurian'
 
-N:58:'Crisd[^u]rian'
+N:58:'Crisdurian'
 I:23:28:0
 W:40:25:260:100000
 P:0:4d5:18:19:0
@@ -997,18 +990,18 @@ A:FROST1:7:7
 D:From the hilt of this dagger springs not so much a blade as an icicle.
 
 
-# The Main Gauche of Azaghal
+# The Main Gauche of Azaghâl
 
-N:66:of Azagh[^a]l
+N:66:of Azaghâl
 I:23:5:0
 W:18:30:30:50000
 P:0:2d5:12:14:0
 F:KILL_DRAGON | IM_FIRE | RES_ACID | RES_FEAR | IGNORE_ACID
 F:IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | THROWING | PERFECT_BALANCE
-D:Azagh[^a]l, Dwarf-king of Beregost, fell before Glaurung in the Battle
-D: of Unnumbered Tears, but with his final stroke he dealt Glaurung such
-D: a blow that the Father of Dragons fled the field with all his kin,
-D: and was at first believed to be mortally wounded.
+D:Azaghâl, Dwarf-king of Beregost, fell before Glaurung in the Battle of
+D: Unnumbered Tears, but with his final stroke he dealt Glaurung such a
+D: blow that the Father of Dragons fled the field with all his kin, and
+D: was at first believed to be mortally wounded.
 
 
 # The Main Gauche of Maedhros
@@ -1021,8 +1014,7 @@ F:INT | DEX | SPEED | SLAY_TROLL | SLAY_GIANT
 F:SEE_INVIS | FREE_ACT | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE
 F:IGNORE_COLD | HIDE_TYPE | SHOW_MODS
 D:A short thrusting blade with a large guard worn by Maedhros the Tall,
-D: eldest son of F["e]anor, who lost his right hand in captivity in
-D: Angband.
+D: eldest son of Fëanor, who lost his right hand in captivity in Angband.
 
 
 # The Rapier 'Forasgil'
@@ -1056,9 +1048,9 @@ D: survival abilities he did not know he had.
 
 ##### Polearms #####
 
-# The Beaked Axe of Hurin
+# The Beaked Axe of Húrin
 
-N:70:of H['u]rin
+N:70:of Húrin
 I:22:10:2
 W:20:15:180:90000
 P:0:3d6:12:15:0
@@ -1067,17 +1059,16 @@ F:BRAND_ACID | RES_ACID | RES_FIRE | RES_DARK | LIGHT
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | ACTIVATE
 F:HIDE_TYPE | SHOW_MODS
 A:BERSERKER:80:80
-D:Wielded by H['u]rin Thalion, last lord of Dor-l['o]min at the Battle
-D: of Tears Unnumbered.  He stood alone, his friends and kinsmen dead
-D: about him, his axe smoking in the black blood of Gothmog's
-D: troll-guard.  No less than seventy times, as he slew his foes, did he
-D: utter his mighty war-cry: "Aure ent['u]luva!" - "Day shall come
-D: again!"
+D:Wielded by Húrin Thalion, last lord of Dor-Lómin at the Battle of
+D: Tears Unnumbered.  He stood alone, his friends and kinsmen dead about
+D: him, his axe smoking in the black blood of Gothmog's troll-guard.  No
+D: less than seventy times, as he slew his foes, did he utter his mighty
+D: war-cry: "Aurë entuluva!" - "Day shall come again!"
 
 
-# The Beaked Axe of Theoden
+# The Beaked Axe of Théoden
 
-N:71:of Th['e]oden
+N:71:of Théoden
 I:22:10:3
 W:20:15:180:40000
 P:0:2d6:8:10:0
@@ -1174,9 +1165,9 @@ D: himself as he came to Valinor in wrath. Its envenomed bite pierced
 D: the Two Trees with wounds that would not heal.
 
 
-# The Spear of Orome
+# The Spear of Oromë
 
-N:78:of Orom["e]
+N:78:of Oromë
 I:22:2:4
 W:15:45:50:60000
 P:0:4d6:15:15:0
@@ -1185,8 +1176,8 @@ F:BRAND_FIRE | RES_FIRE | RES_LIGHT | FEATHER | LIGHT
 F:SEE_INVIS | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 F:THROWING | BLESSED | ACTIVATE | HIDE_TYPE | SHOW_MODS
 A:STONE_TO_MUD:5:0
-D:The thrusting spear of wise Orom["e] the Vala, strong against giants
-D: of frost, and able to pierce rock or flesh with ease.
+D:The thrusting spear of wise Oromë the Vala, strong against giants of
+D: frost, and able to pierce rock or flesh with ease.
 
 
 # The Spear 'Nimloth'
@@ -1234,9 +1225,9 @@ D:A superbly crafted double-bladed axe once borne by Ceruthain,
 D: commander of the Rangers of Arnor.
 
 
-# The Great Axe of Eonwe
+# The Great Axe of Eönwë
 
-N:82:of E["o]nw["e]
+N:82:of Eönwë
 I:22:25:2
 W:30:120:230:200000
 P:0:5d4:15:18:8
@@ -1246,10 +1237,9 @@ F:BRAND_COLD | IM_COLD | RES_COLD | RES_FEAR | SEE_INVIS
 F:FREE_ACT | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 F:BLESSED | ACTIVATE | HIDE_TYPE | SHOW_MODS
 A:MASS_BANISHMENT:1000:0
-D:The axe of E["o]nw["e], leader of the Hosts of the West before the
-D: gates of Thangorodrim, strikes with icy wrath at the undead,
-D: disperses hosts of evil at a word, and grants Maia-like powers of
-D: body and mind.
+D:The axe of Eönwë, leader of the Hosts of the West before the gates of
+D: Thangorodrim, strikes with icy wrath at the undead, disperses hosts
+D: of evil at a word, and grants Maia-like powers of body and mind.
 
 
 # The Great Axe of Durin
@@ -1265,13 +1255,12 @@ F:RES_CHAOS | FREE_ACT | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE
 F:IGNORE_COLD | HIDE_TYPE | SHOW_MODS
 D:The twin massive axe heads of this ancient demon's dread gleam with
 D: mithril inlay, which tell sagas of endurance, invoking the powers of
-D: Khazad-d[^u]m to protect the wearer and slay all evils found
-D: underground.
+D: Khazad-dûm to protect the wearer and slay all evils found underground.
 
 
 # The Lochaber Axe 'Mundwine'
 
-N:84:'Mundwin["e]'
+N:84:'Mundwine
 I:22:28:0
 W:30:8:250:30000
 P:0:3d8:12:17:0
@@ -1295,9 +1284,9 @@ F:HOLD_LIFE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 F:BLESSED | ACTIVATE | HIDE_TYPE | SHOW_MODS | NATIVE_WATER
 A:TELE_AWAY:50:0
 D:The awesome weapon of the Vala Ulmo, Lord of Waters.  Mightest of all
-D: the powers of good save Manw["e] himself, Ulmo laughs to scorn the
-D: dread powers of the undead, and is utterly in command of the Element
-D: of water.
+D: the powers of good save Manwë himself, Ulmo laughs to scorn the dread
+D: powers of the undead, and is utterly in command of the Element of
+D: water.
 
 
 # The Trident of Wrath
@@ -1310,7 +1299,7 @@ F:STR | DEX | SLAY_EVIL | KILL_UNDEAD | BRAND_POIS
 F:RES_LIGHT | RES_DARK | SEE_INVIS | IGNORE_ACID | IGNORE_ELEC
 F:IGNORE_FIRE | IGNORE_COLD | BLESSED | HIDE_TYPE | SHOW_MODS
 D:A massive triple-pronged spear, so great it normally requires two
-D: hands to wield, evoking the spirit of Oss["e] who with it pierced
+D: hands to wield, evoking the spirit of Ossë who with it pierced
 D: legions of evil and undead.
 
 
@@ -1421,9 +1410,9 @@ D: preserve magic activate around you.  You wield the Fear of Dragons
 D: and the Despair of the Undead!
 
 
-# The Quarterstaff of Olorin
+# The Quarterstaff of Olórin
 
-N:94:of Ol['o]rin
+N:94:of Olórin
 I:21:3:4
 W:30:105:150:130000
 P:0:2d9:10:13:0
@@ -1493,9 +1482,9 @@ D:The weapon of a mighty dwarven priest, whose shade is rumoured to
 D: still haunt the halls of Angband itself.
 
 
-# The War Hammer of Aule
+# The War Hammer of Aulë
 
-N:99:of Aul["e]
+N:99:of Aulë
 I:21:8:4
 W:40:75:120:250000
 P:0:9d3:19:21:5
@@ -1504,8 +1493,8 @@ F:KILL_DRAGON | BRAND_ACID | RES_ACID | RES_ELEC | RES_FIRE
 F:RES_COLD | RES_FEAR | RES_NEXUS | SEE_INVIS | FREE_ACT
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | HIDE_TYPE
 F:SHOW_MODS
-D:The wondrous hammer of Aul["e], creator of the wise Dwarven lords of
-D: old.  It bears magics of demolishing that no serpent or demon can
+D:The wondrous hammer of Aulë, creator of the wise Dwarven lords of old.
+D:  It bears magics of demolishing that no serpent or demon can
 D: withstand, and invokes the strength of mountains to ward off the
 D: tumult of the elements.
 
@@ -1513,9 +1502,9 @@ D: tumult of the elements.
 
 ##### Digging Tools #####
 
-# The Mattock of Nain
+# The Mattock of Náin
 
-N:100:of N['a]in
+N:100:of Náin
 I:20:7:6
 W:60:8:250:30000
 P:0:2d8:12:18:0
@@ -1524,9 +1513,9 @@ F:SLAY_TROLL | SLAY_GIANT | SLAY_DRAGON | RES_DARK | RES_DISEN
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | ACTIVATE
 A:STONE_TO_MUD:2:0
 D:A mighty Dwarven mattock, as good for hewing orc-necks as for hewing
-D: stone.  N['a]in, King of the Iron Hills, brought his mattock-wielding
+D: stone.  Náin, King of the Iron Hills, brought his mattock-wielding
 D: warriors to the Battle of Azanulbizar, and no Orc could withstand
-D: them, although N['a]in himself fell before their lord Azog.
+D: them, although Náin himself fell before their lord Azog.
 
 
 
@@ -1571,9 +1560,9 @@ D: fine-engraved silver.  It grants the wearer nobility and
 D: understanding.
 
 
-# The Iron Helm of Dor-lomin
+# The Iron Helm of Dor-Lómin
 
-N:104:of Dor-l['o]min
+N:104:of Dor-Lómin
 I:32:5:4
 W:40:25:75:300000
 P:5:1d3:0:0:20
@@ -1581,8 +1570,8 @@ F:STR | DEX | CON | RES_ACID | RES_ELEC
 F:RES_FIRE | RES_COLD | RES_FEAR | LIGHT | TELEPATHY
 F:SEE_INVIS | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 F:HIDE_TYPE
-D:The legendary dragon helm of T['u]rin Turambar, an object of dread to
-D: the servants of Morgoth.
+D:The legendary dragon helm of Túrin Turambar, an object of dread to the
+D: servants of Morgoth.
 
 
 # The Iron Helm 'Holhenneth'
@@ -1630,14 +1619,14 @@ D: many. Although they knew of his coming, none could stand against him.
 
 # The Iron Crown of Beruthiel
 
-N:108:of Ber['u]thiel
+N:108:of Berúthiel
 I:33:10:-5
 W:40:12:20:1
 P:0:1d1:0:0:20
 F:STR | DEX | CON | TELEPATHY | SEE_INVIS
 F:FREE_ACT | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 F:HIDE_TYPE | LIGHT_CURSE | HEAVY_CURSE
-D:The midnight-hued steel circlet of the sorceress-queen Ber['u]thiel,
+D:The midnight-hued steel circlet of the sorceress-queen Berúthiel,
 D: which grants extraordinary powers of sight and awareness at a
 D: terrible physical cost.
 
@@ -1653,13 +1642,13 @@ F:RES_COLD | RES_LIGHT | RES_BLIND | RES_CONFU | RES_SOUND
 F:RES_CHAOS | LIGHT | REGEN | SEE_INVIS | IGNORE_ACID
 F:IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | ACTIVATE | HIDE_TYPE
 A:HEAL1:250:0
-D:The shining winged circlet brought by Elendil from dying N['u]menor,
+D:The shining winged circlet brought by Elendil from dying Númenor,
 D: emblem of Gondor through an age of the world.
 
 
-# The Jewel Encrusted Crown of Numenor
+# The Jewel Encrusted Crown of Númenor
 
-N:110:of N['u]menor
+N:110:of Númenor
 I:33:12:3
 W:50:20:40:50000
 P:0:1d1:0:0:18
@@ -1668,7 +1657,7 @@ F:RES_COLD | RES_LIGHT | RES_DARK | RES_BLIND | RES_SOUND
 F:RES_SHARD | LIGHT | SEE_INVIS | FREE_ACT | IGNORE_ACID
 F:IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | HIDE_TYPE
 D:A crown of massive gold, set with wondrous jewels of thought and
-D: warding, worn by the kings of ancient N['u]menor.
+D: warding, worn by the kings of ancient Númenor.
 
 
 
@@ -1741,9 +1730,9 @@ D:This shimmering cloak of greens and browns was once worn by the young
 D: Aragorn, a keen-eyed captain of Gondor, valiant on both land and sea.
 
 
-# The Shadow Cloak of Luthien
+# The Shadow Cloak of Lúthien
 
-N:116:of L['u]thien
+N:116:of Lúthien
 I:35:6:2
 W:40:40:5:45000
 P:6:0d0:0:0:20
@@ -1753,7 +1742,7 @@ F:IGNORE_FIRE | IGNORE_COLD | ACTIVATE | HIDE_TYPE
 A:RESTORE_LIFE:250:0
 D:The opaque midnight folds of this cloak, inset with a multitude of
 D: tiny diamonds, swirl around you and you feel a hint, a fragment of
-D: the knowledge and power to restore that lay in L['u]thien, the most
+D: the knowledge and power to restore that lay in Lúthien, the most
 D: beautiful being who ever knew death.
 
 
@@ -1783,7 +1772,7 @@ P:0:0d0:12:15:0
 F:INT | WIS | DEX | SPEED | SHOTS
 F:MIGHT | RES_ELEC | RES_FIRE | RES_COLD | SLOW_DIGEST
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
-D:A hunting bow, once wielded by one of F["e]anor's last two twin sons,
+D:A hunting bow, once wielded by one of Fëanor's last two twin sons,
 D: like and yet unlike as they were, in their abode among the
 D: Green-elves of Ossiriand.
 
@@ -1797,7 +1786,7 @@ P:0:0d0:12:15:0
 F:STR | CON | MIGHT | RES_ELEC | RES_FIRE
 F:RES_COLD | REGEN | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE
 F:IGNORE_COLD
-D:A hunting bow, once wielded by one of F["e]anor's last two twin sons,
+D:A hunting bow, once wielded by one of Fëanor's last two twin sons,
 D: like and yet unlike as they were, in their abode among the
 D: Green-elves of Ossiriand.
 
@@ -1811,7 +1800,7 @@ P:0:0d0:20:22:0
 F:DEX | STEALTH | SPEED | SHOTS | RES_DISEN
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | HIDE_TYPE
 F:SHOW_MODS
-D:The great bow of Beleg C['u]thalion, made of black yew and strung with
+D:The great bow of Beleg Cúthalion, made of black yew and strung with
 D: elven hair that faintly shimmers a pale clear gold.
 
 
@@ -1857,7 +1846,7 @@ D: with mighty power for those brave enough to risk betrayal.
 
 # The Heavy Crossbow 'Cubragol'
 
-N:124:'C['u]bragol'
+N:124:'Cubragol'
 I:19:24:10
 W:50:25:200:50000
 P:0:0d0:10:14:0
@@ -1899,25 +1888,25 @@ D:A pair of boots once pursued by a long lost adventurer  that can help
 D: an adventurer sneak around the dungeon.
 
 
-# The Pair of Hard Leather Boots of Feanor
+# The Pair of Hard Leather Boots of Fëanor
 
-N:127:of F["e]anor
+N:127:of Fëanor
 I:30:3:15
 W:40:150:40:300000
 P:3:1d1:0:0:20
 F:SPEED | RES_NEXUS | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE
 F:IGNORE_COLD | ACTIVATE | HIDE_TYPE
 A:HASTE1:200:0
-D:This wondrous pair of leather boots once sped F["e]anor, creator of
-D: the Silmarils and the mightiest of the Eldar, to fulfill his hero's
+D:This wondrous pair of leather boots once sped Fëanor, creator of the
+D: Silmarils and the mightiest of the Eldar, to fulfill his hero's
 D: challenge and do battle for a Middle-Earth held in thrall. 
 D: "Dear-bought those songs shall be accounted, and yet shall be
 D: well-bought.  For the price could be no other."
 
 
-# The Pair of Metal Shod Boots of Thror
+# The Pair of Metal Shod Boots of Thrór
 
-N:128:of Thr['o]r
+N:128:of Thrór
 I:30:6:3
 W:30:25:80:12000
 P:6:1d1:0:0:20
@@ -1954,9 +1943,9 @@ D:These gloves glow so brightly as to light the way for the player and
 D: cast magical bolts with great frequency.
 
 
-# The Set of Gauntlets of Eol
+# The Set of Gauntlets of Eöl
 
-N:131:of E["o]l
+N:131:of Eöl
 I:31:2:3
 W:55:35:25:40000
 P:2:1d1:-5:-5:15
@@ -1964,7 +1953,7 @@ F:INT | RES_ELEC | RES_POIS | RES_DARK | FEATHER
 F:FREE_ACT | AGGRAVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE
 F:IGNORE_COLD | ACTIVATE
 A:MANA_BOLT:30:30
-D:The iron-shod gauntlets of the Dark Elven smith E["o]l, tingling with
+D:The iron-shod gauntlets of the Dark Elven smith Eöl, tingling with
 D: magics that he could channel in battle.
 
 

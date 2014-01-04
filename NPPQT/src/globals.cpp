@@ -19,6 +19,8 @@ maxima *z_info;
  */
 vault_type *v_info;
 
+
+
 /*
  * The terrain feature array
  */
@@ -215,6 +217,8 @@ s16b monster_level;		/* Current monster creation level */
 byte object_generation_mode;
 
 
+
+
 /*
  * Arrays[NUM_FLOWS][DUNGEON_HGT][DUNGEON_WID] of cave grid flow "cost" values
  */
@@ -226,6 +230,8 @@ u16b cave_cost[MAX_FLOWS][MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
  */
 int cost_at_center[MAX_FLOWS];
 
+//pre-defined colors - loaded at startup
+QColor defined_colors[MAX_COLORS];
 
 
 //Various directories used by NPP

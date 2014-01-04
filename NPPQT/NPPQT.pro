@@ -31,7 +31,6 @@ SOURCES +=  src/qt_main.cpp\
 
 HEADERS  += src/qt_mainwindow.h\
             src/npp.h\
-            src/colors.h \
             src/defines.h\
             src/globals.h \
             src/init.h \

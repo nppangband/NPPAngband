@@ -4,12 +4,10 @@
 
 
 #include "src/defines.h"
-
 #include "src/monster.h"
 #include "src/terrain.h"
 #include "src/player.h"
 #include "src/object.h"
-#include "src/colors.h"
 #include "src/structures.h"
 #include "src/globals.h"
 #include "src/function_declarations.h"
