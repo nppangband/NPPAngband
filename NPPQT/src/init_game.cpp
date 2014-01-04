@@ -102,6 +102,8 @@ void quit_npp_games(QString message)
     msg_box.setText(message);
     msg_box.setInformativeText(QString(QObject::tr("NPPGames will close now.")));
     msg_box.exec();
+
+    // todo - figure out a way to force quit the game
 }
 
 /*
@@ -116,7 +118,7 @@ static void display_parse_error(QString filename, int err, QString buf, int erro
     //  Make a message box, display it, and then quit.
     add_on = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
 
-    pop_up_message_box(QString("Error at line %1 of '%2.txt'. %3 ").arg(error_line) .arg(filename) .arg(buf));
+    pop_up_message_box(QString(QObject::tr("Error at line %1 of '%2.txt'. %3 ")) .arg(error_line) .arg(filename) .arg(buf));
 
     /* Force Quit */
     quit_npp_games(QObject::tr("exiting NPP Games"));
@@ -175,13 +177,6 @@ static int read_edit_file(QString file_name)
         error_line++;
 
         QString file_line = reading.readLine();
-
-         if (error_line > 6525)
-         {
-             pop_up_message_box(QString("file_line is %1 name is %2").arg(file_line) .arg(file_name));
-
-             parse_which_info = parse_r_info;
-         }
 
         err = parse_which_info(file_line);
 

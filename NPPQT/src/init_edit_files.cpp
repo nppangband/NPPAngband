@@ -2360,7 +2360,9 @@ int parse_t_info(QString line_info)
     {
         int index_entry;
         QString name_entry;
-        int is_error = process_n_line(line_info, &name_entry, &index_entry, z_info->k_max);
+
+        // Note we are limiting to ghost_maint max to make room for player ghost templates.
+        int is_error = process_n_line(line_info, &name_entry, &index_entry, z_info->ghost_maint_max);
 
         if (is_error) return (is_error);
 
@@ -2464,7 +2466,9 @@ int parse_a_info(QString line_info)
     {
         int index_entry;
         QString name_entry;
-        int is_error = process_n_line(line_info, &name_entry, &index_entry, z_info->k_max);
+
+        // Note we are oimiting entries to art_norm_max to leave room for in-game created randarts
+        int is_error = process_n_line(line_info, &name_entry, &index_entry, z_info->art_norm_max);
 
         if (is_error) return (is_error);
 
@@ -2742,7 +2746,7 @@ int parse_e_info(QString line_info)
     {
         int index_entry;
         QString name_entry;
-        int is_error = process_n_line(line_info, &name_entry, &index_entry, z_info->k_max);
+        int is_error = process_n_line(line_info, &name_entry, &index_entry, z_info->e_max);
 
         if (is_error) return (is_error);
 
@@ -2902,50 +2906,20 @@ int parse_e_info(QString line_info)
  */
 int parse_r_info(QString line_info)
 {
-    if (last_idx > 453)
-    {
-        // report error
-       // pop_up_message_box(QString("test 1 line is %1") .arg(line_info));
-    }
-
     int i;
 
     /* Current entry */
     static monster_race *r_ptr = NULL;
 
-    if (last_idx > 453)
-    {
-        // report error
-        //pop_up_message_box(QString("test 1"));
-    }
-
     /* Skip comments and blank lines */
     if (line_info.isNull() || line_info.isEmpty() || line_info[0] == '#') return (0);
-
-    if (last_idx > 453)
-    {
-        // report error
-        //pop_up_message_box(QString("test 2"));
-    }
 
     /* Verify correct "colon" format */
     if (line_info[1] != ':') return (PARSE_ERROR_GENERIC);
 
-    if (last_idx > 453)
-    {
-        // report error
-        //pop_up_message_box(QString("test 3"));
-    }
-
     // Get the commmand and remove the command prefix (ex. N:)
     QChar command = line_info.at(0);
     line_info.remove(0,2);
-
-    if (last_idx > 453)
-    {
-        // report error
-        //pop_up_message_box(QString("Entry is %1 line_info is %2.") .arg(last_idx) .arg(line_info));
-    }
 
     // First check if we need to point to a current entry.
     if (command != 'N')
@@ -2964,15 +2938,9 @@ int parse_r_info(QString line_info)
         int index_entry;
         QString name_entry;
 
-        //if (last_idx > 453)pop_up_message_box(QString("this_far 1."));
-
-        int is_error = process_n_line(line_info, &name_entry, &index_entry, z_info->k_max);
-
-        //if (last_idx > 453)pop_up_message_box(QString("this_far 2."));
+        int is_error = process_n_line(line_info, &name_entry, &index_entry, z_info->r_max);
 
         if (is_error) return (is_error);
-
-        //if (last_idx > 453)pop_up_message_box(QString("this_far 3."));
 
         /* Point at the "info" */
         r_ptr =& r_info[index_entry];
@@ -3188,32 +3156,25 @@ int parse_r_info(QString line_info)
         // For some reason spellpower and power
         if (flag_line.contains("SPELL_PCT"))
         {
-            int spell_pct;
-            int spell_power;
-            int spell_pct_start = flag_line.indexOf("PCT_")+4;
-            int splitter = flag_line.indexOf('|');
-            int spell_power_start = flag_line.indexOf("POW_")+4;
+            int spell_pct, spell_power;
 
-            // Isolate spellpercent, then strip it down to a
-            //simple number and then give it to the monster entry.
-            QString spellpercent = flag_line;
-            spellpercent.left(splitter);
-            spellpercent.right(spell_pct_start);
-            spellpercent.remove(QChar(' '));
-            spellpercent.remove(QChar('|'));
-            QTextStream final_percent (&spellpercent);
-            final_percent >> spell_pct;
+            QString spell_capability = flag_line;
+            //get rid of all the letters
+            spell_capability.remove(QChar('S'), Qt::CaseInsensitive);
+            spell_capability.remove(QChar('P'), Qt::CaseInsensitive);
+            spell_capability.remove(QChar('E'), Qt::CaseInsensitive);
+            spell_capability.remove(QChar('L'), Qt::CaseInsensitive);
+            spell_capability.remove(QChar('_'));
+            spell_capability.remove(QChar('C'), Qt::CaseInsensitive);
+            spell_capability.remove(QChar('T'), Qt::CaseInsensitive);
+            spell_capability.remove(QChar('O'), Qt::CaseInsensitive);
+            spell_capability.remove(QChar('W'), Qt::CaseInsensitive);
+            spell_capability.remove(QChar('|'));
+
+            QTextStream final_percent (&spell_capability);
+            final_percent >> spell_pct >> spell_power;
             r_ptr->freq_ranged = spell_pct;
-
-            // Do the same for spellpower
-            QString spellpower = flag_line;
-            spellpower.right(spell_power_start);
-            spellpower.remove(QChar(' '));
-            spellpower.remove(QChar('|'));
-            QTextStream final_power (&spellpower);
-            final_power >> spell_power;
             r_ptr->spell_power = spell_power;
-
         }
 
         else while(flag_line.length() > 0)
@@ -3289,7 +3250,7 @@ int parse_p_info(QString line_info)
     {
         int index_entry;
         QString name_entry;
-        int is_error = process_n_line(line_info, &name_entry, &index_entry, z_info->k_max);
+        int is_error = process_n_line(line_info, &name_entry, &index_entry, z_info->p_max);
 
         if (is_error) return (is_error);
 
@@ -3506,7 +3467,7 @@ int parse_c_info(QString line_info)
     {
         int index_entry;
         QString name_entry;
-        int is_error = process_n_line(line_info, &name_entry, &index_entry, z_info->k_max);
+        int is_error = process_n_line(line_info, &name_entry, &index_entry, z_info->c_max);
 
         if (is_error) return (is_error);
 
@@ -3960,7 +3921,7 @@ int parse_q_info(QString line_info)
     {
         int index_entry;
         QString name_entry;
-        int is_error = process_n_line(line_info, &name_entry, &index_entry, z_info->k_max);
+        int is_error = process_n_line(line_info, &name_entry, &index_entry, z_info->q_max);
 
         if (is_error) return (is_error);
 
@@ -4085,11 +4046,11 @@ int parse_flavor_info(QString line_info)
         /* Save the sval */
         if (count == 2)
         {
-            /* Megahack - unknown sval */
+
             flavor_ptr->sval = (byte)sval;
         }
-        else
-            flavor_ptr->sval = SV_UNKNOWN;
+        /* Megahack - unknown sval */
+        else flavor_ptr->sval = SV_UNKNOWN;
     }
 
     /* Process 'G' for "Graphics" */
