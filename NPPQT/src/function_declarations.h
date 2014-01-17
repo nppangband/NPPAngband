@@ -11,9 +11,30 @@
 //calcs.c
 extern byte calc_energy_gain(byte speed);
 
+//cave.cpp
+extern void update_los_proj_move(int y, int x);
+extern int distance(int y1, int x1, int y2, int x2);
+
 // cmd4.cpp
 extern void create_notes_file(void);
 extern void delete_notes_file(void);
+
+/* effect.cpp */
+extern void effect_prep(int x_idx, byte type, u16b f_idx, byte y, byte x, byte countdown,
+                            byte repeats, u16b power, s16b source, u16b flags);
+extern void effect_wipe(effect_type *x_ptr);
+extern s16b x_pop(void);
+
+//feature.cpp
+extern bool add_dynamic_terrain(byte y, byte x);
+extern void update_level_flag(void);
+extern u32b get_level_flag(u16b feat);
+extern u32b get_level_flag_from_race(monster_race *r_ptr);
+extern QString describe_one_level_flag(u32b flag);
+extern void debug_all_level_flags(u32b flags);
+
+//generate.cpp
+extern void set_dungeon_type(u16b dungeon_type);
 
 //globals.cpp
 extern s16b num_repro;
@@ -25,13 +46,35 @@ extern byte object_generation_mode;
 extern void init_npp_games(void);
 extern void cleanup_npp_games(void);
 
+/* load.c */
+extern bool load_player(void);
+extern bool load_gamemode(void);
+
 //mon_ranged_attack.cpp
 extern int get_dam(monster_race *r_ptr, int attack);
 extern int get_breath_dam(s16b hit_points, int gf_type, bool powerful);
 extern int get_ball_beam_dam(int m_idx, monster_race *r_ptr, int attack, int gf_type, bool powerful);
 
 //obj_util.cpp
+extern bool object_has_hidden_powers(const object_type *o_ptr);
+extern void object_flags(const object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3, u32b *native);
+extern bool wearable_p(const object_type *o_ptr);
 extern s16b lookup_kind(int tval, int sval);
+extern s16b o_pop(void);
+extern void object_wipe(object_type *o_ptr);
+extern void object_copy(object_type *o_ptr, const object_type *j_ptr);
+extern int quiver_space_per_unit(const object_type *o_ptr);
+extern void save_quiver_size(void);
+
+//player_ghost.cpp
+extern void prepare_ghost_name(void);
+extern bool prepare_ghost(int r_idx);
+extern void ghost_challenge(void);
+extern void remove_player_ghost(void);
+extern void delete_player_ghost_entry(void);
+extern void add_player_ghost_entry(void);
+extern void load_player_ghost_file(void);
+extern void save_player_ghost_file(void);
 
 /* randart.c */
 extern void make_random_name(QString *random_name, byte min, byte max);
@@ -44,6 +87,15 @@ extern void make_quest_artifact(int lev);
 extern void create_quest_artifact(object_type *o_ptr);
 extern void artifact_wipe(int a_idx, bool quest_art_wipe);
 extern bool can_be_randart(const object_type *o_ptr);
+
+/* save.c */
+extern bool save_player(void);
+
+/* spells2.c */
+extern bool hp_player(int num);
+
+//squelch.cpp
+extern void rearrange_stack(int y, int x);
 
 //tables.cpp
 extern const byte moria_class_level_adj[MORIA_MAX_CLASS][MORIA_MAX_LEV_ADJ];

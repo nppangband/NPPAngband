@@ -129,8 +129,9 @@ void create_directories()
 {
     NPP_DIR_BASE = QDir::currentPath();
     NPP_DIR_BASE.append ("/NPPQT");
-    NPP_DIR_EDIT = NPP_DIR_HELP = NPP_DIR_ICON = NPP_DIR_PREF = NPP_DIR_SAVE = NPP_DIR_USER = NPP_DIR_BASE;
+    NPP_DIR_EDIT = NPP_DIR_HELP = NPP_DIR_ICON = NPP_DIR_PREF = NPP_DIR_SAVE = NPP_DIR_BONE = NPP_DIR_USER = NPP_DIR_BASE;
     NPP_DIR_EDIT.append ("/lib/edit/");
+    NPP_DIR_BONE.append ("/lib/bone/");
     NPP_DIR_HELP.append ("/lib/help/");
     NPP_DIR_ICON.append ("/lib/icons/");
     NPP_DIR_PREF.append ("/lib/pref/");
@@ -154,8 +155,6 @@ static int read_edit_file(QString file_name)
 
     /* Build the filename */
     edit_file.setFileName(QString("%1%2" ) .arg(NPP_DIR_EDIT) .arg(file_name));
-
-    //pop_up_message_box((QString(QObject::tr(" starting edit_file %1")) .arg(file_name)));
 
     if (!edit_file.exists())
     {

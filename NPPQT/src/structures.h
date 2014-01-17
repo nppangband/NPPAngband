@@ -51,6 +51,7 @@ typedef struct names_type names_type;
 typedef struct flavor_type flavor_type;
 typedef struct autoinscription autoinscription;
 typedef struct move_moment_type move_moment_type;
+typedef struct coord coord;
 typedef struct dynamic_grid_type dynamic_grid_type;
 typedef struct quiver_group_type quiver_group_type;
 typedef struct option_entry option_entry;
@@ -550,8 +551,6 @@ struct effect_type
  *
  * Note that a "discount" on an item is permanent and never goes away.
  *
- * Note that inscriptions are now handled via the "quark_str()" function
- * applied to the "note" field, which will return NULL if "note" is zero.
  *
  * Note that "object" records are "copied" on a fairly regular basis,
  * and care must be taken when handling such objects.
@@ -622,7 +621,7 @@ struct object_type
     byte origin_nature;	/* ORIGIN_* */
     s16b origin_dlvl;	/* Depth */
     s16b origin_r_idx;	/* Monster race */
-    s16b origin_m_name;	/* Index of monster name quark. Used only for player ghosts */
+    QString origin_m_name;	/* Index of monster name quark. Used only for player ghosts */
 
     s16b mimic_r_idx;	/* Object is a mimic */
 };
@@ -1083,8 +1082,8 @@ struct player_type
 
     s16b player_hp[PY_MAX_LEVEL];	/* HP Array */
 
-    QChar died_from[80];		/* Cause of death */
-    QChar history[250];	/* Initial history */
+    QString died_from;		/* Cause of death */
+    QString history;	/* Initial history */
 
     u16b total_winner;		/* Total winner */
     u16b panic_save;		/* Panic save */
@@ -1239,6 +1238,17 @@ struct move_moment_type
 };
 
 /*
+ * Simple structure to hold a map location
+ */
+
+
+struct coord
+{
+    byte y;
+    byte x;
+};
+
+/*
  * The type definition of the entries of the "dyna_g" array
  */
 struct dynamic_grid_type
@@ -1284,6 +1294,97 @@ struct option_entry
     QString description;
     bool normal;
 };
+
+/*
+ * Set of custom predicates that modify the behavior of the game,
+ * specially dungeon generation. The predicates are assigned in generate.c
+ */
+struct dungeon_capabilities_type
+{
+    /*
+     * Check if a monster of the given race can have escorts
+     * Used only in alloc_monster
+     */
+    bool (*can_place_escorts)(s16b r_idx);
+
+    /*
+     * Check if the player must be placed over grids that use CAVE_ROOM
+     */
+    bool (*can_place_player_in_rooms)(void);
+
+    /*
+     * Check if stairs can be placed on the given location
+     */
+    bool (*can_place_stairs)(int y, int x);
+
+    /*
+     * Adjust the number of stairs in a level
+     */
+    int (*adjust_stairs_number)(int initial_amount);
+
+
+    /*
+     * Check if fog must be placed on rooms
+     */
+    bool (*can_place_fog_in_rooms)(void);
+
+    /*
+     * Check if the look command can stop in the given feature
+     */
+    bool (*can_target_feature)(int f_idx);
+
+    /*
+     * Check if regions and walls of the current dungeon can be transformed
+     */
+    bool (*can_be_transformed)(void);
+
+    /*
+     * Check if a non-native monsters can be placed in an elemental grid
+     * Used in get_mon_num
+     */
+    bool (*can_place_non_native_monsters)(void);
+
+    /*
+     * Check if monsters get re-populated while the player is on the level
+     */
+    bool (*allow_level_repopulation)(void);
+
+    /*
+     * Check if summoning is limited to creatures on the level
+     */
+    bool (*limited_level_summoning)(void);
+
+    /*
+     * Check if breeders are allowed to spread on the level
+     */
+    bool (*allow_monster_multiply)(void);
+
+    /*
+     * Check if earthquakes and destruction are allowed
+     */
+    bool (*prevent_destruction)(void);
+
+    /*
+     * Get the initial number of monsters in the level
+     */
+    int (*get_monster_count)(void);
+
+    /*
+     * Get the initial number of objects in the level (rooms only)
+     */
+    int (*get_object_count)(void);
+
+    /*
+     * Get the initial number of gold objects in the level (rooms and corridors)
+     */
+    int (*get_gold_count)(void);
+
+    /*
+     * Get the initial number of extra objects in the level (rooms and corridors)
+     */
+    int (*get_extra_object_count)(void);
+};
+
 
 /* Currently assumes all flags are in TR1 (object) and RF1 (monster flags) */
 struct slays_structure

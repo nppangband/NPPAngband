@@ -18,7 +18,7 @@
  *    are included in all such copies.  Other copyrights may also apply.
  */
 
-
+#include "src/user_macros.h"
 
 
 /*
@@ -908,7 +908,7 @@ static QString a_info_act[ACT_MAX] =
  *Read a line of 'N: serial number : name'.
  * Assumes the N: has already been stripped away
  */
-static int process_n_line(QString read_from_line, QString *save_to_string, int *array_index, int max_index)
+int process_n_line(QString read_from_line, QString *save_to_string, int *array_index, int max_index)
 {
     int num_index;
 
@@ -1097,7 +1097,7 @@ static int process_5_ints(QString line_info, int *v1, int *v2, int *v3, int *v4,
 
 
 // Process 4 integers from a string assumes v1:v2:v3:v4 format
-static int process_4_ints(QString line_info, int *v1, int *v2, int *v3, int *v4)
+int process_4_ints(QString line_info, int *v1, int *v2, int *v3, int *v4)
 {
     int fake_value = -27437;
     int x1 = fake_value, x2 = fake_value, x3 = fake_value, x4 = fake_value;
@@ -2325,8 +2325,7 @@ int parse_t_info(QString line_info)
         int index_entry;
         QString name_entry;
 
-        // Note we are limiting to ghost_maint max to make room for player ghost templates.
-        int is_error = process_n_line(line_info, &name_entry, &index_entry, z_info->ghost_maint_max);
+        int is_error = process_n_line(line_info, &name_entry, &index_entry, z_info->ghost_template_max);
 
         if (is_error) return (is_error);
 

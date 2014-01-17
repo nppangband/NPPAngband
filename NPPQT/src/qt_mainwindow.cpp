@@ -28,9 +28,6 @@ MainWindow::MainWindow()
 
 }
 
-
-
-
 //  Support functions for the file menu.
 
 // Prepare to play a game of NPPAngband.
@@ -41,7 +38,7 @@ void MainWindow::start_game_nppangband()
     setWindowTitle(tr("NPPAngband"));
     update_file_menu_game_active();
 
-   init_npp_games();
+    init_npp_games();
 }
 
 // Prepare to play a game of NPPMoria.
@@ -59,17 +56,8 @@ void MainWindow::open_current_savefile()
 {
     // Let the user select the savefile
     QString fileName = QFileDialog::getOpenFileName(this, tr("Select a savefile"), NPP_DIR_SAVE, tr("NPP (*.npp)"));
-    if (!fileName.isEmpty())
-    {
-        load_file(fileName);
-        update_file_menu_game_active();
-    }
 
-    // Later, read a savefile and extract the game mode
-    game_mode = GAME_NPPANGBAND;
 
-    if (game_mode == GAME_NPPANGBAND) start_game_nppmoria();
-    else if (game_mode == GAME_NPPMORIA) start_game_nppmoria();
 }
 
 void MainWindow::save_character()
@@ -297,7 +285,6 @@ void MainWindow::read_settings()
 {
     QSettings settings("NPPGames", "NPPQT");
 
-
     restoreGeometry(settings.value("mainWindowGeometry").toByteArray());
 
     recent_savefiles = settings.value("recentFiles").toStringList();
@@ -315,47 +302,55 @@ void MainWindow::write_settings()
 }
 
 
-void MainWindow::load_file(const QString &fileName)
+void MainWindow::load_file(const QString &file_name)
 {
-    QFile file(fileName);
-    if (!file.open(QFile::ReadOnly | QFile::Text))
+    QFile file(file_name);
+    if (!file_name.isEmpty())
+    {
+        set_current_savefile(file_name);
+
+        //make sure we have a valid game_mode
+        game_mode = GAME_MODE_UNDEFINED;
+        load_gamemode();
+        if (game_mode == GAME_MODE_UNDEFINED) return;
+
+        // Initialize game then load savefile
+        if (game_mode == GAME_NPPANGBAND) start_game_nppangband();
+        else if (game_mode == GAME_NPPMORIA) start_game_nppmoria();
+
+        if (load_player())
+        {
+            update_file_menu_game_active();
+            statusBar()->showMessage(tr("File loaded"), 2000);
+        }
+    }
+
+    else
     {
         QMessageBox::warning(this, tr("Recent Files"),
                              tr("Cannot read file %1:\n%2.")
-                             .arg(fileName)
+                             .arg(file_name)
                              .arg(file.errorString()));
         return;
     }
 
-    QTextStream in(&file);
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    text_edit->setPlainText(in.readAll());
-    QApplication::restoreOverrideCursor();
-
-    set_current_savefile(fileName);
-    statusBar()->showMessage(tr("File loaded"), 2000);
 }
 
 
 
-void MainWindow::save_file(const QString &fileName)
+void MainWindow::save_file(const QString &file_name)
 {
-    QFile file(fileName);
-    if (!file.open(QFile::WriteOnly | QFile::Text))
+    QFile file(file_name);
+    if (!save_player())
     {
         QMessageBox::warning(this, tr("Recent Files"),
                              tr("Cannot write file %1:\n%2.")
-                             .arg(fileName)
+                             .arg(file_name)
                              .arg(file.errorString()));
         return;
     }
 
-    QTextStream out(&file);
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    out << text_edit->toPlainText();
-    QApplication::restoreOverrideCursor();
-
-    set_current_savefile(fileName);
+    set_current_savefile(file_name);
     statusBar()->showMessage(tr("File saved"), 2000);
 }
 
@@ -401,7 +396,7 @@ void MainWindow::update_recent_savefiles()
     separator_act->setVisible(!recent_savefiles.isEmpty());
 }
 
-QString MainWindow::stripped_name(const QString &fullFileName)
+QString MainWindow::stripped_name(const QString &full_file_name)
 {
-    return QFileInfo(fullFileName).fileName();
+    return QFileInfo(full_file_name).fileName();
 }

@@ -86,6 +86,9 @@ extern int parse_s_info(QString buf);
 extern void quit_npp_games(QString message);
 
 
+// parsing functions used in other parts of the source code
+extern int process_n_line(QString read_from_line, QString *save_to_string, int *array_index, int max_index);
+extern int process_4_ints(QString line_info, int *v1, int *v2, int *v3, int *v4);
 
 /*
  * Error tracking

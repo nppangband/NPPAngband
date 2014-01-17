@@ -65,11 +65,11 @@ private:
 
     //Functions and variables that handle opening and saving files, as well as maintain the
     //  5 most recent savefile list.
-    void load_file(const QString &fileName);
-    void save_file(const QString &fileName);
-    void set_current_savefile(const QString &fileName);
+    void load_file(const QString &file_name);
+    void save_file(const QString &file_name);
+    void set_current_savefile(const QString &file_name);
     void update_recent_savefiles();
-    QString stripped_name(const QString &fullFileName);
+    QString stripped_name(const QString &full_file_name);
     QStringList recent_savefiles;
     QAction *recent_savefile_actions[MAX_RECENT_SAVEFILES];
 

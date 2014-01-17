@@ -34,6 +34,8 @@ void create_notes_file(void)
 
     notes_file.open(QIODevice::WriteOnly);
 
+    QDataStream out_notes(&notes_file);
+
     return;
 }
 
@@ -42,6 +44,7 @@ void create_notes_file(void)
  */
 void delete_notes_file(void)
 {
+    notes_file.close();
     /* Close the notes file */
     if (notes_file.exists())
     {

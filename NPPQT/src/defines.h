@@ -85,10 +85,22 @@
 // Keeping track of which game we are playing.
 enum
 {
-    GAME_NONE_DEFINED,
+    GAME_MODE_UNDEFINED,
     GAME_NPPANGBAND,
     GAME_NPPMORIA
 };
+
+/*
+ * Number of grids in each block (vertically)
+ * Probably hard-coded to 11, see "generate.c"
+ */
+#define BLOCK_HGT	11
+
+/*
+ * Number of grids in each block (horizontally)
+ * Probably hard-coded to 11, see "generate.c"
+ */
+#define BLOCK_WID	11
 
 
 //In some of the QT files, this is defined.  In some it isn't.
@@ -105,6 +117,50 @@ enum
  * Maximum amount of Angband windows.
  */
 #define ANGBAND_TERM_MAX 8
+
+/* Sidebar types */
+#define SIDEBAR_RACE		0
+#define SIDEBAR_TITLE		1
+#define SIDEBAR_CLASS		2
+#define SIDEBAR_LEVEL		3
+#define SIDEBAR_XP			4
+#define SIDEBAR_GOLD		5
+#define SIDEBAR_EQUIPPY		6
+#define SIDEBAR_STAT_MIN	7
+#define SIDEBAR_STAT_MAX	8
+#define SIDEBAR_AC			9
+#define SIDEBAR_HP			10
+#define SIDEBAR_MANA		11
+#define SIDEBAR_MON_MIN		12
+#define SIDEBAR_MON_MAX		13
+#define SIDEBAR_SPEED		14
+#define SIDEBAR_DEPTH		15
+#define SIDEBAR_QUEST		16
+#define SIDEBAR_FEELING		17
+
+#define SIDEBAR_MAX_TYPES	18
+
+#define SIDEBAR_MONSTER_MAX	25
+
+/*
+ * There is a 1/160 chance per round of creating a new monster
+ */
+#define MAX_M_ALLOC_CHANCE	160
+
+/*
+ * Normal levels get at least 14 monsters
+ */
+#define MIN_M_ALLOC_LEVEL	14
+
+/*
+ * The town starts out with 4 residents during the day
+ */
+#define MIN_M_ALLOC_TD		4
+
+/*
+ * The town starts out with 8 residents during the night
+ */
+#define MIN_M_ALLOC_TN		8
 
 /*
  * Number of grids in each dungeon (horizontally)
@@ -175,6 +231,9 @@ typedef qint16          s16b;
 typedef quint32         u32b;
 typedef qint32          s32b;
 
+#define MAX_UCHAR		UCHAR_MAX
+#define MAX_SHORT		32767
+
 /*
  * An array of 256 byte's
  */
@@ -206,6 +265,30 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
  */
 #define DYNA_MAX 1536
 
+/* Flags for the "dynamic_grid_type" data type */
+#define DF1_OCCUPIED 0x01	/* The entry is being used */
+#define DF1_NEW_BORN 0x02	/* The dynamic feature was created recently */
+
+
+#define ENERGY_TO_MOVE		200
+#define BASE_ENERGY_MOVE	100
+#define BASE_ENERGY_FLYING	BASE_ENERGY_MOVE
+
+/*
+ * Percentage of maximum noise you can make just walking around, given a
+ * stealth of zero.
+ */
+#define WAKEUP_ADJ      20
+
+
+/*
+ * More maximum values
+ */
+#define MAX_SIGHT	20	/* Maximum view distance */
+#define MAX_RANGE	20	/* Maximum range (spells, etc) */
+
+
+
 #define OPT_MAX						256
 
 /*
@@ -223,32 +306,7 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 
 
 
-/*
- * Given an array, determine how many elements are in the array.
- */
-#define N_ELEMENTS(a) (sizeof(a) / sizeof((a)[0]))
 
-/**** Available macros ****/
-
-/* Wipe an array of type T[N], at location P, and return P */
-#define C_WIPE(P, N, T) \
-    (memset((P), 0, (N) * sizeof(T)))
-
-/* Wipe a thing of type T, at location P, and return P */
-#define WIPE(P, T) \
-    (memset((P), 0, sizeof(T)))
-
-/* Allocate, wipe, and return an array of type T[N] */
-#define C_ZNEW(N, T) (new T[N]())
-
-
-
-/* Free one thing at P, return NULL */
-#define FREE(P) (delete(P), P = NULL)
-
-#define MIN(a,b)	(((a) > (b)) ? (b)  : (a))
-#define MAX(a,b)	(((a) < (b)) ? (b)  : (a))
-#define ABS(a)		(((a) < 0)   ? (-(a)) : (a))
 
 
 /*
@@ -709,6 +767,85 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 #define score_live				op_ptr->opt[OPT_score_live]
 /* xxx xxx */
 
+/*
+ * Convert a "location" (Y,X) into a "grid" (G)
+ */
+#define GRID(Y,X) \
+    (256 * (Y) + (X))
+
+/*
+ * Convert a "grid" (G) into a "location" (Y)
+ */
+#define GRID_Y(G) \
+    ((int)((G) / 256U))
+
+/*
+ * Convert a "grid" (G) into a "location" (X)
+ */
+#define GRID_X(G) \
+    ((int)((G) % 256U))
+
+
+/*
+ * Determines if a map location is "meaningful"
+ */
+#define in_bounds(Y,X) \
+    (((unsigned)(Y) < (unsigned)(p_ptr->cur_map_hgt)) && \
+     ((unsigned)(X) < (unsigned)(p_ptr->cur_map_wid)))
+
+/*
+ * Determines if a map location is fully inside the outer walls
+ * This is more than twice as expensive as "in_bounds()", but
+ * often we need to exclude the outer walls from calculations.
+ */
+#define in_bounds_fully(Y,X) \
+    (((Y) > 0) && ((Y) < p_ptr->cur_map_hgt-1) && \
+     ((X) > 0) && ((X) < p_ptr->cur_map_wid-1))
+
+
+/*
+ * Determines if a map location is currently "on screen"
+ * Note that "panel_contains(Y,X)" always implies "in_bounds(Y,X)".
+ * Pre-storing this into a cave_info flag would be nice.  XXX XXX
+ */
+#define panel_contains(Y,X) \
+    (((unsigned)((Y) - Term->offset_y) < (unsigned)(SCREEN_HGT)) && \
+     ((unsigned)((X) - Term->offset_x) < (unsigned)(SCREEN_WID)))
+
+
+/*
+ * Determine if a "legal" grid is within "los" of the player
+ *
+ * Note the use of comparison to zero to force a "boolean" result
+ */
+#define player_has_los_bold(Y,X) \
+    ((cave_info[Y][X] & (CAVE_VIEW)) != 0)
+
+/*
+ * Determine if the player has a clear enough head to observe things
+ */
+
+#define player_can_observe() \
+    ((!p_ptr->timed[TMD_BLIND]) && (!p_ptr->timed[TMD_CONFUSED]) && (!p_ptr->timed[TMD_IMAGE]) && (!p_ptr->timed[TMD_PARALYZED]))
+
+
+/*
+ * Determine if a "legal" grid can be "seen" by the player
+ *
+ * Note the use of comparison to zero to force a "boolean" result
+ */
+#define player_can_see_bold(Y,X) \
+    ((cave_info[Y][X] & (CAVE_SEEN)) != 0)
+
+/*
+ * Determine if a "legal" grid is within "line of fire" of the player
+ *
+ * Note the use of comparison to zero to force a "boolean" result
+ */
+#define player_can_fire_bold(Y,X) \
+    ((cave_info[Y][X] & (CAVE_FIRE)) != 0)
+
+
 
 /*
  * Information for "do_cmd_options()".
@@ -729,6 +866,11 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 #define MAX_PIT_PATTERNS	3
 #define PIT_WIDTH			19
 #define PIT_HEIGHT			5
+
+/*
+ * Special note used to mark the end of the notes section in the savefile
+ */
+#define NOTES_MARK "@@@@@@@ No more notes @@@@@@@"
 
 
 //Needs to correspond with the colors table list in tables.c
@@ -795,5 +937,11 @@ enum
 };
 
 
+
+/*
+ * Minimum values for panel change offsets
+ */
+#define MIN_PANEL_CHANGE_OFFSET_Y 2
+#define MIN_PANEL_CHANGE_OFFSET_X 4
 
 #endif // DEFINES_H

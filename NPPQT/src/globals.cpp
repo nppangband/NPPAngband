@@ -6,8 +6,52 @@
 // and all arrays freed.
 
 byte game_mode;
+
+bool arg_wizard;
+
+bool character_generated;	/* The character exists */
+bool character_dungeon;		/* The character has a dungeon */
+bool character_loaded;		/* The character was loaded from a savefile */
+bool character_saved;		/* The character was just saved to a savefile */
+
+s16b character_icky;		/* Depth of the game in special mode */
+s16b character_xtra;		/* Depth of the game in startup mode */
+
+u32b seed_randart;		/* Hack -- consistent random artifacts */
+
+u32b seed_flavor;		/* Hack -- consistent object colors */
+u32b seed_town;			/* Hack -- consistent town layout */
+u32b seed_ghost;			/* Hack -- consistent player_ghosts */
+
+s16b num_repro;			/* Current reproducer count */
+s16b object_level;		/* Current object creation level */
+s16b monster_level;		/* Current monster creation level */
+
+QChar summon_kin_type;		/* Hack -- See summon_specific() */
+
+monster_type *summoner; 	/*Track the current summoner*/
+
+s32b turn;				/* Current game turn */
+
+
 QString current_savefile;
 QFile notes_file;
+
+
+s16b total_wakeup_chance;
+
+/*
+ * Dungeon variables
+ */
+
+byte feeling;			/* Most recent feeling */
+s16b rating;			/* Level's current rating */
+
+u32b  level_flag;		/* Level type */
+
+bool good_item_flag;	/* True if "Artifact" on this level */
+
+bool closing_flag;		/* Dungeon is closing */
 
 /*
  * Structure (not array) of size limits
@@ -211,12 +255,11 @@ static player_type player_type_body;
 player_type *p_ptr = &player_type_body;
 
 
-s16b num_repro;			/* Current reproducer count */
-s16b object_level;		/* Current object creation level */
-s16b monster_level;		/* Current monster creation level */
-byte object_generation_mode;
 
+s16b x_pop(void);
 
+/* squelch.c */
+byte squelch_level[SQUELCH_BYTES];
 
 
 /*
@@ -236,6 +279,7 @@ QColor defined_colors[MAX_COLORS];
 
 //Various directories used by NPP
 QString NPP_DIR_BASE;
+QString NPP_DIR_BONE;
 QString NPP_DIR_EDIT;
 QString NPP_DIR_HELP;
 QString NPP_DIR_ICON;
@@ -375,3 +419,50 @@ bool dyna_full = FALSE;
  */
 byte dyna_center_y = 255;
 byte dyna_center_x = 255;
+
+byte num_trap_on_level;
+s16b player_ghost_num;
+s16b ghost_r_idx;
+QString player_ghost_name;
+QString g_vault_name;
+u16b altered_inventory_counter;
+bool allow_altered_inventory;
+u32b dungeon_summon_mask_f7;
+
+s16b o_max;
+s16b o_cnt;
+s16b mon_max;
+s16b mon_cnt;
+s16b x_max;
+s16b x_cnt;
+bool do_feeling;
+
+/*
+ * Number of player turns the quest indicator is displayed
+ * when the player fails or wins a quest.
+ */
+u16b quest_indicator_timer = 0;
+
+/*
+ * Remember what is being displayed on each row on the side of the screen.
+ */
+int sidebar_details[SIDEBAR_MAX_TYPES];
+
+
+/*
+ * Remember what is being displayed on each row on the side of the screen.
+ */
+int sidebar_monsters[SIDEBAR_MONSTER_MAX];
+
+/*
+ * It's TRUE if the player won a quest.
+ */
+byte quest_indicator_complete = FALSE;
+
+u16b panel_change_offset_y;
+u16b panel_change_offset_x;
+
+/*
+ * The current capabilities of the dungeon
+ */
+dungeon_capabilities_type *dun_cap = NULL;

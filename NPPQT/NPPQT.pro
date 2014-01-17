@@ -13,19 +13,26 @@ TARGET = NPPGAMES
 
 SOURCES +=  src/qt_main.cpp\
             src/qt_mainwindow.cpp\
+            src/calcs.cpp \
+            src/cave.cpp \
             src/cmd4.cpp\
+            src/effect.cpp \
+            src/feature.cpp \
+            src/generate.cpp \
             src/globals.cpp \
             src/init_edit_files.cpp\
             src/init_game.cpp\
+            src/load.cpp \
+            src/mon_ranged_attacks.cpp \
+            src/object-util.cpp \
+            src/player_ghost.cpp \
             src/randart.cpp \
+            src/random_numbers.cpp \
+            src/spells2.cpp \
+            src/squelch.cpp \
             src/tables.cpp \
             src/utilities.cpp \
-            src/random_numbers.cpp \
-            src/mon_ranged_attacks.cpp \
-            src/calcs.cpp \
-            src/obj-util.cpp
-
-
+    src/save.cpp
 
 
 
@@ -41,7 +48,9 @@ HEADERS  += src/qt_mainwindow.h\
             src/structures.h \
             src/terrain.h \
             src/random_numbers.h \
-            src/function_declarations.h
+            src/function_declarations.h \
+            src/loadsave.h \
+            src/user_macros.h
 
 
 RESOURCES += \

@@ -1729,6 +1729,7 @@ s32b artifact_power(int a_idx)
     return (p);
 }
 
+#ifdef LATER
 /*
  * Store the original artifact power ratings as a baseline
  */
@@ -1787,7 +1788,7 @@ static void store_base_power (void)
     }
 
 }
-
+#endif //LATER
 
 
 /*
@@ -1844,7 +1845,7 @@ static void do_pval(artifact_type *a_ptr)
     }
 }
 
-
+#ifdef LATER
 static void remove_contradictory(artifact_type *a_ptr)
 {
     if (a_ptr->a_flags3 & TR3_AGGRAVATE) a_ptr->a_flags1 &= ~(TR1_STEALTH);
@@ -2768,7 +2769,7 @@ static void adjust_art_freq_table(void)
 
     return;
 }
-
+#endif //LATER
 
 /*
  * Build the frequency tables
@@ -2784,7 +2785,7 @@ static void build_art_freq_table(void)
 
     return;
 }
-
+#ifdef LATER
 /*
  * Pick a category of weapon randomly.
  */
@@ -2828,7 +2829,7 @@ static byte get_theme(void)
     return (theme_type[theme][COL_THEME_DROP_TYPE]);
 
 }
-#ifdef LATER
+
 /*
  * Randomly select a base item type (tval,sval).  Assign the various fields
  * corresponding to that choice.
@@ -3752,7 +3753,7 @@ static int do_randart_aux(bool full)
     /* Success */
     return (0);
 }
-#endif //later
+#endif //LATER
 
 
 /*build the names table at the beginning on the game*/

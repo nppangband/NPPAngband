@@ -864,6 +864,13 @@ enum
        ((q_info[GUILD_QUEST_SLOT].base_level == p_ptr->depth) && \
         (guild_quest_level()))
 
+/*
+ * Hack -- The quest indicator timer is compacted along with a bit that indicates
+ * whether the current quest was successfully completed or not.
+ * The value of the bit is 0 if the quest was failed.
+ */
+#define QUEST_INDICATOR_COMPLETE_BIT 0x8000
+
 #define NPPMORIA_LOWEST_SPEED	9
 #define NPPMORIA_MAX_SPEED		14
 #define NPPMORIA_NORMAL_SPEED	11

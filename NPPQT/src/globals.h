@@ -9,9 +9,44 @@
 
 extern byte game_mode;
 
+extern bool arg_wizard;
+extern bool character_generated;
+extern bool character_dungeon;
+extern bool character_loaded;
+extern bool character_saved;
+extern s16b character_icky;
+extern s16b character_xtra;
+extern u32b seed_randart;
+extern u32b seed_flavor;
+extern u32b seed_town;
+extern u32b seed_ghost;
+extern s16b num_repro;
+extern s16b object_level;
+extern s16b monster_level;
+extern QChar summon_kin_type;
+extern monster_type *summoner;
+extern s32b turn;
+
+
+extern s16b o_max;
+extern s16b o_cnt;
+extern s16b mon_max;
+extern s16b mon_cnt;
+extern s16b x_max;
+extern s16b x_cnt;
+extern byte feeling;
+extern bool do_feeling;
+extern s16b rating;
+extern u32b level_flag;
+extern bool good_item_flag;
+extern bool closing_flag;
+
+
 extern QString current_savefile;
 extern QFile notes_file;
 
+
+extern s16b total_wakeup_chance;
 
 //Various game arrays and lists
 extern maxima *z_info;
@@ -55,9 +90,16 @@ extern alloc_entry *alloc_feat_table;
 
 extern option_entry options[OPT_MAX];
 
+extern s16b x_pop(void);
+
+
+/* squelch.c */
+extern byte squelch_level[SQUELCH_BYTES];
+
 
 //Various directories used by NPP
 extern QString NPP_DIR_BASE;
+extern QString NPP_DIR_BONE;
 extern QString NPP_DIR_EDIT;
 extern QString NPP_DIR_HELP;
 extern QString NPP_DIR_ICON;
@@ -100,8 +142,27 @@ extern byte dyna_center_x;
 extern u16b cave_cost[MAX_FLOWS][MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 extern int cost_at_center[MAX_FLOWS];
 
+extern int sidebar_details[SIDEBAR_MAX_TYPES];
+extern int sidebar_monsters[SIDEBAR_MONSTER_MAX];
+
+extern u16b quest_indicator_timer;
+extern byte quest_indicator_complete;
+
+extern u16b panel_change_offset_y;
+extern u16b panel_change_offset_x;
+
+extern dungeon_capabilities_type *dun_cap;
+
 //pre-defined colors - loaded at startup
 extern QColor defined_colors[MAX_COLORS];
 
+extern byte num_trap_on_level;
+extern s16b player_ghost_num;
+extern s16b ghost_r_idx;
+extern QString player_ghost_name;
+extern QString g_vault_name;
+extern u16b altered_inventory_counter;
+extern bool allow_altered_inventory;
+extern u32b dungeon_summon_mask_f7;
 
 #endif // GLOBALS_H
