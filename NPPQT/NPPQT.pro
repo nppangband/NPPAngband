@@ -50,7 +50,8 @@ HEADERS  += src/qt_mainwindow.h\
             src/random_numbers.h \
             src/function_declarations.h \
             src/loadsave.h \
-            src/user_macros.h
+            src/user_macros.h \
+    src/utilities.h
 
 
 RESOURCES += \

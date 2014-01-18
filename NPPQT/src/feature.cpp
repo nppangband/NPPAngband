@@ -138,7 +138,7 @@ void update_level_flag(void)
     /* Debug */
     if (cheat_room)
     {
-        pop_up_message_box("Updating level flags.");
+        message("Updating level flags.");
         // TODO disturb(0, 0);
     }
 
@@ -276,7 +276,7 @@ void debug_all_level_flags(u32b all_flags)
             QString buf = describe_one_level_flag(flag);
 
             /* Message */
-            pop_up_message_box(QString("The %s flag is present.") .arg(buf));
+            message(QString("The %s flag is present.") .arg(buf));
         }
     }
 }

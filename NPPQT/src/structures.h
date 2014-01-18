@@ -468,7 +468,6 @@ struct monster_race
  * be scrapped if space becomes an issue, resulting in less "complete"
  * monster recall (no knowledge of spells, etc). XXX XXX XXX
  *
- * ToDo: The "r_" prefix is no longer needed and should be removed.
  */
 struct monster_lore
 {

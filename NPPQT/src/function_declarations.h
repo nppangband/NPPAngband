@@ -163,6 +163,10 @@ extern int letter_to_number (QChar let);
 extern QChar number_to_letter (int num);
 extern bool is_a_vowel(QChar single_letter);
 extern void pop_up_message_box(QString message);
+extern QColor add_presetcolor(int which_color);
+extern void message(QString msg);
+extern void color_message(QString msg, int which_color);
+extern void custom_color_message(QString msg, byte red, byte green, byte blue);
 
 
 

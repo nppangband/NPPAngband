@@ -2,43 +2,7 @@
 #include "src/qt_mainwindow.h"
 #include <QMessageBox>
 
-typedef struct letters_and_numbers letters_and_numbers;
 
-struct letters_and_numbers
-{
-    QChar let;
-    int num;
-};
-
-static letters_and_numbers lowercase_and_numbers[26] =
-{
-    { 'a', 0},
-    { 'b', 1},
-    { 'c', 2},
-    { 'd', 3},
-    { 'e', 4},
-    { 'f', 5},
-    { 'g', 6},
-    { 'h', 7},
-    { 'i', 8},
-    { 'j', 9},
-    { 'k', 10},
-    { 'l', 11},
-    { 'm', 12},
-    { 'n', 13},
-    { 'o', 14},
-    { 'p', 15},
-    { 'q', 16},
-    { 'r', 17},
-    { 's', 18},
-    { 't', 19},
-    { 'u', 20},
-    { 'v', 21},
-    { 'w', 22},
-    { 'x', 23},
-    { 'y', 24},
-    { 'z', 25}
-};
 
 
 // There is probably a better way with QChar, but I can't find it.
@@ -96,3 +60,71 @@ void pop_up_message_box(QString message)
     msg_box.setText(message);
     msg_box.exec();
 }
+
+QColor add_preset_color(int which_color)
+{
+    QColor color;
+
+    color.setRgb(preset_colors[which_color].red, preset_colors[which_color].green, preset_colors[which_color].blue, 255);
+
+    return (color);
+}
+
+/*
+ *  Add a message - assume the color of white
+ *This should be the only function to add to the message list, to make sure
+ *it never gets larger than 250 messages
+ */
+static void add_message_to_vector(QString msg, QColor which_color)
+{
+    message_type message_body;
+    message_type *msg_ptr = &message_body;
+
+    // First make sure the message list gets no greater than 200
+    while (message_list.size() >= 200)
+    {
+        message_list.QVector::erase(message_list.end());
+    }
+
+    // Default is a while message
+    msg_ptr->msg_color = which_color;
+
+    msg_ptr->message = msg;
+    msg_ptr->message_turn = turn;
+
+    // Add the message at the beginning of the list
+    message_list.prepend(message_body);
+}
+
+/*
+ *  Add a message with a preset color
+ */
+void color_message(QString msg, int which_color)
+{
+    QColor msg_color;
+
+    //Paranoia
+    if (which_color > MAX_COLORS) which_color = TERM_WHITE;
+
+    // Default is a while message
+    msg_color = defined_colors[which_color];
+
+    add_message_to_vector(msg, msg_color);
+}
+
+//  Add a message - assume the color of white
+void message(QString msg)
+{
+    add_message_to_vector(msg, add_preset_color(TERM_WHITE));
+}
+
+//  Add a message with any 24 bit color
+void custom_color_message(QString msg, byte red, byte green, byte blue)
+{
+    QColor msg_color;
+
+    msg_color.setRgb(red, green, blue, 255);
+
+    add_message_to_vector(msg, msg_color);
+}
+

@@ -741,8 +741,7 @@ void ghost_challenge(void)
 
     i = randint0(NUM_GHOST_CHALLENGES);
 
-    // TODO make a regular message
-    pop_up_message_box(QString("%^1 %2") .arg(player_ghost_name) .arg(do_cmd_challenge_text[i]));
+    message(QString("%^1 %2") .arg(player_ghost_name) .arg(do_cmd_challenge_text[i]));
 }
 
 

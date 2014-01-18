@@ -989,13 +989,14 @@ static bool wr_savefile(void)
     if (tmp16u > 80) tmp16u = 80;
     wr_u16b(tmp16u);
 
-    /* Dump the messages (oldest first!) */
-    for (i = tmp16u - 1; i >= 0; i--)
-    {
-
-        //TODO write the messages
-        //wr_string(message_str((s16b)i));
-        //wr_u16b(message_type((s16b)i));
+    /* Dump the messages (newest first!) */
+    for (i = 0; i <tmp16u; i++)
+    {        
+        wr_string(message_list[i].message);
+        wr_byte(message_list[i].msg_color.red());
+        wr_byte(message_list[i].msg_color.green());
+        wr_byte(message_list[i].msg_color.blue());
+        wr_s32b(message_list[i].message_turn);
     }
 
 

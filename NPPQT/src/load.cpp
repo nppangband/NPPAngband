@@ -470,7 +470,7 @@ static void rd_monster(monster_type *m_ptr)
         /* Probably in trouble anyway */
         for (i = 0; i < num; i++) rd_s16b(&dummy);
 
-        pop_up_message_box("Discarding unsupported monster timed effects");
+        message("Discarding unsupported monster timed effects");
     }
 
     rd_u32b(&m_ptr->mflag);
@@ -934,7 +934,7 @@ static int rd_player_spells(void)
     rd_u16b(&tmp16u);
     if (tmp16u > PY_MAX_SPELLS)
     {
-        pop_up_message_box(QString("Too many player spells (%d).") .arg(tmp16u));
+        pop_up_message_box(QString("Too many player spells (%1).") .arg(tmp16u));
         return (-1);
     }
 
@@ -1235,7 +1235,7 @@ static int rd_extra(void)
     /* Incompatible save files */
     if (tmp16u > z_info->max_level)
     {
-        pop_up_message_box(QString("Too many (%u) hitpoint entries!") .arg(tmp16u));
+        pop_up_message_box(QString("Too many (%1) hitpoint entries!") .arg(tmp16u));
         return (-1);
     }
 
@@ -1277,7 +1277,7 @@ static int rd_randarts(void)
         /* Incompatible save files */
         if ((artifact_count > z_info->art_max) || (art_norm_count > z_info->art_norm_max))
         {
-            pop_up_message_box(QString("Too many (%u) artifacts!") .arg(artifact_count));
+            pop_up_message_box(QString("Too many (%1) artifacts!") .arg(artifact_count));
             return (-1);
         }
         /*Mark any new added artifacts*/
@@ -1515,26 +1515,37 @@ static int rd_inventory(void)
  */
 static void rd_messages(void)
 {
-    int i;
-    QString buf;
-    u16b tmp16u;
-
     s16b num;
 
-    /* Total */
     rd_s16b(&num);
 
     /* Read the messages */
-    for (i = 0; i < num; i++)
+    for (int i = 0; i < num; i++)
     {
+        QString buf;
+        byte red, green, blue;
+        s32b msg_turn;
+        message_type message_body;
+        message_type *msg_ptr = &message_body;
+
         /* Read the message */
         rd_string(&buf);
 
-        /* Read the message type */
-        rd_u16b(&tmp16u);
+        msg_ptr->message = buf;
 
-        /* Save the message */
-        //TODO add messages message_add(buf, tmp16u);
+        /* Read the color */
+        rd_byte(&red);
+        rd_byte(&green);
+        rd_byte(&blue);
+
+        msg_ptr->msg_color.setRgb(red, blue, green, 255);
+
+        rd_s32b(&msg_turn);
+        msg_ptr->message_turn = msg_turn;
+
+        /* Save the message, backward  */
+        // Add the message at the beginning of the list
+        message_list.append(message_body);
     }
 }
 
@@ -1593,7 +1604,7 @@ static int rd_dungeon(void)
     /* Ignore illegal dungeons */
     if ((depth < 0) || (depth >= MAX_DEPTH))
     {
-        pop_up_message_box(QString("Ignoring illegal dungeon depth (%d)") .arg(depth));
+        pop_up_message_box(QString("Ignoring illegal dungeon depth (%1)") .arg(depth));
         return (0);
     }
 
@@ -1737,7 +1748,7 @@ static int rd_dungeon(void)
     /* Verify maximum */
     if (limit > z_info->o_max)
     {
-        pop_up_message_box(QString("Too many (%d) object entries!") .arg(limit));
+        pop_up_message_box(QString("Too many (%1) object entries!") .arg(limit));
         return (-1);
     }
 

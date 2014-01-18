@@ -165,4 +165,5 @@ extern u16b altered_inventory_counter;
 extern bool allow_altered_inventory;
 extern u32b dungeon_summon_mask_f7;
 
+
 #endif // GLOBALS_H

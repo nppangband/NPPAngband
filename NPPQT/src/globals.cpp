@@ -466,3 +466,6 @@ u16b panel_change_offset_x;
  * The current capabilities of the dungeon
  */
 dungeon_capabilities_type *dun_cap = NULL;
+
+// Holds all of the messages.
+QVector<message_type> message_list;
