@@ -2,11 +2,11 @@
 #define NPP_H
 
 
-
 #include "src/defines.h"
 #include "src/user_macros.h"
 #include "src/monster.h"
 #include "src/terrain.h"
+#include "src/object_classes.h"
 #include "src/player.h"
 #include "src/object.h"
 #include "src/structures.h"
@@ -21,3 +21,4 @@
 using namespace std;
 
 #endif // NPP_H
+

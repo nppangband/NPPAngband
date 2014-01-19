@@ -276,7 +276,7 @@ static int rd_item(object_type *o_ptr)
     }
 
     /* Repair non "wearable" items */
-    if (!wearable_p(o_ptr))
+    if (!o_ptr->is_wearable())
     {
         /* Get the correct fields */
         o_ptr->to_h = k_ptr->to_h;
@@ -671,7 +671,7 @@ static int rd_store(int n)
         i_ptr = &object_type_body;
 
         /* Wipe the object */
-        object_wipe(i_ptr);
+        i_ptr->object_wipe();
 
         /* Read the item */
         if (rd_item(i_ptr))
@@ -686,7 +686,7 @@ static int rd_store(int n)
             int k = st_ptr->stock_num++;
 
             /* Accept the item */
-            object_copy(&st_ptr->stock[k], i_ptr);
+            st_ptr->stock[k].object_copy(i_ptr);
         }
     }
 
@@ -1452,7 +1452,7 @@ static int rd_inventory(void)
         i_ptr = &object_type_body;
 
         /* Wipe the object */
-        object_wipe(i_ptr);
+        i_ptr->object_wipe();
 
         /* Read the item */
         if (rd_item(i_ptr))
@@ -1471,7 +1471,7 @@ static int rd_inventory(void)
         if (n >= INVEN_WIELD)
         {
             /* Copy object */
-            object_copy(&inventory[n], i_ptr);
+            inventory[n].object_copy(i_ptr);
 
             /* One more item */
             if (!IS_QUIVER_SLOT(n)) p_ptr->equip_cnt++;
@@ -1494,7 +1494,7 @@ static int rd_inventory(void)
             n = slot++;
 
             /* Copy object */
-            object_copy(&inventory[n], i_ptr);
+            inventory[n].object_copy(i_ptr);
 
             /* One more item */
             p_ptr->inven_cnt++;
@@ -1766,7 +1766,7 @@ static int rd_dungeon(void)
         i_ptr = &object_type_body;
 
         /* Wipe the object */
-        object_wipe(i_ptr);
+        i_ptr->object_wipe();
 
         /* Read the item */
         if (rd_item(i_ptr))
@@ -1789,7 +1789,7 @@ static int rd_dungeon(void)
         o_ptr = &o_list[o_idx];
 
         /* Structure Copy */
-        object_copy(o_ptr, i_ptr);
+        o_ptr->object_copy(i_ptr);
 
         /* Dungeon floor */
         if (!i_ptr->held_m_idx)
@@ -2198,6 +2198,9 @@ static int read_savefile(void)
 
         return (FALSE);
     }
+
+    // Ensure the data is read and written consistently
+    in.setVersion(QDataStream::Qt_5_1);
 
     /* Extract version */
     rd_byte(&sf_major);

@@ -31,7 +31,6 @@ typedef struct monster_message_history monster_message_history;
 typedef struct monster_lore monster_lore;
 typedef struct vault_type vault_type;
 typedef struct effect_type effect_type;
-typedef struct object_type object_type;
 typedef struct monster_type monster_type;
 typedef struct alloc_entry alloc_entry;
 typedef struct quest_type quest_type;
@@ -544,86 +543,6 @@ struct effect_type
     s16b x_r_idx;           /* Some monster race index. Used for inscriptions */
 };
 
-
-/*
- * Object information, for a specific object.
- *
- * Note that a "discount" on an item is permanent and never goes away.
- *
- *
- * Note that "object" records are "copied" on a fairly regular basis,
- * and care must be taken when handling such objects.
- *
- * Note that "object flags" must now be derived from the object kind,
- * the artifact and ego-item indexes, and the two "xtra" fields.
- *
- * Each cave grid points to one (or zero) objects via the "o_idx"
- * field (above).  Each object then points to one (or zero) objects
- * via the "next_o_idx" field, forming a singly linked list, which
- * in game terms, represents a "stack" of objects in the same grid.
- *
- * Each monster points to one (or zero) objects via the "hold_o_idx"
- * field (below).  Each object then points to one (or zero) objects
- * via the "next_o_idx" field, forming a singly linked list, which
- * in game terms, represents a pile of objects held by the monster.
- *
- * The "held_m_idx" field is used to indicate which monster, if any,
- * is holding the object.  Objects being held have "ix=0" and "iy=0".
- */
-struct object_type
-{
-    s16b k_idx;			/* Kind index (zero if "dead") */
-
-    byte iy;			/* Y-position on map, or zero */
-    byte ix;			/* X-position on map, or zero */
-
-    byte tval;			/* Item type (from kind) */
-    byte sval;			/* Item sub-type (from kind) */
-
-    s16b pval;			/* Item extra-parameter */
-
-    byte discount;		/* Discount (if any) */
-
-    byte number;		/* Number of items */
-
-    s16b weight;		/* Item weight */
-
-    byte art_num;		/* Artifact type, if any */
-    byte ego_num;		/* Ego-Item type, if any */
-
-    byte xtra1;			/* Extra info type */
-    u32b xtra2;			/* Extra info index */
-
-    s16b to_h;			/* Plusses to hit */
-    s16b to_d;			/* Plusses to damage */
-    s16b to_a;			/* Plusses to AC */
-
-    s16b ac;			/* Normal AC */
-
-    byte dd, ds;		/* Damage dice/sides */
-
-    s16b timeout;		/* Timeout Counter */
-
-    u32b ident;			/* Special flags (was byte) */
-
-    byte marked;		/* Object is marked */
-    bool obj_in_use; 	/* Object is in use */
-
-    QString inscription;		/* Inscription  */
-
-    s16b next_o_idx;	/* Next object in stack (if any) */
-
-    s16b held_m_idx;	/* Monster holding us (if any) */
-
-        /* Object history - DRS */
-
-    byte origin_nature;	/* ORIGIN_* */
-    s16b origin_dlvl;	/* Depth */
-    s16b origin_r_idx;	/* Monster race */
-    QString origin_m_name;	/* Index of monster name quark. Used only for player ghosts */
-
-    s16b mimic_r_idx;	/* Object is a mimic */
-};
 
 
 

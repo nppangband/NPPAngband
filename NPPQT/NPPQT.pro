@@ -23,8 +23,12 @@ SOURCES +=  src/qt_main.cpp\
             src/init_edit_files.cpp\
             src/init_game.cpp\
             src/load.cpp \
+            src/mon_classes.cpp \
             src/mon_ranged_attacks.cpp \
-            src/object-util.cpp \
+            src/object_classes.cpp \
+            src/object_desc.cpp \
+            src/object_make.cpp \
+            src/object_util.cpp \
             src/player_ghost.cpp \
             src/randart.cpp \
             src/random_numbers.cpp \
@@ -32,7 +36,9 @@ SOURCES +=  src/qt_main.cpp\
             src/squelch.cpp \
             src/tables.cpp \
             src/utilities.cpp \
-    src/save.cpp
+            src/save.cpp
+
+
 
 
 
@@ -51,7 +57,8 @@ HEADERS  += src/qt_mainwindow.h\
             src/function_declarations.h \
             src/loadsave.h \
             src/user_macros.h \
-    src/utilities.h
+            src/utilities.h \
+            src/object_classes.h
 
 
 RESOURCES += \

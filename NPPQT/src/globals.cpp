@@ -40,6 +40,10 @@ QFile notes_file;
 
 s16b total_wakeup_chance;
 
+s16b coin_type;			/* Hack -- force coin type */
+
+byte object_generation_mode;/* Hack -- use different depth check, prevent embedded chests */
+
 /*
  * Dungeon variables
  */
@@ -286,6 +290,38 @@ QString NPP_DIR_ICON;
 QString NPP_DIR_PREF;
 QString NPP_DIR_SAVE;
 QString NPP_DIR_USER;
+
+/*
+ * Total Hack -- allow all items to be listed (even empty ones)
+ * This is only used by "do_cmd_inven_e()" and is cleared there.
+ */
+bool item_tester_full;
+
+
+/*
+ * Here is a "pseudo-hook" used during calls to "get_item()" and
+ * "show_inven()" and "show_equip()", and the choice window routines.
+ */
+byte item_tester_tval;
+
+
+/*
+ * Specifies whether the item tester should allow the swap weapon or not.
+ * For example, the player shouldn't be allowed to activate a swap weapon.
+ */
+bool item_tester_swap;
+
+
+/*
+ * Here is a "hook" used during calls to "get_item()" and
+ * "show_inven()" and "show_equip()", and the choice window routines.
+ */
+bool (*item_tester_hook)(const object_type*);
+
+/*
+ * Hack -- function hook to restrict "get_obj_num_prep()" function
+ */
+bool (*get_obj_num_hook)(int k_idx);
 
 
 // Monser race messages

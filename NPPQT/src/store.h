@@ -2,6 +2,7 @@
 #define STORE_H
 
 #include <src/structures.h>
+#include <src/object_classes.h>
 
 /*** Constants ***/
 

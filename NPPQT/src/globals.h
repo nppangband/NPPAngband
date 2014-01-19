@@ -107,6 +107,12 @@ extern QString NPP_DIR_PREF;
 extern QString NPP_DIR_SAVE;
 extern QString NPP_DIR_USER;
 
+extern bool item_tester_full;
+extern byte item_tester_tval;
+extern bool item_tester_swap;
+extern bool (*item_tester_hook)(const object_type*);
+extern bool (*get_obj_num_hook)(int k_idx);
+
 // Monser race messages
 extern monster_race_message *mon_msg;
 extern monster_message_history *mon_message_hist;
@@ -164,6 +170,13 @@ extern QString g_vault_name;
 extern u16b altered_inventory_counter;
 extern bool allow_altered_inventory;
 extern u32b dungeon_summon_mask_f7;
+
+
+extern s16b num_repro;
+extern s16b object_level;
+extern s16b monster_level;
+extern byte object_generation_mode;
+extern s16b coin_type;
 
 
 #endif // GLOBALS_H

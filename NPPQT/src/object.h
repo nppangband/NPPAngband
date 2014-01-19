@@ -1,6 +1,7 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include <QChar>
 
 /* File: object.h */
 
@@ -1581,7 +1582,7 @@ object_aware_p(o_ptr) && \
 
 
 /** The titles of scrolls, ordered by sval. */
-extern char scroll_adj[MAX_TITLES][16];
+extern QString scroll_adj[MAX_TITLES];
 
 /*
  * Objects in the quiver are stored in groups. Each group has its own set of tags ranging from 0 to 9.
@@ -1731,5 +1732,18 @@ enum
 
 #define ACT_MAX					55
 
+
+/*
+ * A "stack" of items is limited to less than 100 items (hard-coded).
+ */
+#define MAX_STACK_SIZE	100
+
+/*
+ * Maximum number of objects allowed in a single dungeon grid.
+ *
+ * The main-screen has a minimum size of 24 rows, so we can always
+ * display 23 objects + 1 header line.
+ */
+#define MAX_FLOOR_STACK			23
 
 #endif // OBJECT_H

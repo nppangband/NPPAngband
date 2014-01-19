@@ -949,6 +949,9 @@ static bool wr_savefile(void)
     save_file.setFileName(current_savefile);
     save_file.open(QIODevice::WriteOnly);
 
+    // Ensure the data is read and written consistently
+    out.setVersion(QDataStream::Qt_5_1);
+
     /*** Actually write the file ***/
 
     /* Dump the file header */

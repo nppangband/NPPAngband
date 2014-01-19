@@ -90,3 +90,51 @@ void rearrange_stack(int y, int x)
         cave_o_idx[y][x] = first_bad_idx;
     }
 }
+
+bool squelch_item_ok(const object_type *o_ptr)
+{
+    object_kind *k_ptr = k_ptr = &k_info[o_ptr->k_idx];
+
+    /* Always delete "nothings" */
+    if (!o_ptr->k_idx) return (TRUE);
+
+    /* Ignore inscribed objects, artifacts , mimics or quest objects */
+    if ((o_ptr->obj_note) || (artifact_p(o_ptr)) || (o_ptr->ident & (IDENT_QUEST)) ||
+        (o_ptr->mimic_r_idx))
+    {
+        return (FALSE);
+    }
+
+    /* Object kind is set to be always squelched */
+    if ((k_ptr->squelch == SQUELCH_ALWAYS) && k_ptr->aware) return (TRUE);
+
+    /* Apply quality squelch if possible */
+    if (object_known_p(o_ptr) && (squelch_itemp(o_ptr, 0, TRUE) == SQUELCH_YES)) return TRUE;
+
+    /* Don't squelch */
+    return (FALSE);
+
+}
+
+/* Attempt to squelch every object in a pile. */
+void do_squelch_pile(int y, int x)
+{
+    s16b o_idx, next_o_idx;
+    object_type *o_ptr;
+
+    for(o_idx = cave_o_idx[y][x]; o_idx; o_idx = next_o_idx)
+    {
+        /* Get the object */
+        o_ptr = &(o_list[o_idx]);
+
+        /* Point to the next object */
+        next_o_idx = o_ptr->next_o_idx;
+
+        /* Destroy the object? */
+        if (squelch_item_ok(o_ptr))
+        {
+            /* Delete */
+            delete_object_idx(o_idx);
+        }
+    }
+}
