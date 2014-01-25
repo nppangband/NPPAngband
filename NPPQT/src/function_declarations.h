@@ -19,6 +19,11 @@ extern int distance(int y1, int x1, int y2, int x2);
 extern void create_notes_file(void);
 extern void delete_notes_file(void);
 
+// cmd_spell.cpp
+extern bool spell_okay(int spell, bool known);
+extern s16b get_spell_from_list(s16b book, s16b spell);
+extern int get_spell_index(object_type *o_ptr, int index);
+
 /* effect.cpp */
 extern void effect_prep(int x_idx, byte type, u16b f_idx, byte y, byte x, byte countdown,
                             byte repeats, u16b power, s16b source, u16b flags);
@@ -56,7 +61,7 @@ extern int get_ball_beam_dam(int m_idx, monster_race *r_ptr, int attack, int gf_
 
 /* object_desc.c */
 extern QString strip_name(int k_idx);
-extern QString object_desc(QString buf, size_t max, const object_type *o_ptr, byte mode);
+extern QString object_desc(object_type *o_ptr, byte mode);
 extern QString object_desc_spoil(object_type *o_ptr);
 
 
@@ -88,14 +93,14 @@ extern void flavor_init(void);
 extern void object_flags(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3, u32b *native);
 extern void object_flags_known(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3, u32b *native);
 extern QChar index_to_label(int i);
-extern s16b wield_slot_ammo(const object_type *o_ptr);
-extern s16b wield_slot(const object_type *o_ptr);
-extern bool ammo_inscribed_for_quiver(const object_type *o_ptr);
-extern bool weapon_inscribed_for_quiver(const object_type *o_ptr);
-extern bool slot_can_wield_item(int slot, const object_type *o_ptr);
+extern s16b wield_slot_ammo(object_type *o_ptr);
+extern s16b wield_slot(object_type *o_ptr);
+extern bool ammo_inscribed_for_quiver(object_type *o_ptr);
+extern bool weapon_inscribed_for_quiver(object_type *o_ptr);
+extern bool slot_can_wield_item(int slot, object_type *o_ptr);
 extern QString mention_use(int i);
 extern QString describe_use(int i);
-extern bool item_tester_okay(const object_type *o_ptr, int obj_num);
+extern bool item_tester_okay(object_type *o_ptr, int obj_num);
 extern int scan_floor(int *items, int size, int y, int x, int mode);
 extern void excise_object_idx(int o_idx);
 extern void delete_object_idx(int o_idx);
@@ -105,34 +110,34 @@ extern void wipe_o_list(void);
 extern s16b o_pop(void);
 extern int count_floor_items(int y, int x, bool pickup_only);
 extern object_type* get_first_object(int y, int x);
-extern object_type* get_next_object(const object_type *o_ptr);
+extern object_type* get_next_object(object_type *o_ptr);
 extern int get_obj_num_prep(void);
 extern bool is_blessed(object_type *o_ptr);
 extern s32b object_value(object_type *o_ptr);
-extern bool object_similar(const object_type *o_ptr, const object_type *j_ptr);
-extern void object_absorb(object_type *o_ptr, const object_type *j_ptr);
+extern bool object_similar(object_type *o_ptr, object_type *j_ptr);
+extern void object_absorb(object_type *o_ptr, object_type *j_ptr);
 extern void object_copy_amt(object_type *dst, object_type *src, int amt);
 extern s16b floor_carry(int y, int x, object_type *j_ptr);
 extern bool drop_near(object_type *j_ptr, int chance, int y, int x);
 extern void inven_item_charges(int item);
 extern void inven_item_describe(int item);
 extern void inven_item_increase(int item, int num);
-extern int get_tag_num(int o_idx, int cmd, byte *tag_num);
+extern int get_tag_num(int o_idx, QChar cmd, byte *tag_num);
 extern int quiver_space_per_unit(const object_type *o_ptr);
 extern void save_quiver_size(void);
 extern int compare_ammo(int slot1, int slot2);
-extern byte quiver_get_group(const object_type *o_ptr);
+extern byte quiver_get_group(object_type *o_ptr);
 extern int sort_quiver(int slot);
 extern void open_quiver_slot(int slot);
-extern bool quiver_carry_okay(const object_type *o_ptr, int num, int item);
+extern bool quiver_carry_okay(object_type *o_ptr, int num, int item);
 extern void inven_item_optimize(int item);
 extern void floor_item_charges(int item);
 extern void floor_item_describe(int item);
 extern void floor_item_increase(int item, int num);
 extern void floor_item_optimize(int item);
-extern bool inven_carry_okay(const object_type *o_ptr);
-extern bool quiver_stack_okay(const object_type *o_ptr);
-extern bool inven_stack_okay(const object_type *o_ptr, int set_limit);
+extern bool inven_carry_okay(object_type *o_ptr);
+extern bool quiver_stack_okay(object_type *o_ptr);
+extern bool inven_stack_okay(object_type *o_ptr, int set_limit);
 extern s16b quiver_carry(object_type *o_ptr);
 extern s16b inven_carry(object_type *o_ptr);
 extern s16b inven_takeoff(int item, int amt);
@@ -140,50 +145,36 @@ extern void inven_drop(int item, int amt);
 extern void combine_pack(void);
 extern void combine_quiver(void);
 extern void reorder_pack(void);
-extern int get_use_device_chance(const object_type *o_ptr);
+extern int get_use_device_chance(object_type *o_ptr);
 extern void distribute_charges(object_type *o_ptr, object_type *i_ptr, int amt);
 extern void reduce_charges(object_type *o_ptr, int amt);
-extern unsigned check_for_inscrip(const object_type *o_ptr, const char *inscrip);
+extern unsigned check_for_inscrip(object_type *o_ptr, QString inscrip);
 extern s16b lookup_kind(int tval, int sval);
 extern void display_object_idx_recall(s16b o_idx);
 extern void display_object_kind_recall(s16b k_idx);
-extern void display_itemlist(void);
-extern bool obj_can_refill(const object_type *o_ptr);
-extern bool obj_is_spellbook(const object_type *o_ptr);
-extern bool obj_is_shovel(const object_type *o_ptr);
-extern bool obj_is_bow(const object_type *o_ptr);
-extern bool obj_is_staff(const object_type *o_ptr);
-extern bool obj_is_wand(const object_type *o_ptr);
-extern bool obj_is_rod(const object_type *o_ptr);
-extern bool obj_is_potion(const object_type *o_ptr);
-extern bool obj_is_scroll(const object_type *o_ptr);
-extern bool obj_is_parchment(const object_type *o_ptr);
-extern bool obj_is_food(const object_type *o_ptr);
-extern bool obj_is_light(const object_type *o_ptr);
-extern bool obj_is_ring(const object_type *o_ptr);
-extern bool obj_is_chest(const object_type *o_ptr);
-extern bool obj_is_openable_chest(const object_type *o_ptr);
-extern bool chest_requires_disarming(const object_type *o_ptr);
-extern bool obj_is_weapon(const object_type *o_ptr);
-extern bool obj_is_ammo(const object_type *o_ptr);
-extern bool ammo_can_fire(const object_type *o_ptr, int item);
+extern bool obj_can_refill(object_type *o_ptr);
+extern bool obj_is_openable_chest(object_type *o_ptr);
+extern bool chest_requires_disarming(object_type *o_ptr);
+extern bool obj_is_weapon(object_type *o_ptr);
+extern bool obj_is_ammo(object_type *o_ptr);
+extern bool ammo_can_fire(object_type *o_ptr, int item);
 extern bool has_correct_ammo(void);
-extern bool obj_has_charges(const object_type *o_ptr);
-extern bool rod_can_zap(const object_type *o_ptr);
-extern bool obj_can_browse(const object_type *o_ptr);
-extern bool obj_can_study(const object_type *o_ptr);
-extern bool obj_can_cast(const object_type *o_ptr);
-extern bool obj_can_takeoff(const object_type *o_ptr);
-extern bool obj_can_wear(const object_type *o_ptr);
-extern bool obj_has_inscrip(const object_type *o_ptr);
+extern bool obj_has_charges(object_type *o_ptr);
+extern bool rod_can_zap(object_type *o_ptr);
+extern bool obj_can_browse(object_type *o_ptr);
+extern bool obj_can_study(object_type *o_ptr);
+extern bool obj_can_cast(object_type *o_ptr);
+extern bool obj_can_takeoff(object_type *o_ptr);
+extern bool obj_can_wear(object_type *o_ptr);
+extern bool obj_has_inscrip(object_type *o_ptr);
 extern object_type *object_from_item_idx(int item);
 extern bool obj_needs_aim(object_type *o_ptr);
-extern bool obj_is_activatable(const object_type *o_ptr);
-extern bool obj_can_activate(const object_type *o_ptr);
+extern bool obj_is_activatable(object_type *o_ptr);
+extern bool obj_can_activate(object_type *o_ptr);
 extern bool get_item_okay(int item);
 extern int scan_items(int *item_list, size_t item_list_max, int mode);
-extern bool item_is_available(int item, bool (*tester)(const object_type *), int mode);
-extern bool is_throwing_weapon(const object_type *o_ptr);
+extern bool item_is_available(int item, bool (*tester)(object_type *), int mode);
+extern bool is_throwing_weapon(object_type *o_ptr);
 extern bool pack_is_full(void);
 extern bool pack_is_overfull(void);
 extern void pack_overflow(void);
@@ -193,6 +184,9 @@ extern void object_tried(object_type *o_ptr);
 extern void object_history(object_type *o_ptr, byte origin, s16b r_idx);
 extern void stack_histories(object_type *o_ptr, const object_type *j_ptr);
 extern void expand_inscription(const object_type *o_ptr, const char *src, char dest[], int max);
+extern int value_check_aux1(object_type *o_ptr);
+extern int value_check_aux2(object_type *o_ptr);
+
 
 
 //player_ghost.cpp
@@ -205,8 +199,11 @@ extern void add_player_ghost_entry(void);
 extern void load_player_ghost_file(void);
 extern void save_player_ghost_file(void);
 
+// player_spell.cpp
+extern int get_player_spell_realm(void);
+
 /* randart.c */
-extern void make_random_name(QString *random_name, byte min, byte max);
+extern QString make_random_name(byte min_length, byte max_length);
 extern s32b artifact_power(int a_idx);
 extern void build_randart_tables(void);
 extern void free_randart_tables(void);
@@ -224,8 +221,9 @@ extern bool save_player(void);
 extern bool hp_player(int num);
 
 //squelch.cpp
+extern int squelch_itemp(object_type *o_ptr, byte feeling, bool fullid);
 extern void rearrange_stack(int y, int x);
-extern bool squelch_item_ok(const object_type *o_ptr);
+extern bool squelch_item_ok(object_type *o_ptr);
 extern void do_squelch_pile(int y, int x);
 
 //tables.cpp
@@ -295,11 +293,14 @@ extern int letter_to_number (QChar let);
 extern QChar number_to_letter (int num);
 extern bool is_a_vowel(QChar single_letter);
 extern void pop_up_message_box(QString message);
+extern bool get_check(QString question);
+extern QString get_string(QString question);
 extern QColor add_presetcolor(int which_color);
 extern void message(QString msg);
 extern void color_message(QString msg, int which_color);
 extern void custom_color_message(QString msg, byte red, byte green, byte blue);
-
+extern void cmd_enable_repeat(void);
+extern void cmd_disable_repeat(void);
 
 
 #endif // FUNCTION_DECLARATIONS_H

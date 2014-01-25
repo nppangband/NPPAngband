@@ -16,6 +16,7 @@ SOURCES +=  src/qt_main.cpp\
             src/calcs.cpp \
             src/cave.cpp \
             src/cmd4.cpp\
+            src/cmd_spell.cpp \
             src/effect.cpp \
             src/feature.cpp \
             src/generate.cpp \
@@ -30,6 +31,7 @@ SOURCES +=  src/qt_main.cpp\
             src/object_make.cpp \
             src/object_util.cpp \
             src/player_ghost.cpp \
+            src/player_spell.cpp \
             src/randart.cpp \
             src/random_numbers.cpp \
             src/spells2.cpp \
@@ -37,6 +39,8 @@ SOURCES +=  src/qt_main.cpp\
             src/tables.cpp \
             src/utilities.cpp \
             src/save.cpp
+
+
 
 
 
@@ -58,7 +62,8 @@ HEADERS  += src/qt_mainwindow.h\
             src/loadsave.h \
             src/user_macros.h \
             src/utilities.h \
-            src/object_classes.h
+            src/object_classes.h \
+            src/squelch.h
 
 
 RESOURCES += \

@@ -208,3 +208,59 @@ bool object_type::can_be_pseudo_ided()
     return (FALSE);
 }
 
+/*
+ * Artifacts use the "art_num" field
+ */
+bool object_type::is_artifact()
+{
+    if (art_num) return (TRUE);
+    return (FALSE);
+}
+
+
+/**
+ * \returns whether the object is known to be an artifact
+ */
+bool object_type::is_known_artifact()
+{
+
+    if (is_artifact() && was_sensed()) return (TRUE);
+    if (ident & (IDENT_INDESTRUCT)) return (TRUE);
+    return (FALSE);
+}
+
+/**
+ * \returns whether the object has been sensed with pseudo-ID
+ */
+bool object_type::was_sensed()
+{
+    if (ident & (IDENT_SENSE)) return (TRUE);
+    return (FALSE);
+}
+
+/*
+ * Is this a spellbook?
+ */
+bool object_type::is_spellbook()
+{
+    if (tval == TV_MAGIC_BOOK) return (TRUE);
+    if (tval == TV_PRAYER_BOOK) return (TRUE);
+    if (tval == TV_DRUID_BOOK) return (TRUE);
+
+    return (FALSE);
+}
+
+
+/* Basic tval testers */
+bool object_type::is_shovel()       { return tval == TV_DIGGING;}
+bool object_type::is_bow()          { return tval == TV_BOW; }
+bool object_type::is_staff()        { return tval == TV_STAFF; }
+bool object_type::is_wand()         { return tval == TV_WAND; }
+bool object_type::is_rod()          { return tval == TV_ROD; }
+bool object_type::is_potion()       { return tval == TV_POTION; }
+bool object_type::is_scroll()       { return tval == TV_SCROLL; }
+bool object_type::is_parchment()    { return tval == TV_PARCHMENT; }
+bool object_type::is_food()         { return tval == TV_FOOD; }
+bool object_type::is_light()        { return tval == TV_LIGHT; }
+bool object_type::is_ring()         { return tval == TV_RING; }
+bool object_type::is_chest()        { return tval == TV_CHEST; }

@@ -344,7 +344,7 @@ static s16b cur_art_k_idx;
  * set.  Relies on European vowels (a, e, i, o, u).  The generated name should
  * be copied/used before calling this function again.
  */
-static QString make_word(byte min_length, byte max_length)
+QString make_random_name(byte min_length, byte max_length)
 {
     QString word_buf;
     int r, totalfreq;
@@ -405,14 +405,6 @@ startover:
 }
 
 
-void make_random_name(QString *random_name, byte min, byte max)
-{
-
-    /*get the randomly generated word*/
-    *random_name = (make_word(min, max), max);
-
-    return;
-}
 
 
 /*
@@ -1129,13 +1121,6 @@ static bool init_mon_power(void)
 
         }
 
-#ifdef ALLOW_DATA_DUMP
-
-        /*record the hp and damage score*/
-        r_ptr->mon_eval_hp	= hp;
-        r_ptr->mon_eval_dam = dam;
-
-#endif /*ALLOW_DATA_DUMP*/
 
         /*
          * Slight adjustment for group monsters.
@@ -1193,18 +1178,13 @@ static bool init_mon_power(void)
 
     }
 
-#ifdef ALLOW_DATA_DUMP
-
-    write_mon_power();
-
-#endif /*ALLOW_DATA_DUMP*/
 
     /* Now we have all the ratings */
     return (TRUE);
 }
 
 
-#ifdef USE_ART_THEME
+
 
 /* Return ART_THEME slot.
  * IMPORTANT: Assumes the function can_be_artifact would return true.
@@ -1240,7 +1220,6 @@ static byte get_art_theme(const artifact_type *a_ptr)
 
 }
 
-#endif /*USE_ART_THEME*/
 
 /*
  * Calculate the rating for calculating a weapon base damage potential
@@ -1729,7 +1708,7 @@ s32b artifact_power(int a_idx)
     return (p);
 }
 
-#ifdef LATER
+
 /*
  * Store the original artifact power ratings as a baseline
  */
@@ -1788,7 +1767,7 @@ static void store_base_power (void)
     }
 
 }
-#endif //LATER
+
 
 
 /*
@@ -1845,7 +1824,7 @@ static void do_pval(artifact_type *a_ptr)
     }
 }
 
-#ifdef LATER
+
 static void remove_contradictory(artifact_type *a_ptr)
 {
     if (a_ptr->a_flags3 & TR3_AGGRAVATE) a_ptr->a_flags1 &= ~(TR1_STEALTH);
@@ -2769,7 +2748,7 @@ static void adjust_art_freq_table(void)
 
     return;
 }
-#endif //LATER
+
 
 /*
  * Build the frequency tables
@@ -2785,7 +2764,7 @@ static void build_art_freq_table(void)
 
     return;
 }
-#ifdef LATER
+
 /*
  * Pick a category of weapon randomly.
  */
@@ -3484,7 +3463,7 @@ static void scramble_artifact(int a_idx)
     }
 
     /*randomize the name*/
-    buf = make_word(5, 11);
+    buf = make_random_name(5, 11);
 
     if (!one_in_(3))
     {
@@ -3753,7 +3732,7 @@ static int do_randart_aux(bool full)
     /* Success */
     return (0);
 }
-#endif //LATER
+
 
 
 /*build the names table at the beginning on the game*/
@@ -3778,7 +3757,7 @@ void free_randart_tables(void)
     FREE(kinds);
 }
 
-#ifdef LATER
+
 
 /*
  * Randomize the artifacts
@@ -3840,7 +3819,7 @@ int do_randart(u32b randart_seed, bool full)
  */
 bool make_one_randart(object_type *o_ptr, int art_power, bool tailored)
 {
-    char tmp[MAX_LEN_ART_NAME];
+    QString tmp;
     int i, tries;
     int a_idx = 0;
     s32b ap;
@@ -3906,7 +3885,7 @@ bool make_one_randart(object_type *o_ptr, int art_power, bool tailored)
         object_generation_mode = OB_GEN_MODE_RANDART;
 
         /*prepare the object template*/
-        object_wipe(o_ptr);
+        o_ptr->object_wipe();
 
         /*get the obejct number test it for appropriate power*/
         while (TRUE)
@@ -3962,53 +3941,48 @@ bool make_one_randart(object_type *o_ptr, int art_power, bool tailored)
     }
 
     /*Start artifact naming with a blank name*/
-    tmp[0] = '\0';
+    tmp.clear();
 
     /*possibly allow character to name the artifact*/
     if (tailored)
     {
-        char ask_first[40];
-        strnfmt(ask_first, sizeof(ask_first), "Name your artifact? ");
+        QString ask_first = "Name your artifact? ";
         if (get_check(ask_first))
         {
-            char buf[MAX_LEN_ART_NAME];
+            QString buf;
 
             /*start with a blank name*/
-            buf[0] = '\0';
+            buf.clear();
 
-            if (get_string("Enter a name for your artifact: ", buf, sizeof(buf)))
-            {
+            buf = (get_string("Enter a name for your artifact: "));
 
-                /*The additional check is because players sometimes hit return accidentally*/
-                if (strlen(buf) > 0) my_strcpy(tmp, format("'%^s'", buf), MAX_LEN_ART_NAME);
-            }
+            /*The additional check is because players sometimes hit return accidentally*/
+            if (buf.length()) tmp = (QString("'%^1'") .arg(buf));
         }
     }
     /*If none selected, make one at random*/
-    if ((!tailored) || (tmp[0] == '\0'))
+    if ((!tailored) || tmp.isEmpty())
     {
-        char buf[MAX_LEN_ART_NAME];
-
         /*randomize the name*/
-        make_random_name(buf, 5, 11);
+        QString buf = make_random_name(5, 11);
 
         /*Capitalize the name*/
-        buf[0] = toupper((unsigned char)buf[0]);
+        QChar first = buf[0];
+        first.toUpper();
+        buf[0] = first;
 
         if (!one_in_(3))
         {
-
-            my_strcpy(tmp, format("'%^s'", buf), MAX_LEN_ART_NAME);
-
+            tmp = (QString("'%^s'") .arg(buf));
         }
         else
         {
-            my_strcpy(tmp, format("of %^s", buf), MAX_LEN_ART_NAME);
+            tmp = (QString("of %^s") .arg(buf));
         }
     }
 
     /*copy the name*/
-    my_strcpy(a_ptr->name, format("%s", tmp), MAX_LEN_ART_NAME);
+    a_ptr->a_name = tmp;
 
     /* Generate the cumulative frequency table for this item type */
     build_freq_table(a_ptr);
@@ -4132,7 +4106,7 @@ void make_quest_artifact(int lev)
     int a_idx = QUEST_ART_SLOT;
     artifact_type *a_ptr = &a_info[a_idx];
     s16b k_idx = 0;
-    char buf[MAX_LEN_ART_NAME];
+    QString buf;
 
     byte old_mode = object_generation_mode;
 
@@ -4178,19 +4152,17 @@ void make_quest_artifact(int lev)
     artifact_prep(k_idx, a_idx);
 
     /*randomize the name*/
-    make_random_name(buf, 5, 11);
+    buf = make_random_name(5, 11);
 
     /*Capitalize the name*/
-    buf[0] = toupper((unsigned char)buf[0]);
+    /*Capitalize the name*/
+    QChar first = buf[0];
+    first.toUpper();
+    buf[0] = first;
 
-    if (!one_in_(3))
-    {
-        my_strcpy(a_ptr->name, format("'%^s'", buf), MAX_LEN_ART_NAME);
-    }
-    else
-    {
-        my_strcpy(a_ptr->name, format("of %^s", buf), MAX_LEN_ART_NAME);
-    }
+    if (!one_in_(3)) a_ptr->a_name = (QString("'%^s'") .arg(buf));
+    else a_ptr->a_name = (QString("of %^s") .arg(buf));
+
 
     return;
 }
@@ -4292,4 +4264,4 @@ bool can_be_randart(const object_type *o_ptr)
     }
 }
 
-#endif //LATER
+

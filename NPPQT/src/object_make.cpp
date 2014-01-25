@@ -227,7 +227,7 @@ static void object_mention(object_type *o_ptr)
     QString o_name = object_desc_spoil(o_ptr);
 
     /* Artifact */
-    if (artifact_p(o_ptr))
+    if (o_ptr->is_artifact())
     {
         /* Silly message */
         message(QString("Artifact (%1)") .arg(o_name));
@@ -3925,7 +3925,7 @@ void steal_object_from_monster(int y, int x)
 {
     monster_type *m_ptr = &mon_list[cave_m_idx[y][x]];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    char o_name[80];
+    QString o_name;
 
     bool chest = (r_ptr->flags1 & (RF1_DROP_CHEST)) ? TRUE : FALSE;
     bool good = (r_ptr->flags1 & (RF1_DROP_GOOD)) ? TRUE : FALSE;
@@ -3957,7 +3957,7 @@ void steal_object_from_monster(int y, int x)
         while (!make_gold(i_ptr)) continue;
 
         /* Describe the object */
-        object_desc(o_name, sizeof(o_name), i_ptr, ODESC_PREFIX | ODESC_FULL);
+        o_name = object_desc(i_ptr, ODESC_PREFIX | ODESC_FULL);
 
         /* Message */
         message(QString("You have stolen %1d gold pieces worth of %2.") .arg((long)i_ptr->pval) .arg(o_name));
@@ -3996,7 +3996,7 @@ void steal_object_from_monster(int y, int x)
         else while (!make_object(i_ptr, good, great,DROP_TYPE_UNTHEMED, FALSE)) continue;
 
         /* Describe the object */
-        object_desc(o_name, sizeof(o_name), i_ptr, ODESC_PREFIX | ODESC_FULL);
+        o_name = object_desc(i_ptr, ODESC_PREFIX | ODESC_FULL);
 
         /*update the monster lore*/
         lore_treasure(cave_m_idx[y][x], 1, 0);
@@ -4031,13 +4031,13 @@ void steal_object_from_monster(int y, int x)
         }
 
         /*squelch the item, unless artifact*/
-        else if (artifact_p(i_ptr))
+        else if (i_ptr->is_artifact())
         {
             /* Mark the object as indestructible */
             i_ptr->discount = INSCRIP_INDESTRUCTIBLE;
 
             /* Update the name */
-            object_desc(o_name, sizeof(o_name), i_ptr, ODESC_BASE);
+            o_name = object_desc(i_ptr, ODESC_BASE);
 
             /* Message */
             message(QString("You cannot squelch %1.") .arg(o_name));

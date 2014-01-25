@@ -44,25 +44,25 @@ bool hp_player(int num)
         /* Heal 0-4 */
         if (num < 5)
         {
-            // TODO make message box msg_print("You feel a little better.");
+            message("You feel a little better.");
         }
 
         /* Heal 5-14 */
         else if (num < 15)
         {
-            // TODO make message box msg_print("You feel better.");
+            message("You feel better.");
         }
 
         /* Heal 15-34 */
         else if (num < 35)
         {
-            // TODO make message box msg_print("You feel much better.");
+            message("You feel much better.");
         }
 
         /* Heal 35+ */
         else
         {
-            // TODO make message box msg_print("You feel very good.");
+            message("You feel very good.");
         }
 
         /* Notice */

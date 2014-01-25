@@ -93,8 +93,11 @@ extern option_entry options[OPT_MAX];
 extern s16b x_pop(void);
 
 
-/* squelch.c */
+
 extern byte squelch_level[SQUELCH_BYTES];
+
+
+extern quiver_group_type quiver_group[MAX_QUIVER_GROUPS];
 
 
 //Various directories used by NPP
@@ -110,7 +113,7 @@ extern QString NPP_DIR_USER;
 extern bool item_tester_full;
 extern byte item_tester_tval;
 extern bool item_tester_swap;
-extern bool (*item_tester_hook)(const object_type*);
+extern bool (*item_tester_hook)(object_type*);
 extern bool (*get_obj_num_hook)(int k_idx);
 
 // Monser race messages

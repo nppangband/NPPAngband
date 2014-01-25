@@ -239,7 +239,7 @@ void flavor_init(void)
                     }
 
                     /* Make random_syllable */
-                    make_random_name(&syllable, min, max);
+                    syllable = make_random_name(min, max);
 
                     /* Make second syllable lowercase */
                     if (q) syllable.toLower();
@@ -577,7 +577,7 @@ static int get_inscribed_ammo_slot(const object_type *o_ptr)
  * Used by wield_slot() to find an appropriate slot for ammo. See wield_slot()
  * for information on what this returns.
  */
-s16b wield_slot_ammo(const object_type *o_ptr)
+s16b wield_slot_ammo(object_type *o_ptr)
 {
     s16b i, open = 0;
     object_type *j_ptr;
@@ -618,7 +618,7 @@ s16b wield_slot_ammo(const object_type *o_ptr)
 /*
  * Determine which equipment slot (if any) an item likes
  */
-s16b wield_slot(const object_type *o_ptr)
+s16b wield_slot(object_type *o_ptr)
 {
     /*Hack - don't allow quest items to be worn*/
     if(o_ptr->ident & (IDENT_QUEST)) return (-1);
@@ -722,7 +722,7 @@ s16b wield_slot(const object_type *o_ptr)
 /*
  * Hack -- determine if an item is inscribed for the quiver =g.
  */
-bool ammo_inscribed_for_quiver(const object_type *o_ptr)
+bool ammo_inscribed_for_quiver(object_type *o_ptr)
 {
     int searches = 0;
 
@@ -761,7 +761,7 @@ bool ammo_inscribed_for_quiver(const object_type *o_ptr)
 /*
  * Hack -- determine if an item is inscribed for the quiver - @v.
  */
-bool weapon_inscribed_for_quiver(const object_type *o_ptr)
+bool weapon_inscribed_for_quiver(object_type *o_ptr)
 {
     int searches = 0;
 
@@ -801,7 +801,7 @@ bool weapon_inscribed_for_quiver(const object_type *o_ptr)
 /*
  * Returns whether item o_ptr will fit in slot 'slot'
  */
-bool slot_can_wield_item(int slot, const object_type *o_ptr)
+bool slot_can_wield_item(int slot, object_type *o_ptr)
 {
     if (o_ptr->tval == TV_RING)
     {
@@ -839,7 +839,7 @@ QString mention_use(int slot)
                 if (slot == INVEN_SWAP_WEAPON) return "holding";
             }
 
-            if (obj_is_bow(o_ptr))
+            if (o_ptr->is_bow())
             {
                 if (p_ptr->state.heavy_shoot)	return "Just holding";
                 else return "Shooting";
@@ -894,7 +894,7 @@ QString describe_use(int i)
     if ((adult_swap_weapons) && ((i == INVEN_MAIN_WEAPON) || (i == INVEN_SWAP_WEAPON)))
     {
         o_ptr = &inventory[i];
-        if (obj_is_bow(o_ptr))
+        if (o_ptr->is_bow())
         {
             if (p_ptr->state.heavy_shoot)	p = "just holding";
             else p = "shooting missiles with";
@@ -948,7 +948,7 @@ QString describe_use(int i)
 /*
  * Check an item against the item tester info
  */
-bool item_tester_okay(const object_type *o_ptr, int obj_num)
+bool item_tester_okay(object_type *o_ptr, int obj_num)
 {
     /* Hack -- allow listing empty slots */
     if (item_tester_full) return (TRUE);
@@ -1434,7 +1434,7 @@ void compact_objects(int size)
             chance = 90;
 
             /* Hack -- only compact artifacts in emergencies */
-            if (artifact_p(o_ptr) && (cnt < 1000)) chance = 100;
+            if (o_ptr->is_artifact() && (cnt < 1000)) chance = 100;
 
             /* Apply the saving throw */
             if (rand_int(100) < chance) continue;
@@ -1492,7 +1492,7 @@ void wipe_o_list(void)
         if (!character_dungeon || adult_preserve)
         {
             /* Hack -- Preserve unknown artifacts */
-            if (artifact_p(o_ptr) && !object_known_p(o_ptr))
+            if (o_ptr->is_artifact() && !object_known_p(o_ptr))
             {
                 /* Mega-Hack -- Preserve the artifact */
                 a_info[o_ptr->art_num].a_cur_num = 0;
@@ -1657,7 +1657,7 @@ object_type *get_first_object(int y, int x)
 /*
  * Get the next object in a stack or NULL if there isn't one.
  */
-object_type *get_next_object(const object_type *o_ptr)
+object_type *get_next_object(object_type *o_ptr)
 {
     if (o_ptr->next_o_idx) return (&o_list[o_ptr->next_o_idx]);
 
@@ -1718,7 +1718,7 @@ bool is_blessed(object_type *o_ptr)
  * Return the "value" of an "unknown" item
  * Make a guess at the value of non-aware items
  */
-static s32b object_value_base(const object_type *o_ptr)
+static s32b object_value_base(object_type *o_ptr)
 {
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
@@ -2064,7 +2064,7 @@ s32b object_value(object_type *o_ptr)
  *
  * Chests, and activatable items, except rods, never stack (for various reasons).
  */
-bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
+bool object_similar(object_type *o_ptr, object_type *j_ptr)
 {
     int total = o_ptr->number + j_ptr->number;
 
@@ -2310,7 +2310,7 @@ bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
  *
  * These assumptions are enforced by the "object_similar()" code.
  */
-void object_absorb(object_type *o_ptr, const object_type *j_ptr)
+void object_absorb(object_type *o_ptr, object_type *j_ptr)
 {
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
@@ -2677,12 +2677,10 @@ bool drop_near(object_type *j_ptr, int chance, int y, int x)
     if (j_ptr->number != 1) plural = TRUE;
 
     /* Describe object */
-    //TODO add object_desc
-    //object_desc(o_name, sizeof(o_name), j_ptr, ODESC_BASE);
-    o_name = ("object description needed");
+    o_name = object_desc(j_ptr, ODESC_BASE);
 
     /* Handle normal "breakage" */
-    if (!artifact_p(j_ptr) && (rand_int(100) < chance))
+    if (!j_ptr->is_artifact() && (rand_int(100) < chance))
     {
         /* Message */
         if (character_dungeon)
@@ -2807,7 +2805,7 @@ bool drop_near(object_type *j_ptr, int chance, int y, int x)
     }
 
     /* Handle lack of space */
-    if (!flag && !artifact_p(j_ptr))
+    if (!flag && !j_ptr->is_artifact())
     {
         /* Message */
         if (character_dungeon)
@@ -2932,23 +2930,23 @@ void inven_item_describe(int item)
 {
     object_type *o_ptr = &inventory[item];
 
-    char o_name[80];
+    QString o_name;
 
-    if (artifact_p(o_ptr) && object_known_p(o_ptr))
+    if (o_ptr->is_artifact() && object_known_p(o_ptr))
     {
         /* Get a description */
-        object_desc(o_name, sizeof(o_name), o_ptr, ODESC_FULL);
+        o_name = object_desc(o_ptr, ODESC_FULL);
 
         /* Print a message */
-        msg_format("You no longer have the %s (%c).", o_name, index_to_label(item));
+        message(QString("You no longer have the %1 (%2).") .arg(o_name) .arg(index_to_label(item)));
     }
     else
     {
         /* Get a description */
-        object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
+        o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
         /* Print a message */
-        msg_format("You have %s (%c).", o_name, index_to_label(item));
+        message(QString("You have %1 (%2).") .arg(o_name) .arg(index_to_label(item)));
     }
 }
 
@@ -2998,41 +2996,48 @@ void inven_item_increase(int item, int num)
  * is cmd. If cmd is 0 then "x" can be anything.
  * Returns FALSE if the object doesn't have a valid tag.
  */
-int get_tag_num(int o_idx, int cmd, byte *tag_num)
+int get_tag_num(int o_idx, QChar cmd, byte *tag_num)
 {
     object_type *o_ptr = &inventory[o_idx];
-    char *s;
-
+    QString inscrip = o_ptr->inscription;
     /* Ignore empty objects */
     if (!o_ptr->k_idx) return FALSE;
 
     /* Ignore objects without notes */
-    if (!o_ptr->obj_note) return FALSE;
+    if (o_ptr->inscription.isEmpty()) return FALSE;
 
-    /* Find the first '@' */
-    s = strchr(quark_str(o_ptr->obj_note), '@');
-
-    while (s)
+    while (inscrip.contains('@'))
     {
+        /* Find the first '@' */
+        int first_index = inscrip.indexOf('@');
+
+        // clear the '@'
+        inscrip.remove(first_index, 1);
+
+        //Paranoia
+        if (inscrip.length() < first_index) continue;
+
+        QChar s = inscrip[first_index];
+
         /* Found "@n"? */
-        if (isdigit((unsigned char)s[1]))
+        if (s.isDigit())
         {
             /* Convert to number */
-            *tag_num = D2I(s[1]);
+            *tag_num = letter_to_number(s);
             return TRUE;
         }
+
+        if (inscrip.length() <= first_index) continue;
+
+        QChar z = inscrip[first_index + 1];
 
         /* Found "@xn"? */
-        if ((!cmd || ((unsigned char)s[1] == cmd)) &&
-            isdigit((unsigned char)s[2]))
+        if (cmd.isNull() || (operator==(s, cmd) && z.isDigit()))
         {
             /* Convert to number */
-            *tag_num = D2I(s[2]);
+            *tag_num = letter_to_number(z);
             return TRUE;
         }
-
-        /* Find another '@' in any other case */
-        s = strchr(s + 1, '@');
     }
 
     return FALSE;
@@ -3043,7 +3048,7 @@ int get_tag_num(int o_idx, int cmd, byte *tag_num)
  * Returns the number of quiver units an object will consume when it's stored in the quiver.
  * Every 99 quiver units we consume an inventory slot
  */
-int quiver_space_per_unit(const object_type *o_ptr)
+int quiver_space_per_unit(object_type *o_ptr)
 {
     return (ammo_p(o_ptr) ? 1: 5);
 }
@@ -3095,7 +3100,7 @@ int compare_ammo(int slot1, int slot2)
 /*
  * Returns the quiver group associated to an object. Defaults to throwing weapons
  */
-byte quiver_get_group(const object_type *o_ptr)
+byte quiver_get_group(object_type *o_ptr)
 {
     switch (o_ptr->tval)
     {
@@ -3440,7 +3445,7 @@ void open_quiver_slot(int slot)
  * inventory slot occupied by the object in "item". This helps us to determine
  * if we have one free inventory slot more. You can pass -1 to ignore this feature.
  */
-bool quiver_carry_okay(const object_type *o_ptr, int num, int item)
+bool quiver_carry_okay(object_type *o_ptr, int num, int item)
 {
     int i;
     int ammo_num = 0;
@@ -3515,7 +3520,7 @@ void inven_item_optimize(int item)
     if (!limit)
     {
         /* Erase the empty slot */
-        object_wipe(&inventory[item]);
+        inventory[item].object_wipe();
 
         /* Recalculate stuff */
         p_ptr->update |= (PU_BONUS);
@@ -3544,7 +3549,7 @@ void inven_item_optimize(int item)
     if (item >= QUIVER_START) sort_quiver(0);
 
     /* Wipe the left-over object on the end */
-    object_wipe(&inventory[j]);
+    inventory[j].object_wipe();
 
     /* Inventory has changed, so disable repeat command */
     cmd_disable_repeat();
@@ -3565,8 +3570,7 @@ void floor_item_charges(int item)
     if (!object_known_p(o_ptr)) return;
 
     /* Print a message */
-    msg_format("There are %d charge%s remaining.", o_ptr->pval,
-               (o_ptr->pval != 1) ? "s" : "");
+    message(QString("There are %1 charge%2 remaining.") .arg(o_ptr->pval) .arg((o_ptr->pval != 1) ? "s" : ""));
 }
 
 
@@ -3577,13 +3581,13 @@ void floor_item_describe(int item)
 {
     object_type *o_ptr = &o_list[item];
 
-    char o_name[80];
+    QString o_name;
 
     /* Get a description */
-    object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
+    o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
     /* Print a message */
-    msg_format("You see %s.", o_name);
+    message(QString("You see %s.") .arg(o_name));
 }
 
 
@@ -3630,7 +3634,7 @@ void floor_item_optimize(int item)
 /*
  * Check if we have space for an item in the pack without overflow
  */
-bool inven_carry_okay(const object_type *o_ptr)
+bool inven_carry_okay(object_type *o_ptr)
 {
     /* Empty slot? */
     if (p_ptr->inven_cnt < INVEN_MAX_PACK) return TRUE;
@@ -3646,7 +3650,7 @@ bool inven_carry_okay(const object_type *o_ptr)
 /*
  * Check to see if an item is stackable in the quiver
  */
-bool quiver_stack_okay(const object_type *o_ptr)
+bool quiver_stack_okay(object_type *o_ptr)
 {
     int j;
 
@@ -3669,7 +3673,7 @@ bool quiver_stack_okay(const object_type *o_ptr)
 /*
  * Check to see if an item is stackable in the inventory
  */
-bool inven_stack_okay(const object_type *o_ptr, int set_limit)
+bool inven_stack_okay(object_type *o_ptr, int set_limit)
 {
     /* Similar slot? */
     int j;
@@ -3795,8 +3799,8 @@ s16b quiver_carry(object_type *o_ptr)
     /* Use that slot */
     i = j;
 
-    /* Apply an autoinscription */
-    apply_autoinscription(o_ptr);
+    /* TODO see if we need this.Apply an autoinscription */
+    //apply_autoinscription(o_ptr);
 
     /* Reorder the quiver */
     if (i < QUIVER_END)
@@ -3845,15 +3849,15 @@ s16b quiver_carry(object_type *o_ptr)
         for (k = n; k >= i; k--)
         {
             /* Hack -- Slide the item */
-            object_copy(&inventory[k+1], &inventory[k]);
+            inventory[k+1].object_copy(&inventory[k]);
         }
 
         /* Wipe the empty slot */
-        object_wipe(&inventory[i]);
+        inventory[i].object_wipe();
     }
 
     /* Copy the item */
-    object_copy(&inventory[i], o_ptr);
+    inventory[i].object_copy(o_ptr);
 
     /* Get the new object */
     j_ptr = &inventory[i];
@@ -3965,8 +3969,8 @@ s16b inven_carry(object_type *o_ptr)
     /* Use that slot */
     i = j;
 
-    /* Apply an autoinscription */
-    apply_autoinscription(o_ptr);
+    /* TODO Apply an autoinscription */
+    //apply_autoinscription(o_ptr);
 
     /* Reorder the pack */
     if (i < INVEN_MAX_PACK)
@@ -4028,15 +4032,15 @@ s16b inven_carry(object_type *o_ptr)
         for (k = n; k >= i; k--)
         {
             /* Hack -- Slide the item */
-            object_copy(&inventory[k+1], &inventory[k]);
+            inventory[k+1].object_copy(&inventory[k]);
         }
 
         /* Wipe the empty slot */
-        object_wipe(&inventory[i]);
+        inventory[i].object_wipe();
     }
 
     /* Copy the item */
-    object_copy(&inventory[i], o_ptr);
+    inventory[i].object_copy(o_ptr);
 
     /* Get the new object */
     j_ptr = &inventory[i];
@@ -4089,9 +4093,9 @@ s16b inven_takeoff(int item, int amt)
     object_type *i_ptr;
     object_type object_type_body;
 
-    cptr act;
+    QString act;
 
-    char o_name[80];
+    QString o_name;
 
     /* Get the item to take off */
     o_ptr = &inventory[item];
@@ -4106,7 +4110,7 @@ s16b inven_takeoff(int item, int amt)
     i_ptr = &object_type_body;
 
     /* Obtain a local object */
-    object_copy(i_ptr, o_ptr);
+    i_ptr->object_copy(o_ptr);
 
     /* Modify quantity */
     i_ptr->number = amt;
@@ -4122,7 +4126,7 @@ s16b inven_takeoff(int item, int amt)
     save_quiver_size();
 
     /* Describe the object */
-    object_desc(o_name, sizeof(o_name), i_ptr, ODESC_PREFIX | ODESC_FULL);
+    o_name = object_desc(i_ptr, ODESC_PREFIX | ODESC_FULL);
 
     /* Carry the object */
     slot = inven_carry(i_ptr);
@@ -4133,7 +4137,7 @@ s16b inven_takeoff(int item, int amt)
     /* Special handling for the quiver */
     if ((item > QUIVER_START) && (item < QUIVER_END))
     {
-        msg_format("You remove %s (%c) from your quiver.", o_name, index_to_label(slot));
+        message(QString("You remove %1 (%2) from your quiver.") .arg(o_name) .arg(index_to_label(slot)));
 
         return(slot);
     }
@@ -4141,7 +4145,7 @@ s16b inven_takeoff(int item, int amt)
     /* Took off weapon */
     if ((item == INVEN_WIELD) || (item == INVEN_BOW))
     {
-        if (obj_is_bow(o_ptr)) act = "You were shooting";
+        if (o_ptr->is_bow()) act = "You were shooting";
         else act = "You were wielding";
     }
 
@@ -4158,8 +4162,7 @@ s16b inven_takeoff(int item, int amt)
     }
 
     /* Message */
-    sound(MSG_WIELD);
-    msg_format("%s %s (%c).", act, o_name, index_to_label(slot));
+    message(QString("%1 %2 (%3).") .arg(act) .arg(o_name) .arg(index_to_label(slot)));
 
     /* Return slot */
     return (slot);
@@ -4181,7 +4184,7 @@ void inven_drop(int item, int amt)
     object_type *i_ptr;
     object_type object_type_body;
 
-    char o_name[80];
+    QString o_name;
 
     /* Get the original object */
     o_ptr = &inventory[item];
@@ -4204,14 +4207,14 @@ void inven_drop(int item, int amt)
         if (!o_ptr->k_idx) return;
 
         /* Describe local object */
-        object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
+        o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
     }
 
     /* Get local object */
     i_ptr = &object_type_body;
 
     /* Obtain local object */
-    object_copy(i_ptr, o_ptr);
+    i_ptr->object_copy(o_ptr);
 
     /* Distribute charges of wands, staves, or rods */
     distribute_charges(o_ptr, i_ptr, amt);
@@ -4223,10 +4226,10 @@ void inven_drop(int item, int amt)
     i_ptr->obj_in_use = FALSE;
 
     /* Describe local object */
-    object_desc(o_name, sizeof(o_name), i_ptr, ODESC_PREFIX | ODESC_FULL);
+    o_name = object_desc(i_ptr, ODESC_PREFIX | ODESC_FULL);
 
     /* Message */
-    msg_format("You drop %s (%c).", o_name, index_to_label(item));
+    message(QString("You drop %1 (%2).") .arg(o_name)  .arg(index_to_label(item)));
 
     /* Drop it near the player */
     drop_near(i_ptr, 0, py, px);
@@ -4291,7 +4294,7 @@ void combine_pack(void)
                 }
 
                 /* Hack -- wipe hole */
-                object_wipe(&inventory[k]);
+                inventory[k].object_wipe();
 
                 /* Redraw stuff */
                 p_ptr->update |= (PU_BONUS);
@@ -4304,7 +4307,7 @@ void combine_pack(void)
     }
 
     /* Message */
-    if (flag) msg_print("You combine some items in your pack.");
+    if (flag) message("You combine some items in your pack.");
 }
 
 
@@ -4357,7 +4360,7 @@ void combine_quiver(void)
                 }
 
                 /* Hack -- wipe hole */
-                object_wipe(&inventory[k]);
+                inventory[k].object_wipe();
 
                 /* Done */
                 break;
@@ -4371,7 +4374,7 @@ void combine_quiver(void)
         p_ptr->window |= (PW_EQUIP);
 
         /* Message */
-        msg_print("You combine your quiver.");
+        message("You combine your quiver.");
     }
 }
 
@@ -4468,24 +4471,24 @@ void reorder_pack(void)
         i_ptr = &object_type_body;
 
         /* Save a copy of the moving item */
-        object_copy(i_ptr, &inventory[i]);
+        i_ptr->object_copy(&inventory[i]);
 
         /* Slide the objects */
         for (k = i; k > j; k--)
         {
             /* Slide the item */
-            object_copy(&inventory[k], &inventory[k-1]);
+            inventory[k].object_copy(&inventory[k-1]);
         }
 
         /* Insert the moving item */
-        object_copy(&inventory[j], i_ptr);
+        inventory[j].object_copy(i_ptr);
 
         /* Redraw stuff */
         p_ptr->redraw |= PR_INVEN;
     }
 
     /* Message */
-    if (flag) msg_print("You reorder some items in your pack.");
+    if (flag) message("You reorder some items in your pack.");
 }
 
 
@@ -4493,7 +4496,7 @@ void reorder_pack(void)
  *Returns the number of times in 1000 that @ will FAIL
  * - thanks to Ed Graham for the formula
  */
-int get_use_device_chance(const object_type *o_ptr)
+int get_use_device_chance(object_type *o_ptr)
 {
     int lev, skill, fail;
 
@@ -4504,10 +4507,8 @@ int get_use_device_chance(const object_type *o_ptr)
     int diff_max = 100;
 
     /* Extract the item level, which is the difficulty rating */
-    if (artifact_p(o_ptr))
-        lev = a_info[o_ptr->art_num].a_level;
-    else
-        lev = k_info[o_ptr->k_idx].k_level;
+    if (o_ptr->is_artifact()) lev = a_info[o_ptr->art_num].a_level;
+    else lev = k_info[o_ptr->k_idx].k_level;
 
     /* Chance of failure */
     skill = p_ptr->state.skills[SKILL_DEVICE];
@@ -4592,26 +4593,15 @@ void reduce_charges(object_type *o_ptr, int amt)
 /*
  * Looks if "inscrip" is present on the given object.
  */
-unsigned check_for_inscrip(const object_type *o_ptr, const char *inscrip)
+unsigned check_for_inscrip(const object_type *o_ptr, QString inscrip)
 {
     unsigned i = 0;
-    const char *s;
 
-    if (!o_ptr->obj_note) return 0;
 
-    s = quark_str(o_ptr->obj_note);
+    if (o_ptr->inscription.isNull()) return 0;
+    if (!o_ptr->inscription.contains(inscrip)) return (0);
 
-    do
-    {
-        s = strstr(s, inscrip);
-        if (!s) break;
-
-        i++;
-        s++;
-    }
-    while (s);
-
-    return i;
+    return (o_ptr->inscription.indexOf(inscrip));
 }
 
 
@@ -4641,19 +4631,26 @@ s16b lookup_kind(int tval, int sval)
     return (0);
 }
 
-
 /**
  * Sort comparator for objects using only tval and sval.
  * -1 if o1 should be first
  *  1 if o2 should be first
  *  0 if it doesn't matter
  */
+static int compare(int first_value, int second_value)
+{
+    if (first_value < second_value) return (-1);
+    if (first_value > second_value) return (1);
+    return (0);
+}
+
+
 static int compare_types(const object_type *o1, const object_type *o2)
 {
     if (o1->tval == o2->tval)
-        return CMP(o1->sval, o2->sval);
+        return compare(o1->sval, o2->sval);
     else
-        return CMP(o1->tval, o2->tval);
+        return compare(o1->tval, o2->tval);
 }
 
 
@@ -4669,19 +4666,19 @@ static int compare_types(const object_type *o1, const object_type *o2)
  *
  * The sort order is designed with the "list items" command in mind.
  */
-static int compare_items(const object_type *o1, const object_type *o2)
+static int compare_items(object_type *o1, object_type *o2)
 {
     /* known artifacts will sort first */
-    if (object_is_known_artifact(o1) && object_is_known_artifact(o2))
+    if (o1->is_known_artifact() && o2->is_known_artifact())
         return compare_types(o1, o2);
-    if (object_is_known_artifact(o1)) return -1;
-    if (object_is_known_artifact(o2)) return 1;
+    if (o1->is_known_artifact()) return -1;
+    if (o2->is_known_artifact()) return 1;
 
     /* unknown objects will sort next */
-    if (!object_flavor_is_aware(o1) && !object_flavor_is_aware(o2))
+    if (!o1->is_flavor_known() && !o2->is_flavor_known())
         return compare_types(o1, o2);
-    if (!object_flavor_is_aware(o1)) return -1;
-    if (!object_flavor_is_aware(o2)) return 1;
+    if (!o1->is_flavor_known()) return -1;
+    if (!o2->is_flavor_known()) return 1;
 
     /* if only one of them is worthless, the other comes first */
     if (object_is_worthless(o1) && !object_is_worthless(o2)) return 1;
@@ -4698,20 +4695,21 @@ static int compare_items(const object_type *o1, const object_type *o2)
  */
 static void display_object_recall(object_type *o_ptr)
 {
+    //TODO object recall
     /* Redirect output to the screen */
-    text_out_hook = text_out_to_screen;
+   // text_out_hook = text_out_to_screen;
 
-    clear_from(0);
-    Term_gotoxy(0, 0);
+    //clear_from(0);
+    //Term_gotoxy(0, 0);
 
     /* Set hooks for character dump */
-    object_info_out_flags = object_flags_known;
+    //object_info_out_flags = object_flags_known;
 
-    screen_out_head(o_ptr);
+    //screen_out_head(o_ptr);
 
-    text_out("\n\n   ");
+    //text_out("\n\n   ");
 
-    object_info_out(o_ptr, TRUE);
+    //object_info_out(o_ptr, TRUE);
 }
 
 
@@ -4739,7 +4737,7 @@ void display_object_kind_recall(s16b k_idx)
     /* leave the function. */
     object_type object;
     object_type *o_ptr = &object;
-    object_wipe(o_ptr);
+    o_ptr->object_wipe();
     object_prep(o_ptr, k_idx);
 
     if (k_info[k_idx].aware) o_ptr->ident |= (IDENT_STORE);
@@ -4750,369 +4748,9 @@ void display_object_kind_recall(s16b k_idx)
 
 
 /*
- * Display visible items, similar to display_monlist
- */
-void display_itemlist(void)
-{
-    int max;
-    int mx, my;
-    unsigned num_player;
-    int line = 1, x = 0;
-    int cur_x;
-    int py = p_ptr->py;
-    int px = p_ptr->px;
-    unsigned i;
-    unsigned disp_count = 0;
-    byte a;
-    char c;
-
-    object_type *types[MAX_ITEMLIST];
-    int counts[MAX_ITEMLIST];
-    int dx[MAX_ITEMLIST], dy[MAX_ITEMLIST];
-    unsigned counter = 0;
-
-    int dungeon_hgt = p_ptr->cur_map_hgt;
-    int dungeon_wid = p_ptr->cur_map_wid;
-
-    byte attr;
-    char buf[80];
-
-    int floor_list_player[MAX_FLOOR_STACK];
-    bool in_term = (Term != angband_term[0]);
-
-    /* Hallucination is weird */
-    if (p_ptr->timed[TMD_IMAGE])
-    {
-        if (in_term)
-            clear_from(0);
-        Term_gotoxy(0, 0);
-        text_out_to_screen(TERM_ORANGE, "You can't believe what you are seeing! It's like a dream!");
-        return;
-    }
-
-    /* Clear the term if in a subwindow, set x otherwise */
-    if (in_term)
-    {
-        clear_from(0);
-        max = Term->hgt - 1;
-    }
-    else
-    {
-        x = 13;
-        max = Term->hgt - 2;
-    }
-
-    /* Player gets special treatment */
-    num_player = scan_floor(floor_list_player, MAX_FLOOR_STACK, py, px, 0x02);
-
-    /* Look at each square of the dungeon for items */
-    for (my = 0; my < dungeon_hgt; my++)
-    {
-        for (mx = 0; mx < dungeon_wid; mx++)
-        {
-            unsigned num_square;
-            int floor_list_stack[MAX_FLOOR_STACK];
-
-            /* No objects here, or it is the player square */
-            if (!cave_o_idx[my][mx]) continue;
-            if ((my == py) && (mx == px)) continue;
-
-            num_square = scan_floor(floor_list_stack, MAX_FLOOR_STACK, my, mx, 0x02);
-
-            /* Iterate over all the items found on this square */
-            for (i = 0; i < num_square; i++)
-            {
-                object_type *o_ptr = &o_list[floor_list_stack[i]];
-                unsigned j;
-
-                /* Skip gold/squelched */
-                if ((o_ptr->tval == TV_GOLD) ||
-                    ((k_info[o_ptr->k_idx].squelch == SQUELCH_ALWAYS) && (k_info[o_ptr->k_idx].aware)))
-                    continue;
-
-                /* See if we've already seen a similar item; if so, just add */
-                /* to its count */
-                for (j = 0; j < counter; j++)
-                {
-                    if (object_similar(o_ptr, types[j]))
-                    {
-                        counts[j] += o_ptr->number;
-                        if ((my - p_ptr->py) * (my - p_ptr->py) + (mx - p_ptr->px) * (mx - p_ptr->px) < dy[j] * dy[j] + dx[j] * dx[j])
-                        {
-                            dy[j] = my - p_ptr->py;
-                            dx[j] = mx - p_ptr->px;
-                        }
-                        break;
-                    }
-                }
-
-                /* We saw a new item. So insert it at the end of the list and */
-                /* then sort it forward using compare_items(). The types list */
-                /* is always kept sorted. */
-                if (j == counter)
-                {
-                    types[counter] = o_ptr;
-                    counts[counter] = o_ptr->number;
-                    dy[counter] = my - p_ptr->py;
-                    dx[counter] = mx - p_ptr->px;
-
-                    while (j > 0 && compare_items(types[j - 1], types[j]) > 0)
-                    {
-                        object_type *tmp_o = types[j - 1];
-                        int tmpcount;
-                        int tmpdx = dx[j-1];
-                        int tmpdy = dy[j-1];
-
-                        types[j - 1] = types[j];
-                        types[j] = tmp_o;
-                        dx[j-1] = dx[j];
-                        dx[j] = tmpdx;
-                        dy[j-1] = dy[j];
-                        dy[j] = tmpdy;
-                        tmpcount = counts[j - 1];
-                        counts[j - 1] = counts[j];
-                        counts[j] = tmpcount;
-                        j--;
-                    }
-                    counter++;
-                }
-            }
-        }
-    }
-
-    /* Note no visible items */
-    if ((!counter) && (!num_player))
-    {
-        /* Player is Blind */
-        if (p_ptr->timed[TMD_BLIND])
-        {
-            c_prt(TERM_ORANGE, "You can't see anything!", 0, 0);
-        }
-
-        /* Clear display and print note */
-        else c_prt(TERM_SLATE, "You see no items.", 0, 0);
-        if (!in_term)
-            Term_addstr(-1, TERM_WHITE, "  (Press any key to continue.)");
-        /* Done */
-        return;
-    }
-
-    /* First print the items the player is standing on */
-    if (num_player)
-    {
-        /* Reprint Message */
-        prt(format("You are standing on %d item%s:",
-                num_player, (num_player > 1 ? "s" : "")), 0, 0);
-    }
-
-    for (i = 0; i < num_player; i++)
-    {
-        /* o_name will hold the object_desc() name for the object. */
-        /* o_desc will also need to put a (x4) behind it. */
-        char o_name[80];
-        char o_desc[86];
-
-        object_type *o_ptr = &o_list[floor_list_player[i]];
-
-        /* We shouldn't list coins or squelched items */
-        if ((o_ptr->tval == TV_GOLD) ||
-            ((k_info[o_ptr->k_idx].squelch == SQUELCH_ALWAYS) && (k_info[o_ptr->k_idx].aware)))
-                        continue;
-        object_desc(o_name, sizeof(o_name), o_ptr, ODESC_FULL);
-        if (o_ptr->number > 1)
-        {
-            strnfmt(o_desc, sizeof(o_desc), "%s (x%d)", o_name, o_ptr->number);
-        }
-        else
-        {
-            strnfmt(o_desc, sizeof(o_desc), "%s", o_name);
-        }
-
-        /* Reset position */
-        cur_x = x;
-
-        /* See if we need to scroll or not */
-        if ((!in_term) && (line == max) && (disp_count != (counter + num_player + 2)))
-        {
-            prt("-- more --", line, x);
-            anykey();
-
-            /* Clear the screen */
-            for (line = 1; line <= max; line++)
-                prt("", line, x);
-
-            /* Reprint Message */
-            prt(format("You can see %d item%s:",
-                    num_player, (num_player > 1 ? "s" : "")), 0, 0);
-
-            /* Reset */
-            line = 1;
-        }
-        else if (line == max)
-        {
-            continue;
-        }
-
-        /* Note that the number of items actually displayed */
-        disp_count++;
-
-        if (artifact_p(o_ptr) && object_is_known(o_ptr))
-            /* known artifact */
-            attr = TERM_VIOLET;
-        else if (!object_flavor_is_aware(o_ptr))
-            /* unaware of kind */
-            attr = TERM_RED;
-        else if (object_is_worthless(o_ptr))
-            /* worthless */
-            attr = TERM_SLATE;
-        else if (!object_is_known(o_ptr))
-            /* unidentified lying object */
-            attr = TERM_L_UMBER;
-        else
-            /* default */
-            attr = TERM_WHITE;
-
-        a = object_type_attr(o_ptr->k_idx);
-        c = object_type_char(o_ptr->k_idx);
-
-        /* Display the pict */
-        Term_putch(cur_x++, line, a, c);
-        if (use_bigtile) Term_putch(cur_x++, line, 255, -1);
-        Term_putch(cur_x++, line, TERM_WHITE, ' ');
-
-        /* Print and bump line counter */
-        c_prt(attr, o_desc, line, cur_x);
-        line++;
-    }
-
-    if (disp_count != (num_player))
-    {
-        /* Print "and others" message if we've run out of space */
-        strnfmt(buf, sizeof buf, "  ...and %d others.", counter  + num_player - disp_count);
-        c_prt(TERM_WHITE, buf, line, x);
-        line ++;
-    }
-    else
-    {
-        /* Otherwise clear a line at the end, for main-term display */
-        prt("", line, x);
-        line++;
-    }
-
-    if (counter)
-    {
-        /* Reprint Message */
-        prt(format("You can see %d %sitem%s:", counter, (num_player ? "other " : ""),
-                (counter > 1 ? "s" : "")),
-                (num_player ? line : 0), 0);
-        if (num_player) line++;
-    }
-
-    for (i = 0; i < counter; i++)
-    {
-        /* o_name will hold the object_desc() name for the object. */
-        /* o_desc will also need to put a (x4) behind it. */
-        /* can there be more than 999 stackable items on a level? */
-        char o_name[80];
-        char o_desc[86];
-
-        object_type *o_ptr = types[i];
-
-        /* We shouldn't list coins or squelched items */
-        if ((o_ptr->tval == TV_GOLD) ||
-            ((k_info[o_ptr->k_idx].squelch == SQUELCH_ALWAYS) && (k_info[o_ptr->k_idx].aware)))
-                    continue;
-
-        object_desc(o_name, sizeof(o_name), o_ptr, ODESC_FULL);
-        if (counts[i] > 1)
-            strnfmt(o_desc, sizeof(o_desc), "%s (x%d) %d %c, %d %c", o_name, counts[i],
-                (dy[i] > 0) ? dy[i] : -dy[i], (dy[i] > 0) ? 'S' : 'N',
-                (dx[i] > 0) ? dx[i] : -dx[i], (dx[i] > 0) ? 'E' : 'W');
-        else
-            strnfmt(o_desc, sizeof(o_desc), "%s  %d %c %d %c", o_name,
-                (dy[i] > 0) ? dy[i] : -dy[i], (dy[i] > 0) ? 'S' : 'N',
-                (dx[i] > 0) ? dx[i] : -dx[i], (dx[i] > 0) ? 'E' : 'W');
-
-        /* Reset position */
-        cur_x = x;
-
-        /* See if we need to scroll or not */
-        if ((!in_term) && (line == max) && (disp_count != counter + num_player + 2))
-        {
-            prt("-- more --", line, x);
-            anykey();
-
-            /* Clear the screen */
-            for (line = 1; line <= max; line++)
-                prt("", line, x);
-
-            /* Reprint Message */
-            prt(format("You can see %d item%s:",
-                       counter, (counter > 1 ? "s" : "")), 0, 0);
-
-            /* Reset */
-            line = 1;
-        }
-        else if (line == max)
-        {
-            continue;
-        }
-
-        /* Note that the number of items actually displayed */
-        disp_count++;
-
-        if (artifact_p(o_ptr) && object_is_known(o_ptr))
-            /* known artifact */
-            attr = TERM_VIOLET;
-        else if (!object_flavor_is_aware(o_ptr))
-            /* unaware of kind */
-            attr = TERM_RED;
-        else if (object_is_worthless(o_ptr))
-            /* worthless */
-            attr = TERM_SLATE;
-        else if (!object_is_known(o_ptr))
-            /* unidentified lying object */
-            attr = TERM_L_UMBER;
-        else
-            /* default */
-            attr = TERM_WHITE;
-
-        a = object_type_attr(o_ptr->k_idx);
-        c = object_type_char(o_ptr->k_idx);
-
-        /* Display the pict */
-        Term_putch(cur_x++, line, a, c);
-        if (use_bigtile) Term_putch(cur_x++, line, 255, -1);
-        Term_putch(cur_x++, line, TERM_WHITE, ' ');
-
-        /* Print and bump line counter */
-        c_prt(attr, o_desc, line, cur_x);
-        line++;
-    }
-
-    if (disp_count != (counter + num_player))
-    {
-        /* Print "and others" message if we've run out of space */
-        strnfmt(buf, sizeof buf, "  ...and %d others.", counter + num_player - disp_count);
-        c_prt(TERM_WHITE, buf, line, x);
-    }
-    else
-    {
-        /* Otherwise clear a line at the end, for main-term display */
-        prt("", line, x);
-    }
-
-    if (!in_term)
-    {
-        Term_addstr(-1, TERM_WHITE, "  (Press any key to continue.)");
-    }
-}
-
-
-/*
  * An "item_tester_hook" for refilling lanterns
  */
-bool obj_can_refill(const object_type *o_ptr)
+bool obj_can_refill(object_type *o_ptr)
 {
     const object_type *j_ptr = &inventory[INVEN_LIGHT];
 
@@ -5142,7 +4780,7 @@ bool obj_can_refill(const object_type *o_ptr)
 /*
  * Is this a spellbook?
  */
-bool obj_is_spellbook(const object_type *o_ptr)
+bool obj_is_spellbook(object_type *o_ptr)
 {
     if (o_ptr->tval == TV_MAGIC_BOOK) return (TRUE);
     if (o_ptr->tval == TV_PRAYER_BOOK) return (TRUE);
@@ -5153,18 +4791,18 @@ bool obj_is_spellbook(const object_type *o_ptr)
 
 
 /* Basic tval testers */
-bool obj_is_shovel(const object_type *o_ptr)   { return o_ptr->tval == TV_DIGGING;}
-bool obj_is_bow(const object_type *o_ptr)   { return o_ptr->tval == TV_BOW; }
-bool obj_is_staff(const object_type *o_ptr)  { return o_ptr->tval == TV_STAFF; }
-bool obj_is_wand(const object_type *o_ptr)   { return o_ptr->tval == TV_WAND; }
-bool obj_is_rod(const object_type *o_ptr)    { return o_ptr->tval == TV_ROD; }
-bool obj_is_potion(const object_type *o_ptr) { return o_ptr->tval == TV_POTION; }
-bool obj_is_scroll(const object_type *o_ptr) { return o_ptr->tval == TV_SCROLL; }
-bool obj_is_parchment(const object_type *o_ptr) { return o_ptr->tval == TV_PARCHMENT; }
-bool obj_is_food(const object_type *o_ptr)   { return o_ptr->tval == TV_FOOD; }
-bool obj_is_light(const object_type *o_ptr)   { return o_ptr->tval == TV_LIGHT; }
-bool obj_is_ring(const object_type *o_ptr)   { return o_ptr->tval == TV_RING; }
-bool obj_is_chest(const object_type *o_ptr)   { return o_ptr->tval == TV_CHEST; }
+bool obj_is_shovel(object_type *o_ptr)   { return o_ptr->tval == TV_DIGGING;}
+bool obj_is_bow(object_type *o_ptr)   { return o_ptr->tval == TV_BOW; }
+bool obj_is_staff( object_type *o_ptr)  { return o_ptr->tval == TV_STAFF; }
+bool obj_is_wand(object_type *o_ptr)   { return o_ptr->tval == TV_WAND; }
+bool obj_is_rod(object_type *o_ptr)    { return o_ptr->tval == TV_ROD; }
+bool obj_is_potion(object_type *o_ptr) { return o_ptr->tval == TV_POTION; }
+bool obj_is_scroll(object_type *o_ptr) { return o_ptr->tval == TV_SCROLL; }
+bool obj_is_parchment(object_type *o_ptr) { return o_ptr->tval == TV_PARCHMENT; }
+bool obj_is_food(object_type *o_ptr)   { return o_ptr->tval == TV_FOOD; }
+bool obj_is_light(object_type *o_ptr)   { return o_ptr->tval == TV_LIGHT; }
+bool obj_is_ring(object_type *o_ptr)   { return o_ptr->tval == TV_RING; }
+bool obj_is_chest(object_type *o_ptr)   { return o_ptr->tval == TV_CHEST; }
 
 
 /**
@@ -5172,7 +4810,7 @@ bool obj_is_chest(const object_type *o_ptr)   { return o_ptr->tval == TV_CHEST; 
  *
  * \param o_ptr is the object to check
  */
-bool obj_is_openable_chest(const object_type *o_ptr)
+bool obj_is_openable_chest(object_type *o_ptr)
 {
     if (!obj_is_chest(o_ptr)) return FALSE;
 
@@ -5188,7 +4826,7 @@ bool obj_is_openable_chest(const object_type *o_ptr)
  *
  * \param o_ptr is the object to check
  */
-bool chest_requires_disarming(const object_type *o_ptr)
+bool chest_requires_disarming(object_type *o_ptr)
 {
     if (!obj_is_chest(o_ptr)) return FALSE;
 
@@ -5212,7 +4850,7 @@ bool chest_requires_disarming(const object_type *o_ptr)
  *
  * \param o_ptr is the object to check
  */
-bool obj_is_weapon(const object_type *o_ptr)
+bool obj_is_weapon(object_type *o_ptr)
 {
     /* Ignore empty objects */
     if (!o_ptr->k_idx) return (FALSE);
@@ -5235,7 +4873,7 @@ bool obj_is_weapon(const object_type *o_ptr)
  *
  * \param o_ptr is the object to check
  */
-bool obj_is_ammo(const object_type *o_ptr)
+bool obj_is_ammo(object_type *o_ptr)
 {
     /* Ignore empty objects */
     if (!o_ptr->k_idx) return (FALSE);
@@ -5255,7 +4893,7 @@ bool obj_is_ammo(const object_type *o_ptr)
 /*
  * Determine whether the ammo can be fired with the current launcher
  */
-bool ammo_can_fire(const object_type *o_ptr, int item)
+bool ammo_can_fire(object_type *o_ptr, int item)
 {
     /* Get the "bow" (if any) */
     object_type *j_ptr = &inventory[INVEN_BOW];
@@ -5316,7 +4954,7 @@ bool has_correct_ammo(void)
 /*
  * Determine if an object has charges
  */
-bool obj_has_charges(const object_type *o_ptr)
+bool obj_has_charges(object_type *o_ptr)
 {
     if (o_ptr->tval != TV_WAND && o_ptr->tval != TV_STAFF) return FALSE;
 
@@ -5329,7 +4967,7 @@ bool obj_has_charges(const object_type *o_ptr)
 /*
  * Determine if an object has charges
  */
-bool rod_can_zap(const object_type *o_ptr)
+bool rod_can_zap(object_type *o_ptr)
 {
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
@@ -5343,7 +4981,7 @@ bool rod_can_zap(const object_type *o_ptr)
 /*
  * Determine if an object can be browsed (spellbook)
  */
-bool obj_can_browse(const object_type *o_ptr)
+bool obj_can_browse(object_type *o_ptr)
 {
     if (o_ptr->tval != cp_ptr->spell_book) return FALSE;
     return TRUE;
@@ -5352,7 +4990,7 @@ bool obj_can_browse(const object_type *o_ptr)
 /*
  * Determine if an object is a spelbook with spells that can be studied
  */
-bool obj_can_study(const object_type *o_ptr)
+bool obj_can_study(object_type *o_ptr)
 {
     int i;
     if (o_ptr->tval != cp_ptr->spell_book) return FALSE;
@@ -5374,7 +5012,7 @@ bool obj_can_study(const object_type *o_ptr)
 /*
  * Determine if an object is a spellbook with spells that can be cast
  */
-bool obj_can_cast(const object_type *o_ptr)
+bool obj_can_cast(object_type *o_ptr)
 {
     int i;
     if (o_ptr->tval != cp_ptr->spell_book) return FALSE;
@@ -5396,7 +5034,7 @@ bool obj_can_cast(const object_type *o_ptr)
 /*
  * Can only take off non-cursed items
  */
-bool obj_can_takeoff(const object_type *o_ptr)
+bool obj_can_takeoff(object_type *o_ptr)
 {
     return !cursed_p(o_ptr);
 }
@@ -5405,7 +5043,7 @@ bool obj_can_takeoff(const object_type *o_ptr)
 /*
  * Can only put on wieldable items
  */
-bool obj_can_wear(const object_type *o_ptr)
+bool obj_can_wear(object_type *o_ptr)
 {
     s16b x = wield_slot(o_ptr);
 
@@ -5416,9 +5054,9 @@ bool obj_can_wear(const object_type *o_ptr)
 /*
  * Can has inscrip pls
  */
-bool obj_has_inscrip(const object_type *o_ptr)
+bool obj_has_inscrip(object_type *o_ptr)
 {
-    return (o_ptr->obj_note ? TRUE : FALSE);
+    return (o_ptr->inscription.isEmpty());
 }
 
 
@@ -5521,7 +5159,7 @@ bool obj_needs_aim(object_type *o_ptr)
 /*
  * Determine if an object is activatable
  */
-bool obj_is_activatable(const object_type *o_ptr)
+bool obj_is_activatable(object_type *o_ptr)
 {
     u32b f1, f2, f3, fn;
 
@@ -5537,7 +5175,7 @@ bool obj_is_activatable(const object_type *o_ptr)
 /*
  * Determine if an object can be activatable (is charged)
  */
-bool obj_can_activate(const object_type *o_ptr)
+bool obj_can_activate(object_type *o_ptr)
 {
 
     if (obj_is_activatable(o_ptr))
@@ -5643,7 +5281,7 @@ int scan_items(int *item_list, size_t item_list_max, int mode)
  *
  * 'mode' defines which areas we should look at, a la scan_items().
  */
-bool item_is_available(int item, bool (*tester)(const object_type *), int mode)
+bool item_is_available(int item, bool (*tester)(object_type *), int mode)
 {
     int item_list[ALL_INVEN_TOTAL + MAX_FLOOR_STACK];
     int item_num;
@@ -5664,7 +5302,7 @@ bool item_is_available(int item, bool (*tester)(const object_type *), int mode)
 }
 
 
-bool is_throwing_weapon(const object_type *o_ptr)
+bool is_throwing_weapon(object_type *o_ptr)
 {
     u32b f1, f2, f3, fn;
 
@@ -5705,7 +5343,7 @@ bool pack_is_overfull(void)
 void pack_overflow(void)
 {
     int item = INVEN_MAX_PACK;
-    char o_name[80];
+    QString o_name;
     object_type *o_ptr;
 
     if (!pack_is_overfull()) return;
@@ -5713,17 +5351,17 @@ void pack_overflow(void)
     /* Get the slot to be dropped */
     o_ptr = &inventory[item];
 
-    /* Disturbing */
-    disturb(0, 0);
+    /* TODO Disturbing */
+    //disturb(0, 0);
 
     /* Warning */
-    msg_print("Your pack overflows!");
+    message("Your pack overflows!");
 
     /* Describe */
-    object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
+    o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
     /* Message */
-    msg_format("You drop %s (%c).", o_name, index_to_label(item));
+    message(QString("You drop %1 (%2).") .arg(o_name)  .arg(index_to_label(item)));
 
     /* Drop it (carefully) near the player */
     drop_near(o_ptr, 0, p_ptr->py, p_ptr->px);
@@ -5733,14 +5371,14 @@ void pack_overflow(void)
     inven_item_describe(item);
     inven_item_optimize(item);
 
-    /* Notice stuff (if needed) */
-    if (p_ptr->notice) notice_stuff();
+    /* TODO Notice stuff (if needed) */
+    //if (p_ptr->notice) notice_stuff();
 
-    /* Update stuff (if needed) */
-    if (p_ptr->update) update_stuff();
+    /* TODO Update stuff (if needed) */
+    //if (p_ptr->update) update_stuff();
 
-    /* Redraw stuff (if needed) */
-    if (p_ptr->redraw) redraw_stuff();
+    /* TODO Redraw stuff (if needed) */
+    //if (p_ptr->redraw) redraw_stuff();
 
 }
 
@@ -5832,7 +5470,7 @@ void object_history(object_type *o_ptr, byte origin, s16b r_idx)
     /* Paranoia */
     o_ptr->origin_dlvl = 0;
     o_ptr->origin_r_idx = 0;
-    o_ptr->origin_m_name = 0;
+    o_ptr->origin_m_name.clear();
 
     switch (origin)
     {
@@ -5846,11 +5484,8 @@ void object_history(object_type *o_ptr, byte origin, s16b r_idx)
             /* Special case: player ghosts */
             if (r_ptr->flags2 & (RF2_PLAYER_GHOST))
             {
-                /* Format the ghost name */
-                char *name = player_ghost_name;
-
                 /* Store the name */
-                o_ptr->origin_m_name = quark_add(name);
+                o_ptr->origin_m_name = player_ghost_name;
             }
 
             /* Fall through */
@@ -5913,7 +5548,7 @@ void stack_histories(object_type *o_ptr, const object_type *j_ptr)
             o_ptr->origin_nature = ORIGIN_MIXED;
             o_ptr->origin_dlvl = 0;
             o_ptr->origin_r_idx = 0;
-            o_ptr->origin_m_name = 0;
+            o_ptr->origin_m_name.clear();
             break;
         }
     }
@@ -5934,7 +5569,7 @@ void stack_histories(object_type *o_ptr, const object_type *j_ptr)
  * If only_random_powers is TRUE the string will hold only a representation
  * of the random powers of ego-items
  */
-void format_object_flags(const object_type *o_ptr, char buf[], int max, bool only_random_powers)
+QString format_object_flags(object_type *o_ptr, int max, bool only_random_powers)
 {
     u16b i;
 
@@ -5943,8 +5578,8 @@ void format_object_flags(const object_type *o_ptr, char buf[], int max, bool onl
     /* It's easier to handle flags in arrays. See later */
     u32b flags[MAX_GROUPS];
 
-    char *end;
-
+    QString end;
+    QString buf;
     /*
      * Object flags and their names
      */
@@ -5952,7 +5587,7 @@ void format_object_flags(const object_type *o_ptr, char buf[], int max, bool onl
     {
         u32b flag;
         byte group;	/* The field (1 for flags1, 2 for flags2, 3 for flags3 and 4 for native) */
-        cptr name;
+        QString name;
     } flag_info[] =
     {
         {TR2_IM_ACID,		2,	"ImAcid"},
@@ -6059,9 +5694,9 @@ void format_object_flags(const object_type *o_ptr, char buf[], int max, bool onl
             ego_item_type *e_ptr = &e_info[o_ptr->ego_num];
 
             /* Remove the flags */
-            f1 &= ~(e_ptr->flags1);
-            f2 &= ~(e_ptr->flags2);
-            f3 &= ~(e_ptr->flags3);
+            f1 &= ~(e_ptr->e_flags1);
+            f2 &= ~(e_ptr->e_flags2);
+            f3 &= ~(e_ptr->e_flags3);
             native &= ~(e_ptr->e_native);
         }
     }
@@ -6076,7 +5711,7 @@ void format_object_flags(const object_type *o_ptr, char buf[], int max, bool onl
 
     /* Start with an empty string */
     buf[0] = '\0';
-    end = NULL;
+    end.clear();
 
     /* Scan the flags */
     for (i = 0; i < N_ELEMENTS(flag_info); i++)
@@ -6088,11 +5723,11 @@ void format_object_flags(const object_type *o_ptr, char buf[], int max, bool onl
             /* Append a space if it's not the first flag we found */
             if (end != NULL)
             {
-                end = my_fast_strcat(buf, end, " ", max);
+                end.append(" ");
             }
 
             /* Append the flag name */
-            end = my_fast_strcat(buf, end, flag_info[i].name, max);
+            end.append(flag_info[i].name);
 
             /* Special cases in flags2 */
             if (flag_info[i].group == 2)
@@ -6114,3 +5749,71 @@ void format_object_flags(const object_type *o_ptr, char buf[], int max, bool onl
     }
 }
 
+/*
+ * Return a "feeling" (or NULL) about an item.  Method 1 (Heavy).
+ */
+int value_check_aux1(object_type *o_ptr)
+{
+    /* Artifacts */
+    if (o_ptr->is_artifact())
+    {
+        /* Cursed/Broken */
+        if (cursed_p(o_ptr) || broken_p(o_ptr)) return (INSCRIP_TERRIBLE);
+
+        /* Normal */
+        return (INSCRIP_SPECIAL);
+    }
+
+    /* Ego-Items */
+    if (ego_item_p(o_ptr))
+    {
+        /* Cursed/Broken */
+        if (cursed_p(o_ptr) || broken_p(o_ptr)) return (INSCRIP_WORTHLESS);
+
+        /* Normal */
+        return (INSCRIP_EXCELLENT);
+    }
+
+    /* Cursed items */
+    if (cursed_p(o_ptr)) return (INSCRIP_CURSED);
+
+    /* Broken items */
+    if (broken_p(o_ptr)) return (INSCRIP_BROKEN);
+
+    /* Good "armor" bonus */
+    if (o_ptr->to_a > 0) return (INSCRIP_GOOD_STRONG);
+
+    /* Good "weapon" bonus */
+    if (o_ptr->to_h + o_ptr->to_d > 0) return (INSCRIP_GOOD_STRONG);
+
+    /* Default to "average" */
+    return (INSCRIP_AVERAGE);
+}
+
+
+/*
+ * Return a "feeling" (or NULL) about an item.  Method 2 (Light).
+ */
+int value_check_aux2(object_type *o_ptr)
+{
+    /* Cursed items (all of them) */
+    if (cursed_p(o_ptr)) return (INSCRIP_CURSED);
+
+    /* Broken items (all of them) */
+    if (broken_p(o_ptr)) return (INSCRIP_BROKEN);
+
+    /* Artifacts -- except cursed/broken ones */
+    if (o_ptr->is_artifact()) return (INSCRIP_GOOD_WEAK);
+
+    /* Ego-Items -- except cursed/broken ones */
+    if (ego_item_p(o_ptr)) return (INSCRIP_GOOD_WEAK);
+
+    /* Good armor bonus */
+    if (o_ptr->to_a > 0) return (INSCRIP_GOOD_WEAK);
+
+    /* Good weapon bonuses */
+    if (o_ptr->to_h + o_ptr->to_d > 0) return (INSCRIP_GOOD_WEAK);
+
+    /* Default to "average" */
+    return (INSCRIP_AVERAGE);
+}

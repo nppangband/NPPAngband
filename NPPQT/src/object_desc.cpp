@@ -83,7 +83,7 @@ static QString obj_desc_get_basename(object_type *o_ptr, bool aware, bool plural
     if (aware && !show_flavors) show_flavor = FALSE;
 
     /* Known artifacts get special treatment */
-    if (artifact_p(o_ptr) && aware)
+    if (o_ptr->is_artifact() && aware)
     {
         /* An exception for unidentified special artifacts */
         if (!k_ptr->flavor || o_ptr->is_known()) return (k_ptr->k_name);
@@ -242,7 +242,7 @@ static QString obj_desc_name(object_type *o_ptr, bool prefix, byte mode, bool sp
         }
         else if (o_ptr->number > 1) buf.append(QString("%1 ") .arg(o_ptr->number));
 
-        else if ((known) && artifact_p(o_ptr))  buf.append( "The ");
+        else if ((known) && o_ptr->is_artifact())  buf.append( "The ");
 
         else if (basename.contains('&'))
         {
@@ -342,7 +342,7 @@ static QString obj_desc_name(object_type *o_ptr, bool prefix, byte mode, bool sp
         buf.append(QString(" %1") .arg(e_info[o_ptr->ego_num].e_name));
     }
 
-    else if (aware && !artifact_p(o_ptr) && (k_ptr->flavor || k_ptr->tval == TV_SCROLL))
+    else if (aware && (!o_ptr->is_artifact()) && (k_ptr->flavor || k_ptr->tval == TV_SCROLL))
         buf.append(QString(" of %1") .arg(k_ptr->k_name));
 
     return buf;

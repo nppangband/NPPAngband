@@ -1,6 +1,7 @@
 #include "src/npp.h"
 #include "src/qt_mainwindow.h"
 #include <QMessageBox>
+#include <QInputDialog>
 
 
 
@@ -60,6 +61,36 @@ void pop_up_message_box(QString message)
     msg_box.setText(message);
     msg_box.exec();
 }
+
+
+// Post a question to the player and wait for a yes/no response.
+// return TRUE/FALSE;
+bool get_check(QString question)
+{
+    QMessageBox get_check;
+    // get_check.setParent();  TODO - set as parent of main window
+    get_check.setWindowTitle("Please respond yes or no");
+    get_check.setText(question);
+    get_check.setStandardButtons(QMessageBox::Yes);
+    get_check.setStandardButtons(QMessageBox::No);
+    if (get_check.exec() == QMessageBox::Yes) return (TRUE);
+    else return (FALSE);
+}
+
+// Post a question to the player and wait for player to enter a string.
+// returns the string;
+QString get_string(QString question)
+{
+
+    bool ok;
+    QString text = QInputDialog::getText(0, "Please enter a response", question, QLineEdit::Normal,"", &ok);
+
+    if (!ok) return NULL;
+
+    return (text);
+}
+
+
 
 QColor add_preset_color(int which_color)
 {
@@ -128,3 +159,14 @@ void custom_color_message(QString msg, byte red, byte green, byte blue)
     add_message_to_vector(msg, msg_color);
 }
 
+static bool repeat_prev_allowed;
+
+void cmd_enable_repeat(void)
+{
+    repeat_prev_allowed = TRUE;
+}
+
+void cmd_disable_repeat(void)
+{
+    repeat_prev_allowed = FALSE;
+}

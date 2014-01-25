@@ -99,7 +99,7 @@ class object_type
 
     s16b mimic_r_idx;	/* Object is a mimic */
 
-    // Methods - all in object_classs.cpp
+    // Methods - all in object_class.cpp
     void object_wipe();
     void object_copy (object_type *j_ptr);
     bool has_hidden_powers();
@@ -108,6 +108,23 @@ class object_type
     bool is_known();
     bool is_flavor_known();
     bool can_be_pseudo_ided();
+    bool is_artifact();
+    bool is_known_artifact();
+    bool was_sensed();
+    bool is_spellbook();
+    bool is_shovel();
+    bool is_bow();
+    bool is_staff();
+    bool is_wand();
+    bool is_rod();
+    bool is_potion();
+    bool is_scroll();
+    bool is_parchment();
+    bool is_food();
+    bool is_light();
+    bool is_ring();
+    bool is_chest();
+
 };
 
 #endif // OBJECT_TYPE_CLASS_H

@@ -280,6 +280,17 @@ int cost_at_center[MAX_FLOWS];
 //pre-defined colors - loaded at startup
 QColor defined_colors[MAX_COLORS];
 
+/*
+ * Some static info used to manage quiver groups
+ */
+quiver_group_type quiver_group[MAX_QUIVER_GROUPS] =
+{
+    {'f', TERM_L_BLUE},
+    {'f', TERM_L_GREEN},
+    {'f', TERM_YELLOW},
+    {'v', TERM_ORANGE},
+};
+
 
 //Various directories used by NPP
 QString NPP_DIR_BASE;
@@ -316,7 +327,7 @@ bool item_tester_swap;
  * Here is a "hook" used during calls to "get_item()" and
  * "show_inven()" and "show_equip()", and the choice window routines.
  */
-bool (*item_tester_hook)(const object_type*);
+bool (*item_tester_hook)(object_type*);
 
 /*
  * Hack -- function hook to restrict "get_obj_num_prep()" function

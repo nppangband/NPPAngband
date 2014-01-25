@@ -1503,16 +1503,12 @@ object_aware_p(o_ptr) && \
     (((T)->tval == TV_RING) || ((T)->tval == TV_AMULET))
 
 /* Returns TRUE if T is a torch or a lantern */
-#define fuelable_lite_p(T) (((T)->tval == TV_LIGHT) && (!artifact_p(T)))
+#define fuelable_lite_p(T) (((T)->tval == TV_LIGHT) && (!(T->is_artifact())))
 
-/*
- * Artifacts use the "art_num" field
- */
-#define artifact_p(T) \
-    ((T)->art_num ? TRUE : FALSE)
+
 
 #define artifact_known(T) \
-    (artifact_p(T) && ( object_known_p(T) || \
+    (T-is_artifact() && ( object_known_p(T) || \
                         (T)->discount == INSCRIP_TERRIBLE || \
                         (T)->discount == INSCRIP_INDESTRUCTIBLE || \
                         (T)->discount == INSCRIP_SPECIAL ))
@@ -1545,7 +1541,7 @@ object_aware_p(o_ptr) && \
 
 
 /* Returns TRUE if T is a torch or a lantern */
-#define fuelable_light_p(T) (((T)->tval == TV_LIGHT) && (!artifact_p(T)))
+#define fuelable_light_p(T) (((T)->tval == TV_LIGHT) && (!T->is_artifact()))
 
 
 
@@ -1569,7 +1565,7 @@ object_aware_p(o_ptr) && \
  * Return TRUE if the given artifact is enabled to use the "easy mental" feature
  */
 #define ARTIFACT_EASY_MENTAL(O_PTR) \
-        (artifact_p(O_PTR) && \
+        (o_ptr->is_artifact() && \
         !adult_rand_artifacts && \
         ((O_PTR)->art_num < z_info->art_norm_max))
 
@@ -1745,5 +1741,12 @@ enum
  * display 23 objects + 1 header line.
  */
 #define MAX_FLOOR_STACK			23
+
+/*
+ * These are the return values of squelch_itemp()
+ */
+#define SQUELCH_FAILED	-1
+#define SQUELCH_NO		0
+#define SQUELCH_YES		1
 
 #endif // OBJECT_H

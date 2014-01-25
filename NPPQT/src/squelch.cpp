@@ -17,9 +17,133 @@
  *    are included in all such copies.  Other copyrights may also apply.
  */
 #include "src/npp.h"
+#include "src/squelch.h"
 
+/*
+ * Find the squelch type of the object, or TYPE_MAX if none
+ */
+static squelch_type_t squelch_type_of(object_type *o_ptr)
+{
+    size_t i;
 
+    /* Find the appropriate squelch group */
+    for (i = 0; i < N_ELEMENTS(quality_mapping); i++)
+    {
+        if ((quality_mapping[i].tval == o_ptr->tval) &&
+            (quality_mapping[i].min_sval <= o_ptr->sval) &&
+            (quality_mapping[i].max_sval >= o_ptr->sval))
+            return quality_mapping[i].squelch_type;
+    }
 
+    return PS_TYPE_MAX;
+}
+
+/*
+ * Determines if an object is going to be squelched on identification.
+ * Input:
+ *  o_ptr   : This is a pointer to the object type being identified.
+ *  feeling : This is the feeling of the object if it is being
+ *            pseudoidentified or 0 if the object is being identified.
+ *  fullid  : Is the object is being identified?
+ *
+ * Output: One of the three above values.
+ */
+
+int squelch_itemp(object_type *o_ptr, byte feelings, bool fullid)
+{
+    int num, result;
+    byte feel;
+
+    /* Default */
+    result = SQUELCH_NO;
+
+    /* Never squelch quest items */
+    if (o_ptr->ident & IDENT_QUEST) return result;
+
+    /* Squelch some ego items if known */
+    if (fullid && (ego_item_p(o_ptr)) && (e_info[o_ptr->ego_num].squelch))
+    {
+        /* Squelch fails on inscribed objects */
+        return ((!o_ptr->inscription.isEmpty()) ? SQUELCH_FAILED: SQUELCH_YES);
+    }
+
+    /* Check to see if the object is eligible for squelching on id. */
+    num = squelch_type_of(o_ptr);
+
+    /* Never squelched */
+    if (num == PS_TYPE_MAX) return result;
+
+    /*
+     * Get the "feeling" of the object.  If the object is being identified
+     * get the feeling returned by a heavy pseudoid.
+     */
+    feel = feelings;
+
+    /* Handle fully identified objects */
+    if (fullid)  feel = value_check_aux1(o_ptr);
+
+    /* Get result based on the feeling and the squelch_level */
+    switch (squelch_level[num])
+    {
+        case SQUELCH_NONE:
+        {
+            return result;
+        }
+
+        case SQUELCH_CURSED:
+        {
+            result = (((feel==INSCRIP_BROKEN) ||
+                (feel==INSCRIP_TERRIBLE) ||
+                (feel==INSCRIP_WORTHLESS) ||
+                (feel==INSCRIP_CURSED)) ? SQUELCH_YES : SQUELCH_NO);
+            break;
+        }
+
+        case SQUELCH_AVERAGE:
+        {
+            result = (((feel==INSCRIP_BROKEN) ||
+                (feel==INSCRIP_TERRIBLE) ||
+                (feel==INSCRIP_WORTHLESS) ||
+                (feel==INSCRIP_CURSED) ||
+                (feel==INSCRIP_AVERAGE)) ? SQUELCH_YES : SQUELCH_NO);
+            break;
+        }
+
+        case SQUELCH_GOOD_STRONG:
+        {
+            result = (((feel==INSCRIP_BROKEN) ||
+                (feel==INSCRIP_TERRIBLE) ||
+                (feel==INSCRIP_WORTHLESS) ||
+                (feel==INSCRIP_CURSED) ||
+                (feel==INSCRIP_AVERAGE) ||
+                (feel==INSCRIP_GOOD_STRONG)) ? SQUELCH_YES : SQUELCH_NO);
+            break;
+        }
+
+        case SQUELCH_GOOD_WEAK:
+        {
+            result = (((feel==INSCRIP_BROKEN) ||
+                (feel==INSCRIP_TERRIBLE) ||
+                (feel==INSCRIP_WORTHLESS) ||
+                (feel==INSCRIP_CURSED) ||
+                (feel==INSCRIP_AVERAGE) ||
+                (feel==INSCRIP_GOOD_STRONG) ||
+                (feel==INSCRIP_GOOD_WEAK)) ? SQUELCH_YES : SQUELCH_NO);
+            break;
+        }
+
+        case SQUELCH_ALL:
+        {
+            result = SQUELCH_YES;
+            break;
+        }
+    }
+
+    /* Squelching will fail on an artifact or inscribed object */
+    if ((result == SQUELCH_YES) && (o_ptr->is_artifact() || !o_ptr->inscription.isEmpty())) result = SQUELCH_FAILED;
+
+    return result;
+}
 
 void rearrange_stack(int y, int x)
 {
@@ -91,7 +215,7 @@ void rearrange_stack(int y, int x)
     }
 }
 
-bool squelch_item_ok(const object_type *o_ptr)
+bool squelch_item_ok(object_type *o_ptr)
 {
     object_kind *k_ptr = k_ptr = &k_info[o_ptr->k_idx];
 
@@ -99,7 +223,7 @@ bool squelch_item_ok(const object_type *o_ptr)
     if (!o_ptr->k_idx) return (TRUE);
 
     /* Ignore inscribed objects, artifacts , mimics or quest objects */
-    if ((o_ptr->obj_note) || (artifact_p(o_ptr)) || (o_ptr->ident & (IDENT_QUEST)) ||
+    if ((!o_ptr->inscription.isEmpty()) || (o_ptr->is_artifact()) || (o_ptr->ident & (IDENT_QUEST)) ||
         (o_ptr->mimic_r_idx))
     {
         return (FALSE);

@@ -1204,6 +1204,15 @@ struct monster_message_history
 };
 
 /*
+ * Info used to manage quiver groups
+ */
+struct quiver_group_type
+{
+    QChar cmd;		/* The command used to perform an action with the objects in the group */
+    byte color;		/* The color of the pseudo-tag used for the group */
+};
+
+/*
  * The descriptions and default values of the in-game options
  */
 struct option_entry
@@ -1302,6 +1311,15 @@ struct dungeon_capabilities_type
      */
     int (*get_extra_object_count)(void);
 };
+
+/*
+ * A structure to hold a tval and its description
+ */
+typedef struct
+{
+    int tval;
+    const char *desc;
+} tval_desc;
 
 
 /* Currently assumes all flags are in TR1 (object) and RF1 (monster flags) */
