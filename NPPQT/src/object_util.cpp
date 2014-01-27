@@ -21,287 +21,8 @@
 #include "src/npp.h"
 #include "src/init.h"
 
-/*
- * File: object2.c
- * Purpose: Object list maintenance and other object utilities
- *
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- * 						Jeff Greene, Diego Gonzalez
- *
- *
- * This work is free software; you can redistribute it and/or modify it
- * under the terms of either:
- *
- * a) the GNU General Public License as published by the Free Software
- *    Foundation, version 2, or
- *
- * b) the "Angband licence":
- *    This software may be copied and distributed for educational, research,
- *    and not for profit purposes provided that this copyright and statement
- *    are included in all such copies.  Other copyrights may also apply.
- */
-#include "src/npp.h"
 
 
-
-/*
- * Hold the titles of scrolls, 6 to 14 characters each.
- */
-QString scroll_adj[MAX_TITLES];
-
-
-/*
- * Assign flavors that don't change
- */
-static void flavor_assign_fixed(void)
-{
-    int i, j;
-
-    for (i = 1; i < z_info->flavor_max; i++)
-    {
-        flavor_type *flavor_ptr = &flavor_info[i];
-
-        /* Skip random flavors */
-        if (flavor_ptr->sval == SV_UNKNOWN) continue;
-
-        for (j = 0; j < z_info->k_max; j++)
-        {
-            /* Skip other objects */
-            if ((k_info[j].tval == flavor_ptr->tval) &&
-                (k_info[j].sval == flavor_ptr->sval))
-            {
-                /* Store the flavor index */
-                k_info[j].flavor = i;
-            }
-        }
-    }
-}
-
-
-/*
- * Assign random flavors
- */
-static void flavor_assign_random(byte tval)
-{
-    u16b i, choice;
-    u16b flavor_count = 0;
-    u16b *flavor;
-
-    /* Allocate the "who" array */
-    flavor = C_ZNEW(z_info->flavor_max, u16b);
-
-    /* Count the random flavors for the given tval */
-    for (i = 0; i < z_info->flavor_max; i++)
-    {
-        if ((flavor_info[i].tval == tval) &&
-            (flavor_info[i].sval == SV_UNKNOWN))
-        {
-            flavor[flavor_count] = i;
-            flavor_count++;
-        }
-    }
-
-    for (i = 0; i < z_info->k_max; i++)
-    {
-        u16b slot;
-
-        /* Skip other object types */
-        if (k_info[i].tval != tval) continue;
-
-        /* Skip objects that already are flavored */
-        if (k_info[i].flavor != 0) continue;
-
-            /* HACK - Ordinary food is "boring" */
-        if ((tval == TV_FOOD) && (k_info[i].sval > SV_FOOD_MIN_FOOD))
-            continue;
-
-        if (!flavor_count)
-        {
-            FREE(flavor);
-            quit_npp_games(QString("Not enough flavors for tval %1.")  .arg(tval));
-        }
-
-        /* Select a flavor */
-        slot = randint0(flavor_count);
-        choice = flavor[slot];
-
-        /* Store the flavor index */
-        k_info[i].flavor = choice;
-
-        /* Mark the flavor as used */
-        flavor_info[choice].sval = k_info[i].sval;
-
-        /* One less flavor to choose from */
-        flavor_count--;
-        flavor[slot] = flavor[flavor_count];
-    }
-
-    /* Free the array */
-    FREE(flavor);
-}
-
-
-/*
- * Prepare the "variable" part of the "k_info" array.
- *
- * The "color"/"metal"/"type" of an item is its "flavor".
- * For the most part, flavors are assigned randomly each game.
- *
- * Initialize descriptions for the "colored" objects, including:
- * Rings, Amulets, Staffs, Wands, Rods, Food, Potions, Scrolls.
- *
- * The first 4 entries for potions are fixed (Water, Apple Juice,
- * Slime Mold Juice, Unused Potion).
- *
- * Scroll titles are always between 6 and 14 letters long.  This is
- * ensured because every title is composed of whole words, where every
- * word is from 1 to 8 letters long (one or two syllables of 1 to 4
- * letters each), and that no scroll is finished until it attempts to
- * grow beyond 15 letters.  The first time this can happen is when the
- * current title has 6 letters and the new word has 8 letters, which
- * would result in a 6 letter scroll title.
- *
- * Duplicate titles are avoided by requiring that no two scrolls share
- * the same first four letters (not the most efficient method, and not
- * the least efficient method, but it will always work).
- *
- * Hack -- make sure everything stays the same for each saved game
- * This is accomplished by the use of a saved "random seed", as in
- * "town_gen()".  Since no other functions are called while the special
- * seed is in effect, so this function is pretty "safe".
- */
-void flavor_init(void)
-{
-    int i, j;
-
-
-    /* Hack -- Use the "simple" RNG */
-    Rand_quick = TRUE;
-
-    /* Hack -- Induce consistent flavors */
-    Rand_value = seed_flavor;
-
-
-    flavor_assign_fixed();
-
-    flavor_assign_random(TV_RING);
-    flavor_assign_random(TV_AMULET);
-    flavor_assign_random(TV_STAFF);
-    flavor_assign_random(TV_WAND);
-    flavor_assign_random(TV_ROD);
-    flavor_assign_random(TV_FOOD);
-    flavor_assign_random(TV_POTION);
-    flavor_assign_random(TV_SCROLL);
-
-    /* Scrolls (random titles, always white) */
-    for (i = 0; i < MAX_TITLES; i++)
-    {
-        /* Get a new title */
-        while (TRUE)
-        {
-            QString buf;
-
-            bool okay;
-
-            /* Start a new title */
-            buf.clear();
-
-            /* Collect words until done */
-            while (TRUE)
-            {
-                int q, s;
-
-                QString tmp;
-
-                /* Start a new word */
-                tmp.clear();
-
-                /* Choose one or two syllables */
-                s = ((rand_int(100) < 30) ? 1 : 2);
-
-                /* Add a one or two syllable word */
-                for (q = 0; q < s; q++)
-                {
-                    QString syllable;
-                    byte min;
-                    byte max;
-
-                    /* Different syllable lengths for 1 and two syllable words */
-                    if (s == 1)
-                    {
-                        min = 4;
-                        max = 10;
-                    }
-                    else /* (s == 2) */
-                    {
-                        min = 2;
-                        max = 6;
-                    }
-
-                    /* Make random_syllable */
-                    syllable = make_random_name(min, max);
-
-                    /* Make second syllable lowercase */
-                    if (q) syllable.toLower();
-
-                    /* Add the syllable */
-                    tmp.append (syllable);
-                }
-
-                /* Stop before getting too long */
-                if ((buf.length() + 1 + tmp.length()) > 15) break;
-
-                /* Add a space */
-                buf.append(" ");
-
-                /* Add the word */
-                buf.append (tmp);
-            }
-
-            /* Save the title */
-           scroll_adj[i] = buf;
-
-            /* Assume okay */
-            okay = TRUE;
-
-            /* Check for "duplicate" scroll titles */
-            for (j = 0; j < i; j++)
-            {
-                /* Compare first four characters */
-                QString hack1 = scroll_adj[j];
-                QString hack2 = scroll_adj[i];
-                hack1.truncate(4);
-                hack2.truncate(4);
-                if (QString::compare(hack1, hack2, Qt::CaseInsensitive)) continue;
-
-                /* Not okay */
-                okay = FALSE;
-
-                /* Stop looking */
-                break;
-            }
-
-            /* Break when done */
-            if (okay) break;
-        }
-    }
-
-
-    /* Hack -- Use the "complex" RNG */
-    Rand_quick = FALSE;
-
-    /* Analyze every object */
-    for (i = 1; i < z_info->k_max; i++)
-    {
-        object_kind *k_ptr = &k_info[i];
-
-        /*Skip "empty" objects*/
-        if (k_ptr->k_name.isEmpty()) continue;
-
-        /*No flavor yields aware*/
-        if (!k_ptr->flavor) k_ptr->aware = TRUE;
-    }
-}
 
 
 
@@ -604,7 +325,7 @@ s16b wield_slot_ammo(object_type *o_ptr)
         if ((o_ptr->number + j_ptr->number) >= MAX_STACK_SIZE) continue;
 
         /* If ammo is cursed we can't stack it */
-        if (cursed_p(&inventory[i])) continue;
+        if (inventory[i].is_cursed()) continue;
 
         /* If they are stackable, we'll use this slot for sure */
         if (object_similar(&inventory[i], o_ptr)) return i;
@@ -727,7 +448,7 @@ bool ammo_inscribed_for_quiver(object_type *o_ptr)
     int searches = 0;
 
     /* Well Balanced weapons only */
-    if (!obj_is_ammo(o_ptr)) return (FALSE);
+    if (!o_ptr->is_ammo()) return (FALSE);
 
     /* Marked to go right back into the quiver */
     if (o_ptr->ident & (IDENT_QUIVER)) return (TRUE);
@@ -803,11 +524,11 @@ bool weapon_inscribed_for_quiver(object_type *o_ptr)
  */
 bool slot_can_wield_item(int slot, object_type *o_ptr)
 {
-    if (o_ptr->tval == TV_RING)
+    if (o_ptr->is_ring())
     {
         return (slot == INVEN_LEFT || slot == INVEN_RIGHT) ? TRUE : FALSE;
     }
-    else if (obj_is_ammo(o_ptr))
+    else if (o_ptr->is_ammo())
     {
         return (slot >= QUIVER_START && slot < QUIVER_END) ? TRUE : FALSE;
     }
@@ -945,6 +666,9 @@ QString describe_use(int i)
 }
 
 
+
+
+
 /*
  * Check an item against the item tester info
  */
@@ -1001,7 +725,7 @@ int scan_floor(int *items, int size, int y, int x, int mode)
     if (!in_bounds(y, x)) return (0);
 
     /* Scan all objects in the grid */
-    for (this_o_idx = cave_o_idx[y][x]; this_o_idx; this_o_idx = next_o_idx)
+    for (this_o_idx = dungeon_info[y][x].object_idx; this_o_idx; this_o_idx = next_o_idx)
     {
         object_type *o_ptr;
 
@@ -1103,7 +827,7 @@ void excise_object_idx(int o_idx)
         int x = j_ptr->ix;
 
         /* Scan all objects in the grid */
-        for (this_o_idx = cave_o_idx[y][x]; this_o_idx; this_o_idx = next_o_idx)
+        for (this_o_idx = dungeon_info[y][x].object_idx; this_o_idx; this_o_idx = next_o_idx)
         {
             object_type *o_ptr;
 
@@ -1120,7 +844,7 @@ void excise_object_idx(int o_idx)
                 if (prev_o_idx == 0)
                 {
                     /* Remove from list */
-                    cave_o_idx[y][x] = next_o_idx;
+                    dungeon_info[y][x].object_idx = next_o_idx;
                 }
 
                 /* Real previous */
@@ -1198,7 +922,7 @@ void delete_object(int y, int x)
     if (!in_bounds(y, x)) return;
 
     /* Scan all objects in the grid */
-    for (this_o_idx = cave_o_idx[y][x]; this_o_idx; this_o_idx = next_o_idx)
+    for (this_o_idx = dungeon_info[y][x].object_idx; this_o_idx; this_o_idx = next_o_idx)
     {
         object_type *o_ptr;
 
@@ -1216,7 +940,7 @@ void delete_object(int y, int x)
     }
 
     /* Objects are gone */
-    cave_o_idx[y][x] = 0;
+    dungeon_info[y][x].object_idx = 0;
 
     p_ptr->redraw |= PR_ITEMLIST;
 
@@ -1287,10 +1011,10 @@ static void compact_objects_aux(int i1, int i2)
         x = o_ptr->ix;
 
         /* Repair grid */
-        if (cave_o_idx[y][x] == i1)
+        if (dungeon_info[y][x].object_idx == i1)
         {
             /* Repair */
-            cave_o_idx[y][x] = i2;
+            dungeon_info[y][x].object_idx = i2;
         }
     }
 
@@ -1519,7 +1243,7 @@ void wipe_o_list(void)
             int x = o_ptr->ix;
 
             /* Hack -- see above */
-            cave_o_idx[y][x] = 0;
+            dungeon_info[y][x].object_idx = 0;
         }
 
         /*Wipe the randart if necessary*/
@@ -1607,10 +1331,10 @@ int count_floor_items(int y, int x, bool pickup_only)
     if (!in_bounds_fully(y, x)) return (0);
 
     /* Nothing there */
-    if (!cave_o_idx[y][x]) return (0);
+    if (!dungeon_info[y][x].has_object()) return (0);
 
     /* Scan all objects in the grid */
-    for (this_o_idx = cave_o_idx[y][x]; this_o_idx; this_o_idx = next_o_idx)
+    for (this_o_idx = dungeon_info[y][x].object_idx; this_o_idx; this_o_idx = next_o_idx)
     {
         /* Get the object */
         o_ptr = &o_list[this_o_idx];
@@ -1645,7 +1369,7 @@ object_type *get_first_object(int y, int x)
     /* Paranoia */
     if (!in_bounds_fully(y, x)) return (NULL);
 
-    o_idx = cave_o_idx[y][x];
+    o_idx = dungeon_info[y][x].object_idx;
 
     if (o_idx) return (&o_list[o_idx]);
 
@@ -1723,7 +1447,7 @@ static s32b object_value_base(object_type *o_ptr)
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
     /* Use template cost for aware objects */
-    if (object_aware_p(o_ptr)) return (k_ptr->cost);
+    if (o_ptr->is_aware()) return (k_ptr->cost);
 
     /* Analyze the type */
     switch (o_ptr->tval)
@@ -2011,10 +1735,10 @@ s32b object_value(object_type *o_ptr)
     if (object_known_p(o_ptr))
     {
         /* Broken items -- worthless */
-        if (broken_p(o_ptr)) return (0L);
+        if (o_ptr->is_broken()) return (0L);
 
         /* Cursed items -- worthless */
-        if (cursed_p(o_ptr)) return (0L);
+        if (o_ptr->is_cursed()) return (0L);
 
         /* Real value (see above) */
         value = object_value_real(o_ptr);
@@ -2024,10 +1748,10 @@ s32b object_value(object_type *o_ptr)
     else
     {
         /* Hack -- Felt broken items */
-        if ((o_ptr->ident & (IDENT_SENSE)) && broken_p(o_ptr)) return (0L);
+        if ((o_ptr->ident & (IDENT_SENSE)) && o_ptr->is_broken()) return (0L);
 
         /* Hack -- Felt cursed items */
-        if ((o_ptr->ident & (IDENT_SENSE)) && cursed_p(o_ptr)) return (0L);
+        if ((o_ptr->ident & (IDENT_SENSE)) && o_ptr->is_cursed()) return (0L);
 
         /* Base value (see above) */
         value = object_value_base(o_ptr);
@@ -2197,7 +1921,7 @@ bool object_similar(object_type *o_ptr, object_type *j_ptr)
             if (o_ptr->xtra1 || j_ptr->xtra1) return (FALSE);
 
             /* Mega-Hack -- Handle lites */
-            if (fuelable_light_p(o_ptr))
+            if (o_ptr->is_fuelable_lite())
             {
                 if (o_ptr->timeout != j_ptr->timeout) return (FALSE);
             }
@@ -2422,7 +2146,7 @@ s16b floor_carry(int y, int x, object_type *j_ptr)
 
 
     /* Scan objects in that grid for combination */
-    for (this_o_idx = cave_o_idx[y][x]; this_o_idx; this_o_idx = next_o_idx)
+    for (this_o_idx = dungeon_info[y][x].object_idx; this_o_idx; this_o_idx = next_o_idx)
     {
         object_type *o_ptr = &o_list[this_o_idx];
 
@@ -2471,10 +2195,10 @@ s16b floor_carry(int y, int x, object_type *j_ptr)
         o_ptr->held_m_idx = 0;
 
         /* Link the object to the pile */
-        o_ptr->next_o_idx = cave_o_idx[y][x];
+        o_ptr->next_o_idx = dungeon_info[y][x].object_idx;
 
         /* Link the floor to the object */
-        cave_o_idx[y][x] = o_idx;
+        dungeon_info[y][x].object_idx = o_idx;
 
         /* Rearrange to reflect squelching */
         rearrange_stack(y, x);
@@ -2490,7 +2214,7 @@ s16b floor_carry(int y, int x, object_type *j_ptr)
         if (player_can_see_bold(y,x))
         {
             /*Mark the feature lore*/
-            feature_lore *f_l_ptr = &f_l_list[cave_feat[y][x]];
+            feature_lore *f_l_ptr = &f_l_list[dungeon_info[y][x].feat];
             f_l_ptr->f_l_flags1 |= (FF1_DROP);
         }
     }
@@ -2541,14 +2265,12 @@ static bool find_similar_object_or_empty_grid(object_type *j_ptr, int *oy, int *
              * 	it's free of traps
              * 	it doesn't contain a terrain feature dangerous for the object
              */
-
-            //TODO fix this
-            if ((d <= max_dist) && //generic_los(*oy, *ox, y, x, CAVE_PROJECT) &&
+            if ((d <= max_dist) && generic_los(*oy, *ox, y, x, CAVE_PROJECT) &&
                 cave_ff1_match(y, x, FF1_DROP) && cave_passable_bold(y, x))// &&
                 //!cave_any_trap_bold(y, x) && !object_hates_location(y, x, j_ptr))
             {
                 /* Get the first object index in that grid */
-                int o_idx = cave_o_idx[y][x];
+                int o_idx = dungeon_info[y][x].object_idx;
 
                 /* The grid is empty */
                 if (o_idx == 0)
@@ -2743,8 +2465,7 @@ bool drop_near(object_type *j_ptr, int chance, int y, int x)
                 if (!in_bounds_fully(ty, tx)) continue;
 
                 /* Require line of sight */
-                //TODO line of sight
-                //if (!los(y, x, ty, tx)) continue;
+                if (!los(y, x, ty, tx)) continue;
 
                 /* Require a grid suitable for drops */
                 if (!(cave_ff1_match(ty, tx, FF1_DROP) &&
@@ -2883,7 +2604,7 @@ bool drop_near(object_type *j_ptr, int chance, int y, int x)
 
     /* Mega-Hack -- no message if "dropped" by player */
     /* Message when an object falls under the player */
-    if (chance && (cave_m_idx[by][bx] < 0))
+    if (chance && (dungeon_info[by][bx].monster_idx < 0))
     {
         /* Hack -- Only one message per turn */
         static long last_turn = -1;
@@ -3050,7 +2771,7 @@ int get_tag_num(int o_idx, QChar cmd, byte *tag_num)
  */
 int quiver_space_per_unit(object_type *o_ptr)
 {
-    return (ammo_p(o_ptr) ? 1: 5);
+    return (o_ptr->is_ammo() ? 1: 5);
 }
 
 
@@ -3226,8 +2947,8 @@ int sort_quiver(int slot)
             if (i_ptr->tval < j_ptr->tval) continue;
 
             /* Non-aware items always come last */
-            if (!object_aware_p(i_ptr)) continue;
-            if (!object_aware_p(j_ptr)) break;
+            if (!i_ptr->is_aware()) continue;
+            if (!j_ptr->is_aware()) break;
 
             /* Objects sort by increasing sval */
             if (i_ptr->sval < j_ptr->sval) break;
@@ -3465,11 +3186,11 @@ bool quiver_carry_okay(object_type *o_ptr, int num, int item)
         if (!i_ptr->k_idx) continue;
 
         /* Increment the ammo count */
-        ammo_num += (i_ptr->number * (ammo_p(i_ptr) ? 1: 5));
+        ammo_num += (i_ptr->number * quiver_space_per_unit(i_ptr));
     }
 
     /* Add the requested amount of objects to be put in the quiver */
-    ammo_num += (num * (ammo_p(o_ptr) ? 1: 5));
+    ammo_num += (num * quiver_space_per_unit(o_ptr));
 
     /* We need as many free inventory as: */
     need = (ammo_num + 98) / 99;
@@ -3743,7 +3464,7 @@ s16b quiver_carry(object_type *o_ptr)
     if (o_ptr->mimic_r_idx) return (-1);
 
     /* Must be ammo. */
-    if (!ammo_p(o_ptr) && !is_throwing_weapon(o_ptr)) return (-1);
+    if (!o_ptr->is_ammo() && !is_throwing_weapon(o_ptr)) return (-1);
 
     /* Check for combining */
     for (j = QUIVER_START; j < QUIVER_END; j++)
@@ -3823,8 +3544,8 @@ s16b quiver_carry(object_type *o_ptr)
             if (o_ptr->tval < j_ptr->tval) continue;
 
             /* Non-aware (flavored) items always come last */
-            if (!object_aware_p(o_ptr)) continue;
-            if (!object_aware_p(j_ptr)) break;
+            if (!o_ptr->is_aware()) continue;
+            if (!j_ptr->is_aware()) break;
 
             /* Objects sort by increasing sval */
             if (o_ptr->sval < j_ptr->sval) break;
@@ -3999,8 +3720,8 @@ s16b inven_carry(object_type *o_ptr)
             if (o_ptr->tval < j_ptr->tval) continue;
 
             /* Non-aware (flavored) items always come last */
-            if (!object_aware_p(o_ptr)) continue;
-            if (!object_aware_p(j_ptr)) break;
+            if (!o_ptr->is_aware()) continue;
+            if (!j_ptr->is_aware()) break;
 
             /* Objects sort by increasing sval */
             if (o_ptr->sval < j_ptr->sval) break;
@@ -4435,8 +4156,8 @@ void reorder_pack(void)
             if (o_ptr->tval < j_ptr->tval) continue;
 
             /* Non-aware (flavored) items always come last */
-            if (!object_aware_p(o_ptr)) continue;
-            if (!object_aware_p(j_ptr)) break;
+            if (!o_ptr->is_aware()) continue;
+            if (!j_ptr->is_aware()) break;
 
             /* Objects sort by increasing sval */
             if (o_ptr->sval < j_ptr->sval) break;
@@ -4845,50 +4566,6 @@ bool chest_requires_disarming(object_type *o_ptr)
 }
 
 
-/*
- * Determine whether an object is a weapon
- *
- * \param o_ptr is the object to check
- */
-bool obj_is_weapon(object_type *o_ptr)
-{
-    /* Ignore empty objects */
-    if (!o_ptr->k_idx) return (FALSE);
-
-    switch (o_ptr->tval)
-    {
-        case TV_HAFTED:
-        case TV_POLEARM:
-        case TV_SWORD:
-        case TV_DIGGING:
-            return TRUE;
-        default:
-            return FALSE;
-    }
-}
-
-
-/**
- * Determine whether an object is ammo
- *
- * \param o_ptr is the object to check
- */
-bool obj_is_ammo(object_type *o_ptr)
-{
-    /* Ignore empty objects */
-    if (!o_ptr->k_idx) return (FALSE);
-
-    switch (o_ptr->tval)
-    {
-        case TV_SHOT:
-        case TV_ARROW:
-        case TV_BOLT:
-            return TRUE;
-        default:
-            return FALSE;
-    }
-}
-
 
 /*
  * Determine whether the ammo can be fired with the current launcher
@@ -4905,7 +4582,7 @@ bool ammo_can_fire(object_type *o_ptr, int item)
     }
 
     /* No ammo */
-    if (!obj_is_ammo(o_ptr)) return (FALSE);
+    if (!o_ptr->is_ammo()) return (FALSE);
 
     /* No launcher */
     if (!j_ptr->tval || !p_ptr->state.ammo_tval) return (FALSE);
@@ -4914,7 +4591,7 @@ bool ammo_can_fire(object_type *o_ptr, int item)
     if (!item_is_available(item, NULL, (USE_INVEN | USE_FLOOR | USE_EQUIP | USE_QUIVER))) return (FALSE);
 
     /* Cursed quiver */
-    if (IS_QUIVER_SLOT(item) && p_ptr->state.cursed_quiver && !cursed_p(o_ptr)) return (FALSE);
+    if (IS_QUIVER_SLOT(item) && p_ptr->state.cursed_quiver && !o_ptr->is_cursed()) return (FALSE);
 
     /* Wrong ammo type */
     if (o_ptr->tval != p_ptr->state.ammo_tval) return (FALSE);
@@ -4964,100 +4641,6 @@ bool obj_has_charges(object_type *o_ptr)
 }
 
 
-/*
- * Determine if an object has charges
- */
-bool rod_can_zap(object_type *o_ptr)
-{
-    object_kind *k_ptr = &k_info[o_ptr->k_idx];
-
-    if (!obj_is_rod(o_ptr)) return FALSE;
-
-    if (o_ptr->timeout > (o_ptr->pval - k_ptr->pval)) return (FALSE);
-
-    return (TRUE);
-}
-
-/*
- * Determine if an object can be browsed (spellbook)
- */
-bool obj_can_browse(object_type *o_ptr)
-{
-    if (o_ptr->tval != cp_ptr->spell_book) return FALSE;
-    return TRUE;
-}
-
-/*
- * Determine if an object is a spelbook with spells that can be studied
- */
-bool obj_can_study(object_type *o_ptr)
-{
-    int i;
-    if (o_ptr->tval != cp_ptr->spell_book) return FALSE;
-
-    for (i = 0;  i < SPELLS_PER_BOOK; i++)
-    {
-        int spell = get_spell_index(o_ptr, i);
-
-        /* Not a spell */
-        if (spell == -1) continue;
-
-        /* Is there a spell we can learn? */
-        if (spell_okay(spell, FALSE)) return (TRUE);
-    }
-    return (FALSE);
-
-}
-
-/*
- * Determine if an object is a spellbook with spells that can be cast
- */
-bool obj_can_cast(object_type *o_ptr)
-{
-    int i;
-    if (o_ptr->tval != cp_ptr->spell_book) return FALSE;
-
-    for (i = 0;  i < SPELLS_PER_BOOK; i++)
-    {
-        int spell = get_spell_index(o_ptr, i);
-
-        /* Not a spell */
-        if (spell == -1) continue;
-
-        /* Is there a spell we can learn? */
-        if (spell_okay(spell, TRUE)) return (TRUE);
-    }
-    return (FALSE);
-}
-
-
-/*
- * Can only take off non-cursed items
- */
-bool obj_can_takeoff(object_type *o_ptr)
-{
-    return !cursed_p(o_ptr);
-}
-
-
-/*
- * Can only put on wieldable items
- */
-bool obj_can_wear(object_type *o_ptr)
-{
-    s16b x = wield_slot(o_ptr);
-
-    return ((x >= INVEN_WIELD) && x < QUIVER_END);
-}
-
-
-/*
- * Can has inscrip pls
- */
-bool obj_has_inscrip(object_type *o_ptr)
-{
-    return (o_ptr->inscription.isEmpty());
-}
 
 
 /*** Generic utility functions ***/
@@ -5129,7 +4712,7 @@ bool obj_needs_aim(object_type *o_ptr)
             /*Some rod doesn't need targeting*/
             if (((o_ptr->sval >= SV_ROD_MIN_DIRECTION) &&
                  (o_ptr->sval != SV_ROD_STAR_IDENTIFY) &&
-                 (o_ptr->sval != SV_ROD_MASS_IDENTIFY)) || !object_aware_p(o_ptr))return(TRUE);
+                 (o_ptr->sval != SV_ROD_MASS_IDENTIFY)) || !o_ptr->is_aware())return(TRUE);
             else return (FALSE);
         }
         case TV_RING:
@@ -5351,8 +4934,8 @@ void pack_overflow(void)
     /* Get the slot to be dropped */
     o_ptr = &inventory[item];
 
-    /* TODO Disturbing */
-    //disturb(0, 0);
+    /* Disturbing */
+    disturb(0, 0);
 
     /* Warning */
     message("Your pack overflows!");
@@ -5749,71 +5332,3 @@ QString format_object_flags(object_type *o_ptr, int max, bool only_random_powers
     }
 }
 
-/*
- * Return a "feeling" (or NULL) about an item.  Method 1 (Heavy).
- */
-int value_check_aux1(object_type *o_ptr)
-{
-    /* Artifacts */
-    if (o_ptr->is_artifact())
-    {
-        /* Cursed/Broken */
-        if (cursed_p(o_ptr) || broken_p(o_ptr)) return (INSCRIP_TERRIBLE);
-
-        /* Normal */
-        return (INSCRIP_SPECIAL);
-    }
-
-    /* Ego-Items */
-    if (ego_item_p(o_ptr))
-    {
-        /* Cursed/Broken */
-        if (cursed_p(o_ptr) || broken_p(o_ptr)) return (INSCRIP_WORTHLESS);
-
-        /* Normal */
-        return (INSCRIP_EXCELLENT);
-    }
-
-    /* Cursed items */
-    if (cursed_p(o_ptr)) return (INSCRIP_CURSED);
-
-    /* Broken items */
-    if (broken_p(o_ptr)) return (INSCRIP_BROKEN);
-
-    /* Good "armor" bonus */
-    if (o_ptr->to_a > 0) return (INSCRIP_GOOD_STRONG);
-
-    /* Good "weapon" bonus */
-    if (o_ptr->to_h + o_ptr->to_d > 0) return (INSCRIP_GOOD_STRONG);
-
-    /* Default to "average" */
-    return (INSCRIP_AVERAGE);
-}
-
-
-/*
- * Return a "feeling" (or NULL) about an item.  Method 2 (Light).
- */
-int value_check_aux2(object_type *o_ptr)
-{
-    /* Cursed items (all of them) */
-    if (cursed_p(o_ptr)) return (INSCRIP_CURSED);
-
-    /* Broken items (all of them) */
-    if (broken_p(o_ptr)) return (INSCRIP_BROKEN);
-
-    /* Artifacts -- except cursed/broken ones */
-    if (o_ptr->is_artifact()) return (INSCRIP_GOOD_WEAK);
-
-    /* Ego-Items -- except cursed/broken ones */
-    if (ego_item_p(o_ptr)) return (INSCRIP_GOOD_WEAK);
-
-    /* Good armor bonus */
-    if (o_ptr->to_a > 0) return (INSCRIP_GOOD_WEAK);
-
-    /* Good weapon bonuses */
-    if (o_ptr->to_h + o_ptr->to_d > 0) return (INSCRIP_GOOD_WEAK);
-
-    /* Default to "average" */
-    return (INSCRIP_AVERAGE);
-}

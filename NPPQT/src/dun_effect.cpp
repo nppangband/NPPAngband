@@ -130,13 +130,13 @@ static void place_effect_idx(int x_idx, int y, int x)
      */
     if (cave_any_trap_bold(y, x))
     {
-        x_ptr->next_x_idx = x_list[cave_x_idx[y][x]].next_x_idx;
-        x_list[cave_x_idx[y][x]].next_x_idx = x_idx;
+        x_ptr->next_x_idx = x_list[dungeon_info[y][x].effect_idx].next_x_idx;
+        x_list[dungeon_info[y][x].effect_idx].next_x_idx = x_idx;
     }
     else
     {
-        x_ptr->next_x_idx = cave_x_idx[y][x];
-        cave_x_idx[y][x] = x_idx;
+        x_ptr->next_x_idx = dungeon_info[y][x].effect_idx;
+        dungeon_info[y][x].effect_idx = x_idx;
     }
 
     /* Update some CAVE_* flags */
@@ -178,7 +178,7 @@ void effect_prep(int x_idx, byte type, u16b f_idx, byte y, byte x, byte countdow
     x_ptr->x_flags = flags;
 
     /* Scan objects in that grid for combination */
-    for (this_x_idx = cave_x_idx[y][x]; this_x_idx; this_x_idx = next_x_idx)
+    for (this_x_idx = dungeon_info[y][x].effect_idx; this_x_idx; this_x_idx = next_x_idx)
     {
         effect_type *x2_ptr;
 

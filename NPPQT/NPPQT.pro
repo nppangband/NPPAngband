@@ -14,24 +14,27 @@ TARGET = NPPGAMES
 SOURCES +=  src/qt_main.cpp\
             src/qt_mainwindow.cpp\
             src/calcs.cpp \
-            src/cave.cpp \
-            src/cmd4.cpp\
+            src/dun_effect.cpp \
+            src/dun_generate.cpp \
+            src/cmd4.cpp \
             src/cmd_spell.cpp \
-            src/effect.cpp \
-            src/feature.cpp \
-            src/generate.cpp \
+            src/dun_cave.cpp \
+            src/dun_classes.cpp \
+            src/dun_feature.cpp \
+            src/dun_util.cpp \
             src/globals.cpp \
             src/init_edit_files.cpp\
             src/init_game.cpp\
             src/load.cpp \
             src/mon_classes.cpp \
+            src/mon_player_ghost.cpp \
             src/mon_ranged_attacks.cpp \
             src/object_classes.cpp \
             src/object_desc.cpp \
             src/object_make.cpp \
             src/object_util.cpp \
-            src/player_ghost.cpp \
             src/player_spell.cpp \
+            src/projection.cpp \
             src/randart.cpp \
             src/random_numbers.cpp \
             src/spells2.cpp \
@@ -39,9 +42,6 @@ SOURCES +=  src/qt_main.cpp\
             src/tables.cpp \
             src/utilities.cpp \
             src/save.cpp
-
-
-
 
 
 
@@ -63,7 +63,9 @@ HEADERS  += src/qt_mainwindow.h\
             src/user_macros.h \
             src/utilities.h \
             src/object_classes.h \
-            src/squelch.h
+            src/squelch.h \
+    src/randart.h \
+    src/dun_classes.h
 
 
 RESOURCES += \

@@ -1267,7 +1267,7 @@ static int verify_version(QString read_line)
 }
 
 // Process G:{G:{Character}:{U}Color line.  Assumes G: has been chopped.
-static QChar process_graphics_line(QString line_info, int *error_return, QColor *color_return)
+static QChar process_graphics_line(QString line_info, int *error_return, QColor *color_return, byte *color_slot)
 {
     QChar symbol;
     QColor color;
@@ -1304,7 +1304,11 @@ static QChar process_graphics_line(QString line_info, int *error_return, QColor 
 
         }
 
-        else color.setRgb(red, green, blue, 255);
+        else
+        {
+            *color_slot = COLOR_CUSTOM;
+            color.setRgb(red, green, blue, 255);
+        }
 
     }
     else if (!count)//color entered by name.
@@ -1318,6 +1322,7 @@ static QChar process_graphics_line(QString line_info, int *error_return, QColor 
             //load the color and finish.
             color_found = TRUE;
             color.setRgb(preset_colors[i].red, preset_colors[i].green, preset_colors[i].blue, 255);
+            *color_slot = i;
             break;
         }
 
@@ -1862,17 +1867,19 @@ int parse_f_info(QString line_info)
     {
         QChar d_char;
         QColor d_color;
+        byte color_slot;
         int error;
 
         /* There better be a current f_ptr */
         if (!f_ptr) return (PARSE_ERROR_MISSING_RECORD_HEADER);
 
-        d_char = process_graphics_line(line_info, &error, &d_color);
+        d_char = process_graphics_line(line_info, &error, &d_color, &color_slot);
 
         /* Paranoia */
         if (error > 0) return (PARSE_ERROR_GENERIC);
 
         /* Save the values */
+        f_ptr->color_num = color_slot;
         f_ptr->d_color = d_color;
         f_ptr->d_char = d_char;
     }
@@ -2120,17 +2127,19 @@ int parse_k_info(QString line_info)
     {        
         QChar d_char;
         QColor d_color;
+        byte color_slot;
         int error;
 
         /* There better be a current k_ptr */
         if (!k_ptr) return (PARSE_ERROR_MISSING_RECORD_HEADER);
 
-        d_char = process_graphics_line(line_info, &error, &d_color);
+        d_char = process_graphics_line(line_info, &error, &d_color, &color_slot);
 
         /* Paranoia */
         if (error > 0) return (PARSE_ERROR_GENERIC);
 
         /* Save the values */
+        k_ptr->color_num = color_slot;
         k_ptr->d_color = d_color;
         k_ptr->d_char = d_char;
     }
@@ -2938,17 +2947,19 @@ int parse_r_info(QString line_info)
     {
         QChar d_char;
         QColor d_color;
+        byte color_slot;
         int error;
 
         /* There better be a current r_ptr */
         if (!r_ptr) return (PARSE_ERROR_MISSING_RECORD_HEADER);
 
-        d_char = process_graphics_line(line_info, &error, &d_color);
+        d_char = process_graphics_line(line_info, &error, &d_color, &color_slot);
 
         /* Paranoia */
         if (error > 0) return (PARSE_ERROR_GENERIC);
 
         /* Save the values */
+        r_ptr->color_num = color_slot;
         r_ptr->d_color = d_color;
         r_ptr->d_char = d_char;
     }
@@ -4032,17 +4043,19 @@ int parse_flavor_info(QString line_info)
     {
         QChar d_char;
         QColor d_color;
+        byte color_slot;
         int error;
 
         /* There better be a current flavor_ptr */
         if (!flavor_ptr) return (PARSE_ERROR_MISSING_RECORD_HEADER);
 
-        d_char = process_graphics_line(line_info, &error, &d_color);
+        d_char = process_graphics_line(line_info, &error, &d_color, &color_slot);
 
         /* Paranoia */
         if (error > 0) return (PARSE_ERROR_GENERIC);
 
         /* Save the values */
+        flavor_ptr->color_num = color_slot;
         flavor_ptr->d_color= d_color;
         flavor_ptr->d_char = d_char;
     }

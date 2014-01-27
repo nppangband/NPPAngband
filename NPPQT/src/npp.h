@@ -5,6 +5,7 @@
 #include "src/defines.h"
 #include "src/user_macros.h"
 #include "src/monster.h"
+#include "src/dun_classes.h"
 #include "src/terrain.h"
 #include "src/object_classes.h"
 #include "src/player.h"
@@ -12,8 +13,9 @@
 #include "src/structures.h"
 #include "src/globals.h"
 #include "src/function_declarations.h"
-#include "random_numbers.h"
-#include "utilities.h"
+#include "src/random_numbers.h"
+#include "src/utilities.h"
+
 
 
 

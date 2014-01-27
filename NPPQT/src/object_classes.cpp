@@ -160,6 +160,26 @@ bool object_type::is_known()
 }
 
 /*
+ * returns whether an object is aware (e.g. ID'd)
+ */
+bool object_type::is_aware()
+{
+    if (k_info[k_idx].aware) return (TRUE);
+    return (FALSE);
+}
+
+/*
+ * returns whether an object has been tried
+ */
+bool object_type::is_tried()
+{
+    if (k_info[k_idx].tried) return (TRUE);
+    return (FALSE);
+}
+
+
+
+/*
  * returns whether the player is aware of the object's flavour
  */
 bool object_type::is_flavor_known()
@@ -226,6 +246,35 @@ bool object_type::is_known_artifact()
 
     if (is_artifact() && was_sensed()) return (TRUE);
     if (ident & (IDENT_INDESTRUCT)) return (TRUE);
+    if (ident & (INSCRIP_TERRIBLE)) return (TRUE);
+    if (ident & (INSCRIP_SPECIAL)) return (TRUE);
+    return (FALSE);
+}
+
+/*
+ * Artifacts use the "ego_num" field
+ */
+bool object_type::is_ego_item()
+{
+    if (ego_num) return (TRUE);
+    return (FALSE);
+}
+
+/*
+ * Returns TRUE if this object is cursed.
+ */
+bool object_type::is_cursed()
+{
+    if (ident & (IDENT_CURSED)) return (TRUE);
+    return (FALSE);
+}
+
+/*
+ * Returns TRUE if this object is broken.
+ */
+bool object_type::is_broken()
+{
+    if (ident & (IDENT_BROKEN)) return (TRUE);
     return (FALSE);
 }
 
@@ -250,7 +299,6 @@ bool object_type::is_spellbook()
     return (FALSE);
 }
 
-
 /* Basic tval testers */
 bool object_type::is_shovel()       { return tval == TV_DIGGING;}
 bool object_type::is_bow()          { return tval == TV_BOW; }
@@ -263,4 +311,205 @@ bool object_type::is_parchment()    { return tval == TV_PARCHMENT; }
 bool object_type::is_food()         { return tval == TV_FOOD; }
 bool object_type::is_light()        { return tval == TV_LIGHT; }
 bool object_type::is_ring()         { return tval == TV_RING; }
+bool object_type::is_amulet()       { return tval == TV_AMULET; }
+bool object_type::is_jewlery()
+{
+    if (is_amulet())    return (TRUE);
+    if (is_ring())      return (TRUE);
+    return (FALSE);
+}
 bool object_type::is_chest()        { return tval == TV_CHEST; }
+
+/**
+ * \returns whether the object can be filled with oil
+ */
+bool object_type::is_fuelable_lite()
+{
+    if (tval != TV_LIGHT)   return (FALSE);
+    if (is_artifact())      return (FALSE);
+    return (TRUE);
+}
+
+/**
+ * \returns whether the object is ammunition
+ */
+bool object_type::is_ammo()
+{
+    if (tval == TV_BOLT)   return (TRUE);
+    if (tval == TV_ARROW)   return (TRUE);
+    if (tval == TV_SHOT)   return (TRUE);
+    return (FALSE);
+}
+
+/*
+ * Determine whether an object is a weapon
+ */
+bool object_type::is_weapon()
+{
+    switch (tval)
+    {
+        case TV_HAFTED:
+        case TV_POLEARM:
+        case TV_SWORD:
+        case TV_DIGGING:
+            return TRUE;
+        default:
+            return FALSE;
+    }
+}
+
+
+/*
+ * Determine if an object has charges
+ */
+bool object_type::can_zap()
+{
+    object_kind *k_ptr = &k_info[k_idx];
+
+    if (!is_rod()) return FALSE;
+
+    if (timeout > (pval - k_ptr->pval)) return (FALSE);
+
+    return (TRUE);
+}
+
+/*
+ * Determine if an object can be browsed (spellbook)
+ */
+bool object_type::can_browse()
+{
+    if (tval != cp_ptr->spell_book) return (FALSE);
+    return TRUE;
+}
+
+/*
+ * Determine if an object is a spelbook with spells that can be studied
+ */
+bool object_type::can_study()
+{
+    int i;
+    if (tval != cp_ptr->spell_book) return FALSE;
+
+    for (i = 0;  i < SPELLS_PER_BOOK; i++)
+    {
+        int spell = get_spell_index(sval, i);
+
+        /* Not a spell */
+        if (spell == -1) continue;
+
+        /* Is there a spell we can learn? */
+        if (spell_okay(spell, FALSE)) return (TRUE);
+    }
+    return (FALSE);
+
+}
+
+/*
+ * Determine if an object is a spellbook with spells that can be cast
+ */
+bool object_type::can_cast()
+{
+    int i;
+    if (tval != cp_ptr->spell_book) return FALSE;
+
+    for (i = 0;  i < SPELLS_PER_BOOK; i++)
+    {
+        int spell = get_spell_index(sval, i);
+
+        /* Not a spell */
+        if (spell == -1) continue;
+
+        /* Is there a spell we can learn? */
+        if (spell_okay(spell, TRUE)) return (TRUE);
+    }
+    return (FALSE);
+}
+
+
+/*
+ * Can only take off non-cursed items
+ */
+bool object_type::can_takeoff()
+{
+    return (!is_cursed());
+}
+
+
+/*
+ * Can has inscrip pls
+ */
+bool object_type::has_inscription()
+{
+    return (!inscription.isEmpty());
+}
+
+
+/*
+ * Return a "feeling" (or NULL) about an item.  Method 1 (Heavy).
+ */
+s16b object_type::pseudo_heavy()
+{
+    /* Artifacts */
+    if (is_artifact())
+    {
+        /* Cursed/Broken */
+        if (is_cursed() || is_broken()) return (INSCRIP_TERRIBLE);
+
+        /* Normal */
+        return (INSCRIP_SPECIAL);
+    }
+
+    /* Ego-Items */
+    if (is_ego_item())
+    {
+        /* Cursed/Broken */
+        if (is_cursed() || is_broken()) return (INSCRIP_WORTHLESS);
+
+        /* Normal */
+        return (INSCRIP_EXCELLENT);
+    }
+
+    /* Cursed items */
+    if (is_cursed()) return (INSCRIP_CURSED);
+
+    /* Broken items */
+    if (is_broken()) return (INSCRIP_BROKEN);
+
+    /* Good "armor" bonus */
+    if (to_a > 0) return (INSCRIP_GOOD_STRONG);
+
+    /* Good "weapon" bonus */
+    if (to_h + to_d > 0) return (INSCRIP_GOOD_STRONG);
+
+    /* Default to "average" */
+    return (INSCRIP_AVERAGE);
+}
+
+
+/*
+ * Return a "feeling" (or NULL) about an item.  Method 2 (Light).
+ */
+s16b object_type::pseudo_light()
+{
+    /* Cursed items (all of them) */
+    if (is_cursed()) return (INSCRIP_CURSED);
+
+    /* Broken items (all of them) */
+    if (is_broken()) return (INSCRIP_BROKEN);
+
+    /* Artifacts -- except cursed/broken ones */
+    if (is_artifact()) return (INSCRIP_GOOD_WEAK);
+
+    /* Ego-Items -- except cursed/broken ones */
+    if (is_ego_item()) return (INSCRIP_GOOD_WEAK);
+
+    /* Good armor bonus */
+    if (to_a > 0) return (INSCRIP_GOOD_WEAK);
+
+    /* Good weapon bonuses */
+    if (to_h + to_d > 0) return (INSCRIP_GOOD_WEAK);
+
+    /* Default to "average" */
+    return (INSCRIP_AVERAGE);
+}
+

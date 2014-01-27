@@ -17,11 +17,7 @@ typedef struct colors_preset colors_preset;
 typedef struct feature_state feature_state;
 typedef struct feature_type feature_type;
 typedef struct feature_lore feature_lore;
-typedef struct object_kind object_kind;
 typedef struct ghost_template ghost_template;
-typedef struct artifact_type artifact_type;
-typedef struct artifact_lore artifact_lore;
-typedef struct ego_item_type ego_item_type;
 typedef struct monster_blow monster_blow;
 typedef struct monster_names monster_names;
 typedef struct monster_desc monster_desc;
@@ -47,7 +43,6 @@ typedef struct player_type player_type;
 typedef struct player_state player_state;
 typedef struct start_item start_item;
 typedef struct names_type names_type;
-typedef struct flavor_type flavor_type;
 typedef struct autoinscription autoinscription;
 typedef struct move_moment_type move_moment_type;
 typedef struct coord coord;
@@ -144,11 +139,9 @@ struct feature_type
 
     u16b unused;		/* Unused */
 
+    byte color_num;     //The number of any default color.  CUSTOM_COLOR for all others.
     QColor d_color;		/* Default feature color */
     QChar d_char;		/* Default feature character */
-
-    QColor x_color;		/* Desired feature color */
-    QChar x_char;		/* Desired feature character */
 
     bool f_everseen;	/* Used to despoilify knowledge screens */
 
@@ -168,14 +161,7 @@ struct feature_type
 
 };
 
-/*
- * Artifact "lore" information
- *
- */
-struct artifact_lore
-{
-        bool was_fully_identified;      /* Preserved between diferent games */
-};
+
 
 
 /*
@@ -209,151 +195,6 @@ struct feature_lore
 
 
 
-/*
- * Information about object "kinds", including player knowledge.
- *
- * Only "aware" and "tried" are saved in the savefile
- */
-struct object_kind
-{
-    QString k_name;			/* Name  */
-    QString k_text;			/* Text  */
-
-    byte tval;			/* Object type */
-    byte sval;			/* Object sub type */
-
-    s16b pval;			/* Object extra info */
-
-    s16b to_h;			/* Bonus to hit */
-    s16b to_d;			/* Bonus to damage */
-    s16b to_a;			/* Bonus to armor */
-
-    s16b ac;			/* Base armor */
-
-    byte dd, ds;		/* Damage dice/sides */
-
-    s16b weight;		/* Weight */
-
-    s32b cost;			/* Object "base cost" */
-
-    u32b k_flags1;		/* Flags, set 1 */
-    u32b k_flags2;		/* Flags, set 2 */
-    u32b k_flags3;		/* Flags, set 3 */
-    u32b k_native;		/* Flags, native */
-    u32b k_store;		/* Flags, sold in a store */
-
-    u16b effect;         /**< Effect this item produces (effects.c) */
-
-    byte locale[4];		/* Allocation level(s) */
-    byte chance[4];		/* Allocation chance(s) */
-
-    byte k_level;			/* Level */
-    byte extra;			/* Something */
-
-
-    QColor d_color;		/* Default feature color */
-    QChar d_char;		/* Default object character */
-
-
-    QColor x_color;    /* Desired object color */
-    QChar x_char;		/* Desired object character */
-
-    QString autoinscribe;  //Default inscription for this object
-
-    u16b flavor;		/* Special object flavor (or zero) */
-
-    bool aware;			/* The player is "aware" of the item's effects */
-
-    bool tried;			/* The player has "tried" one of the items */
-
-    byte squelch;		/* Squelch setting for the particular item */
-
-    bool everseen;		/* Used to despoilify squelch menus */
-};
-
-
-
-/*
- * Information about "artifacts".
- *
- * Note that the save-file only writes "cur_num" to the savefile,
- * except for the random artifacts
- *
- * Note that "max_num" is always "1" (if that artifact "exists")
- */
-struct artifact_type
-{
-    QString a_name;       /* Name */
-    QString a_text;		/* Text  */
-
-    byte tval;			/* Artifact type */
-    byte sval;			/* Artifact sub type */
-
-    s16b pval;			/* Artifact extra info */
-
-    s16b to_h;			/* Bonus to hit */
-    s16b to_d;			/* Bonus to damage */
-    s16b to_a;			/* Bonus to armor */
-
-    s16b ac;			/* Base armor */
-
-    byte dd, ds;		/* Damage when hits */
-
-    s16b weight;		/* Weight */
-
-    s32b cost;			/* Artifact "cost" */
-
-    u32b a_flags1;		/* Artifact Flags, set 1 */
-    u32b a_flags2;		/* Artifact Flags, set 2 */
-    u32b a_flags3;		/* Artifact Flags, set 3 */
-    u32b a_native;		/* Flags, native */
-
-    byte a_level;			/* Artifact level */
-    byte a_rarity;		/* Artifact rarity */
-
-    byte a_cur_num;		/* Number created (0 or 1) */
-    byte a_max_num;		/* Unused (should be "1") */
-
-    byte activation;	/* Activation to use */
-    u16b time;			/* Activation time */
-    u16b randtime;		/* Activation time dice */
-
-};
-
-
-/*
- * Information about "ego-items".
- */
-struct ego_item_type
-{
-    QString e_name;        /* Name  */
-    QString e_text;			/* Text  */
-
-    s32b cost;			/* Ego-item "cost" */
-
-    u32b e_flags1;		/* Ego-Item Flags, set 1 */
-    u32b e_flags2;		/* Ego-Item Flags, set 2 */
-    u32b e_flags3;		/* Ego-Item Flags, set 3 */
-    u32b e_native;		/* Flags, native */
-
-    byte level;			/* Minimum level */
-    byte rarity;		/* Object rarity */
-    byte rating;		/* Level rating boost */
-
-    byte tval[EGO_TVALS_MAX]; /* Legal tval */
-    byte min_sval[EGO_TVALS_MAX];	/* Minimum legal sval */
-    byte max_sval[EGO_TVALS_MAX];	/* Maximum legal sval */
-
-    byte max_to_h;		/* Maximum to-hit bonus */
-    byte max_to_d;		/* Maximum to-dam bonus */
-    byte max_to_a;		/* Maximum to-ac bonus */
-    byte max_pval;		/* Maximum pval */
-
-    byte xtra;			/* Extra sustain/resist/power */
-
-    bool everseen;			/* Do not spoil squelch menus */
-    bool squelch;			/* Squelch this ego-item */
-};
 
 /*
  * Information about ghost "templates".
@@ -449,11 +290,9 @@ struct monster_race
     byte level;				/* Level of creature */
     byte rarity;			/* Rarity of creature */
 
+    byte color_num;     //The number of any default color.  CUSTOM_COLOR for all others.
     QColor d_color;         /* Default monster color */
     QChar d_char;			/* Default monster character */
-
-    QColor x_color;        /* Desired monster color */
-    QChar x_char;			/* Desired monster character */
 
     byte max_num;			/* Maximum population allowed per level */
     byte cur_num;			/* Monster population on current level */
@@ -1120,20 +959,6 @@ struct player_type
 
 
 
-
-struct flavor_type
-{
-    QString text;      /* Text */
-
-    byte tval;      /* Associated object type */
-    byte sval;      /* Associated object sub-type */
-
-    QColor d_color;		/* Default flavor color */
-    QChar d_char;    /* Default flavor character */
-
-    QColor x_color;    /* Desired flavor color */
-    QChar x_char;    /* Desired flavor character */
-};
 
 
 

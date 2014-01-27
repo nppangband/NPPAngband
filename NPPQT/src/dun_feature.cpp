@@ -114,7 +114,7 @@ bool add_dynamic_terrain(byte y, byte x)
     g_ptr->y = y;
     g_ptr->x = x;
     g_ptr->flags = (DF1_OCCUPIED | DF1_NEW_BORN);
-    g_ptr->counter = calculate_turn_count(cave_feat[y][x]);
+    g_ptr->counter = calculate_turn_count(dungeon_info[y][x].feat);
 
     /* One grid more */
     ++dyna_cnt;
@@ -139,7 +139,7 @@ void update_level_flag(void)
     if (cheat_room)
     {
         message("Updating level flags.");
-        // TODO disturb(0, 0);
+        disturb(0, 0);
     }
 
     /* Scan the dungeon */
@@ -148,7 +148,7 @@ void update_level_flag(void)
         for (x = 1; x < (p_ptr->cur_map_wid - 1); x++)
         {
             /* Cache the feature */
-            u16b feat = cave_feat[y][x];
+            u16b feat = dungeon_info[y][x].feat;
 
             /* Is it an elemental feature? */
             if (feat_ff3_match(feat, TERRAIN_MASK))

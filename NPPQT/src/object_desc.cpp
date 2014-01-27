@@ -548,7 +548,7 @@ static QString obj_desc_combat(object_type *o_ptr,  QString buf, bool spoil)
 static QString obj_desc_light(object_type *o_ptr, QString buf)
 {
     /* Fuelled light sources get number of remaining turns appended */
-    if (fuelable_lite_p(o_ptr))
+    if (o_ptr->is_fuelable_lite())
         buf.append(QString(" (%1 turns)") .arg(o_ptr->timeout));
 
     return (buf);
@@ -641,7 +641,7 @@ static QString obj_desc_charges(object_type *o_ptr, QString buf)
 
         /* Indicate "charging" objects, but not rods or lites */
         if (known && o_ptr->timeout && o_ptr->tval != TV_ROD
-                && !fuelable_lite_p(o_ptr))
+                && !o_ptr->is_fuelable_lite())
         {
 
             /* Hack -- Dump " (charging)" if relevant */
@@ -658,8 +658,8 @@ static QString obj_desc_inscrip(object_type *o_ptr, QString buf)
     int n = 0;
 
     /* See if the object is "known" */
-    bool known = (object_known_p(o_ptr) ? TRUE : FALSE);
-    bool aware = (object_aware_p(o_ptr) ? TRUE : FALSE);
+    bool known = o_ptr->is_known();
+    bool aware = o_ptr->is_aware();
 
     u32b f1, f2, f3, fn;
     object_flags(o_ptr, &f1, &f2, &f3, &fn);
@@ -670,7 +670,7 @@ static QString obj_desc_inscrip(object_type *o_ptr, QString buf)
     {
         u[n++] = inscrip_text[o_ptr->discount - INSCRIP_NULL];
     }
-    else if (cursed_p(o_ptr) && known)
+    else if (o_ptr->is_cursed() && known)
     {
         u[n++] = "cursed";
     }
@@ -678,7 +678,7 @@ static QString obj_desc_inscrip(object_type *o_ptr, QString buf)
     {
         u[n++] = "empty";
     }
-    else if ((!aware) && object_tried_p(o_ptr))
+    else if ((!aware) && o_ptr->is_tried())
     {
         u[n++] = "tried";
     }
@@ -754,10 +754,10 @@ QString object_desc(object_type *o_ptr, byte mode)
     object_flags(o_ptr, &f1, &f2, &f3, &fn);
 
     /* See if the object is "aware" */
-    aware = (object_aware_p(o_ptr) ? TRUE : FALSE);
+    aware = o_ptr->is_aware();
 
     /* See if the object is "known" */
-    known = (object_known_p(o_ptr) ? TRUE : FALSE);
+    known = o_ptr->is_known();
 
     /* Object is in the inventory of a store */
     if (o_ptr->ident & IDENT_STORE)

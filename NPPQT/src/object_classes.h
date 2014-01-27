@@ -18,7 +18,17 @@
  */
 #include <src/object.h>
 #include <QString>
+#include <QColor>
 
+typedef struct artifact_lore artifact_lore;
+/*
+ * Artifact "lore" information
+ *
+ */
+struct artifact_lore
+{
+        bool was_fully_identified;      /* Preserved between diferent games */
+};
 
 /*
  * Object information, for a specific object.
@@ -106,10 +116,15 @@ class object_type
     bool is_wearable();
     bool is_easy_know();
     bool is_known();
+    bool is_aware();
+    bool is_tried();
     bool is_flavor_known();
     bool can_be_pseudo_ided();
     bool is_artifact();
     bool is_known_artifact();
+    bool is_ego_item();
+    bool is_cursed();
+    bool is_broken();
     bool was_sensed();
     bool is_spellbook();
     bool is_shovel();
@@ -123,8 +138,189 @@ class object_type
     bool is_food();
     bool is_light();
     bool is_ring();
+    bool is_amulet();
+    bool is_jewlery();
     bool is_chest();
+    bool is_fuelable_lite();
+    bool is_ammo();
+    bool is_weapon();
+    bool can_zap();
+    bool can_browse();
+    bool can_study();
+    bool can_cast();
+    bool can_takeoff();
+    bool can_wear();
+    bool has_inscription();
+
+
+    // return pseudo-id
+    s16b pseudo_heavy();
+    s16b pseudo_light();
 
 };
+
+/*
+ * Information about object "kinds", including player knowledge.
+ *
+ * Only "aware" and "tried" are saved in the savefile
+ */
+class object_kind
+{
+public:
+
+    QString k_name;			/* Name  */
+    QString k_text;			/* Text  */
+
+    byte tval;			/* Object type */
+    byte sval;			/* Object sub type */
+
+    s16b pval;			/* Object extra info */
+
+    s16b to_h;			/* Bonus to hit */
+    s16b to_d;			/* Bonus to damage */
+    s16b to_a;			/* Bonus to armor */
+
+    s16b ac;			/* Base armor */
+
+    byte dd, ds;		/* Damage dice/sides */
+
+    s16b weight;		/* Weight */
+
+    s32b cost;			/* Object "base cost" */
+
+    u32b k_flags1;		/* Flags, set 1 */
+    u32b k_flags2;		/* Flags, set 2 */
+    u32b k_flags3;		/* Flags, set 3 */
+    u32b k_native;		/* Flags, native */
+    u32b k_store;		/* Flags, sold in a store */
+
+    u16b effect;         /**< Effect this item produces (effects.c) */
+
+    byte locale[4];		/* Allocation level(s) */
+    byte chance[4];		/* Allocation chance(s) */
+
+    byte k_level;			/* Level */
+    byte extra;			/* Something */
+
+    byte color_num;     //The number of any default color.  CUSTOM_COLOR for all others.
+    QColor d_color;		/* Default feature color */
+    QChar d_char;		/* Default object character */
+
+    QString autoinscribe;  //Default inscription for this object
+
+    u16b flavor;		/* Special object flavor (or zero) */
+
+    bool aware;			/* The player is "aware" of the item's effects */
+
+    bool tried;			/* The player has "tried" one of the items */
+
+    byte squelch;		/* Squelch setting for the particular item */
+
+    bool everseen;		/* Used to despoilify squelch menus */
+};
+
+
+
+/*
+ * Information about "artifacts".
+ *
+ * Note that the save-file only writes "cur_num" to the savefile,
+ * except for the random artifacts
+ *
+ * Note that "max_num" is always "1" (if that artifact "exists")
+ */
+class artifact_type
+{
+public:
+
+    QString a_name;       /* Name */
+    QString a_text;		/* Text  */
+
+    byte tval;			/* Artifact type */
+    byte sval;			/* Artifact sub type */
+
+    s16b pval;			/* Artifact extra info */
+
+    s16b to_h;			/* Bonus to hit */
+    s16b to_d;			/* Bonus to damage */
+    s16b to_a;			/* Bonus to armor */
+
+    s16b ac;			/* Base armor */
+
+    byte dd, ds;		/* Damage when hits */
+
+    s16b weight;		/* Weight */
+
+    s32b cost;			/* Artifact "cost" */
+
+    u32b a_flags1;		/* Artifact Flags, set 1 */
+    u32b a_flags2;		/* Artifact Flags, set 2 */
+    u32b a_flags3;		/* Artifact Flags, set 3 */
+    u32b a_native;		/* Flags, native */
+
+    byte a_level;			/* Artifact level */
+    byte a_rarity;		/* Artifact rarity */
+
+    byte a_cur_num;		/* Number created (0 or 1) */
+    byte a_max_num;		/* Unused (should be "1") */
+
+    byte activation;	/* Activation to use */
+    u16b time;			/* Activation time */
+    u16b randtime;		/* Activation time dice */
+
+};
+
+
+/*
+ * Information about "ego-items".
+ */
+class ego_item_type
+{
+public:
+    QString e_name;        /* Name  */
+    QString e_text;			/* Text  */
+
+    s32b cost;			/* Ego-item "cost" */
+
+    u32b e_flags1;		/* Ego-Item Flags, set 1 */
+    u32b e_flags2;		/* Ego-Item Flags, set 2 */
+    u32b e_flags3;		/* Ego-Item Flags, set 3 */
+    u32b e_native;		/* Flags, native */
+
+    byte level;			/* Minimum level */
+    byte rarity;		/* Object rarity */
+    byte rating;		/* Level rating boost */
+
+    byte tval[EGO_TVALS_MAX]; /* Legal tval */
+    byte min_sval[EGO_TVALS_MAX];	/* Minimum legal sval */
+    byte max_sval[EGO_TVALS_MAX];	/* Maximum legal sval */
+
+    byte max_to_h;		/* Maximum to-hit bonus */
+    byte max_to_d;		/* Maximum to-dam bonus */
+    byte max_to_a;		/* Maximum to-ac bonus */
+    byte max_pval;		/* Maximum pval */
+
+    byte xtra;			/* Extra sustain/resist/power */
+
+    bool everseen;			/* Do not spoil squelch menus */
+    bool squelch;			/* Squelch this ego-item */
+};
+
+
+class flavor_type
+{
+public:
+    QString text;      /* Text */
+
+    byte tval;      /* Associated object type */
+    byte sval;      /* Associated object sub-type */
+
+    byte color_num;     //The number of any default color.  CUSTOM_COLOR for all others.
+    QColor d_color;		/* Default flavor color */
+    QChar d_char;    /* Default flavor character */
+
+};
+
+
 
 #endif // OBJECT_TYPE_CLASS_H

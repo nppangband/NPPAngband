@@ -91,7 +91,7 @@ s16b get_spell_from_list(s16b book, s16b spell)
 }
 
 
-int get_spell_index(object_type *o_ptr, int index)
+int get_spell_index(int sval, int index)
 {
-    return get_spell_from_list(o_ptr->sval,index);
+    return get_spell_from_list(sval,index);
 }

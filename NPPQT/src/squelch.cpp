@@ -61,7 +61,7 @@ int squelch_itemp(object_type *o_ptr, byte feelings, bool fullid)
     if (o_ptr->ident & IDENT_QUEST) return result;
 
     /* Squelch some ego items if known */
-    if (fullid && (ego_item_p(o_ptr)) && (e_info[o_ptr->ego_num].squelch))
+    if (fullid && (o_ptr->is_ego_item()) && (e_info[o_ptr->ego_num].squelch))
     {
         /* Squelch fails on inscribed objects */
         return ((!o_ptr->inscription.isEmpty()) ? SQUELCH_FAILED: SQUELCH_YES);
@@ -80,7 +80,7 @@ int squelch_itemp(object_type *o_ptr, byte feelings, bool fullid)
     feel = feelings;
 
     /* Handle fully identified objects */
-    if (fullid)  feel = value_check_aux1(o_ptr);
+    if (fullid)  feel = o_ptr->pseudo_heavy();
 
     /* Get result based on the feeling and the squelch_level */
     switch (squelch_level[num])
@@ -161,7 +161,7 @@ void rearrange_stack(int y, int x)
     cur_good_idx = 0;
 
     /*go through all the objects*/
-    for(o_idx = cave_o_idx[y][x]; o_idx; o_idx = next_o_idx)
+    for(o_idx = dungeon_info[y][x].object_idx; o_idx; o_idx = next_o_idx)
     {
         o_ptr = &(o_list[o_idx]);
         next_o_idx = o_ptr->next_o_idx;
@@ -204,14 +204,14 @@ void rearrange_stack(int y, int x)
 
     if (first_good_idx != 0)
     {
-        cave_o_idx[y][x] = first_good_idx;
+        dungeon_info[y][x].object_idx = first_good_idx;
         o_list[cur_good_idx].next_o_idx = first_bad_idx;
         o_list[cur_bad_idx].next_o_idx = 0;
     }
 
     else
     {
-        cave_o_idx[y][x] = first_bad_idx;
+        dungeon_info[y][x].object_idx = first_bad_idx;
     }
 }
 
@@ -246,7 +246,7 @@ void do_squelch_pile(int y, int x)
     s16b o_idx, next_o_idx;
     object_type *o_ptr;
 
-    for(o_idx = cave_o_idx[y][x]; o_idx; o_idx = next_o_idx)
+    for(o_idx = dungeon_info[y][x].object_idx; o_idx; o_idx = next_o_idx)
     {
         /* Get the object */
         o_ptr = &(o_list[o_idx]);

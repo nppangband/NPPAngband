@@ -2,6 +2,7 @@
 #define GLOBALS_H
 
 #include "src/structures.h"
+#include "src/dun_classes.h"
 #include <QString>
 #include <QFile>
 
@@ -26,7 +27,9 @@ extern s16b monster_level;
 extern QChar summon_kin_type;
 extern monster_type *summoner;
 extern s32b turn;
-
+extern int use_graphics;
+extern s16b image_count;
+extern bool use_bigtile;
 
 extern s16b o_max;
 extern s16b o_cnt;
@@ -116,6 +119,11 @@ extern bool item_tester_swap;
 extern bool (*item_tester_hook)(object_type*);
 extern bool (*get_obj_num_hook)(int k_idx);
 
+/* Sorting functions */
+extern bool (*ang_sort_comp)(const void *u, const void *v, int a, int b);
+extern void (*ang_sort_swap)(void *u, void *v, int a, int b);
+extern void ang_sort(void *u, void *v, int n);
+
 // Monser race messages
 extern monster_race_message *mon_msg;
 extern monster_message_history *mon_message_hist;
@@ -134,11 +142,6 @@ extern int temp_n;
 extern u16b *temp_g;
 extern byte *temp_y;
 extern byte *temp_x;
-extern u16b (*cave_info)[256];
-extern byte (*cave_feat)[MAX_DUNGEON_WID];
-extern s16b (*cave_o_idx)[MAX_DUNGEON_WID];
-extern s16b (*cave_m_idx)[MAX_DUNGEON_WID];
-extern s16b (*cave_x_idx)[MAX_DUNGEON_WID];
 extern u32b mon_power_ave[MAX_DEPTH_ALL][CREATURE_TYPE_MAX];
 
 extern dynamic_grid_type *dyna_g;
@@ -148,6 +151,7 @@ extern bool dyna_full;
 extern byte dyna_center_y;
 extern byte dyna_center_x;
 
+extern dungeon_type dungeon_info[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 extern u16b cave_cost[MAX_FLOWS][MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 extern int cost_at_center[MAX_FLOWS];
 

@@ -594,17 +594,6 @@ static int init_other(void)
 
     /*** Prepare dungeon arrays ***/
 
-    /* Padded into array */
-    cave_info = C_ZNEW(MAX_DUNGEON_HGT, u16b_256);
-
-    /* Feature array */
-    cave_feat = C_ZNEW(MAX_DUNGEON_HGT, byte_wid);
-
-    /* Entity arrays */
-    cave_o_idx = C_ZNEW(MAX_DUNGEON_HGT, s16b_wid);
-    cave_m_idx = C_ZNEW(MAX_DUNGEON_HGT, s16b_wid);
-    cave_x_idx = C_ZNEW(MAX_DUNGEON_HGT, s16b_wid);
-
 
     /*start with cost at center 0*/
     for (i = 0; i < MAX_FLOWS; i++)
@@ -1255,12 +1244,6 @@ void cleanup_npp_games(void)
     FREE(o_list);
     FREE(x_list);
 
-    /* Free the cave */
-    FREE(cave_o_idx);
-    FREE(cave_m_idx);
-    FREE(cave_x_idx);
-    FREE(cave_feat);
-    FREE(cave_info);
 
     /* Prepare monster movement array*/
     FREE(mon_moment_info);
@@ -1285,5 +1268,265 @@ void cleanup_npp_games(void)
 
     /*free the randart arrays*/
     free_randart_tables();
+}
+
+
+/*
+ * Hold the titles of scrolls, 6 to 14 characters each.
+ */
+QString scroll_adj[MAX_TITLES];
+
+
+/*
+ * Assign flavors that don't change
+ */
+static void flavor_assign_fixed(void)
+{
+    int i, j;
+
+    for (i = 1; i < z_info->flavor_max; i++)
+    {
+        flavor_type *flavor_ptr = &flavor_info[i];
+
+        /* Skip random flavors */
+        if (flavor_ptr->sval == SV_UNKNOWN) continue;
+
+        for (j = 0; j < z_info->k_max; j++)
+        {
+            /* Skip other objects */
+            if ((k_info[j].tval == flavor_ptr->tval) &&
+                (k_info[j].sval == flavor_ptr->sval))
+            {
+                /* Store the flavor index */
+                k_info[j].flavor = i;
+            }
+        }
+    }
+}
+
+
+/*
+ * Assign random flavors
+ */
+static void flavor_assign_random(byte tval)
+{
+    u16b i, choice;
+    u16b flavor_count = 0;
+    u16b *flavor;
+
+    /* Allocate the "who" array */
+    flavor = C_ZNEW(z_info->flavor_max, u16b);
+
+    /* Count the random flavors for the given tval */
+    for (i = 0; i < z_info->flavor_max; i++)
+    {
+        if ((flavor_info[i].tval == tval) &&
+            (flavor_info[i].sval == SV_UNKNOWN))
+        {
+            flavor[flavor_count] = i;
+            flavor_count++;
+        }
+    }
+
+    for (i = 0; i < z_info->k_max; i++)
+    {
+        u16b slot;
+
+        /* Skip other object types */
+        if (k_info[i].tval != tval) continue;
+
+        /* Skip objects that already are flavored */
+        if (k_info[i].flavor != 0) continue;
+
+            /* HACK - Ordinary food is "boring" */
+        if ((tval == TV_FOOD) && (k_info[i].sval > SV_FOOD_MIN_FOOD))
+            continue;
+
+        if (!flavor_count)
+        {
+            FREE(flavor);
+            quit_npp_games(QString("Not enough flavors for tval %1.")  .arg(tval));
+        }
+
+        /* Select a flavor */
+        slot = randint0(flavor_count);
+        choice = flavor[slot];
+
+        /* Store the flavor index */
+        k_info[i].flavor = choice;
+
+        /* Mark the flavor as used */
+        flavor_info[choice].sval = k_info[i].sval;
+
+        /* One less flavor to choose from */
+        flavor_count--;
+        flavor[slot] = flavor[flavor_count];
+    }
+
+    /* Free the array */
+    FREE(flavor);
+}
+
+
+/*
+ * Prepare the "variable" part of the "k_info" array.
+ *
+ * The "color"/"metal"/"type" of an item is its "flavor".
+ * For the most part, flavors are assigned randomly each game.
+ *
+ * Initialize descriptions for the "colored" objects, including:
+ * Rings, Amulets, Staffs, Wands, Rods, Food, Potions, Scrolls.
+ *
+ * The first 4 entries for potions are fixed (Water, Apple Juice,
+ * Slime Mold Juice, Unused Potion).
+ *
+ * Scroll titles are always between 6 and 14 letters long.  This is
+ * ensured because every title is composed of whole words, where every
+ * word is from 1 to 8 letters long (one or two syllables of 1 to 4
+ * letters each), and that no scroll is finished until it attempts to
+ * grow beyond 15 letters.  The first time this can happen is when the
+ * current title has 6 letters and the new word has 8 letters, which
+ * would result in a 6 letter scroll title.
+ *
+ * Duplicate titles are avoided by requiring that no two scrolls share
+ * the same first four letters (not the most efficient method, and not
+ * the least efficient method, but it will always work).
+ *
+ * Hack -- make sure everything stays the same for each saved game
+ * This is accomplished by the use of a saved "random seed", as in
+ * "town_gen()".  Since no other functions are called while the special
+ * seed is in effect, so this function is pretty "safe".
+ */
+void flavor_init(void)
+{
+    int i, j;
+
+
+    /* Hack -- Use the "simple" RNG */
+    Rand_quick = TRUE;
+
+    /* Hack -- Induce consistent flavors */
+    Rand_value = seed_flavor;
+
+
+    flavor_assign_fixed();
+
+    flavor_assign_random(TV_RING);
+    flavor_assign_random(TV_AMULET);
+    flavor_assign_random(TV_STAFF);
+    flavor_assign_random(TV_WAND);
+    flavor_assign_random(TV_ROD);
+    flavor_assign_random(TV_FOOD);
+    flavor_assign_random(TV_POTION);
+    flavor_assign_random(TV_SCROLL);
+
+    /* Scrolls (random titles, always white) */
+    for (i = 0; i < MAX_TITLES; i++)
+    {
+        /* Get a new title */
+        while (TRUE)
+        {
+            QString buf;
+
+            bool okay;
+
+            /* Start a new title */
+            buf.clear();
+
+            /* Collect words until done */
+            while (TRUE)
+            {
+                int q, s;
+
+                QString tmp;
+
+                /* Start a new word */
+                tmp.clear();
+
+                /* Choose one or two syllables */
+                s = ((rand_int(100) < 30) ? 1 : 2);
+
+                /* Add a one or two syllable word */
+                for (q = 0; q < s; q++)
+                {
+                    QString syllable;
+                    byte min;
+                    byte max;
+
+                    /* Different syllable lengths for 1 and two syllable words */
+                    if (s == 1)
+                    {
+                        min = 4;
+                        max = 10;
+                    }
+                    else /* (s == 2) */
+                    {
+                        min = 2;
+                        max = 6;
+                    }
+
+                    /* Make random_syllable */
+                    syllable = make_random_name(min, max);
+
+                    /* Make second syllable lowercase */
+                    if (q) syllable.toLower();
+
+                    /* Add the syllable */
+                    tmp.append (syllable);
+                }
+
+                /* Stop before getting too long */
+                if ((buf.length() + 1 + tmp.length()) > 15) break;
+
+                /* Add a space */
+                buf.append(" ");
+
+                /* Add the word */
+                buf.append (tmp);
+            }
+
+            /* Save the title */
+           scroll_adj[i] = buf;
+
+            /* Assume okay */
+            okay = TRUE;
+
+            /* Check for "duplicate" scroll titles */
+            for (j = 0; j < i; j++)
+            {
+                /* Compare first four characters */
+                QString hack1 = scroll_adj[j];
+                QString hack2 = scroll_adj[i];
+                hack1.truncate(4);
+                hack2.truncate(4);
+                if (QString::compare(hack1, hack2, Qt::CaseInsensitive)) continue;
+
+                /* Not okay */
+                okay = FALSE;
+
+                /* Stop looking */
+                break;
+            }
+
+            /* Break when done */
+            if (okay) break;
+        }
+    }
+
+
+    /* Hack -- Use the "complex" RNG */
+    Rand_quick = FALSE;
+
+    /* Analyze every object */
+    for (i = 1; i < z_info->k_max; i++)
+    {
+        object_kind *k_ptr = &k_info[i];
+
+        /*Skip "empty" objects*/
+        if (k_ptr->k_name.isEmpty()) continue;
+
+        /*No flavor yields aware*/
+        if (!k_ptr->flavor) k_ptr->aware = TRUE;
+    }
 }
 

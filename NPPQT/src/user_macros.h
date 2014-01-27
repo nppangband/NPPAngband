@@ -15,6 +15,9 @@
 /* Allocate, wipe, and return an array of type T[N] */
 #define C_ZNEW(N, T) (new T[N]())
 
+/* Allocate, wipe, and return a thing of type T */
+#define ZNEW(T) (new T())
+
 /* Free one thing at P, return NULL */
 #define FREE(P) (delete(P), P = NULL)
 

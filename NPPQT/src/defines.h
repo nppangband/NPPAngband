@@ -427,6 +427,90 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 
 
 
+/*** Function flags ***/
+
+#define PROJECT_NO			0
+#define PROJECT_NOT_CLEAR	1
+#define PROJECT_CLEAR		2
+
+
+/*
+ * Bit flags for the "project()", the "projectable()", and/or the
+ * "project_path()" functions.
+ *
+ *   BEAM:  Work as a beam weapon (affect every grid passed through)
+ *   ARC:   Act as an arc spell (a portion of a caster-centered ball)
+ *   STAR:  Act as a starburst - a randomized ball
+ *   BOOM:  Explode in some way
+ *   WALL:  Affect one layer of any wall, even if not passable
+ *   PASS:  Ignore walls entirely
+ *   GRID:  Affect each grid in the "blast area" in some way
+ *   ITEM:  Affect each object in the "blast area" in some way
+ *   KILL:  Affect each monster in the "blast area" in some way
+ *   PLAY:  Explicitly affect the player
+ *   EFFECT Set Effects based on this projection
+ *   HIDE:  Hack -- disable graphical effects of projection
+ *   STOP:  Stop as soon as we hit a monster
+ *   JUMP:  Jump directly to the target location
+ *   THRU:  Continue "through" the target (used for projectiles)
+ *   CHCK:  Note occupied grids, but do not stop at them
+ *   ORTH:  Projection cannot move diagonally (used for wall spells)
+ */
+
+/* Projection types */
+#define PROJECT_NONE		0x00000000
+#define PROJECT_BEAM		0x00000001
+#define PROJECT_ARC			0x00000002
+#define PROJECT_STAR		0x00000004
+#define PROJECT_ROCK		0x00000008 /* A boulder is being thrown, use rock graphic (affects visuals only) */
+#define PROJECT_SHOT		0x00000010 /* A rock is being thrown/fired, use shot graphic (affects visuals only) */
+#define PROJECT_AMMO		0x00000020 /* A bolt/arrow is being thrown/fired, use shot graphic (affects visuals only) */
+
+/* What projections do */
+#define PROJECT_BOOM		0x00000040
+#define PROJECT_WALL		0x00000080
+#define PROJECT_PASS		0x00000100  /*Ignore walls*/
+#define PROJECT_ROOM		0x00000200  /* Create a room as you kill_wall */
+#define PROJECT_SAME		0x00000400  /* Don't damage similar monsters */
+
+/* What projections affect */
+#define PROJECT_GRID		0x00000800
+#define PROJECT_ITEM		0x00001000
+#define PROJECT_KILL		0x00002000 /* Hurt the monsters*/
+#define PROJECT_PLAY		0x00004000 /* Hurt the player*/
+#define PROJECT_EFCT		0x00008000 /* Use Effects*/
+#define PROJECT_CLOUD		0x00010000 /* Always set the effect regardless of damage*/
+#define PROJECT_NO_EFCT		0x00020000 /* Cancel effects */
+
+/* Graphics */
+#define PROJECT_HIDE		0x00040000
+#define PROJECT_NO_REDRAW	0x00080000
+#define PROJECT_XXX9		0x00100000
+
+/* How projections travel */
+#define PROJECT_STOP		0x00200000
+#define PROJECT_JUMP		0x00400000
+#define PROJECT_THRU		0x00800000
+#define PROJECT_CHCK		0x01000000
+#define PROJECT_ORTH		0x02000000 /*(unused)*/
+#define PROJECT_XX10		0x04000000
+
+/* Projection blockage indicators */
+#define PATH_G_FULL			0
+#define PATH_G_BLCK			1
+#define PATH_G_WALL			2
+#define PATH_G_NONE			100
+
+#define PATH_SIZE			512
+
+/*Who caused the projection? */
+#define SOURCE_PLAYER			-1	/*player is the source of projection*/
+#define SOURCE_TRAP				-2	/*Trap*/
+#define SOURCE_EFFECT			-3	/*Effect*/
+#define SOURCE_OTHER			-4	/*Terrain, something other than player or monster*/
+#define SOURCE_MONSTER_START	 0	/*Greater than 0 monster is the source*/
+
+
 #define LEV_THEME_HEAD				11
 #define LEV_THEME_CREEPING_COIN		0	/*creeping coins*/
 #define LEV_THEME_ORC				1	/*orc*/
@@ -819,7 +903,7 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
  * Note the use of comparison to zero to force a "boolean" result
  */
 #define player_has_los_bold(Y,X) \
-    ((cave_info[Y][X] & (CAVE_VIEW)) != 0)
+    ((dungeon_info[Y][X].cave_info & (CAVE_VIEW)) != 0)
 
 /*
  * Determine if the player has a clear enough head to observe things
@@ -835,7 +919,7 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
  * Note the use of comparison to zero to force a "boolean" result
  */
 #define player_can_see_bold(Y,X) \
-    ((cave_info[Y][X] & (CAVE_SEEN)) != 0)
+    ((dungeon_info[Y][X].cave_info & (CAVE_SEEN)) != 0)
 
 /*
  * Determine if a "legal" grid is within "line of fire" of the player
@@ -845,7 +929,13 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 #define player_can_fire_bold(Y,X) \
     ((cave_info[Y][X] & (CAVE_FIRE)) != 0)
 
-
+/*
+ * Available graphic modes
+ */
+#define GRAPHICS_NONE			0
+#define GRAPHICS_ORIGINAL		1
+#define GRAPHICS_DAVID_GERVAIS	2
+#define GRAPHICS_PSEUDO			3
 
 /*
  * Information for "do_cmd_options()".
@@ -933,8 +1023,10 @@ enum
     TERM_SILVER,
     TERM_COPPER,
 
-    MAX_COLORS
+    MAX_COLORS,
+    COLOR_CUSTOM  //
 };
+
 
 
 

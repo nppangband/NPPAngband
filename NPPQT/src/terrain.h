@@ -482,7 +482,7 @@
 #define feat_ff1_match(f_idx, flags) _feat_ff1_match(f_info + (f_idx), flags)
 
 #define cave_ff1_match(y, x, flags) \
-_feat_ff1_match(f_info + cave_feat[y][x], flags)
+_feat_ff1_match(f_info + dungeon_info[y][x].feat, flags)
 
 
 #define _feat_ff2_match(f_ptr, flags) ((f_ptr)->f_flags2 & (flags))
@@ -490,14 +490,14 @@ _feat_ff1_match(f_info + cave_feat[y][x], flags)
 #define feat_ff2_match(f_idx, flags) _feat_ff2_match(f_info + (f_idx), flags)
 
 #define cave_ff2_match(y, x, flags) \
-_feat_ff2_match(f_info + cave_feat[y][x], flags)
+_feat_ff2_match(f_info + dungeon_info[y][x].feat, flags)
 
 #define _feat_ff3_match(f_ptr, flags) ((f_ptr)->f_flags3 & (flags))
 
 #define feat_ff3_match(f_idx, flags) _feat_ff3_match(f_info + (f_idx), flags)
 
 #define cave_ff3_match(y, x, flags) \
-_feat_ff3_match(f_info + cave_feat[y][x], flags)
+_feat_ff3_match(f_info + dungeon_info[y][x].feat, flags)
 
 
 
@@ -563,7 +563,7 @@ _feat_ff3_match(f_info + cave_feat[y][x], flags)
  * Determine if a "legal" grid contains the given CAVE_* flag
  */
 #define cave_flag_bold(Y,X,FLG) \
-    ((cave_info[Y][X] & (FLG)) != 0)
+    ((dungeon_info[Y][X].cave_info & (FLG)) != 0)
 
 /*
  * Determine if a "legal" grid is suitable for LOS
@@ -596,35 +596,35 @@ _feat_ff3_match(f_info + cave_feat[y][x], flags)
  * Determine if a "legal" grid is a "trap" grid
  */
 #define cave_any_trap_bold(Y,X) \
-     (x_list[cave_x_idx[Y][X]].x_flags & (EF1_TRAP_DUMB | EF1_TRAP_SMART | EF1_TRAP_PLAYER | EF1_GLYPH))
+    (x_list[dungeon_info[Y][X].effect_idx].x_flags & (EF1_TRAP_DUMB | EF1_TRAP_SMART | EF1_TRAP_PLAYER | EF1_GLYPH))
 /*
  * Determine if a "legal" grid is a "trap" for monsters (set by player)
  */
 #define cave_monster_trap_bold(Y,X) \
-     (x_list[cave_x_idx[Y][X]].x_flags & (EF1_TRAP_PLAYER))
+     (x_list[dungeon_info[Y][X].effect_idx].x_flags & (EF1_TRAP_PLAYER))
 /*
  * Determine if a "legal" grid is a "trap" grid for players (set by monsters)
  */
 #define cave_player_trap_bold(Y,X) \
-     (x_list[cave_x_idx[Y][X]].x_flags & (EF1_TRAP_DUMB | EF1_TRAP_SMART))
+     ([x_list[dungeon_info[Y][X].effect_idx].x_flags & (EF1_TRAP_DUMB | EF1_TRAP_SMART))
 
 /*
  * Determine if a "legal" grid is a smart "trap" for players (set by monsters)
  */
 #define cave_smart_trap_bold(Y,X) \
-     (x_list[cave_x_idx[Y][X]].x_flags & (EF1_TRAP_SMART))
+     ([x_list[dungeon_info[Y][X].effect_idx].x_flags & (EF1_TRAP_SMART))
 
 /*
  * Determine if a "legal" grid is a passive "trap" for players (set by monsters)
  */
 #define cave_passive_trap_bold(Y,X) \
-     (x_list[cave_x_idx[Y][X]].x_flags & (EF1_TRAP_DUMB))
+     (x_list[dungeon_info[Y][X].effect_idx].x_flags & (EF1_TRAP_DUMB))
 
 /*
  * Determine if a "legal" grid is a glyph.
  */
 #define cave_player_glyph_bold(Y,X) \
-     (x_list[cave_x_idx[Y][X]].x_flags & (EF1_GLYPH))
+     (x_list[dungeon_info[Y][X].effect_idx].x_flags & (EF1_GLYPH))
 
 
 /*
@@ -639,7 +639,7 @@ _feat_ff3_match(f_info + cave_feat[y][x], flags)
     (cave_ff1_match(Y, X, FF1_DROP) && \
      cave_passable_bold(Y, X) && \
     !cave_any_trap_bold(Y, X) && \
-     (cave_o_idx[Y][X] == 0))
+     (dungeon_info[Y][X].object_idx == 0))
 
 /*
  * Determine if a "legal" grid is an "empty" floor grid
@@ -653,7 +653,7 @@ _feat_ff3_match(f_info + cave_feat[y][x], flags)
      cave_passable_bold(Y, X) && \
         !cave_player_glyph_bold(Y, X) && \
         !cave_monster_trap_bold(Y, X) && \
-        (cave_m_idx[Y][X] == 0))
+        (dungeon_info[Y][X].monster_idx == 0))
 
 /*
  * Determine if a "legal" grid is a valid starting grid for player
@@ -684,8 +684,8 @@ _feat_ff3_match(f_info + cave_feat[y][x], flags)
         (cave_ff1_match(Y, X, FF1_FLOOR) && \
         cave_passable_bold(Y, X) && \
         !cave_any_trap_bold(Y, X) && \
-        (cave_o_idx[Y][X] == 0) && \
-        (cave_m_idx[Y][X] == 0))
+        (dungeon_info[Y][X].object_idx == 0) && \
+        (dungeon_info[Y][X].monster_idx == 0))
 
 /*
  * Determine if a "legal" grid is an "plain" floor grid
@@ -702,9 +702,9 @@ _feat_ff3_match(f_info + cave_feat[y][x], flags)
     (!cave_ff1_match(Y, X, FF1_PERMANENT) && \
     cave_passable_bold(Y, X) && \
     !cave_any_trap_bold(Y, X) && \
-    (f_info[cave_feat[Y][X]].dam_non_native == 0) && \
-    (cave_o_idx[Y][X] == 0) && \
-    (cave_m_idx[Y][X] == 0))
+    (f_info[dungeon_info[Y][X].feat].dam_non_native == 0) && \
+    (dungeon_info[Y][X].object_idx == 0) && \
+    (dungeon_info[Y][X].monster_idx == 0))
 
 
 /*
@@ -730,20 +730,20 @@ _feat_ff3_match(f_info + cave_feat[y][x], flags)
  * Determine if a "legal" grid is a "shop" grid
  */
 #define cave_shop_bold(Y,X) \
-     (f_info[cave_feat[Y][X]].f_flags1 & (FF1_SHOP))
+     (f_info[dungeon_info[Y][X].feat].f_flags1 & (FF1_SHOP))
 
 
 /*
  * Determine if a "legal" grid is a "wall" grid
  */
 #define cave_wall_bold(Y,X) \
-     (f_info[cave_feat[Y][X]].f_flags1 & (FF1_WALL))
+     (f_info[dungeon_info[Y][X].feat].f_flags1 & (FF1_WALL))
 
      /*
  * Determine if a "legal" grid is a "wall" grid
  */
 #define cave_door_bold(Y,X) \
-     (f_info[cave_feat[Y][X]].f_flags1 & (FF1_DOOR))
+     (f_info[dungeon_info[Y][X].feat].f_flags1 & (FF1_DOOR))
 
 /*
  * Determine if a "legal" grid is an up stairs.
@@ -777,7 +777,7 @@ _feat_ff3_match(f_info + cave_feat[y][x], flags)
  * Line 4-5 -- shop doors
  */
 #define cave_perma_bold(Y,X) \
-    (f_info[cave_feat[Y][X]].f_flags1  & (FF1_PERMANENT))
+    (f_info[dungeon_info[Y][X].cave_info].f_flags1  & (FF1_PERMANENT))
 
 /*
  * Determine if a "legal" grid is a door but not secret.

@@ -1638,7 +1638,7 @@ static int rd_dungeon(void)
         for (i = count; i > 0; i--)
         {
             /* Extract "info" */
-            cave_info[y][x] = tmp8u;
+            dungeon_info[y][x].cave_info = tmp8u;
 
             /* Advance/Wrap */
             if (++x >= p_ptr->cur_map_wid)
@@ -1668,7 +1668,7 @@ static int rd_dungeon(void)
             feature_type *f_ptr;
 
             /* Extract "feat" */
-            cave_feat[y][x] = tmp8u;
+            dungeon_info[y][x].feat = tmp8u;
 
             update_los_proj_move(y, x);
 
@@ -1681,7 +1681,7 @@ static int rd_dungeon(void)
                 int d;
 
                 /* Turn on super glow */
-                cave_info[y][x] |= (CAVE_HALO);
+                dungeon_info[y][x].feat |= (CAVE_HALO);
 
                 /* Spread super glow through adjacent grids */
                 for (d = 0; d < 8; d++)
@@ -1697,7 +1697,7 @@ static int rd_dungeon(void)
                     }
 
                     /* Turn on super glow */
-                    cave_info[yy][xx] |= (CAVE_HALO);
+                    dungeon_info[yy][xx].cave_info |= (CAVE_HALO);
                 }
             }
 
@@ -1800,10 +1800,10 @@ static int rd_dungeon(void)
             /* ToDo: Verify coordinates */
 
             /* Link the object to the pile */
-            o_ptr->next_o_idx = cave_o_idx[y][x];
+            o_ptr->next_o_idx = dungeon_info[y][x].object_idx;
 
             /* Link the floor to the object */
-            cave_o_idx[y][x] = o_idx;
+            dungeon_info[y][x].object_idx = o_idx;
 
             /* Rearrange stack if needed */
             rearrange_stack(y, x);

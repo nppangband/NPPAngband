@@ -815,7 +815,7 @@ static void wr_dungeon(void)
         for (x = 0; x < p_ptr->cur_map_wid; x++)
         {
             /* Extract the important cave_info flags */
-            tmp8u = (cave_info[y][x] & (IMPORTANT_FLAGS));
+            tmp8u = (dungeon_info[y][x].cave_info & (IMPORTANT_FLAGS));
 
             /* If the run is broken, or too full, flush it */
             if ((tmp8u != prev_char) || (count == MAX_UCHAR))
@@ -854,7 +854,7 @@ static void wr_dungeon(void)
         for (x = 0; x < p_ptr->cur_map_wid; x++)
         {
             /* Extract a byte */
-            tmp8u = cave_feat[y][x];
+            tmp8u = dungeon_info[y][x].feat;
 
             /* If the run is broken, or too full, flush it */
             if ((tmp8u != prev_char) || (count == MAX_UCHAR))
@@ -883,8 +883,8 @@ static void wr_dungeon(void)
 
     /*** Compact ***/
 
-    /* TODO Compact the objects */
-    //compact_objects(0);
+    /* Compact the objects */
+    compact_objects(0);
 
     /* TODO Compact the monsters */
     //compact_monsters(0);

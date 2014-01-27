@@ -12,8 +12,33 @@
 extern byte calc_energy_gain(byte speed);
 
 //cave.cpp
-extern void update_los_proj_move(int y, int x);
 extern int distance(int y1, int x1, int y2, int x2);
+extern bool generic_los(int y1, int x1, int y2, int x2, u16b flg);
+extern bool no_light(void);
+extern bool cave_valid_bold(int y, int x);
+extern byte multi_hued_attr(monster_race *r_ptr);
+extern bool feat_supports_lighting(u16b feat);
+extern bool dtrap_edge(int y, int x);
+extern void map_info(s16b y, s16b x);
+extern int vinfo_init(void);
+extern void forget_view(void);
+extern void update_view(void);
+extern void update_flows(bool full);
+extern void wiz_light(void);
+extern void wiz_dark(void);
+extern void town_illuminate(bool daytime);
+extern void update_los_proj_move(int y, int x);
+extern void cave_alter_feat(int y, int x, int action);
+extern void cave_set_feat(int y, int x, u16b feat);
+extern int  project_path(u16b *path_g, u16b * path_gx, int range, int y1, int x1, int *y2, int *x2, u32b flg);
+extern byte projectable(int y1, int x1, int y2, int x2, u32b flg);
+extern void scatter(int *yp, int *xp, int y, int x, int d, int m);
+extern void health_track(int m_idx);
+extern void track_object(int item);
+extern void track_object_kind(int k_idx);
+extern void monster_race_track(int r_idx);
+extern void feature_kind_track(int f_idx);
+extern void disturb(int stop_search, int unused_flag);
 
 // cmd4.cpp
 extern void create_notes_file(void);
@@ -22,7 +47,7 @@ extern void delete_notes_file(void);
 // cmd_spell.cpp
 extern bool spell_okay(int spell, bool known);
 extern s16b get_spell_from_list(s16b book, s16b spell);
-extern int get_spell_index(object_type *o_ptr, int index);
+extern int get_spell_index(int sval, int index);
 
 /* effect.cpp */
 extern void effect_prep(int x_idx, byte type, u16b f_idx, byte y, byte x, byte countdown,
@@ -46,6 +71,7 @@ extern void set_dungeon_type(u16b dungeon_type);
 /* init2.c */
 extern void init_npp_games(void);
 extern void cleanup_npp_games(void);
+extern void flavor_init(void);
 
 /* load.c */
 extern bool load_player(void);
@@ -89,7 +115,6 @@ extern void create_food(void);
 
 
 //obj_util.cpp
-extern void flavor_init(void);
 extern void object_flags(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3, u32b *native);
 extern void object_flags_known(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3, u32b *native);
 extern QChar index_to_label(int i);
@@ -155,18 +180,9 @@ extern void display_object_kind_recall(s16b k_idx);
 extern bool obj_can_refill(object_type *o_ptr);
 extern bool obj_is_openable_chest(object_type *o_ptr);
 extern bool chest_requires_disarming(object_type *o_ptr);
-extern bool obj_is_weapon(object_type *o_ptr);
-extern bool obj_is_ammo(object_type *o_ptr);
 extern bool ammo_can_fire(object_type *o_ptr, int item);
 extern bool has_correct_ammo(void);
 extern bool obj_has_charges(object_type *o_ptr);
-extern bool rod_can_zap(object_type *o_ptr);
-extern bool obj_can_browse(object_type *o_ptr);
-extern bool obj_can_study(object_type *o_ptr);
-extern bool obj_can_cast(object_type *o_ptr);
-extern bool obj_can_takeoff(object_type *o_ptr);
-extern bool obj_can_wear(object_type *o_ptr);
-extern bool obj_has_inscrip(object_type *o_ptr);
 extern object_type *object_from_item_idx(int item);
 extern bool obj_needs_aim(object_type *o_ptr);
 extern bool obj_is_activatable(object_type *o_ptr);
@@ -184,8 +200,6 @@ extern void object_tried(object_type *o_ptr);
 extern void object_history(object_type *o_ptr, byte origin, s16b r_idx);
 extern void stack_histories(object_type *o_ptr, const object_type *j_ptr);
 extern void expand_inscription(const object_type *o_ptr, const char *src, char dest[], int max);
-extern int value_check_aux1(object_type *o_ptr);
-extern int value_check_aux2(object_type *o_ptr);
 
 
 
@@ -201,6 +215,9 @@ extern void save_player_ghost_file(void);
 
 // player_spell.cpp
 extern int get_player_spell_realm(void);
+
+// projection.cpp
+extern byte gf_color(int type);
 
 /* randart.c */
 extern QString make_random_name(byte min_length, byte max_length);
@@ -295,7 +312,7 @@ extern bool is_a_vowel(QChar single_letter);
 extern void pop_up_message_box(QString message);
 extern bool get_check(QString question);
 extern QString get_string(QString question);
-extern QColor add_presetcolor(int which_color);
+extern QColor add_preset_color(int which_color);
 extern void message(QString msg);
 extern void color_message(QString msg, int which_color);
 extern void custom_color_message(QString msg, byte red, byte green, byte blue);

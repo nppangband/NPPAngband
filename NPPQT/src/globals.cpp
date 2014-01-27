@@ -33,6 +33,11 @@ monster_type *summoner; 	/*Track the current summoner*/
 
 s32b turn;				/* Current game turn */
 
+int use_graphics;		/* The "graphics" mode is enabled */
+bool use_bigtile = FALSE;
+
+s16b image_count;  		/* Grids until next random image    */
+                        /* Optimizes the hallucination code */
 
 QString current_savefile;
 QFile notes_file;
@@ -266,6 +271,9 @@ s16b x_pop(void);
 byte squelch_level[SQUELCH_BYTES];
 
 
+// Array congaining all of the dungeon information.
+dungeon_type dungeon_info[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
+
 /*
  * Arrays[NUM_FLOWS][DUNGEON_HGT][DUNGEON_WID] of cave grid flow "cost" values
  */
@@ -334,6 +342,17 @@ bool (*item_tester_hook)(object_type*);
  */
 bool (*get_obj_num_hook)(int k_idx);
 
+/*
+ * Current "comp" function for ang_sort()
+ */
+bool (*ang_sort_comp)(const void *u, const void *v, int a, int b);
+
+
+/*
+ * Current "swap" function for ang_sort()
+ */
+void (*ang_sort_swap)(void *u, void *v, int a, int b);
+
 
 // Monser race messages
 monster_race_message *mon_msg;
@@ -365,70 +384,7 @@ u16b *temp_g;
 byte *temp_y;
 byte *temp_x;
 
-/*
- * Array[DUNGEON_HGT][256] of cave grid info flags (padded)
- *
- * This array is padded to a width of 256 to allow fast access to elements
- * in the array via "grid" values (see the GRID() macros).
- */
-u16b (*cave_info)[256];
 
-/*
- * Array[DUNGEON_HGT][DUNGEON_WID] of cave grid feature codes
- */
-byte (*cave_feat)[MAX_DUNGEON_WID];
-
-
-/*
- * Array[DUNGEON_HGT][DUNGEON_WID] of cave grid object indexes
- *
- * Note that this array yields the index of the top object in the stack of
- * objects in a given grid, using the "next_o_idx" field in that object to
- * indicate the next object in the stack, and so on, using zero to indicate
- * "nothing".  This array replicates the information contained in the object
- * list, for efficiency, providing extremely fast determination of whether
- * any object is in a grid, and relatively fast determination of which objects
- * are in a grid.
- */
-s16b (*cave_o_idx)[MAX_DUNGEON_WID];
-
-/*
- * Array[DUNGEON_HGT][DUNGEON_WID] of cave grid monster indexes
- *
- * Note that this array yields the index of the monster or player in a grid,
- * where negative numbers are used to represent the player, positive numbers
- * are used to represent a monster, and zero is used to indicate "nobody".
- * This array replicates the information contained in the monster list and
- * the player structure, but provides extremely fast determination of which,
- * if any, monster or player is in any given grid.
- */
-s16b (*cave_m_idx)[MAX_DUNGEON_WID];
-
-/*
- * Array[DUNGEON_HGT][DUNGEON_WID] of cave grid effect indexes
- *
- * Note that this array yields the index of the top object in the stack of
- * effects in a given grid, using the "next_x_idx" field in that effect to
- * indicate the next effect in the stack, and so on, using zero to indicate
- * "nothing".  This array replicates the information contained in the effect
- * list, for efficiency, providing extremely fast determination of whether
- * any effect is in a grid, and relatively fast determination of which effects
- * are in a grid.
- */
-
-/*
- * Array[DUNGEON_HGT][DUNGEON_WID] of cave grid effect indexes
- *
- * Note that this array yields the index of the top object in the stack of
- * effects in a given grid, using the "next_x_idx" field in that effect to
- * indicate the next effect in the stack, and so on, using zero to indicate
- * "nothing".  This array replicates the information contained in the effect
- * list, for efficiency, providing extremely fast determination of whether
- * any effect is in a grid, and relatively fast determination of which effects
- * are in a grid.
- */
-
-s16b (*cave_x_idx)[MAX_DUNGEON_WID];
 
 /*
  * Table of avergae monster power.

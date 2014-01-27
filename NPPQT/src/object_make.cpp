@@ -234,7 +234,7 @@ static void object_mention(object_type *o_ptr)
     }
 
     /* Ego-item */
-    else if (ego_item_p(o_ptr))
+    else if (o_ptr->is_ego_item())
     {
         /* Silly message */
         message(QString("Ego-item (%1)") .arg(o_name));
@@ -1915,7 +1915,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
         if (e_ptr->e_flags3 & (TR3_PERMA_CURSE)) o_ptr->ident |= (IDENT_CURSED);
 
         /* Hack -- apply extra penalties if needed */
-        if (cursed_p(o_ptr) || broken_p(o_ptr))
+        if (o_ptr->is_cursed() || o_ptr->is_broken())
         {
             /* Hack -- obtain bonuses */
             if (e_ptr->max_to_h > 0) o_ptr->to_h -= randint(e_ptr->max_to_h);
@@ -3481,7 +3481,7 @@ bool make_object(object_type *j_ptr, bool good, bool great, int objecttype, bool
     object_quantities(j_ptr);
 
     /* Notice "okay" out-of-depth objects */
-    if (!cursed_p(j_ptr) && !broken_p(j_ptr) &&
+    if (!j_ptr->is_cursed() && !j_ptr->is_broken() &&
         (k_info[j_ptr->k_idx].k_level > p_ptr->depth))
     {
         /* Rating increase */
@@ -3923,7 +3923,7 @@ int get_coin_type(const monster_race *r_ptr)
 
 void steal_object_from_monster(int y, int x)
 {
-    monster_type *m_ptr = &mon_list[cave_m_idx[y][x]];
+    monster_type *m_ptr = &mon_list[dungeon_info[y][x].monster_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     QString o_name;
 
@@ -3972,7 +3972,7 @@ void steal_object_from_monster(int y, int x)
         p_ptr->redraw |= (PR_GOLD);
 
         /*update the monster lore*/
-        lore_treasure(cave_m_idx[y][x], 0, 1);
+        lore_treasure(dungeon_info[y][x].monster_idx, 0, 1);
 
         /* Reset "coin" type */
         coin_type = 0;
@@ -3999,7 +3999,7 @@ void steal_object_from_monster(int y, int x)
         o_name = object_desc(i_ptr, ODESC_PREFIX | ODESC_FULL);
 
         /*update the monster lore*/
-        lore_treasure(cave_m_idx[y][x], 1, 0);
+        lore_treasure(dungeon_info[y][x].monster_idx, 1, 0);
 
         /*does the player want to squelch the item?*/
         sq_flag = ((k_info[i_ptr->k_idx].squelch == SQUELCH_ALWAYS) &&

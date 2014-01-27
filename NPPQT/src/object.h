@@ -1342,19 +1342,6 @@
 
 
 /*
- * Determine if a given inventory item is "aware"
- */
-#define object_aware_p(T) \
-    (k_info[(T)->k_idx].aware)
-
-/*
- * Determine if a given inventory item is "tried"
- */
-#define object_tried_p(T) \
-    (k_info[(T)->k_idx].tried)
-
-
-/*
  * Determine if a given inventory item is "known"
  * Test One -- Check for special "known" tag
  * Test Two -- Check for "Easy Know" + "Aware"
@@ -1496,15 +1483,6 @@ object_aware_p(o_ptr) && \
 
 
 
- /*
- * Rings and Amulets
- */
-#define object_is_jewelry(T) \
-    (((T)->tval == TV_RING) || ((T)->tval == TV_AMULET))
-
-/* Returns TRUE if T is a torch or a lantern */
-#define fuelable_lite_p(T) (((T)->tval == TV_LIGHT) && (!(T->is_artifact())))
-
 
 
 #define artifact_known(T) \
@@ -1513,35 +1491,7 @@ object_aware_p(o_ptr) && \
                         (T)->discount == INSCRIP_INDESTRUCTIBLE || \
                         (T)->discount == INSCRIP_SPECIAL ))
 
-/*
- * Ego-Items use the "ego_name" field
- */
-#define ego_item_p(T) \
-    ((T)->ego_num ? TRUE : FALSE)
 
-
-/*
- * Broken items.
- */
-#define broken_p(T) \
-    ((T)->ident & (IDENT_BROKEN))
-
-/*
- * Cursed items.
- */
-#define cursed_p(T) \
-    ((T)->ident & (IDENT_CURSED))
-
-/*
- * Ammo.
- */
-#define ammo_p(T) \
-    (((T)->tval == TV_BOLT) || ((T)->tval == TV_ARROW) || \
-    ((T)->tval == TV_SHOT))
-
-
-/* Returns TRUE if T is a torch or a lantern */
-#define fuelable_light_p(T) (((T)->tval == TV_LIGHT) && (!T->is_artifact()))
 
 
 
