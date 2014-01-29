@@ -160,7 +160,7 @@ help the player survive.  This is one of the hardest quests, as the player
 will not be able to rest much while while wave after wave of monsters 
 appear.  Voluntarily leaving an arena level results in immediate quest failure.
 Completing an Arena Quest increases player fame by 40 + 10d2.  Failing an 
-artifact quest reduces total player fame by 20%.
+arena quest reduces total player fame by 20%.
 
 ***** <Greater Vault Quest>
 GREATER VAULT QUEST:
@@ -178,7 +178,7 @@ from the greater vault. The guild will offer only a moderate amount of gold
 as a quest reward. Voluntarily leaving the quest level before the timer 
 expires, or allowing the quest time to expire without entering the greater 
 vault, results in immediate quest failure. Completing a Artifact Quest 
-increases player fame by 10.  Failing an artifact quest reduces total 
+increases player fame by 10.  Failing a greater vault quest reduces total 
 player fame by only 10%.
 
 

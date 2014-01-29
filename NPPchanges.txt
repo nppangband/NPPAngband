@@ -2,7 +2,10 @@ NPPAngband 8.0.0
 Misc code cleanup found by "Runningaway".
 Items sold in each shot can now be specified in the object.txt file (coded by "Runningaway")
 Bugfix: Well balanced weapons wouldn't stack in stores (found by "Runningaway").
-
+Bugfix: Fixed typos in quest help file. (found by "Runningaway").
+Bugfix: Missing punctuation on message when rods cannot be used because they are charging.
+Bugfix: The check for displaying a message when a temporary effect was increased was incorrect. (found by "Runningaway").
+Bugfix: Lesser Servants of the Valar were pluralized as greater servants. (found by "Runningaway")
 
 NPP 7.1.0:
 (Moria) Use words to show the players speed ("fast", "slow") rather than numbers (+1, -1)

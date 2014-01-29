@@ -101,7 +101,7 @@ void plural_aux(char *name, size_t max)
 	else if (strstr(name, "Lesser Servant of"))
 	{
 		char dummy[80];
-		strcpy (dummy, "Greater Servants of ");
+		strcpy (dummy, "Lesser Servants of ");
 		my_strcat (dummy, &(name[1]), sizeof(dummy));
 		my_strcpy (name, dummy, max);
 		return;

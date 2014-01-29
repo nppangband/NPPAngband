@@ -2308,7 +2308,7 @@ static void describe_feature_basic(int f_idx, const feature_lore *f_l_ptr)
 	text_out(type);
 
 	/* Describe location */
-	if (f_ptr->f_flags1 & FF2_EFFECT)
+	if (f_ptr->f_flags2 & FF2_EFFECT)
 	{
 		/* Do nothing */
 	}

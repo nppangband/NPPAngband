@@ -1073,7 +1073,7 @@ s16b move_player(int dir, int jumping)
 
 		/* Reveal when you are on shallow or deep  terrain */
 		else if (!(cave_info[y][x] & (CAVE_MARK)) &&
-				_feat_ff3_match(f_ptr, FF2_SHALLOW | FF2_DEEP))
+				_feat_ff2_match(f_ptr, FF2_SHALLOW | FF2_DEEP))
 		{
 			/* Get the name */
 			feature_desc(name, sizeof(name), f_ptr - f_info,
