@@ -1,4 +1,4 @@
-# File: p_race.txt
+# File: m_p_race.txt
 
 
 # This file is used to initialize the "lib/data/p_race.raw" file, which is

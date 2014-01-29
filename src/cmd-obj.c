@@ -35,10 +35,10 @@ static int check_devices(object_type *o_ptr)
 	/* Get the right string */
 	switch (o_ptr->tval)
 	{
-		case TV_ROD:   msg = "zap the rod";   break;
-		case TV_WAND:  msg = "use the wand";  what = "wand";  break;
-		case TV_STAFF: msg = "use the staff"; what = "staff"; break;
-		default:       msg = "activate it";  break;
+		case TV_ROD:	msg = "zap the rod";   break;
+		case TV_WAND:	msg = "use the wand";  what = "wand";  break;
+		case TV_STAFF:	msg = "use the staff"; what = "staff"; break;
+		default:		msg = "activate it";  break;
 	}
 
 	/* Figure out how hard the item is to use */

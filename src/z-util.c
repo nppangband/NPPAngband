@@ -84,6 +84,7 @@ int my_strnicmp(cptr a, cptr b, int n)
 	return 0;
 }
 
+
 /*
  * An ANSI version of strstr() with case insensitivity.
  *
@@ -92,33 +93,34 @@ int my_strnicmp(cptr a, cptr b, int n)
  */
 char *my_stristr(const char *string, const char *pattern)
 {
-      const char *pptr, *sptr;
-      char *start;
+	const char *pptr, *sptr;
+	char *start;
 
-      for (start = (char *)string; *start != 0; start++)
-      {
-            /* find start of pattern in string */
-            for ( ; ((*start != 0) &&
-			        (toupper((unsigned char)*start) != toupper((unsigned char)*pattern))); start++)
-                  ;
-            if (*start == 0)
-                  return NULL;
+	for (start = (char *)string; *start != 0; start++)
+	{
+		/* find start of pattern in string */
+		for ( ; ((*start != 0) &&
+			    (toupper((unsigned char)*start) != toupper((unsigned char)*pattern))); start++)
+				;
 
-            pptr = (const char *)pattern;
-            sptr = (const char *)start;
+		if (*start == 0)
+			return NULL;
 
-            while (toupper((unsigned char)*sptr) == toupper((unsigned char)*pptr))
-            {
-                  sptr++;
-                  pptr++;
+		pptr = (const char *)pattern;
+		sptr = (const char *)start;
 
-                  /* if end of pattern then pattern was found */
-                  if (*pptr == 0)
-                        return (start);
-            }
-      }
+		while (toupper((unsigned char)*sptr) == toupper((unsigned char)*pptr))
+		{
+			sptr++;
+			pptr++;
 
-      return NULL;
+			/* if end of pattern then pattern was found */
+			if (*pptr == 0)
+				return (start);
+		}
+	}
+
+	return NULL;
 }
 
 
@@ -224,11 +226,11 @@ bool prefix(cptr s, cptr t)
 }
 
 
-
 /*
  * Redefinable "plog" action
  */
 void (*plog_aux)(cptr) = NULL;
+
 
 /*
  * Print (or log) a "warning" message (ala "perror()")
@@ -242,7 +244,6 @@ void plog(cptr str)
 	/* Just do a labeled fprintf to stderr */
 	else (void)(fprintf(stderr, "%s: %s\n", argv0 ? argv0 : "?", str));
 }
-
 
 
 /*
@@ -272,8 +273,6 @@ void quit(cptr str)
 	/* Failure */
 	exit(EXIT_FAILURE);
 }
-
-
 
 
 /* Compare and swap hooks */
@@ -347,28 +346,30 @@ void ang_sort(void *u, void *v, int n)
 /* Arithmetic mean of the first 'size' entries of the array 'nums' */
 int mean(int *nums, int size)
 {
-    	int i, total = 0;
+	int i, total = 0;
 
-    	for(i = 0; i < size; i++) total += nums[i];
+	for(i = 0; i < size; i++) total += nums[i];
 
-    	return total / size;
+	return total / size;
 }
+
 
 /* Variance of the first 'size' entries of the array 'nums'  */
 int variance(int *nums, int size)
 {
-    	int i, avg, total = 0;
+	int i, avg, total = 0;
 
-    	avg = mean(nums, size);
+	avg = mean(nums, size);
 
-    	for(i = 0; i < size; i++)
+	for(i = 0; i < size; i++)
 	{
-        	int delta = nums[i] - avg;
-        	total += delta * delta;
-    	}
+		int delta = nums[i] - avg;
+		total += delta * delta;
+	}
 
-    	return total / size;
+	return total / size;
 }
+
 
 /*
  * Fast string concatenation.
@@ -414,3 +415,4 @@ char *my_fast_strcat(char *buf, char *end, const char *src, size_t bufsize)
 	/* Return the new end of "buf" */
 	return end;
 }
+

@@ -1296,6 +1296,7 @@ static int bow_multiplier(int sval)
 			return (4);
 		default:
 			msg_format("Illegal bow sval %d", sval);
+			break;
 	}
 
 	return (0);

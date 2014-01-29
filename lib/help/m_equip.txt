@@ -3,7 +3,7 @@
 
 
      All effective combat methods require equipment, and all benefit greatly
-from various qualities that your equipped items may possess.  Defence is
+from various qualities that your equipped items may possess.  Defense is
 similarly equipment-dependent.
      Attacks can also benefit or be hindered depending on the terrain in which 
 the player or creature is standing.
@@ -94,10 +94,10 @@ Damage multipliers  (only the best applies):
      Slay Undead    :  x3 against undead
      Slay Dragon    :  x4 against dragons
 
-     Brand Acid     :  x2 against everything susceptable to acid
-     Brand Fire     :  x2 against everything susceptable to fire
-     Brand Cold     :  x2 against everything susceptable to cold
-     Brand Pois     :  x2 against everything susceptable to poison
+     Brand Acid     :  x2 against everything susceptible to acid
+     Brand Fire     :  x2 against everything susceptible to fire
+     Brand Cold     :  x2 against everything susceptible to cold
+     Brand Pois     :  x2 against everything susceptible to poison
 
 
 --- Resistances ---

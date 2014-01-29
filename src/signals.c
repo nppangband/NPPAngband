@@ -106,14 +106,11 @@ static void handle_signal_simple(int sig)
 	/* Disable handler */
 	(void)(*signal_aux)(sig, SIG_IGN);
 
-
 	/* Nothing to save, just quit */
 	if (!character_generated || character_saved) quit(NULL);
 
-
 	/* Count the signals */
 	signal_count++;
-
 
 	/* Terminate dead characters */
 	if (p_ptr->is_dead)
@@ -188,17 +185,15 @@ static void handle_signal_abort(int sig)
 	/* Disable handler */
 	(void)(*signal_aux)(sig, SIG_IGN);
 
-
 	/* Nothing to save, just quit */
 	if (!character_generated || character_saved) quit(NULL);
-
 
 	/* Clear the bottom line */
 	Term_erase(0, 23, 255);
 
 	/* Give a warning */
 	Term_putstr(0, 23, -1, TERM_RED,
-	            "A gruesome software bug LEAPS out at you!");
+		"A gruesome software bug LEAPS out at you!");
 
 	/* Message */
 	Term_putstr(45, 23, -1, TERM_RED, "Panic save...");
@@ -235,8 +230,6 @@ static void handle_signal_abort(int sig)
 }
 
 
-
-
 /*
  * Ignore SIGTSTP signals (keyboard suspend)
  */
@@ -248,6 +241,7 @@ void signals_ignore_tstp(void)
 #endif
 
 }
+
 
 /*
  * Handle SIGTSTP signals (keyboard suspend)
@@ -272,11 +266,9 @@ void signals_init(void)
 	(void)(*signal_aux)(SIGHUP, SIG_IGN);
 #endif
 
-
 #ifdef SIGTSTP
 	(void)(*signal_aux)(SIGTSTP, handle_signal_suspend);
 #endif
-
 
 #ifdef SIGINT
 	(void)(*signal_aux)(SIGINT, handle_signal_simple);
@@ -285,7 +277,6 @@ void signals_init(void)
 #ifdef SIGQUIT
 	(void)(*signal_aux)(SIGQUIT, handle_signal_simple);
 #endif
-
 
 #ifdef SIGFPE
 	(void)(*signal_aux)(SIGFPE, handle_signal_abort);
@@ -327,11 +318,11 @@ void signals_init(void)
 	(void)(*signal_aux)(SIGEMT, handle_signal_abort);
 #endif
 
-/*
- * SIGDANGER:
- * This is not a common (POSIX, SYSV, BSD) signal, it is used by AIX(?) to
- * signal that the system will soon be out of memory.
- */
+	/*
+	 * SIGDANGER:
+	 * This is not a common (POSIX, SYSV, BSD) signal, it is used by AIX(?) to
+	 * signal that the system will soon be out of memory.
+	 */
 #ifdef SIGDANGER
 	(void)(*signal_aux)(SIGDANGER, handle_signal_abort);
 #endif
@@ -347,12 +338,10 @@ void signals_init(void)
 #ifdef SIGPWR
 	(void)(*signal_aux)(SIGPWR, handle_signal_abort);
 #endif
-
 }
 
 
 #else	/* !WINDOWS */
-
 
 /*
  * Do nothing
@@ -361,12 +350,14 @@ void signals_ignore_tstp(void)
 {
 }
 
+
 /*
  * Do nothing
  */
 void signals_handle_tstp(void)
 {
 }
+
 
 /*
  * Do nothing

@@ -1882,9 +1882,9 @@ static bool choose_mtrap(int *choice)
 		c = inkey();
 
 		/* Letters are used for selection */
-		if (isalpha(c))
+		if (isalpha((int)c))
 		{
-			if (islower(c))
+			if (islower((int)c))
 			{
 				*choice = A2I(c);
 			}

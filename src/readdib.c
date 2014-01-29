@@ -47,7 +47,7 @@
 static DWORD PASCAL lread(HFILE fh, VOID FAR *pv, DWORD ul)
 {
 	DWORD ulT = ul;
-	BYTE *hp = pv;
+	BYTE *hp = (BYTE *)pv;
 
 	while (ul > (DWORD)MAXREAD)
 	{
@@ -112,7 +112,7 @@ static HPALETTE PASCAL NEAR MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 	 */
 	else
 	{
-		return (GetStockObject(DEFAULT_PALETTE));
+		return (HPALETTE)(GetStockObject(DEFAULT_PALETTE));
 	}
 }
 

@@ -30,29 +30,30 @@ const size_t squelch_size = SQUELCH_BYTES;
  * list a little more reasonable.
  */
 
-#define TYPE_AMMO    1
-#define TYPE_BOW     2
-#define TYPE_WEAPON1 3
-#define TYPE_WEAPON2 4
-#define TYPE_BODY    5
-#define TYPE_CLOAK   6
-#define TYPE_SHIELD  7
-#define TYPE_HELM    8
-#define TYPE_GLOVES  9
-#define TYPE_BOOTS   10
-#define TYPE_RING    11
-#define TYPE_STAFF   12
-#define TYPE_WAND    13
-#define TYPE_ROD     14
-#define TYPE_SCROLL  15
-#define TYPE_POTION  16
-#define TYPE_AMULET  17
-#define TYPE_BOOK    18
-#define TYPE_FOOD    19
-#define TYPE_MISC    20
-#define TYPE_MAX	 TYPE_MISC
+#define TYPE_AMMO		1
+#define TYPE_BOW		2
+#define TYPE_WEAPON1	3
+#define TYPE_WEAPON2	4
+#define TYPE_BODY		5
+#define TYPE_CLOAK		6
+#define TYPE_SHIELD		7
+#define TYPE_HELM		8
+#define TYPE_GLOVES		9
+#define TYPE_BOOTS		10
+#define TYPE_RING		11
+#define TYPE_STAFF		12
+#define TYPE_WAND		13
+#define TYPE_ROD		14
+#define TYPE_SCROLL		15
+#define TYPE_POTION		16
+#define TYPE_AMULET		17
+#define TYPE_BOOK		18
+#define TYPE_FOOD		19
+#define TYPE_MISC		20
+#define TYPE_MAX	TYPE_MISC
 
-#define MAXTV_TO_TYPE  100
+#define MAXTV_TO_TYPE	100
+
 /*
  * This (admittedly hacky) stores the mapping from tval to typeval
  * and is reinitialized every time do_cmd_squelch is called.  This
@@ -60,6 +61,10 @@ const size_t squelch_size = SQUELCH_BYTES;
  */
 static int tv_to_type[MAXTV_TO_TYPE];
 static bool seen_type[TYPE_MAX];
+
+/* Coordinates for menu displays */
+#define SCOL	26
+#define SROW	17
 
 /*
  * List of kinds of item, for pseudo-id squelch.
@@ -105,37 +110,38 @@ typedef struct
  * "0 to SV_UNKNOWN" category, they will be grouped
  * with the rare items.
  */
-static quality_squelch_struct quality_mapping[] =
+static const quality_squelch_struct quality_mapping[] =
 {
-	{ PS_TYPE_EQUIP_RARE,		TV_SWORD,	SV_BLADE_OF_CHAOS,	SV_BLADE_OF_CHAOS },
+	{ PS_TYPE_EQUIP_RARE,	TV_SWORD,	SV_BLADE_OF_CHAOS,	SV_BLADE_OF_CHAOS },
 	{ PS_TYPE_WEAPON_SHARP,	TV_SWORD,	0,		SV_UNKNOWN },
-	{ PS_TYPE_EQUIP_RARE,		TV_POLEARM,	SV_SCYTHE_OF_SLICING,	SV_SCYTHE_OF_SLICING },
+	{ PS_TYPE_EQUIP_RARE,	TV_POLEARM,	SV_SCYTHE_OF_SLICING,	SV_SCYTHE_OF_SLICING },
 	{ PS_TYPE_WEAPON_SHARP,	TV_POLEARM,	0,		SV_UNKNOWN },
-	{ PS_TYPE_EQUIP_RARE,		TV_HAFTED,	SV_MACE_OF_DISRUPTION,	SV_GROND },
+	{ PS_TYPE_EQUIP_RARE,	TV_HAFTED,	SV_MACE_OF_DISRUPTION,	SV_GROND },
 	{ PS_TYPE_WEAPON_BLUNT,	TV_HAFTED,	0,		SV_UNKNOWN },
-	{ PS_TYPE_BOW,				TV_BOW,		0,		SV_UNKNOWN },
-	{ PS_TYPE_MISSILE_SLING,	TV_SHOT,	0,		SV_UNKNOWN },
-	{ PS_TYPE_MISSILE_BOW,		TV_ARROW,	0,		SV_UNKNOWN },
+	{ PS_TYPE_BOW,			TV_BOW,		0,		SV_UNKNOWN },
+	{ PS_TYPE_MISSILE_SLING,TV_SHOT,	0,		SV_UNKNOWN },
+	{ PS_TYPE_MISSILE_BOW,	TV_ARROW,	0,		SV_UNKNOWN },
 	{ PS_TYPE_MISSILE_XBOW,	TV_BOLT,	0,		SV_UNKNOWN },
-	{ PS_TYPE_ARMOR_ROBE,		TV_SOFT_ARMOR,	SV_ROBE,	SV_ROBE },
-	{ PS_TYPE_ARMOR_BODY,		TV_SOFT_ARMOR,	0,		SV_UNKNOWN },
-	{ PS_TYPE_EQUIP_RARE,		TV_HARD_ARMOR,	SV_MITHRIL_CHAIN_MAIL,	SV_ADAMANTITE_PLATE_MAIL },
-	{ PS_TYPE_ARMOR_BODY,		TV_HARD_ARMOR,	0,		SV_UNKNOWN },
+	{ PS_TYPE_ARMOR_ROBE,	TV_SOFT_ARMOR,	SV_ROBE,	SV_ROBE },
+	{ PS_TYPE_ARMOR_BODY,	TV_SOFT_ARMOR,	0,	SV_UNKNOWN },
+	{ PS_TYPE_EQUIP_RARE,	TV_HARD_ARMOR,	SV_MITHRIL_CHAIN_MAIL,	SV_ADAMANTITE_PLATE_MAIL },
+	{ PS_TYPE_ARMOR_BODY,	TV_HARD_ARMOR,	0,	SV_UNKNOWN },
 	{ PS_TYPE_ARMOR_DRAGON,	TV_DRAG_ARMOR,	0, 	SV_UNKNOWN},
 	{ PS_TYPE_ARMOR_DRAGON,	TV_DRAG_SHIELD,	0, 	SV_UNKNOWN},
-	{ PS_TYPE_EQUIP_RARE,		TV_CLOAK,	SV_SHADOW_CLOAK, 	SV_SHADOW_CLOAK },
-	{ PS_TYPE_CLOAK,			TV_CLOAK,	0, 		SV_UNKNOWN },
-	{ PS_TYPE_EQUIP_RARE,		TV_SHIELD,	SV_SHIELD_OF_DEFLECTION, 	SV_SHIELD_OF_DEFLECTION },
-	{ PS_TYPE_SHIELD,			TV_SHIELD,	0,		SV_UNKNOWN },
-	{ PS_TYPE_HELMS,			TV_HELM,	0,		SV_UNKNOWN },
-	{ PS_TYPE_CROWNS,			TV_CROWN,	0,		SV_UNKNOWN },
-	{ PS_TYPE_GLOVES,			TV_GLOVES,	0,		SV_UNKNOWN },
-	{ PS_TYPE_BOOTS,			TV_BOOTS,	0,		SV_UNKNOWN },
-	{ PS_TYPE_DIGGER,			TV_DIGGING,	0,		SV_UNKNOWN },
+	{ PS_TYPE_EQUIP_RARE,	TV_CLOAK,	SV_SHADOW_CLOAK,	SV_SHADOW_CLOAK },
+	{ PS_TYPE_CLOAK,		TV_CLOAK,	0, 		SV_UNKNOWN },
+	{ PS_TYPE_EQUIP_RARE,	TV_SHIELD,	SV_SHIELD_OF_DEFLECTION,	SV_SHIELD_OF_DEFLECTION },
+	{ PS_TYPE_SHIELD,		TV_SHIELD,	0,		SV_UNKNOWN },
+	{ PS_TYPE_HELMS,		TV_HELM,	0,		SV_UNKNOWN },
+	{ PS_TYPE_CROWNS,		TV_CROWN,	0,		SV_UNKNOWN },
+	{ PS_TYPE_GLOVES,		TV_GLOVES,	0,		SV_UNKNOWN },
+	{ PS_TYPE_BOOTS,		TV_BOOTS,	0,		SV_UNKNOWN },
+	{ PS_TYPE_DIGGER,		TV_DIGGING,	0,		SV_UNKNOWN },
 	{ PS_TYPE_RING,			TV_RING,	0,		SV_UNKNOWN },
-	{ PS_TYPE_AMULET,			TV_AMULET,	0,		SV_UNKNOWN },
-	{ PS_TYPE_LIGHT, 			TV_LIGHT, 	0,		SV_UNKNOWN },
+	{ PS_TYPE_AMULET,		TV_AMULET,	0,		SV_UNKNOWN },
+	{ PS_TYPE_LIGHT, 		TV_LIGHT,	0,		SV_UNKNOWN },
 };
+
 
 typedef struct
 {
@@ -143,18 +149,19 @@ typedef struct
 	const char *name;
 } quality_name_struct;
 
-static quality_name_struct quality_choices[PS_TYPE_MAX] =
+
+static const quality_name_struct quality_choices[PS_TYPE_MAX] =
 {
-	{ PS_TYPE_WEAPON_SHARP,	"Sharp Melee Weapons" },
-	{ PS_TYPE_WEAPON_BLUNT,	"Blunt Melee Weapons" },
+	{ PS_TYPE_WEAPON_SHARP,		"Sharp Melee Weapons" },
+	{ PS_TYPE_WEAPON_BLUNT,		"Blunt Melee Weapons" },
 	{ PS_TYPE_EQUIP_RARE,		"Rare Equipment" },
 	{ PS_TYPE_BOW,				"Missile launchers" },
 	{ PS_TYPE_MISSILE_SLING,	"Shots and Pebbles" },
 	{ PS_TYPE_MISSILE_BOW,		"Arrows" },
-	{ PS_TYPE_MISSILE_XBOW,	"Bolts" },
+	{ PS_TYPE_MISSILE_XBOW,		"Bolts" },
 	{ PS_TYPE_ARMOR_ROBE,		"Robes" },
 	{ PS_TYPE_ARMOR_BODY,		"Body Armor" },
-	{ PS_TYPE_ARMOR_DRAGON,	"Dragon Armor/Shields" },
+	{ PS_TYPE_ARMOR_DRAGON,		"Dragon Armor/Shields" },
 	{ PS_TYPE_CLOAK,			"Cloaks" },
 	{ PS_TYPE_SHIELD,			"Shields" },
 	{ PS_TYPE_HELMS,			"Helms" },
@@ -162,60 +169,50 @@ static quality_name_struct quality_choices[PS_TYPE_MAX] =
 	{ PS_TYPE_GLOVES,			"Gloves" },
 	{ PS_TYPE_BOOTS,			"Boots" },
 	{ PS_TYPE_DIGGER,			"Diggers" },
-	{ PS_TYPE_RING,			"Rings" },
+	{ PS_TYPE_RING,				"Rings" },
 	{ PS_TYPE_AMULET,			"Amulets" },
 	{ PS_TYPE_LIGHT, 			"Lights" },
 };
 
 
 /* Categories for sval-dependent squelch. */
-static tval_desc tvals[] =
+static const tval_desc tvals[] =
 {
-	{TYPE_AMMO, 	"Missiles"},
-	{TYPE_BOW, 		"Missile Launchers"},
-	{TYPE_WEAPON1, 	"Weapons (Swords)"},
-	{TYPE_WEAPON2, 	"Weapons (Non Swords)"},
-	{TYPE_BODY, 	"Body Armor"},
-	{TYPE_CLOAK, 	"Cloaks"},
-	{TYPE_SHIELD, 	"Shields"},
-	{TYPE_HELM, 	"Helmets"},
-	{TYPE_GLOVES, 	"Gloves"},
-	{TYPE_BOOTS, 	"Boots"},
-	{TYPE_AMULET, 	"Amulets"},
-	{TYPE_RING, 	"Rings"},
-	{TYPE_STAFF, 	"Staves"},
-	{TYPE_WAND, 	"Wands"},
-	{TYPE_ROD, 		"Rods"},
-	{TYPE_SCROLL, 	"Scrolls"},
-	{TYPE_POTION, 	"Potions"},
-	{TYPE_BOOK, 	"Magic Books"},
-	{TYPE_FOOD, 	"Food Items"},
-	{TYPE_MISC, 	"Miscellaneous"},
+	{TYPE_AMMO,		"Missiles"},
+	{TYPE_BOW,		"Missile Launchers"},
+	{TYPE_WEAPON1,	"Weapons (Swords)"},
+	{TYPE_WEAPON2,	"Weapons (Non Swords)"},
+	{TYPE_BODY,		"Body Armor"},
+	{TYPE_CLOAK,	"Cloaks"},
+	{TYPE_SHIELD,	"Shields"},
+	{TYPE_HELM,		"Helmets"},
+	{TYPE_GLOVES,	"Gloves"},
+	{TYPE_BOOTS,	"Boots"},
+	{TYPE_AMULET,	"Amulets"},
+	{TYPE_RING,		"Rings"},
+	{TYPE_STAFF,	"Staves"},
+	{TYPE_WAND,		"Wands"},
+	{TYPE_ROD,		"Rods"},
+	{TYPE_SCROLL,	"Scrolls"},
+	{TYPE_POTION,	"Potions"},
+	{TYPE_BOOK,		"Magic Books"},
+	{TYPE_FOOD,		"Food Items"},
+	{TYPE_MISC,		"Miscellaneous"},
 };
+
 
 /*
  * The names for the various kinds of quality
  */
-static quality_name_struct quality_values[SQUELCH_MAX] =
+static const quality_name_struct quality_values[SQUELCH_MAX] =
 {
-	{ SQUELCH_NONE,		"none" },
-	{ SQUELCH_CURSED,	"squelch cursed" },
-	{ SQUELCH_AVERAGE,	"squelch cursed and average" },
+	{ SQUELCH_NONE,			"none" },
+	{ SQUELCH_CURSED,		"squelch cursed" },
+	{ SQUELCH_AVERAGE,		"squelch cursed and average" },
 	{ SQUELCH_GOOD_STRONG,	"squelch good, average, and cursed" },
 	{ SQUELCH_GOOD_WEAK,	"squelch good pseudo-id, average, and cursed" },
-	{ SQUELCH_ALL,	"squelch all but artifacts" },
+	{ SQUELCH_ALL,			"squelch all but artifacts" },
 };
-
-/*
- * menu struct for differentiating aware from unaware squelch
- */
-typedef struct
-{
-	s16b idx;
-	bool aware;
-} squelch_choice;
-
-
 
 
 /*** Autoinscription stuff ***/
@@ -235,6 +232,7 @@ int get_autoinscription_index(s16b k_idx)
 	return -1;
 }
 
+
 /*
  * Returns the current autoinscription.
  */
@@ -253,7 +251,10 @@ cptr get_autoinscription(s16b kindIdx)
 	return 0;
 }
 
-/*Put the autoinscription on an object*/
+
+/*
+ * Put the autoinscription on an object
+ */
 int apply_autoinscription(object_type *o_ptr)
 {
 	char o_name[80];
@@ -309,6 +310,9 @@ int apply_autoinscription(object_type *o_ptr)
 }
 
 
+/*
+ * Remove the autoinscription from an object
+ */
 int remove_autoinscription(s16b kind)
 {
 	int i = get_autoinscription_index(kind);
@@ -388,6 +392,7 @@ void autoinscribe_ground(void)
 	}
 }
 
+
 void autoinscribe_pack(void)
 {
 	int i;
@@ -401,7 +406,10 @@ void autoinscribe_pack(void)
 	}
 }
 
-/* Convert the values returned by squelch_itemp to string */
+
+/*
+ * Convert the values returned by squelch_itemp to string
+ */
 const char *squelch_to_label(int squelch)
 {
   	if (squelch == SQUELCH_YES) return ("(Squelched)");
@@ -410,8 +418,6 @@ const char *squelch_to_label(int squelch)
 
 	return ("");
 }
-
-
 
 
 /*** Squelch code ***/
@@ -433,12 +439,16 @@ bool squelch_tval(int tval)
 	return FALSE;
 }
 
-/* Simple function that returns the squelch status */
+
+/*
+ * Simple function that returns the squelch status
+ */
 byte get_squelch_status(int k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 	return (k_ptr->squelch);
 }
+
 
 /*
  * Find the squelch type of the object, or TYPE_MAX if none
@@ -459,6 +469,7 @@ static squelch_type_t squelch_type_of(const object_type *o_ptr)
 	return PS_TYPE_MAX;
 }
 
+
 /*
  * Determines if an object is going to be squelched on identification.
  * Input:
@@ -469,7 +480,6 @@ static squelch_type_t squelch_type_of(const object_type *o_ptr)
  *
  * Output: One of the three above values.
  */
-
 int squelch_itemp(const object_type *o_ptr, byte feelings, bool fullid)
 {
 	int num, result;
@@ -560,11 +570,12 @@ int squelch_itemp(const object_type *o_ptr, byte feelings, bool fullid)
 		}
 	}
 
-	/* Squelching will fail on an artifact or inscribed object */
+	/* Squelching fails on an artifact or inscribed object */
 	if ((result == SQUELCH_YES) && (artifact_p(o_ptr) || o_ptr->obj_note)) result = SQUELCH_FAILED;
 
 	return result;
 }
+
 
 /*
  * This performs the squelch, actually removing the item from the
@@ -592,6 +603,7 @@ int do_squelch_item(int squelch, int item, object_type *o_ptr)
 
 	return 1;
 }
+
 
 void rearrange_stack(int y, int x)
 {
@@ -634,7 +646,6 @@ void rearrange_stack(int y, int x)
 		}
 
 		else
-
 		{
 			if (first_good_idx==0)
 			{
@@ -663,9 +674,10 @@ void rearrange_stack(int y, int x)
 	}
 }
 
+
 bool squelch_item_ok(const object_type *o_ptr)
 {
-	object_kind *k_ptr = k_ptr = &k_info[o_ptr->k_idx];
+	object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
 	/* Always delete "nothings" */
 	if (!o_ptr->k_idx) return (TRUE);
@@ -689,7 +701,9 @@ bool squelch_item_ok(const object_type *o_ptr)
 }
 
 
-/* Attempt to squelch every object in a pile. */
+/*
+ * Attempt to squelch every object in a pile.
+ */
 void do_squelch_pile(int y, int x)
 {
 	s16b o_idx, next_o_idx;
@@ -712,6 +726,7 @@ void do_squelch_pile(int y, int x)
 	}
 }
 
+
 /*
  * Increase or decrease the squelch setting.
  * The incremental change is intended to be either +1 or -1
@@ -724,7 +739,7 @@ void change_squelch_setting(s16b k_idx, int change)
 
 	int new_value = k_ptr->squelch + change;
 
-	/* Boundry Control */
+	/* Boundary Control */
 	if (new_value < SQUELCH_NEVER)
 	{
 		k_ptr->squelch = SQUELCH_OPT_MAX - 1;
@@ -742,50 +757,53 @@ void change_squelch_setting(s16b k_idx, int change)
 	return;
 }
 
+
 /*** Ego-Item Squelch menu ***/
 
 
 static tval_desc raw_tvals[] =
 {
-	{TV_SKELETON, "Skeletons"},
-	{TV_BOTTLE, "Bottles"},
-	{TV_JUNK, "Junk"},
-	{TV_SPIKE, "Spikes"},
-	{TV_CHEST, "Chests"},
-	{TV_SHOT, "Shots"},
-	{TV_ARROW, "Arrows"},
-	{TV_BOLT, "Bolts"},
-	{TV_BOW, "Launchers"},
-	{TV_DIGGING, "Diggers"},
-	{TV_HAFTED, "Maces"},
-	{TV_POLEARM, "Polearms"},
-	{TV_SWORD, "Swords"},
-	{TV_BOOTS, "Boots"},
-	{TV_GLOVES, "Gloves"},
-	{TV_HELM, "Helmets"},
-	{TV_CROWN, "Crowns"},
-	{TV_SHIELD, "Shields"},
-	{TV_CLOAK, "Cloaks"},
-	{TV_SOFT_ARMOR, "Soft Armor"},
-	{TV_HARD_ARMOR, "Hard Armor"},
-	{TV_DRAG_ARMOR, "DSMails"},
-	{TV_LIGHT, "Lights"},
-	{TV_AMULET, "Amulets"},
-	{TV_DRAG_SHIELD, "DSShields"},
-	{TV_RING, "Rings"},
-	{TV_STAFF, "Staves"},
-	{TV_WAND, "Wands"},
-	{TV_ROD, "Rods"},
-	{TV_SCROLL, "Scrolls"},
-	{TV_POTION, "Potions"},
-	{TV_FLASK, "Flaskes"},
-	{TV_FOOD, "Food"},
-	{TV_MAGIC_BOOK, "Magic Books"},
-	{TV_PRAYER_BOOK, "Prayer Books"},
-	{TV_DRUID_BOOK, "Druid Books"}
+	{TV_SKELETON,	"Skeletons"},
+	{TV_BOTTLE,		"Bottles"},
+	{TV_JUNK,		"Junk"},
+	{TV_SPIKE,		"Spikes"},
+	{TV_CHEST,		"Chests"},
+	{TV_SHOT,		"Shots"},
+	{TV_ARROW,		"Arrows"},
+	{TV_BOLT,		"Bolts"},
+	{TV_BOW,		"Launchers"},
+	{TV_DIGGING,	"Diggers"},
+	{TV_HAFTED,		"Maces"},
+	{TV_POLEARM,	"Polearms"},
+	{TV_SWORD,		"Swords"},
+	{TV_BOOTS,		"Boots"},
+	{TV_GLOVES,		"Gloves"},
+	{TV_HELM,		"Helmets"},
+	{TV_CROWN,		"Crowns"},
+	{TV_SHIELD,		"Shields"},
+	{TV_CLOAK,		"Cloaks"},
+	{TV_SOFT_ARMOR,	"Soft Armor"},
+	{TV_HARD_ARMOR,	"Hard Armor"},
+	{TV_DRAG_ARMOR,	"DSMails"},
+	{TV_LIGHT,		"Lights"},
+	{TV_AMULET,		"Amulets"},
+	{TV_DRAG_SHIELD,"DSShields"},
+	{TV_RING,		"Rings"},
+	{TV_STAFF,		"Staves"},
+	{TV_WAND,		"Wands"},
+	{TV_ROD,		"Rods"},
+	{TV_SCROLL,		"Scrolls"},
+	{TV_POTION,		"Potions"},
+	{TV_FLASK,		"Flasks"},
+	{TV_FOOD,		"Food"},
+	{TV_MAGIC_BOOK,	"Magic Books"},
+	{TV_PRAYER_BOOK,"Prayer Books"},
+	{TV_DRUID_BOOK,	"Druid Books"}
 };
 
+
 #define NUM_RAW_TVALS (sizeof(raw_tvals) / sizeof(raw_tvals[0]))
+
 
 /*
  * Utility function used to find/sort tval names.
@@ -798,21 +816,16 @@ static int tval_comp_func(const void *a_ptr, const void *b_ptr)
 }
 
 
-typedef struct ego_desc
-{
-	s16b e_idx;
-	const char *short_name;
-} ego_desc;
-
 /*
  * Skip common prefixes in ego-item names.
  */
 static const char *strip_ego_name(const char *name)
 {
- 	if (prefix(name, "of the "))	return name + 7;
- 	if (prefix(name, "of "))	return name + 3;
- 	return name;
+	if (prefix(name, "of the "))	return name + 7;
+	if (prefix(name, "of "))	return name + 3;
+	return name;
 }
+
 
 /*
  * Utility function used for sorting an array of ego-item indices by
@@ -820,14 +833,16 @@ static const char *strip_ego_name(const char *name)
  */
 static int ego_comp_func(const void *a_ptr, const void *b_ptr)
 {
-	const ego_desc *a = a_ptr;
-	const ego_desc *b = b_ptr;
+	const ego_desc *a = (const ego_desc *)a_ptr;
+	const ego_desc *b = (const ego_desc *)b_ptr;
 
 	/* Note the removal of common prefixes */
 	return (strcmp(a->short_name, b->short_name));
 }
 
+
 /*** Quality-squelch menu ***/
+
 
 static void ego_squelch_hook(int oid, void *db, const region *loc)
 {
@@ -862,6 +877,7 @@ static void ego_squelch_hook(int oid, void *db, const region *loc)
 	text_out(".");
 }
 
+
 /*
  * Display an entry in the menu.
  * The procedure for displaying the name is complicated, as it
@@ -875,7 +891,7 @@ static void ego_item_display(menu_type *menu, int oid, bool cursor, int row, int
 	byte tval_table[EGO_TVALS_MAX];
 	int i;
 	int n = 0;
-	const ego_desc *ego_choice = menu->menu_data;
+	const ego_desc *ego_choice = menu->menu_data.ego;
 	int idx = ego_choice[oid].e_idx;
 	ego_item_type *e_ptr = &e_info[idx];
 	char buf[100] = "", *end;
@@ -929,7 +945,7 @@ static void ego_item_display(menu_type *menu, int oid, bool cursor, int row, int
 		key.tval = tval_table[i];
 		key.desc = NULL;
 
-		result = bsearch(&key, raw_tvals, NUM_RAW_TVALS, sizeof(raw_tvals[0]), tval_comp_func);
+		result = (tval_desc *)bsearch(&key, raw_tvals, NUM_RAW_TVALS, sizeof(raw_tvals[0]), tval_comp_func);
 
 		if (result) tval_name = result->desc;
 		/* Paranoia */
@@ -978,16 +994,15 @@ static void ego_item_display(menu_type *menu, int oid, bool cursor, int row, int
 	if (e_ptr->squelch) attr = TERM_L_RED;
 	else attr = TERM_L_GREEN;
 	c_put_str(attr, ego_choice[oid].short_name, row, col + (end - buf));
-
-
 }
+
 
 /*
  * Handle keypresses.
  */
 static bool ego_item_action(char cmd, void *db, int oid)
 {
-	const ego_desc *ego_choice = db;
+	const ego_desc *ego_choice = (ego_desc *)db;
 
 	/* Get the selected ego-item type */
 	ego_item_type *e_ptr = &e_info[ego_choice[oid].e_idx];
@@ -1009,7 +1024,6 @@ static bool ego_item_action(char cmd, void *db, int oid)
 	}
 
 	return FALSE;
-
 }
 
 
@@ -1069,7 +1083,7 @@ static void ego_item_menu(void *unused, const char *also_unused)
 	WIPE(&menu, menu);
 
 	menu.cmd_keys = " \n\r";
-	menu.menu_data = ego_choice;
+	menu.menu_data.ego = ego_choice;
 	menu.count = num;
 	menu_init(&menu, MN_SKIN_SCROLL, &menu_f, &area);
 	menu.browse_hook = ego_squelch_hook;
@@ -1103,11 +1117,9 @@ static void ego_item_menu(void *unused, const char *also_unused)
 					break;
 				}
 				case '?':	{show_file("options.txt#ego_squelch", NULL, 0, 0); break;}
-				default:  	break;
+				default:	break;
 			}
 		}
-
-
 	}
 
 	FREE(ego_choice);
@@ -1116,8 +1128,6 @@ static void ego_item_menu(void *unused, const char *also_unused)
 	screen_load();
 	return;
 }
-
-
 
 
 /*** Quality-squelch menu ***/
@@ -1154,6 +1164,7 @@ static void quality_squelch_hook(int oid, void *db, const region *loc)
 	text_out(" are applicable settings.");
 }
 
+
 /*
  * Display an entry in the menu.
  */
@@ -1167,17 +1178,18 @@ static void quality_display(menu_type *menu, int oid, bool cursor, int row, int 
 	byte attr = (cursor ? TERM_L_BLUE : TERM_WHITE);
 
 	c_put_str(attr, format("%-20s : %s", name, level_name), row, col);
-
-
 }
 
 
-/* Increase or decrease the squelch quality level by one for moria objects (no artifacts) */
+/*
+ * Increase or decrease the squelch quality level by one for moria objects
+ * (no artifacts)
+ */
 static void change_squelch_level_moria(int index, int change)
 {
-	/* only allowable options to be toggled through*/
+	/* only allowable options to be toggled through */
 
-	/*first do the rings and amulets*/
+	/* first do the rings and amulets */
 	if ((index == PS_TYPE_AMULET) || (index == PS_TYPE_RING))
 	{
 		/*
@@ -1188,7 +1200,6 @@ static void change_squelch_level_moria(int index, int change)
 		else squelch_level[index] = SQUELCH_NONE;
 	}
 
-
 	/*
 	 * Move up to the next squelch setting, or go back down to the lowest setting if
 	 * we are at the top.
@@ -1196,7 +1207,6 @@ static void change_squelch_level_moria(int index, int change)
 	else if (change > 0)
 	{
 		/* Weak Pseudo ID */
-
 		if (!(cp_ptr->flags & (CF_PSEUDO_ID_HEAVY)))
 		{
 			if (squelch_level[index] == SQUELCH_GOOD_STRONG) squelch_level[index] = SQUELCH_NONE;
@@ -1215,7 +1225,6 @@ static void change_squelch_level_moria(int index, int change)
 	}
 	else /* (change <=0) */
 	{
-
 		/* Weak Pseudo ID */
 		if (!(cp_ptr->flags & (CF_PSEUDO_ID_HEAVY)))
 		{
@@ -1246,9 +1255,9 @@ static void change_squelch_level(int index, int change)
 		return;
 	}
 
-	/* only allowable  options to be toggled through*/
+	/* only allowable options to be toggled through*/
 
-	/*first do the rings and amulets*/
+	/* first do the rings and amulets */
 	if ((index == PS_TYPE_AMULET) || (index == PS_TYPE_RING))
 	{
 		/*
@@ -1267,13 +1276,11 @@ static void change_squelch_level(int index, int change)
 			else if (squelch_level[index] == SQUELCH_ALL) squelch_level[index] = SQUELCH_CURSED;
 			else squelch_level[index] = SQUELCH_ALL;
 		}
-
 	}
 
 	/* Everything else*/
 	else
 	{
-
 		/*
 		 * Move up to the next squelch setting, or go back down to the lowest setting if
 		 * we are at the top.
@@ -1283,11 +1290,9 @@ static void change_squelch_level(int index, int change)
 			if (squelch_level[index] == SQUELCH_ALL) squelch_level[index] = SQUELCH_NONE;
 			else if (squelch_level[index] == SQUELCH_GOOD_STRONG) squelch_level[index] = SQUELCH_ALL;
 			else squelch_level[index]++;
-
 		}
 		else /* (change <=0) */
 		{
-
 			if (squelch_level[index] == SQUELCH_NONE) squelch_level[index] = SQUELCH_ALL;
 			else if (squelch_level[index] == SQUELCH_ALL) squelch_level[index] = SQUELCH_GOOD_STRONG;
 			else squelch_level[index]--;
@@ -1296,6 +1301,7 @@ static void change_squelch_level(int index, int change)
 
 	return;
 }
+
 
 /*
  * Handle keypresses.
@@ -1337,6 +1343,7 @@ static bool quality_action(char cmd, void *db, int oid)
 			squelch_level[index] = SQUELCH_CURSED;
 			break;
 		}
+
 		case 'C':
 		{
 			for (i = 0; i < SQUELCH_BYTES; i++)
@@ -1345,7 +1352,8 @@ static bool quality_action(char cmd, void *db, int oid)
 			}
 			break;
 		}
-			/* Set to squelch average and below */
+
+		/* Set to squelch average and below */
 		case 'v':
 		{
 			if ((index != PS_TYPE_AMULET)	&& (index != PS_TYPE_RING))
@@ -1359,7 +1367,7 @@ static bool quality_action(char cmd, void *db, int oid)
 		{
 			for (i = 0; i < SQUELCH_BYTES ; i++)
 			{
-				/* Aumulets and rings only have cursed and good settings */
+				/* Amulets and rings only have cursed and good settings */
 				if ((i == PS_TYPE_AMULET) || (i == PS_TYPE_RING)) continue;
 				/* The rest can be set to average */
 				squelch_level[i] = SQUELCH_AVERAGE;
@@ -1377,6 +1385,7 @@ static bool quality_action(char cmd, void *db, int oid)
 			else return (FALSE);
 			break;
 		}
+
 		case 'G':
 		{
 			for (i = 0; i < SQUELCH_BYTES; i++)
@@ -1386,6 +1395,7 @@ static bool quality_action(char cmd, void *db, int oid)
 			}
 				break;
 		}
+
 		/* Squelch to good (weak pseudo-id and below ) */
 		case 'w':
 		{
@@ -1436,11 +1446,10 @@ static bool quality_action(char cmd, void *db, int oid)
 			change_squelch_level(index, 1);
 			break;
 		}
-		default:  return (FALSE);
+		default:	return (FALSE);
 	}
 
 	return TRUE;
-
 }
 
 /*
@@ -1510,7 +1519,7 @@ static void quality_menu(void *unused, const char *also_unused)
 					break;
 				}
 				case '?':	{show_file("options.txt#qual_squelch", NULL, 0, 0); break;}
-				default:  	break;
+				default:	break;
 			}
 		}
 	}
@@ -1519,7 +1528,6 @@ static void quality_menu(void *unused, const char *also_unused)
 	screen_load();
 	return;
 }
-
 
 
 /*** Object Squelch Menu ***/
@@ -1556,13 +1564,14 @@ static void object_squelch_hook(int oid, void *db, const region *loc)
 	text_out_indent = 0;
 }
 
+
 /*
  * Display an entry on the sval menu
  */
 static void object_squelch_display(menu_type *menu, int oid, bool cursor, int row, int col, int width)
 {
 	char buf[80];
-	const squelch_choice *choice = (const squelch_choice *) menu->menu_data;
+	const squelch_choice *choice = menu->menu_data.squelch;
 	int idx = choice[oid].idx;
 	const char *inscrip = get_autoinscription(idx);
 
@@ -1589,9 +1598,9 @@ static void object_squelch_display(menu_type *menu, int oid, bool cursor, int ro
 
 		c_put_str(color, format("[%c]", sq_mode), row, col);
 		if (inscrip) c_put_str(TERM_YELLOW, inscrip, row, (col + 40));
-
 	}
 }
+
 
 /*
  * Deal with events on the object squelch menu
@@ -1752,7 +1761,7 @@ static bool object_sqelch_menu(int tval, const char *desc)
 	menu.cmd_keys = "ANLS{+-";
 	/*menu.selections = "abcdefghijklmnopqrstuvwxyzBCDEFGHIJKMOPQRTUVWXYZ1234567890[]!@#";*/
 	menu.count = num;
-	menu.menu_data = choice;
+	menu.menu_data.squelch = choice;
 	menu_init(&menu, MN_SKIN_SCROLL, &menu_f, &area);
 	menu.flags = MN_DBL_TAP;
 	menu.browse_hook = object_squelch_hook;
@@ -1830,39 +1839,39 @@ static void init_tv_to_type(void)
 		tv_to_type[i] = TYPE_MAX;
 	}
 
-	tv_to_type[TV_SKELETON]=TYPE_MISC;
-	tv_to_type[TV_BOTTLE]=TYPE_MISC;
-	tv_to_type[TV_JUNK]=TYPE_MISC;
-	tv_to_type[TV_SPIKE]=TYPE_MISC;
-	tv_to_type[TV_CHEST]=TYPE_MISC;
-	tv_to_type[TV_SHOT]=TYPE_AMMO;
-	tv_to_type[TV_ARROW]=TYPE_AMMO;
-	tv_to_type[TV_BOLT]=TYPE_AMMO;
-	tv_to_type[TV_BOW]=TYPE_BOW;
-	tv_to_type[TV_DIGGING]=TYPE_WEAPON2;
-	tv_to_type[TV_HAFTED]=TYPE_WEAPON2;
-	tv_to_type[TV_POLEARM]=TYPE_WEAPON2;
-	tv_to_type[TV_SWORD]=TYPE_WEAPON1;
-	tv_to_type[TV_BOOTS]=TYPE_BOOTS;
-	tv_to_type[TV_GLOVES]=TYPE_GLOVES;
-	tv_to_type[TV_HELM]=TYPE_HELM;
-	tv_to_type[TV_CROWN]=TYPE_HELM;
-	tv_to_type[TV_SHIELD]=TYPE_SHIELD;
-	tv_to_type[TV_CLOAK]=TYPE_CLOAK;
+	tv_to_type[TV_SKELETON]	= TYPE_MISC;
+	tv_to_type[TV_BOTTLE]	= TYPE_MISC;
+	tv_to_type[TV_JUNK]		= TYPE_MISC;
+	tv_to_type[TV_SPIKE]	= TYPE_MISC;
+	tv_to_type[TV_CHEST]	= TYPE_MISC;
+	tv_to_type[TV_SHOT]		= TYPE_AMMO;
+	tv_to_type[TV_ARROW]	= TYPE_AMMO;
+	tv_to_type[TV_BOLT]		= TYPE_AMMO;
+	tv_to_type[TV_BOW]		= TYPE_BOW;
+	tv_to_type[TV_DIGGING]	= TYPE_WEAPON2;
+	tv_to_type[TV_HAFTED]	= TYPE_WEAPON2;
+	tv_to_type[TV_POLEARM]	= TYPE_WEAPON2;
+	tv_to_type[TV_SWORD]	= TYPE_WEAPON1;
+	tv_to_type[TV_BOOTS]	= TYPE_BOOTS;
+	tv_to_type[TV_GLOVES]	= TYPE_GLOVES;
+	tv_to_type[TV_HELM]		= TYPE_HELM;
+	tv_to_type[TV_CROWN]	= TYPE_HELM;
+	tv_to_type[TV_SHIELD]	= TYPE_SHIELD;
+	tv_to_type[TV_CLOAK]	= TYPE_CLOAK;
 	tv_to_type[TV_SOFT_ARMOR]=TYPE_BODY;
 	tv_to_type[TV_HARD_ARMOR]=TYPE_BODY;
 	tv_to_type[TV_DRAG_ARMOR]=TYPE_BODY;
 	tv_to_type[TV_DRAG_SHIELD]=TYPE_SHIELD;
-	tv_to_type[TV_LIGHT]=TYPE_MISC;
-	tv_to_type[TV_AMULET]=TYPE_AMULET;
-	tv_to_type[TV_RING]=TYPE_RING;
-	tv_to_type[TV_STAFF]=TYPE_STAFF;
-	tv_to_type[TV_WAND]=TYPE_WAND;
-	tv_to_type[TV_ROD]=TYPE_ROD;
-	tv_to_type[TV_SCROLL]=TYPE_SCROLL;
-	tv_to_type[TV_POTION]=TYPE_POTION;
-	tv_to_type[TV_FLASK]=TYPE_MISC;
-	tv_to_type[TV_FOOD]=TYPE_FOOD;
+	tv_to_type[TV_LIGHT]	= TYPE_MISC;
+	tv_to_type[TV_AMULET]	= TYPE_AMULET;
+	tv_to_type[TV_RING]		= TYPE_RING;
+	tv_to_type[TV_STAFF]	= TYPE_STAFF;
+	tv_to_type[TV_WAND]		= TYPE_WAND;
+	tv_to_type[TV_ROD]		= TYPE_ROD;
+	tv_to_type[TV_SCROLL]	= TYPE_SCROLL;
+	tv_to_type[TV_POTION]	= TYPE_POTION;
+	tv_to_type[TV_FLASK]	= TYPE_MISC;
+	tv_to_type[TV_FOOD]		= TYPE_FOOD;
 	tv_to_type[TV_MAGIC_BOOK]=TYPE_BOOK;
 	tv_to_type[TV_PRAYER_BOOK]=TYPE_BOOK;
 	tv_to_type[TV_DRUID_BOOK]=TYPE_BOOK;
@@ -1881,13 +1890,11 @@ static void init_tv_to_type(void)
 		/* Note that we have seen this type */
 		seen_type[tv_to_type[k_ptr->tval]] = TRUE;
 	}
-
 }
+
 
 static void squelch_prefs_save(void *unused, const char *also_unused)
 {
-	int col = 26;
-	int row = 17;
 	char ftmp[80];
 	char buf[80];
 	int i, tval, sval, squelch;
@@ -1895,10 +1902,10 @@ static void squelch_prefs_save(void *unused, const char *also_unused)
 	ang_file *fff;
 
 	/* Prompt */
-	prt("Command: Save Squelch Info", row, col);
+	prt("Command: Save Squelch Info", SROW, SCOL);
 
 	/* Prompt */
-	prt("File: ", row+1, col);
+	prt("File: ", SROW + 1, SCOL);
 
 	/* Default filename */
 	sprintf(ftmp, "%s.squ", op_ptr->base_name);
@@ -1955,25 +1962,22 @@ static void squelch_prefs_save(void *unused, const char *also_unused)
 			file_close(fff);
 
 			/* Ending message */
-			prt("Squelch file saved successfully.  (Hit a key.)", row, col);
+			prt("Squelch file saved successfully.  (Hit a key.)", SROW, SCOL);
 			(void)inkey_ex();
 		}
-
 	}
-
 }
+
 
 static void squelch_prefs_load(void *unused, const char *also_unused)
 {
-	int col = 26;
-	int row = 17;
 	char ftmp[80];
 
 	/* Prompt */
-	prt("Command: Load squelch info from file", row, col);
+	prt("Command: Load squelch info from file", SROW, SCOL);
 
 	/* Prompt */
-	prt("File: ", row+1, col);
+	prt("File: ", SROW + 1, SCOL);
 
 	/* Default filename */
 	sprintf(ftmp, "%s.squ", op_ptr->base_name);
@@ -1985,21 +1989,20 @@ static void squelch_prefs_load(void *unused, const char *also_unused)
 		if (process_pref_file(ftmp))
 		{
 			/* Mention failure */
-			prt("Failed to load squelch file!  (Hit a key.)", row+1, col);
+			prt("Failed to load squelch file!  (Hit a key.)", SROW + 1, SCOL);
 		}
 		else
 		{
 			/* Mention success */
-			prt("Squelch data loaded!  (Hit a key.)",  row+1, col);
+			prt("Squelch data loaded!  (Hit a key.)", SROW + 1, SCOL);
 		}
 		(void)inkey_ex();
 	}
 }
 
+
 static void autoinscribe_prefs_save(void *unused, const char *also_unused)
 {
-	int col = 26;
-	int row = 17;
 	char ftmp[80];
 	char buf[80];
 	int i;
@@ -2007,10 +2010,10 @@ static void autoinscribe_prefs_save(void *unused, const char *also_unused)
 	ang_file *fff;
 
 	/* Prompt */
-	prt("Command: Save Autoinscribe Info", row, col);
+	prt("Command: Save Autoinscribe Info", SROW, SCOL);
 
 	/* Prompt */
-	prt("File: ", row+1, col);
+	prt("File: ", SROW + 1, SCOL);
 
 	/* Default filename */
 	sprintf(ftmp, "%s.ins", op_ptr->base_name);
@@ -2052,23 +2055,22 @@ static void autoinscribe_prefs_save(void *unused, const char *also_unused)
 			file_close(fff);
 
 			/* Ending message */
-			prt("Autoinscribe file saved successfully.  (Hit a key.)", row+1, col);
+			prt("Autoinscribe file saved successfully.  (Hit a key.)", SROW + 1, SCOL);
 			(void)inkey_ex();
 		}
 	}
 }
 
+
 static void autoinscribe_prefs_load(void *unused, const char *also_unused)
 {
-	int col = 26;
-	int row = 17;
 	char ftmp[80];
 
 	/* Prompt */
-	prt("Command: Load Autoinscribe info from file", row, col);
+	prt("Command: Load Autoinscribe info from file", SROW, SCOL);
 
 	/* Prompt */
-	prt("File: ", row+1, col);
+	prt("File: ", SROW + 1, SCOL);
 
 	/* Default filename */
 	sprintf(ftmp, "%s.ins", op_ptr->base_name);
@@ -2080,16 +2082,15 @@ static void autoinscribe_prefs_load(void *unused, const char *also_unused)
 		if (process_pref_file(ftmp))
 		{
 			/* Mention failure */
-			prt("Failed to load autoinscribe file!  (Hit a key.)", row+1, col);
+			prt("Failed to load autoinscribe file!  (Hit a key.)", SROW + 1, SCOL);
 		}
 
 		else
 		{
 			/* Mention success */
-			prt("Autoinscribe data loaded!  (Hit a key.)", row+1, col);
+			prt("Autoinscribe data loaded!  (Hit a key.)", SROW + 1, SCOL);
 		}
 		(void)inkey_ex();
-
 	}
 }
 
@@ -2100,15 +2101,16 @@ struct
 	char tag;
 	const char *name;
 	void (*action)(void *unused, const char *also_unused);
-} extra_item_options[] =
+} const extra_item_options[] =
 {
-	{ 'Q', "Quality squelching options", quality_menu },
-	{ 'E', "Ego squelching options", ego_item_menu },
-	{ 'S', "Save squelch values to pref file.", squelch_prefs_save},
-	{ 'L', "Load squelch values from pref file.", squelch_prefs_load},
-	{ 'B', "Save autoinscriptions to pref file.", autoinscribe_prefs_save},
-	{ 'G', "Load autoinscriptions from pref file.", autoinscribe_prefs_load},
+	{ 'Q', "Quality squelching options",			quality_menu },
+	{ 'E', "Ego squelching options",				ego_item_menu },
+	{ 'S', "Save squelch values to pref file.",		squelch_prefs_save},
+	{ 'L', "Load squelch values from pref file.",	squelch_prefs_load},
+	{ 'B', "Save autoinscriptions to pref file.",	autoinscribe_prefs_save},
+	{ 'G', "Load autoinscriptions from pref file.",	autoinscribe_prefs_load},
 };
+
 
 static char tag_options_item(menu_type *menu, int oid)
 {
@@ -2129,6 +2131,7 @@ static char tag_options_item(menu_type *menu, int oid)
 	return 0;
 }
 
+
 static int valid_options_item(menu_type *menu, int oid)
 {
 	size_t line = (size_t) oid;
@@ -2147,6 +2150,7 @@ static int valid_options_item(menu_type *menu, int oid)
 
 	return 0;
 }
+
 
 static void display_options_item(menu_type *menu, int oid, bool cursor, int row, int col, int width)
 {
@@ -2248,7 +2252,7 @@ void do_cmd_squelch_autoinsc(void *unused, cptr title)
 				case 'B':	{autoinscribe_prefs_save(NULL, NULL); break;}
 				case 'G':	{autoinscribe_prefs_load(NULL, NULL); break;}
 				case '?':	{show_file("options.txt#squelch", NULL, 0, 0); break;}
-				default:  	break;
+				default:	break;
 			}
 		}
 	}
@@ -2256,9 +2260,6 @@ void do_cmd_squelch_autoinsc(void *unused, cptr title)
 	/* Load screen and finish */
 	screen_load();
 
-
-
 	return;
 }
-
 

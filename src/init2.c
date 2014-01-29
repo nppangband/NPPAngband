@@ -39,7 +39,7 @@ static void cmd_game_nppmoria(void *unused)
 
 
 /* Extra options on the "item options" menu */
-struct
+struct game_mode_menu
 {
 	char tag;
 	const char *name;
@@ -122,7 +122,7 @@ static void get_game_mode(void)
 static void init_nppangband(void)
 {
 	z_info->max_level = 50;
-	z_info->max_titles = z_info->max_level  / 5;
+	z_info->max_titles = z_info->max_level / 5;
 }
 
 /* We are going to play NPPMoria*/
@@ -372,19 +372,19 @@ header t_head;
  */
 static void init_header(header *head, int num, int len)
 {
-       /* Save the "version" */
-       head->v_major = VERSION_MAJOR;
-       head->v_minor = VERSION_MINOR;
-       head->v_patch = VERSION_PATCH;
-       head->v_extra = VERSION_EXTRA;
+	/* Save the "version" */
+	head->v_major = VERSION_MAJOR;
+	head->v_minor = VERSION_MINOR;
+	head->v_patch = VERSION_PATCH;
+	head->v_extra = VERSION_EXTRA;
 
-       /* Save the "record" information */
-       head->info_num = num;
-       head->info_len = len;
+	/* Save the "record" information */
+	head->info_num = num;
+	head->info_len = len;
 
-       /* Save the size of "*_head" and "*_info" */
-       head->head_size = sizeof(header);
-       head->info_size = head->info_num * head->info_len;
+	/* Save the size of "*_head" and "*_info" */
+	head->head_size = sizeof(header);
+	head->info_size = head->info_num * head->info_len;
 }
 
 
@@ -407,7 +407,6 @@ static void display_parse_error(cptr filename, errr err, cptr buf)
 	/* Quit */
 	quit_fmt("Error in '%s.txt' file.", filename);
 }
-
 
 
 /*
@@ -445,7 +444,7 @@ static errr init_info(cptr filename, header *head)
 	/*** Load the ascii template file ***/
 
 	/* Open the file */
-	fh = file_open(txt_file, MODE_READ, -1);
+	fh = file_open(txt_file, MODE_READ, FTYPE_TEXT);
 	if (!fh) quit(format("Cannot open '%s.txt' file.", filename));
 
 	/* Parse the file */
@@ -476,6 +475,7 @@ static errr init_info(cptr filename, header *head)
 	return (0);
 }
 
+
 /*
  * Free the allocated memory for the info-, name-, and text- arrays.
  */
@@ -494,6 +494,7 @@ static errr free_info(header *head)
 	return (0);
 }
 
+
 /*
  * Initialize the "z_info" array
  */
@@ -511,7 +512,7 @@ static errr init_z_info(void)
 	else err = init_info("m_limits", &z_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	z_info = z_head.info_ptr;
+	z_info = (maxima *)z_head.info_ptr;
 
 	return (err);
 }
@@ -533,7 +534,7 @@ static errr init_f_info(void)
 	err = init_info("terrain", &f_head);
 
 	/* Set the global variables */
-	f_info = f_head.info_ptr;
+	f_info = (feature_type *)f_head.info_ptr;
 	f_name = f_head.name_ptr;
 	f_text = f_head.text_ptr;
 
@@ -558,12 +559,13 @@ static errr init_k_info(void)
 	else err = init_info("m_object", &k_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	k_info = k_head.info_ptr;
+	k_info = (object_kind *)k_head.info_ptr;
 	k_name = k_head.name_ptr;
 	k_text = k_head.text_ptr;
 
 	return (err);
 }
+
 
 /*
  * Initialize the "t_info" array
@@ -581,14 +583,12 @@ static errr init_t_info(void)
 	err = init_info("player_ghost", &t_head);
 
 	/* Set the global variables */
-	t_info = t_head.info_ptr;
+	t_info = (ghost_template *)t_head.info_ptr;
 	t_name = t_head.name_ptr;
 	t_text = t_head.text_ptr;
 
 	return (err);
 }
-
-
 
 
 /*
@@ -608,13 +608,12 @@ static errr init_a_info(void)
 	else err = init_info("m_artifact", &a_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	a_info = a_head.info_ptr;
+	a_info = (artifact_type *)a_head.info_ptr;
 
 	a_text = a_head.text_ptr;
 
 	return (err);
 }
-
 
 
 /*
@@ -634,9 +633,10 @@ static errr init_e_info(void)
 	else err = init_info("m_ego_item", &e_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	e_info = e_head.info_ptr;
+	e_info = (ego_item_type *)e_head.info_ptr;
 	e_name = e_head.name_ptr;
 	e_text = e_head.text_ptr;
+
 	return (err);
 }
 
@@ -658,12 +658,11 @@ static errr init_r_info(void)
 	else err = init_info("m_monster", &r_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	r_info = r_head.info_ptr;
+	r_info = (monster_race *)r_head.info_ptr;
 	r_text = r_head.text_ptr;
 
 	return (err);
 }
-
 
 
 /*
@@ -682,13 +681,12 @@ static errr init_v_info(void)
 	err = init_info("vault", &v_head);
 
 	/* Set the global variables */
-	v_info = v_head.info_ptr;
+	v_info = (vault_type *)v_head.info_ptr;
 	v_name = v_head.name_ptr;
 	v_text = v_head.text_ptr;
 
 	return (err);
 }
-
 
 
 /*
@@ -708,7 +706,7 @@ static errr init_p_info(void)
 	else err = init_info("m_p_race", &p_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	p_info = p_head.info_ptr;
+	p_info = (player_race *)p_head.info_ptr;
 	p_name = p_head.name_ptr;
 	p_text = p_head.text_ptr;
 
@@ -733,13 +731,12 @@ static errr init_c_info(void)
 	else err = init_info("m_p_class", &c_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	c_info = c_head.info_ptr;
+	c_info = (player_class *)c_head.info_ptr;
 	c_name = c_head.name_ptr;
 	c_text = c_head.text_ptr;
 
 	return (err);
 }
-
 
 
 /*
@@ -759,12 +756,11 @@ static errr init_h_info(void)
 	else err = init_info("m_p_hist", &h_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	h_info = h_head.info_ptr;
+	h_info = (hist_type *)h_head.info_ptr;
 	h_text = h_head.text_ptr;
 
 	return (err);
 }
-
 
 
 /*
@@ -785,7 +781,7 @@ static errr init_b_info(void)
 	else err = init_info("m_shop_own", &b_head);
 
 	/* Set the global variables */
-	b_info = b_head.info_ptr;
+	b_info = (owner_type *)b_head.info_ptr;
 	b_name = b_head.name_ptr;
 	b_text = b_head.text_ptr;
 
@@ -810,32 +806,32 @@ static errr init_q_info(void)
 	else err = init_info("m_quest", &q_head);  /* game_mode == NPPMORIA */
 
 	/* Set the global variables */
-	q_info = q_head.info_ptr;
+	q_info = (quest_type *)q_head.info_ptr;
 	q_name = q_head.name_ptr;
 
 	return (err);
 }
+
 
 /*
  * Initialize the "n_info" structure
  */
 static errr init_n_info(void)
 {
-  errr err;
+	errr err;
 
-  /* Init the header */
-  init_header(&n_head, 1, sizeof(names_type));
+	/* Init the header */
+	init_header(&n_head, 1, sizeof(names_type));
 
-  /* Save a pointer to the parsing function */
-  n_head.parse_info_txt = parse_n_info;
+	/* Save a pointer to the parsing function */
+	n_head.parse_info_txt = parse_n_info;
 
-  err = init_info("names", &n_head);
+	err = init_info("names", &n_head);
 
-  n_info = n_head.info_ptr;
+	n_info = (names_type *)n_head.info_ptr;
 
-  return (err);
+	return (err);
 }
-
 
 
 /*
@@ -854,7 +850,7 @@ static errr init_flavor_info(void)
 	err = init_info("flavor", &flavor_head);
 
 	/* Set the global variables */
-	flavor_info = flavor_head.info_ptr;
+	flavor_info = (flavor_type *)flavor_head.info_ptr;
 	flavor_name = flavor_head.name_ptr;
 	flavor_text = flavor_head.text_ptr;
 
@@ -872,6 +868,7 @@ static void autoinscribe_clean(void)
 	inscriptions = 0;
 	inscriptionsCount = 0;
 }
+
 
 static void autoinscribe_init(void)
 {
@@ -920,7 +917,7 @@ static errr init_other(void)
 	fire_g = C_ZNEW(VIEW_MAX, u16b);
 
 	/* has_LIGHT patch causes both temp_g and temp_x/y to be used
-	   in targetting mode: can't use the same memory any more. */
+	   in targeting mode: can't use the same memory any more. */
 	temp_y = C_ZNEW(TEMP_MAX, byte);
 	temp_x = C_ZNEW(TEMP_MAX, byte);
 
@@ -979,7 +976,7 @@ static errr init_other(void)
 	x_list = C_ZNEW(z_info->x_max, effect_type);
 
 
-	/*** Prepare mosnter lore array ***/
+	/*** Prepare monster lore array ***/
 
 	/* Lore */
 	l_list = C_ZNEW(z_info->r_max, monster_lore);
@@ -1056,7 +1053,6 @@ static errr init_other(void)
 	/* Success */
 	return (0);
 }
-
 
 
 /*
@@ -1414,6 +1410,7 @@ static errr init_alloc(void)
 	return (0);
 }
 
+
 /*
  * Hack -- main Angband initialization entry point
  *
@@ -1463,13 +1460,12 @@ static errr init_alloc(void)
  */
 bool init_angband(void)
 {
-	
 	/* If we have a savefile, use that for game mode instead */
 	if (savefile[0])
 	{
 		load_gamemode();
 	}
-		
+
 	/* Which game are we playing? */
 	if (game_mode == 0)
 	{
@@ -1592,6 +1588,9 @@ bool init_angband(void)
 			return FALSE;
 		}
 	}
+
+	/* compiler happiness, never actually gets here */
+	return FALSE;
 }
 
 

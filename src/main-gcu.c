@@ -112,8 +112,8 @@ static bool loaded_terminfo;
  */
 typedef struct term_data
 {
-	term t;                 /* All term info */
-	WINDOW *win;            /* Pointer to the curses window */
+	term t;			/* All term info */
+	WINDOW *win;	/* Pointer to the curses window */
 } term_data;
 
 /* Max number of windows on screen */
@@ -196,8 +196,6 @@ void do_gcu_resize(void);
 void set_256color_table(int i, int fg);
 
 
-
-
 /*
  * Place the "keymap" into its "normal" state
  */
@@ -210,7 +208,6 @@ static void keymap_norm(void)
 	(void)tcsetattr(0, TCSAFLUSH, &norm_termios);
 
 #endif
-
 
 }
 
@@ -288,8 +285,6 @@ static void keymap_game_prepare(void)
 
 
 }
-
-
 
 
 /*
@@ -854,7 +849,6 @@ static errr Term_wipe_gcu(int x, int y, int n)
 }
 
 
-
 /*
  * Place some text on the screen using an attribute
  */
@@ -1097,44 +1091,44 @@ errr init_gcu(int argc, char **argv)
 		init_pair(PAIR_BLACK, COLOR_BLACK, bg_color);
 
 		/* Prepare the colors */
-		colortable[TERM_DARK]     = (COLOR_PAIR(PAIR_BLACK));
-		colortable[TERM_WHITE]    = (COLOR_PAIR(PAIR_WHITE) | A_BRIGHT);
-		colortable[TERM_SLATE]    = (COLOR_PAIR(PAIR_WHITE));
-		colortable[TERM_ORANGE]   = (COLOR_PAIR(PAIR_YELLOW) | A_BRIGHT);
-		colortable[TERM_RED]      = (COLOR_PAIR(PAIR_RED));
-		colortable[TERM_GREEN]    = (COLOR_PAIR(PAIR_GREEN));
-		colortable[TERM_BLUE]     = (COLOR_PAIR(PAIR_BLUE));
-		colortable[TERM_UMBER]    = (COLOR_PAIR(PAIR_YELLOW));
-		colortable[TERM_L_DARK]   = (COLOR_PAIR(PAIR_BLACK) | A_BRIGHT);
-		colortable[TERM_L_WHITE]  = (COLOR_PAIR(PAIR_WHITE));
-		colortable[TERM_VIOLET] = (COLOR_PAIR(PAIR_MAGENTA));
-		colortable[TERM_YELLOW]   = (COLOR_PAIR(PAIR_YELLOW) | A_BRIGHT);
-		colortable[TERM_L_RED]    = (COLOR_PAIR(PAIR_MAGENTA) | A_BRIGHT);
-		colortable[TERM_L_GREEN]  = (COLOR_PAIR(PAIR_GREEN) | A_BRIGHT);
-		colortable[TERM_L_BLUE]   = (COLOR_PAIR(PAIR_BLUE) | A_BRIGHT);
-		colortable[TERM_L_UMBER]  = (COLOR_PAIR(PAIR_YELLOW));
-		colortable[TERM_SNOW_WHITE] = (COLOR_PAIR(PAIR_WHITE) | A_BRIGHT);
-		colortable[TERM_SLATE_GRAY] = (COLOR_PAIR(PAIR_WHITE));
-		colortable[TERM_ORANGE_PEEL]  = (COLOR_PAIR(PAIR_YELLOW) | A_BRIGHT);
-		colortable[TERM_RED_LAVA]      = (COLOR_PAIR(PAIR_RED));
-		colortable[TERM_JUNGLE_GREEN]    = (COLOR_PAIR(PAIR_GREEN));
-		colortable[TERM_NAVY_BLUE]     = (COLOR_PAIR(PAIR_BLUE));
-		colortable[TERM_AUBURN]    = (COLOR_PAIR(PAIR_YELLOW));
-		colortable[TERM_TAUPE]   = (COLOR_PAIR(PAIR_BLACK) | A_BRIGHT);
-		colortable[TERM_L_WHITE_2]  = (COLOR_PAIR(PAIR_WHITE));
-		colortable[TERM_D_PURPLE]      = (COLOR_PAIR(PAIR_MAGENTA));
-		colortable[TERM_MAIZE]   = (COLOR_PAIR(PAIR_YELLOW) | A_BRIGHT);
-		colortable[TERM_RASPBERRY]      = (COLOR_PAIR(PAIR_MAGENTA) | A_BRIGHT);
-		colortable[TERM_LIME_GREEN]  = (COLOR_PAIR(PAIR_GREEN) | A_BRIGHT);
-		colortable[TERM_SKY_BLUE]   = (COLOR_PAIR(PAIR_BLUE) | A_BRIGHT);
-		colortable[TERM_L_BROWN]  = (COLOR_PAIR(PAIR_YELLOW));
-		colortable[TERM_SILVER]    = (COLOR_PAIR(PAIR_WHITE));
-		colortable[TERM_MAHAGONY]   = (COLOR_PAIR(PAIR_RED) | A_BRIGHT);
-		colortable[TERM_RED_RUST]      = (COLOR_PAIR(PAIR_RED));
-		colortable[TERM_COPPER]    = (COLOR_PAIR(PAIR_YELLOW));
-		colortable[TERM_GOLD]   = (COLOR_PAIR(PAIR_YELLOW) | A_BRIGHT);
-		colortable[TERM_PINK]    = (COLOR_PAIR(PAIR_MAGENTA) | A_BRIGHT);
-		colortable[TERM_EARTH_YELLOW]    = (COLOR_PAIR(PAIR_YELLOW));
+		colortable[TERM_DARK]		= (COLOR_PAIR(PAIR_BLACK));
+		colortable[TERM_WHITE]		= (COLOR_PAIR(PAIR_WHITE) | A_BRIGHT);
+		colortable[TERM_SLATE		= (COLOR_PAIR(PAIR_WHITE));
+		colortable[TERM_ORANGE]		= (COLOR_PAIR(PAIR_YELLOW) | A_BRIGHT);
+		colortable[TERM_RED]		= (COLOR_PAIR(PAIR_RED));
+		colortable[TERM_GREEN]		= (COLOR_PAIR(PAIR_GREEN));
+		colortable[TERM_BLUE]		= (COLOR_PAIR(PAIR_BLUE));
+		colortable[TERM_UMBER]		= (COLOR_PAIR(PAIR_YELLOW));
+		colortable[TERM_L_DARK]		= (COLOR_PAIR(PAIR_BLACK) | A_BRIGHT);
+		colortable[TERM_L_WHITE]	= (COLOR_PAIR(PAIR_WHITE));
+		colortable[TERM_VIOLET]		= (COLOR_PAIR(PAIR_MAGENTA));
+		colortable[TERM_YELLOW]		= (COLOR_PAIR(PAIR_YELLOW) | A_BRIGHT);
+		colortable[TERM_L_RED]		= (COLOR_PAIR(PAIR_MAGENTA) | A_BRIGHT);
+		colortable[TERM_L_GREEN]	= (COLOR_PAIR(PAIR_GREEN) | A_BRIGHT);
+		colortable[TERM_L_BLUE]		= (COLOR_PAIR(PAIR_BLUE) | A_BRIGHT);
+		colortable[TERM_L_UMBER]	= (COLOR_PAIR(PAIR_YELLOW));
+		colortable[TERM_SNOW_WHITE]	= (COLOR_PAIR(PAIR_WHITE) | A_BRIGHT);
+		colortable[TERM_SLATE_GRAY]	= (COLOR_PAIR(PAIR_WHITE));
+		colortable[TERM_ORANGE_PEEL] = (COLOR_PAIR(PAIR_YELLOW) | A_BRIGHT);
+		colortable[TERM_RED_LAVA]	= (COLOR_PAIR(PAIR_RED));
+		colortable[TERM_JUNGLE_GREEN] = (COLOR_PAIR(PAIR_GREEN));
+		colortable[TERM_NAVY_BLUE]	= (COLOR_PAIR(PAIR_BLUE));
+		colortable[TERM_AUBURN]		= (COLOR_PAIR(PAIR_YELLOW));
+		colortable[TERM_TAUPE]		= (COLOR_PAIR(PAIR_BLACK) | A_BRIGHT);
+		colortable[TERM_L_WHITE_2]	= (COLOR_PAIR(PAIR_WHITE));
+		colortable[TERM_D_PURPLE]	= (COLOR_PAIR(PAIR_MAGENTA));
+		colortable[TERM_MAIZE]		= (COLOR_PAIR(PAIR_YELLOW) | A_BRIGHT);
+		colortable[TERM_RASPBERRY]	= (COLOR_PAIR(PAIR_MAGENTA) | A_BRIGHT);
+		colortable[TERM_LIME_GREEN]	= (COLOR_PAIR(PAIR_GREEN) | A_BRIGHT);
+		colortable[TERM_SKY_BLUE]	= (COLOR_PAIR(PAIR_BLUE) | A_BRIGHT);
+		colortable[TERM_L_BROWN]	= (COLOR_PAIR(PAIR_YELLOW));
+		colortable[TERM_SILVER]		= (COLOR_PAIR(PAIR_WHITE));
+		colortable[TERM_MAHAGONY]	= (COLOR_PAIR(PAIR_RED) | A_BRIGHT);
+		colortable[TERM_RED_RUST]	= (COLOR_PAIR(PAIR_RED));
+		colortable[TERM_COPPER]		= (COLOR_PAIR(PAIR_YELLOW));
+		colortable[TERM_GOLD]		= (COLOR_PAIR(PAIR_YELLOW) | A_BRIGHT);
+		colortable[TERM_PINK]		= (COLOR_PAIR(PAIR_MAGENTA) | A_BRIGHT);
+		colortable[TERM_EARTH_YELLOW]	= (COLOR_PAIR(PAIR_YELLOW));
 	}
 
 #endif
@@ -1143,15 +1137,15 @@ errr init_gcu(int argc, char **argv)
 	/* Build a quick access table for the "alternate character set". */
 	if (use_alt_charset)
 	{
-		acs_table[1] = ACS_DIAMOND;    acs_table[16] = ACS_S1;
-		acs_table[2] = ACS_CKBOARD;    acs_table[18] = ACS_HLINE;
-		acs_table[7] = ACS_DEGREE;     acs_table[20] = ACS_S9;
-		acs_table[8] = ACS_PLMINUS;    acs_table[21] = ACS_LTEE;
-		acs_table[11] = ACS_LRCORNER;  acs_table[22] = ACS_RTEE;
-		acs_table[12] = ACS_URCORNER;  acs_table[23] = ACS_BTEE;
-		acs_table[13] = ACS_ULCORNER;  acs_table[24] = ACS_TTEE;
-		acs_table[14] = ACS_LLCORNER;  acs_table[25] = ACS_VLINE;
-		acs_table[15] = ACS_PLUS;      acs_table[31] = ACS_BULLET;
+		acs_table[1] = ACS_DIAMOND;		acs_table[16] = ACS_S1;
+		acs_table[2] = ACS_CKBOARD;		acs_table[18] = ACS_HLINE;
+		acs_table[7] = ACS_DEGREE;		acs_table[20] = ACS_S9;
+		acs_table[8] = ACS_PLMINUS;		acs_table[21] = ACS_LTEE;
+		acs_table[11] = ACS_LRCORNER;	acs_table[22] = ACS_RTEE;
+		acs_table[12] = ACS_URCORNER;	acs_table[23] = ACS_BTEE;
+		acs_table[13] = ACS_ULCORNER;	acs_table[24] = ACS_TTEE;
+		acs_table[14] = ACS_LLCORNER;	acs_table[25] = ACS_VLINE;
+		acs_table[15] = ACS_PLUS;		acs_table[31] = ACS_BULLET;
 	}
 #endif
 
@@ -1182,7 +1176,7 @@ errr init_gcu(int argc, char **argv)
 		 * it amongst the available terms */
 		get_gcu_term_size(i, &rows, &cols, &y, &x);
 
-		/* Skip non-existant windows */
+		/* Skip non-existent windows */
 		if (rows <= 0 || cols <= 0) continue;
 
 		/* Create a term */

@@ -62,7 +62,7 @@ static void print_tomb(void)
 
 	/* Open the death file */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "dead.txt");
-	fp = file_open(buf, MODE_READ, -1);
+	fp = file_open(buf, MODE_READ, FTYPE_TEXT);
 
 	if (fp)
 	{
@@ -149,7 +149,7 @@ static void display_winner(void)
 
 
 	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "crown.txt");
-	fp = file_open(buf, MODE_READ, -1);
+	fp = file_open(buf, MODE_READ, FTYPE_TEXT);
 
 	Term_clear();
 	Term_get_size(&wid, &hgt);
@@ -490,7 +490,7 @@ void death_screen(void)
 	/* Initialize the menu */
 	menu = &death_menu;
 	WIPE(menu, menu_type);
-	menu->menu_data = death_actions;
+	menu->menu_data.act = death_actions;
 	menu->flags = MN_CASELESS_TAGS;
 	menu->cmd_keys = cmd_keys;
 	menu->count = N_ELEMENTS(death_actions);

@@ -40,7 +40,7 @@ struct data_panel
 	byte color;
 	const char *label;
 	const char *fmt;	/* printf format argument */
-	type_union value[MAX_FMT];	/* (short) arugment list */
+	type_union value[MAX_FMT];	/* (short) argument list */
 };
 
 #endif /* !INCLUDED_ZTYPE_H */

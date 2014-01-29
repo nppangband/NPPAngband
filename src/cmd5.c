@@ -21,14 +21,15 @@
 #include "ui-menu.h"
 #include "game-event.h"
 
-/* Adjustment to minimum failure rates for wisdom/intelligence in moria */
+
+/*
+ * Adjustment to minimum failure rates for wisdom/intelligence in moria
+ */
 int spell_failure_min_moria(int stat)
 {
-
-
 	int value = p_ptr->state.stat_use[stat];
 
-	if (value > 117) 		return(0);
+	if (value > 117)		return(0);
 	else if (value > 107)	return(1);
 	else if (value > 87)	return(2);
 	else if (value > 67)	return(3);
@@ -39,7 +40,6 @@ int spell_failure_min_moria(int stat)
 }
 
 
-
 /*
  * Returns chance of failure for a spell
  */
@@ -48,7 +48,6 @@ s16b spell_chance(int spell)
 	int chance, minfail;
 
 	const magic_type *s_ptr;
-
 
 	/* Paranoia -- must be literate */
 	if (!cp_ptr->spell_book) return (100);
@@ -139,7 +138,6 @@ bool spell_okay(int spell, bool known)
 	/* Spell is learned */
 	if (p_ptr->spell_flags[spell] & PY_SPELL_LEARNED)
 	{
-
 		/* Okay to cast, not to study */
 		return (known);
 	}
@@ -159,9 +157,9 @@ int spell_mode;
 #define SPELL_ERROR			-3
 int spell_pick;
 
+
 static byte update_spells(const object_type *o_ptr)
 {
-
 	int i;
 
 	byte count = 0;
@@ -183,7 +181,6 @@ static byte update_spells(const object_type *o_ptr)
 		/* Collect this spell */
 		if (spell != -1) spells[count++] = spell;
 	}
-
 
 	return (count);
 }
@@ -430,10 +427,10 @@ static bool get_spell_action(char cmd, void *db, int oid)
  */
 int get_spell_menu(const object_type *o_ptr, int mode_dummy)
 {
-
 	char header[100];
 	bool okay = (mode_dummy == BOOK_BROWSE);
 	int i;
+
 	menu_type menu;
 	menu_iter menu_f = { NULL , NULL, get_spell_display, get_spell_action };
 	ui_event_data evt = { EVT_NONE, 0, 0, 0, 0 };
@@ -484,7 +481,7 @@ int get_spell_menu(const object_type *o_ptr, int mode_dummy)
 	WIPE(&menu, menu);
 	menu.flags = MN_DBL_TAP;
 	menu.cmd_keys = "abcdefghi*MG? \n\r";
-	menu.menu_data = spells;
+	menu.menu_data.bytes = spells;
 	menu.count = num_spells;
 	menu.browse_hook = spell_menu_hook;
 
@@ -564,7 +561,7 @@ int get_spell_menu(const object_type *o_ptr, int mode_dummy)
 					(void)get_spell_action(evt.key, spells, cursor);
 					break;
 				}
-				default:  	break;
+				default:	break;
 			}
 		}
 
@@ -576,7 +573,6 @@ int get_spell_menu(const object_type *o_ptr, int mode_dummy)
 			if ((x >= 0) || (x < num_spells))
 			{
 				cursor= x;
-
 			}
 		}
 
@@ -939,6 +935,7 @@ void spell_learn(int spell)
 	p_ptr->redraw |= (PR_STUDY | PR_OBJECT);
 }
 
+
 s16b get_spell_from_list(s16b book, s16b spell)
 {
 	int realm = get_player_spell_realm();
@@ -963,18 +960,13 @@ s16b get_spell_from_list(s16b book, s16b spell)
 		if (realm == DRUID_REALM) return (spell_list_nppangband_druid[book][spell]);
 	}
 
-
 	/* Whoops! */
 	return (-1);
 }
-
 
 
 int get_spell_index(const object_type *o_ptr, int index)
 {
 	return get_spell_from_list(o_ptr->sval,index);
 }
-
-
-
 

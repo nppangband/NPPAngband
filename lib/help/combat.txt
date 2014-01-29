@@ -73,9 +73,8 @@ a weapon to find out how many blows you would get if you wielded that weapon.
 at a safe distance.
 
 Basic Calculation:
-     
      1) increase damage dice and bonus damage for apply any critical hit bonuses
-     2) increase damage dice and bonuse damage for apply any slay or brand multiplier
+     2) increase damage dice and bonus damage for apply any slay or brand multiplier
      3) roll the missile's damage dice
      4) add in any bonus damages from classes with the ROGUE_COMBAT flag (rogues, brigands)
      5) apply any critical hit bonuses
@@ -98,7 +97,7 @@ standing in, and whether you are native to that terrain can also make it easier
 or harder to get a hit.
 
 Base damage:
-     Unlike in melee, launcher, slay/brand, and critical hit multiplers are all
+     Unlike in melee, launcher, slay/brand, and critical hit multipliers are all
 applied after the bonus to damage, which is applied directly to the result of
 the base damage dice.
 
@@ -135,8 +134,8 @@ on a monster if the potion hits them.  Rogues and brigands get extra damage
 from thrown weapons.
 
 Basic Calculation:
-     1) increase damage dice and bonus damage for apply any critical hit bonuses
-     2) increase damage dice and bonuse damage for apply any slay or brand multiplier
+     1) increase damage dice and bonus damage for apply any critical hit bonuses.
+     2) increase damage dice and bonus damage for apply any slay or brand multiplier.
      3) Apply any slay or brand multiplier.
      4) Apply any critical hit.
 

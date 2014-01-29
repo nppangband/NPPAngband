@@ -7,14 +7,15 @@
  */
 
 
-
 #ifndef INCLUDED_UI_H
 #define INCLUDED_UI_H
+
 
 /* ================== GEOMETRY ====================== */
 
 /* Defines a rectangle on the screen that is bound to a Panel or subpanel */
 typedef struct region region;
+
 
 struct region {
 	int col;	/* x-coordinate of upper right corner */
@@ -24,9 +25,10 @@ struct region {
 	int page_rows;	/* non-positive value is relative to the bottom of the screen */
 };
 
+
 /* Region that defines the full screen */
 static const region SCREEN_REGION = {0, 0, 0, 0};
-/* Region that leaves the bottom line for mousebuttons */
+/* Region that leaves the bottom line for mouse buttons */
 static const region SCREEN_REGION_BUTTONS = {0, 0, 0, -1};
 
 /* Erase the contents of a region */

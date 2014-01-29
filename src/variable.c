@@ -80,29 +80,29 @@ bool character_saved;		/* The character was just saved to a savefile */
 s16b character_icky;		/* Depth of the game in special mode */
 s16b character_xtra;		/* Depth of the game in startup mode */
 
-u32b seed_randart;		/* Hack -- consistent random artifacts */
+u32b seed_randart;			/* Hack -- consistent random artifacts */
 
-u32b seed_flavor;		/* Hack -- consistent object colors */
-u32b seed_town;			/* Hack -- consistent town layout */
+u32b seed_flavor;			/* Hack -- consistent object colors */
+u32b seed_town;				/* Hack -- consistent town layout */
 u32b seed_ghost;			/* Hack -- consistent player_ghosts */
 
-s16b num_repro;			/* Current reproducer count */
-s16b object_level;		/* Current object creation level */
-s16b monster_level;		/* Current monster creation level */
+s16b num_repro;				/* Current reproducer count */
+s16b object_level;			/* Current object creation level */
+s16b monster_level;			/* Current monster creation level */
 
 char summon_kin_type;		/* Hack -- See summon_specific() */
 
-monster_type *summoner; 	/*Track the current summoner*/
+monster_type *summoner;		/*Track the current summoner*/
 
-s32b turn;				/* Current game turn */
+s32b turn;					/* Current game turn */
 
 bool do_feeling;			/* Hack -- Level feeling counter */
 
 int use_graphics;		/* The "graphics" mode is enabled */
 bool use_bigtile = FALSE;
 
-s16b image_count;  		/* Grids until next random image    */
-                  		/* Optimizes the hallucination code */
+s16b image_count;		/* Grids until next random image    */
+						/* Optimizes the hallucination code */
 
 s16b signal_count;		/* Hack -- Count interrupts */
 
@@ -127,11 +127,11 @@ bool repair_mflag_mark;	/* Hack -- repair monster flags (mark) */
 s16b o_max = 1;			/* Number of allocated objects */
 s16b o_cnt = 0;			/* Number of live objects */
 
-s16b mon_max = 1;	/* Number of allocated monsters */
-s16b mon_cnt = 0;	/* Number of live monsters */
+s16b mon_max = 1;		/* Number of allocated monsters */
+s16b mon_cnt = 0;		/* Number of live monsters */
 
-s16b x_max = 1;	/* Number of allocated effects */
-s16b x_cnt = 0;	/* Number of live effects */
+s16b x_max = 1;			/* Number of allocated effects */
+s16b x_cnt = 0;			/* Number of live effects */
 
 
 /*
@@ -147,7 +147,7 @@ bool command_repeating = FALSE;
 byte feeling;			/* Most recent feeling */
 s16b rating;			/* Level's current rating */
 
-u32b  level_flag;		/* Level type */
+u32b level_flag;		/* Level type */
 
 bool good_item_flag;	/* True if "Artifact" on this level */
 
@@ -207,6 +207,9 @@ char angband_term_name[ANGBAND_TERM_MAX][16] =
 	"Term-7"
 };
 
+/*
+ * Macro data
+ */
 int max_macrotrigger = 0;
 char *macro_template = NULL;
 char *macro_modifier_chr;
@@ -255,7 +258,7 @@ byte angband_color_table[256][4] =
 	{0x00, 0xE3, 0x0B, 0x5C},	/* TERM_RASPBERRY 	(Shade 1 - R1) */
 	{0x00, 0xBF, 0xFF, 0x00},	/* TERM_LIME_GREEN  (Shade 1 - G1) */
 	{0x00, 0x00, 0xBF, 0xFF},	/* TERM_SKY_BLUE  	(Shade 1 - B1 */
-	{0x00, 0xC1, 0x9A, 0x6B}, 	/* TERM_L_BROWN		(Shade 1 - Fallow - U1) */
+	{0x00, 0xC1, 0x9A, 0x6B},	/* TERM_L_BROWN		(Shade 1 - Fallow - U1) */
 
 	{0x00, 0x00, 0x00, 0x00},	/* 	32 - Unused */
 	{0x00, 0x00, 0x00, 0x00},	/* 	33 - Unused */
@@ -272,8 +275,9 @@ byte angband_color_table[256][4] =
 	{0x00, 0xFF, 0x14, 0x93},	/* TERM_PINK 		(Shade 2 - R2) */
 	{0x00, 0x00, 0x00, 0x00},	/* 	45 - Unused */
 	{0x00, 0x00, 0x00, 0x00},	/* 	46 - Unused */
-	{0x00, 0xE1, 0xA9, 0x5F} 	/* TERM_EARTH_YELLOW (Shade 2 - U2) */
+	{0x00, 0xE1, 0xA9, 0x5F}	/* TERM_EARTH_YELLOW (Shade 2 - U2) */
 };
+
 
 /*
  * Standard sound (and message) names
@@ -523,13 +527,11 @@ s16b (*cave_m_idx)[MAX_DUNGEON_WID];
 s16b (*cave_x_idx)[MAX_DUNGEON_WID];
 
 /*
- * Table of avergae monster power.
- * Used to hep determine a suitable quest monster.
+ * Table of average monster power.
+ * Used to help determine a suitable quest monster.
  */
 
 u32b mon_power_ave[MAX_DEPTH_ALL][CREATURE_TYPE_MAX];
-
-
 
 
 /*
@@ -544,8 +546,6 @@ u16b cave_cost[MAX_FLOWS][MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 int cost_at_center[MAX_FLOWS];
 
 
-
-
 #ifdef	MONSTER_SMELL
 /*
  * Array[DUNGEON_HGT][DUNGEON_WID] of cave grid flow "when" stamps
@@ -558,6 +558,7 @@ byte (*cave_when)[MAX_DUNGEON_WID];
 int scent_when = 250;
 
 #endif	/* MONSTER_SMELL */
+
 
 /*
  * The character generates both directed (extra) noise (by doing noisy
@@ -619,6 +620,7 @@ s16b alloc_ego_size;
  */
 alloc_entry *alloc_ego_table;
 
+
 /*
  * The size of "alloc_feat_table" (at most MAX_F_IDX * 4)
  */
@@ -630,7 +632,6 @@ s16b alloc_feat_size;
 alloc_entry *alloc_feat_table;
 
 
-
 /*
  * The size of "alloc_race_table" (at most z_info->r_max)
  */
@@ -640,6 +641,7 @@ s16b alloc_race_size;
  * The array[alloc_race_size] of entries in the "race allocator table"
  */
 alloc_entry *alloc_race_table;
+
 
 /*
  * Specify attr/char pairs for visual special effects
@@ -666,7 +668,6 @@ char macro_buffer[1024];
  * Keymaps for each "mode" associated with each keypress.
  */
 char *keymap_act[KEYMAP_MODES][256];
-
 
 
 /*** Player information ***/
@@ -806,8 +807,6 @@ char *g_text;
 quest_type *q_info;
 char *q_name;
 
-
-
 /*
  * The object flavor arrays
  */
@@ -815,9 +814,13 @@ flavor_type *flavor_info;
 char *flavor_name;
 char *flavor_text;
 
-/*Monster_movement energy info*/
+
+/*
+ * Monster_movement energy info
+ */
 move_moment_type *mon_moment_info;
 u16b move_moment_num;
+
 
 /*
  * Hack -- The special Angband "System Suffix"
@@ -904,12 +907,10 @@ bool (*ang_sort_comp)(const void *u, const void *v, int a, int b);
 void (*ang_sort_swap)(void *u, void *v, int a, int b);
 
 
-
 /*
  * Hack -- function hook to restrict "get_mon_num_prep()" function
  */
 bool (*get_mon_num_hook)(int r_idx);
-
 
 
 /*
@@ -924,7 +925,6 @@ void (*object_info_out_flags)(const object_type *o_ptr, u32b *f1, u32b *f2, u32b
  * Hack -- function hook to restrict "get_feat_num_prep()" function
  */
 bool (*get_feat_num_hook)(int f_idx);
-
 
 
 /*
@@ -1013,7 +1013,6 @@ s16b ghost_r_idx;
 char player_ghost_name[80];
 
 
-
 /*
  * The name of the current greater vault, if any. -DG-
  */
@@ -1048,6 +1047,7 @@ bool dyna_full = FALSE;
 byte dyna_center_y = 255;
 byte dyna_center_x = 255;
 
+
 /*
  * The array used to store stacked monster messages
  */
@@ -1060,6 +1060,7 @@ monster_message_history *mon_message_hist;
  */
 u16b size_mon_msg;
 u16b size_mon_hist;
+
 
 /*
  * Some static info used to manage quiver groups
@@ -1080,6 +1081,12 @@ quiver_group_type quiver_group[MAX_QUIVER_GROUPS] =
 u16b quest_indicator_timer = 0;
 
 /*
+ * It's TRUE if the player won a quest.
+ */
+byte quest_indicator_complete = FALSE;
+
+
+/*
  * Remember what is being displayed on each row on the side of the screen.
  */
 int sidebar_details[SIDEBAR_MAX_TYPES];
@@ -1090,10 +1097,6 @@ int sidebar_details[SIDEBAR_MAX_TYPES];
  */
 int sidebar_monsters[SIDEBAR_MONSTER_MAX];
 
-/*
- * It's TRUE if the player won a quest.
- */
-byte quest_indicator_complete = FALSE;
 
 /*
  * Panel change offsets. See verify_panel
@@ -1102,14 +1105,13 @@ u16b panel_change_offset_y = MIN_PANEL_CHANGE_OFFSET_Y;
 u16b panel_change_offset_x = MIN_PANEL_CHANGE_OFFSET_X;
 
 
-
 /*
  * The current capabilities of the dungeon
  */
 dungeon_capabilities_type *dun_cap = NULL;
 
+
 /* Delay in centiseconds before moving to allow another keypress */
 /* Zero means normal instant movement. */
 u16b lazymove_delay =0;
-
 

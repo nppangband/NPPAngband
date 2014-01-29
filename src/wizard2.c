@@ -1,4 +1,3 @@
-
 /* File: wizard2.c */
 
 /*
@@ -22,6 +21,7 @@
 
 
 #ifdef ALLOW_DEBUG
+
 
 /*
  * Show the extents of all flows
@@ -90,7 +90,7 @@ static void do_cmd_wiz_show_flows(void)
 				if (cave_ff1_match(y, x, FF1_MOVE))
 				{
 					c = '*';
-				       	a = TERM_YELLOW;
+					a = TERM_YELLOW;
 				}
 
 				/* Special character for player */
@@ -112,7 +112,7 @@ static void do_cmd_wiz_show_flows(void)
 		/* We couldn't find a grid in that flow */
 		if (!flag) continue;
 
-		/* Show a messsage */
+		/* Show a message */
 		msg_format("Flow: %s.", flow_info[flow].name);
 
 		/* Pause */
@@ -151,8 +151,6 @@ static void do_cmd_wiz_flow(void)
  			{
 				for (x = Term->offset_x; x < Term->offset_x + SCREEN_WID; x++)
 				{
-
-
 					byte a;
 
 					int age = get_scent(y, x);
@@ -171,7 +169,6 @@ static void do_cmd_wiz_flow(void)
 					else if (age < 60) a = TERM_ORANGE;
 					else if (age < 70) a = TERM_L_RED;
 					else a = TERM_RED;
-
 
 					/* Display player/floors/walls */
 					if ((y == py) && (x == px))
@@ -199,14 +196,11 @@ static void do_cmd_wiz_flow(void)
 #endif /*MONSTER_SMELL*/
 
 			break;
-
 		}
-
 
 		case 'N':
 		case 'n':
 		{
-
 			/* Update map */
 			for (y = Term->offset_y; y < Term->offset_y + SCREEN_HGT; y++)
  			{
@@ -258,9 +252,7 @@ static void do_cmd_wiz_flow(void)
 			prt_map();
 
 			break;
-
 		}
-
 
 		default:
 		{
@@ -273,9 +265,7 @@ static void do_cmd_wiz_flow(void)
 
 	/* Redraw map */
 	prt_map();
-
 }
-
 
 
 /*
@@ -318,7 +308,6 @@ static void do_cmd_wiz_bamf(void)
 }
 
 
-
 /*
  * Aux function for "do_cmd_wiz_change()"
  */
@@ -333,7 +322,6 @@ static void do_cmd_wiz_change_aux(void)
 	char tmp_val[160];
 
 	char ppp[80];
-
 
 	/* Query the stats */
 	for (i = 0; i < A_MAX; i++)
@@ -358,7 +346,6 @@ static void do_cmd_wiz_change_aux(void)
 		p_ptr->stat_cur[i] = p_ptr->stat_max[i] = tmp_int;
 	}
 
-
 	/* Default */
 	sprintf(tmp_val, "%ld", (long)(p_ptr->au));
 
@@ -373,7 +360,6 @@ static void do_cmd_wiz_change_aux(void)
 
 	/* Save */
 	p_ptr->au = tmp_long;
-
 
 	/* Default */
 	sprintf(tmp_val, "%ld", (long)(p_ptr->exp));
@@ -425,7 +411,6 @@ static void do_cmd_wiz_change_aux(void)
 
 	/* Save */
 	p_ptr->q_fame = tmp_long;
-
 }
 
 
@@ -440,7 +425,6 @@ static void do_cmd_wiz_change(void)
 	/* Redraw everything */
 	do_cmd_redraw();
 }
-
 
 
 /*
@@ -503,7 +487,6 @@ static void wiz_display_item(const object_type *o_ptr)
 	u32b f1, f2, f3, native;
 
 	char buf[256];
-
 
 	/* Extract the flags */
 	object_flags(o_ptr, &f1, &f2, &f3, &native);
@@ -578,43 +561,43 @@ static void wiz_display_item(const object_type *o_ptr)
  */
 static const tval_desc tvals[] =
 {
-	{ TV_SWORD,             "Sword"                },
-	{ TV_POLEARM,           "Polearm"              },
-	{ TV_HAFTED,            "Hafted Weapon"        },
-	{ TV_BOW,               "Bow"                  },
-	{ TV_ARROW,             "Arrows"               },
-	{ TV_BOLT,              "Bolts"                },
-	{ TV_SHOT,              "Shots"                },
-	{ TV_SHIELD,            "Shield"               },
-	{ TV_CROWN,             "Crown"                },
-	{ TV_HELM,              "Helm"                 },
-	{ TV_GLOVES,            "Gloves"               },
-	{ TV_BOOTS,             "Boots"                },
-	{ TV_CLOAK,             "Cloak"                },
-	{ TV_DRAG_ARMOR,        "Dragon Scale Mail"    },
-	{ TV_DRAG_SHIELD,       "Dragon Scale Shield"  },
-	{ TV_HARD_ARMOR,        "Hard Armor"           },
-	{ TV_SOFT_ARMOR,        "Soft Armor"           },
-	{ TV_RING,              "Ring"                 },
-	{ TV_AMULET,            "Amulet"               },
-	{ TV_LIGHT,              "Lite"                },
-	{ TV_POTION,            "Potion"               },
-	{ TV_SCROLL,            "Scroll"               },
-	{ TV_WAND,              "Wand"                 },
-	{ TV_STAFF,             "Staff"                },
-	{ TV_ROD,               "Rod"                  },
-	{ TV_PRAYER_BOOK,       "Priest Book"          },
-	{ TV_MAGIC_BOOK,        "Magic Book"           },
-	{ TV_DRUID_BOOK,        "Druid Book"           },
-	{ TV_SPIKE,             "Spikes"               },
-	{ TV_DIGGING,           "Digger"               },
-	{ TV_CHEST,             "Chest"                },
-	{ TV_FOOD,              "Food"                 },
-	{ TV_FLASK,             "Flask"                },
-	{ TV_SKELETON,          "Skeletons"            },
-	{ TV_BOTTLE,            "Empty bottle"         },
-	{ TV_JUNK,              "Junk"                 },
-	{ 0,                    NULL                   }
+	{ TV_SWORD,				"Sword"					},
+	{ TV_POLEARM,			"Polearm"				},
+	{ TV_HAFTED,			"Hafted Weapon"			},
+	{ TV_BOW,				"Bow"					},
+	{ TV_ARROW,				"Arrows"				},
+	{ TV_BOLT,				"Bolts"					},
+	{ TV_SHOT,				"Shots"					},
+	{ TV_SHIELD,			"Shield"				},
+	{ TV_CROWN,				"Crown"					},
+	{ TV_HELM,				"Helm"					},
+	{ TV_GLOVES,			"Gloves"				},
+	{ TV_BOOTS,				"Boots"					},
+	{ TV_CLOAK,				"Cloak"					},
+	{ TV_DRAG_ARMOR,		"Dragon Scale Mail"		},
+	{ TV_DRAG_SHIELD,		"Dragon Scale Shield"	},
+	{ TV_HARD_ARMOR,		"Hard Armor"			},
+	{ TV_SOFT_ARMOR,		"Soft Armor"			},
+	{ TV_RING,				"Ring"					},
+	{ TV_AMULET,			"Amulet"				},
+	{ TV_LIGHT,				"Lite"					},
+	{ TV_POTION,			"Potion"				},
+	{ TV_SCROLL,			"Scroll"				},
+	{ TV_WAND,				"Wand"					},
+	{ TV_STAFF,				"Staff"					},
+	{ TV_ROD,				"Rod"					},
+	{ TV_PRAYER_BOOK,		"Priest Book"			},
+	{ TV_MAGIC_BOOK,		"Magic Book"			},
+	{ TV_DRUID_BOOK,		"Druid Book"			},
+	{ TV_SPIKE,				"Spikes"				},
+	{ TV_DIGGING,			"Digger"				},
+	{ TV_CHEST,				"Chest"					},
+	{ TV_FOOD,				"Food"					},
+	{ TV_FLASK,				"Flask"					},
+	{ TV_SKELETON,			"Skeletons"				},
+	{ TV_BOTTLE,			"Empty bottle"			},
+	{ TV_JUNK,				"Junk"					},
+	{ 0,					NULL					}
 };
 
 
@@ -634,12 +617,11 @@ static int wiz_create_itemtype(void)
 
 	int choice[60];
 	static const char choice_name[] = "abcdefghijklmnopqrst"
-	                                  "ABCDEFGHIJKLMNOPQRST"
-	                                  "0123456789:;<=>?@%&*";
+									  "ABCDEFGHIJKLMNOPQRST"
+									  "0123456789:;<=>?@%&*";
 	const char *cp;
 
 	char buf[160];
-
 
 	/* Clear screen */
 	Term_clear();
@@ -652,7 +634,6 @@ static int wiz_create_itemtype(void)
 		ch  = choice_name[num];
 		prt(format("[%c] %s", ch, tvals[num].desc), row, col);
 	}
-
 
 	/* We need to know the maximal possible tval_index */
 	max_num = num;
@@ -672,13 +653,12 @@ static int wiz_create_itemtype(void)
 	tval = tvals[num].tval;
 	tval2_desc = tvals[num].desc;
 
-
 	/*** And now we go for k_idx ***/
 
 	/* Clear screen */
 	Term_clear();
 
-	/* We have to search the whole itemlist. */
+	/* We have to search the whole item list. */
 	for (num = 0, i = 1; (num < 60) && (i < z_info->k_max); i++)
 	{
 		object_kind *k_ptr = &k_info[i];
@@ -732,7 +712,6 @@ static void wiz_tweak_item(object_type *o_ptr)
 	cptr p;
 	char tmp_val[80];
 
-
 	/* Hack -- leave artifacts alone */
 	if (artifact_p(o_ptr)) return;
 
@@ -774,17 +753,14 @@ static void wiz_reroll_item(object_type *o_ptr)
 
 	bool changed = FALSE;
 
-
 	/* Hack -- leave artifacts alone */
 	if (artifact_p(o_ptr)) return;
-
 
 	/* Get local object */
 	i_ptr = &object_type_body;
 
 	/* Copy the object */
 	object_copy(i_ptr, o_ptr);
-
 
 	/* Main loop. Ask for magification and artifactification */
 	while (TRUE)
@@ -825,7 +801,6 @@ static void wiz_reroll_item(object_type *o_ptr)
 		}
 	}
 
-
 	/* Notice change */
 	if (changed)
 	{
@@ -852,7 +827,6 @@ static void wiz_reroll_item(object_type *o_ptr)
 
 	}
 }
-
 
 
 /*
@@ -884,10 +858,8 @@ static void wiz_statistics(object_type *o_ptr)
 
 	cptr q = "Rolls: %ld, Matches: %ld, Better: %ld, Worse: %ld, Other: %ld";
 
-
 	/* Mega-Hack -- allow multiple artifacts XXX XXX XXX */
 	if (artifact_p(o_ptr)) a_info[o_ptr->art_num].a_cur_num = 0;
-
 
 	/* Interact */
 	while (TRUE)
@@ -959,7 +931,6 @@ static void wiz_statistics(object_type *o_ptr)
 				(void)Term_fresh();
 			}
 
-
 			/* Get local object */
 			i_ptr = &object_type_body;
 
@@ -973,14 +944,14 @@ static void wiz_statistics(object_type *o_ptr)
 			if (artifact_p(i_ptr)) a_info[i_ptr->art_num].a_cur_num = 0;
 
 			/* Test for the same tval and sval. */
-			if ((o_ptr->tval) != (i_ptr->tval)) continue;
-			if ((o_ptr->sval) != (i_ptr->sval)) continue;
+			if ((o_ptr->tval) != (i_ptr->tval) ||
+				(o_ptr->sval) != (i_ptr->sval)) continue;
 
 			/* Check for match */
 			if ((i_ptr->pval == o_ptr->pval) &&
-			    (i_ptr->to_a == o_ptr->to_a) &&
-			    (i_ptr->to_h == o_ptr->to_h) &&
-			    (i_ptr->to_d == o_ptr->to_d))
+				(i_ptr->to_a == o_ptr->to_a) &&
+				(i_ptr->to_h == o_ptr->to_h) &&
+				(i_ptr->to_d == o_ptr->to_d))
 			{
 				matches++;
 			}
@@ -1015,7 +986,6 @@ static void wiz_statistics(object_type *o_ptr)
 		message_flush();
 	}
 
-
 	/* Hack -- Normally only make a single artifact */
 	if (artifact_p(o_ptr)) a_info[o_ptr->art_num].a_cur_num = 1;
 }
@@ -1030,10 +1000,8 @@ static void wiz_quantity_item(object_type *o_ptr, bool carried)
 
 	char tmp_val[3];
 
-
 	/* Never duplicate artifacts */
 	if (artifact_p(o_ptr)) return;
-
 
 	/* Default */
 	sprintf(tmp_val, "%d", o_ptr->number);
@@ -1063,7 +1031,6 @@ static void wiz_quantity_item(object_type *o_ptr, bool carried)
 }
 
 
-
 /*
  * Play with an item. Options include:
  *   - Output statistics (via wiz_roll_item)
@@ -1086,7 +1053,6 @@ static void do_cmd_wiz_play(void)
 
 	bool changed = FALSE;
 
-
 	/* Get an item */
 	q = "Play with which object? ";
 	s = "You have nothing to play with.";
@@ -1104,17 +1070,14 @@ static void do_cmd_wiz_play(void)
 		o_ptr = &o_list[0 - item];
 	}
 
-
 	/* Save screen */
 	screen_save();
-
 
 	/* Get local object */
 	i_ptr = &object_type_body;
 
 	/* Copy object */
 	object_copy(i_ptr, o_ptr);
-
 
 	/* The main loop */
 	while (TRUE)
@@ -1154,10 +1117,8 @@ static void do_cmd_wiz_play(void)
 		}
 	}
 
-
 	/* Load screen */
 	screen_load();
-
 
 	/* Accept change */
 	if (changed)
@@ -1176,7 +1137,6 @@ static void do_cmd_wiz_play(void)
 
 		/* Redraw stuff */
 		p_ptr->redraw |= (PR_INVEN | PR_EQUIP);
-
 	}
 
 	/* Ignore change */
@@ -1205,7 +1165,6 @@ static void wiz_create_item(void)
 
 	int k_idx;
 
-
 	/* Save screen */
 	screen_save();
 
@@ -1214,7 +1173,6 @@ static void wiz_create_item(void)
 
 	/* Load screen */
 	screen_load();
-
 
 	/* Return if failed */
 	if (!k_idx) return;
@@ -1351,7 +1309,6 @@ static void do_cmd_wiz_cure_all(void)
 }
 
 
-
 /*
  * Go to any level
  */
@@ -1388,7 +1345,6 @@ static void do_cmd_wiz_jump(void)
 
 	/* New depth */
 	dungeon_change_level(p_ptr->command_arg);
-
 }
 
 
@@ -1421,6 +1377,7 @@ static void do_cmd_wiz_learn(void)
 		}
 	}
 }
+
 
 /*
  * Become aware of a lot of objects
@@ -1514,7 +1471,6 @@ static void do_cmd_wiz_know_all(void)
 }
 
 
-
 /*
  * Hack -- Rerate Hitpoints
  */
@@ -1542,7 +1498,7 @@ static void do_cmd_rerate(void)
 
 		/* Legal values */
 		if ((p_ptr->player_hp[z_info->max_level - 1] >= min_value) &&
-		    (p_ptr->player_hp[z_info->max_level - 1] <= max_value)) break;
+			(p_ptr->player_hp[z_info->max_level - 1] <= max_value)) break;
 	}
 
 	percent = (int)(((long)p_ptr->player_hp[z_info->max_level - 1] * 200L) /
@@ -1614,7 +1570,6 @@ static void do_cmd_wiz_named(int r_idx, bool slp)
 }
 
 
-
 /*
  * Hack -- Delete all nearby monsters
  */
@@ -1646,7 +1601,6 @@ static void do_cmd_wiz_zap(int d)
 
 	/* Update monster list window */
 	p_ptr->redraw |= PR_MONLIST;
-
 }
 
 
@@ -1694,7 +1648,6 @@ static void do_cmd_wiz_query(void)
 	char cmd;
 
 	u16b mask = 0x00;
-
 
 	/* Get a "debug command" */
 	if (!get_com("Debug Command Query: ", &cmd)) return;
@@ -1768,6 +1721,7 @@ static void do_cmd_wiz_query(void)
 	prt_map();
 }
 
+
 static void wiz_create_items(void)
 {
 	int i;
@@ -1792,7 +1746,10 @@ static void wiz_create_items(void)
 	}
 }
 
-/* More informative than spoiler information */
+
+/*
+ *More informative than spoiler information
+ */
 static void do_cmd_wiz_know_quests(void)
 {
 	int i;
@@ -1811,10 +1768,12 @@ static void do_cmd_wiz_know_quests(void)
 	}
 }
 
-/* Create a specific monster grid */
+
+/*
+ * Create a specific monster grid
+ */
 static void do_cmd_wiz_monster(void)
 {
-
 	int x, y;
 	char buf[10];
 	monster_race *r_ptr;
@@ -1860,7 +1819,6 @@ static void do_cmd_wiz_monster(void)
 
 		/*Success*/
 		break;
-
 	}
 
 	/* Place the monster */
@@ -1874,7 +1832,9 @@ static void do_cmd_wiz_monster(void)
 }
 
 
-/* Create a specific terrain grid given its feature number or query a grid */
+/*
+ * Create a specific terrain grid given its feature number or query a grid
+ */
 static void do_cmd_wiz_feature(void)
 {
 	char ch;
@@ -1950,7 +1910,6 @@ static void do_cmd_wiz_feature(void)
 		/* Create the feature */
 		/*build_terrain(y, x, feat);*/
 		cave_set_feat(y, x, feat);
-
 	}
 	/* Query a dungeon grid */
 	else
@@ -1968,6 +1927,7 @@ static void do_cmd_wiz_feature(void)
 	}
 }
 
+
 /*
  * Ask for and parse a "debug command"
  *
@@ -1979,7 +1939,6 @@ void do_cmd_debug(void)
 	int px = p_ptr->px;
 
 	char cmd;
-
 
 	/* Get a "debug command" */
 	if (!get_com("Debug Command: ", &cmd)) return;
@@ -2006,7 +1965,6 @@ void do_cmd_debug(void)
 		}
 
 #endif
-
 
 		/* Hack -- Help */
 		case '?':
@@ -2111,6 +2069,7 @@ void do_cmd_debug(void)
 		case 'K':
 		{
 			do_cmd_wiz_know_all();
+			break;
 		}
 
 		/* Learn about objects */
@@ -2259,7 +2218,6 @@ void do_cmd_debug(void)
 			break;
 		}
 
-
 		/* Oops */
 		default:
 		{
@@ -2277,5 +2235,4 @@ static int i = 0;
 #endif
 
 #endif
-
 

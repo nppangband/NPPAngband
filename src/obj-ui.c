@@ -26,7 +26,7 @@
  * Used by show_inven(), show_equip(), and show_floor().  Mode flags are
  * documented in object.h
  */
-static void show_obj_list(int num_obj, char labels[50][80], object_type *objects[50], byte mode)
+static void show_obj_list(int num_obj, char labels[50][80], object_type *objects[50], int mode)
 {
 	int i, row = 0, col = 0;
 	size_t max_len = 0;
@@ -276,7 +276,7 @@ bool find_object_in_use(int *item)
  * off to show_obj_list() for display.  Mode flags documented in
  * object.h
  */
-void show_inven(byte mode)
+void show_inven(int mode)
 {
 	int i, last_slot = 0;
 
@@ -660,7 +660,7 @@ void display_equip(void)
  * off to show_obj_list() for display.  Mode flags documented in
  * object.h
  */
-void show_equip(byte mode)
+void show_equip(int mode)
 {
 	int i, last_slot = 0;
 
@@ -749,7 +749,7 @@ void show_equip(byte mode)
  * off to show_obj_list() for display.  Mode flags documented in
  * object.h
  */
-void show_floor(const int *floor_list, int floor_num, byte mode)
+void show_floor(const int *floor_list, int floor_num, int mode)
 {
 	int i;
 
@@ -1085,7 +1085,7 @@ static void item_prompt(menu_type *menu, int mode, cptr pmt)
  */
 static char get_item_tag(menu_type *menu, int oid)
 {
-	const int *choice = menu->menu_data;
+	const int *choice = menu->menu_data.ints;
 	int idx = choice[oid];
 
 	if (p_ptr->command_wrk == USE_FLOOR)  return I2A(oid);
@@ -1098,7 +1098,7 @@ static char get_item_tag(menu_type *menu, int oid)
 
 static void get_item_display(menu_type *menu, int oid, bool cursor, int row, int col, int width)
 {
-	const int *choice = menu->menu_data;
+	const int *choice = menu->menu_data.ints;
 	int idx = choice[oid];
 	char o_name[200];
 	char label;
@@ -1513,23 +1513,23 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 			/* Pick the right menu */
 			if (p_ptr->command_wrk == (USE_INVEN))
 			{
-				menu.menu_data = inven_items;
+				menu.menu_data.ints = inven_items;
 				num_entries = inven_count;
 			}
 			else if ((p_ptr->command_wrk == (USE_EQUIP)) && use_quiver && (!use_inven) && allow_quiver &&
 					 (mode & (QUIVER_FIRST)))
 			{
-				menu.menu_data = quiver_items;
+				menu.menu_data.ints = quiver_items;
 				num_entries = quiver_count;
 			}
 			else if (p_ptr->command_wrk == (USE_FLOOR))
 			{
-				menu.menu_data = floor_items;
+				menu.menu_data.ints = floor_items;
 				num_entries = floor_count;
 			}
 			else /* if (p_ptr->command_wrk == (USE_EQUIP)) */
 			{
-				menu.menu_data = equip_items;
+				menu.menu_data.ints = equip_items;
 				num_entries = equip_count;
 			}
 
@@ -1572,7 +1572,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 
 			case EVT_SELECT:
 			{
-				int *tmp = (int *) menu.menu_data;
+				int *tmp = menu.menu_data.ints;
 				if (p_ptr->command_wrk == (USE_FLOOR))	k = 0 - tmp[evt.index];
 				else k = tmp[evt.index];
 
@@ -1592,6 +1592,7 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 			case EVT_BACK:
 			{
 				done = TRUE;
+				continue;
 			}
 
 			default:
@@ -1644,7 +1645,9 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 					refresh = TRUE;
 					break;
 				}
+				/* Do not use break */
 			}
+			/* no break */
 			case '.':
 			{
 				/*
@@ -1747,10 +1750,10 @@ bool item_menu(int *cp, cptr pmt, int mode, bool *oops, int sq_y, int sq_x)
 				bool verify;
 
 				/* Note verify */
-				verify = (isupper(evt.key) ? TRUE : FALSE);
+				verify = (isupper((int)evt.key) ? TRUE : FALSE);
 
 				/* Lowercase */
-				evt.key = tolower(evt.key);
+				evt.key = tolower((int)evt.key);
 
 				/* Convert letter to inventory index */
 				if (p_ptr->command_wrk == (USE_INVEN))
@@ -2008,7 +2011,7 @@ bool get_item_beside(int *cp, cptr pmt, cptr str, int sq_y, int sq_x)
 	/* Forget the item_tester_tval restriction */
 	item_tester_tval = 0;
 
-	/* Forger the item tester_swap restriction */
+	/* Forget the item tester_swap restriction */
 	item_tester_swap = FALSE;
 
 	/* Forget the item_tester_hook restriction */
@@ -2088,7 +2091,7 @@ static cmd_code find_command_line(cmd_code command)
 
 	for (i = 0; i < N_ELEMENTS(command_actions); i++)
 	{
-		if (command_actions[i].command == command) return i;
+		if (command_actions[i].command == command) return (cmd_code)i;
 	}
 
 	/*
@@ -2096,7 +2099,7 @@ static cmd_code find_command_line(cmd_code command)
 	 * harmless Inscribe command
 	 */
 
-	return (0);
+	return (CMD_NULL);
 }
 
 /*
@@ -2349,7 +2352,6 @@ static void collect_commands(const object_type *o_ptr, int item)
 		/*  Check if the object can be activated and it isn't charging */
 		if (obj_can_activate(o_ptr))
 		{
-
 			if ((!adult_swap_weapons) || (item != INVEN_SWAP_WEAPON))
 			{
 				add_command(CMD_ACTIVATE);
@@ -2547,7 +2549,7 @@ void cmd_use_item(void)
 	WIPE(&menu, menu);
 	menu.cmd_keys = "\x8B\x8C\n\r";
 	menu.count = poss;
-	menu.menu_data = comm;
+	menu.menu_data.chars = comm;
 	menu_init(&menu, MN_SKIN_SCROLL, &commands_menu, &area);
 
 	/* We want to use all objects */
@@ -2623,7 +2625,7 @@ void cmd_use_item(void)
 			collect_commands(o_ptr, item);
 			/* Update the menu */
 			menu.count = poss;
-			menu.menu_data = comm;
+			menu.menu_data.chars = comm;
 			area.page_rows = poss + 3;
 
 			/* Find the column to start in */
@@ -2686,6 +2688,4 @@ void cmd_use_item(void)
 	message_flush();
 
 }
-
-
 

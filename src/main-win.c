@@ -101,7 +101,6 @@
 #endif /* HTML_HELP */
 
 
-
 /*
  * Menu constants -- see "ANGBAND.RC"
  */
@@ -174,14 +173,14 @@
 #define IDM_WINDOW_D_HGT_6		276
 #define IDM_WINDOW_D_HGT_7		277
 
-#define IDM_OPTIONS_GRAPHICS_NONE   400
-#define IDM_OPTIONS_GRAPHICS_OLD    401
-#define IDM_OPTIONS_GRAPHICS_ADAM   402
-#define IDM_OPTIONS_GRAPHICS_DAVID  403
-#define IDM_OPTIONS_BIGTILE         409
-#define IDM_OPTIONS_LOW_PRIORITY    420
-#define IDM_OPTIONS_SAVER           430
-#define IDM_OPTIONS_MAP             440
+#define IDM_OPTIONS_GRAPHICS_NONE	400
+#define IDM_OPTIONS_GRAPHICS_OLD	401
+#define IDM_OPTIONS_GRAPHICS_ADAM	402
+#define IDM_OPTIONS_GRAPHICS_DAVID	403
+#define IDM_OPTIONS_BIGTILE			409
+#define IDM_OPTIONS_LOW_PRIORITY	420
+#define IDM_OPTIONS_SAVER			430
+#define IDM_OPTIONS_MAP				440
 
 #define IDM_HELP_GENERAL		901
 #define IDM_HELP_SPOILERS		902
@@ -195,41 +194,41 @@
 /*
  * Exclude parts of WINDOWS.H that are not needed
  */
-#define NOCOMM            /* Comm driver APIs and definitions */
-#define NOLOGERROR        /* LogError() and related definitions */
-#define NOPROFILER        /* Profiler APIs */
-#define NOLFILEIO         /* _l* file I/O routines */
-#define NOOPENFILE        /* OpenFile and related definitions */
-#define NORESOURCE        /* Resource management */
-#define NOATOM            /* Atom management */
-#define NOLANGUAGE        /* Character test routines */
-#define NOLSTRING         /* lstr* string management routines */
-#define NODBCS            /* Double-byte character set routines */
-#define NOKEYBOARDINFO    /* Keyboard driver routines */
-#define NOCOLOR           /* COLOR_* color values */
-#define NODRAWTEXT        /* DrawText() and related definitions */
-#define NOSCALABLEFONT    /* Truetype scalable font support */
-#define NOMETAFILE        /* Metafile support */
-#define NOSYSTEMPARAMSINFO /* SystemParametersInfo() and SPI_* definitions */
-#define NODEFERWINDOWPOS  /* DeferWindowPos and related definitions */
-#define NOKEYSTATES       /* MK_* message key state flags */
-#define NOWH              /* SetWindowsHook and related WH_* definitions */
-#define NOCLIPBOARD       /* Clipboard APIs and definitions */
-#define NOICONS           /* IDI_* icon IDs */
-#define NOMDI             /* MDI support */
-#define NOHELP            /* Help support */
+#define NOCOMM				/* Comm driver APIs and definitions */
+#define NOLOGERROR			/* LogError() and related definitions */
+#define NOPROFILER			/* Profiler APIs */
+#define NOLFILEIO			/* _l* file I/O routines */
+#define NOOPENFILE			/* OpenFile and related definitions */
+#define NORESOURCE			/* Resource management */
+#define NOATOM				/* Atom management */
+#define NOLANGUAGE			/* Character test routines */
+#define NOLSTRING			/* lstr* string management routines */
+#define NODBCS				/* Double-byte character set routines */
+#define NOKEYBOARDINFO		/* Keyboard driver routines */
+#define NOCOLOR				/* COLOR_* color values */
+#define NODRAWTEXT			/* DrawText() and related definitions */
+#define NOSCALABLEFONT		/* Truetype scalable font support */
+#define NOMETAFILE			/* Metafile support */
+#define NOSYSTEMPARAMSINFO	/* SystemParametersInfo() and SPI_* definitions */
+#define NODEFERWINDOWPOS	/* DeferWindowPos and related definitions */
+#define NOKEYSTATES			/* MK_* message key state flags */
+#define NOWH				/* SetWindowsHook and related WH_* definitions */
+#define NOCLIPBOARD			/* Clipboard APIs and definitions */
+#define NOICONS				/* IDI_* icon IDs */
+#define NOMDI				/* MDI support */
+#define NOHELP				/* Help support */
 
 /* Not defined since it breaks Borland C++ 5.5 */
-/* #define NOCTLMGR */    /* Control management and controls */
+/* #define NOCTLMGR */		/* Control management and controls */
 
 /*
  * Exclude parts of WINDOWS.H that are not needed (Win32)
  */
 #define WIN32_LEAN_AND_MEAN
-#define NONLS             /* All NLS defines and routines */
-#define NOSERVICE         /* All Service Controller routines, SERVICE_ equates, etc. */
-#define NOKANJI           /* Kanji support stuff. */
-#define NOMCX             /* Modem Configuration Extensions */
+#define NONLS				/* All NLS defines and routines */
+#define NOSERVICE			/* All Service Controller routines, SERVICE_ equates, etc. */
+#define NOKANJI				/* Kanji support stuff. */
+#define NOMCX				/* Modem Configuration Extensions */
 
 /*
  * Include the "windows" support file
@@ -242,15 +241,15 @@
 /*
  * Exclude parts of MMSYSTEM.H that are not needed
  */
-#define MMNODRV          /* Installable driver support */
-#define MMNOWAVE         /* Waveform support */
-#define MMNOMIDI         /* MIDI support */
-#define MMNOAUX          /* Auxiliary audio support */
-#define MMNOTIMER        /* Timer support */
-#define MMNOJOY          /* Joystick support */
-#define MMNOMCI          /* MCI support */
-#define MMNOMMIO         /* Multimedia file I/O support */
-#define MMNOMMSYSTEM     /* General MMSYSTEM functions */
+#define MMNODRV			/* Installable driver support */
+#define MMNOWAVE		/* Waveform support */
+#define MMNOMIDI		/* MIDI support */
+#define MMNOAUX			/* Auxiliary audio support */
+#define MMNOTIMER		/* Timer support */
+#define MMNOJOY			/* Joystick support */
+#define MMNOMCI			/* MCI support */
+#define MMNOMMIO		/* Multimedia file I/O support */
+#define MMNOMMSYSTEM	/* General MMSYSTEM functions */
 
 #include <mmsystem.h>
 
@@ -321,7 +320,6 @@
  * Font settings
  */
 #define DEFAULT_FONT	"8x12x.fon"
-
 
 
 /*
@@ -402,6 +400,7 @@ struct _term_data
  * An array of term_data's
  */
 static term_data data[MAX_TERM_DATA];
+
 
 /*
  * Hack -- global "window creation" pointer
@@ -683,7 +682,7 @@ static void show_win_error(void)
 	              MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 	              (LPTSTR) &lpMsgBuf, 0, NULL);
 
-	MessageBox(NULL, lpMsgBuf, "Error", MB_OK | MB_ICONINFORMATION);
+	MessageBox(NULL, (LPCSTR)lpMsgBuf, "Error", MB_OK | MB_ICONINFORMATION);
 
 	LocalFree(lpMsgBuf);
 }
@@ -735,7 +734,7 @@ static char *analyze_font(char *path, int *wp, int *hp)
 
 
 /*
- * Check for existance of a directory
+ * Check for existence of a directory
  */
 static bool check_dir(cptr s)
 {
@@ -1147,7 +1146,7 @@ static int new_palette(void)
 	/* Use the bitmap */
 	if (hBmPal)
 	{
-		lppe = mem_alloc(256 * sizeof(PALETTEENTRY));
+		lppe = (LPPALETTEENTRY)mem_alloc(256 * sizeof(PALETTEENTRY));
 		nEntries = GetPaletteEntries(hBmPal, 0, 255, lppe);
 		if ((nEntries == 0) || (nEntries > 220))
 		{
@@ -1252,6 +1251,7 @@ static int new_palette(void)
 
 
 #ifdef USE_GRAPHICS
+
 /*
  * Initialize graphics
  */
@@ -1342,6 +1342,7 @@ static bool init_graphics(void)
 	/* Result */
 	return (can_use_graphics);
 }
+
 #endif /* USE_GRAPHICS */
 
 
@@ -1364,6 +1365,7 @@ static bool init_sound(void)
 	/* Result */
 	return (can_use_sound);
 }
+
 #endif /* USE_SOUND */
 
 
@@ -1427,7 +1429,6 @@ static errr term_force_font(term_data *td, cptr path)
 	/* Check we have a path */
 	if (!path) return (1);
 
-
 	/* Forget the old font (if needed) */
 	if (td->font_id) DeleteObject(td->font_id);
 
@@ -1458,8 +1459,6 @@ static errr term_force_font(term_data *td, cptr path)
 		td->font_file = NULL;
 	}
 
-
-
 	/* Local copy */
 	my_strcpy(buf, path, sizeof(buf));
 
@@ -1486,9 +1485,9 @@ static errr term_force_font(term_data *td, cptr path)
 
 	/* Create the font (using the 'base' of the font file name!) */
 	td->font_id = CreateFont(hgt, wid, 0, 0, FW_DONTCARE, 0, 0, 0,
-	                         ANSI_CHARSET, OUT_DEFAULT_PRECIS,
-	                         CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
-	                         FIXED_PITCH | FF_DONTCARE, base);
+							 ANSI_CHARSET, OUT_DEFAULT_PRECIS,
+							 CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+							 FIXED_PITCH | FF_DONTCARE, base);
 
 	/* Hack -- Unknown size */
 	if (!wid || !hgt)
@@ -1499,7 +1498,7 @@ static errr term_force_font(term_data *td, cptr path)
 
 		/* all this trouble to get the cell size */
 		hdcDesktop = GetDC(HWND_DESKTOP);
-		hfOld = SelectObject(hdcDesktop, td->font_id);
+		hfOld = (HFONT)SelectObject(hdcDesktop, td->font_id);
 		GetTextMetrics(hdcDesktop, &tm);
 		SelectObject(hdcDesktop, hfOld);
 		ReleaseDC(HWND_DESKTOP, hdcDesktop);
@@ -1516,7 +1515,6 @@ static errr term_force_font(term_data *td, cptr path)
 	/* Success */
 	return (0);
 }
-
 
 
 /*
@@ -1613,7 +1611,6 @@ static void term_data_redraw_section(term_data *td, int x1, int y1, int x2, int 
 	/* Restore the term */
 	Term_activate(term_screen);
 }
-
 
 
 /*** Function hooks needed by "Term" ***/
@@ -2009,7 +2006,6 @@ static errr Term_xtra_win(int n, int v)
 }
 
 
-
 /*
  * Low level graphics (Assumes valid input).
  *
@@ -2121,6 +2117,7 @@ static errr Term_wipe_win(int x, int y, int n)
 	return 0;
 }
 
+
 /*
  * Given a position in the ISO Latin-1 character set, return
  * the correct character on this system.
@@ -2130,6 +2127,7 @@ static errr Term_wipe_win(int x, int y, int n)
  	/* The Windows port uses the Latin-1 standard */
  	return (c);
 }
+
 
 /*
  * Low level graphics.  Assumes valid input.
@@ -2180,8 +2178,8 @@ static errr Term_text_win(int x, int y, int n, byte a, cptr s)
 
 	/* Bizarre size */
 	if (td->bizarre ||
-	    (td->tile_hgt != td->font_hgt) ||
-	    (td->tile_wid != td->font_wid))
+		(td->tile_hgt != td->font_hgt) ||
+		(td->tile_wid != td->font_wid))
 	{
 		int i;
 
@@ -2287,7 +2285,7 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp, c
 
 	/* More info */
 	hdcSrc = CreateCompatibleDC(hdc);
-	hbmSrcOld = SelectObject(hdcSrc, infGraph.hBitmap);
+	hbmSrcOld = (HBITMAP)SelectObject(hdcSrc, infGraph.hBitmap);
 
 	if ((arg_graphics == GRAPHICS_ADAM_BOLT) ||
 	    (arg_graphics == GRAPHICS_DAVID_GERVAIS))
@@ -2540,7 +2538,6 @@ static void init_windows(void)
 
 	char buf[1024];
 
-
 	/* Main window */
 	td = &data[0];
 	WIPE(td, term_data);
@@ -2574,10 +2571,8 @@ static void init_windows(void)
 		td->pos_y = (7 - i) * 20;
 	}
 
-
 	/* Load prefs */
 	load_prefs();
-
 
 	/* Main window (need these before term_getsize gets called) */
 	td = &data[0];
@@ -2597,7 +2592,6 @@ static void init_windows(void)
 		td->dwExStyle = (WS_EX_TOOLWINDOW);
 		td->menubar = FALSE;
 	}
-
 
 	/* All windows */
 	for (i = 0; i < MAX_TERM_DATA; i++)
@@ -2630,7 +2624,6 @@ static void init_windows(void)
 		/* Resize the window */
 		term_window_resize(td);
 	}
-
 
 	/* Sub windows (reverse order) */
 	for (i = MAX_TERM_DATA - 1; i >= 1; --i)
@@ -2665,7 +2658,6 @@ static void init_windows(void)
 			SetWindowPos(td->w, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 		}
 	}
-
 
 	/* Main window */
 	td = &data[0];
@@ -2971,7 +2963,6 @@ static void check_for_save_file(LPSTR cmd_line)
 #ifdef USE_SAVER
 
 
-
 /*
  * Start the screensaver
  */
@@ -2988,7 +2979,7 @@ static void start_screensaver(void)
 	/* Does the savefile already exist? */
 	file_exist = file_exists(savefile);
 
-	/* Don't try to load a non-existant savefile */
+	/* Don't try to load a non-existent savefile */
 	if (!file_exist) savefile[0] = '\0';
 
 	/* Game in progress */
@@ -3001,7 +2992,6 @@ static void start_screensaver(void)
 
 	/* Low priority */
 	SendMessage(data[0].w, WM_COMMAND, IDM_OPTIONS_LOW_PRIORITY, 0);
-
 
 	/* Play game */
 	play_game((bool)!file_exist);
@@ -3699,7 +3689,7 @@ static LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 				/* Introduce the scan code */
 				Term_keypress('x');
 
-				/* Encode the hexidecimal scan code */
+				/* Encode the hexadecimal scan code */
 				Term_keypress(hexsym[i/16]);
 				Term_keypress(hexsym[i%16]);
 
@@ -4108,7 +4098,7 @@ static LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 				/* Introduce the scan code */
 				Term_keypress('x');
 
-				/* Encode the hexidecimal scan code */
+				/* Encode the hexadecimal scan code */
 				Term_keypress(hexsym[i/16]);
 				Term_keypress(hexsym[i%16]);
 
@@ -4126,7 +4116,6 @@ static LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 			Term_keypress(wParam);
 			return 0;
 		}
-
 
 #ifdef USE_SAVER
 		case WM_MBUTTONDOWN:
@@ -4216,7 +4205,7 @@ static LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 #ifdef USE_SAVER
 
 LRESULT FAR PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg,
-                                            WPARAM wParam, LPARAM lParam)
+                                    WPARAM wParam, LPARAM lParam)
 {
 	static int iMouse = 0;
 	static WORD xMouse = 0;
@@ -4299,9 +4288,6 @@ LRESULT FAR PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg,
 #endif /* USE_SAVER */
 
 
-
-
-
 /*** Temporary Hooks ***/
 
 
@@ -4344,7 +4330,6 @@ static void hack_quit(cptr str)
 	/* Exit */
 	exit(0);
 }
-
 
 
 /*** Various hooks ***/
@@ -4484,7 +4469,10 @@ static errr get_init_cmd(void)
 	return 0;
 }
 
-/* Command dispatcher for windows build */
+
+/*
+ * Command dispatcher for windows build
+ */
 static errr win_get_cmd(cmd_context context, bool wait)
 {
 
@@ -4652,9 +4640,9 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 	if (lpCmdLine && ((*lpCmdLine == '-') || (*lpCmdLine == '/')))
 	{
 		lpCmdLine++;
-		
+
 		/* process all switches */
-		while (*lpCmdLine != ' ')
+		while(*lpCmdLine != ' ')
 		{
 			switch (*lpCmdLine)
 			{
@@ -4663,21 +4651,20 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 				case 'S':
 				{
 					screensaver = TRUE;
-	
+
 					/* Only run one screensaver at the time */
 					screensaverSemaphore = CreateSemaphore(NULL, 0, 1, "AngbandSaverSemaphore");
-	
+
 					if (!screensaverSemaphore) exit(0);
-	
+
 					if (GetLastError() == ERROR_ALREADY_EXISTS)
 					{
 						CloseHandle(screensaverSemaphore);
 						exit(0);
 					}
-	
+
 					break;
 				}
-	
 				case 'P':
 				case 'p':
 				case 'C':
@@ -4698,22 +4685,22 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 				case 'M':
 				{
 					game_mode = GAME_NPPMORIA;
-					break;	
+					break;
 				}
-				
+
 				/* o for original ? */
 				/* a is taken by screensaver... */
 				case 'o':
 				case 'O':
 				{
 					game_mode = GAME_NPPANGBAND;
-					break;			
+					break;
 				}
 			}
-			
+
 			lpCmdLine++;
 		}
-		
+
 		/* skip whitespace */
 		while (*lpCmdLine == ' ')
 		{
@@ -4721,37 +4708,35 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 		}
 	}
 
-
-
 	/* Initialize */
 	if (hPrevInst == NULL)
 	{
-		wc.style         = CS_CLASSDC;
-		wc.lpfnWndProc   = AngbandWndProc;
-		wc.cbClsExtra    = 0;
-		wc.cbWndExtra    = 4; /* one long pointer to term_data */
-		wc.hInstance     = hInst;
-		wc.hIcon         = hIcon = LoadIcon(hInst, "ANGBAND");
-		wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
-		wc.hbrBackground = GetStockObject(BLACK_BRUSH);
-		wc.lpszMenuName  = "ANGBAND";
-		wc.lpszClassName = AppName;
+		wc.style			= CS_CLASSDC;
+		wc.lpfnWndProc		= AngbandWndProc;
+		wc.cbClsExtra		= 0;
+		wc.cbWndExtra		= 4; /* one long pointer to term_data */
+		wc.hInstance		= hInst;
+		wc.hIcon			= hIcon = LoadIcon(hInst, "ANGBAND");
+		wc.hCursor			= LoadCursor(NULL, IDC_ARROW);
+		wc.hbrBackground	= (HBRUSH)GetStockObject(BLACK_BRUSH);
+		wc.lpszMenuName		= "ANGBAND";
+		wc.lpszClassName	= AppName;
 
 		if (!RegisterClass(&wc)) exit(1);
 
-		wc.lpfnWndProc   = AngbandListProc;
-		wc.lpszMenuName  = NULL;
-		wc.lpszClassName = AngList;
+		wc.lpfnWndProc		= AngbandListProc;
+		wc.lpszMenuName		= NULL;
+		wc.lpszClassName	= AngList;
 
 		if (!RegisterClass(&wc)) exit(2);
 
 #ifdef USE_SAVER
 
-		wc.style          = CS_VREDRAW | CS_HREDRAW | CS_SAVEBITS | CS_DBLCLKS;
-		wc.lpfnWndProc    = AngbandSaverProc;
-		wc.hCursor        = NULL;
-		wc.lpszMenuName   = NULL;
-		wc.lpszClassName  = "WindowsScreenSaverClass";
+		wc.style			= CS_VREDRAW | CS_HREDRAW | CS_SAVEBITS | CS_DBLCLKS;
+		wc.lpfnWndProc		= AngbandSaverProc;
+		wc.hCursor			= NULL;
+		wc.lpszMenuName		= NULL;
+		wc.lpszClassName	= "WindowsScreenSaverClass";
 
 		if (!RegisterClass(&wc)) exit(3);
 

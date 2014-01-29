@@ -12742,6 +12742,7 @@ void set_dungeon_type(u16b dungeon_type)
 			if (game_mode == GAME_NPPMORIA) dun_cap = &dun_cap_body_moria;
 
 			else dun_cap = &dun_cap_body_default;
+			break;
 		}
 	}
 }

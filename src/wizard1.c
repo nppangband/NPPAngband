@@ -38,6 +38,7 @@ static void spoiler_out_n_chars(int n, char c)
 	while (--n >= 0) file_writec(fh, c);
 }
 
+
 /*
  * Write out `n' blank lines to the spoiler file
  */
@@ -45,6 +46,7 @@ static void spoiler_blanklines(int n)
 {
 	spoiler_out_n_chars(n, '\n');
 }
+
 
 /*
  * Write a line to the spoiler file and then "underline" it with hypens
@@ -119,24 +121,20 @@ static const grouper group_item[] =
 };
 
 
-
-
 /*
  * Describe the kind
  */
 static void kind_info(char *buf, size_t buf_len,
-                      char *dam, size_t dam_len,
-                      char *wgt, size_t wgt_len,
-                      int *lev, s32b *val, int k)
+					  char *dam, size_t dam_len,
+					  char *wgt, size_t wgt_len,
+					  int *lev, s32b *val, int k)
 {
 	object_kind *k_ptr;
 
-	object_type *i_ptr;
 	object_type object_type_body;
 
-
 	/* Get local object */
-	i_ptr = &object_type_body;
+	object_type *i_ptr = &object_type_body;
 
 	/* Prepare a fake item */
 	object_prep(i_ptr, k);
@@ -149,7 +147,6 @@ static void kind_info(char *buf, size_t buf_len,
 	i_ptr->to_a = 0;
 	i_ptr->to_h = 0;
 	i_ptr->to_d = 0;
-
 
 	/* Level */
 	(*lev) = k_ptr->k_level;
@@ -222,7 +219,6 @@ static void kind_info(char *buf, size_t buf_len,
 }
 
 
-
 /*
  * Create a spoiler file for items
  */
@@ -239,7 +235,7 @@ static void spoil_obj_desc(cptr fname)
 
 	cptr format = "%-51s  %7s%6s%4s%9s\n";
 
-	/* We use either ascii or system-specific encoding */
+	/* We use either ASCII or system-specific encoding */
  	int encoding = (xchars_to_file) ? SYSTEM_SPECIFIC : ASCII;
 
 	/* Open the file */
@@ -252,7 +248,6 @@ static void spoil_obj_desc(cptr fname)
 		msg_print("Cannot create spoiler file.");
 		return;
 	}
-
 
 	/* Header */
 	file_putf(fh, "Spoiler File -- Basic Items (%s)\n\n\n", VERSION_STRING);
@@ -305,7 +300,7 @@ static void spoil_obj_desc(cptr fname)
 
 				/* Dump it */
 				x_file_putf(fh, encoding, "  %-51s%7s%6s%4d%9ld\n",
-				        buf, dam, wgt, e, (long)(v));
+							buf, dam, wgt, e, (long)(v));
 			}
 
 			/* Start a new set */
@@ -334,7 +329,6 @@ static void spoil_obj_desc(cptr fname)
 		}
 	}
 
-
 	/* Check for errors */
 	if (!file_close(fh))
 	{
@@ -345,8 +339,6 @@ static void spoil_obj_desc(cptr fname)
 	/* Message */
 	msg_print("Successfully created a spoiler file.");
 }
-
-
 
 
 /*
@@ -361,32 +353,30 @@ static void spoil_obj_desc(cptr fname)
  */
 static const grouper group_artifact[] =
 {
-	{ TV_SWORD,         "Edged Weapons" },
-	{ TV_POLEARM,       "Polearms" },
-	{ TV_HAFTED,        "Hafted Weapons" },
-	{ TV_BOW,           "Bows" },
-	{ TV_DIGGING,       "Diggers" },
+	{ TV_SWORD,			"Edged Weapons" },
+	{ TV_POLEARM,		"Polearms" },
+	{ TV_HAFTED,		"Hafted Weapons" },
+	{ TV_BOW,			"Bows" },
+	{ TV_DIGGING,		"Diggers" },
 
-	{ TV_SOFT_ARMOR,    "Body Armor" },
-	{ TV_HARD_ARMOR,    NULL },
-	{ TV_DRAG_ARMOR,    NULL },
+	{ TV_SOFT_ARMOR,	"Body Armor" },
+	{ TV_HARD_ARMOR,	NULL },
+	{ TV_DRAG_ARMOR,	NULL },
 
-	{ TV_CLOAK,         "Cloaks" },
-	{ TV_SHIELD,        "Shields" },
-	{ TV_DRAG_SHIELD,   NULL },
-	{ TV_HELM,          "Helms/Crowns" },
-	{ TV_CROWN,         NULL },
-	{ TV_GLOVES,        "Gloves" },
-	{ TV_BOOTS,         "Boots" },
+	{ TV_CLOAK,			"Cloaks" },
+	{ TV_SHIELD,		"Shields" },
+	{ TV_DRAG_SHIELD,	NULL },
+	{ TV_HELM,			"Helms/Crowns" },
+	{ TV_CROWN,			NULL },
+	{ TV_GLOVES,		"Gloves" },
+	{ TV_BOOTS,			"Boots" },
 
-	{ TV_LIGHT,          "Light Sources" },
-	{ TV_AMULET,        "Amulets" },
-	{ TV_RING,          "Rings" },
+	{ TV_LIGHT,			"Light Sources" },
+	{ TV_AMULET,		"Amulets" },
+	{ TV_RING,			"Rings" },
 
 	{ 0, NULL }
 };
-
-
 
 
 /*
@@ -400,7 +390,6 @@ static void spoil_artifact(cptr fname)
 	object_type object_type_body;
 
 	char buf[1024];
-
 
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
@@ -422,7 +411,7 @@ static void spoil_artifact(cptr fname)
 
 	/* Dump the header */
 	spoiler_underline(format("Artifact Spoilers for %s %s",
-			VERSION_MODE_NAME, VERSION_STRING), '=');
+							 VERSION_MODE_NAME, VERSION_STRING), '=');
 
 	/* List the artifacts by tval */
 	for (i = 0; group_artifact[i].tval; i++)
@@ -578,7 +567,6 @@ static void spoil_mon_desc(cptr fname)
 			strnfmt(nam, sizeof(nam), "The %s", name);
 		}
 
-
 		/* Level */
 		strnfmt(lev, sizeof(lev), "%d", r_ptr->level);
 
@@ -597,7 +585,6 @@ static void spoil_mon_desc(cptr fname)
 		/* Hitpoints */
 		strnfmt(hp, sizeof(hp), "hp dice %d, hp sides %d", r_ptr->hdice,r_ptr->hside);
 
-
 		/* Experience */
 		strnfmt(exp, sizeof(exp), "%ld", (long)(r_ptr->mexp));
 
@@ -606,7 +593,7 @@ static void spoil_mon_desc(cptr fname)
 
 		/* Dump the info */
 		x_file_putf(fh, encoding, "%-40.40s%4s%4s%6s%8s%4s %12.12s\n",
-		        nam, lev, rar, spd, hp, ac, exp);
+					nam, lev, rar, spd, hp, ac, exp);
 	}
 
 	/* End it */
@@ -614,7 +601,6 @@ static void spoil_mon_desc(cptr fname)
 
 	/* Free the "who" array */
 	FREE(who);
-
 
 	/* Check for errors */
 	if (!file_close(fh))
@@ -628,14 +614,9 @@ static void spoil_mon_desc(cptr fname)
 }
 
 
-
-
-
-
 /*
  * Monster spoilers originally by: smchorse@ringer.cs.utsa.edu (Shawn McHorse)
  */
-
 
 
 /*
@@ -648,7 +629,6 @@ static void spoil_mon_info(cptr fname)
 	u16b why = 2;
 	u16b *who;
 	int count = 0;
-
 
 	/* Open the file */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
@@ -689,9 +669,7 @@ static void spoil_mon_info(cptr fname)
 	/* Sort the array by dungeon depth of monsters */
 	ang_sort(who, &why, count);
 
-	/*
-	 * List all monsters in order (except the ghost).
-	 */
+	/* List all monsters in order (except the ghost). */
 	for (n = 0; n < count; n++)
 	{
 		int r_idx = who[n];
@@ -719,7 +697,6 @@ static void spoil_mon_info(cptr fname)
 
 		/* Symbol --(-- */
 		text_out(" '%c')\n", r_ptr->d_char);
-
 
 		/* Indent */
 		text_out("=== ");
@@ -772,6 +749,7 @@ static void spoil_mon_info(cptr fname)
 	msg_print("Successfully created a spoiler file.");
 }
 
+
 /*
  * Create a spoiler file for monsters (-SHAWN-)
  */
@@ -782,7 +760,6 @@ static void spoil_features(cptr fname)
 	u16b why = 2;
 	u16b *who;
 	int count = 0;
-
 
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
@@ -810,7 +787,7 @@ static void spoil_features(cptr fname)
 	/* Allocate the "who" array */
 	who = C_ZNEW(z_info->f_max, u16b);
 
-	/* Scan thef features */
+	/* Scan the features */
 	for (i = 1; i < z_info->f_max; i++)
 	{
 		feature_type *f_ptr = &f_info[i];
@@ -826,12 +803,9 @@ static void spoil_features(cptr fname)
 	/* Sort the array by dungeon depth of features */
 	ang_sort(who, &why, count);
 
-	/*
-	 * List all features in order.
-	 */
+	/* List all features in order. */
 	for (n = 0; n < count; n++)
 	{
-
 		int f_idx = who[n];
 		feature_type *f_ptr = &f_info[f_idx];
 
@@ -849,13 +823,8 @@ static void spoil_features(cptr fname)
 		sprintf(buf, " '%c')\n", f_ptr->d_char);
 		text_out(buf);
 
-
-		/* Indent */
-		sprintf(buf, "=== ");
-		text_out(buf);
-
-		/* Number */
-		sprintf(buf, "Num:%d  ", f_idx);
+		/* Indent and Number */
+		sprintf(buf, "=== Num:%d  ", f_idx);
 		text_out(buf);
 
 		/* Describe */
@@ -879,7 +848,6 @@ static void spoil_features(cptr fname)
 }
 
 
-
 /*
  * Create Spoiler files
  */
@@ -887,13 +855,12 @@ void do_cmd_spoilers(void)
 {
 	char ch;
 
-
 	/* Save screen */
 	screen_save();
 
 
 	/* Interact */
-	while (1)
+	while (TRUE)
 	{
 		/* Clear screen */
 		Term_clear();
@@ -960,7 +927,6 @@ void do_cmd_spoilers(void)
 		message_flush();
 	}
 
-
 	/* Load screen */
 	screen_load();
 }
@@ -973,6 +939,7 @@ static int i = 0;
 #endif
 
 #endif
+
 
 /*
  * Hack -- Create a "forged" artifact

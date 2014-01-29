@@ -36,6 +36,7 @@ void region_erase(const region *loc)
 		Term_erase(loc->col, loc->row + i, w);
 }
 
+
 bool region_inside(const region *loc, const ui_event_data *key)
 {
 	if ((loc->col > key->mousex) || (loc->col + loc->width <= key->mousex))
@@ -49,6 +50,7 @@ bool region_inside(const region *loc, const ui_event_data *key)
 
 
 /*** Miscellaneous things ***/
+
 
 /*
  * A Hengband-like 'window' function, that draws a surround box in ASCII art.

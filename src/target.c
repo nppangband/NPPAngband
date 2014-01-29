@@ -2077,6 +2077,7 @@ bool target_set_interactive(int mode, int x, int y)
 				{
 					list_floor_objects = (!list_floor_objects);
 				}
+				/* no break */
 
 				case '?':
 				{

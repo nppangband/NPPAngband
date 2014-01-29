@@ -20,6 +20,7 @@
 #include "angband.h"
 #include "game-event.h"
 
+
 /*
  * Convert a decimal to a single digit hex number
  */
@@ -28,8 +29,9 @@ static char hexify(int i)
 	return (hexsym[i % 16]);
 }
 
+
 /*
- * Convert a hexidecimal-digit into a decimal
+ * Convert a hexadecimal-digit into a decimal
  */
 static int dehex(char c)
 {
@@ -64,7 +66,7 @@ static size_t trigger_text_to_ascii(char *buf, size_t max, cptr *strptr)
 	str++;
 
 	/* Examine modifier keys */
-	while (1)
+	while (TRUE)
 	{
 		/* Look for modifier key name */
 		for (i = 0; macro_modifier_chr[i]; i++)
@@ -294,7 +296,6 @@ static size_t trigger_ascii_to_text(char *buf, size_t max, cptr *strptr)
 	cptr tmp;
 	size_t current_len = strlen(buf);
 
-
 	/* No definition of trigger names */
 	if (macro_template == NULL) return 0;
 
@@ -336,6 +337,7 @@ static size_t trigger_ascii_to_text(char *buf, size_t max, cptr *strptr)
 			{
 				if (ch != *str) return 0;
 				str++;
+				break;
 			}
 		}
 	}
@@ -468,6 +470,8 @@ void ascii_to_text(char *buf, size_t len, cptr str)
 }
 
 
+/*----- Roman numeral functions  ------*/
+
 /*
  * Find the start of a possible Roman numerals suffix by going back from the
  * end of the string to a space, then checking that all the remaining chars
@@ -498,7 +502,6 @@ char *find_roman_suffix_start(cptr buf)
 	return (char *)start;
 }
 
-/*----- Roman numeral functions  ------*/
 
 /*
  * Converts an arabic numeral (int) to a roman numeral (char *).
@@ -635,7 +638,6 @@ int roman_to_int(const char *roman)
 }
 
 
-
 /*
  * The "macro" package
  *
@@ -643,7 +645,6 @@ int roman_to_int(const char *roman)
  * of which has a trigger pattern string and a resulting action string
  * and a small set of flags.
  */
-
 
 
 /*
@@ -719,7 +720,6 @@ static int macro_find_maybe(cptr pat)
 	/* Nothing */
 	return -1;
 }
-
 
 
 /*
@@ -806,7 +806,6 @@ errr macro_add(cptr pat, cptr act)
 }
 
 
-
 /*
  * Initialize the "macro" package
  */
@@ -854,7 +853,6 @@ errr macro_free(void)
 	/* Success */
 	return (0);
 }
-
 
 
 /*
@@ -938,7 +936,6 @@ static bool parse_macro = FALSE;
 static bool parse_under = FALSE;
 
 
-
 /*
  * Helper function called only from "inkey()"
  *
@@ -1003,7 +1000,6 @@ static ui_event_data inkey_aux(int scan_cutoff)
 		ch = ke.key;
 	}
 
-
 	/* End "macro action" */
 	if ((ch == 30) || (ch == DEFINED_XFF))
 	{
@@ -1022,13 +1018,11 @@ static ui_event_data inkey_aux(int scan_cutoff)
 	buf[p++] = ch;
 	buf[p] = '\0';
 
-
 	/* Check for possible macro */
 	k = macro_find_check(buf);
 
 	/* No macro pending */
 	if (k < 0) return (ke);
-
 
 	/* Wait for a macro, or a timeout */
 	while (TRUE)
@@ -1064,7 +1058,6 @@ static ui_event_data inkey_aux(int scan_cutoff)
 		}
 	}
 
-
 	/* Check for available macro */
 	k = macro_find_ready(buf);
 
@@ -1091,7 +1084,6 @@ static ui_event_data inkey_aux(int scan_cutoff)
 		return (ke);
 	}
 
-
 	/* Get the pattern */
 	pat = macro__pat[k];
 
@@ -1104,7 +1096,6 @@ static ui_event_data inkey_aux(int scan_cutoff)
 		/* Push the key, notice over-flow */
 		if (Term_key_push(buf[--p])) return (ke0);
 	}
-
 
 	/* Begin "macro action" */
 	parse_macro = TRUE;
@@ -1126,11 +1117,9 @@ static ui_event_data inkey_aux(int scan_cutoff)
 		if (Term_key_push(act[--n])) return (ke0);
 	}
 
-
 	/* Hack -- Force "inkey()" to call us again */
 	return (ke0);
 }
-
 
 
 /*
@@ -1251,7 +1240,6 @@ ui_event_data inkey_ex(void)
 		Term_flush();
 	}
 
-
 	/* Get the cursor state */
 	(void)Term_get_cursor(&cursor_state);
 
@@ -1262,10 +1250,8 @@ ui_event_data inkey_ex(void)
 		(void)Term_set_cursor(TRUE);
 	}
 
-
 	/* Hack -- Activate main screen */
 	Term_activate(term_screen);
-
 
 	/* Get a key */
 	while (ke.type == EVT_NONE)
@@ -1277,7 +1263,6 @@ ui_event_data inkey_ex(void)
 			ke.type = EVT_KBRD;
 			break;
 		}
-
 
 		/* Hack -- Flush output once when no key ready */
 		if (!done && (0 != Term_inkey(&kk, FALSE, FALSE)))
@@ -1301,7 +1286,6 @@ ui_event_data inkey_ex(void)
 			/* Only once */
 			done = TRUE;
 		}
-
 
 		/* Hack -- Handle "inkey_base" */
 		if (inkey_base)
@@ -1345,7 +1329,6 @@ ui_event_data inkey_ex(void)
 
 					/* Delay */
 					Term_xtra(TERM_XTRA_DELAY, 10);
-
 				}
 			}
 
@@ -1389,10 +1372,8 @@ ui_event_data inkey_ex(void)
 			continue;
 		}
 
-
 		/* Treat back-quote as escape */
 		if (ke.key == '`') ke.key = ESCAPE;
-
 
 		/* End "macro trigger" */
 		if (parse_under && (ke.key >=0 && ke.key <= 32))
@@ -1425,14 +1406,13 @@ ui_event_data inkey_ex(void)
 		}
 
 		/* Inside "macro trigger" */
-    	else if (parse_under)
+		else if (parse_under)
 		{
 			/* Strip this key */
 			ke.type = EVT_NONE;
 			ke.key = 0;
 		}
 	}
-
 
 	/* Hack -- restore the term */
 	Term_activate(old);
@@ -1456,7 +1436,7 @@ char anykey(void)
 {
 	ui_event_data ke = EVENT_EMPTY;
 
-	/* Only accept a keypress or mouse click*/
+	/* Only accept a keypress or mouse click */
 	do
 	{
 		ke = inkey_ex();
@@ -1464,6 +1444,7 @@ char anykey(void)
 
 	return ke.key;
 }
+
 
 /*
  * Get a "keypress" from the user.
@@ -1482,7 +1463,6 @@ char inkey(void)
 	if (ke.type == EVT_ESCAPE) ke.key = ESCAPE;
 	return ke.key;
 }
-
 
 
 /*
@@ -1521,8 +1501,6 @@ void sound(int val)
 
 	sound_hook(val);
 }
-
-
 
 
 /*
@@ -1582,7 +1560,7 @@ static int message_column = 0;
  * Hack -- Note that "msg_print(NULL)" will clear the top line even if no
  * messages are pending.
  */
-static void msg_print_aux(u16b type, cptr msg)
+static void msg_print_aux(MessageType type, cptr msg)
 {
 	int n;
 	char *t;
@@ -1612,13 +1590,11 @@ static void msg_print_aux(u16b type, cptr msg)
 		message_column = 0;
 	}
 
-
 	/* No message */
 	if (!msg) return;
 
 	/* Paranoia */
 	if (n > 1000) return;
-
 
 	/* Memorize the message (if legal) */
 	if (character_generated && !(p_ptr->is_dead))
@@ -1698,6 +1674,7 @@ void msg_print(cptr msg)
 	msg_print_aux(MSG_GENERIC, msg);
 }
 
+
 /*
  * Print message and flush (used for de-bugging)
  */
@@ -1707,7 +1684,11 @@ void playtesting(cptr msg)
 	message_flush();
 }
 
-void msg_c_format(u16b mtype, const char *fmt, ...)
+
+/*
+ * Display a formatted message of a given type, using "vstrnfmt()" and "msg_print()".
+ */
+void msg_c_format(const MessageType mtype, const char *fmt, ...)
 {
 	va_list vp;
 
@@ -1728,7 +1709,7 @@ void msg_c_format(u16b mtype, const char *fmt, ...)
 
 
 /*
- * Display a formatted message, using "vstrnfmt()" and "msg_print()".
+ * Display a generic, formatted message, using "vstrnfmt()" and "msg_print()".
  */
 void msg_format(cptr fmt, ...)
 {
@@ -1755,7 +1736,7 @@ void msg_format(cptr fmt, ...)
  *
  * The "extra" parameter is currently unused.
  */
-void message(u16b message_type, s16b extra, cptr message)
+void message(const MessageType message_type, s16b extra, cptr message)
 {
 	/* Unused parameter */
 	(void)extra;
@@ -1771,7 +1752,7 @@ void message(u16b message_type, s16b extra, cptr message)
  *
  * The "extra" parameter is currently unused.
  */
-void message_format(u16b message_type, s16b extra, cptr fmt, ...)
+void message_format(const MessageType message_type, s16b extra, cptr fmt, ...)
 {
 	va_list vp;
 
@@ -1813,14 +1794,16 @@ void message_flush(void)
 	}
 }
 
-/* Clears top line, re-set message column without a -more- prompt */
+
+/*
+ * Clears top line, re-set message column without a -more- prompt
+ */
 void clear_message_line(void)
 {
 	prt("", 0, 0);
 	message_column = 0;
 	msg_flag = FALSE;
 }
-
 
 
 /*
@@ -1880,7 +1863,6 @@ void put_str(cptr str, int row, int col)
 	/* Spawn */
 	Term_putstr(col, row, -1, TERM_WHITE, str);
 }
-
 
 
 /*
@@ -2056,6 +2038,12 @@ void text_out_to_file(byte a, cptr str)
 	/* Wrap width */
 	int wrap = (text_out_wrap ? text_out_wrap : 75);
 
+	/* Output line buffer */
+	char *out;
+
+	/* Current position in output buffer */
+	int out_pos = 0;
+
 	/* We use either ascii or system-specific encoding */
  	int encoding = (xchars_to_file) ? SYSTEM_SPECIFIC : ASCII;
 
@@ -2064,6 +2052,8 @@ void text_out_to_file(byte a, cptr str)
 
 	/* Copy to a rewriteable string */
  	my_strcpy(buf, str, 1024);
+
+ 	out = (char *)mem_alloc((wrap + 1) * sizeof(char));
 
  	/* Translate it to 7-bit ASCII or system-specific format */
  	xstr_trans(buf, encoding);
@@ -2087,7 +2077,7 @@ void text_out_to_file(byte a, cptr str)
 			/* Output the indent */
 			for (i = 0; i < text_out_indent; i++)
 			{
-				file_writec(text_out_file, ' ');
+				out[out_pos++] = ' ';
 				pos++;
 			}
 		}
@@ -2122,6 +2112,7 @@ void text_out_to_file(byte a, cptr str)
 
 				/* Reset */
 				pos = 0;
+				out_pos = 0;
 
 				continue;
 			}
@@ -2141,18 +2132,25 @@ void text_out_to_file(byte a, cptr str)
 			/* Ensure the character is printable */
 			ch = (my_isprint((unsigned char) s[n]) ? s[n] : ' ');
 
-			/* Write out the character */
-			file_writec(text_out_file, ch);
+			/* Add to the buffer */
+			out[out_pos++] = ch;
 
 			/* Increment */
 			pos++;
 		}
 
+		/* Write out the buffer */
+		file_write(text_out_file, out, out_pos);
+
 		/* Move 's' past the stuff we've written */
 		s += len;
 
 		/* If we are at the end of the string, end */
-		if (*s == '\0') return;
+		if (*s == '\0')
+		{
+			mem_free(out);
+			return;
+		}
 
 		/* Skip newlines */
 		if (*s == '\n') s++;
@@ -2162,10 +2160,14 @@ void text_out_to_file(byte a, cptr str)
 
 		/* Reset */
 		pos = 0;
+		out_pos = 0;
 
 		/* Skip whitespace */
 		while (*s == ' ') s++;
 	}
+
+	/* free output buffer */
+	mem_free(out);
 
 	/* We are done */
 	return;
@@ -2216,6 +2218,7 @@ void text_out_c(byte a, const char *fmt, ...)
 	/* Output now */
 	text_out_hook(a, buf);
 }
+
 
 /*
  * Given a "formatted" chunk of text (i.e. one including tags like {red}{/})
@@ -2305,6 +2308,7 @@ static bool next_section(const char *source, size_t init, const char **text, siz
 	return TRUE;
 }
 
+
 /*
  * Output text to the screen or to a file depending on the
  * selected hook.  Takes strings with "embedded formatting",
@@ -2378,6 +2382,7 @@ void clear_from(int row)
 		Term_erase(0, y, 255);
 	}
 }
+
 
 /*
  * The default "keypress handling function" for askfor_aux, this takes the
@@ -2604,7 +2609,6 @@ static bool get_name_keypress(char *buf, size_t buflen, size_t *curs, size_t *le
 			break;
 		}
 
-
 		default:
 		{
 			result = askfor_aux_keypress(buf, buflen, curs, len, keypress, firsttime);
@@ -2662,6 +2666,7 @@ bool get_name(char *buf, size_t buflen)
 	return res;
 }
 
+
 /*
  * Prompt for a string from the user.
  *
@@ -2694,7 +2699,6 @@ bool get_string(cptr prompt, char *buf, size_t len)
 }
 
 
-
 /*
  * Request a "quantity" from the user
  *
@@ -2706,7 +2710,6 @@ s16b get_quantity(cptr prompt, int max)
 
 	button_add("[ALL]", 'a');
 	event_signal(EVENT_MOUSEBUTTONS);
-
 
 	/* Use "command_arg" */
 	if (p_ptr->command_arg)
@@ -2728,13 +2731,11 @@ s16b get_quantity(cptr prompt, int max)
 		/* Build a prompt if needed */
 		if (!prompt)
 		{
-
 			/* Build a prompt */
 			strnfmt(tmp, sizeof(tmp), "Quantity (0-%d, '*' or 'a' = all): ", max);
 
 			/* Use that prompt */
 			prompt = tmp;
-
 		}
 
 		/* Build the default */
@@ -2763,6 +2764,7 @@ s16b get_quantity(cptr prompt, int max)
 	/* Return the result */
 	return (amt);
 }
+
 
 /*
  * Hack - duplication of get_check prompt to give option of setting destroyed
@@ -2807,7 +2809,7 @@ int get_check_other(cptr prompt, cptr other_text, char other, cptr explain)
 		if (ke.key == ESCAPE) break;
 		if (ke.key == '\r') break;
 		if (strchr("YyNn", ke.key))	break;
-		if ((ke.key == tolower(other)) || (ke.key == toupper(other))) break;
+		if ((ke.key == tolower((int)other)) || (ke.key == toupper((int)other))) break;
 		bell("Illegal response to a 'yes/no' question!");
 	}
 
@@ -2821,12 +2823,13 @@ int get_check_other(cptr prompt, cptr other_text, char other, cptr explain)
 	/* Normal negation */
 	if ((ke.key == 'Y') || (ke.key == 'y') || ke.key == '\r')	return (TRUE);
 	/*other option*/
-	else if ((ke.key == toupper(other)) || (ke.key == tolower(other))) return (2);
+	else if ((ke.key == toupper((int)other)) || (ke.key == tolower((int)other))) return (2);
 	/*all else default to no*/
 
 	/* Negative result */
 	return (FALSE);
 }
+
 
 /*
  * Verify something with the user
@@ -2882,6 +2885,7 @@ bool get_check(cptr prompt)
 	/* Success */
 	return (TRUE);
 }
+
 
 /* TODO: refactor get_check() in terms of get_char() */
 /*
@@ -2984,8 +2988,9 @@ static bool get_file_text(const char *suggested_name, char *path, size_t len)
 	return TRUE;
 }
 
+
 /*
- * Give a prompt, then get a choice withing a certain range.
+ * Give a prompt, then get a choice within a certain range.
  */
 int get_menu_choice(s16b max, char *prompt)
 {
@@ -3002,9 +3007,9 @@ int get_menu_choice(s16b max, char *prompt)
 		ch = inkey();
 
 		/* Letters are used for selection */
-		if (isalpha(ch))
+		if (isalpha((int)ch))
 		{
-			if (islower(ch))
+			if (islower((int)ch))
 			{
 				choice = A2I(ch);
 			}
@@ -3025,25 +3030,24 @@ int get_menu_choice(s16b max, char *prompt)
 			}
 		}
 
-		/* Allow user to exit the fuction */
-        else if (ch == ESCAPE)
-        {
+		/* Allow user to exit the function */
+		else if (ch == ESCAPE)
+		{
 			/* Mark as no choice made */
 			choice = -1;
 
 			done = TRUE;
-        }
+		}
 
-        else if (ch == '\r')
-        {
-        	/* Hitting return is the same as 'A' */
-        	choice = A2I('a');
-        	done = TRUE;
-        }
+		else if (ch == '\r')
+		{
+			/* Hitting return is the same as 'A' */
+			choice = A2I('a');
+			done = TRUE;
+		}
 
-         /* Invalid input */
-         else bell("Illegal response to question!");
-
+		/* Invalid input */
+		else bell("Illegal response to question!");
 	}
 
 	/* Clear the prompt */
@@ -3054,15 +3058,11 @@ int get_menu_choice(s16b max, char *prompt)
 }
 
 
-
-
 /**
  * Get a pathname to save a file to, given the suggested name.  Returns the
  * result in "path".
  */
 bool (*get_file)(const char *suggested_name, char *path, size_t len) = get_file_text;
-
-
 
 
 /*
@@ -3122,13 +3122,10 @@ void pause_line(int row)
 }
 
 
-
-
 /*
  * Hack -- special buffer to hold the action of the current keymap
  */
 static char request_command_buffer[256];
-
 
 
 /*
@@ -3166,14 +3163,13 @@ void request_command(void)
 	else
 		mode = KEYMAP_MODE_ORIG;
 
-
 	/* Reset command/argument/direction */
 	p_ptr->command_cmd = 0;
 	p_ptr->command_arg = 0;
 	p_ptr->command_dir = 0;
 
 	/* Get command */
-	while (1)
+	while (TRUE)
 	{
 		/* Hack -- auto-commands */
 		if (p_ptr->command_new)
@@ -3205,14 +3201,12 @@ void request_command(void)
 		/* Clear top line */
 		prt("", 0, 0);
 
-
 		/* Resize events XXX XXX */
 		if (ke.type == EVT_RESIZE)
 		{
 			p_ptr->command_cmd_ex = ke;
 			p_ptr->command_new = ' ';
 		}
-
 
 		/* Command Count */
 		if (ke.key == '0')
@@ -3226,7 +3220,7 @@ void request_command(void)
 			prt("Count: ", 0, 0);
 
 			/* Get a command count */
-			while (1)
+			while (TRUE)
 			{
 				/* Get a new keypress */
 				ke.key = inkey();
@@ -3312,10 +3306,10 @@ void request_command(void)
 		{
 			switch (ke.key)
 			{
-				case ARROW_DOWN:    ke.key = '2'; break;
-				case ARROW_LEFT:    ke.key = '4'; break;
-				case ARROW_RIGHT:   ke.key = '6'; break;
-				case ARROW_UP:      ke.key = '8'; break;
+				case ARROW_DOWN:	ke.key = '2'; break;
+				case ARROW_LEFT:	ke.key = '4'; break;
+				case ARROW_RIGHT:	ke.key = '6'; break;
+				case ARROW_UP:		ke.key = '8'; break;
 			}
 		}
 
@@ -3329,14 +3323,12 @@ void request_command(void)
 			if (!inkey_next) inkey_next = "";
 		}
 
-
 		/* Allow "control chars" to be entered */
 		if (ke.key == '^')
 		{
 			/* Get a new command and controlify it */
 			if (get_com("Control: ", &ke.key)) ke.key = KTRL(ke.key);
 		}
-
 
 		/* Buttons are always specified in standard keyset */
 		if (ke.type == EVT_BUTTON)
@@ -3363,10 +3355,8 @@ void request_command(void)
 			continue;
 		}
 
-
 		/* Paranoia */
 		if (ke.key == '\0') continue;
-
 
 		/* Use command */
 		p_ptr->command_cmd = ke.key;
@@ -3375,7 +3365,6 @@ void request_command(void)
 		/* Done */
 		break;
 	}
-
 
 	/* Hack -- Scan equipment */
 	for (i = INVEN_WIELD; i < INVEN_TOTAL; i++)
@@ -3400,7 +3389,6 @@ void request_command(void)
 		}
 	}
 
-
 	/* Hack -- erase the message line. */
 	prt("", 0, 0);
 
@@ -3408,9 +3396,6 @@ void request_command(void)
 	p_ptr->command_cmd_ex.key = p_ptr->command_cmd;
 
 }
-
-
-
 
 
 /*
@@ -3471,95 +3456,96 @@ int color_char_to_attr(char c)
  */
 int color_text_to_attr(cptr name)
 {
-  	int i, len, base, shade;
+	int i, len, base, shade;
 
 	/* Optimize name searching. See below */
-  	static byte len_names[MAX_BASE_COLORS];
+	static byte len_names[MAX_BASE_COLORS];
 
-  	/* Separate the color name and the shade number */
-  	/* Only letters can be part of the name */
-  	for (i = 0; isalpha(name[i]); i++) ;
+	/* Separate the color name and the shade number */
+	/* Only letters can be part of the name */
+	for (i = 0; isalpha((int)name[i]); i++) ;
 
-  	/* Store the start of the shade number */
-  	len = i;
+	/* Store the start of the shade number */
+	len = i;
 
-  	/* Check for invalid characters in the shade part */
-  	while (name[i])
-  	{
-    	/* No digit, exit */
-    	if (!isdigit(name[i])) return (-1);
-    	++i;
-  	}
+	/* Check for invalid characters in the shade part */
+	while (name[i])
+	{
+		/* No digit, exit */
+		if (!isdigit((int)name[i])) return (-1);
+		++i;
+	}
 
-  	/* Initialize the shade */
-  	shade = 0;
+	/* Initialize the shade */
+	shade = 0;
 
-  	/* Only analyze the shade if there is one */
-  	if (name[len])
-  	{
-    	/* Convert to number */
-    	shade = atoi(name + len);
+	/* Only analyze the shade if there is one */
+	if (name[len])
+	{
+		/* Convert to number */
+		shade = atoi(name + len);
 
-    	/* Check bounds */
-    	if ((shade < 0) || (shade > MAX_SHADES - 1)) return (-1);
-  	}
+		/* Check bounds */
+		if ((shade < 0) || (shade > MAX_SHADES - 1)) return (-1);
+	}
 
-  	/* Extra, allow the use of strings like "r1", "U5", etc. */
-  	if (len == 1)
-  	{
-    	/* Convert one character, check sanity */
-    	if ((base = color_char_to_attr(name[0])) == -1) return (-1);
+	/* Extra, allow the use of strings like "r1", "U5", etc. */
+	if (len == 1)
+	{
+		/* Convert one character, check sanity */
+		if ((base = color_char_to_attr(name[0])) == -1) return (-1);
 
-    	/* Build the extended color */
-    	return (MAKE_EXTENDED_COLOR(base, shade));
-  	}
+		/* Build the extended color */
+		return (MAKE_EXTENDED_COLOR(base, shade));
+	}
 
-  	/* Hack - Initialize the length array once */
-  	if (!len_names[0])
-  	{
-    	for (base = 0; base < MAX_BASE_COLORS; base++)
-    	{
-      	/* Store the length of each color name */
-      	len_names[base] = (byte)strlen(color_names[base & 0x0F]);
-    	}
-  	}
+	/* Hack - Initialize the length array once */
+	if (!len_names[0])
+	{
+		for (base = 0; base < MAX_BASE_COLORS; base++)
+		{
+			/* Store the length of each color name */
+			len_names[base] = (byte)strlen(color_names[base & 0x0F]);
+		}
+	}
 
-  	/* Find the name */
-  	for (base = 0; base < MAX_BASE_COLORS; base++)
-  	{
-    	/* Somewhat optimize the search */
-    	if (len != len_names[base]) continue;
+	/* Find the name */
+	for (base = 0; base < MAX_BASE_COLORS; base++)
+	{
+		/* Somewhat optimize the search */
+		if (len != len_names[base]) continue;
 
-    	/* Compare only the found name */
-    	if (my_strnicmp(name, color_names[base & 0x0F], len) == 0)
-    	{
-      		/* Build the extended color */
-      		return (MAKE_EXTENDED_COLOR(base, shade));
-    	}
-  	}
+		/* Compare only the found name */
+		if (my_strnicmp(name, color_names[base & 0x0F], len) == 0)
+		{
+			/* Build the extended color */
+			return (MAKE_EXTENDED_COLOR(base, shade));
+		}
+	}
 
-  	/* We can not find it */
-  	return (-1);
+	/* We can not find it */
+	return (-1);
 }
+
 
 static const char *short_color_names[MAX_BASE_COLORS] =
 {
-  "Dark",
-  "White",
-  "Slate",
-  "Orange",
-  "Red",
-  "Green",
-  "Blue",
-  "Umber",
-  "L.Dark",
-  "L.Slate",
-  "Violet",
-  "Yellow",
-  "L.Red",
-  "L.Green",
-  "L.Blue",
-  "L.Umber"
+	"Dark",
+	"White",
+	"Slate",
+	"Orange",
+	"Red",
+	"Green",
+	"Blue",
+	"Umber",
+	"L.Dark",
+	"L.Slate",
+	"Violet",
+	"Yellow",
+	"L.Red",
+	"L.Green",
+	"L.Blue",
+	"L.Umber"
 };
 
 
@@ -3676,7 +3662,7 @@ void build_gamma_table(int gamma)
 			n++;
 
 			/*
-			 * Use the following identiy to calculate the gamma table.
+			 * Use the following identity to calculate the gamma table.
 			 * exp(x) = 1 + x + x^2/2 + x^3/(2*3) + x^4/(2*3*4) +...
 			 *
 			 * n is the current term number.
@@ -3692,7 +3678,7 @@ void build_gamma_table(int gamma)
 			 * Note that everything is scaled by 256 for accuracy,
 			 * plus another factor of 256 for the final result to
 			 * be from 0-255.  Thus gamma_helper[] * gamma must be
-			 * divided by 256*256 each itteration, to get back to
+			 * divided by 256*256 each iteration, to get back to
 			 * the original power series.
 			 */
 			diff = (((diff / 256) * gamma_helper[i]) * (gamma - 256)) / (256 * n);
@@ -3778,7 +3764,6 @@ byte get_angle_to_grid[41][41] =
 };
 
 
-
 /*
  * Calculates and returns the angle to the target or in the given
  * direction.
@@ -3847,6 +3832,7 @@ int get_angle_to_target(int y0, int x0, int y1, int x1, int dir)
 	return (get_angle_to_grid[ny][nx]);
 }
 
+
 /*
  * Using the angle given, find a grid that is in that direction from the
  * origin.
@@ -3863,7 +3849,6 @@ void get_grid_using_angle(int angle, int y0, int x0, int *ty, int *tx)
 	int diff;
 	int this_angle;
 	int fudge = 180;
-
 
 	/* Angle must be legal */
 	if ((angle < 0) || (angle >= 180)) return;
@@ -3918,6 +3903,7 @@ void get_grid_using_angle(int angle, int y0, int x0, int *ty, int *tx)
 	}
 }
 
+
 /*
  * Returns a string which contains the name of a extended color.
  * Examples: "Dark", "Red1", "Yellow5", etc.
@@ -3926,27 +3912,24 @@ void get_grid_using_angle(int angle, int y0, int x0, int *ty, int *tx)
  */
 cptr get_ext_color_name(byte ext_color)
 {
-  	static char buf[25];
+	static char buf[25];
 
-  	if (GET_SHADE(ext_color) > 0)
+	if (GET_SHADE(ext_color) > 0)
 	{
-    	strnfmt(buf, sizeof(buf), "%s%d", color_names[GET_BASE_COLOR(ext_color)],
+		strnfmt(buf, sizeof(buf), "%s%d", color_names[GET_BASE_COLOR(ext_color)],
 		GET_SHADE(ext_color));
-  	}
-  	else
-  	{
-    	strnfmt(buf, sizeof(buf), "%s", color_names[GET_BASE_COLOR(ext_color)]);
-  	}
+	}
+	else
+	{
+		strnfmt(buf, sizeof(buf), "%s", color_names[GET_BASE_COLOR(ext_color)]);
+	}
 
-  	return buf;
+	return buf;
 }
 
 
-
-
-
 /*
- * Create a new grid queue. "q" must be a pointer to an unitialized
+ * Create a new grid queue. "q" must be a pointer to an uninitialized
  * grid_queue_type structure. That structure must be already allocated
  * (it can be in the system stack).
  * You must supply the maximum number of grids for the queue
@@ -3963,6 +3946,7 @@ void grid_queue_create(grid_queue_type *q, size_t max_size)
 	q->head = q->tail = 0;
 }
 
+
 /*
  * Free the resources used by a queue
  */
@@ -3977,6 +3961,7 @@ void grid_queue_destroy(grid_queue_type *q)
 	/* Clear all */
 	WIPE(q, grid_queue_type);
 }
+
 
 /*
  * Append a grid at the tail of the queue, given the coordinates of that grid.
@@ -4000,6 +3985,7 @@ bool grid_queue_push(grid_queue_type *q, byte y, byte x)
 	/* Success */
 	return (TRUE);
 }
+
 
 /*
  * Remove the grid at the front of the queue
@@ -4073,5 +4059,4 @@ int effective_depth(int depth)
 	/* in Quickband this is different */
 	return depth;
 }
-
 

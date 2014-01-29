@@ -20,8 +20,6 @@
 #include "angband.h"
 
 
-
-
 /*
  * Global array for looping through the "keypad directions".
  */
@@ -48,7 +46,7 @@ const s16b ddy_ddd[9] =
 
 
 /*
- * Global array for converting numbers to uppercase hecidecimal digit
+ * Global array for converting numbers to uppercase hexadecimal digit
  * This array can also be used to convert a number to an octal digit
  */
 const char hexsym[16] =
@@ -311,6 +309,7 @@ const byte adj_chr_gold[] =
 	90	/* 18/220+ */
 };
 
+
 /*
  * Stat Table (CHR) -- bonus to charm
  *
@@ -555,32 +554,32 @@ const byte adj_dex_ta[] =
 	128 + -3	/* 4 */,
 	128 + -2	/* 5 */,
 	128 + -1	/* 6 */,
-	128 + 0	/* 7 */,
-	128 + 0	/* 8 */,
-	128 + 0	/* 9 */,
-	128 + 0	/* 10 */,
-	128 + 0	/* 11 */,
-	128 + 0	/* 12 */,
-	128 + 0	/* 13 */,
-	128 + 0	/* 14 */,
-	128 + 1	/* 15 */,
-	128 + 1	/* 16 */,
-	128 + 1	/* 17 */,
-	128 + 2	/* 18/00-18/09 */,
-	128 + 2	/* 18/10-18/19 */,
-	128 + 2	/* 18/20-18/29 */,
-	128 + 2	/* 18/30-18/39 */,
-	128 + 2	/* 18/40-18/49 */,
-	128 + 3	/* 18/50-18/59 */,
-	128 + 3	/* 18/60-18/69 */,
-	128 + 3	/* 18/70-18/79 */,
-	128 + 4	/* 18/80-18/89 */,
-	128 + 5	/* 18/90-18/99 */,
-	128 + 6	/* 18/100-18/109 */,
-	128 + 7	/* 18/110-18/119 */,
-	128 + 8	/* 18/120-18/129 */,
-	128 + 9	/* 18/130-18/139 */,
-	128 + 9	/* 18/140-18/149 */,
+	128 + 0		/* 7 */,
+	128 + 0		/* 8 */,
+	128 + 0		/* 9 */,
+	128 + 0		/* 10 */,
+	128 + 0		/* 11 */,
+	128 + 0		/* 12 */,
+	128 + 0		/* 13 */,
+	128 + 0		/* 14 */,
+	128 + 1		/* 15 */,
+	128 + 1		/* 16 */,
+	128 + 1		/* 17 */,
+	128 + 2		/* 18/00-18/09 */,
+	128 + 2		/* 18/10-18/19 */,
+	128 + 2		/* 18/20-18/29 */,
+	128 + 2		/* 18/30-18/39 */,
+	128 + 2		/* 18/40-18/49 */,
+	128 + 3		/* 18/50-18/59 */,
+	128 + 3		/* 18/60-18/69 */,
+	128 + 3		/* 18/70-18/79 */,
+	128 + 4		/* 18/80-18/89 */,
+	128 + 5		/* 18/90-18/99 */,
+	128 + 6		/* 18/100-18/109 */,
+	128 + 7		/* 18/110-18/119 */,
+	128 + 8		/* 18/120-18/129 */,
+	128 + 9		/* 18/130-18/139 */,
+	128 + 9		/* 18/140-18/149 */,
 	128 + 10	/* 18/150-18/159 */,
 	128 + 11	/* 18/160-18/169 */,
 	128 + 12	/* 18/170-18/179 */,
@@ -601,31 +600,31 @@ const byte adj_str_td[] =
 	128 + -2	/* 4 */,
 	128 + -1	/* 5 */,
 	128 + -1	/* 6 */,
-	128 + 0	/* 7 */,
-	128 + 0	/* 8 */,
-	128 + 0	/* 9 */,
-	128 + 0	/* 10 */,
-	128 + 0	/* 11 */,
-	128 + 0	/* 12 */,
-	128 + 0	/* 13 */,
-	128 + 0	/* 14 */,
-	128 + 0	/* 15 */,
-	128 + 1	/* 16 */,
-	128 + 2	/* 17 */,
-	128 + 2	/* 18/00-18/09 */,
-	128 + 2	/* 18/10-18/19 */,
-	128 + 3	/* 18/20-18/29 */,
-	128 + 3	/* 18/30-18/39 */,
-	128 + 3	/* 18/40-18/49 */,
-	128 + 3	/* 18/50-18/59 */,
-	128 + 3	/* 18/60-18/69 */,
-	128 + 4	/* 18/70-18/79 */,
-	128 + 5	/* 18/80-18/89 */,
-	128 + 5	/* 18/90-18/99 */,
-	128 + 6	/* 18/100-18/109 */,
-	128 + 7	/* 18/110-18/119 */,
-	128 + 8	/* 18/120-18/129 */,
-	128 + 9	/* 18/130-18/139 */,
+	128 + 0		/* 7 */,
+	128 + 0		/* 8 */,
+	128 + 0		/* 9 */,
+	128 + 0		/* 10 */,
+	128 + 0		/* 11 */,
+	128 + 0		/* 12 */,
+	128 + 0		/* 13 */,
+	128 + 0		/* 14 */,
+	128 + 0		/* 15 */,
+	128 + 1		/* 16 */,
+	128 + 2		/* 17 */,
+	128 + 2		/* 18/00-18/09 */,
+	128 + 2		/* 18/10-18/19 */,
+	128 + 3		/* 18/20-18/29 */,
+	128 + 3		/* 18/30-18/39 */,
+	128 + 3		/* 18/40-18/49 */,
+	128 + 3		/* 18/50-18/59 */,
+	128 + 3		/* 18/60-18/69 */,
+	128 + 4		/* 18/70-18/79 */,
+	128 + 5		/* 18/80-18/89 */,
+	128 + 5		/* 18/90-18/99 */,
+	128 + 6		/* 18/100-18/109 */,
+	128 + 7		/* 18/110-18/119 */,
+	128 + 8		/* 18/120-18/129 */,
+	128 + 9		/* 18/130-18/139 */,
 	128 + 10	/* 18/140-18/149 */,
 	128 + 11	/* 18/150-18/159 */,
 	128 + 12	/* 18/160-18/169 */,
@@ -648,31 +647,31 @@ const byte adj_dex_th[] =
 	128 + -2	/* 5 */,
 	128 + -1	/* 6 */,
 	128 + -1	/* 7 */,
-	128 + 0	/* 8 */,
-	128 + 0	/* 9 */,
-	128 + 0	/* 10 */,
-	128 + 0	/* 11 */,
-	128 + 0	/* 12 */,
-	128 + 0	/* 13 */,
-	128 + 0	/* 14 */,
-	128 + 0	/* 15 */,
-	128 + 1	/* 16 */,
-	128 + 2	/* 17 */,
-	128 + 3	/* 18/00-18/09 */,
-	128 + 3	/* 18/10-18/19 */,
-	128 + 3	/* 18/20-18/29 */,
-	128 + 3	/* 18/30-18/39 */,
-	128 + 3	/* 18/40-18/49 */,
-	128 + 4	/* 18/50-18/59 */,
-	128 + 4	/* 18/60-18/69 */,
-	128 + 4	/* 18/70-18/79 */,
-	128 + 4	/* 18/80-18/89 */,
-	128 + 5	/* 18/90-18/99 */,
-	128 + 6	/* 18/100-18/109 */,
-	128 + 7	/* 18/110-18/119 */,
-	128 + 8	/* 18/120-18/129 */,
-	128 + 9	/* 18/130-18/139 */,
-	128 + 9	/* 18/140-18/149 */,
+	128 + 0		/* 8 */,
+	128 + 0		/* 9 */,
+	128 + 0		/* 10 */,
+	128 + 0		/* 11 */,
+	128 + 0		/* 12 */,
+	128 + 0		/* 13 */,
+	128 + 0		/* 14 */,
+	128 + 0		/* 15 */,
+	128 + 1		/* 16 */,
+	128 + 2		/* 17 */,
+	128 + 3		/* 18/00-18/09 */,
+	128 + 3		/* 18/10-18/19 */,
+	128 + 3		/* 18/20-18/29 */,
+	128 + 3		/* 18/30-18/39 */,
+	128 + 3		/* 18/40-18/49 */,
+	128 + 4		/* 18/50-18/59 */,
+	128 + 4		/* 18/60-18/69 */,
+	128 + 4		/* 18/70-18/79 */,
+	128 + 4		/* 18/80-18/89 */,
+	128 + 5		/* 18/90-18/99 */,
+	128 + 6		/* 18/100-18/109 */,
+	128 + 7		/* 18/110-18/119 */,
+	128 + 8		/* 18/120-18/129 */,
+	128 + 9		/* 18/130-18/139 */,
+	128 + 9		/* 18/140-18/149 */,
 	128 + 10	/* 18/150-18/159 */,
 	128 + 11	/* 18/160-18/169 */,
 	128 + 12	/* 18/170-18/179 */,
@@ -693,32 +692,32 @@ const byte adj_str_th[] =
 	128 + -2	/* 4 */,
 	128 + -1	/* 5 */,
 	128 + -1	/* 6 */,
-	128 + 0	/* 7 */,
-	128 + 0	/* 8 */,
-	128 + 0	/* 9 */,
-	128 + 0	/* 10 */,
-	128 + 0	/* 11 */,
-	128 + 0	/* 12 */,
-	128 + 0	/* 13 */,
-	128 + 0	/* 14 */,
-	128 + 0	/* 15 */,
-	128 + 0	/* 16 */,
-	128 + 0	/* 17 */,
-	128 + 1	/* 18/00-18/09 */,
-	128 + 1	/* 18/10-18/19 */,
-	128 + 1	/* 18/20-18/29 */,
-	128 + 1	/* 18/30-18/39 */,
-	128 + 1	/* 18/40-18/49 */,
-	128 + 1	/* 18/50-18/59 */,
-	128 + 1	/* 18/60-18/69 */,
-	128 + 2	/* 18/70-18/79 */,
-	128 + 3	/* 18/80-18/89 */,
-	128 + 4	/* 18/90-18/99 */,
-	128 + 5	/* 18/100-18/109 */,
-	128 + 6	/* 18/110-18/119 */,
-	128 + 7	/* 18/120-18/129 */,
-	128 + 8	/* 18/130-18/139 */,
-	128 + 9	/* 18/140-18/149 */,
+	128 + 0		/* 7 */,
+	128 + 0		/* 8 */,
+	128 + 0		/* 9 */,
+	128 + 0		/* 10 */,
+	128 + 0		/* 11 */,
+	128 + 0		/* 12 */,
+	128 + 0		/* 13 */,
+	128 + 0		/* 14 */,
+	128 + 0		/* 15 */,
+	128 + 0		/* 16 */,
+	128 + 0		/* 17 */,
+	128 + 1		/* 18/00-18/09 */,
+	128 + 1		/* 18/10-18/19 */,
+	128 + 1		/* 18/20-18/29 */,
+	128 + 1		/* 18/30-18/39 */,
+	128 + 1		/* 18/40-18/49 */,
+	128 + 1		/* 18/50-18/59 */,
+	128 + 1		/* 18/60-18/69 */,
+	128 + 2		/* 18/70-18/79 */,
+	128 + 3		/* 18/80-18/89 */,
+	128 + 4		/* 18/90-18/99 */,
+	128 + 5		/* 18/100-18/109 */,
+	128 + 6		/* 18/110-18/119 */,
+	128 + 7		/* 18/120-18/129 */,
+	128 + 8		/* 18/130-18/139 */,
+	128 + 9		/* 18/140-18/149 */,
 	128 + 10	/* 18/150-18/159 */,
 	128 + 11	/* 18/160-18/169 */,
 	128 + 12	/* 18/170-18/179 */,
@@ -1095,7 +1094,6 @@ const int adj_con_mhp[] =
 	1250	/* 18/200-18/209 */,
 	1250	/* 18/210-18/219 */,
 	1250	/* 18/220+ */
-
 };
 
 
@@ -1182,12 +1180,12 @@ const byte blows_table[12][12] =
  * energy per turn, but then speed becomes very "expensive",
  * and you must get all the way to "Fast (+50)" to reach the
  * point of getting 45 energy per turn.  After that point,
- * furthur increases in speed are more or less pointless,
+ * further increases in speed are more or less pointless,
  * except to balance out heavy inventory.
  *
  * Note that currently the fastest monster is "Fast (+30)".
  *
- * It should be possible to lower the energy threshhold from
+ * It should be possible to lower the energy threshold from
  * 100 units to 50 units, though this may interact badly with
  * the (compiled out) small random energy boost code.  It may
  * also tend to cause more "clumping" at high speeds.
@@ -1205,70 +1203,71 @@ const byte extract_energy_nppmoria[6] =
 
 const byte extract_energy_nppangband[200] =
 {
-	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
-	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
-	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
-	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
-	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
-	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
-	/* S-50 */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
-	/* S-40 */     2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
-	/* S-30 */     2,  2,  2,  2,  2,  2,  2,  3,  3,  3,
-	/* S-20 */     3,  3,  3,  3,  3,  4,  4,  4,  4,  4,
-	/* S-10 */     5,  5,  5,  5,  6,  6,  7,  7,  8,  9,
-	/* Norm */    10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-	/* F+10 */    20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-	/* F+20 */    30, 31, 32, 33, 34, 35, 36, 36, 37, 37,
-	/* F+30 */    38, 38, 39, 39, 40, 40, 40, 41, 41, 41,
-	/* F+40 */    42, 42, 42, 43, 43, 43, 44, 44, 44, 44,
-	/* F+50 */    45, 45, 45, 45, 45, 46, 46, 46, 46, 46,
-	/* F+60 */    47, 47, 47, 47, 47, 48, 48, 48, 48, 48,
-	/* F+70 */    49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
-	/* Fast */    49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
+	/* Slow */	 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+	/* Slow */	 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+	/* Slow */	 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+	/* Slow */	 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+	/* Slow */	 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+	/* Slow */	 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+	/* S-50 */	 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+	/* S-40 */	 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
+	/* S-30 */	 2,  2,  2,  2,  2,  2,  2,  3,  3,  3,
+	/* S-20 */	 3,  3,  3,  3,  3,  4,  4,  4,  4,  4,
+	/* S-10 */	 5,  5,  5,  5,  6,  6,  7,  7,  8,  9,
+	/* Norm */	10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+	/* F+10 */	20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+	/* F+20 */	30, 31, 32, 33, 34, 35, 36, 36, 37, 37,
+	/* F+30 */	38, 38, 39, 39, 40, 40, 40, 41, 41, 41,
+	/* F+40 */	42, 42, 42, 43, 43, 43, 44, 44, 44, 44,
+	/* F+50 */	45, 45, 45, 45, 45, 46, 46, 46, 46, 46,
+	/* F+60 */	47, 47, 47, 47, 47, 48, 48, 48, 48, 48,
+	/* F+70 */	49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
+	/* Fast */	49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
 };
+
 
 const s32b player_exp_nppmoria[PY_MAX_LEVEL_MORIA] =
 {
-      10,			/* Experience needed to gain level 2 */
-      25,			/* Experience needed to gain level 3 */
-      45,			/* Experience needed to gain level 4 */
-      70,			/* Experience needed to gain level 5 */
-      100,			/* Experience needed to gain level 6 */
-      140,			/* Experience needed to gain level 7 */
-      200,			/* Experience needed to gain level 8 */
-      280,			/* Experience needed to gain level 9 */
-      380,			/* Experience needed to gain level 10 */
-      500,			/* Experience needed to gain level 11 */
-      650,			/* Experience needed to gain level 12 */
-      850,	 		/* Experience needed to gain level 13 */
-      1100,	   		/* Experience needed to gain level 14 */
-      1400,     	/* Experience needed to gain level 15 */
-      1800,     	/* Experience needed to gain level 16 */
-      2300,			/* Experience needed to gain level 17 */
-      2900,    		/* Experience needed to gain level 18 */
-      3600,    		/* Experience needed to gain level 19 */
-      4400,    		/* Experience needed to gain level 20 */
-      5400,	 		/* Experience needed to gain level 21 */
-      6800,	   		/* Experience needed to gain level 22 */
-      8400,    		/* Experience needed to gain level 23 */
-      10200,    	/* Experience needed to gain level 24 */
-      12500,		/* Experience needed to gain level 25 */
-      17500,   		/* Experience needed to gain level 26 */
-      25000,  		/* Experience needed to gain level 27 */
-      35000L,  		/* Experience needed to gain level 28 */
-      50000L,   	/* Experience needed to gain level 29 */
-      75000L,		/* Experience needed to gain level 30 */
-      100000L,  	/* Experience needed to gain level 31 */
-      150000L,  	/* Experience needed to gain level 32 */
-      200000L,		/* Experience needed to gain level 33 */
-      300000L, 		/* Experience needed to gain level 34 */
-      400000L, 		/* Experience needed to gain level 35 */
-      500000L, 		/* Experience needed to gain level 36 */
-      750000L, 		/* Experience needed to gain level 37 */
-      1500000L, 	/* Experience needed to gain level 38 */
-      2500000L, 	/* Experience needed to gain level 39 */
-      5000000L, 	/* Experience needed to gain level 40 */
-      10000000L		/* Level 40 */
+	      10L,	/* Experience needed to gain level 2 */
+	      25L,	/* Experience needed to gain level 3 */
+	      45L,	/* Experience needed to gain level 4 */
+	      70L,	/* Experience needed to gain level 5 */
+	     100L,	/* Experience needed to gain level 6 */
+	     140L,	/* Experience needed to gain level 7 */
+	     200L,	/* Experience needed to gain level 8 */
+	     280L,	/* Experience needed to gain level 9 */
+	     380L,	/* Experience needed to gain level 10 */
+	     500L,	/* Experience needed to gain level 11 */
+	     650L,	/* Experience needed to gain level 12 */
+	     850L,	/* Experience needed to gain level 13 */
+	    1100L,	/* Experience needed to gain level 14 */
+	    1400L,	/* Experience needed to gain level 15 */
+	    1800L,	/* Experience needed to gain level 16 */
+	    2300L,	/* Experience needed to gain level 17 */
+	    2900L,	/* Experience needed to gain level 18 */
+	    3600L,	/* Experience needed to gain level 19 */
+	    4400L,	/* Experience needed to gain level 20 */
+	    5400L,	/* Experience needed to gain level 21 */
+	    6800L,	/* Experience needed to gain level 22 */
+	    8400L,	/* Experience needed to gain level 23 */
+	   10200L,	/* Experience needed to gain level 24 */
+	   12500L,	/* Experience needed to gain level 25 */
+	   17500L,	/* Experience needed to gain level 26 */
+	   25000L,	/* Experience needed to gain level 27 */
+	   35000L,	/* Experience needed to gain level 28 */
+	   50000L,	/* Experience needed to gain level 29 */
+	   75000L,	/* Experience needed to gain level 30 */
+	  100000L,	/* Experience needed to gain level 31 */
+	  150000L,	/* Experience needed to gain level 32 */
+	  200000L,	/* Experience needed to gain level 33 */
+	  300000L,	/* Experience needed to gain level 34 */
+	  400000L,	/* Experience needed to gain level 35 */
+	  500000L,	/* Experience needed to gain level 36 */
+	  750000L,	/* Experience needed to gain level 37 */
+	 1500000L,	/* Experience needed to gain level 38 */
+	 2500000L,	/* Experience needed to gain level 39 */
+	 5000000L,	/* Experience needed to gain level 40 */
+	10000000L	/* Level 40 */
 };
 
 
@@ -1277,56 +1276,56 @@ const s32b player_exp_nppmoria[PY_MAX_LEVEL_MORIA] =
  */
 const s32b player_exp_nppangband[PY_MAX_LEVEL] =
 {
-		10,			/* Experience needed to gain level 2 */
-		25,			/* Experience needed to gain level 3 */
-		45,			/* Experience needed to gain level 4 */
-		70,			/* Experience needed to gain level 5 */
-		100,		/* Experience needed to gain level 6 */
-		140,		/* Experience needed to gain level 7 */
-		200,		/* Experience needed to gain level 8 */
-		280,		/* Experience needed to gain level 9 */
-		380,		/* Experience needed to gain level 10 */
-		500,		/* Experience needed to gain level 11 */
-		650,		/* Experience needed to gain level 12 */
-		850,		/* Experience needed to gain level 13 */
-		1100,		/* Experience needed to gain level 14 */
-		1400,		/* Experience needed to gain level 15 */
-		1800,		/* Experience needed to gain level 16 */
-		2300,		/* Experience needed to gain level 17 */
-		2900,		/* Experience needed to gain level 18 */
-		3600,		/* Experience needed to gain level 19 */
-		4400,		/* Experience needed to gain level 20 */
-		5400,		/* Experience needed to gain level 21 */
-		6800,		/* Experience needed to gain level 22 */
-		8400,		/* Experience needed to gain level 23 */
-		10200,		/* Experience needed to gain level 24 */
-		12500,		/* Experience needed to gain level 25 */
-		17500,		/* Experience needed to gain level 26 */
-		25000,		/* Experience needed to gain level 27 */
-		35000L,		/* Experience needed to gain level 28 */
-		50000L,		/* Experience needed to gain level 29 */
-		75000L,		/* Experience needed to gain level 30 */
-		100000L,	/* Experience needed to gain level 31 */
-		150000L,	/* Experience needed to gain level 32 */
-		200000L,	/* Experience needed to gain level 33 */
-		275000L,	/* Experience needed to gain level 34 */
-		350000L,	/* Experience needed to gain level 35 */
-		450000L,	/* Experience needed to gain level 36 */
-		550000L,	/* Experience needed to gain level 37 */
-		700000L,	/* Experience needed to gain level 38 */
-		850000L,	/* Experience needed to gain level 39 */
-		1000000L,	/* Experience needed to gain level 40 */
-		1250000L,	/* Experience needed to gain level 41 */
-		1500000L,	/* Experience needed to gain level 42 */
-		1800000L,	/* Experience needed to gain level 43 */
-		2100000L,	/* Experience needed to gain level 44 */
-		2400000L,	/* Experience needed to gain level 45 */
-		2700000L,	/* Experience needed to gain level 46 */
-		3000000L,	/* Experience needed to gain level 47 */
-		3500000L,	/* Experience needed to gain level 48 */
-		4000000L,	/* Experience needed to gain level 49 */
-		4500000L,	/* Experience needed to gain level 50 */
-		5000000L	/* Level 50 */
+	10L,		/* Experience needed to gain level 2 */
+	25L,		/* Experience needed to gain level 3 */
+	45L,		/* Experience needed to gain level 4 */
+	70L,		/* Experience needed to gain level 5 */
+	100L,		/* Experience needed to gain level 6 */
+	140L,		/* Experience needed to gain level 7 */
+	200L,		/* Experience needed to gain level 8 */
+	280L,		/* Experience needed to gain level 9 */
+	380L,		/* Experience needed to gain level 10 */
+	500L,		/* Experience needed to gain level 11 */
+	650L,		/* Experience needed to gain level 12 */
+	850L,		/* Experience needed to gain level 13 */
+	1100L,		/* Experience needed to gain level 14 */
+	1400L,		/* Experience needed to gain level 15 */
+	1800L,		/* Experience needed to gain level 16 */
+	2300L,		/* Experience needed to gain level 17 */
+	2900L,		/* Experience needed to gain level 18 */
+	3600L,		/* Experience needed to gain level 19 */
+	4400L,		/* Experience needed to gain level 20 */
+	5400L,		/* Experience needed to gain level 21 */
+	6800L,		/* Experience needed to gain level 22 */
+	8400L,		/* Experience needed to gain level 23 */
+	10200L,		/* Experience needed to gain level 24 */
+	12500L,		/* Experience needed to gain level 25 */
+	17500L,		/* Experience needed to gain level 26 */
+	25000L,		/* Experience needed to gain level 27 */
+	35000L,		/* Experience needed to gain level 28 */
+	50000L,		/* Experience needed to gain level 29 */
+	75000L,		/* Experience needed to gain level 30 */
+	100000L,	/* Experience needed to gain level 31 */
+	150000L,	/* Experience needed to gain level 32 */
+	200000L,	/* Experience needed to gain level 33 */
+	275000L,	/* Experience needed to gain level 34 */
+	350000L,	/* Experience needed to gain level 35 */
+	450000L,	/* Experience needed to gain level 36 */
+	550000L,	/* Experience needed to gain level 37 */
+	700000L,	/* Experience needed to gain level 38 */
+	850000L,	/* Experience needed to gain level 39 */
+	1000000L,	/* Experience needed to gain level 40 */
+	1250000L,	/* Experience needed to gain level 41 */
+	1500000L,	/* Experience needed to gain level 42 */
+	1800000L,	/* Experience needed to gain level 43 */
+	2100000L,	/* Experience needed to gain level 44 */
+	2400000L,	/* Experience needed to gain level 45 */
+	2700000L,	/* Experience needed to gain level 46 */
+	3000000L,	/* Experience needed to gain level 47 */
+	3500000L,	/* Experience needed to gain level 48 */
+	4000000L,	/* Experience needed to gain level 49 */
+	4500000L,	/* Experience needed to gain level 50 */
+	5000000L	/* Level 50 */
 };
 
 
@@ -1348,6 +1347,7 @@ const player_sex sex_info[MAX_SEXES] =
 		"King"
 	}
 };
+
 
 /*
  * Spells in each book (mage spells, priest and druid spells)
@@ -1383,8 +1383,8 @@ const s16b spell_list_nppmoria_mage[BOOKS_PER_REALM_MORIA][SPELLS_PER_BOOK] =
 	/* Magick II */
 	{
 		SPELL_CREATE_FOOD,
-	   	SPELL_RECHARGE_ITEM_I,
-	   	SPELL_SLEEP_II,
+		SPELL_RECHARGE_ITEM_I,
+		SPELL_SLEEP_II,
 		SPELL_POLYMORPH_OTHER,
 		SPELL_IDENTIFY,
 		SPELL_MASS_SLEEP,
@@ -1466,13 +1466,11 @@ const s16b spell_list_nppmoria_priest[BOOKS_PER_REALM_MORIA][SPELLS_PER_BOOK] =
 };
 
 
-
 /*
  * Spells in each book (mage spells, priest and druid spells)
  */
 const s16b spell_list_nppangband_mage[BOOKS_PER_REALM_ANGBAND][SPELLS_PER_BOOK] =
 {
-
 	/* Magic for Beginners */
 	{
 		SPELL_MAGIC_MISSILE,
@@ -1502,7 +1500,7 @@ const s16b spell_list_nppangband_mage[BOOKS_PER_REALM_ANGBAND][SPELLS_PER_BOOK] 
 	/* Incantations and Illusions */
 	{
 		SPELL_SATISFY_HUNGER,
-    	SPELL_RECHARGE_ITEM_I,
+		SPELL_RECHARGE_ITEM_I,
 		SPELL_TURN_STONE_TO_MUD,
 		SPELL_SHARD_STORM,
 		SPELL_POLYMORPH_OTHER,
@@ -1591,10 +1589,11 @@ const s16b spell_list_nppangband_mage[BOOKS_PER_REALM_ANGBAND][SPELLS_PER_BOOK] 
 	},
 };
 
+
 /*** Priest spell books ***/
 const s16b spell_list_nppangband_priest[BOOKS_PER_REALM_ANGBAND][SPELLS_PER_BOOK] =
 {
-		/*Beginner's Handbook*/
+	/*Beginner's Handbook*/
 	{
 		PRAYER_DETECT_EVIL,
 		PRAYER_CURE_LIGHT_WOUNDS,
@@ -1834,8 +1833,6 @@ const s16b spell_list_nppangband_druid[BOOKS_PER_REALM_ANGBAND][SPELLS_PER_BOOK]
 };
 
 
-
-
 /*
  * Each chest has a certain set of traps, determined by pval
  * Each chest has a "pval" from 1 to the chest level (max 55)
@@ -1911,6 +1908,7 @@ const byte chest_traps[64] =
 	(CHEST_EXPLODE | CHEST_SUMMON | CHEST_PARALYZE),
 };
 
+
 /*
  * Array of feeling strings
  */
@@ -1945,7 +1943,6 @@ cptr feeling_themed_level[LEV_THEME_TAIL] =
 };
 
 
-
 /*
  * Hack -- the "basic" color names (see "TERM_xxx")
  */
@@ -1978,6 +1975,7 @@ cptr stat_names[A_MAX] =
 	"STR: ", "INT: ", "WIS: ", "DEX: ", "CON: ", "CHR: "
 };
 
+
 /*
  * Abbreviations of damaged stats
  */
@@ -1985,6 +1983,7 @@ cptr stat_names_reduced[A_MAX] =
 {
 	"Str: ", "Int: ", "Wis: ", "Dex: ", "Con: ", "Chr: "
 };
+
 
 /*
  * Full stat names
@@ -1998,7 +1997,6 @@ cptr stat_names_full[A_MAX] =
 	"constitution",
 	"charisma"
 };
-
 
 
 /*
@@ -2061,7 +2059,7 @@ option_entry options[OPT_MAX] =
 	{NULL,					NULL,									FALSE},		/* xxx */
 	{"stack_force_notes",	"Merge inscriptions when stacking",		FALSE},		/* OPT_stack_force_notes */
 	{"stack_force_costs",	"Merge discounts when stacking",		FALSE},		/* OPT_stack_force_costs */
-	{"expand_inscribe",     "Expand the power of the inscribe commands", TRUE},	/* OPT_expand_inscribe */
+	{"expand_inscribe",		"Expand the power of the inscribe commands", TRUE},	/* OPT_expand_inscribe */
 	{"disturb_detect",		"Disturb whenever leaving trap detected area",TRUE},/* OPT_disturb_detect */
 	{NULL,					NULL,									FALSE},		/* xxx */
 	{NULL,					NULL,									FALSE},		/* xxx */
@@ -2085,7 +2083,7 @@ option_entry options[OPT_MAX] =
 	{NULL,					NULL,									FALSE},		/* xxx */
 	{NULL,					NULL,									FALSE},		/* xxx */
 	{"auto_scum",			"Auto-scum for good levels",			FALSE},		/* OPT_auto_scum */
-	{"allow_themed_levels","Allow the generation of themed levels",  TRUE},		/* OPT_allow_themed_levels */
+	{"allow_themed_levels",	"Allow the generation of themed levels", TRUE},		/* OPT_allow_themed_levels */
 	{NULL,					NULL,									FALSE},		/* xxx */
 	{NULL,					NULL,									FALSE},		/* xxx */
 	{NULL,					NULL,									FALSE},		/* xxx */
@@ -2309,6 +2307,7 @@ option_entry options[OPT_MAX] =
 	{NULL,NULL,FALSE} /* xxx */
 };
 
+
 /*
  * Option screen interface
  */
@@ -2440,13 +2439,13 @@ const byte option_page_nppangband[OPT_PAGE_MAX][OPT_PAGE_PER] =
 	}
 };
 
+
 /*
  * Option screen interface
  */
 const byte option_page_nppmoria[OPT_PAGE_MAX][OPT_PAGE_PER] =
 {
 	/*** Interface/Gameplay ***/
-
 	{
 		OPT_use_sound,
 		OPT_rogue_like_commands,
@@ -2471,7 +2470,6 @@ const byte option_page_nppmoria[OPT_PAGE_MAX][OPT_PAGE_PER] =
 	},
 
 	/*** Display ***/
-
 	{
 		OPT_hp_changes_color,
 		OPT_hilight_player,
@@ -2496,7 +2494,6 @@ const byte option_page_nppmoria[OPT_PAGE_MAX][OPT_PAGE_PER] =
 	},
 
 	/* Warning */
-
 	{
 		OPT_disturb_move,
 		OPT_disturb_near,
@@ -2521,7 +2518,6 @@ const byte option_page_nppmoria[OPT_PAGE_MAX][OPT_PAGE_PER] =
 	},
 
 	/*** Birth ***/
-
 	{
 		OPT_birth_money,
 		OPT_birth_take_notes,
@@ -2546,7 +2542,6 @@ const byte option_page_nppmoria[OPT_PAGE_MAX][OPT_PAGE_PER] =
 	},
 
 	/*** Cheat ***/
-
 	{
 		OPT_cheat_peek,
 		OPT_cheat_hear,
@@ -2585,9 +2580,8 @@ cptr inscrip_text[MAX_INSCRIP] =
 	"excellent",
 	"special",
 	"uncursed",
-	"indestructible"
+	"indestructable"
 };
-
 
 
 /*
@@ -2608,155 +2602,158 @@ cptr inscrip_text[MAX_INSCRIP] =
 /*{Mana_cost,dam_mult,dam_div,dam_var,best_range}*/
 byte spell_info_RF4[32][5]=
 {
-	{1,     0,     0,     0,     0},        /* RF4_SHIEIK */
-	{0,     0,     0,     0,     0},        /* RF4_LASH */
-	{0,     3,     1,     4,     4},        /* RF4_BOULDER */
-	{0,     4,     1,     4,     4},        /* RF4_SHOT */
-	{0,     4,     1,     4,     4},        /* RF4_ARROW */
-	{0,     4,     1,     4,     4},        /* RF4_BOLT */
-	{0,     3,     1,     4,     4},        /* RF4_MISSL */
-	{0,     3,     1,     6,     6},        /* RF4_PMISSLE */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_ACID */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_ELEC */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_FIRE */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_COLD */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_POIS */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_PLAS */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_LIGHT */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_DARK */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_CONFU */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_SOUND */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_SHARD */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_INER */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_GRAV */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_FORCE */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_NEXUS */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_NETHR */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_CHAOS */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_DISEN */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_TIME */
-	{0,     0,     0,     0,     0},        /* RF4_BRTH_MANA */
-	{0,     0,     0,     0,     0},        /* RF4_XXX3 */
-	{0,     0,     0,     0,     0},        /* RF4_XXX4 */
-	{0,     0,     0,     0,     0},        /* RF4_XXX5 */
-	{0,     0,     0,     0,     0}        /* RF4_XXX6 */
+	{1,     0,     0,     0,     0},		/* RF4_SHIEIK */
+	{0,     0,     0,     0,     0},		/* RF4_LASH */
+	{0,     3,     1,     4,     4},		/* RF4_BOULDER */
+	{0,     4,     1,     4,     4},		/* RF4_SHOT */
+	{0,     4,     1,     4,     4},		/* RF4_ARROW */
+	{0,     4,     1,     4,     4},		/* RF4_BOLT */
+	{0,     3,     1,     4,     4},		/* RF4_MISSL */
+	{0,     3,     1,     6,     6},		/* RF4_PMISSLE */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_ACID */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_ELEC */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_FIRE */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_COLD */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_POIS */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_PLAS */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_LIGHT */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_DARK */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_CONFU */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_SOUND */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_SHARD */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_INER */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_GRAV */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_FORCE */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_NEXUS */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_NETHR */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_CHAOS */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_DISEN */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_TIME */
+	{0,     0,     0,     0,     0},		/* RF4_BRTH_MANA */
+	{0,     0,     0,     0,     0},		/* RF4_XXX3 */
+	{0,     0,     0,     0,     0},		/* RF4_XXX4 */
+	{0,     0,     0,     0,     0},		/* RF4_XXX5 */
+	{0,     0,     0,     0,     0}			/* RF4_XXX6 */
 };
 
- /*{Mana_cost,dam_mult,dam_div,dam_var,best_range}*/
+
+/* {Mana_cost,dam_mult,dam_div,dam_var,best_range} */
 byte spell_info_RF5[32][5]=
 {
-	{4,     4,     1,     6,     6},        /* RF5_BALL_ACID */
-	{4,     4,     1,     6,     6},        /* RF5_BALL_ELEC */
-	{4,     4,     1,     6,     6},        /* RF5_BALL_FIRE */
-	{4,     4,     1,     6,     6},        /* RF5_BALL_COLD */
-	{4,     3,     1,     6,     6},        /* RF5_BALL_POIS */
-	{5,     3,     1,     6,     6},        /* RF5_BALL_LIGHT */
-	{5,     3,     1,     6,     6},        /* RF5_BALL_DARK */
-	{6,     3,     1,     6,     6},        /* RF5_BALL_CONFU */
-	{4,     2,     1,     6,     6},        /* RF5_BALL_SOUND */
-	{4,     3,     1,     6,     6},        /* RF5_BALL_SHARD */
-	{6,     5,     2,     6,     6},        /* RF5_BALL_METEOR */
-	{5,     3,     1,     4,     4},        /* RF5_BALL_STORM */
-	{6,     3,     1,     6,     6},        /* RF5_BALL_NETHR */
-	{7,     3,     1,     4,     4},        /* RF5_BALL_CHAOS */
-	{7,     3,     1,     8,     8},        /* RF5_BALL_MANA */
-	{7,     3,     1,     6,     6},        /* RF5_BALL_WATER */
-	{4,     4,     1,     6,     6},        /* RF5_BOLT_ACID */
-	{4,     4,     1,     6,     6},        /* RF5_BOLT_ELEC */
-	{4,     4,     1,     6,     6},        /* RF5_BOLT_FIRE */
-	{4,     4,     1,     6,     6},        /* RF5_BOLT_COLD */
-	{4,     3,     1,     6,     6},        /* RF5_BOLT_POIS */
-	{5,     3,     1,     6,     6},        /* RF5_BOLT_PLAS */
-	{5,     3,     1,     6,     6},        /* RF5_BOLT_ICE */
-	{5,     3,     1,     6,     6},        /* RF5_BOLT_WATER */
-	{5,     3,     1,     6,     6},        /* RF5_BOLT_NETHR */
-	{5,     2,     1,     6,     6},        /* RF5_BOLT_MANA */
-	{5,     2,     1,     6,     6},        /* RF5_BOLT_GRAV */
-	{6,     3,     1,     6,     6},        /* RF5_BEAM_ELEC */
-	{6,     4,     1,     6,     6},        /* RF5_BEAM_ICE */
-	{6,     3,     1,     6,     6},        /* RF5_BEAM_NETHR */
-	{6,     5,     2,     6,     6},        /* RF5_BEAM_LAVA */
-	{5,     5,     2,     8,     8}         /* RF5_HOLY_ORB */
+	{4,     4,     1,     6,     6},		/* RF5_BALL_ACID */
+	{4,     4,     1,     6,     6},		/* RF5_BALL_ELEC */
+	{4,     4,     1,     6,     6},		/* RF5_BALL_FIRE */
+	{4,     4,     1,     6,     6},		/* RF5_BALL_COLD */
+	{4,     3,     1,     6,     6},		/* RF5_BALL_POIS */
+	{5,     3,     1,     6,     6},		/* RF5_BALL_LIGHT */
+	{5,     3,     1,     6,     6},		/* RF5_BALL_DARK */
+	{6,     3,     1,     6,     6},		/* RF5_BALL_CONFU */
+	{4,     2,     1,     6,     6},		/* RF5_BALL_SOUND */
+	{4,     3,     1,     6,     6},		/* RF5_BALL_SHARD */
+	{6,     5,     2,     6,     6},		/* RF5_BALL_METEOR */
+	{5,     3,     1,     4,     4},		/* RF5_BALL_STORM */
+	{6,     3,     1,     6,     6},		/* RF5_BALL_NETHR */
+	{7,     3,     1,     4,     4},		/* RF5_BALL_CHAOS */
+	{7,     3,     1,     8,     8},		/* RF5_BALL_MANA */
+	{7,     3,     1,     6,     6},		/* RF5_BALL_WATER */
+	{4,     4,     1,     6,     6},		/* RF5_BOLT_ACID */
+	{4,     4,     1,     6,     6},		/* RF5_BOLT_ELEC */
+	{4,     4,     1,     6,     6},		/* RF5_BOLT_FIRE */
+	{4,     4,     1,     6,     6},		/* RF5_BOLT_COLD */
+	{4,     3,     1,     6,     6},		/* RF5_BOLT_POIS */
+	{5,     3,     1,     6,     6},		/* RF5_BOLT_PLAS */
+	{5,     3,     1,     6,     6},		/* RF5_BOLT_ICE */
+	{5,     3,     1,     6,     6},		/* RF5_BOLT_WATER */
+	{5,     3,     1,     6,     6},		/* RF5_BOLT_NETHR */
+	{5,     2,     1,     6,     6},		/* RF5_BOLT_MANA */
+	{5,     2,     1,     6,     6},		/* RF5_BOLT_GRAV */
+	{6,     3,     1,     6,     6},		/* RF5_BEAM_ELEC */
+	{6,     4,     1,     6,     6},		/* RF5_BEAM_ICE */
+	{6,     3,     1,     6,     6},		/* RF5_BEAM_NETHR */
+	{6,     5,     2,     6,     6},		/* RF5_BEAM_LAVA */
+	{5,     5,     2,     8,     8}			/* RF5_HOLY_ORB */
 };
 
- /*{Mana_cost,dam_mult,dam_div,dam_var,best_range}*/
+
+/* {Mana_cost,dam_mult,dam_div,dam_var,best_range} */
 byte spell_info_RF6[32][5]=
 {
-	{6,     0,     0,     0,     0},        /* RF6_HASTE */
-	{0,     0,     0,     0,     0},        /* RF6_ADD_MANA */
-	{3,     0,     0,     0,     0},        /* RF6_HEAL */
-	{3,     0,     0,     0,     0},        /* RF6_CURE */
-	{3,     0,     0,     0,     0},        /* RF6_BLINK */
-	{8,     0,     0,     0,     0},        /* RF6_TPORT */
-	{0,     0,     0,     0,     0},        /* RF6_XXX1 */
-	{4,     0,     0,     0,     0},        /* RF6_TELE_SELF_TO */
-	{4,     0,     0,     0,     0},        /* RF6_TELE_TO */
-	{8,     0,     0,     0,     0},        /* RF6_TELE_AWAY */
-	{8,     0,     0,     0,     0},        /* RF6_TELE_LEVEL */
-	{0,     0,     0,     0,     0},        /* RF6_XXX2 */
-	{1,     0,     0,     0,     0},        /* RF6_DARKNESS */
-	{2,     0,     0,     0,     0},        /* RF6_TRAPS */
-	{0,     0,     0,     0,     0},        /* RF6_XXX3 */
-	{2,     0,     0,     0,     0},        /* RF6_DRAIN_MANA */
-	{0,     0,     0,     0,     0},        /* RF6_XXX4 */
-	{0,     0,     0,     0,     0},        /* RF6_XXX5 */
-	{3,     3,     2,     6,     6},        /* RF6_MIND_BLAST */
-	{4,     5,     2,     6,     6},        /* RF6_BRAIN_SMASH */
-	{4,     5,     2,     6,     6},        /* RF6_WOUND */
-	{0,     0,     0,     0,     0},        /* RF6_XXX6 */
-	{0,     0,     0,     0,     0},        /* RF6_XXX7 */
-	{0,     0,     0,     0,     0},        /* RF6_XXX8 */
-	{0,     0,     0,     0,     0},        /* RF6_XXX9 */
-	{2,     0,     0,     0,     0},        /* RF6_HUNGER */
-	{0,     0,     0,     0,     0},        /* RF6_XX11 */
-	{1,     0,     0,     0,     0},        /* RF6_SCARE */
-	{3,     0,     0,     0,     0},        /* RF6_BLIND */
-	{4,     0,     0,     0,     0},        /* RF6_CONF */
-	{5,     0,     0,     0,     0},        /* RF6_SLOW */
-	{6,     0,     0,     0,     0}        /* RF6_HOLD */
+	{6,     0,     0,     0,     0},		/* RF6_HASTE */
+	{0,     0,     0,     0,     0},		/* RF6_ADD_MANA */
+	{3,     0,     0,     0,     0},		/* RF6_HEAL */
+	{3,     0,     0,     0,     0},		/* RF6_CURE */
+	{3,     0,     0,     0,     0},		/* RF6_BLINK */
+	{8,     0,     0,     0,     0},		/* RF6_TPORT */
+	{0,     0,     0,     0,     0},		/* RF6_XXX1 */
+	{4,     0,     0,     0,     0},		/* RF6_TELE_SELF_TO */
+	{4,     0,     0,     0,     0},		/* RF6_TELE_TO */
+	{8,     0,     0,     0,     0},		/* RF6_TELE_AWAY */
+	{8,     0,     0,     0,     0},		/* RF6_TELE_LEVEL */
+	{0,     0,     0,     0,     0},		/* RF6_XXX2 */
+	{1,     0,     0,     0,     0},		/* RF6_DARKNESS */
+	{2,     0,     0,     0,     0},		/* RF6_TRAPS */
+	{0,     0,     0,     0,     0},		/* RF6_XXX3 */
+	{2,     0,     0,     0,     0},		/* RF6_DRAIN_MANA */
+	{0,     0,     0,     0,     0},		/* RF6_XXX4 */
+	{0,     0,     0,     0,     0},		/* RF6_XXX5 */
+	{3,     3,     2,     6,     6},		/* RF6_MIND_BLAST */
+	{4,     5,     2,     6,     6},		/* RF6_BRAIN_SMASH */
+	{4,     5,     2,     6,     6},		/* RF6_WOUND */
+	{0,     0,     0,     0,     0},		/* RF6_XXX6 */
+	{0,     0,     0,     0,     0},		/* RF6_XXX7 */
+	{0,     0,     0,     0,     0},		/* RF6_XXX8 */
+	{0,     0,     0,     0,     0},		/* RF6_XXX9 */
+	{2,     0,     0,     0,     0},		/* RF6_HUNGER */
+	{0,     0,     0,     0,     0},		/* RF6_XX11 */
+	{1,     0,     0,     0,     0},		/* RF6_SCARE */
+	{3,     0,     0,     0,     0},		/* RF6_BLIND */
+	{4,     0,     0,     0,     0},		/* RF6_CONF */
+	{5,     0,     0,     0,     0},		/* RF6_SLOW */
+	{6,     0,     0,     0,     0}			/* RF6_HOLD */
 };
+
 
  /*{Mana_cost,dam_mult,dam_div,dam_var,best_range}*/
 byte spell_info_RF7[32][5]=
 {
-	{12,    0,     0,     0,     0},        /* RF7_S_KIN */ /* Summon - 6 */
-	{0,     0,     0,     0,     0},        /* RF7_XXX1 */
-	{0,     0,     0,     0,     0},        /* RF7_XXX2 */
-	{10,    0,     0,     0,     0},        /* RF7_S_MONSTER */ /* Summon - 1 */
-	{15,    0,     0,     0,     0},        /* RF7_S_MONSTERS */ /* Summon - 8 */
-	{0,     0,     0,     0,     0},        /* RF7_XXX3 */
-	{0,     0,     0,     0,     0},        /* RF7_XXX4 */
-	{0,     0,     0,     0,     0},        /* RF7_XXX5 */
-	{10,    0,     0,     0,     0},        /* RF7_S_ANT */ /* Summon - 6 */
-	{12,    0,     0,     0,     0},        /* RF7_S_SPIDER */ /* Summon - 6 */
-	{14,    0,     0,     0,     0},        /* RF7_S_HOUND */ /* Summon - 6 */
-	{15,    0,     0,     0,     0},        /* RF7_S_ANIMAL */ /* Summon - 6 */
-	{15,    0,     0,     0,     0},        /* RF7_S_HYDRA */
-	{0,     0,     0,     0,     0},        /* RF7_XXX7 */
-	{15,    0,     0,     0,     0},        /* RF7_S_THIEF */ /* Summon - 6 */
-	{5,     0,     0,     0,     0},        /* RF7_S_BERTBILLTOM */ /* Summon - 2 */
-	{0,     0,     0,     0,     0},        /* RF7_XXX8 */
-	{15,    0,     0,     0,     0},        /* RF7_S_AINU */
-	{0,     0,     0,     0,     0},        /* RF7_XX10 */
-	{0,     0,     0,     0,     0},        /* RF7_XX11 */
-	{14,    0,     0,     0,     0},        /* RF7_S_DRAGON */ /* Summon - 1 */
-	{20,    0,     0,     0,     0},        /* RF7_S_HI_DRAGON */ /* Summon - 8 */
-	{0,     0,     0,     0,     0},        /* RF7_XX12 */
-	{0,     0,     0,     0,     0},        /* RF7_XX13 */
-	{14,    0,     0,     0,     0},        /* RF7_S_DEMON */ /* Summon - 1 / 2-3 */
-	{20,    0,     0,     0,     0},        /* RF7_S_HI_DEMON */ /* Summon - 8 */
-	{0,     0,     0,     0,     0},        /* RF7_XX14 */
-	{15,    0,     0,     0,     0},        /* RF7_S_UNIQUE */ /* Summon - 8 */
-	{20,    0,     0,     0,     0},        /* RF7_S_HI_UNIQUE */ /* Summon - 8 */
-	{12,    0,     0,     0,     0},        /* RF7_S_UNDEAD */ /* Summon - 1 */
-	{20,    0,     0,     0,     0},        /* RF7_S_HI_UNDEAD */ /* Summon - 8 */
-	{20,    0,     0,     0,     0}        /* RF7_S_WRAITH */ /* Summon - 8 */
-
+	{12,    0,     0,     0,     0},		/* RF7_S_KIN */			/* Summon - 6 */
+	{0,     0,     0,     0,     0},		/* RF7_XXX1 */
+	{0,     0,     0,     0,     0},		/* RF7_XXX2 */
+	{10,    0,     0,     0,     0},		/* RF7_S_MONSTER */		/* Summon - 1 */
+	{15,    0,     0,     0,     0},		/* RF7_S_MONSTERS */	/* Summon - 8 */
+	{0,     0,     0,     0,     0},		/* RF7_XXX3 */
+	{0,     0,     0,     0,     0},		/* RF7_XXX4 */
+	{0,     0,     0,     0,     0},		/* RF7_XXX5 */
+	{10,    0,     0,     0,     0},		/* RF7_S_ANT */			/* Summon - 6 */
+	{12,    0,     0,     0,     0},		/* RF7_S_SPIDER */		/* Summon - 6 */
+	{14,    0,     0,     0,     0},		/* RF7_S_HOUND */		/* Summon - 6 */
+	{15,    0,     0,     0,     0},		/* RF7_S_ANIMAL */		/* Summon - 6 */
+	{15,    0,     0,     0,     0},		/* RF7_S_HYDRA */
+	{0,     0,     0,     0,     0},		/* RF7_XXX7 */
+	{15,    0,     0,     0,     0},		/* RF7_S_THIEF */		/* Summon - 6 */
+	{5,     0,     0,     0,     0},		/* RF7_S_BERTBILLTOM */	/* Summon - 2 */
+	{0,     0,     0,     0,     0},		/* RF7_XXX8 */
+	{15,    0,     0,     0,     0},		/* RF7_S_AINU */
+	{0,     0,     0,     0,     0},		/* RF7_XX10 */
+	{0,     0,     0,     0,     0},		/* RF7_XX11 */
+	{14,    0,     0,     0,     0},		/* RF7_S_DRAGON */		/* Summon - 1 */
+	{20,    0,     0,     0,     0},		/* RF7_S_HI_DRAGON */	/* Summon - 8 */
+	{0,     0,     0,     0,     0},		/* RF7_XX12 */
+	{0,     0,     0,     0,     0},		/* RF7_XX13 */
+	{14,    0,     0,     0,     0},		/* RF7_S_DEMON */		/* Summon - 1 / 2-3 */
+	{20,    0,     0,     0,     0},		/* RF7_S_HI_DEMON */	/* Summon - 8 */
+	{0,     0,     0,     0,     0},		/* RF7_XX14 */
+	{15,    0,     0,     0,     0},		/* RF7_S_UNIQUE */		/* Summon - 8 */
+	{20,    0,     0,     0,     0},		/* RF7_S_HI_UNIQUE */	/* Summon - 8 */
+	{12,    0,     0,     0,     0},		/* RF7_S_UNDEAD */		/* Summon - 1 */
+	{20,    0,     0,     0,     0},		/* RF7_S_HI_UNDEAD */	/* Summon - 8 */
+	{20,    0,     0,     0,     0}			/* RF7_S_WRAITH */		/* Summon - 8 */
 };
+
 
 /*
  * d_base:     base desirability for AI.
- * d_summ:     desriability for AI per monster level
+ * d_summ:     desirability for AI per monster level
  *                  times 0-3 based on number of clear spaces
  * d_hurt:     desirability for AI per monster spell power
  *                  times 0-3 based on damage taken
@@ -2770,11 +2767,10 @@ byte spell_info_RF7[32][5]=
  *                 for purposes of desirability.
  * d_range:    % of spell desirability retained for each step past 'range'
  */
-
 byte spell_desire_RF4[32][8] =
 {
-/*     d_base	  d_hurt    d_esc	 d_res				    */
-/*	     d_summ	d_mana	  d_tact	   d_range		    */
+/*     d_base	  d_hurt    d_esc	 d_res				*/
+/*	     d_summ	d_mana	  d_tact	   d_range			*/
 	{ 30,  0,   0,   5,	0,   0,	   0	  ,  100}, /* RF4_SHRIEK    */
 	{ 40,  0,   0,   5,	0,   0,	   0	  ,    0}, /* RF4_LASH	    */
 	{ 40,  0,   0,   5,	0,   0, LRN_ARCH  ,  100}, /* RF4_BOULDER   */
@@ -2789,7 +2785,7 @@ byte spell_desire_RF4[32][8] =
 	{ 75,  0,   0,   5,	0,   0, LRN_COLD  ,   90}, /* RF4_BRTH_COLD */
 	{ 65,  0,   0,   5,	0,   0, LRN_POIS  ,   90}, /* RF4_BRTH_POIS */
 	{ 65,  0,   0,   5,	0,   0, LRN_PLAS  ,   90}, /* RF4_BRTH_PLAS */
-	{ 65,  0,   0,   5,	0,   0, LRN_LIGHT  ,   90}, /* RF4_BRTH_LIGHT */
+	{ 65,  0,   0,   5,	0,   0, LRN_LIGHT ,   90}, /* RF4_BRTH_LIGHT */
 	{ 65,  0,   0,   5,	0,   0, LRN_DARK  ,   90}, /* RF4_BRTH_DARK */
 	{ 65,  0,   0,   5,	0,   0, LRN_CONFU ,   90}, /* RF4_BRTH_CONFU*/
 	{ 65,  0,   0,   5,	0,   0, LRN_SOUND ,   90}, /* RF4_BRTH_SOUND*/
@@ -2818,7 +2814,7 @@ byte spell_desire_RF5[32][8] =
 	{ 50,  0,   0,   0,	0,   0, LRN_FIRE  ,  100}, /* RF5_BALL_FIRE */
 	{ 50,  0,   0,   0,	0,   0, LRN_COLD  ,  100}, /* RF5_BALL_COLD */
 	{ 50,  0,   0,   0,	0,   0, LRN_POIS  ,  100}, /* RF5_BALL_POIS */
-	{ 40,  0,   0,   0,	0,   0, LRN_LIGHT  ,  100}, /* RF5_BALL_LIGHT */
+	{ 40,  0,   0,   0,	0,   0, LRN_LIGHT ,  100}, /* RF5_BALL_LIGHT */
 	{ 40,  0,   0,   0,	0,   0, LRN_DARK  ,  100}, /* RF5_BALL_DARK */
 	{ 40,  0,   0,   0,	0,   0, LRN_CONFU ,  100}, /* RF5_BALL_CONFU*/
 	{ 40,  0,   0,   0,	0,   0, LRN_SOUND ,  100}, /* RF5_BALL_SOUND*/
@@ -2850,41 +2846,42 @@ byte spell_desire_RF5[32][8] =
 
 byte spell_desire_RF6[32][8] =
 {
-/*     d_base	  d_hurt    d_esc	 d_res				    */
-/*	     d_summ	d_mana	  d_tact	   d_range		    */
+/*     d_base	  d_hurt    d_esc	 d_res			*/
+/*	     d_summ	d_mana	  d_tact	   d_range		*/
 	{ 50,  0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_HASTE	    */
-	{ 15,  0,   0,  25,	0,   0,	   0  ,  100}, /* RF6_ADD_MANA  */
+	{ 15,  0,   0,  25,	0,   0,	   0	  ,  100}, /* RF6_ADD_MANA  */
 	{ 10,  0,   30,  0,	0,   0,	   0	  ,  100}, /* RF6_HEAL	    */
 	{ 50,  0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_CURE	    */
 	{ 27,  0,   0,   0,	10,  15,   0	  ,  100}, /* RF6_BLINK	    */
 	{  3,  0,   0,   0,	20,  10,   0	  ,  100}, /* RF6_TPORT	    */
-	{ 0,   0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XXX1	    */
+	{  0,  0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XXX1	    */
 	{ 30,  0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_TELE_SELF_TO*/
 	{ 30,  0,   0,   0,	0,   10,   0	  ,  100}, /* RF6_TELE_TO   */
 	{  3,  0,   0,   0,	20,  10,   0	  ,  100}, /* RF6_TELE_AWAY */
-	{  3,  0,   0,   0,	20,  10,LRN_NEXUS_SAVE,	   100}, /* RF6_TELE_LEVEL */
-	{ 0,   0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XXX3	    */
+	{  3,  0,   0,   0,	20,  10,LRN_NEXUS_SAVE,100},/* RF6_TELE_LEVEL */
+	{  0,  0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XXX3	    */
 	{ 20,  0,   0,   0,	5,   0,	   0	  ,  100}, /* RF6_DARKNESS  */
 	{ 25,  0,   0,   0,	5,   0,	   0	  ,  100}, /* RF6_TRAPS	    */
 	{  0,  0,   0,   0,	0,   0,    0      ,  100}, /* RF6_XXX3    */
-	{ 25,  0,   0,   15,	0,   0, LRN_MANA  ,  100}, /* RF6_DRAIN_MANA*/
-	{ 0,   0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XXX4	    */
-	{ 0,   0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XXX5	    */
-	{ 30,  0,   0,   0,	0,   0, LRN_SAVE  ,  100}, /* RF6_MIND_BLAST*/
-	{ 40,  0,   0,   0,	0,   0, LRN_SAVE  ,  100}, /* RF6_BRAIN_SMASH*/
-	{ 40,  0,   0,   0,	0,   0, LRN_SAVE  ,  100}, /* RF6_WOUND	    */
-	{ 0,   0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XXX6	    */
-	{ 0,   0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XXX7	    */
-	{ 0,   0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XXX8	    */
-	{ 0,   0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XXX9	    */
-	{ 25,  0,   0,   0,	0,   0,	 LRN_SAVE ,  100}, /* RF6_HUNGER    */
-	{ 0,   0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XX11	    */
-	{ 25,  0,   0,   0,	0,   0, LRN_FEAR_SAVE,	  100}, /* RF6_SCARE	 */
-	{ 30,  0,   0,   0,	0,   0, LRN_BLIND_SAVE,	   100}, /* RF6_BLIND	  */
-	{ 30,  0,   0,   0,	0,   0, LRN_CONFU_SAVE,	   100}, /* RF6_CONF	  */
-	{ 40,  0,   0,   0,	0,   0, LRN_FREE_SAVE,	  100}, /* RF6_SLOW	 */
-	{ 35,  0,   0,   0,	0,   0, LRN_FREE_SAVE,	  100} /* RF6_HOLD	*/
+	{ 25,  0,   0,   15,0,   0,	LRN_MANA  ,  100}, /* RF6_DRAIN_MANA*/
+	{  0,  0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XXX4	    */
+	{  0,  0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XXX5	    */
+	{ 30,  0,   0,   0,	0,   0,	LRN_SAVE  ,  100}, /* RF6_MIND_BLAST*/
+	{ 40,  0,   0,   0,	0,   0,	LRN_SAVE  ,  100}, /* RF6_BRAIN_SMASH*/
+	{ 40,  0,   0,   0,	0,   0,	LRN_SAVE  ,  100}, /* RF6_WOUND	    */
+	{  0,  0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XXX6	    */
+	{  0,  0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XXX7	    */
+	{  0,  0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XXX8	    */
+	{  0,  0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XXX9	    */
+	{ 25,  0,   0,   0,	0,   0,	LRN_SAVE  ,  100}, /* RF6_HUNGER    */
+	{  0,  0,   0,   0,	0,   0,	   0	  ,  100}, /* RF6_XX11	    */
+	{ 25,  0,   0,   0,	0,   0,	LRN_FEAR_SAVE,100},/* RF6_SCARE	 */
+	{ 30,  0,   0,   0,	0,   0,	LRN_BLIND_SAVE,100}, /* RF6_BLIND	  */
+	{ 30,  0,   0,   0,	0,   0,	LRN_CONFU_SAVE,100}, /* RF6_CONF	  */
+	{ 40,  0,   0,   0,	0,   0,	LRN_FREE_SAVE,100},/* RF6_SLOW	 */
+	{ 35,  0,   0,   0,	0,   0,	LRN_FREE_SAVE,100} /* RF6_HOLD	*/
 };
+
 
 byte spell_desire_RF7[32][8] =
 {
@@ -2918,14 +2915,11 @@ byte spell_desire_RF7[32][8] =
 	{ 0,   17,  0,   0,	0,   0,	   0	  ,  100}, /* RF7_S_HI_DEMON*/
 	{ 0,   0,   0,   0,	0,   0,	   0	  ,  100}, /* RF7_XX14	    */
 	{ 0,   15,  0,   0,	0,   0,	   0	  ,  100}, /* RF7_S_UNIQUE  */
-	{ 0,   18,  0,   0,	0,   0,	   0  	  ,  100}, /* RF7_S_HI_UNIQUE */
+	{ 0,   18,  0,   0,	0,   0,	   0	  ,  100}, /* RF7_S_HI_UNIQUE */
 	{ 0,   15,  0,   0,	0,   0,	   0	  ,  100}, /* RF7_S_UNDEAD  */
 	{ 0,   17,  0,   0,	0,   0,	   0	  ,  100}, /* RF7_S_HI_UNDEAD*/
 	{ 0,   18,  0,   0,	0,   0,	   0	  ,  100}  /* RF7_S_WRAITH  */
 };
-
-
-
 
 
 /*
@@ -3212,57 +3206,53 @@ const byte char_tables[256][CHAR_TABLE_SLOTS] =
 };
 
 
-
-
-
 /*
  * Translate from encodes to extended 8-bit characters and back again.
  */
 const xchar_type latin1_encode[] =
 {
     { "`A", 192 },  { "'A", 193 },  { "^A", 194 },  { "~A", 195 },
-    { "\"A", 196 },  { "*A", 197 },  { ",C", 199 },  { "`E", 200 },
-    { "'E", 201 },  { "^E", 202 }, { "\"E", 203 },  { "`I", 204 },
-    { "'I", 205 },  { "^I", 206 }, { "\"I", 207 },  { "~N", 209 },
+    { "\"A", 196 }, { "*A", 197 },  { ",C", 199 },  { "`E", 200 },
+    { "'E", 201 },  { "^E", 202 },  { "\"E", 203 }, { "`I", 204 },
+    { "'I", 205 },  { "^I", 206 },  { "\"I", 207 }, { "~N", 209 },
     { "`O", 210 },  { "'O", 211 },  { "^O", 212 },  { "~O", 213 },
-	{ "\"O", 214 },  { "/O", 216 },  { "`U", 217 },  { "'U", 218 },
-    { "^U", 219 }, { "\"U", 220 },  { "'Y", 221 },  { "`a", 224 },
-    { "'a", 225 },  { "^a", 226 },  { "~a", 227 }, { "\"a", 228 },
+	{ "\"O", 214 }, { "/O", 216 },  { "`U", 217 },  { "'U", 218 },
+    { "^U", 219 },  { "\"U", 220 }, { "'Y", 221 },  { "`a", 224 },
+    { "'a", 225 },  { "^a", 226 },  { "~a", 227 },  { "\"a", 228 },
     { "*a", 229 },  { ",c", 231 },  { "`e", 232 },  { "'e", 233 },
-    { "^e", 234 }, { "\"e", 235 },  { "`i", 236 },  { "'i", 237 },
-    { "^i", 238 }, { "\"i", 239 },  { "~n", 241 },  { "`o", 242 },
-    { "'o", 243 },  { "^o", 244 },  { "~o", 245 }, { "\"o", 246 },
+    { "^e", 234 },  { "\"e", 235 }, { "`i", 236 },  { "'i", 237 },
+    { "^i", 238 },  { "\"i", 239 }, { "~n", 241 },  { "`o", 242 },
+    { "'o", 243 },  { "^o", 244 },  { "~o", 245 },  { "\"o", 246 },
     { "/o", 248 },  { "`u", 249 },  { "'u", 250 },  { "^u", 251 },
-    { "\"u", 252 },  { "'y", 253 }, { "\"y", 255 },
+    { "\"u", 252 }, { "'y", 253 },  { "\"y", 255 },
 
-    { "iexcl", 161 }, { "euro", 162 }, { "pound", 163 }, { "curren", 164 },
-    { "yen", 165 },   { "brvbar", 166 }, { "sect", 167 }, { "Agrave", 192 },
-    { "Aacute", 193 }, { "Acirc", 194 }, { "Atilde", 195 }, { "Auml", 196 },
-    { "Aring", 197 }, { "Aelig", 198 }, { "Ccedil", 199 }, { "Egrave", 200 },
-    { "Eacute", 201 }, { "Ecirc", 202 }, { "Euml", 203 }, { "Igrave", 204 },
-    { "Iacute", 205 }, { "Icirc", 206 }, { "Iuml", 207 }, { "ETH", 208 },
+    { "iexcl", 161 },  { "euro", 162 },   { "pound", 163 },  { "curren", 164 },
+    { "yen", 165 },    { "brvbar", 166 }, { "sect", 167 },   { "Agrave", 192 },
+    { "Aacute", 193 }, { "Acirc", 194 },  { "Atilde", 195 }, { "Auml", 196 },
+    { "Aring", 197 },  { "Aelig", 198 },  { "Ccedil", 199 }, { "Egrave", 200 },
+    { "Eacute", 201 }, { "Ecirc", 202 },  { "Euml", 203 },   { "Igrave", 204 },
+    { "Iacute", 205 }, { "Icirc", 206 },  { "Iuml", 207 },   { "ETH", 208 },
     { "Ntilde", 209 }, { "Ograve", 210 }, { "Oacute", 211 }, { "Ocirc", 212 },
-    { "Otilde", 213 }, { "Ouml", 214 }, { "Oslash", 216 }, { "Ugrave", 217 },
-    { "Uacute", 218 }, { "Ucirc", 219 }, { "Uuml", 220 }, { "Yacute", 221 },
-    { "THORN", 222 }, { "szlig", 223 }, { "agrave", 224 }, { "aacute", 225 },
-    { "acirc", 226 }, { "atilde", 227 }, { "auml", 228 }, { "aring", 229 },
-    { "aelig", 230 }, { "ccedil", 231 }, { "egrave", 232 }, { "eacute", 233 },
-    { "ecirc", 234 }, { "euml", 235 }, { "igrave", 236 }, { "iacute", 237 },
-    { "icirc", 238 }, { "iuml", 239 }, { "eth", 240 },   { "ntilde", 241 },
-    { "ograve", 242 }, { "oacute", 243 }, { "ocirc", 244 }, { "otilde", 245 },
-    { "ouml", 246 }, { "oslash", 248 }, { "ugrave", 249 }, { "uacute", 250 },
-    { "ucirc", 251 }, { "uuml", 252 }, { "yacute", 253 }, { "thorn", 254 },
+    { "Otilde", 213 }, { "Ouml", 214 },   { "Oslash", 216 }, { "Ugrave", 217 },
+    { "Uacute", 218 }, { "Ucirc", 219 },  { "Uuml", 220 },   { "Yacute", 221 },
+    { "THORN", 222 },  { "szlig", 223 },  { "agrave", 224 }, { "aacute", 225 },
+    { "acirc", 226 },  { "atilde", 227 }, { "auml", 228 },   { "aring", 229 },
+    { "aelig", 230 },  { "ccedil", 231 }, { "egrave", 232 }, { "eacute", 233 },
+    { "ecirc", 234 },  { "euml", 235 },   { "igrave", 236 }, { "iacute", 237 },
+    { "icirc", 238 },  { "iuml", 239 },   { "eth", 240 },    { "ntilde", 241 },
+    { "ograve", 242 }, { "oacute", 243 }, { "ocirc", 244 },  { "otilde", 245 },
+    { "ouml", 246 },   { "oslash", 248 }, { "ugrave", 249 }, { "uacute", 250 },
+    { "ucirc", 251 },  { "uuml", 252 },   { "yacute", 253 }, { "thorn", 254 },
     { "yuml", 255 },   { "\0", 0 }
 };
-
 
 
 cptr squelch_status[SQUELCH_OPT_MAX] =
 {
 	"Never Squelch",
-    "Never Pickup",
-    "Always Pickup",
-    "Always Squelch",
+	"Never Pickup",
+	"Always Pickup",
+	"Always Squelch",
 };
 
 const byte squelch_status_color[SQUELCH_OPT_MAX] =
@@ -3270,8 +3260,9 @@ const byte squelch_status_color[SQUELCH_OPT_MAX] =
 	TERM_YELLOW,
 	TERM_L_GREEN,
 	TERM_L_UMBER,
-    TERM_L_RED,
+	TERM_L_RED,
 };
+
 
 /*
  * 11x25 room, or 9x23 of room after the permanent rock.
@@ -3291,6 +3282,7 @@ const byte arena_level_map[ARENA_LEVEL_HGT][ARENA_LEVEL_WID] =
 	{10, 9, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9,10},
 	{10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10}
 };
+
 
 const byte pit_room_maps[MAX_PIT_PATTERNS][PIT_HEIGHT][PIT_WIDTH] =
 {
@@ -3318,7 +3310,6 @@ const byte pit_room_maps[MAX_PIT_PATTERNS][PIT_HEIGHT][PIT_WIDTH] =
 		{0,1,3,4,5,6,5,4,3,3,3,4,5,6,5,4,3,1,0},
 		{0,0,0,1,1,1,2,2,2,3,2,2,2,1,1,1,0,0,0},
 	}
-
 };
 
 /* Some useful constants */
@@ -3344,18 +3335,17 @@ const brands_structure brands_info_nppangband[10] =
 
 const slays_structure slays_info_nppangband[11] =
 {
-	{TR1_SLAY_ANIMAL, 2, RF3_ANIMAL, 	"animals"},
-	{TR1_SLAY_EVIL, 2, RF3_EVIL, 		"evil creatures"},
+	{TR1_SLAY_ANIMAL, 2, RF3_ANIMAL,	"animals"},
+	{TR1_SLAY_EVIL, 2, RF3_EVIL,		"evil creatures"},
 	{TR1_SLAY_UNDEAD, 3, RF3_UNDEAD,	"the undead"},
-	{TR1_SLAY_DEMON, 3, RF3_DEMON, 		"demons"},
-	{TR1_SLAY_ORC, 3, RF3_ORC, 			"orcs"},
-	{TR1_SLAY_TROLL, 3, RF3_TROLL, 		"trolls"},
-	{TR1_SLAY_GIANT, 3, RF3_GIANT, 		"giants"},
-	{TR1_SLAY_DRAGON, 3, RF3_DRAGON, 	"dragons"},
-	{TR1_KILL_DRAGON, 5, RF3_DRAGON, 	"dragons"},
-	{TR1_KILL_DEMON, 5, RF3_DEMON, 		"demons"},
+	{TR1_SLAY_DEMON, 3, RF3_DEMON,		"demons"},
+	{TR1_SLAY_ORC, 3, RF3_ORC,			"orcs"},
+	{TR1_SLAY_TROLL, 3, RF3_TROLL,		"trolls"},
+	{TR1_SLAY_GIANT, 3, RF3_GIANT,		"giants"},
+	{TR1_SLAY_DRAGON, 3, RF3_DRAGON,	"dragons"},
+	{TR1_KILL_DRAGON, 5, RF3_DRAGON,	"dragons"},
+	{TR1_KILL_DEMON, 5, RF3_DEMON,		"demons"},
 	{TR1_KILL_UNDEAD, 5, RF3_UNDEAD,	"the undead"},
-
 };
 
 /*
@@ -3378,7 +3368,6 @@ const slays_structure slays_info_nppmoria[4] =
 	{TR1_SLAY_UNDEAD, 3, RF3_UNDEAD,	"the undead"},
 	{TR1_SLAY_DRAGON, 4, RF3_DRAGON, 	"dragons"},
 };
-
 
 
 const mon_susceptibility_struct mon_suscept[4] =

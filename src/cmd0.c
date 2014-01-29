@@ -32,28 +32,10 @@
 
 /*** Big list of commands ***/
 
-/* Useful typedef */
-typedef void do_cmd_type(void);
-
-
 /* Forward declare these, because they're really defined later */
 static do_cmd_type do_cmd_wizard, do_cmd_try_debug,
 			do_cmd_mouseclick, do_cmd_port,
 			do_cmd_xxx_options, do_cmd_menu, do_cmd_monlist, do_cmd_itemlist;
-
-
-/*
- * Holds a generic command - if cmd is set to other than CMD_NULL
- * it simply pushes that command to the game, otherwise the hook
- * function will be called.
- */
-typedef struct
-{
-	const char *desc;
-	unsigned char key;
-	cmd_code cmd;
-	do_cmd_type *hook;
-} command_type;
 
 
 /* Magic use */
@@ -103,6 +85,7 @@ static command_type cmd_item_use[] =
 	{ "Throw an item",            'v', CMD_NULL, textui_cmd_throw },
 	{ "Use item",            	  '|', CMD_NULL, cmd_use_item  }
 };
+
 
 /* Item management commands */
 static command_type cmd_item_manage[] =
@@ -158,26 +141,26 @@ static command_type cmd_util[] =
 /* Commands that shouldn't be shown to the user */
 static command_type cmd_hidden[] =
 {
-	{ "Take notes",               ':', CMD_NULL, do_cmd_dictate_note},
-	{ "Version info",             'V', CMD_NULL, do_cmd_version },
-	{ "Load a single pref line",  '"', CMD_NULL, do_cmd_pref },
-	{ "Mouse click",      DEFINED_XFF, CMD_NULL, do_cmd_mouseclick },
-	{ "Enter a store",            '_', CMD_ENTER_STORE, NULL },
-	{ "Toggle windows",     KTRL('E'), CMD_NULL, toggle_inven_equip }, /* XXX */
-	{ "Alter a grid",             '+', CMD_NULL, textui_cmd_alter },
-	{ "Walk",                     ';', CMD_NULL, textui_cmd_walk },
-	{ "Jump into a trap",         '-', CMD_NULL, textui_cmd_jump },
-	{ "Start running",            '.', CMD_NULL, textui_cmd_run },
-	{ "Stand still",              ',', CMD_HOLD, NULL },
-	{ "Check knowledge",          '~', CMD_NULL, do_cmd_knowledge },
+	{ "Take notes",                    ':', CMD_NULL, do_cmd_dictate_note},
+	{ "Version info",                  'V', CMD_NULL, do_cmd_version },
+	{ "Load a single pref line",       '"', CMD_NULL, do_cmd_pref },
+	{ "Mouse click",(unsigned char)DEFINED_XFF, CMD_NULL, do_cmd_mouseclick },
+	{ "Enter a store",                 '_', CMD_ENTER_STORE, NULL },
+	{ "Toggle windows",          KTRL('E'), CMD_NULL, toggle_inven_equip }, /* XXX */
+	{ "Alter a grid",                  '+', CMD_NULL, textui_cmd_alter },
+	{ "Walk",                          ';', CMD_NULL, textui_cmd_walk },
+	{ "Jump into a trap",              '-', CMD_NULL, textui_cmd_jump },
+	{ "Start running",                 '.', CMD_NULL, textui_cmd_run },
+	{ "Stand still",                   ',', CMD_HOLD, NULL },
+	{ "Check knowledge",               '~', CMD_NULL, do_cmd_knowledge },
 	{ "Display menu of actions", KTRL('H'), CMD_NULL, do_cmd_menu },
 	{ "Center map",              KTRL('L'), CMD_NULL, do_cmd_center_map },
 
-	{ "Toggle wizard mode",  KTRL('W'), CMD_NULL, do_cmd_wizard },
-	{ "Repeat previous command",  'n', CMD_REPEAT, NULL },
+	{ "Toggle wizard mode",      KTRL('W'), CMD_NULL, do_cmd_wizard },
+	{ "Repeat previous command",       'n', CMD_REPEAT, NULL },
 
 #ifdef ALLOW_DEBUG
-	{ "Debug mode commands", KTRL('A'), CMD_NULL, do_cmd_try_debug },
+	{ "Debug mode commands",     KTRL('A'), CMD_NULL, do_cmd_try_debug }
 #endif
 };
 
@@ -266,7 +249,7 @@ static void show_cmd_menu(void)
 	WIPE(&menu, menu);
 	menu.cmd_keys = "\x8B\x8C\n\r";
 	menu.count = poss;
-	menu.menu_data = comm;
+	menu.menu_data.data = comm;
 	menu_init(&menu, MN_SKIN_SCROLL, &commands_menu, &area);
 
 	/* Select an entry */
@@ -697,6 +680,7 @@ static void do_cmd_mouseclick(void)
 		case SIDEBAR_RACE:
 		{
 			char buf[80];
+
 			if (game_mode == GAME_NPPMORIA) strnfmt(buf, sizeof(buf), "m_raceclas.txt#%s", p_name + rp_ptr->name);
 			else strnfmt(buf, sizeof(buf), "raceclas.txt#%s", p_name + rp_ptr->name);
 			screen_save();
@@ -707,6 +691,7 @@ static void do_cmd_mouseclick(void)
 		case SIDEBAR_CLASS:
 		{
 			char buf[80];
+
 			if (game_mode == GAME_NPPMORIA) strnfmt(buf, sizeof(buf), "m_raceclas.txt#%s", c_name + cp_ptr->name);
 			else strnfmt(buf, sizeof(buf), "raceclas.txt#%s", c_name + cp_ptr->name);
 			screen_save();
@@ -885,7 +870,7 @@ static void do_cmd_unknown(void)
 
 
 /* List indexed by char */
-struct {
+struct converted_list {
 	do_cmd_type *hook;
 	cmd_code cmd;
 } converted_list[UCHAR_MAX+1];
@@ -897,7 +882,7 @@ struct {
 static void cmd_sub_entry(menu_type *menu, int oid, bool cursor, int row, int col, int width)
 {
 	byte attr = (cursor ? TERM_L_BLUE : TERM_WHITE);
-	const command_type *commands = menu->menu_data;
+	const command_type *commands = menu->menu_data.cmd;
 
 	(void)width;
 
@@ -948,13 +933,13 @@ static bool cmd_menu(command_list *list, void *selection_p)
 
 	ui_event_data evt;
 	int cursor = 0;
-	command_type *selection = selection_p;
+	command_type *selection = (command_type *)selection_p;
 
 	/* Set up the menu */
 	WIPE(&menu, menu);
 	menu.cmd_keys = "\x8B\x8C\n\r";
 	menu.count = list->len;
-	menu.menu_data = list->list;
+	menu.menu_data.cmd = list->list;
 	menu_init(&menu, MN_SKIN_SCROLL, &commands_menu, &area);
 
 	/* Set up the screen */
@@ -1021,7 +1006,7 @@ static void do_cmd_menu(void)
 	WIPE(&menu, menu);
 	menu.cmd_keys = "\x8B\x8C\n\r";
 	menu.count = N_ELEMENTS(cmds_all) - 1;
-	menu.menu_data = &chosen_command;
+	menu.menu_data.cmd = &chosen_command;
 	menu_init(&menu, MN_SKIN_SCROLL, &commands_menu, &area);
 
 	/* Set up the screen */

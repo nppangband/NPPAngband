@@ -21,7 +21,6 @@
 #include "game-event.h"
 
 
-
 /*
  * Semi-Portable High Score List Entry (128 bytes)
  *
@@ -55,14 +54,13 @@ struct high_score
 	char p_r[3];		/* Player Race (number) */
 	char p_c[3];		/* Player Class (number) */
 
-	char cur_lev[4];		/* Current Player Level (number) */
-	char cur_dun[4];		/* Current Dungeon Level (number) */
-	char max_lev[4];		/* Max Player Level (number) */
-	char max_dun[4];		/* Max Dungeon Level (number) */
+	char cur_lev[4];	/* Current Player Level (number) */
+	char cur_dun[4];	/* Current Dungeon Level (number) */
+	char max_lev[4];	/* Max Player Level (number) */
+	char max_dun[4];	/* Max Dungeon Level (number) */
 
 	char how[32];		/* Method of death (string) */
 };
-
 
 
 /*
@@ -88,7 +86,7 @@ static size_t highscore_read(high_score scores[], size_t sz)
 
 	if(game_mode == GAME_NPPMORIA) path_build(fname, sizeof(fname), ANGBAND_DIR_APEX, "m_scores.raw");
 	else path_build(fname, sizeof(fname), ANGBAND_DIR_APEX, "scores.raw");
-	scorefile = file_open(fname, MODE_READ, -1);
+	scorefile = file_open(fname, MODE_READ, FTYPE_TEXT);
 
 	if (!scorefile) return TRUE;
 
@@ -128,6 +126,7 @@ static size_t highscore_where(const high_score *entry, const high_score scores[]
 	return sz - 1;
 }
 
+
 static size_t highscore_add(const high_score *entry, high_score scores[], size_t sz)
 {
 	size_t slot = highscore_where(entry, scores, sz);
@@ -137,6 +136,7 @@ static size_t highscore_add(const high_score *entry, high_score scores[], size_t
 
 	return slot;
 }
+
 
 static size_t highscore_count(const high_score scores[], size_t sz)
 {
@@ -185,7 +185,6 @@ static void highscore_write(const high_score scores[], size_t sz)
 	/* Read in and add new score */
 	n = highscore_count(scores, sz);
 
-
 	/*** Lock scores ***/
 
 	if (file_exists(lok_name))
@@ -204,7 +203,6 @@ static void highscore_write(const high_score scores[], size_t sz)
 		msg_print("Failed to create lock for scorefile; not writing.");
 		return;
 	}
-
 
 	/*** Open the new file for writing ***/
 
@@ -245,7 +243,6 @@ static void highscore_write(const high_score scores[], size_t sz)
 }
 
 
-
 /*
  * Display the scores in a given range.
  */
@@ -255,7 +252,6 @@ static void display_scores_aux(const high_score scores[], int from, int to, int 
 
 	int j, k, n, place;
 	int count;
-
 
 	/* Assume we will show the first 10 */
 	if (from < 0) from = 0;
@@ -301,7 +297,6 @@ static void display_scores_aux(const high_score scores[], int from, int to, int 
 			int pr, pc, clev, mlev, cdun, mdun;
 			cptr user, gold, when, aged;
 
-
 			/* Hack -- indicate death in yellow */
 			attr = (j == highlight) ? TERM_L_GREEN : TERM_WHITE;
 
@@ -325,15 +320,13 @@ static void display_scores_aux(const high_score scores[], int from, int to, int 
 			strnfmt(out_val, sizeof(out_val),
 			        "%3d.%9s  %s the %s %s, Level %d",
 			        place, score->pts, score->who,
-			        p_name + p_info[pr].name, c_name + c_info[pc].name,
-			        clev);
+			        p_name + p_info[pr].name, c_name + c_info[pc].name, clev);
 
 			/* Append a "maximum level" */
 			if (mlev > clev) my_strcat(out_val, format(" (Max %d)", mlev), sizeof(out_val));
 
 			/* Dump the first line */
 			c_put_str(attr, out_val, n*4 + 2, 0);
-
 
 			/* Died where? */
 			if (!cdun)
@@ -360,7 +353,6 @@ static void display_scores_aux(const high_score scores[], int from, int to, int 
 			c_put_str(attr, out_val, n*4 + 4, 15);
 		}
 
-
 		/* Wait for response */
 		prt("[Press ESC to exit, any other key to continue.]", 22, 17);
 		event_signal(EVENT_MOUSEBUTTONS);
@@ -375,6 +367,7 @@ static void display_scores_aux(const high_score scores[], int from, int to, int 
 
 	return;
 }
+
 
 static void build_score(high_score *entry, const char *died_from, time_t *death_time)
 {
@@ -418,7 +411,6 @@ static void build_score(high_score *entry, const char *died_from, time_t *death_
 }
 
 
-
 /*
  * Enters a players name on a hi-score table, if "legal".
  *
@@ -438,14 +430,14 @@ void enter_score(time_t *death_time)
 		return;
 	}
 
-	/* Wizard-mode pre-empts scoring */
+	/* Wizard-mode preempts scoring */
 	if (p_ptr->noscore & (NOSCORE_WIZARD | NOSCORE_DEBUG))
 	{
 		msg_print("Score not registered for wizards.");
 		message_flush();
 	}
 
-	/* Hack -- Interupted */
+	/* Hack -- Interrupted */
 	else if (!p_ptr->total_winner && streq(p_ptr->died_from, "Interrupting"))
 	{
 		msg_print("Score not registered due to interruption.");
@@ -538,6 +530,4 @@ void show_scores(void)
 	/* Hack - Flush it */
 	Term_fresh();
 }
-
-
 

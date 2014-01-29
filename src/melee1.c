@@ -218,7 +218,7 @@ bool make_attack_normal(monster_type *m_ptr)
 
 	bool blinked;
 
-	int sound_msg;
+	MessageType sound_msg;
 
 	bool player_on_glyph = FALSE;
 
@@ -301,7 +301,7 @@ bool make_attack_normal(monster_type *m_ptr)
 			case RBE_EAT_GOLD:   power =  5;  break;
 			case RBE_EAT_ITEM:   power =  5;  break;
 			case RBE_EAT_FOOD:   power =  5;  break;
-			case RBE_EAT_LIGHT:   power =  5;  break;
+			case RBE_EAT_LIGHT:  power =  5;  break;
 			case RBE_HUNGER:     power = 15;  break;
 			case RBE_POISON:     power = 25;  break;
 			case RBE_ACID:       power = 10;  break;
@@ -1538,16 +1538,16 @@ bool make_attack_normal(monster_type *m_ptr)
 
 						/*go through the 4 strengths of drain_life*/
 						if (effect == RBE_EXP_10)
-							d = damroll(10, 6) + (p_ptr->exp/100) * MON_DRAIN_LIFE;
+							d = damroll(10, 6) + (p_ptr->exp/100L) * MON_DRAIN_LIFE;
 
 						else if (effect == RBE_EXP_20)
-							d = damroll(20, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
+							d = damroll(20, 6) + (p_ptr->exp / 100L) * MON_DRAIN_LIFE;
 
 						else if (effect == RBE_EXP_40)
-							d = damroll(40, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
+							d = damroll(40, 6) + (p_ptr->exp / 100L) * MON_DRAIN_LIFE;
 
 						else if (effect == RBE_EXP_80)
-							d = damroll(80, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
+							d = damroll(80, 6) + (p_ptr->exp / 100L) * MON_DRAIN_LIFE;
 
 						/*give the player a message*/
 						if (p_ptr->state.hold_life)
@@ -5184,6 +5184,8 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
 		default:
 		{
 			msg_print("A monster tried to cast a spell that has not yet been defined.");
+
+			break;
 		}
 	}
 

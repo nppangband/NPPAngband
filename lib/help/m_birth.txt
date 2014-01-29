@@ -49,7 +49,7 @@ character in a variety of ways.  Every stat has a numerical value, ranging
 from a minimum of 3, up to a normal maximum of 18, and even higher, into
 the "percentile" range, represented as "18/01" through "18/100": this is the
 maximum that can be achieved intrinsically, for any given stat. Equipment may 
-add bonuses or penalties up to teh maximum, up to 18/100.
+add bonuses or penalties up to the maximum, up to 18/100.
 
 Each character also has several primary "skills", disarming, magic devices,
 saving throws, stealth, searching ability, searching frequency, fighting skill,

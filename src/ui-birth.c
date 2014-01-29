@@ -90,6 +90,7 @@ enum birth_options
 static void point_based_start(void);
 static bool quickstart_allowed = FALSE;
 
+
 /* ------------------------------------------------------------------------
  * Quickstart? screen.
  * ------------------------------------------------------------------------ */
@@ -149,6 +150,7 @@ static enum birth_stage get_quickstart_command(void)
 	return next;
 }
 
+
 /* ------------------------------------------------------------------------
  * The various "menu" bits of the birth process - namely choice of sex,
  * race, class, and roller type.
@@ -158,52 +160,43 @@ static enum birth_stage get_quickstart_command(void)
 static menu_type sex_menu, race_menu, class_menu, roller_menu, birth_opt_menu;
 
 /* Locations of the menus, etc. on the screen */
-#define HEADER_ROW       1
-#define QUESTION_ROW     7
+#define HEADER_ROW		 1
+#define QUESTION_ROW	 7
 #define TABLE_ROW		10
-#define ROLLER_ROW       TABLE_ROW + 8
+#define ROLLER_ROW		TABLE_ROW + 8
 
-#define QUESTION_COL     2
-#define SEX_COL          2
-#define RACE_COL        14
-#define RACE_AUX_COL    29
-#define CLASS_COL       29
+#define QUESTION_COL	 2
+#define SEX_COL			 2
+#define RACE_COL		14
+#define RACE_AUX_COL	29
+#define CLASS_COL		29
 #define ROLLER_COL		44
-#define CLASS_AUX_COL   44
+#define CLASS_AUX_COL	44
 
-static region gender_region = {SEX_COL, TABLE_ROW, 15, -2};
-static region race_region = {RACE_COL, TABLE_ROW, 15, -2};
-static region class_region = {CLASS_COL, TABLE_ROW, 19, -2};
-static region birth_opt_region = {ROLLER_COL,   TABLE_ROW, 36,   8};
-static region roller_region = {ROLLER_COL, ROLLER_ROW, 36, 8};
+static region gender_region		= {SEX_COL,		TABLE_ROW,	15, -2};
+static region race_region		= {RACE_COL,	TABLE_ROW,	15, -2};
+static region class_region		= {CLASS_COL,	TABLE_ROW,	19, -2};
+static region birth_opt_region	= {ROLLER_COL,	TABLE_ROW,	36,  8};
+static region roller_region		= {ROLLER_COL,	ROLLER_ROW,	36,  8};
 
 /* We use different menu "browse functions" to display the help text
    sometimes supplied with the menu items - currently just the list
    of bonuses, etc, corresponding to each race and class. */
 typedef void (*browse_f) (int oid, void *db, const region *l);
 
-/* We have one of these structures for each menu we display - it holds
-   the useful information for the menu - text of the menu items, "help"
-   text, current (or default) selection, and whether random selection
-   is allowed. */
-struct birthmenu_data
-{
-	const char **items;
-	const char *hint;
-	bool allow_random;
-};
 
 /* A custom "display" function for our menus that simply displays the
    text from our stored data in a different colour if it's currently
    selected. */
 static void birthmenu_display(menu_type *menu, int oid, bool cursor,
-			      int row, int col, int width)
+							  int row, int col, int width)
 {
-	struct birthmenu_data *data = menu->menu_data;
+	struct birthmenu_data *data = menu->menu_data.birth;
 
 	byte attr = curs_attrs[CURS_KNOWN][0 != cursor];
 	c_put_str(attr, data->items[oid], row, col);
 }
+
 
 /* We defer the choice of actual actions until outside of the menu API
    in menu_question(), so this can be a reasonably simple function
@@ -213,10 +206,12 @@ static bool birthmenu_handler(char cmd, void *db, int oid)
 	return TRUE;
 }
 
+
 /* Our custom menu iterator, only really needed to allow us to override
    the default handling of "commands" in the standard iterators (hence
    only defining the display and handler parts). */
 static const menu_iter birth_iter = { NULL, NULL, birthmenu_display, birthmenu_handler };
+
 
 static void race_help(int i, void *db, const region *l)
 {
@@ -242,6 +237,7 @@ static void race_help(int i, void *db, const region *l)
 	text_out_indent = 0;
 }
 
+
 static void class_help(int i, void *db, const region *l)
 {
 	int j;
@@ -266,6 +262,7 @@ static void class_help(int i, void *db, const region *l)
 	text_out_indent = 0;
 }
 
+
 /* Set up one of our menus ready to display choices for a birth question.
    This is slightly involved. */
 static void init_birth_menu(menu_type *menu, int n_choices, int initial_choice, const region *reg, bool allow_random, browse_f aux)
@@ -282,7 +279,7 @@ static void init_birth_menu(menu_type *menu, int n_choices, int initial_choice, 
 	menu->count = n_choices;
 
 	/* Allocate sufficient space for our own bits of menu information. */
-	menu_data = mem_alloc(sizeof *menu_data);
+	menu_data = (birthmenu_data *)mem_alloc(sizeof *menu_data);
 
 	/* Copy across the game's suggested initial selection, etc. */
 	menu->cursor = initial_choice;
@@ -290,10 +287,10 @@ static void init_birth_menu(menu_type *menu, int n_choices, int initial_choice, 
 
 	/* Allocate space for an array of menu item texts and help texts
 	   (where applicable) */
-	menu_data->items = mem_alloc(menu->count * sizeof *menu_data->items);
+	menu_data->items =(const char **)mem_alloc(menu->count * sizeof *menu_data->items);
 
 	/* Poke our menu data in to the assigned slot in the menu structure. */
-	menu->menu_data = menu_data;
+	menu->menu_data.birth = menu_data;
 
 	/* Set up the "browse" hook to display help text (where applicable). */
 	menu->browse_hook = aux;
@@ -302,7 +299,6 @@ static void init_birth_menu(menu_type *menu, int n_choices, int initial_choice, 
 	   menu. */
 	menu_init(menu, MN_SKIN_SCROLL, &birth_iter, reg);
 }
-
 
 
 static void setup_menus(void)
@@ -325,7 +321,7 @@ static void setup_menus(void)
 
 	/* Sex menu fairly straightforward */
 	init_birth_menu(&sex_menu, MAX_SEXES, p_ptr->psex, &gender_region, TRUE, NULL);
-	mdata = sex_menu.menu_data;
+	mdata = sex_menu.menu_data.birth;
 	for (i = 0; i < MAX_SEXES; i++)
 	{
 		mdata->items[i] = sex_info[i].title;
@@ -334,7 +330,7 @@ static void setup_menus(void)
 
 	/* Race menu more complicated. */
 	init_birth_menu(&race_menu, z_info->p_max, p_ptr->prace, &race_region, TRUE, race_help);
-	mdata = race_menu.menu_data;
+	mdata = race_menu.menu_data.birth;
 
 	for (i = 0; i < z_info->p_max; i++)
 	{
@@ -344,7 +340,7 @@ static void setup_menus(void)
 
 	/* Class menu similar to race. */
 	init_birth_menu(&class_menu, z_info->c_max, p_ptr->pclass, &class_region, TRUE, class_help);
-	mdata = class_menu.menu_data;
+	mdata = class_menu.menu_data.birth;
 
 	for (i = 0; i < z_info->c_max; i++)
 	{
@@ -354,7 +350,7 @@ static void setup_menus(void)
 
 	/* Birth option menu simple */
 	init_birth_menu(&birth_opt_menu, MAX_BIRTH_OPTONS, 0, &birth_opt_region, FALSE, NULL);
-	mdata = birth_opt_menu.menu_data;
+	mdata = birth_opt_menu.menu_data.birth;
 	for (i = 0; i < MAX_BIRTH_OPTONS; i++)
 	{
 		mdata->items[i] = option_choices[i];
@@ -363,7 +359,7 @@ static void setup_menus(void)
 
 	/* Roller menu straightforward again */
 	init_birth_menu(&roller_menu, MAX_BIRTH_ROLLERS, 0, &roller_region, TRUE, NULL);
-	mdata = roller_menu.menu_data;
+	mdata = roller_menu.menu_data.birth;
 	for (i = 0; i < MAX_BIRTH_ROLLERS; i++)
 	{
 		mdata->items[i] = roller_choices[i];
@@ -371,10 +367,11 @@ static void setup_menus(void)
 	mdata->hint = "Your choice of character generation.  Point-based is recommended.";
 }
 
+
 /* Cleans up our stored menu info when we've finished with it. */
 static void free_birth_menu(menu_type *menu)
 {
-	struct birthmenu_data *data = menu->menu_data;
+	struct birthmenu_data *data = menu->menu_data.birth;
 
 	if (data)
 	{
@@ -382,6 +379,7 @@ static void free_birth_menu(menu_type *menu)
 		mem_free(data);
 	}
 }
+
 
 static void free_birth_menus(void)
 {
@@ -392,6 +390,7 @@ static void free_birth_menus(void)
 	free_birth_menu(&birth_opt_menu);
 	free_birth_menu(&roller_menu);
 }
+
 
 /*
  * Clear the previous question
@@ -416,6 +415,7 @@ static void clear_question(void)
 	"birth process, '{lightgreen}={/}' for game options, '{lightgreen}?{/} " \
 	"for help, or '{lightgreen}Ctrl-X{/}' to quit."
 
+
 /* Show the birth instructions on an otherwise blank screen */
 static void print_menu_instructions(void)
 {
@@ -436,12 +436,14 @@ static void print_menu_instructions(void)
 	text_out_indent = 0;
 }
 
+
 /* Allow the user to select from the current menu, and return the
    corresponding command to the game.  Some actions are handled entirely
    by the UI (displaying help text, for instance). */
-static enum birth_stage menu_question(enum birth_stage current, menu_type *current_menu, cmd_code choice_command)
+static enum birth_stage menu_question(enum birth_stage current,
+		menu_type *current_menu, cmd_code choice_command)
 {
-	struct birthmenu_data *menu_data = current_menu->menu_data;
+	struct birthmenu_data *menu_data = current_menu->menu_data.birth;
 	int cursor = current_menu->cursor;
 	ui_event_data cx;
 
@@ -469,7 +471,7 @@ static enum birth_stage menu_question(enum birth_stage current, menu_type *curre
 
 		/* As all the menus are displayed in "hierarchical" style, we allow
 		   use of "back" (left arrow key or equivalent) to step back in
-		   the proces as well as "escape". */
+		   the process as well as "escape". */
 		if (cx.type == EVT_BACK || cx.type == EVT_ESCAPE || cx.key == ESCAPE)
 		{
 			next = BIRTH_BACK;
@@ -483,7 +485,7 @@ static enum birth_stage menu_question(enum birth_stage current, menu_type *curre
 				{
 					/* Do a first roll of the stats */
 					cmd_insert(CMD_ROLL_STATS);
-					next = current + 2;
+					next = (enum birth_stage)(current + 2);
 				}
 				else
 				{
@@ -497,13 +499,13 @@ static enum birth_stage menu_question(enum birth_stage current, menu_type *curre
 					 */
 					point_based_start();
 					cmd_insert(CMD_RESET_STATS, TRUE);
-					next = current + 1;
+					next = (enum birth_stage)(current + 1);
 				}
 			}
 			else
 			{
 				cmd_insert(choice_command, cursor);
-				next = current + 1;
+				next = (enum birth_stage)(current + 1);
 			}
 		}
 		/* '*' chooses an option at random from those the game's provided. */
@@ -513,7 +515,7 @@ static enum birth_stage menu_question(enum birth_stage current, menu_type *curre
 			cmd_insert(choice_command, current_menu->cursor);
 
 			menu_refresh(current_menu);
-			next = current + 1;
+			next = (enum birth_stage)(current + 1);
 		}
 		else if (cx.key == '=')
 		{
@@ -533,6 +535,7 @@ static enum birth_stage menu_question(enum birth_stage current, menu_type *curre
 
 	return next;
 }
+
 
 /* ------------------------------------------------------------------------
  * The rolling bit of the roller.
@@ -646,12 +649,14 @@ static enum birth_stage roller_command(bool first_call)
 #define COSTS_COL (42 + 32)
 #define TOTAL_COL (42 + 19)
 
+
 /* This is called whenever a stat changes.  We take the easy road, and just
    redisplay them all using the standard function. */
 static void point_based_stats(game_event_type type, game_event_data *data, void *user)
 {
 	display_player_stat_info(2, 42);
 }
+
 
 /* This is called whenever any of the other miscellaneous stat-dependent things
    changed.  We are hooked into changes in the amount of gold in this case,
@@ -685,6 +690,7 @@ static void point_based_points(game_event_type type, game_event_data *data, void
 	put_str(format("Total Cost: %2d/%2d", sum, data->birthstats.remaining + sum), COSTS_ROW + A_MAX, TOTAL_COL);
 }
 
+
 static void point_based_start(void)
 {
 	const char *prompt = "[up/down to move, left/right to modify, 'r' to reset, 'Enter' to accept]";
@@ -705,12 +711,14 @@ static void point_based_start(void)
 	event_add_handler(EVENT_GOLD, point_based_misc, NULL);
 }
 
+
 static void point_based_stop(void)
 {
 	event_remove_handler(EVENT_BIRTHPOINTS, point_based_points, NULL);
 	event_remove_handler(EVENT_STATS, point_based_stats, NULL);
 	event_remove_handler(EVENT_GOLD, point_based_misc, NULL);
 }
+
 
 static enum birth_stage point_based_command(void)
 {
@@ -796,6 +804,7 @@ static enum birth_stage point_based_command(void)
 	return next;
 }
 
+
 /* ------------------------------------------------------------------------
  * Asking for the player's chosen name.
  * ------------------------------------------------------------------------ */
@@ -816,6 +825,7 @@ static enum birth_stage get_name_command(void)
 
 	return next;
 }
+
 
 /* ------------------------------------------------------------------------
  * Final confirmation of character.
@@ -873,7 +883,6 @@ static enum birth_stage get_confirm_command(void)
 }
 
 
-
 /* ------------------------------------------------------------------------
  * Things that relate to the world outside this file: receiving game events
  * and being asked for game commands.
@@ -901,12 +910,8 @@ errr get_birth_command(bool wait)
 	{
 		case BIRTH_RESET:
 		{
-
-
 			cmd_insert(CMD_BIRTH_RESET, TRUE);
 			roller = BIRTH_RESET;
-
-
 
 			if (quickstart_allowed)
 				next = BIRTH_QUICKSTART;
@@ -918,7 +923,6 @@ errr get_birth_command(bool wait)
 
 		case BIRTH_QUICKSTART:
 		{
-
 			display_player(0, TRUE);
 
 			next = get_quickstart_command();
@@ -968,7 +972,7 @@ errr get_birth_command(bool wait)
 			next = menu_question(current_stage, menu, command);
 
 			if (next == BIRTH_BACK)
-				next = current_stage - 1;
+				next = (enum birth_stage)(current_stage - 1);
 
 			/* Make sure that the character gets reset before quickstarting */
 			if (next == BIRTH_QUICKSTART)
@@ -1032,6 +1036,7 @@ errr get_birth_command(bool wait)
 		default:
 		{
 			/* Remove dodgy compiler warning, */
+			break;
 		}
 	}
 
@@ -1040,6 +1045,7 @@ errr get_birth_command(bool wait)
 
 	return 0;
 }
+
 
 /*
  * Called when we enter the birth mode - so we set up handlers, command hooks,

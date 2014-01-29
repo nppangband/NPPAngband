@@ -878,7 +878,7 @@ static int calc_blows_moria(const object_type *o_ptr, player_state *new_state)
 	int str = new_state->stat_use[A_STR];
 	int dex = new_state->stat_use[A_DEX];
 
-	/* Boundry control */
+	/* Boundary control */
 	if (str > 118) str = 118;
 	if (dex  > 118) dex = 118;
 
@@ -887,14 +887,14 @@ static int calc_blows_moria(const object_type *o_ptr, player_state *new_state)
 		return 1;
 	}
 	else
-    {
+	{
 
 		/* First figure out the dex index */
-		if      (dex < 10)	 dex_index = 0;
-		else if (dex<  19)	 dex_index = 1;
-		else if (dex < 68)	 dex_index = 2;
-		else if (dex < 108)	 dex_index = 3;
-		else if (dex < 118)	 dex_index = 4;
+		if      (dex < 10)	dex_index = 0;
+		else if (dex < 19)	dex_index = 1;
+		else if (dex < 68)	dex_index = 2;
+		else if (dex < 108)	dex_index = 3;
+		else if (dex < 118)	dex_index = 4;
 		else		 dex_index = 5;
 
 		/* Now do the str_index */

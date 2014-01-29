@@ -15,12 +15,12 @@ successfully will display any power or damage information.  Be aware that the
 true usefulness of some spells only becomes apparent with much experimentation.
 
 Gaining new spells:
-     You learn new spells by pressing 'G', choosing a spellbook with unlearnt
+     You learn new spells by pressing 'G', choosing a spellbook with unlearned
 spells that are not too high level for you, and either choosing a spell (mages,
 rogues, druids, rangers) or having one granted to you (priests, paladins).
 
 Casting spells:
-     You may cast any previously learnt spell of your level or less.  You cast
+     You may cast any previously learned spell of your level or less.  You cast
 spells by typing 'm' or 'p', choosing a spellbook, and then a spell.  Casting a
 spell takes a full turn.  The first time you suceesfully cast a spell, you gain
 experience.
