@@ -18,6 +18,7 @@
  */
 #define MAX_INVENTORY_HOME	24
 
+#define TOWN_DAWN		10000	/* Number of turns from dawn to dawn XXX */
 
 /*
  * Store index definitions (see "store.c", etc)

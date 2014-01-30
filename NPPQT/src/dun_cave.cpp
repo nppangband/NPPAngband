@@ -1236,7 +1236,25 @@ void map_info(s16b y, s16b x)
 
 }
 
+/*
+ * Redraw a dungeon square.
+ * first update it, then print it(on the screen) a given map location
+ *
+ * This function should only be called on "legal" grids.
+ *
+ * Note the inline use of "print_rel()" for efficiency.
+ *
+ * The main screen will always be at least 24x80 in size.
+ */
+void light_spot(int y, int x)
+{
 
+    /* Hack -- redraw the grid */
+    map_info(y, x);
+
+    // TODO print the square onscreen
+
+}
 
 
 /*
@@ -1838,7 +1856,7 @@ void forget_view(void)
         /* fast_cave_info[g] &= ~(CAVE_LITE); */
 
         /* Redraw */
-        // TODO light_spot(y, x);
+        light_spot(y, x);
     }
 
     /* None left */
@@ -2437,7 +2455,7 @@ void update_view(void)
             // TODO note_spot(y, x);
 
             /* Redraw */
-            // TODO light_spot(y, x);
+            light_spot(y, x);
         }
     }
 
@@ -2466,7 +2484,7 @@ void update_view(void)
             x = GRID_X(g);
 
             /* Redraw */
-            // TODO light_spot(y, x);
+            light_spot(y, x);
         }
     }
 
@@ -3698,7 +3716,7 @@ static void cave_set_feat_aux(int y, int x, u16b feat)
     /* Remove the old feature from dyna_g if necessary */
     if (_feat_ff3_match(f_ptr, FF3_DYNAMIC))
     {
-        // TODO remove_dynamic_terrain(y, x);
+        remove_dynamic_terrain(y, x);
     }
 
     /* Add the new feature to dyna_g if necessary */
@@ -3716,9 +3734,7 @@ static void cave_set_feat_aux(int y, int x, u16b feat)
         /* Debug message */
         if (cheat_room && !(level_flag & flag))
         {
-            char name[80];
-
-            // TODO feature_desc(name, sizeof(name), feat, TRUE, TRUE);
+            QString name = feature_desc(feat, TRUE, TRUE);
 
             message(QString("Adding %1 to the level.") .arg(name));
         }
@@ -3747,10 +3763,10 @@ static void cave_set_feat_aux(int y, int x, u16b feat)
             if (!cave_ff3_match(yy, xx, FF3_DYNAMIC)) continue;
 
             /* The dynamic grid already is in dyna_g. Ignore */
-            // TODO if (get_dynamic_terrain(yy, xx)) continue;
+            if (get_dynamic_terrain(yy, xx)) continue;
 
             /* Try to put the grid in dyna_g */
-            // TODO (void)add_dynamic_terrain(yy, xx);
+            (void)add_dynamic_terrain(yy, xx);
         }
     }
 
@@ -3768,7 +3784,7 @@ static void cave_set_feat_aux(int y, int x, u16b feat)
     }
 
      /* Don't allow effects where players can't move. */
-    // TODO delete effects if (!_feat_ff1_match(f2_ptr, FF1_MOVE) && dungeon_info[y][x].has_effect()) delete_effects(y, x);
+    if (!_feat_ff1_match(f2_ptr, FF1_MOVE) && dungeon_info[y][x].has_effect()) delete_effects(y, x);
 
     /* This is a generated dungeon*/
     if (character_dungeon)
@@ -3777,7 +3793,7 @@ static void cave_set_feat_aux(int y, int x, u16b feat)
         /*
         if (!_feat_ff1_match(f2_ptr, FF1_DOOR))
         {
-            cave_info[y][x] &= ~(CAVE_MARK);
+            dungeon_info[y][x].cave_info &= ~(CAVE_MARK);
             }
         */
 
@@ -3785,7 +3801,7 @@ static void cave_set_feat_aux(int y, int x, u16b feat)
         // TODO note_spot(y, x);
 
         /* Redraw */
-        // TODO light_spot(y, x);
+        light_spot(y, x);
     }
 }
 
@@ -3808,7 +3824,7 @@ void cave_alter_feat(int y, int x, int action)
     feature_lore *f_l_ptr = &f_l_list[oldfeat];
 
     /* Get the new feat */
-    // TODO feat_state newfeat = feat_state(dungeon_info[y][x].feat, action);
+    newfeat = feat_state(dungeon_info[y][x].feat, action);
 
     /* Mark the transition in the feature_lore */
     if ((player_can_see_bold(y, x)) && player_can_observe())
@@ -3848,7 +3864,7 @@ void cave_alter_feat(int y, int x, int action)
             if (player_can_see_bold(y, x)) f_l_ptr->f_l_flags3 |= (FF3_PICK_TRAP);
 
             /* Pick a trap */
-            // TODO pick_and_set_trap(y, x, 0);
+            pick_and_set_trap(y, x, 0);
 
             /* Disturb */
             disturb(0, 0);
@@ -3860,7 +3876,7 @@ void cave_alter_feat(int y, int x, int action)
             if (player_can_see_bold(y, x)) f_l_ptr->f_l_flags3 |= (FF3_PICK_DOOR);
 
             /* Pick a trap */
-            // TODO place_closed_door(y, x);
+            place_closed_door(y, x);
 
             /* Disturb */
             disturb(0, 0);
@@ -3877,7 +3893,7 @@ void cave_alter_feat(int y, int x, int action)
             // TODO note_spot(y, x);
 
             /* Redraw */
-            // TODO light_spot(y, x);
+            light_spot(y, x);
         }
     }
 
@@ -3915,7 +3931,7 @@ void cave_set_feat(int y, int x, u16b feat)
         {
 
             /* Take any accumulated damage from terrain */
-            // TODO process_player_terrain_damage();
+            process_player_terrain_damage();
         }
     }
 
@@ -4050,7 +4066,7 @@ void cave_set_feat(int y, int x, u16b feat)
                 (k & (1 << (i + 8))))) continue;
 
             /* Convert to branch */
-            // TODO feat2 = feat_state(dungeon_info[y][x].feat, FS_TREE);
+            feat2 = feat_state(dungeon_info[y][x].feat, FS_TREE);
 
             /* Set the new feature */
             cave_set_feat_aux(yy, xx, feat2);
@@ -4104,7 +4120,7 @@ void cave_set_feat(int y, int x, u16b feat)
             if ((j >= 8) || one_in_(4))
             {
                 /* Remove the branch */
-                // TODO feat2 = feat_state(feat2, FS_NEED_TREE);
+                feat2 = feat_state(feat2, FS_NEED_TREE);
 
                 /* Set the new feature */
                 cave_set_feat_aux(yy, xx, feat2);

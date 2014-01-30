@@ -53,6 +53,17 @@ bool is_a_vowel(QChar single_letter)
 
     return (FALSE);
 }
+// Capitilize the first character in a string.
+QString capitilize_first(QString line)
+{
+    // Paranoia
+    if (line.isEmpty()) return (line);
+    QChar first = line[0];
+    first.toUpper();
+    line[0] = first;
+    return (line);
+
+}
 
 void pop_up_message_box(QString message)
 {
@@ -234,4 +245,12 @@ void ang_sort(void *u, void *v, int n)
 {
     /* Sort the array */
     ang_sort_aux(u, v, 0, n-1);
+}
+
+
+// Write a note to the notes file
+void write_note (QString note)
+{
+    (void)note;
+    // TODO write note
 }

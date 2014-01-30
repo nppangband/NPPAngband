@@ -20,6 +20,7 @@ extern byte multi_hued_attr(monster_race *r_ptr);
 extern bool feat_supports_lighting(u16b feat);
 extern bool dtrap_edge(int y, int x);
 extern void map_info(s16b y, s16b x);
+extern void light_spot(int y, int x);
 extern int vinfo_init(void);
 extern void forget_view(void);
 extern void update_view(void);
@@ -49,21 +50,88 @@ extern bool spell_okay(int spell, bool known);
 extern s16b get_spell_from_list(s16b book, s16b spell);
 extern int get_spell_index(int sval, int index);
 
+// dungeon.cpp
+extern void dungeon_change_level(int dlev);
+extern void process_player_terrain_damage(void);
+
 /* effect.cpp */
+extern int scan_effects_grid(int *effects, int size, int y, int x);
 extern void effect_prep(int x_idx, byte type, u16b f_idx, byte y, byte x, byte countdown,
                             byte repeats, u16b power, s16b source, u16b flags);
-extern void effect_wipe(effect_type *x_ptr);
+extern bool set_effect_lingering_cloud(int f_idx, byte y, byte x, u16b power, s16b source, u16b flag);
+extern bool set_effect_glacier(int f_idx, byte y, byte x, s16b source, u16b flag);
+extern bool set_effect_shimmering_cloud(int f_idx, byte y, byte x, byte repeats, u16b power, s16b source, u16b flag);
+extern bool set_effect_permanent_cloud(int f_idx, byte y, byte x,	u16b power, u16b flag);
+extern bool set_effect_trap_passive(int f_idx, byte y, byte x);
+extern bool set_effect_trap_smart(int f_idx, byte y, byte x, u16b flags);
+extern bool set_effect_trap_player(int f_idx, byte y, byte x);
+extern bool set_effect_glyph(byte y, byte x);
+extern bool set_effect_inscription(int f_idx, byte y, byte x, s16b source, u16b flag);
+extern void compact_effects(void);
+extern void pick_and_set_trap(int y, int x, int mode);
+extern void place_trap(int y, int x, byte mode);
+extern void effect_near(int feat, int y, int x, byte effect_type);
+extern void wipe_x_list(void);
+extern void delete_effect_idx(int x_idx);
+extern void delete_effects(int y, int x);
+extern void excise_effect_idx(int x_idx);
 extern s16b x_pop(void);
+extern void process_effects(void);
 
-//feature.cpp
+/* feature.c */
+extern QString feature_desc(u16b feat, bool add_prefix,	bool get_mimic);
+extern int feat_adjust_combat_for_player(int chance, bool being_attacked);
+extern int feat_adjust_combat_for_monster(const monster_type *m_ptr,
+    int chance, bool being_attacked);
+extern void find_secret(int y, int x);
+extern u16b feat_state(u16b feat, int action);
+extern u16b feat_state_power(u16b feat, int action);
+extern u16b feat_state_explicit_power(u16b feat, int action);
+extern u16b fire_trap_smart(int f_idx, int y, int x, byte mode);
+extern void hit_trap(int f_idx, int y, int x, byte mode);
+extern void feat_near(int feat, int y, int x);
+extern void count_feat_everseen(void);
+extern bool vault_locked_door(int f_idx);
+extern int get_feat_num_prep(void);
+extern s16b get_feat_num(int level);
+extern u16b pick_trap(int y, int x, byte mode);
+extern u16b get_secret_door_num(void);
+extern void place_secret_door(int y, int x);
+extern void place_closed_door(int y, int x);
+extern void place_boring_closed_door(int y, int x);
+extern void place_open_door(int y, int x);
+extern void place_broken_door(int y, int x);
+extern void place_locked_door(int y, int x);
+extern void place_jammed_door(int y, int x);
+extern void place_random_door(int y, int x);
+extern dynamic_grid_type *get_dynamic_terrain(byte y, byte x);
+extern void wipe_dynamic_terrain(void);
 extern bool add_dynamic_terrain(byte y, byte x);
+extern void remove_dynamic_terrain(byte y, byte x);
+extern void process_dynamic_terrain(void);
+extern s16b select_powerful_race(void);
+extern QString format_monster_inscription(s16b r_idx);
+extern void decipher_strange_inscription(int x_idx);
+extern void hit_silent_watcher(int y, int x);
+extern bool hit_wall(int y, int x, bool do_action);
 extern void update_level_flag(void);
 extern u32b get_level_flag(u16b feat);
 extern u32b get_level_flag_from_race(monster_race *r_ptr);
-extern QString describe_one_level_flag(u32b flag);
+extern QString describe_one_level_flag(QString buf, size_t max, u32b flag);
 extern void debug_all_level_flags(u32b flags);
 
+
 //generate.cpp
+/* generate.c */
+extern void place_random_stairs(int y, int x);
+extern void get_mon_hook(byte theme);
+extern byte get_nest_theme(int nestlevel, bool quest_theme);
+extern byte get_pit_theme(int pitlevel, bool quest_theme);
+extern void build_terrain(int y, int x, int feat);
+extern byte get_level_theme(s16b orig_theme_num, bool quest_level);
+extern byte max_themed_monsters(const monster_race *r_ptr, u32b max_power);
+extern void update_arena_level(byte stage);
+extern void generate_cave(void);
 extern void set_dungeon_type(u16b dungeon_type);
 
 
@@ -77,6 +145,9 @@ extern void flavor_init(void);
 extern bool load_player(void);
 extern bool load_gamemode(void);
 
+//mon_cast.cpp
+extern bool cave_exist_mon(const monster_race *r_ptr, int y, int x, bool occupied_ok, bool damage_ok, bool can_dig);
+
 //mon_classes.cpp
 extern void lore_treasure(int m_idx, int num_item, int num_gold);
 
@@ -84,6 +155,48 @@ extern void lore_treasure(int m_idx, int num_item, int num_gold);
 extern int get_dam(monster_race *r_ptr, int attack);
 extern int get_breath_dam(s16b hit_points, int gf_type, bool powerful);
 extern int get_ball_beam_dam(int m_idx, monster_race *r_ptr, int attack, int gf_type, bool powerful);
+
+//mon_timed.cpp
+extern bool mon_inc_timed(int m_idx, int idx, int v, u16b flag);
+extern bool mon_dec_timed(int m_idx, int idx, int v, u16b flag);
+extern bool mon_clear_timed(int m_idx, int idx, u16b flag);
+extern void wake_monster_attack(monster_type *m_ptr, u16b flag);
+
+//mon_util.cpp
+extern s16b poly_r_idx(const monster_type *m_ptr);
+extern void delete_monster_idx(int i);
+extern void delete_monster(int y, int x);
+extern void compact_monsters(int size);
+extern void wipe_mon_list(void);
+extern s16b mon_pop(void);
+extern int get_mon_num_prep(void);
+extern s16b get_mon_num(int level, int y, int x, byte mp_flags);
+extern void display_monlist(void);
+extern QString monster_desc(monster_type *m_ptr, int mode);
+extern QString monster_desc_race(int r_idx);
+extern void lore_probe_monster_aux(int r_idx);
+extern void lore_do_probe_monster(int m_idx);
+extern void lore_treasure(int m_idx, int num_item, int num_gold);
+extern void update_mon(int m_idx, bool full);
+extern void update_monsters(bool full);
+extern s16b monster_carry(int m_idx, object_type *j_ptr);
+extern void monster_swap(int y1, int x1, int y2, int x2);
+extern bool player_place(int y, int x);
+extern void monster_hide(monster_type *m_ptr);
+extern void monster_unhide(monster_type *m_ptr);
+extern s16b monster_place(int y, int x, monster_type *n_ptr);
+extern void calc_monster_speed(int y, int x);
+extern void reveal_mimic(int o_idx, bool message);
+extern bool place_monster_aux(int y, int x, int r_idx, byte mp_flags);
+extern bool place_monster(int y, int x, byte mp_flags);
+extern bool alloc_monster(int dis, byte mp_flags);
+extern bool summon_specific(int y1, int x1, int lev, int type, byte mp_flags);
+extern bool multiply_monster(int m_idx, bool override);
+extern void message_pain(int m_idx, int dam);
+extern bool add_monster_message(QString mon_name, int m_idx, int msg_code);
+extern void flush_monster_messages(void);
+extern void update_smart_learn(int m_idx, int what);
+extern bool monster_nonliving(monster_race *r_ptr);
 
 /* object_desc.c */
 extern QString strip_name(int k_idx);
@@ -219,6 +332,50 @@ extern int get_player_spell_realm(void);
 // projection.cpp
 extern byte gf_color(int type);
 
+/* quest.c */
+extern QString plural_aux(QString name);
+extern int quest_collection_num(quest_type *q_ptr);
+extern void describe_quest(char *random_name, size_t max, s16b level, int mode);
+extern void show_quest_mon(int y, int x);
+extern void add_reward_gold(void);
+extern QString get_title(void);
+extern void prt_rep_guild(int rep_y, int rep_x);
+extern void prt_welcome_guild(void);
+extern void grant_reward_hp(void);
+extern bool quest_allowed(byte j);
+extern bool can_quest_at_level(void);
+extern void quest_finished(quest_type *q_ptr);
+extern bool guild_purchase(int choice);
+extern byte quest_check(int lev);
+extern int quest_num(int lev);
+extern int quest_item_slot(void);
+extern int quest_item_count(void);
+extern s32b quest_time_remaining(void);
+extern s32b quest_player_turns_remaining(void);
+extern void guild_quest_wipe(bool reset_defer);
+extern void write_quest_note(bool success);
+extern void quest_fail(void);
+extern QString format_quest_indicator(char dest[], int max, byte *attr);
+extern void quest_status_update(void);
+extern bool quest_fixed(const quest_type *q_ptr);
+extern bool quest_slot_fixed(int quest_num);
+extern bool quest_multiple_r_idx(const quest_type *q_ptr);
+extern bool quest_slot_multiple_r_idx(int quest_num);
+extern bool quest_single_r_idx(const quest_type *q_ptr);
+extern bool quest_slot_single_r_idx(int quest_num);
+extern bool quest_themed(const quest_type *q_ptr);
+extern bool quest_type_collection(const quest_type *q_ptr);
+extern bool quest_slot_collection(int quest_num);
+extern bool quest_slot_themed(int quest_num);
+extern bool quest_timed(const quest_type *q_ptr);
+extern bool quest_slot_timed(int quest_num);
+extern bool quest_no_down_stairs(const quest_type *q_ptr);
+extern bool no_down_stairs(s16b check_depth);
+extern bool quest_shall_fail_if_leave_level(void);
+extern bool quest_might_fail_if_leave_level(void);
+extern bool quest_fail_immediately(void);
+extern bool quest_might_fail_now(void);
+
 /* randart.c */
 extern QString make_random_name(byte min_length, byte max_length);
 extern s32b artifact_power(int a_idx);
@@ -236,12 +393,36 @@ extern bool save_player(void);
 
 /* spells2.c */
 extern bool hp_player(int num);
+extern void light_room(int y1, int x1);
+extern void unlight_room(int y1, int x1);
+extern bool light_area(int dam, int rad);
+extern bool unlight_area(int dam, int rad);
+extern QString get_spell_type_from_feature(int f_idx, int *gf_type);
+extern bool is_player_immune(int gf_type);
 
 //squelch.cpp
 extern int squelch_itemp(object_type *o_ptr, byte feeling, bool fullid);
 extern void rearrange_stack(int y, int x);
 extern bool squelch_item_ok(object_type *o_ptr);
 extern void do_squelch_pile(int y, int x);
+
+/*store.c*/
+extern s32b price_item(const object_type *o_ptr, bool store_buying);
+extern void store_item_increase(int st, int item, int num);
+extern void store_item_optimize(int st, int item);
+extern bool keep_in_stock(const object_type *o_ptr, int which);
+extern void store_delete_index(int st, int what);
+extern void store_shuffle(int which);
+extern void do_cmd_buy(int command, cmd_arg args[]);
+extern void do_cmd_reward(int command, cmd_arg args[]);
+extern void do_cmd_retrieve(int command, cmd_arg args[]);
+extern bool item_tester_hook_randart(const object_type *o_ptr);
+extern bool item_tester_hook_flammable_book(const object_type *o_ptr);
+extern void do_cmd_sell(int command, cmd_arg args[]);
+extern void do_cmd_stash(int command, cmd_arg args[]);
+extern void do_cmd_store(int command, cmd_arg args[]);
+extern void store_maint(int which);
+extern void store_init(int which);
 
 //tables.cpp
 extern const byte moria_class_level_adj[MORIA_MAX_CLASS][MORIA_MAX_LEV_ADJ];
@@ -302,13 +483,28 @@ extern byte spell_desire_RF4[32][8];
 extern byte spell_desire_RF5[32][8];
 extern byte spell_desire_RF6[32][8];
 extern byte spell_desire_RF7[32][8];
+extern const byte get_angle_to_grid[41][41];
+extern const byte arena_level_map[ARENA_LEVEL_HGT][ARENA_LEVEL_WID];
+extern const byte pit_room_maps[MAX_PIT_PATTERNS][PIT_HEIGHT][PIT_WIDTH];
+extern const slays_structure slays_info_nppangband[11];
+extern const brands_structure brands_info_nppangband[10];
+extern const slays_structure slays_info_nppmoria[4];
+extern const slays_structure brands_info_nppmoria[4];
+extern const mon_susceptibility_struct mon_suscept[4];
 extern const colors_preset preset_colors[MAX_COLORS];
+
+/* target.c */
+extern bool target_able(int m_idx);
+extern bool target_okay(void);
+extern void target_set_monster(int m_idx);
+extern void target_set_location(int y, int x);
 
 
 // Utilities.cpp
 extern int letter_to_number (QChar let);
 extern QChar number_to_letter (int num);
 extern bool is_a_vowel(QChar single_letter);
+extern QString capitilize_first(QString line);
 extern void pop_up_message_box(QString message);
 extern bool get_check(QString question);
 extern QString get_string(QString question);

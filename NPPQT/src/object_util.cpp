@@ -900,7 +900,7 @@ void delete_object_idx(int o_idx)
         p_ptr->redraw |= (PR_ITEMLIST);
 
         /* Visual update */
-        //TODO light_spot(y, x);
+        light_spot(y, x);
     }
 
     /* Wipe the object */
@@ -945,7 +945,7 @@ void delete_object(int y, int x)
     p_ptr->redraw |= PR_ITEMLIST;
 
     /* Visual update */
-    //TODO light_spot(y, x);
+    light_spot(y, x);
 }
 
 
@@ -2207,7 +2207,7 @@ s16b floor_carry(int y, int x, object_type *j_ptr)
         // TODO note_spot(y, x);
 
         /* Redraw */
-        // TODO light_spot(y, x);
+        light_spot(y, x);
 
 
         /*If the player can see the drop, mark the lore*/

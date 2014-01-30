@@ -117,12 +117,15 @@ extern bool item_tester_full;
 extern byte item_tester_tval;
 extern bool item_tester_swap;
 extern bool (*item_tester_hook)(object_type*);
+extern bool (*get_mon_num_hook)(int r_idx);
 extern bool (*get_obj_num_hook)(int k_idx);
+extern bool (*get_feat_num_hook)(int k_idx);
 
 /* Sorting functions */
 extern bool (*ang_sort_comp)(const void *u, const void *v, int a, int b);
 extern void (*ang_sort_swap)(void *u, void *v, int a, int b);
 extern void ang_sort(void *u, void *v, int n);
+extern void write_note (QString note);
 
 // Monser race messages
 extern monster_race_message *mon_msg;
@@ -132,6 +135,7 @@ extern u16b size_mon_hist;
 
 //monster movement information
 extern move_moment_type *mon_moment_info;
+extern u16b move_moment_num;
 
 // Arrays for cave information
 extern int view_n;
@@ -182,8 +186,13 @@ extern u32b dungeon_summon_mask_f7;
 extern s16b num_repro;
 extern s16b object_level;
 extern s16b monster_level;
-extern byte object_generation_mode;
 extern s16b coin_type;
+extern byte object_generation_mode;
+extern bool shimmer_monsters;
+extern bool shimmer_objects;
+extern bool repair_mflag_mark;
+extern bool repair_mflag_show;
+
 
 
 #endif // GLOBALS_H

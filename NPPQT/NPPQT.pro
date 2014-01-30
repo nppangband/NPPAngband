@@ -16,6 +16,7 @@ SOURCES +=  src/qt_main.cpp\
             src/calcs.cpp \
             src/dun_effect.cpp \
             src/dun_generate.cpp \
+            src/dungeon.cpp \
             src/cmd4.cpp \
             src/cmd_spell.cpp \
             src/dun_cave.cpp \
@@ -26,23 +27,28 @@ SOURCES +=  src/qt_main.cpp\
             src/init_edit_files.cpp\
             src/init_game.cpp\
             src/load.cpp \
+            src/mon_cast.cpp \
             src/mon_classes.cpp \
             src/mon_player_ghost.cpp \
             src/mon_ranged_attacks.cpp \
+            src/mon_timed.cpp \
+            src/mon_util.cpp \
             src/object_classes.cpp \
             src/object_desc.cpp \
             src/object_make.cpp \
             src/object_util.cpp \
             src/player_spell.cpp \
             src/projection.cpp \
+            src/quest.cpp \
             src/randart.cpp \
             src/random_numbers.cpp \
+            src/save.cpp \
             src/spells2.cpp \
             src/squelch.cpp \
             src/tables.cpp \
+            src/target.cpp \
             src/utilities.cpp \
-            src/save.cpp
-
+    src/store.cpp
 
 
 
@@ -64,8 +70,9 @@ HEADERS  += src/qt_mainwindow.h\
             src/utilities.h \
             src/object_classes.h \
             src/squelch.h \
-    src/randart.h \
-    src/dun_classes.h
+            src/randart.h \
+            src/dun_classes.h \
+            src/dun_generate.h
 
 
 RESOURCES += \

@@ -49,6 +49,12 @@ s16b coin_type;			/* Hack -- force coin type */
 
 byte object_generation_mode;/* Hack -- use different depth check, prevent embedded chests */
 
+bool shimmer_monsters;	/* Hack -- optimize multi-hued monsters */
+bool shimmer_objects;	/* Hack -- optimize multi-hued objects */
+bool repair_mflag_show;	/* Hack -- repair monster flags (show) */
+bool repair_mflag_mark;	/* Hack -- repair monster flags (mark) */
+
+
 /*
  * Dungeon variables
  */
@@ -338,9 +344,20 @@ bool item_tester_swap;
 bool (*item_tester_hook)(object_type*);
 
 /*
+ * Hack -- function hook to restrict "get_mon_num_prep()" function
+ */
+bool (*get_mon_num_hook)(int r_idx);
+
+/*
  * Hack -- function hook to restrict "get_obj_num_prep()" function
  */
 bool (*get_obj_num_hook)(int k_idx);
+
+/*
+ * Hack -- function hook to restrict "get_feat_num_prep()" function
+ */
+bool (*get_feat_num_hook)(int f_idx);
+
 
 /*
  * Current "comp" function for ang_sort()

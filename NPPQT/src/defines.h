@@ -102,6 +102,23 @@ enum
  */
 #define BLOCK_WID	11
 
+/*
+ * Number of grids in each panel (vertically)
+ * Must be a multiple of BLOCK_HGT
+ */
+#define PANEL_HGT	11
+
+/*since dungeon generation uses PANEL wid to generate dungeons,
+ *the width there can't be dependent on bigtile mode.
+ */
+
+#define PANEL_WID_FIXED	33
+/*
+ * Number of grids in each panel (horizontally)
+ * Must be a multiple of BLOCK_WID
+ */
+#define PANEL_WID	(use_bigtile ? 16 : PANEL_WID_FIXED)
+
 
 //In some of the QT files, this is defined.  In some it isn't.
 #ifndef     TRUE
@@ -502,6 +519,19 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 #define PATH_G_NONE			100
 
 #define PATH_SIZE			512
+
+/*Who caused the projection? */
+#define SOURCE_PLAYER			-1	/*player is the source of projection*/
+#define SOURCE_TRAP				-2	/*Trap*/
+#define SOURCE_EFFECT			-3	/*Effect*/
+#define SOURCE_OTHER			-4	/*Terrain, something other than player or monster*/
+#define SOURCE_MONSTER_START	 0	/*Greater than 0 monster is the source*/
+
+
+/*Mode whether to describe traps/spells or set off/cast them*/
+#define MODE_DESCRIBE	1
+#define MODE_ACTION		2
+#define MODE_FLAGS		3
 
 /*Who caused the projection? */
 #define SOURCE_PLAYER			-1	/*player is the source of projection*/
@@ -927,7 +957,7 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
  * Note the use of comparison to zero to force a "boolean" result
  */
 #define player_can_fire_bold(Y,X) \
-    ((cave_info[Y][X] & (CAVE_FIRE)) != 0)
+    ((dungeon_info[Y][X].cave_info & (CAVE_FIRE)) != 0)
 
 /*
  * Available graphic modes
@@ -1027,7 +1057,8 @@ enum
     COLOR_CUSTOM  //
 };
 
-
+#define CHECK_DISTURB(stop_search) \
+(p_ptr->command_rep || p_ptr->running || p_ptr->resting || ((stop_search) && p_ptr->searching))
 
 
 /*

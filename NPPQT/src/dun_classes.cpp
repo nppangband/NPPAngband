@@ -38,3 +38,20 @@ bool dungeon_type::has_monster()
     if (monster_idx) return (TRUE);
     return (FALSE);
 }
+
+
+// Manually wipe the effect.
+void effect_type::effect_wipe()
+{
+    x_type = 0;
+    x_f_idx = 0;
+    x_cur_y = 0;
+    x_cur_x = 0;
+    x_countdown = 0;
+    x_repeats = 0;
+    x_power = 0;
+    x_source = 0;
+    x_flags = 0;
+    next_x_idx = 0;
+    x_r_idx = 0;
+}

@@ -550,13 +550,13 @@ _feat_ff3_match(f_info + dungeon_info[y][x].feat, flags)
 /*
  * Determines if a monster is FULLY native to a certain location.
  */
-#define is_monster_native(Y, X, RACE) is_monster_native_aux(cave_feat[Y][X], (RACE)->r_native)
+#define is_monster_native(Y, X, RACE) is_monster_native_aux(dungeon_info[Y][X].feat, (RACE)->r_native)
 
 
 /*
  * Determines if the player is FULLY native to a certain location.
  */
-#define is_player_native(Y, X) is_monster_native_aux(cave_feat[Y][X], p_ptr->p_native)
+#define is_player_native(Y, X) is_monster_native_aux(dungeon_info[Y][X].feat, p_ptr->p_native)
 
 
 /*
@@ -606,13 +606,13 @@ _feat_ff3_match(f_info + dungeon_info[y][x].feat, flags)
  * Determine if a "legal" grid is a "trap" grid for players (set by monsters)
  */
 #define cave_player_trap_bold(Y,X) \
-     ([x_list[dungeon_info[Y][X].effect_idx].x_flags & (EF1_TRAP_DUMB | EF1_TRAP_SMART))
+     (x_list[dungeon_info[Y][X].effect_idx].x_flags & (EF1_TRAP_DUMB | EF1_TRAP_SMART))
 
 /*
  * Determine if a "legal" grid is a smart "trap" for players (set by monsters)
  */
 #define cave_smart_trap_bold(Y,X) \
-     ([x_list[dungeon_info[Y][X].effect_idx].x_flags & (EF1_TRAP_SMART))
+     (x_list[dungeon_info[Y][X].effect_idx].x_flags & (EF1_TRAP_SMART))
 
 /*
  * Determine if a "legal" grid is a passive "trap" for players (set by monsters)
@@ -663,8 +663,8 @@ _feat_ff3_match(f_info + dungeon_info[y][x].feat, flags)
     !cave_ff1_match(Y, X, FF1_PERMANENT) && \
     !cave_player_trap_bold(Y, X) && \
     (is_player_native(Y, X) || \
-        (f_info[cave_feat[Y][X]].dam_non_native == 0)) && \
-    (cave_m_idx[Y][X] == 0))
+        (f_info[dungeon_info[Y][X].feat].dam_non_native == 0)) && \
+    (dungeon_info[Y][X].monster_idx == 0))
 
 /*
  * Determine if a "legal" grid is a valid starting grid for player
@@ -723,7 +723,7 @@ _feat_ff3_match(f_info + dungeon_info[y][x].feat, flags)
  cave_passable_bold(Y, X) && \
  !cave_any_trap_bold(Y, X) && \
  !cave_ff3_match(Y, X, FF3_LAVA | FF3_WATER | FF3_ACID | FF3_OIL | FF3_FIRE) && \
- (cave_o_idx[Y][X] == 0))
+ (dungeon_info[Y][X].object_idx == 0))
 
 
 /*

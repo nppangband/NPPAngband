@@ -856,13 +856,7 @@
  * not alive.  All other mimics are "mimics", living creatures that look
  * like something non-living.
  */
-#define monster_nonliving(M) \
-    (((M)->flags3 & (RF3_DEMON))  || \
-     ((M)->flags3 & (RF3_UNDEAD)) || \
-     (strchr("Evg$+~-_", (M)->d_char)))
 
-#define get_mon_idx(M) \
-    (cave_m_idx[(M)->fy][(M)->fx])
 
 
 /*
@@ -878,7 +872,7 @@
  */
 #define cave_no_dam_for_mon(Y, X, M) \
     (is_monster_native(Y, X, M) || \
-    f_info[cave_feat[Y][X]].dam_non_native == 0)
+    f_info[dungeon_info[Y][X].feat].dam_non_native == 0)
 
 
 /*
@@ -1048,12 +1042,9 @@ enum
 #define MON_TMD_FLG_NOFAIL		0x0020	/*  Never Fail the Tests. */
 /* XXX */
 
-/*
- * Maximum length of ghost names
- */
-#define MAX_GHOST_NAME_LEN 32
 
 
+#define NASTY_MON	(auto_scum ? 30 : 40)	/* 1/chance of inflated monster level */
 
 
 #endif // MONSTER_H

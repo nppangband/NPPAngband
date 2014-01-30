@@ -49,4 +49,32 @@ public:
 
 };
 
+class effect_type
+{
+public:
+
+    byte x_type;            /* Effect Type */
+
+    u16b x_f_idx;           /* Effect Feature IDX */
+
+    byte x_cur_y;			/* Current y location, or countdown_base */
+    byte x_cur_x;			/* Current x location, or countdown_rand */
+
+    byte x_countdown;       /* Number of turns effect has left */
+    byte x_repeats;			/* Number of times the effect repeats*/
+
+    u16b x_power;           /* Strength of effect */
+
+    s16b x_source;          /* Source of effect - THIS MUST BE THE RACE of the monster, not the mon_idx of the creature. */
+
+    u16b x_flags;           /* Effect "memory" bitflags */
+
+    s16b next_x_idx;		/* Idx of next effect at this square. */
+
+    s16b x_r_idx;           /* Some monster race index. Used for inscriptions */
+
+    void effect_wipe();
+};
+
+
 #endif // DUN_CLASSES_H

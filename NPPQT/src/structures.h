@@ -20,13 +20,11 @@ typedef struct feature_lore feature_lore;
 typedef struct ghost_template ghost_template;
 typedef struct monster_blow monster_blow;
 typedef struct monster_names monster_names;
-typedef struct monster_desc monster_desc;
 typedef struct monster_race monster_race;
 typedef struct monster_race_message monster_race_message;
 typedef struct monster_message_history monster_message_history;
 typedef struct monster_lore monster_lore;
 typedef struct vault_type vault_type;
-typedef struct effect_type effect_type;
 typedef struct monster_type monster_type;
 typedef struct alloc_entry alloc_entry;
 typedef struct quest_type quest_type;
@@ -54,6 +52,22 @@ typedef struct slays_structure slays_structure;
 typedef struct brands_structure brands_structure;
 typedef struct mon_susceptibility_struct mon_susceptibility_struct;
 
+
+class cmd_arg
+{
+public:
+    QString string;
+
+    int choice;
+    int item;
+    int number;
+    int direction;
+
+    struct
+    {
+        int x, y;
+    } point;
+} ;
 
 /*
  * Information about maximal indices of certain arrays
@@ -359,28 +373,6 @@ struct vault_type
     byte wid;			/* Vault width */
 };
 
-struct effect_type
-{
-    byte x_type;            /* Effect Type */
-
-    u16b x_f_idx;           /* Effect Feature IDX */
-
-    byte x_cur_y;			/* Current y location, or countdown_base */
-    byte x_cur_x;			/* Current x location, or countdown_rand */
-
-    byte x_countdown;       /* Number of turns effect has left */
-    byte x_repeats;			/* Number of times the effect repeats*/
-
-    u16b x_power;           /* Strength of effect */
-
-    s16b x_source;          /* Source of effect - THIS MUST BE THE RACE of the monster, not the mon_idx of the creature. */
-
-    u16b x_flags;           /* Effect "memory" bitflags */
-
-    s16b next_x_idx;		/* Idx of next effect at this square. */
-
-    s16b x_r_idx;           /* Some monster race index. Used for inscriptions */
-};
 
 
 
