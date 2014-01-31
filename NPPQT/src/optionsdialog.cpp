@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QCheckBox>
 #include <QTableWidget>
+#include <QLabel>
 
 OptionsDialog::OptionsDialog(QWidget *parent) :
     QDialog(parent),
@@ -17,14 +18,23 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
     for (int t = 0; t < ui->tabWidget->count(); t++) {
         QWidget *tab = ui->tabWidget->widget(t);
 
-        QVBoxLayout *l1 = new QVBoxLayout;
-        tab->setLayout(l1);
+        QVBoxLayout *l3 = new QVBoxLayout;
+        tab->setLayout(l3);
 
-        QTableWidget *table = new QTableWidget(0, 4);
-        table->verticalHeader()->hide();
-        table->horizontalHeader()->hide();
-        table->hideColumn(3);
-        l1->addWidget(table);
+        QScrollArea *area = new QScrollArea();
+        area->setWidgetResizable(true);
+        l3->addWidget(area);
+
+        QWidget *content = new QWidget;
+        area->setWidget(content);        
+
+        QVBoxLayout *l1 = new QVBoxLayout;
+        l1->setSpacing(0);
+        content->setLayout(l1);                
+        content->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+
+        char *colors[] = {"#D8F7BB", "white"};
+        int cl = 0;
 
         for (int i = 0, j = 0; i < OPT_PAGE_PER; i++) {
             byte idx;
@@ -39,29 +49,43 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
             option_entry *opt = options + idx;
             if (opt->name == NULL) continue;
 
-            table->insertRow(j);
+            QWidget *row = new QWidget;
+            l1->addWidget(row);
+            row->setStyleSheet(QString("background-color: %1").arg(colors[cl++ % 2]));            
 
-            QTableWidgetItem *item = new QTableWidgetItem;
-            item->setCheckState(opt->normal ? Qt::Checked : Qt::Unchecked);
-            table->setItem(j, 0, item);
+            QVBoxLayout *l2 = new QVBoxLayout;
+            row->setLayout(l2);
 
-            item = new QTableWidgetItem(opt->name);
-            table->setItem(j, 1, item);
+            QCheckBox *ck = new QCheckBox(opt->name);
+            ck->setChecked(op_ptr->opt[idx]);
+            ck->setProperty("npp_option", QVariant(idx));
+            l2->addWidget(ck);
 
-            item = new QTableWidgetItem(opt->description);
-            table->setItem(j, 2, item);
-
-            // Save the option number in the hidden column
-            table->setItem(j, 3, new QTableWidgetItem(QString::number(idx)));
-
-            ++j;
+            l2->addWidget(new QLabel(opt->description));
         }
-
-        table->resizeColumnsToContents();
     }
 }
 
 OptionsDialog::~OptionsDialog()
 {
     delete ui;
+}
+
+
+void OptionsDialog::on_buttonBox_clicked(QAbstractButton *button)
+{
+    if (button->text().compare("Save") == 0) {
+        for (int t = 0; t < ui->tabWidget->count(); t++) {
+            QWidget *tab = ui->tabWidget->widget(t);
+
+            QList<QCheckBox *> cks = tab->findChildren<QCheckBox *>();
+
+            for (int i = 0; i < cks.count(); i++) {
+                int opt_idx = cks.at(i)->property("npp_option").toInt();
+                op_ptr->opt[opt_idx] = cks.at(i)->isChecked();
+            }
+        }
+    }
+
+    this->close();
 }

@@ -666,7 +666,8 @@ static int init_other(void)
     for (i = 0; i < OPT_MAX; i++)
     {
         /* Default value */
-        op_ptr->opt[i] = options[i].normal;
+        op_ptr->opt[i] = (options[i].normal != 0);
+        exit(1);
     }
 
     /* Initialize the window flags */
