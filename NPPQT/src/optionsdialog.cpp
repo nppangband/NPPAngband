@@ -16,54 +16,52 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
     ui->setupUi(this);
 
     for (int t = 0; t < ui->tabWidget->count(); t++) {
-        QWidget *tab = ui->tabWidget->widget(t);
+         QWidget *tab = ui->tabWidget->widget(t);
 
-        QVBoxLayout *l3 = new QVBoxLayout;
-        tab->setLayout(l3);
+         QVBoxLayout *l1 = new QVBoxLayout;
+         tab->setLayout(l1);
 
-        QScrollArea *area = new QScrollArea();
-        area->setWidgetResizable(true);
-        l3->addWidget(area);
+         QTableWidget *table = new QTableWidget(0, 4);
+         table->verticalHeader()->hide();
+         table->horizontalHeader()->hide();
+         table->hideColumn(3);
+         table->setShowGrid(false);
+         table->setAlternatingRowColors(true);
+         l1->addWidget(table);
 
-        QWidget *content = new QWidget;
-        area->setWidget(content);        
+         for (int i = 0, j = 0; i < OPT_PAGE_PER; i++) {
+             byte idx;
+             if ((game_mode == GAME_NPPANGBAND) || (game_mode == GAME_MODE_UNDEFINED)) {
+                 idx = option_page_nppangband[t][i];
+             }
+             else {
+                 idx = option_page_nppmoria[t][i];
+             }
+             if (idx == OPT_NONE) continue;
 
-        QVBoxLayout *l1 = new QVBoxLayout;
-        l1->setSpacing(0);
-        content->setLayout(l1);                
-        content->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+             option_entry *opt = options + idx;
+             if (opt->name == NULL) continue;
 
-        char *colors[] = {"#D8F7BB", "white"};
-        int cl = 0;
+             table->insertRow(j);
 
-        for (int i = 0, j = 0; i < OPT_PAGE_PER; i++) {
-            byte idx;
-            if ((game_mode == GAME_NPPANGBAND) || (game_mode == GAME_MODE_UNDEFINED)) {
-                idx = option_page_nppangband[t][i];
-            }
-            else {
-                idx = option_page_nppmoria[t][i];
-            }
-            if (idx == OPT_NONE) continue;
+             QTableWidgetItem *item = new QTableWidgetItem;
+             item->setCheckState(op_ptr->opt[idx] ? Qt::Checked : Qt::Unchecked);
+             table->setItem(j, 0, item);
 
-            option_entry *opt = options + idx;
-            if (opt->name == NULL) continue;
+             item = new QTableWidgetItem(opt->name);
+             table->setItem(j, 1, item);
 
-            QWidget *row = new QWidget;
-            l1->addWidget(row);
-            row->setStyleSheet(QString("background-color: %1").arg(colors[cl++ % 2]));            
+             item = new QTableWidgetItem(opt->description);
+             table->setItem(j, 2, item);
 
-            QVBoxLayout *l2 = new QVBoxLayout;
-            row->setLayout(l2);
+             // Save the option number in the hidden column
+             table->setItem(j, 3, new QTableWidgetItem(QString::number(idx)));
 
-            QCheckBox *ck = new QCheckBox(opt->name);            
-            ck->setChecked(op_ptr->opt[idx]);
-            ck->setProperty("npp_option", QVariant(idx));
-            l2->addWidget(ck);
+             ++j;
+         }
 
-            l2->addWidget(new QLabel(opt->description));
-        }
-    }
+         table->resizeColumnsToContents();
+     }
 }
 
 OptionsDialog::~OptionsDialog()
@@ -78,11 +76,12 @@ void OptionsDialog::on_buttonBox_clicked(QAbstractButton *button)
         for (int t = 0; t < ui->tabWidget->count(); t++) {
             QWidget *tab = ui->tabWidget->widget(t);
 
-            QList<QCheckBox *> cks = tab->findChildren<QCheckBox *>();
-
-            for (int i = 0; i < cks.count(); i++) {
-                int opt_idx = cks.at(i)->property("npp_option").toInt();
-                op_ptr->opt[opt_idx] = cks.at(i)->isChecked();
+            QTableWidget *table = tab->findChild<QTableWidget *>();
+            for (int i = 0; i < table->rowCount(); i++) {
+                QTableWidgetItem *item_check = table->item(i, 0);
+                QTableWidgetItem *item_idx = table->item(i, 3);
+                int opt_idx = item_idx->text().toInt();
+                op_ptr->opt[opt_idx] = (item_check->checkState() == Qt::Checked);
             }
         }
     }
