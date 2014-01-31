@@ -193,6 +193,8 @@ extern bool shimmer_objects;
 extern bool repair_mflag_mark;
 extern bool repair_mflag_show;
 
+extern const byte option_page_nppangband[OPT_PAGE_MAX][OPT_PAGE_PER];
+extern const byte option_page_nppmoria[OPT_PAGE_MAX][OPT_PAGE_PER];
 
 
 #endif // GLOBALS_H

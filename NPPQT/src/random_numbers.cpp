@@ -338,9 +338,9 @@ u32b Rand_simple(u32b m)
     else
     {
         /* Initialize with new seed */
-        long int new_time;
+        time_t new_time;
         time(&new_time);
-        Rand_value = new_time;
+        Rand_value = (long int)new_time;
         initialized = TRUE;
     }
 

@@ -4,6 +4,7 @@
 #include "src/qt_mainwindow.h"
 #include "src/npp.h"
 #include "src/init.h"
+#include "src/optionsdialog.h"
 
 
 // The main function - intitalize the main window and set the menus.
@@ -111,6 +112,10 @@ void MainWindow::open_recent_file()
 
 void MainWindow::about()
 {
+   OptionsDialog *dlg = new OptionsDialog(this);
+   dlg->exec();
+   delete dlg;
+
    QMessageBox::about(this, tr("About NPPAngband and NPPMoria"),
             tr("<h2>NPPAngband and NPPMoria"
                "<p>Copyright (c) 2003-2015 Jeff Greene and Diego González.</h2>"
