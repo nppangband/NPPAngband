@@ -56,7 +56,7 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
             QVBoxLayout *l2 = new QVBoxLayout;
             row->setLayout(l2);
 
-            QCheckBox *ck = new QCheckBox(opt->name);
+            QCheckBox *ck = new QCheckBox(opt->name);            
             ck->setChecked(op_ptr->opt[idx]);
             ck->setProperty("npp_option", QVariant(idx));
             l2->addWidget(ck);
