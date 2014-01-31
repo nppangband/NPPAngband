@@ -15,7 +15,7 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    for (int t = 0; t < ui->tabWidget->count(); t++) {
+    for (int t = 0; t < 5; t++) {
          QWidget *tab = ui->tabWidget->widget(t);
 
          QVBoxLayout *l1 = new QVBoxLayout;
@@ -62,6 +62,9 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
 
          table->resizeColumnsToContents();
      }
+
+     ui->spin_base_delay->setValue(op_ptr->delay_factor);
+     ui->spin_hitpoint_warning->setValue(op_ptr->hitpoint_warn);
 }
 
 OptionsDialog::~OptionsDialog()
@@ -73,7 +76,7 @@ OptionsDialog::~OptionsDialog()
 void OptionsDialog::on_buttonBox_clicked(QAbstractButton *button)
 {
     if (button->text().compare("Save") == 0) {
-        for (int t = 0; t < ui->tabWidget->count(); t++) {
+        for (int t = 0; t < 5; t++) {
             QWidget *tab = ui->tabWidget->widget(t);
 
             QTableWidget *table = tab->findChild<QTableWidget *>();
@@ -84,6 +87,9 @@ void OptionsDialog::on_buttonBox_clicked(QAbstractButton *button)
                 op_ptr->opt[opt_idx] = (item_check->checkState() == Qt::Checked);
             }
         }
+
+        op_ptr->delay_factor = ui->spin_base_delay->value();
+        op_ptr->hitpoint_warn = ui->spin_hitpoint_warning->value();
     }
 
     this->close();
