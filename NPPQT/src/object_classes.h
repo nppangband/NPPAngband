@@ -151,6 +151,8 @@ class object_type
     bool can_takeoff();
     bool can_wear();
     bool has_inscription();
+    void uncurse();
+    byte object_color();
 
 
     // return pseudo-id

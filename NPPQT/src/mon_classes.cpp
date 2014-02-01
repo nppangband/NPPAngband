@@ -40,14 +40,18 @@ void lore_treasure(int m_idx, int num_item, int num_gold)
     monster_lore *l_ptr = &l_list[m_ptr->r_idx];
 
 
+
+
     /* Note the number of things dropped */
     if (num_item > l_ptr->drop_item) l_ptr->drop_item = num_item;
     if (num_gold > l_ptr->drop_gold) l_ptr->drop_gold = num_gold;
+
 
     /* Hack -- memorize the good/great flags */
     if (r_ptr->flags1 & (RF1_DROP_CHEST)) l_ptr->r_l_flags1 |= (RF1_DROP_CHEST);
     if (r_ptr->flags1 & (RF1_DROP_GOOD)) l_ptr->r_l_flags1 |= (RF1_DROP_GOOD);
     if (r_ptr->flags1 & (RF1_DROP_GREAT)) l_ptr->r_l_flags1 |= (RF1_DROP_GREAT);
+
 
     /* Update monster recall window */
     if (p_ptr->monster_race_idx == m_ptr->r_idx)
@@ -56,4 +60,5 @@ void lore_treasure(int m_idx, int num_item, int num_gold)
         p_ptr->redraw |= (PR_MONSTER);
     }
 }
+
 

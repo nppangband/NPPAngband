@@ -599,7 +599,7 @@ u16b fire_trap_smart(int f_idx, int y, int x, byte mode)
 
                     if (FALSE) // TODO (allow_player_confusion())
                     {
-                        //  TODO (void)inc_timed(TMD_CONFUSED, rand_int(4) + 4 + x_ptr->x_power / 10, TRUE);
+                        (void)inc_timed(TMD_CONFUSED, rand_int(4) + 4 + x_ptr->x_power / 10, TRUE);
                     }
                 }
 
@@ -744,7 +744,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                         dam += damroll(dice2, sides2);
                     }
 
-                    // TODO (void)set_cut(p_ptr->timed[TMD_CUT] + randint(dam));
+                    (void)set_cut(p_ptr->timed[TMD_CUT] + randint(dam));
 
                     /* Take the damage */
                     // TODO take_hit(dam, name);
@@ -852,7 +852,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                         message("You are impaled!");
 
                         dam = dam * 2;
-                        // TODO (void)set_cut(p_ptr->timed[TMD_CUT] + randint(dam));
+                        (void)set_cut(p_ptr->timed[TMD_CUT] + randint(dam));
                     }
 
                     /* Take the damage */
@@ -900,7 +900,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                         message("You are impaled on poisonous spikes!");
 
                         dam = dam * 2;
-                        // TODO (void)set_cut(p_ptr->timed[TMD_CUT] + randint(dam));
+                        (void)set_cut(p_ptr->timed[TMD_CUT] + randint(dam));
 
                         if (p_ptr->state.resist_pois || p_ptr->timed[TMD_OPP_POIS] || p_ptr->state.immune_pois)
                         {
@@ -909,7 +909,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                         else
                         {
                             dam = dam * 2;
-                            // TODO (void)inc_timed(TMD_POISONED, randint(dam), TRUE);
+                            (void)inc_timed(TMD_POISONED, randint(dam), TRUE);
                         }
                     }
 
@@ -1029,7 +1029,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                     message("A small dart hits you!");
                     dam = damroll(dice, sides);
                     // TODO take_hit(dam, name);
-                    // TODO (void)inc_timed(TMD_SLOW, rand_int(duration) + duration, TRUE);
+                    (void)inc_timed(TMD_SLOW, rand_int(duration) + duration, TRUE);
                 }
                 else
                 {
@@ -1058,7 +1058,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                     message("A small dart hits you!");
                     dam = damroll(dice, sides);
                     // TODO take_hit(dam, name);
-                    // TODO (void)do_dec_stat(A_STR);
+                    (void)do_dec_stat(A_STR);
                 }
                 else
                 {
@@ -1087,7 +1087,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                     message("A small dart hits you!");
                     dam = damroll(1, 4);
                     // TODO take_hit(dam, name);
-                    // TODO (void)do_dec_stat(A_DEX);
+                    (void)do_dec_stat(A_DEX);
                 }
                 else
                 {
@@ -1116,7 +1116,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                     message("A small dart hits you!");
                     dam = damroll(1, 4);
                     // TODO take_hit(dam, name);
-                    // TODO (void)do_dec_stat(A_CON);
+                    (void)do_dec_stat(A_CON);
                 }
                 else
                 {
@@ -1144,7 +1144,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 message("You are surrounded by a black gas!");
                 if (!p_ptr->state.resist_blind)
                 {
-                    //TODO (void)inc_timed(TMD_BLIND,rand_int(rand_base) + base, TRUE);
+                    (void)inc_timed(TMD_BLIND,rand_int(rand_base) + base, TRUE);
                 }
             }
             break;
@@ -1173,7 +1173,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 message("You are surrounded by a gas of scintillating colors!");
                 //TODO  if (allow_player_confusion())
                 {
-                    // TODO (void)inc_timed(TMD_CONFUSED, rand_int(rand_base) + base, TRUE);
+                    (void)inc_timed(TMD_CONFUSED, rand_int(rand_base) + base, TRUE);
                 }
             }
             break;
@@ -1202,7 +1202,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 message("You are surrounded by a pungent green gas!");
                 if (!p_ptr->state.resist_pois && !p_ptr->timed[TMD_OPP_POIS] && !p_ptr->state.immune_pois)
                 {
-                    //TODO (void)inc_timed(TMD_POISONED, rand_int(rand_base) + base, TRUE);
+                    (void)inc_timed(TMD_POISONED, rand_int(rand_base) + base, TRUE);
                 }
             }
             break;
@@ -1229,7 +1229,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 message("You are surrounded by a strange white mist!");
                 if (!p_ptr->state.free_act)
                 {
-                    //TODO (void)inc_timed(TMD_PARALYZED, rand_int(rand_base) + base, TRUE);
+                    (void)inc_timed(TMD_PARALYZED, rand_int(rand_base) + base, TRUE);
                 }
             }
             break;
@@ -1684,7 +1684,7 @@ s16b get_feat_num(int level)
         if (feat_ff1_match(f_idx, FF1_MORE))
         {
             /* Cache the quest type at the current depth */
-            // TODO int what_quest_type = quest_check(p_ptr->depth);
+            int what_quest_type = quest_check(p_ptr->depth);
 
             /* Verify if the feature is a down shaft */
             bool is_shaft = (feat_ff2_match(f_idx, FF2_SHAFT) != 0);
@@ -1695,13 +1695,13 @@ s16b get_feat_num(int level)
             /* Stairs have special rules */
             if (feat_ff1_match(f_idx, FF1_STAIRS))
             {
-                // TODO if (no_down_stairs(p_ptr->depth)) continue;
+                if (no_down_stairs(p_ptr->depth)) continue;
 
                 /* Shafts shouldn't pierce quest levels */
-               // TODO  if (is_shaft && quest_check(p_ptr->depth + 1)) continue;
+               if (is_shaft && quest_check(p_ptr->depth + 1)) continue;
             }
             /* Trap doors don't get along with quests */
-            // TODO else if (what_quest_type) continue;
+            else if (what_quest_type) continue;
         }
 
         /* Accept */
@@ -1812,7 +1812,7 @@ u16b pick_trap(int y, int x, byte mode)
         if (feat == FEAT_TRAP_DOOR)
         {
             /* HACK - no trap doors on quest levels  */
-            // TODO if (quest_check(p_ptr->depth)) continue;
+            if (quest_check(p_ptr->depth)) continue;
 
             /* Hack -- no trap doors on the deepest level */
             if (p_ptr->depth >= MAX_DEPTH-1) continue;
@@ -3332,7 +3332,7 @@ QString format_monster_inscription(s16b r_idx)
     if (m_ptr->m_timed[MON_TMD_SLEEP])
     {
         /* Get the monster name */
-        // TODO name = monster_desc(m_ptr, 0x180);
+        name = monster_desc(m_ptr, 0x180);
 
         /* Format */
         if (one_in_(2)) inscr = (QString("Sssshhhh! %1 is asleep!") .arg(name));
@@ -3344,7 +3344,7 @@ QString format_monster_inscription(s16b r_idx)
     else if ((r_ptr->flags3 & (RF3_DRAGON)) && (r_ptr->d_char == 'D') && one_in_(2))
     {
         /* Get the monster name */
-        // TODO name = monster_desc(m_ptr, 0x180);
+        name = monster_desc(m_ptr, 0x180);
 
         /* Format */
         inscr = (QString("It says: beware of the claws of %1!") .arg(name));
@@ -3353,7 +3353,7 @@ QString format_monster_inscription(s16b r_idx)
     else if ((r_ptr->flags3 & (RF3_DEMON)) && (r_ptr->d_char == 'U') && one_in_(2))
     {
         /* Get the monster name */
-        // TODO monster_desc(m_ptr, 0x188);
+        name = monster_desc(m_ptr, 0x188);
 
         /* Format */
         inscr = (QString("It says: %1 came from hell to hunt you!") .arg(name));
@@ -3362,7 +3362,7 @@ QString format_monster_inscription(s16b r_idx)
     else if (one_in_(3))
     {
         /* Get the monster name */
-        // TODO name = monster_desc(m_ptr, 0x180);
+        name = name = monster_desc(m_ptr, 0x180);
 
         /* Format */
         inscr = (QString("Its says: %1 will attack you without mercy!") .arg(name));
@@ -3371,7 +3371,7 @@ QString format_monster_inscription(s16b r_idx)
     else if (one_in_(2))
     {
         /* Get the monster name */
-        // TODO monster_desc(m_ptr, 0x188);
+        name = monster_desc(m_ptr, 0x188);
 
         /* Format */
         inscr = (QString("It says: %2 guards this dungeon!") .arg(name));
@@ -3380,7 +3380,7 @@ QString format_monster_inscription(s16b r_idx)
     else
     {
         /* Get the monster name */
-        // TODO monster_desc(m_ptr, 0x188);
+        name = monster_desc(m_ptr, 0x188);
 
         /* Format */
         inscr = (QString("It says: You will be face to face with %3!") .arg(name));
@@ -3599,7 +3599,7 @@ bool hit_wall(int y, int x, bool do_action)
             if (!p_ptr->state.resist_blind && !p_ptr->state.resist_light)
             {
                 /* Become blind */
-                // TODO (void)inc_timed(TMD_BLIND, 10 + randint(10), TRUE);
+                (void)inc_timed(TMD_BLIND, 10 + randint(10), TRUE);
             }
 
             /* Teleport */

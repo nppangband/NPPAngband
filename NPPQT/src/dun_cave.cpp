@@ -3692,7 +3692,7 @@ static void cave_set_feat_aux(int y, int x, u16b feat)
             if (x_ptr->x_type == EFFECT_INSCRIPTION)
             {
                 /* Remove it */
-                // TODO delect effect delete_effect_idx((int)(x_ptr - x_list));
+                delete_effect_idx((int)(x_ptr - x_list));
             }
         }
     }

@@ -40,6 +40,7 @@
 /*
  * A store owner
  */
+
 struct owner_type
 {
     QString owner_name;	/* Name  */

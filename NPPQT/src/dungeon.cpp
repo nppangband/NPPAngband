@@ -35,7 +35,7 @@ void dungeon_change_level(int dlev)
             QString note = "Left the level without entering the ";
             note.append(g_vault_name);
 
-            // TODO do_cmd_note(note, p_ptr->depth);
+            write_note(note, p_ptr->depth);
         }
     }
 

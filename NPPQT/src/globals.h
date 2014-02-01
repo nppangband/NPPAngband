@@ -125,7 +125,6 @@ extern bool (*get_feat_num_hook)(int k_idx);
 extern bool (*ang_sort_comp)(const void *u, const void *v, int a, int b);
 extern void (*ang_sort_swap)(void *u, void *v, int a, int b);
 extern void ang_sort(void *u, void *v, int n);
-extern void write_note (QString note);
 
 // Monser race messages
 extern monster_race_message *mon_msg;
