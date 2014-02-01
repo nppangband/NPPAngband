@@ -147,12 +147,13 @@ void MainWindow::update_file_menu_game_active()
     save_cur_char->setEnabled(TRUE);
     save_cur_char_as->setEnabled(TRUE);
     close_cur_char->setEnabled(TRUE);
-    // Use this line when we are finished with player birth.   options_act->setEnabled(TRUE);
 
     for (int i = 0; i < MAX_RECENT_SAVEFILES; ++i)
     {
         recent_savefile_actions[i]->setEnabled(FALSE);
     }
+
+    options_act->setEnabled(TRUE);
 }
 
 // Activates and de-activates certain file_menu commands when a game is ended.
@@ -171,7 +172,7 @@ void MainWindow::update_file_menu_game_inactive()
         recent_savefile_actions[i]->setEnabled(TRUE);
     }
 
-    // Use this line when we are finished with player birth.   options_act->setEnabled(FALSE);
+    options_act->setEnabled(FALSE);
 }
 
 
@@ -179,8 +180,6 @@ void MainWindow::update_file_menu_game_inactive()
 void MainWindow::create_actions()
 {
 
-
-    // Set icon someday?? new_game_nppangband->setIcon(QIcon(":/images/new.png"));
     new_game_nppangband = new QAction(tr("New Game - NPPAngband"), this);
     new_game_nppangband->setStatusTip(tr("Start a new game of NPPAngband."));
     new_game_nppangband->setIcon(QIcon(":/icons/lib/icons/New_game_NPPAngband.png"));

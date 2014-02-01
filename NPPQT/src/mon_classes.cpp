@@ -39,9 +39,6 @@ void lore_treasure(int m_idx, int num_item, int num_gold)
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     monster_lore *l_ptr = &l_list[m_ptr->r_idx];
 
-
-
-
     /* Note the number of things dropped */
     if (num_item > l_ptr->drop_item) l_ptr->drop_item = num_item;
     if (num_gold > l_ptr->drop_gold) l_ptr->drop_gold = num_gold;

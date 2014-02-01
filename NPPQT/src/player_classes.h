@@ -269,6 +269,9 @@ public:
     bool heavy_wield;	/* Heavy weapon */
     bool heavy_shoot;	/* Heavy shooter */
     bool icky_wield;	/* Icky weapon */
+
+    // All variables above need to be re-set in player_set_wipe.
+    void player_state_wipe();
 };
 
 
@@ -291,6 +294,9 @@ public:
     byte hitpoint_warn;		/* Hitpoint warning (0 to 9) */
 
     byte delay_factor;		/* Delay factor (0 to 9) */
+
+    // All variables above need to be re-set in player_set_wipe.
+    void player_other_wipe();
 };
 
 
@@ -321,7 +327,6 @@ public:
     byte psex;			/* Sex index */
     byte prace;			/* Race index */
     byte pclass;		/* Class index */
-    byte oops;			/* Unused */
 
     byte hitdie;		/* Hit dice (sides) */
     byte expfact;		/* Experience factor */
@@ -417,9 +422,6 @@ public:
     u16b quiver_remainder;	/* "cached" quiver statistics*/
     u16b quiver_slots;
 
-
-
-
     s16b target_set;		/* Target flag */
     s16b target_who;		/* Target identity */
     s16b target_row;		/* Target location */
@@ -492,7 +494,7 @@ public:
 
     u16b dungeon_type;	/* One of the DUNGEON_TYPE_* constants */
 
-
+    void player_type_wipe();
 
 };
 
