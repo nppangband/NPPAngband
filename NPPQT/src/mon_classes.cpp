@@ -39,9 +39,6 @@ void lore_treasure(int m_idx, int num_item, int num_gold)
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     monster_lore *l_ptr = &l_list[m_ptr->r_idx];
 
-
-
-
     /* Note the number of things dropped */
     if (num_item > l_ptr->drop_item) l_ptr->drop_item = num_item;
     if (num_gold > l_ptr->drop_gold) l_ptr->drop_gold = num_gold;
@@ -61,4 +58,70 @@ void lore_treasure(int m_idx, int num_item, int num_gold)
     }
 }
 
+/*
+ * Wipe the monster_type class.
+ * This function shoudld be used instead of WIPE command.
+ * All variables in dungeon_type should be re-set in this function.
+ * This function does not clear the monster pointer from dungeon_type.
+ * It should be called directly only under unusual circumstances.
+ */
+void monster_type::monster_wipe()
+{
+    r_idx = 0;
+    fy = fx = 0;
+    hp = maxhp = 0;
+    m_speed = 0;
+    m_energy = 0;
+    for (int i = 0; i < MON_TMD_MAX; i++) m_timed[i] = 0;
+    cdis = 0;
+    mflag = 0;
+    m_color.setRgb(0,0,0,0);
+    ml = project = sidebar = FALSE;
+    hold_o_idx = 0;
+    smart = 0;
+    target_x = target_y = 0;
+    min_range = best_range = mana = using_flow;
+}
+//  Wipe the monster_lore class. Should only be called at the beginning of a game
+void monster_lore::monster_lore_wipe()
+{
+    sights = deaths = pkills = tkills = 0;
+    wake = ignore = xtra1 = xtra2 = 0;
+    drop_gold = drop_item = 0;
+    ranged = mana = spell_power = xtra3 = 0;
+    for (int i = 0; i < MONSTER_BLOW_MAX; i++) blows[i] = 0;
+    r_l_flags1 = r_l_flags2 = r_l_flags3 = r_l_flags4 = 0;
+    r_l_flags5 = r_l_flags6 = r_l_flags7 = r_l_native = 0;
+}
 
+// Wipe the monster_race class.  This could be used on any entry, but is intended only for player ghosts.
+void monster_race::monster_race_wipe()
+{
+    r_name_full.clear();
+    r_name_short.clear();
+    r_text.clear();
+    hdice = hside = 0;
+    ac = sleep = 0;
+    aaf = r_speed = 0;
+    mexp = extra = 0;
+    freq_ranged = mana = spell_power = mon_power = 0;
+    flags1 = flags2 = flags3 = flags4 = flags5 = 0;
+    flags6 = flags7 = r_native = 0;
+    for (int i = 0; i < MONSTER_BLOW_MAX; i++)
+    {
+        blow[i].d_dice = blow[i].d_side = blow[i].effect = blow[i].method = 0;
+    }
+    level = rarity = color_num = 0;
+    d_color.setRgb(0,0,0,0);
+    d_char = '\0';
+    max_num = cur_num = 0;
+}
+
+/*
+ * Information about ghost "templates".
+ */
+void ghost_template::ghost_template_wipe()
+{
+    t_name.clear();
+    t_gender = t_race = t_class = t_depth = 0;
+};

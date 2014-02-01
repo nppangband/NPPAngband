@@ -2387,7 +2387,7 @@ void remove_dynamic_terrain(byte y, byte x)
     if (g_ptr)
     {
         /* Clear its fields */
-        WIPE(g_ptr, dynamic_grid_type);
+        g_ptr->dynamic_grid_wipe();
 
         /* Decrease the grid count */
         if (dyna_cnt > 0) --dyna_cnt;
@@ -3312,7 +3312,7 @@ QString format_monster_inscription(s16b r_idx)
         m_ptr = &m_body;
 
         /* Clear the monster */
-        WIPE(m_ptr, monster_type);
+        m_ptr->monster_wipe();
 
         /* Hack -- Set the race */
         m_ptr->r_idx = r_idx;

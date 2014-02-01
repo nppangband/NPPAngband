@@ -3,6 +3,8 @@
 
 #include "src/structures.h"
 #include "src/dun_classes.h"
+#include "src/mon_classes.h"
+#include "src/player_classes.h"
 #include <QString>
 #include <QFile>
 

@@ -3,6 +3,7 @@
 
 #include <QColor>
 #include <QChar>
+#include "src/terrain.h"
 
 enum
 {
@@ -47,6 +48,9 @@ public:
     bool has_effect();
     bool has_monster();
 
+    // All variables above should be included in this method.
+    void dungeon_square_wipe();
+
 };
 
 class effect_type
@@ -73,7 +77,152 @@ public:
 
     s16b x_r_idx;           /* Some monster race index. Used for inscriptions */
 
+    // All variables above should be included in this method.
     void effect_wipe();
+};
+
+/*
+ * Feature state structure
+ *
+ *    - Action (FS_*)
+ *   - Result (FEAT_*)
+ */
+class feature_state
+{
+public:
+
+    byte fs_action;
+    s16b fs_result;
+    u16b fs_power;
+};
+
+/*
+ * Information about terrain "features"
+ */
+class feature_type
+{
+public:
+
+    QString f_name;			/* Name (offset) */
+    QString f_text;			/* Text (offset) */
+
+    u16b f_mimic;	/* Feature to mimic */
+
+    s16b f_edge;
+
+    u32b f_flags1;
+    u32b f_flags2;
+    u32b f_flags3;
+
+    u16b f_level;     	/* Minimum level */
+    u16b f_rarity;    	/* 1/Rarity */
+
+    u16b priority;  /* Map priority */
+    s16b defaults;     /* Default state */
+
+    feature_state state[MAX_FEAT_STATES];
+
+    byte f_power;
+
+    u16b unused;		/* Unused */
+
+    byte color_num;     //The number of any default color.  CUSTOM_COLOR for all others.
+    QColor d_color;		/* Default feature color */
+    QChar d_char;		/* Default feature character */
+
+    bool f_everseen;	/* Used to despoilify knowledge screens */
+
+    /* Fields use donly by effects. */
+    u16b x_damage;				/* damage per 100 levels for a smart trap - or basic damage for an effect cloud*/
+    byte x_gf_type;			/* the force type of the effect - numbers are hard coded in source */
+    byte x_timeout_set; 	/*base time between effect instances */
+    byte x_timeout_rand; /*is the random time between effects */
+
+    /* Fields used only by terrain. */
+    u16b dam_non_native;		/*damage to non-native creatures existing in grid */
+    byte native_energy_move;	/*energy to move through for native creatures */
+    byte non_native_energy_move;	/*energy to move through for non-native creatures */
+    byte native_to_hit_adj;	/*combat bonus for being native (percentage)  */
+    byte non_native_to_hit_adj;	/*combat bonus for being native (percentage)*/
+    s32b f_stealth_adj;			/*Adjustment to stealth depending on terrain*/
+
+};
+
+/*
+ * Feature "lore" information
+ *
+ * Note that these fields are related to the "feature recall".
+ *
+ */
+class feature_lore
+{
+public:
+
+    byte f_l_sights;		/*Number of times seeing this terrain*/
+
+    u32b f_l_flags1;
+    u32b f_l_flags2;
+    u32b f_l_flags3;
+
+    byte f_l_defaults;     /* Default state */
+
+    byte f_l_state[MAX_FEAT_STATES];
+
+    byte f_l_power;		/*Number of observed usages of power (unlock, trap power, etc)*/
+
+    byte f_l_dam_non_native;		/*Number of observed damage to non-native creatures existing in grid*/
+    byte f_l_native_moves;		/* Number of observed native moves for this terrain */
+    byte f_l_non_native_moves;	/* Number of observed non-native moves for this terrain */
+    byte f_l_native_to_hit_adj;	/*Number of observed  for being native (percentage)*/
+    byte f_l_non_native_to_hit_adj;	/*Number of observed combat penalties for being non-native (percentage)*/
+    byte f_l_stealth_adj;			/*Number of observed adjustments to stealth depending on terrain*/
+
+    // All variables above should be included in this method.
+    void feature_lore_wipe();
+
+};
+
+/*
+ * Information about "vault generation"
+ */
+class vault_type
+{
+public:
+
+    QString vault_name;			/* Name (offset) */
+    QString vault_text;			/* Text (offset) */
+
+    byte typ;			/* Vault type */
+
+    byte rat;			/* Vault rating */
+
+    byte hgt;			/* Vault height */
+    byte wid;			/* Vault width */
+};
+
+/*
+ * The type definition of the entries of the "dyna_g" array
+ */
+class dynamic_grid_type
+{
+public:
+
+    /* Coordinates */
+    byte y;
+    byte x;
+
+    /* DF1_* flags */
+    byte flags;
+
+    /*
+     * Timed features use a counter. Each time the features are
+     * proccesed this counter is decremented. The effect is applied when
+     * the counter becomes 0.
+     */
+    byte counter;
+
+    // All variables above should be included in this method.
+    void dynamic_grid_wipe();
 };
 
 

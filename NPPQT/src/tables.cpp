@@ -2054,7 +2054,7 @@ option_entry options[OPT_MAX] =
 {
     {"rogue_like_commands",	"Rogue-like commands",					FALSE},		/* OPT_rogue_like_commands */
     {"quick_messages",		"Activate quick messages",				TRUE},		/* OPT_quick_messages */
-    {"use_sound",			"Use Sound", 							FALSE},		/* OPT_use_sound */
+    {NULL,NULL,	FALSE},/* xxx */
     {"carry_query_flag",	"Prompt before picking things up",		FALSE},		/* OPT_carry_query_flag */
     {"use_old_target",		"Use old target by default",			FALSE},		/* OPT_use_old_target */
     {"always_pickup",		"Pick things up by default",			TRUE},		/* OPT_always_pickup */
@@ -2122,7 +2122,7 @@ option_entry options[OPT_MAX] =
     {"show_piles",			"Show stacks using special attr/char",	FALSE},	/* OPT_show_piles */
     {"center_player",		"Center map continuously (very slow)",	FALSE},	/* OPT_center_player */
     {"animate_flicker",    	"Shimmer multi-colored things",  		TRUE}, /* OPT_animate_flicker */
-    {"xchars_to_file",		"Allow accents in output files",		FALSE},	/* OPT_xchars_to_file */
+    {NULL,NULL,	FALSE},/* xxx */
     {"auto_more",			"Automatically clear '-more-' prompts",	FALSE},	/* OPT_auto_more */
     {NULL,				NULL,								FALSE},/* xxx */
     {"auto_display_lists",	"Automatically display drop-down lists", TRUE},	/* OPT_auto_display_lists */
@@ -2130,7 +2130,7 @@ option_entry options[OPT_MAX] =
     {"verify_leave_quest",	"Verify before leaving a quest level",TRUE},/* OPT_verify_leave_quest*/
     {"mark_squelch_items",	"Items marked for squelch appear as dot",FALSE},/* OPT_mark_squelch_items */
     {"mouse_movement",      "Allow mouse clicks to move the player",       TRUE }, /*OPT_mouse_movement*/
-    {"mouse_buttons",       "Show mouse status line buttons",              TRUE }, /*OPT_mouse_buttons*/
+    {NULL,NULL,	FALSE},/* xxx */
     {"notify_recharge",		"Notify on object recharge", 	FALSE},/* OPT_notify_recharge */
     {NULL,				NULL,								FALSE},/* xxx */
     {NULL,				NULL,							FALSE},/* xxx */
@@ -2318,7 +2318,6 @@ const byte option_page_nppangband[OPT_PAGE_MAX][OPT_PAGE_PER] =
     /*** Interface/Gameplay ***/
 
     {
-        OPT_use_sound,
         OPT_rogue_like_commands,
         OPT_floor_query_flag,
         OPT_carry_query_flag,
@@ -2331,11 +2330,12 @@ const byte option_page_nppangband[OPT_PAGE_MAX][OPT_PAGE_PER] =
         OPT_easy_alter,
         OPT_expand_inscribe,
         OPT_mouse_movement,
-        OPT_mouse_buttons,
         OPT_auto_scum,
         OPT_allow_themed_levels,
         OPT_smart_cheat,
-        OPT_xchars_to_file,
+        OPT_NONE,
+        OPT_NONE,
+        OPT_NONE,
         OPT_NONE,
         OPT_NONE
     },
@@ -2449,7 +2449,6 @@ const byte option_page_nppmoria[OPT_PAGE_MAX][OPT_PAGE_PER] =
     /*** Interface/Gameplay ***/
 
     {
-        OPT_use_sound,
         OPT_rogue_like_commands,
         OPT_floor_query_flag,
         OPT_carry_query_flag,
@@ -2462,9 +2461,10 @@ const byte option_page_nppmoria[OPT_PAGE_MAX][OPT_PAGE_PER] =
         OPT_easy_alter,
         OPT_expand_inscribe,
         OPT_mouse_movement,
-        OPT_mouse_buttons,
         OPT_smart_cheat,
-        OPT_xchars_to_file,
+        OPT_NONE,
+        OPT_NONE,
+        OPT_NONE,
         OPT_NONE,
         OPT_NONE,
         OPT_NONE,

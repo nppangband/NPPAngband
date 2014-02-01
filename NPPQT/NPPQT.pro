@@ -38,6 +38,7 @@ SOURCES +=  src/qt_main.cpp\
             src/object_make.cpp \
             src/object_util.cpp \
             src/optionsdialog.cpp \
+            src/player_classes.cpp \
             src/player_spell.cpp \
             src/projection.cpp \
             src/quest.cpp \
@@ -51,6 +52,7 @@ SOURCES +=  src/qt_main.cpp\
             src/target.cpp \
             src/timed.cpp \
             src/utilities.cpp
+
 
 
 
@@ -77,7 +79,9 @@ HEADERS  += src/qt_mainwindow.h\
             src/randart.h \
             src/dun_classes.h \
             src/dun_generate.h \
-            src/optionsdialog.h
+            src/optionsdialog.h \
+            src/mon_classes.h \
+            src/player_classes.h
 
 
 RESOURCES += \

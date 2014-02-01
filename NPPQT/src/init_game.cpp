@@ -662,20 +662,7 @@ static int init_other(void)
 
     /*** Prepare the options ***/
 
-    /* Initialize the options */
-    for (i = 0; i < OPT_MAX; i++)
-    {
-        /* Default value */
-        op_ptr->opt[i] = (options[i].normal != 0);
-        exit(1);
-    }
-
-    /* Initialize the window flags */
-    for (i = 0; i < ANGBAND_TERM_MAX; i++)
-    {
-        /* Assume no flags */
-        op_ptr->window_flag[i] = 0L;
-    }
+    p_ptr->player_type_wipe();
 
     /*Clear the update flags*/
     p_ptr->notice = 0L;
@@ -1092,7 +1079,6 @@ static int init_alloc(void)
  */
 void init_npp_games(void)
 {
-
     QLabel status_update;
     status_update.setText (QString("Starting game"));
     status_update.show();
@@ -1183,7 +1169,6 @@ void init_npp_games(void)
 
     /* Done */
     status_update.setText (QString(QObject::tr("Initialization complete")));
-
     status_update.hide();
 }
 
