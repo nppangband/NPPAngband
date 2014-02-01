@@ -605,7 +605,7 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
  */
 #define OPT_rogue_like_commands		0
 #define OPT_quick_messages			1
-#define OPT_use_sound				2
+/* xxx */
 #define OPT_carry_query_flag		3
 #define OPT_use_old_target			4
 #define OPT_always_pickup			5
@@ -670,7 +670,7 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 #define OPT_show_piles				67
 #define OPT_center_player			68
 #define OPT_animate_flicker			69
-#define OPT_xchars_to_file			70
+/* xxx */
 #define OPT_auto_more				71
 /* xxx */
 #define OPT_auto_display_lists		73
@@ -678,7 +678,7 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 #define OPT_verify_leave_quest		75
 #define OPT_mark_squelch_items		76
 #define OPT_mouse_movement			77
-#define OPT_mouse_buttons			78
+/* xxx */
 #define OPT_notify_recharge			79
 /* xxx */
 /* xxx */
@@ -745,7 +745,7 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
  */
 #define rogue_like_commands		op_ptr->opt[OPT_rogue_like_commands]
 #define quick_messages			op_ptr->opt[OPT_quick_messages]
-#define use_sound				op_ptr->opt[OPT_use_sound]
+/* xxx */
 #define carry_query_flag		op_ptr->opt[OPT_carry_query_flag]
 #define use_old_target			op_ptr->opt[OPT_use_old_target]
 #define always_pickup			op_ptr->opt[OPT_always_pickup]
@@ -811,7 +811,7 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 #define show_piles				op_ptr->opt[OPT_show_piles]
 #define center_player			op_ptr->opt[OPT_center_player]
 #define animate_flicker 		op_ptr->opt[OPT_animate_flicker]
-#define xchars_to_file			op_ptr->opt[OPT_xchars_to_file]
+/* xxx */
 #define auto_more				op_ptr->opt[OPT_auto_more]
 /* xxx */
 #define auto_display_lists		op_ptr->opt[OPT_auto_display_lists]

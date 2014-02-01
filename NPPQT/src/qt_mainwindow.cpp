@@ -147,6 +147,7 @@ void MainWindow::update_file_menu_game_active()
     save_cur_char->setEnabled(TRUE);
     save_cur_char_as->setEnabled(TRUE);
     close_cur_char->setEnabled(TRUE);
+    // Use this line when we are finished with player birth.   options_act->setEnabled(TRUE);
 
     for (int i = 0; i < MAX_RECENT_SAVEFILES; ++i)
     {
@@ -169,17 +170,15 @@ void MainWindow::update_file_menu_game_inactive()
     {
         recent_savefile_actions[i]->setEnabled(TRUE);
     }
+
+    // Use this line when we are finished with player birth.   options_act->setEnabled(FALSE);
 }
 
 
 //  Set's up all the QActions that will be added to the menu bar.  These are later added by create_menus.
 void MainWindow::create_actions()
 {
-    options_act = new QAction(tr("Options"), this);
-    options_act->setStatusTip(tr("Change the game options."));
-    //new_game_nppangband->setIcon(QIcon(":/icons/lib/icons/New_game_NPPAngband.png"));
-    //new_game_nppangband->setShortcut(tr("Ctrl+A"));
-    connect(options_act, SIGNAL(triggered()), this, SLOT(options_dialog()));
+
 
     // Set icon someday?? new_game_nppangband->setIcon(QIcon(":/images/new.png"));
     new_game_nppangband = new QAction(tr("New Game - NPPAngband"), this);
@@ -233,6 +232,11 @@ void MainWindow::create_actions()
                 this, SLOT(open_recent_file()));
     }
 
+    options_act = new QAction(tr("Options"), this);
+    options_act->setStatusTip(tr("Change the game options."));
+    options_act->setIcon(QIcon(":/icons/lib/icons/options.png"));
+    connect(options_act, SIGNAL(triggered()), this, SLOT(options_dialog()));
+
 
     about_act = new QAction(tr("&About"), this);
     about_act->setStatusTip(tr("Show the application's About box"));
@@ -258,8 +262,6 @@ void MainWindow::create_menus()
     file_menu->addAction(save_cur_char_as);
     file_menu->addAction(close_cur_char);
     separator_act = file_menu->addSeparator();
-    file_menu->addAction(options_act);
-    separator_act = file_menu->addSeparator();
     file_menu->addAction(exit_npp);
     separator_act = file_menu->addSeparator();    
     for (int i = 0; i < MAX_RECENT_SAVEFILES; ++i)
@@ -270,6 +272,8 @@ void MainWindow::create_menus()
 
     menuBar()->addSeparator();
 
+    settings = menuBar()->addMenu(tr("&Settings"));
+    settings->addAction(options_act);
 
     // Help section of top menu.
     help_menu = menuBar()->addMenu(tr("&Help"));
@@ -289,6 +293,7 @@ void MainWindow::create_toolbars()
     file_toolbar->addAction(save_cur_char);
     file_toolbar->addAction(save_cur_char_as);
     file_toolbar->addAction(close_cur_char);
+    file_toolbar->addAction(options_act);
     file_toolbar->addSeparator();
     file_toolbar->addAction(exit_npp);
 }

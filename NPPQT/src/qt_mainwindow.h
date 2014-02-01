@@ -79,6 +79,7 @@ private:
     //  Holds the actual commands for the file menu and toolbar.
     QMenu *file_menu;
     QMenu *recent_files_menu;
+    QMenu *settings;
     QMenu *help_menu;
     QToolBar *file_toolbar;
     QAction *new_game_nppangband;
