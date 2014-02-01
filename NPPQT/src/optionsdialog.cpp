@@ -72,6 +72,7 @@ OptionsDialog::~OptionsDialog()
     delete ui;
 }
 
+
 void OptionsDialog::on_buttonBox_clicked(QAbstractButton *button)
 {
     if (button->text().compare("Save") == 0) {

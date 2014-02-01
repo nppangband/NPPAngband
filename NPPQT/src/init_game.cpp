@@ -667,7 +667,6 @@ static int init_other(void)
     {
         /* Default value */
         op_ptr->opt[i] = (options[i].normal != 0);
-        exit(1);
     }
 
     /* Initialize the window flags */
@@ -1092,7 +1091,6 @@ static int init_alloc(void)
  */
 void init_npp_games(void)
 {
-
     QLabel status_update;
     status_update.setText (QString("Starting game"));
     status_update.show();
@@ -1183,7 +1181,6 @@ void init_npp_games(void)
 
     /* Done */
     status_update.setText (QString(QObject::tr("Initialization complete")));
-
     status_update.hide();
 }
 
