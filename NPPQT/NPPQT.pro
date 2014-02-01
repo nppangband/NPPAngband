@@ -77,7 +77,9 @@ HEADERS  += src/qt_mainwindow.h\
             src/randart.h \
             src/dun_classes.h \
             src/dun_generate.h \
-            src/optionsdialog.h
+            src/optionsdialog.h \
+            src/mon_classes.h \
+            src/player_classes.h
 
 
 RESOURCES += \

@@ -1093,14 +1093,10 @@ static int init_alloc(void)
 void init_npp_games(void)
 {
 
-    QLabel status_update;
-    status_update.setText (QString("Starting game"));
-    status_update.show();
-
     /*** Initialize some arrays ***/
 
     /* Initialize size info */
-    status_update.setText (QString(QObject::tr("Initializing array sizes...")));
+    //status_update.setText (QString(QObject::tr("Initializing array sizes...")));
     if (init_z_info()) quit_npp_games(QObject::tr("Cannot initialize sizes"));
 
     if (game_mode == GAME_NPPANGBAND) init_nppangband();
@@ -1108,83 +1104,78 @@ void init_npp_games(void)
     else return;  //Something would be broken with the setup for this to happen.
 
     /* Initialize color info */
-    status_update.setText (QString(QObject::tr("Initializing colors...")));
+    //status_update.setText (QString(QObject::tr("Initializing colors...")));
     if (init_color_info()) quit_npp_games(QObject::tr("Cannot initialize colors"));
 
     /* Initialize feature info */
-    status_update.setText (QString(QObject::tr("Initializing arrays... (features)")));
+    //status_update.setText (QString(QObject::tr("Initializing arrays... (features)")));
     if (init_f_info()) quit_npp_games(QObject::tr("Cannot initialize features"));
 
     /* Initialize object info */
-    status_update.setText (QString(QObject::tr("Initializing arrays... (objects)")));
+    //status_update.setText (QString(QObject::tr("Initializing arrays... (objects)")));
     if (init_k_info()) quit_npp_games(QObject::tr("Cannot initialize objects"));
 
     /* Initialize object info */
-    status_update.setText (QString(QObject::tr("Initializing arrays... (ghosts)")));
+    //status_update.setText (QString(QObject::tr("Initializing arrays... (ghosts)")));
     if (init_t_info()) quit_npp_games(QObject::tr("Cannot initialize ghosts"));
 
     /* Initialize artifact info */
-    status_update.setText (QString(QObject::tr("Initializing arrays... (artifacts)")));
+    //status_update.setText (QString(QObject::tr("Initializing arrays... (artifacts)")));
     if (init_a_info()) quit_npp_games(QObject::tr("Cannot initialize artifacts"));
 
     /* Initialize ego-item info */
-    status_update.setText (QString(QObject::tr("Initializing arrays... (ego-items)")));
+    //status_update.setText (QString(QObject::tr("Initializing arrays... (ego-items)")));
     if (init_e_info()) quit_npp_games(QObject::tr("Cannot initialize ego-items"));
 
     /* Initialize monster info */
-    status_update.setText (QString(QObject::tr("Initializing arrays... (monsters)")));
+    //status_update.setText (QString(QObject::tr("Initializing arrays... (monsters)")));
     if (init_r_info()) quit_npp_games(QObject::tr("Cannot initialize monsters"));
 
     /* Initialize feature info */
-    status_update.setText (QString(QObject::tr("Initializing arrays... vaults)")));
+    //status_update.setText (QString(QObject::tr("Initializing arrays... vaults)")));
     if (init_v_info()) quit_npp_games(QObject::tr("Cannot initialize vaults"));
 
     /* Initialize history info */
-    status_update.setText (QString(QObject::tr("Initializing arrays... histories)")));
+    //status_update.setText (QString(QObject::tr("Initializing arrays... histories)")));
     if (init_h_info()) quit_npp_games(QObject::tr("Cannot initialize histories"));
 
     /* Initialize race info */
-    status_update.setText (QString(QObject::tr("Initializing arrays... (races)")));
+    //status_update.setText (QString(QObject::tr("Initializing arrays... (races)")));
     if (init_p_info()) quit_npp_games(QObject::tr("Cannot initialize races"));
 
     /* Initialize class info */
-    status_update.setText (QString(QObject::tr("Initializing arrays... (classes)")));
+    //status_update.setText (QString(QObject::tr("Initializing arrays... (classes)")));
     if (init_c_info()) quit_npp_games(QObject::tr("Cannot initialize classes"));
 
     /* Initialize owner info */
-    status_update.setText (QString(QObject::tr("Initializing arrays... (owners)")));
+    //status_update.setText (QString(QObject::tr("Initializing arrays... (owners)")));
     if (init_b_info()) quit_npp_games(QObject::tr("Cannot initialize owners"));
 
     /* Initialize flavor info */
-    status_update.setText (QString(QObject::tr("Initializing arrays... (flavors)")));
+    //status_update.setText (QString(QObject::tr("Initializing arrays... (flavors)")));
     if (init_flavor_info()) quit_npp_games(QObject::tr("Cannot initialize flavors"));
 
     /* Initialize quests info */
-    status_update.setText (QString(QObject::tr("Initializing arrays... (quests)")));
+    //status_update.setText (QString(QObject::tr("Initializing arrays... (quests)")));
     if (init_q_info()) quit_npp_games(QObject::tr("Cannot initialize quests"));
 
     /* Initialize some other arrays */
-    status_update.setText (QString(QObject::tr("Initializing arrays... (other)")));
+    //status_update.setText (QString(QObject::tr("Initializing arrays... (other)")));
     if (init_other()) quit_npp_games(QObject::tr("Cannot initialize other stuff"));
 
     /* Initialize some other arrays */
-    status_update.setText (QString(QObject::tr("Initializing arrays... (alloc)")));
+    //status_update.setText (QString(QObject::tr("Initializing arrays... (alloc)")));
     if (init_alloc()) quit_npp_games(QObject::tr("Cannot initialize alloc stuff"));
 
     /*** Load default user pref files ***/
 
 
     /* Initialize randart tables info */
-    status_update.setText (QString(QObject::tr("Initializing Random Artifact Tables...]")));
+    //status_update.setText (QString(QObject::tr("Initializing Random Artifact Tables...]")));
     if (init_n_info()) quit_npp_games(QObject::tr("Cannot initialize random name generator list"));
 
     /*Build the randart probability tables based on the standard Artifact Set*/
     build_randart_tables();
-
-    /* Done */
-    status_update.setText (QString(QObject::tr("Initialization complete")));
-
-    status_update.hide();
 }
 
 
