@@ -513,3 +513,28 @@ s16b object_type::pseudo_light()
     return (INSCRIP_AVERAGE);
 }
 
+/*
+ * Hack -- Removes curse from an object.
+ */
+void object_type::uncurse()
+{
+    /* Uncurse it */
+    ident &= ~(IDENT_CURSED);
+
+    /* Remove special inscription, if any */
+    if (discount >= INSCRIP_NULL) discount = 0;
+
+    /* Take note if allowed */
+    if (discount == 0) discount = INSCRIP_UNCURSED;
+
+    /* The object has been "sensed" */
+    ident |= (IDENT_SENSE);
+}
+
+/*
+ * Hack -- Removes curse from an object.
+ */
+byte object_type::object_color()
+{
+    return (k_info[k_idx].color_num);
+}

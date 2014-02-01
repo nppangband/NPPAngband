@@ -45,10 +45,11 @@ SOURCES +=  src/qt_main.cpp\
             src/save.cpp \
             src/spells2.cpp \
             src/squelch.cpp \
+            src/store.cpp \
             src/tables.cpp \
             src/target.cpp \
-            src/utilities.cpp \
-    src/store.cpp
+            src/timed.cpp \
+            src/utilities.cpp
 
 
 

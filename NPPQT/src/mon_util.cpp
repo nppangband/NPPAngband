@@ -962,7 +962,7 @@ static QString get_mon_name(int r_idx, int in_los)
  *   0x22 --> Possessive, genderized if visable ("his") or "its"
  *   0x23 --> Reflexive, genderized if visable ("himself") or "itself"
  */
-QString monster_desc(const monster_type *m_ptr, int mode)
+QString monster_desc(monster_type *m_ptr, int mode)
 {
     QString desc;
     QString res;

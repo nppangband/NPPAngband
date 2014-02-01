@@ -117,12 +117,11 @@ extern bool hit_wall(int y, int x, bool do_action);
 extern void update_level_flag(void);
 extern u32b get_level_flag(u16b feat);
 extern u32b get_level_flag_from_race(monster_race *r_ptr);
-extern QString describe_one_level_flag(QString buf, size_t max, u32b flag);
+extern QString describe_one_level_flag(u32b flag);
 extern void debug_all_level_flags(u32b flags);
 
 
 //generate.cpp
-/* generate.c */
 extern void place_random_stairs(int y, int x);
 extern void get_mon_hook(byte theme);
 extern byte get_nest_theme(int nestlevel, bool quest_theme);
@@ -149,7 +148,7 @@ extern bool load_gamemode(void);
 extern bool cave_exist_mon(const monster_race *r_ptr, int y, int x, bool occupied_ok, bool damage_ok, bool can_dig);
 
 //mon_classes.cpp
-extern void lore_treasure(int m_idx, int num_item, int num_gold);
+
 
 //mon_ranged_attack.cpp
 extern int get_dam(monster_race *r_ptr, int attack);
@@ -313,7 +312,17 @@ extern void object_tried(object_type *o_ptr);
 extern void object_history(object_type *o_ptr, byte origin, s16b r_idx);
 extern void stack_histories(object_type *o_ptr, const object_type *j_ptr);
 extern void expand_inscription(const object_type *o_ptr, const char *src, char dest[], int max);
-
+extern bool item_tester_hook_wieldable_ided_weapon(object_type *o_ptr);
+extern bool item_tester_hook_wieldable_weapon(object_type *o_ptr);
+extern bool item_tester_hook_ided_weapon(object_type *o_ptr);
+extern bool item_tester_hook_weapon(object_type *o_ptr);
+extern bool item_tester_hook_ided_armour(object_type *o_ptr);
+extern bool item_tester_hook_armour(object_type *o_ptr);
+extern bool item_tester_hook_ided_ammo(object_type *o_ptr);
+extern bool item_tester_hook_ammo(object_type *o_ptr);
+extern bool item_tester_hook_recharge(object_type *o_ptr);
+extern bool item_tester_hook_randart(object_type *o_ptr);
+extern bool item_tester_hook_flammable_book(object_type *o_ptr);
 
 
 //player_ghost.cpp
@@ -393,21 +402,45 @@ extern bool save_player(void);
 
 /* spells2.c */
 extern bool hp_player(int num);
+extern bool inc_stat(int stat);
+extern bool dec_stat(int stat, int amount, bool permanent);
+extern bool res_stat(int stat);
+extern bool do_dec_stat(int stat);
+extern bool do_res_stat(int stat);
+extern bool do_inc_stat(int stat);
+extern void do_perm_stat_boost(int stat);
+extern void identify_pack(void);
+extern void uncurse_object(object_type *o_ptr);
+extern bool remove_curse(bool heavy);
+extern bool remove_all_curse(void);
+extern bool restore_level(void);
+extern bool enchant(object_type *o_ptr, int n, int eflag);
+extern bool enchant_spell(int num_hit, int num_dam, int num_ac);
+extern bool ident_spell(void);
+extern bool identify_fully(void);
+extern void recharge_staff_wand(object_type *o_ptr, int percent);
 extern void light_room(int y1, int x1);
 extern void unlight_room(int y1, int x1);
 extern bool light_area(int dam, int rad);
 extern bool unlight_area(int dam, int rad);
 extern QString get_spell_type_from_feature(int f_idx, int *gf_type);
 extern bool is_player_immune(int gf_type);
+extern void identify_object(object_type *o_ptr, bool star_ident);
+extern bool brand_object(object_type *o_ptr, byte brand_type, bool do_enchant);
+extern bool brand_weapon(bool enchant);
+extern bool brand_ammo(bool enchant);
+extern bool brand_bolts(bool enchant);
 
 //squelch.cpp
+extern QString squelch_to_label(int squelch);
 extern int squelch_itemp(object_type *o_ptr, byte feeling, bool fullid);
+extern int do_squelch_item(int squelch, int item, object_type *o_ptr);
 extern void rearrange_stack(int y, int x);
 extern bool squelch_item_ok(object_type *o_ptr);
 extern void do_squelch_pile(int y, int x);
 
 /*store.c*/
-extern s32b price_item(const object_type *o_ptr, bool store_buying);
+extern s32b price_item(object_type *o_ptr, bool store_buying);
 extern void store_item_increase(int st, int item, int num);
 extern void store_item_optimize(int st, int item);
 extern bool keep_in_stock(const object_type *o_ptr, int which);
@@ -416,8 +449,6 @@ extern void store_shuffle(int which);
 extern void do_cmd_buy(int command, cmd_arg args[]);
 extern void do_cmd_reward(int command, cmd_arg args[]);
 extern void do_cmd_retrieve(int command, cmd_arg args[]);
-extern bool item_tester_hook_randart(const object_type *o_ptr);
-extern bool item_tester_hook_flammable_book(const object_type *o_ptr);
 extern void do_cmd_sell(int command, cmd_arg args[]);
 extern void do_cmd_stash(int command, cmd_arg args[]);
 extern void do_cmd_store(int command, cmd_arg args[]);
@@ -499,6 +530,18 @@ extern bool target_okay(void);
 extern void target_set_monster(int m_idx);
 extern void target_set_location(int y, int x);
 
+/* timed.c */
+
+extern bool redundant_timed_event(int idx);
+extern bool set_timed(int idx, int v, bool notify);
+extern bool inc_timed(int idx, int v, bool notify);
+extern bool dec_timed(int idx, int v, bool notify);
+extern bool clear_timed(int idx, bool notify);
+extern bool player_can_repeat(void);
+extern bool set_stun(int v);
+extern bool set_cut(int v);
+extern bool set_food(int v);
+
 
 // Utilities.cpp
 extern int letter_to_number (QChar let);
@@ -514,6 +557,8 @@ extern void color_message(QString msg, int which_color);
 extern void custom_color_message(QString msg, byte red, byte green, byte blue);
 extern void cmd_enable_repeat(void);
 extern void cmd_disable_repeat(void);
+extern void write_note(QString note, s16b depth);
+extern QString get_player_title(void);
 
 
 #endif // FUNCTION_DECLARATIONS_H

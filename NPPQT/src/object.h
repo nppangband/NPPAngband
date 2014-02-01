@@ -1699,4 +1699,13 @@ enum
 #define SQUELCH_NO		0
 #define SQUELCH_YES		1
 
+/*
+ * Bit flags for the "enchant()" function
+ */
+#define ENCH_TOHIT	0x01
+#define ENCH_TODAM	0x02
+#define ENCH_TOAC	0x04
+
+#define ENCHANT_MAX 9
+
 #endif // OBJECT_H

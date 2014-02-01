@@ -1732,11 +1732,11 @@ static int rd_dungeon(void)
     p_ptr->depth = depth;
 
 
-    /* TODO - Place player in dungeon */
-    //if (!player_place(py, px))
+    /* Place player in dungeon */
+    if (!player_place(py, px))
     {
-    //    pop_up_message_box(QString("Cannot place player (%1,%2)!").arg(py) .arg(px));
-     //   return (-1);
+        pop_up_message_box(QString("Cannot place player (%1,%2)!").arg(py) .arg(px));
+        return (-1);
     }
 
 
@@ -1854,13 +1854,12 @@ static int rd_dungeon(void)
             (void)prepare_ghost(n_ptr->r_idx);
         }
 
-        //TODO place monster
         /* Place monster in dungeon */
-        //if (monster_place(n_ptr->fy, n_ptr->fx, n_ptr) != i)
-        //{
-            //pop_up_message_box(QString("Cannot place monster %d") .arg(i));
-            //return (-1);
-        //}
+        if (monster_place(n_ptr->fy, n_ptr->fx, n_ptr) != i)
+        {
+            pop_up_message_box(QString("Cannot place monster %d") .arg(i));
+            return (-1);
+        }
     }
 
 
