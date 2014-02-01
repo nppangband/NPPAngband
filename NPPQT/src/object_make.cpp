@@ -4146,8 +4146,8 @@ void create_food(void)
     /* Either put it in the inventory or on the floor */
     if (inven_carry_okay(i_ptr))
     {
-        // TODO put object in inventory (cmd1)
-       // put_object_in_inventory(i_ptr);
+        // put object in inventory (cmd1)
+        // TODO put_object_in_inventory(i_ptr);
     }
     else drop_near(i_ptr, -1, p_ptr->py, p_ptr->px);
 }

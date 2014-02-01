@@ -2612,10 +2612,20 @@ void guild_quest_wipe(bool reset_defer)
     int i;
 
     /* Wipe the structure */
-    (void)WIPE(q_ptr, quest_type);
+    q_ptr->name.clear();
+    q_ptr->q_type = 0;
+    q_ptr->q_reward = 0;
+    q_ptr->q_fame_inc = 0;
+    q_ptr->q_theme = 0;
+    q_ptr->base_level = 0;
+    q_ptr->mon_idx = 0;
+    q_ptr->turn_counter = 0;
+    q_ptr->q_num_killed = 0;
+    q_ptr->q_max_num = 0;
 
     /* Bring back the flags we didn't want to wipe */
-    q_ptr->q_flags |= preserve_mask;
+    q_ptr->q_flags = preserve_mask;
+
 
     if (reset_defer) p_ptr->deferred_rewards = 0;
 
@@ -2807,7 +2817,7 @@ void write_quest_note(bool success)
     }
 
     /*write the note*/
-    write_note(note);
+    write_note(note, q_ptr->base_level);
 }
 
 /*

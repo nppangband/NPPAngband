@@ -249,8 +249,19 @@ void ang_sort(void *u, void *v, int n)
 
 
 // Write a note to the notes file
-void write_note (QString note)
+void write_note(QString note, s16b depth)
 {
     (void)note;
+    (void)depth;
     // TODO write note
+}
+
+QString get_player_title(void)
+{
+    if (game_mode == GAME_NPPMORIA)
+    {
+        return (cp_ptr->cl_title[p_ptr->lev-1]);
+    }
+
+    return (cp_ptr->cl_title[(p_ptr->lev - 1) / 5]);
 }

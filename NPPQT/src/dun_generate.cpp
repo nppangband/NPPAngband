@@ -8449,9 +8449,10 @@ static void roll_level_flag(int num_rolls)
             /* Debug message */
             if (cheat_room && !(level_flag & flag))
             {
-                char name[80];
+                QString name;
 
-                describe_one_level_flag(name, sizeof(name), flag);
+
+                name = describe_one_level_flag(flag);
 
                 color_message(QString("Adding %1 to level_flag.") .arg(name), TERM_WHITE);
             }

@@ -252,7 +252,7 @@ static owner_type *store_owner(int st)
  *
  * The shopkeeper's name must come first, then the character's name.
  */
-static const char *comment_welcome[] =
+static QString comment_welcome[] =
 {
     "",
     "%s nods to you.",
@@ -269,7 +269,7 @@ static const char *comment_welcome[] =
 /*
  * Messages for reacting to purchase prices.
  */
-static const char *comment_worthless[] =
+static QString comment_worthless[] =
 {
     "Arrgghh!",
     "You bastard!",
@@ -279,7 +279,7 @@ static const char *comment_worthless[] =
     "The shopkeeper mutters in disgust."
 };
 
-static const char *comment_bad[] =
+static QString comment_bad[] =
 {
     "Damn!",
     "You fiend!",
@@ -287,7 +287,7 @@ static const char *comment_bad[] =
     "The shopkeeper glares at you."
 };
 
-static const char *comment_accept[] =
+static QString comment_accept[] =
 {
     "Okay.",
     "Fine.",
@@ -297,7 +297,7 @@ static const char *comment_accept[] =
     "Taken!"
 };
 
-static const char *comment_good[] =
+static QString comment_good[] =
 {
     "Cool!",
     "You've made my day!",
@@ -306,7 +306,7 @@ static const char *comment_good[] =
     "The shopkeeper laughs loudly."
 };
 
-static const char *comment_great[] =
+static QString comment_great[] =
 {
     "Yipee!",
     "I think I'll retire!",
@@ -324,9 +324,9 @@ static const char *comment_great[] =
  */
 static void prt_welcome(const owner_type *ot_ptr)
 {
-    char short_name[20];
+    QString short_name;
     QString player_name;
-    const char *owner_name = &b_name[ot_ptr->owner_name];
+    QString owner_name = ot_ptr->owner_name;
 
     /* We go from level 1 - 50  */
     size_t i = ((unsigned)p_ptr->lev - 1) / 5;
@@ -340,15 +340,10 @@ static void prt_welcome(const owner_type *ot_ptr)
     /* Welcome the character */
     if (i)
     {
-        int j;
-
         /* Extract the first name of the store owner (stop before the first space) */
-        for (j = 0; owner_name[j] && owner_name[j] != ' '; j++)
-            short_name[j] = owner_name[j];
-
-        /* Truncate the name */
-        short_name[j] = '\0';
-
+        QString short_name = owner_name;
+        int j = short_name.indexOf(' ');
+        short_name.truncate(j);
 
         /* Get a title for the character */
         if ((i % 2) && randint0(2)) player_name = get_player_title();
@@ -356,7 +351,7 @@ static void prt_welcome(const owner_type *ot_ptr)
         else                        player_name = (p_ptr->psex == SEX_MALE ? "sir" : "lady");
 
         /* Balthazar says "Welcome" */
-        prt(format(comment_welcome[i], short_name, player_name), 0, 0);
+        //TODO print onscreen prt(format(comment_welcome[i], short_name, player_name), 0, 0);
     }
 }
 
@@ -389,19 +384,19 @@ static void purchase_analyze(s32b price, s32b value, s32b guess)
 {
     /* Item was worthless, but we bought it */
     if ((value <= 0) && (price > value))
-        message(MSG_STORE1, 0, ONE_OF(comment_worthless));
+        message(ONE_OF(comment_worthless));
 
     /* Item was cheaper than we thought, and we paid more than necessary */
     else if ((value < guess) && (price > value))
-        message(MSG_STORE2, 0, ONE_OF(comment_bad));
+        message(ONE_OF(comment_bad));
 
     /* Item was a good bargain, and we got away with it */
     else if ((value > guess) && (value < (4 * guess)) && (price < value))
-        message(MSG_STORE3, 0, ONE_OF(comment_good));
+        message(ONE_OF(comment_good));
 
     /* Item was a great bargain, and we got away with it */
     else if ((value > guess) && (price < value))
-        message(MSG_STORE4, 0, ONE_OF(comment_great));
+        message(ONE_OF(comment_great));
 }
 
 
@@ -422,7 +417,7 @@ static int current_store(void)
 {
     if (cave_shop_bold(p_ptr->py,p_ptr->px))
 
-        return (f_info[cave_feat[p_ptr->py][p_ptr->px]].f_power);
+        return (f_info[dungeon_info[p_ptr->py][p_ptr->px].cave_info].f_power);
 
     return STORE_NONE;
 }
@@ -435,7 +430,7 @@ static bool check_gold(s32b price)
 {
     if (price > p_ptr->au)
     {
-        msg_format("It would cost you %d gold.  You don't have enough.", price);
+        message(QString("It would cost you %1 gold.  You don't have enough.") .arg(price));
 
         return (FALSE);
     }
@@ -645,8 +640,8 @@ static bool store_service_aux(int store_num, s16b choice)
     object_type *o_ptr;
     object_kind *k_ptr;
     quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
-    char o_name[80];
-    char title[80];
+    QString o_name;
+    QString title;
 
     byte lev;
 
@@ -654,10 +649,10 @@ static bool store_service_aux(int store_num, s16b choice)
 
     int item;
 
-    char prompt[160];
+    QString prompt;
 
     u32b price = price_services(store_num, choice);
-    get_title(title, sizeof(title));
+    title = get_title();
 
     switch (choice)
     {
@@ -680,7 +675,7 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Get an item */
             q = "Enchant which item? ";
             s = "You have nothing to enchant.";
-            if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_QUIVER))) return (FALSE);
+            //TODO if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_QUIVER))) return (FALSE);
 
             /*Got the item*/
             o_ptr = &inventory[item];
@@ -695,8 +690,8 @@ static bool store_service_aux(int store_num, s16b choice)
             else add_to = o_ptr->to_d;
 
             /* Description, shorten it for artifacts */
-            if (o_ptr->art_num) object_desc(o_name, sizeof(o_name), o_ptr, ODESC_BASE);
-            else object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
+            if (o_ptr->is_artifact()) o_name = object_desc(o_ptr, ODESC_BASE);
+            else o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
             /*
              * We will eventually run into the u32 variable max number, so
@@ -704,8 +699,7 @@ static bool store_service_aux(int store_num, s16b choice)
              */
             if (add_to >= 15)
             {
-                msg_format("%s %s cannot be enchanted any further",
-               ((item >= 0) ? "Your" : "The"), o_name);
+                message(QString("%1 %2 cannot be enchanted any further") .arg(((item >= 0) ? "Your" : "The")) .arg(o_name));
 
                 return (FALSE);
             }
@@ -735,20 +729,17 @@ static bool store_service_aux(int store_num, s16b choice)
             /*Too expensive*/
             if (!check_gold(price)) return (FALSE);
 
-            strnfmt(prompt, sizeof(prompt), "Spend %d gold to enchant %s? ",
-                            price, o_name);
+            prompt = (QString("Spend %1 gold to enchant %2? ") .arg(price) .arg(o_name));
             if (!get_check(prompt)) return (FALSE);
 
             /*reduce the gold*/
             p_ptr->au -= price;
 
             /* Description */
-            object_desc(o_name, sizeof(o_name), o_ptr, ODESC_FULL);
+            o_name = object_desc(o_ptr, ODESC_FULL);
 
             /* Describe */
-            msg_format("%s %s glow%s brightly!",
-               ((item >= 0) ? "Your" : "The"), o_name,
-               ((o_ptr->number > 1) ? "" : "s"));
+            message(QString("%1 %2 glow%3 brightly!") .arg((item >= 0) ? "Your" : "The") .arg(o_name) .arg((o_ptr->number > 1) ? "" : "s"));
 
             if (choice == SERVICE_ENCHANT_ARMOR) o_ptr->to_a ++;
             else if (choice == SERVICE_ENCHANT_TO_HIT) o_ptr->to_h ++;
@@ -756,14 +747,14 @@ static bool store_service_aux(int store_num, s16b choice)
             else o_ptr->to_d++;
 
             /* Break curse */
-            if (cursed_p(o_ptr) &&
+            if (o_ptr->is_cursed() &&
                 (!(k_ptr->k_flags3 & (TR3_PERMA_CURSE))) &&
                  (add_to >= 0) && (rand_int(100) < 25))
             {
-                msg_print("The curse is broken!");
+                message("The curse is broken!");
 
                 /* Uncurse the object */
-                uncurse_object(o_ptr);
+                o_ptr->uncurse();
 
             }
 
@@ -786,19 +777,19 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Get an item */
             q = "Brand which item? ";
             s = "You have nothing to Brand.";
-            if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_QUIVER))) return (FALSE);
+            // TODO if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_QUIVER))) return (FALSE);
 
             /*Got the item*/
             o_ptr = &inventory[item];
 
             /* Description, shorten it for artifacts */
-            if (o_ptr->art_num) object_desc(o_name, sizeof(o_name), o_ptr, ODESC_BASE);
-            else object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
+            if (o_ptr->art_num) o_name = object_desc(o_ptr, ODESC_BASE);
+            else o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
             /*If artifact, or ego item, don't bother*/
             if ((o_ptr->art_num) || (o_ptr->ego_num))
             {
-                msg_format("%^s cannot be branded!", o_name);
+                message(QString("%^1 cannot be branded!") .arg(o_name));
 
                 return (FALSE);
             }
@@ -817,8 +808,7 @@ static bool store_service_aux(int store_num, s16b choice)
             /*Too expensive*/
             if (!check_gold(price)) return (FALSE);
 
-            strnfmt(prompt, sizeof(prompt), "Spend %d gold to brand %s? ",
-                            price, o_name);
+            prompt = (QString("Spend %1 gold to brand %2? ") .arg(price) .arg(o_name));
             if (!get_check(prompt)) return (FALSE);
 
             if (choice == SERVICE_ELEM_BRAND_WEAP)
@@ -844,7 +834,7 @@ static bool store_service_aux(int store_num, s16b choice)
                 p_ptr->au -= price;
                 return (TRUE);
             }
-            msg_format("Branding failed.");
+            message("Branding failed.");
             return (FALSE);
         }
 
@@ -857,13 +847,13 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Get an item */
             q = "Recharge which item? ";
             s = "You have nothing to recharge.";
-            if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return (FALSE);
+            // TODO if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return (FALSE);
 
             /*Got the item*/
             o_ptr = &inventory[item];
 
             /* Description */
-            object_desc(o_name, sizeof(o_name), o_ptr, ODESC_FULL);
+            o_name = object_desc(o_ptr, ODESC_FULL);
 
             /* Extract the object "level" */
             lev = k_info[o_ptr->k_idx].k_level;
@@ -877,8 +867,7 @@ static bool store_service_aux(int store_num, s16b choice)
                 if (!o_ptr->timeout)
                 {
                     /* Describe */
-                    msg_format("The %s %s not require re-charging!",
-                        o_name, (o_ptr->number > 1 ? "do" : "does"));
+                    message(QString("The %1 %2 not require re-charging!") .arg(o_name) .arg((o_ptr->number > 1 ? "do" : "does")));
 
                     return (FALSE);
                 }
@@ -900,8 +889,8 @@ static bool store_service_aux(int store_num, s16b choice)
             /*Too expensive*/
             if (!check_gold(price)) return(FALSE);
 
-            strnfmt(prompt, sizeof(prompt), "Spend %d gold to recharge %s?  ",
-                            price, o_name);
+            prompt = (QString("Spend %1 gold to recharge %2?") .arg(price) .arg(o_name));
+
             if (!get_check(prompt)) return(FALSE);
 
             /*re-charge the rods*/
@@ -953,8 +942,7 @@ static bool store_service_aux(int store_num, s16b choice)
             /*Too expensive*/
             if (!check_gold(price)) return (FALSE);
 
-            strnfmt(prompt, sizeof(prompt), "Spend %d gold to cure critical wounds? ",
-                            price);
+            prompt = (QString("Spend %1 gold to cure critical wounds? ") .arg(price));
             if (!get_check(prompt)) return (FALSE);
 
             /*Heal the player, note if they actually need healing*/
@@ -971,7 +959,7 @@ static bool store_service_aux(int store_num, s16b choice)
                 p_ptr->au -= price;
                 return (TRUE);
             }
-            msg_format("You do not require any healing services.");
+            message("You do not require any healing services.");
 
             return (FALSE);
         }
@@ -980,8 +968,7 @@ static bool store_service_aux(int store_num, s16b choice)
             /*Too expensive*/
             if (!check_gold(price)) return (FALSE);
 
-            strnfmt(prompt, sizeof(prompt), "Spend %d gold to restore life levels? ",
-                            price);
+            prompt = (QString("Spend %1 gold to restore life levels? ") .arg(price));
             if (!get_check(prompt)) return (FALSE);
 
             /*We restored the player*/
@@ -991,7 +978,7 @@ static bool store_service_aux(int store_num, s16b choice)
                 return (TRUE);
             }
             /* Not needed*/
-            msg_format("Your life levels do not require restoring.");
+            message("Your life levels do not require restoring.");
             return (FALSE);
         }
         case SERVICE_REMOVE_CURSE:
@@ -1007,7 +994,7 @@ static bool store_service_aux(int store_num, s16b choice)
                 return (TRUE);
             }
 
-            else msg_format("No items had a curse removed.");
+            else message("No items had a curse removed.");
             return (FALSE);
 
         }
@@ -1026,40 +1013,34 @@ static bool store_service_aux(int store_num, s16b choice)
             else
             {
                 /* Ask confirmation */
-                if (!get_check(format("Choose a stat to permanently increase, %s?", title))) return (FALSE);
+                if (!get_check(QString("Choose a stat to permanently increase, %1?") .arg(title))) return (FALSE);
             }
 
-            screen_save();
-
             /* returning false??*/
-            result = stats_menu(choice);
+            // TODO result = stats_menu(choice);
 
-            if (result == STAT_NO_CHOICE)
+            if (result == 0) // TODO work on "escape" choiceSTAT_NO_CHOICE)
             {
 
                 if (choice == SERVICE_RESTORE_STAT)
                 {
-                    screen_load();
-                    msg_format("None of your stats need restoring.");
+                    message("None of your stats need restoring.");
                 }
                 else if (choice == SERVICE_INCREASE_STAT)
                 {
-                    screen_load();
-                    msg_format("Your stats cannot be increased any further.");
+                    message("Your stats cannot be increased any further.");
                 }
                 /* must be SERVICE_QUEST_REWARD_INC_STAT*/
                 else
                 {
-                    screen_load();
-                    msg_format("Your stats cannot be permanently increased any further.");
+                    message("Your stats cannot be permanently increased any further.");
                 }
                 return (FALSE);
             }
 
             /*player chose escape - do nothing */
-            if (result == STAT_ESCAPE)
+            if (result == 0) // DOTO figure out STAT_ESCAPE)
             {
-                screen_load();
                 return (FALSE);
             }
 
@@ -1068,24 +1049,20 @@ static bool store_service_aux(int store_num, s16b choice)
             {
                 /*charge it*/
                 if (do_res_stat(result)) p_ptr->au -= price;
-                else msg_format("Your %s does not need restoring.",
-                                        stat_names_full[result]);
+                else message(QString("Your %1 does not need restoring.") .arg(stat_names_full[result]));
 
             }
             else if (choice == SERVICE_INCREASE_STAT)
             {
                 if (do_inc_stat(result)) p_ptr->au -= price;
-                else msg_format("Your %s cannot be increased any further.",
-                                    stat_names_full[result]);
+                else message(QString("Your %1 cannot be increased any further.") .arg(stat_names_full[result]));
             }
             /* must be SERVICE_QUEST_REWARD_INC_STAT*/
             else
             {
-                Term_gotoxy(0, 0);
                 do_perm_stat_boost(result);
                 guild_quest_wipe(TRUE);
             }
-            screen_load();
             return (TRUE);
         }
 
@@ -1095,7 +1072,7 @@ static bool store_service_aux(int store_num, s16b choice)
 
             if ((adult_no_artifacts) || (adult_no_xtra_artifacts))
             {
-                msg_print("Nothing happens.");
+                message("Nothing happens.");
                 return (FALSE);
             }
 
@@ -1103,9 +1080,9 @@ static bool store_service_aux(int store_num, s16b choice)
             item_tester_hook = item_tester_hook_randart;
 
             /* Get an item */
-            q = format("Choose an item to be made into an artifact, %s.", title);
-            s = format("You have no eligible item, %s.", title);
-            if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return (FALSE);
+            q = (QString("Choose an item to be made into an artifact, %1.") .arg(title));
+            s = (QString("You have no eligible item, %1.") .arg(title));
+            // TODO if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return (FALSE);
 
             /*Got the item*/
             o_ptr = &inventory[item];
@@ -1114,7 +1091,7 @@ static bool store_service_aux(int store_num, s16b choice)
             k_ptr = &k_info[o_ptr->k_idx];
 
             /* Description */
-            object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
+            o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
             /* Get the "value" of the item */
             o_value = k_ptr->cost * 50;
@@ -1125,9 +1102,8 @@ static bool store_service_aux(int store_num, s16b choice)
             /*Too expensive*/
             if (!check_gold(price)) return (FALSE);
 
-            strnfmt(prompt, sizeof(prompt), "Spend %d gold to make %s into an artifact? ",
-                            price, o_name);
-            if (!get_check(prompt)) return (FALSE);
+            prompt = (QString("Spend %1 gold to make %2 into an artifact? ") .arg(price) .arg(o_name));
+            // TODO if (!get_check(prompt)) return (FALSE);
 
             /*re-use the o_value variable for a completely different purpose*/
             /*extra power bonus for expensive items and high player fame*/
@@ -1156,12 +1132,12 @@ static bool store_service_aux(int store_num, s16b choice)
                 o_ptr->ident |= (IDENT_MENTAL);
 
                 /*Let the player know what they just got*/
-                object_info_screen(o_ptr);
+                // TODO object_info_screen(o_ptr);
 
                 return (TRUE);
             }
 
-            msg_print("The attempt at making an artifact has failed");
+            message("The attempt at making an artifact has failed");
             return (FALSE);
         }
 
@@ -1172,7 +1148,7 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Paranoia - should never happen */
             if ((adult_no_artifacts) || (adult_no_xtra_artifacts))
             {
-                msg_print("Nothing happens.");
+                message("Nothing happens.");
                 return (FALSE);
             }
 
@@ -1180,9 +1156,9 @@ static bool store_service_aux(int store_num, s16b choice)
             item_tester_hook = item_tester_hook_randart;
 
             /* Get an item */
-            q = format("Choose an item to be made into an artifact, %s. ", title);
-            s = format("You have no eligible item, %s. ", title);
-            if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return (FALSE);
+            q = (QString("Choose an item to be made into an artifact, %1. ") .arg(title));
+            s = (QString("You have no eligible item, %1. ") .arg(title));
+            // TODO if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return (FALSE);
 
             /*Got the item*/
             o_ptr = &inventory[item];
@@ -1191,9 +1167,9 @@ static bool store_service_aux(int store_num, s16b choice)
             k_ptr = &k_info[o_ptr->k_idx];
 
             /* Description */
-            object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
+            o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
-            strnfmt(prompt, sizeof(prompt), "Make %s into an artifact? ", o_name);
+            prompt = (QString("Make %1 into an artifact? ") .arg(o_name));
 
             if (!get_check(prompt)) return (FALSE);
 
@@ -1219,34 +1195,34 @@ static bool store_service_aux(int store_num, s16b choice)
                 o_ptr->ident |= (IDENT_MENTAL);
 
                 /*Let the player know what they just got*/
-                object_info_screen(o_ptr);
+                // TODO object_info_screen(o_ptr);
 
                 guild_quest_wipe(TRUE);
 
                 return (TRUE);
             }
-            msg_print("The attempt at making an artifact has failed");
+            message("The attempt at making an artifact has failed");
             return (FALSE);
         }
 
         case SERVICE_PROBE_QUEST_MON:
         {
-            char race_name[80];
+            QString race_name;
 
             monster_race *r_ptr = &r_info[q_ptr->mon_idx];
             monster_lore *l_ptr = &l_list[q_ptr->mon_idx];
 
             if ((!quest_single_r_idx(q_ptr)) || (q_ptr->mon_idx == 0))
             {
-                msg_print("You are not currently questing for a specific creature.");
+                message("You are not currently questing for a specific creature.");
                 return (FALSE);
             }
 
             /* Not a vault quest, so get the monster race name (singular)*/
-            monster_desc_race(race_name, sizeof(race_name), q_ptr->mon_idx);
+            race_name = monster_desc_race(q_ptr->mon_idx);
 
             /* Make it plural if necessary*/
-            if (q_ptr->q_max_num > 1) plural_aux(race_name, sizeof(race_name));
+            if (q_ptr->q_max_num > 1) race_name = plural_aux(race_name);
 
             price += r_ptr->level * 100;
 
@@ -1254,8 +1230,7 @@ static bool store_service_aux(int store_num, s16b choice)
             if (!check_gold(price)) return (FALSE);
 
             /*confirm*/
-            strnfmt(prompt, sizeof(prompt), "Spend %d gold to probe %s? ",
-                            price, race_name);
+            prompt = (QString("Spend %1 gold to probe %2? ") .arg(price) .arg(race_name));
             if (!get_check(prompt)) return (FALSE);
 
             /*charge the player*/
@@ -1273,35 +1248,15 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Know "forced" flags */
             l_ptr->r_l_flags1 |= (r_ptr->flags1 & (RF1_FORCE_DEPTH | RF1_FORCE_MAXHP));
 
-            /* Save screen */
-            screen_save();
-
-            /* Begin recall */
-            Term_gotoxy(0, 1);
-
             /* Output to the screen */
-            text_out_hook = text_out_to_screen;
-
-            /* Recall monster */
-            describe_monster(q_ptr->mon_idx, FALSE);
-
-            /* Describe monster */
-            roff_top(q_ptr->mon_idx);
-
-            /*give the player a look at the updated monster info*/
-            put_str("Press any key to continue.  ", 0, 40);
-
-            inkey();
-
-            /* Load screen */
-            screen_load();
+            //TODO - print out the monster information or display a dialog
             return (TRUE);
         }
         case SERVICE_BUY_HEALING_POTION:
         case SERVICE_BUY_LIFE_POTION:
         case SERVICE_BUY_SCROLL_BANISHMENT:
         {
-            char o_name[80];
+            QString o_name;
             int k_idx;
 
             object_type *i_ptr;
@@ -1332,8 +1287,7 @@ static bool store_service_aux(int store_num, s16b choice)
             /*Too expensive*/
             if (!check_gold(price)) return (FALSE);
 
-            strnfmt(prompt, sizeof(prompt), "Spend %d gold to purchase a potion of %s? ",
-                            price, (k_name + k_ptr->name));
+            prompt = (QString("Spend %1 gold to purchase a potion of %2? ") .arg(price) .arg(k_ptr->k_name));
             if (!get_check(prompt)) return (FALSE);
 
             /*charge the player*/
@@ -1346,7 +1300,7 @@ static bool store_service_aux(int store_num, s16b choice)
             k_info[k_idx].aware = TRUE;
 
             /* Describe the result */
-            object_desc(o_name, sizeof(o_name), i_ptr, ODESC_FULL);
+            o_name = object_desc(i_ptr, ODESC_FULL);
 
             /* Remember history */
             object_history(i_ptr, ORIGIN_STORE, 0);
@@ -1354,13 +1308,13 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Note that the pack is too full */
             if (!inven_carry_okay(i_ptr))
             {
-                msg_format("You have no room in your backpack.");
+                message("You have no room in your backpack.");
 
                 /* Drop the object */
                 drop_near(i_ptr, -1, p_ptr->py, p_ptr->px);
 
                 /* Inform the player */
-                msg_format("Your %s is waiting outside!", o_name);
+                message(QString("Your %1 is waiting outside!") .arg(o_name));
 
             }
 
@@ -1373,10 +1327,10 @@ static bool store_service_aux(int store_num, s16b choice)
                 item_new = inven_carry(i_ptr);
 
                 /* Describe just the result */
-                object_desc(o_name, sizeof(o_name), &inventory[item_new], ODESC_PREFIX | ODESC_FULL);
+                o_name = object_desc(&inventory[item_new], ODESC_PREFIX | ODESC_FULL);
 
                 /* Message */
-                msg_format("You have (%c) %s.", index_to_label(item_new), o_name);
+                message(QString("You have (%1) %2.") .arg(index_to_label(item_new)) .arg(o_name));
             }
 
             return (TRUE);
@@ -1386,20 +1340,19 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Check for current quest */
             if (!guild_quest_level())
             {
-                msg_format("You don't have a current quest, %s.", title);
+                message(QString("You don't have a current quest, %1.") .arg(title));
                 return (FALSE);
             }
 
             /* Ask confirmation */
-            if (!get_check(format("Abandon your quest, %s?", title))) return (FALSE);
+            if (!get_check(QString("Abandon your quest, %1?") .arg(title))) return (FALSE);
 
             /* Remove the current quest */
             quest_fail();
 
             /*Get the new title, and give a message*/
-            get_title(title, sizeof(title));
-            msg_print(format("The guild is disappointed in you, %s.", title));
-            message_flush();
+            title = get_title();
+            message(QString("The guild is disappointed in you, %1.") .arg(title));
 
             return (TRUE);
         }
@@ -1421,7 +1374,7 @@ static bool store_service_aux(int store_num, s16b choice)
             q = "Fireproof which book? ";
             if (cp_ptr->spell_book == TV_PRAYER_BOOK) s = "You have no flammable prayer books!";
             else s = "You have no flammable spell books!";
-            if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return (FALSE);
+            // TODO if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return (FALSE);
 
             /*Got the item*/
             o_ptr = &inventory[item];
@@ -1435,11 +1388,10 @@ static bool store_service_aux(int store_num, s16b choice)
             if (!check_gold(price)) return (FALSE);
 
             /* Description */
-            object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
+            o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
             /*confirm*/
-            strnfmt(prompt, sizeof(prompt),
-                "Spend %d gold to fireproof %s? ", 	price, o_name);
+            prompt = (QString("Spend %1 gold to fireproof %2? ") .arg(price) .arg(o_name));
             if (!get_check(prompt)) return (FALSE);
 
             /*find the ego-item*/
@@ -1447,7 +1399,7 @@ static bool store_service_aux(int store_num, s16b choice)
             {
                 ego_item_type *e_ptr = &e_info[i];
 
-                if (strstr((e_name + e_ptr->name), "Fireproof"))
+                if (e_ptr->e_name.contains("Fireproof"))
                 {
                     int j;
                     bool right_type = FALSE;
@@ -1467,10 +1419,10 @@ static bool store_service_aux(int store_num, s16b choice)
                         o_ptr->ego_num = i;
 
                         /* Description */
-                        object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
+                        o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
                         /*Confirm it worked*/
-                        msg_format("You have %s", o_name);
+                        message(QString("You have %1") .arg(o_name));
 
                         return (TRUE);
                     }
@@ -1484,12 +1436,12 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Check for current quest */
             if (!guild_quest_level())
             {
-                msg_format("You don't have a current quest, %s.", title);
+                message(QString("You don't have a current quest, %1.") .arg(title));
                 return (FALSE);
             }
 
             /* Ask confirmation */
-            if (!get_check(format("Really defer your reward, %s?", title))) return (FALSE);
+            if (!get_check(QString("Really defer your reward, %1?") .arg(title))); return (FALSE);
 
             p_ptr->deferred_rewards += (q_ptr->q_fame_inc * 3) / 2;
 
@@ -1503,17 +1455,17 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Check for current quest */
             if (!guild_quest_level())
             {
-                msg_format("You don't have a current quest, %s.", title);
+                message(QString("You don't have a current quest, %1.") .arg(title));
                 return (FALSE);
             }
 
             /* Ask confirmation */
-            if (!get_check(format("Do you wish to permanently increase your hit points, %s?", title))) return (FALSE);
+            if (!get_check(QString("Do you wish to permanently increase your hit points, %1?") .arg(title))) return (FALSE);
 
             grant_reward_hp();
 
             /* Inform the player */
-            msg_print(format("You now have an increased vitality, %s!", title));
+            message(QString("You now have an increased vitality, %1!") .arg(title));
 
             guild_quest_wipe(TRUE);
 
@@ -1526,12 +1478,12 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Check for current quest */
             if (!guild_quest_level())
             {
-                msg_format("You don't have a current quest, %s.", title);
+                message(QString("You don't have a current quest, %1.") .arg(title));
                 return (FALSE);
             }
 
             /* Ask confirmation */
-            if (!get_check(format("Do you wish to permanently increase your stats, %s?", title))) return (FALSE);
+            if (!get_check(QString("Do you wish to permanently increase your stats, %1?") .arg(title))); return (FALSE);
 
             /* Boost all six stats */
             for (i = 0; i < A_MAX; i++) do_perm_stat_boost(i);
@@ -1582,7 +1534,7 @@ static bool service_purchase(int this_store, int choice)
  * Hack -- the black market always charges twice as much as it should.
  *
  */
-s32b price_item(const object_type *o_ptr, bool store_buying)
+s32b price_item(object_type *o_ptr, bool store_buying)
 {
     int adjust;
     int this_store = current_store();
@@ -1779,7 +1731,7 @@ static void mass_produce(object_type *o_ptr, int store)
  * since stores (but not the home) only get objects under certain
  * restricted circumstances.
  */
-static bool store_object_similar(const object_type *o_ptr, const object_type *j_ptr)
+static bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
 {
     u32b f1, f2, f3, fn;
     u32b j1, j2, j3, jn;
@@ -1815,7 +1767,7 @@ static bool store_object_similar(const object_type *o_ptr, const object_type *j_
     if (o_ptr->xtra1 || j_ptr->xtra1) return (0);
 
     /* Mega-Hack -- Handle lites */
-    if (fuelable_light_p(o_ptr))
+    if (o_ptr->is_fuelable_lite())
     {
         if (o_ptr->timeout != j_ptr->timeout) return 0;
     }
@@ -1886,7 +1838,7 @@ static void store_object_absorb(object_type *o_ptr, object_type *j_ptr)
  * it cannot hold.  Before, one could "nuke" objects this way, by
  * adding them to a pile which was already full.
  */
-static bool store_check_num(int st, const object_type *o_ptr)
+static bool store_check_num(int st, object_type *o_ptr)
 {
     int i;
     object_type *j_ptr;
@@ -1934,7 +1886,7 @@ static bool store_check_num(int st, const object_type *o_ptr)
  *
  * Note that a shop-keeper must refuse to buy "worthless" objects
  */
-static bool store_will_buy(int store_num, const object_type *o_ptr)
+static bool store_will_buy(int store_num, object_type *o_ptr)
 {
     /* Hack -- The Home and guild are simple */
     if (store_num == STORE_HOME) return (TRUE);
@@ -2031,7 +1983,7 @@ static bool store_will_buy(int store_num, const object_type *o_ptr)
                 case TV_SWORD:
                 {
                     /* Known blessed blades are accepted too */
-                    if (is_blessed(o_ptr) && object_known_p(o_ptr)) break;
+                    if (is_blessed(o_ptr) && o_ptr->is_known()) break;
                 }
                 default:
                 return (FALSE);
@@ -2160,16 +2112,16 @@ static int home_carry(object_type *o_ptr)
         if (o_ptr->tval < j_ptr->tval) continue;
 
         /* Can happen in the home */
-        if (!object_flavor_is_aware(o_ptr)) continue;
-        if (!object_flavor_is_aware(j_ptr)) break;
+        if (!o_ptr->is_flavor_known()) continue;
+        if (!j_ptr->is_flavor_known()) break;
 
         /* Objects sort by increasing sval */
         if (o_ptr->sval < j_ptr->sval) break;
         if (o_ptr->sval > j_ptr->sval) continue;
 
         /* Objects in the home can be unknown */
-        if (!object_is_known(o_ptr)) continue;
-        if (!object_is_known(j_ptr)) break;
+        if (!o_ptr->is_flavor_known()) continue;
+        if (!j_ptr->is_flavor_known()) break;
 
         /* Objects sort by decreasing value */
         j_value = object_value(j_ptr);
@@ -2181,14 +2133,14 @@ static int home_carry(object_type *o_ptr)
     for (i = st_ptr->stock_num; i > slot; i--)
     {
         /* Hack -- slide the objects */
-        object_copy(&st_ptr->stock[i], &st_ptr->stock[i-1]);
+        st_ptr->stock[i].object_copy(&st_ptr->stock[i-1]);
     }
 
     /* More stuff now */
     st_ptr->stock_num++;
 
     /* Hack -- Insert the new object */
-    object_copy(&st_ptr->stock[slot], o_ptr);
+    st_ptr->stock[slot].object_copy(o_ptr);
 
     /* Return the location */
     return (slot);
@@ -2222,7 +2174,7 @@ static int store_carry(int st, object_type *o_ptr)
     if (value <= 0) return (-1);
 
     /* Erase the inscription & pseudo-ID bit */
-    o_ptr->obj_note = 0;
+    o_ptr->inscription.clear();
 
     /* Some item types require maintenance */
     switch (o_ptr->tval)
@@ -2320,14 +2272,14 @@ static int store_carry(int st, object_type *o_ptr)
     for (i = st_ptr->stock_num; i > slot; i--)
     {
         /* Hack -- slide the objects */
-        object_copy(&st_ptr->stock[i], &st_ptr->stock[i-1]);
+        st_ptr->stock[i].object_copy(&st_ptr->stock[i-1]);
     }
 
     /* More stuff now */
     st_ptr->stock_num++;
 
     /* Hack -- Insert the new object */
-    object_copy(&st_ptr->stock[slot], o_ptr);
+    st_ptr->stock[slot].object_copy(o_ptr);
 
     /* Return the location */
     return (slot);
@@ -2393,7 +2345,7 @@ void store_item_optimize(int st, int item)
     }
 
     /* Nuke the final slot */
-    object_wipe(&st_ptr->stock[j]);
+   st_ptr->stock[j].object_wipe();
 }
 
 
@@ -2403,12 +2355,12 @@ void store_item_optimize(int st, int item)
  *
  * Based on a suggestion by Lee Vogt <lvogt@cig.mcel.mot.com>.
  */
-static bool black_market_ok(const object_type *o_ptr)
+static bool black_market_ok(object_type *o_ptr)
 {
     int i, j;
 
     /* Ego items are always fine */
-    if (ego_item_p(o_ptr)) return (TRUE);
+    if (o_ptr->is_ego_item()) return (TRUE);
 
     /* Good items are normally fine */
     if (o_ptr->to_a > 2) return (TRUE);
@@ -2706,7 +2658,7 @@ static void store_create_random(int which)
         i_ptr = &object_type_body;
 
         /*wipe the object*/
-        object_wipe(i_ptr);
+        i_ptr->object_wipe();
 
         /*
          * Get the object level.  The object level of 100 is a hack
@@ -2957,7 +2909,7 @@ void store_init(int which)
     /* Clear any old items */
     for (k = 0; k < st_ptr->stock_size; k++)
     {
-        object_wipe(&st_ptr->stock[k]);
+        st_ptr->stock[k].object_wipe();
     }
 
 }
@@ -3040,13 +2992,13 @@ static void store_display_recalc(int this_store)
 
     store_type *st_ptr = &store[this_store];
 
-    Term_get_size(&wid, &hgt);
+    //TODO Term_get_size(&wid, &hgt);
 
     /* Clip the width at a maximum of 104 (enough room for an 80-char item name) */
     if (wid > 104) wid = 104;
 
     /* Clip the text_out function at two smaller than the screen width */
-    text_out_wrap = wid - 2;
+    // TODO  text_out_wrap = wid - 2;
 
     /* Put a reasonable limit on height for extremely large screens. */
     if ((this_store == STORE_GUILD) && !guild_quest_complete()) hgt_max = quests_max + 20;
@@ -3176,20 +3128,19 @@ static bool object_ident_changed(object_type *o_ptr)
 /*
  * Redisplay a single store entry
  */
-static void store_display_entry(menu_type *menu, int oid, bool cursor, int row, int col, int width)
+static void store_display_entry(int oid, bool cursor, int row, int col, int width)
 {
     s32b x;
     byte desc = ODESC_PREFIX;
     int entry_type;
     int entry_num;
 
-    char i_name[80];
-    char out_val[160];
+    QString i_name;
+    QString out_val;
     byte colour = TERM_WHITE;
 
     int this_store = current_store();
     store_type *st_ptr = &store[this_store];
-    (void)menu;
     (void)cursor;
     (void)width;
 
@@ -3199,11 +3150,11 @@ static void store_display_entry(menu_type *menu, int oid, bool cursor, int row, 
     if (entry_type == ENTRY_SERVICE)
     {
         colour = TERM_L_GREEN;
-        my_strcpy(i_name, service_names[services_offered[entry_num]], sizeof(i_name));
+        i_name = (QString(service_names[services_offered[entry_num]]));
     }
     else if (entry_type == ENTRY_QUEST)
     {
-        my_strcpy(i_name, quest_title[quests_offered[entry_num]], sizeof(i_name));
+        i_name = quest_title[quests_offered[entry_num]];
     }
     else /*object*/
     {
@@ -3211,7 +3162,7 @@ static void store_display_entry(menu_type *menu, int oid, bool cursor, int row, 
         /* Get the object */
         object_type *o_ptr = &st_ptr->stock[entry_num];
 
-        colour = tval_to_attr[o_ptr->tval & 0x7F];
+        colour = o_ptr->object_color();
 
         /* Don't display the quest reward inventory until the quest is complete */
         if (this_store == STORE_GUILD)
@@ -3227,14 +3178,9 @@ static void store_display_entry(menu_type *menu, int oid, bool cursor, int row, 
         /* Describe the object - preserving insriptions in the home */
         if ((this_store == STORE_HOME) || (this_store == STORE_GUILD)) desc = ODESC_FULL;
         else desc = ODESC_FULL | ODESC_STORE;
-        object_desc(i_name, sizeof(i_name), o_ptr, ODESC_PREFIX | desc);
+        i_name = object_desc(o_ptr, ODESC_PREFIX | desc);
     }
 
-    /*Always use the same color for highlighted items */
-    if (cursor) colour = curs_attrs[CURS_KNOWN][(int)cursor];
-
-    /* Print the entry */
-    c_put_str(colour, i_name, row, col);
 
     /* Show weights for objects */
     if (entry_type == ENTRY_OBJECT)
@@ -3242,11 +3188,7 @@ static void store_display_entry(menu_type *menu, int oid, bool cursor, int row, 
         /* Redundant, but it avoids compiler warnings */
         object_type *o_ptr = &st_ptr->stock[entry_num];
 
-        /* Make sure long inscriptions aren't mixed up in the weight */
-        Term_erase(row, scr_places_x[LOC_WEIGHT]-1, 20);
-
-        strnfmt(out_val, sizeof out_val, "%3d.%d lb", o_ptr->weight / 10, o_ptr->weight % 10);
-        c_put_str(curs_attrs[CURS_KNOWN][(int)cursor], out_val, row, scr_places_x[LOC_WEIGHT]);
+        // TODO show weights
     }
 
     /* Get the price if appropriate*/
@@ -3262,11 +3204,8 @@ static void store_display_entry(menu_type *menu, int oid, bool cursor, int row, 
     {
         x = price_services(this_store, services_offered[entry_num]);
 
-        if (x) strnfmt(out_val, sizeof out_val, "%9ld", (long)x);
-        else strnfmt(out_val, sizeof out_val, "     Free");
-
-        /* Display the service name */
-        c_put_str(colour, i_name, row, col);
+        if (x) out_val = (QString("%d") .arg(x));
+        else out_val = ("     Free");
     }
     else if (entry_type == ENTRY_QUEST)
     {
@@ -3282,24 +3221,19 @@ static void store_display_entry(menu_type *menu, int oid, bool cursor, int row, 
         /* Extract the "minimum" price */
         x = price_item(o_ptr, FALSE);
 
-        if (((o_ptr->tval == TV_WAND) || (o_ptr->tval == TV_STAFF)) &&
-            (o_ptr->number > 1))
-            strnfmt(out_val, sizeof out_val, "%9ld avg", (long)x);
-        else
-            strnfmt(out_val, sizeof out_val, "%9ld    ", (long)x);
+        // TODO if (((o_ptr->tval == TV_WAND) || (o_ptr->tval == TV_STAFF)) && (o_ptr->number > 1)) strnfmt(out_val, sizeof out_val, "%9ld avg", (long)x);
+        // TODO  else strnfmt(out_val, sizeof out_val, "%9ld    ", (long)x);
     }
 
     /* Make sure the player can afford it */
-    if ((int) p_ptr->au < (int) x)
+    // TODO if ((int) p_ptr->au < (int) x)
     {
-        colour = curs_attrs[CURS_UNKNOWN][(int)cursor];
+        // TODO colour = curs_attrs[CURS_UNKNOWN][(int)cursor];
     }
 
-    /* Make sure long inscriptions aren't mixed up in the price */
-    Term_erase(row, scr_places_x[LOC_PRICE]-1, 20);
 
     /* Actually draw the price */
-    c_put_str(colour, out_val, row, scr_places_x[LOC_PRICE]);
+    // TODO display onscreen
 
 }
 
@@ -3313,220 +3247,94 @@ static void store_display_frame(void)
 
     owner_type *ot_ptr = store_owner(this_store);
 
-    /* Clear screen, except for status bar */
-    clear_from(1);
 
     /* The "Home" is special */
     if (this_store == STORE_HOME)
     {
         /* Put the owner name */
-        put_str("Your Home", scr_places_y[LOC_OWNER], 1);
+        //TODO put_str("Your Home", scr_places_y[LOC_OWNER], 1);
 
         /* Label the object descriptions */
-        put_str("Home Inventory", scr_places_y[LOC_HEADER], 1);
+        //TODO put_str("Home Inventory", scr_places_y[LOC_HEADER], 1);
 
         /* Show weight header */
-        put_str("Weight", 5, scr_places_x[LOC_WEIGHT] + 2);
+        //TODO put_str("Weight", 5, scr_places_x[LOC_WEIGHT] + 2);
     }
 
     /*The Guild is also special*/
     else if (this_store == STORE_GUILD)
     {
         /* Put the owner name */
-        put_str("The Adventurer's Guild", scr_places_y[LOC_OWNER], 1);
+        //TODO put_str("The Adventurer's Guild", scr_places_y[LOC_OWNER], 1);
 
         /* Label the object descriptions */
         if (guild_quest_complete())
         {
-            put_str("Guild Services and Quest Rewards",	scr_places_y[LOC_HEADER], 1);
+            //TODO put_str("Guild Services and Quest Rewards",	scr_places_y[LOC_HEADER], 1);
         }
         else if (guild_quest_level())
         {
-            char q_out[120];
+            //TODO char q_out[120];
 
-            put_str("Guild Services", scr_places_y[LOC_HEADER], 1);
+            //TODO put_str("Guild Services", scr_places_y[LOC_HEADER], 1);
 
             /* Print out the quest on 2 different lines. */
-            c_put_str(TERM_BLUE, "Your current quest:", scr_places_y[LOC_CUR_QUEST1]-1, 1);
-            describe_quest(q_out, sizeof(q_out), guild_quest_level(), QMODE_HALF_1);
-            put_str(q_out, scr_places_y[LOC_CUR_QUEST1], 1);
+            //TODO c_put_str(TERM_BLUE, "Your current quest:", scr_places_y[LOC_CUR_QUEST1]-1, 1);
+            //TODO describe_quest(q_out, sizeof(q_out), guild_quest_level(), QMODE_HALF_1);
+            //TODO put_str(q_out, scr_places_y[LOC_CUR_QUEST1], 1);
 
             /* Put the monster symbol at the end if necessary */
-            show_quest_mon(scr_places_y[LOC_CUR_QUEST1], 1 + strlen(q_out));
-            describe_quest(q_out, sizeof(q_out), guild_quest_level(), QMODE_HALF_2);
-            put_str(q_out, scr_places_y[LOC_CUR_QUEST2], 1);
+            //TODO show_quest_mon(scr_places_y[LOC_CUR_QUEST1], 1 + strlen(q_out));
+            //TODO describe_quest(q_out, sizeof(q_out), guild_quest_level(), QMODE_HALF_2);
+            //TODO put_str(q_out, scr_places_y[LOC_CUR_QUEST2], 1);
         }
         else
         {
-            put_str("Guild Services and Available Quests",
-                            scr_places_y[LOC_HEADER], 1);
+            //TODO put_str("Guild Services and Available Quests",
         }
 
         /* Print the standard greeting and reputation. */
-        prt_rep_guild(scr_places_y[LOC_GUILD_REP], 3);
+        //TODO prt_rep_guild(scr_places_y[LOC_GUILD_REP], 3);
     }
 
     /* Normal stores */
     else
     {
-        const char *store_name = (f_name + f_info[cave_feat[p_ptr->py][p_ptr->px]].name);
-        const char *owner_name = &b_name[ot_ptr->owner_name];
+        QString store_name = (f_info[dungeon_info[p_ptr->py][p_ptr->px].feat].f_name);
+        QString owner_name = ot_ptr->owner_name;
 
         /* Put the owner name */
-        put_str(owner_name, scr_places_y[LOC_OWNER], 1);
+        // TODO put_str(owner_name, scr_places_y[LOC_OWNER], 1);
 
         /* Show the max price in the store (above prices) */
-        strnfmt(buf, sizeof(buf), "%s (%ld)", store_name, (long)(ot_ptr->max_cost));
-        prt(buf, scr_places_y[LOC_OWNER], scr_places_x[LOC_OWNER] - strlen(buf));
+        //TODO strnfmt(buf, sizeof(buf), "%s (%ld)", store_name, (long)(ot_ptr->max_cost));
+        // TODO prt(buf, scr_places_y[LOC_OWNER], scr_places_x[LOC_OWNER] - strlen(buf));
 
 
         /* Label the object descriptions */
-        if (services_max)
-        {
-            put_str("Store Inventory and Services", scr_places_y[LOC_HEADER], 1);
-        }
-        else put_str("Store Inventory", scr_places_y[LOC_HEADER], 1);
+        // TODO
 
         /* Showing weight label */
-        put_str("Weight", scr_places_y[LOC_HEADER], scr_places_x[LOC_WEIGHT] + 2);
+        // TODO
 
         /* Label the asking price (in stores) */
-        put_str("Price", scr_places_y[LOC_HEADER], scr_places_x[LOC_PRICE] + 4);
+        // TODO
     }
 }
 
 
 
-/*
- * Display help.
- */
-static void store_display_help(void)
-{
-    int help_loc = scr_places_y[LOC_HELP_PROMPT];
-
-    /* Clear */
-    clear_from(scr_places_y[LOC_HELP_CLEAR]);
-
-    /* Prepare help hooks */
-    text_out_hook = text_out_to_screen;
-    text_out_indent = 1;
-    Term_gotoxy(1, help_loc);
-
-    text_out("Use the ");
-    text_out_c(TERM_L_GREEN, "movement keys");
-    text_out(" or ");
-    text_out_c(TERM_L_GREEN, "a mouseclick");
-    text_out(" to navigate, or ");
-    text_out_c(TERM_L_GREEN, "Space");
-    text_out(" to advance to the next page. '");
-
-    if (rogue_like_commands)
-        text_out_c(TERM_L_GREEN, "x");
-    else
-        text_out_c(TERM_L_GREEN, "l");
-
-    text_out("' examines and '");
-    text_out_c(TERM_L_GREEN, "p");
-    text_out("' or'");
-    text_out_c(TERM_L_GREEN, "g");
-
-    if (current_store() == STORE_HOME) text_out("' picks up");
-    else text_out("' purchases");
-
-    text_out(" the selected item. '");
-
-    text_out_c(TERM_L_GREEN, "s");
-    text_out("' or'");
-    text_out_c(TERM_L_GREEN, "d");
-    if (current_store() == STORE_HOME) text_out("' drops");
-    else text_out("' sells");
-
-    text_out(" an item from your inventory. ");
-
-    text_out_c(TERM_L_GREEN, "ESC");
-    text_out(" exits the building.");
-
-    text_out_indent = 0;
-}
 
 
-/*
- * Decides what parts of the store display to redraw.  Called on terminal
- * resizings and the redraw command.
- */
-static void store_redraw(void)
-{
-    if (store_flags & (STORE_FRAME_CHANGE))
-    {
-        store_display_frame();
-
-        if (store_flags & STORE_SHOW_HELP)
-            store_display_help();
-        else
-            prt("Press '?' for help.", scr_places_y[LOC_HELP_PROMPT], 1);
-
-        store_flags &= ~(STORE_FRAME_CHANGE);
-        event_signal(EVENT_MOUSEBUTTONS);
-    }
-
-    if (store_flags & (STORE_GOLD_CHANGE))
-    {
-        prt(format("Gold Remaining: %9ld", (long)p_ptr->au),
-            scr_places_y[LOC_AU], scr_places_x[LOC_AU]);
-        store_flags &= ~(STORE_GOLD_CHANGE);
-    }
-}
 
 
-/*** Higher-level code ***/
 
-
-static bool store_get_check(const char *prompt)
-{
-    ui_event_data ch;
-    bool return_v = FALSE;
-
-    /* Prompt for it */
-    prt(prompt, 0, 0);
-
-    /* Make some buttons */
-    button_backup_all();
-    button_kill_all();
-    button_add("[YES]", 'y');
-    button_add("[NO]", 'n');
-    event_signal(EVENT_MOUSEBUTTONS);
-
-    while (TRUE)
-    {
-        /* Get an answer */
-        ch = inkey_ex();
-
-        if ((strchr("Nn", ch.key)) || (ch.key == ESCAPE)) break;
-        if ((strchr("Yy", ch.key)) || (ch.key == '\r') || (ch.key == '\r') || (ch.key == '\xff'))
-        {
-            return_v = TRUE;
-            break;
-        }
-
-    }
-
-    /* Kill the buttons */
-    /* Restore the old buttons */
-    button_restore();
-    event_signal(EVENT_MOUSEBUTTONS);
-
-    /* Erase the prompt */
-    prt("", 0, 0);
-
-    /* Success */
-    return (return_v);
-}
 
 
 /*
  * Return the quantity of a given item in the pack (include quiver).
  */
-static int find_inven(const object_type *o_ptr)
+static int find_inven(object_type *o_ptr)
 {
     int j;
     int num = 0;
@@ -3619,7 +3427,7 @@ static int find_inven(const object_type *o_ptr)
             case TV_LIGHT:
             {
                 /* Require both items to be known */
-                if (!object_is_known(o_ptr) || !object_is_known(j_ptr)) continue;
+                if (!o_ptr->is_known() || !j_ptr->is_known()) continue;
 
                 /* Fall through */
             }
@@ -3630,7 +3438,7 @@ static int find_inven(const object_type *o_ptr)
             case TV_SHOT:
             {
                 /* Require identical knowledge of both items */
-                if (object_is_known(o_ptr) != object_is_known(j_ptr)) continue;
+                if (!o_ptr->is_known() != !j_ptr->is_known()) continue;
 
                 /* Require identical "bonuses" */
                 if (o_ptr->to_h != j_ptr->to_h) continue;
@@ -3663,7 +3471,7 @@ static int find_inven(const object_type *o_ptr)
             default:
             {
                 /* Require knowledge */
-                if (!object_is_known(o_ptr) || !object_is_known(j_ptr)) continue;
+                if (!o_ptr->is_known() || !j_ptr->is_known()) continue;
 
                 /* Probably okay */
                 break;
@@ -3684,7 +3492,7 @@ static int find_inven(const object_type *o_ptr)
 /*
  * Buy the item with the given index from the current store's inventory.
  */
-void do_cmd_buy(cmd_code code, cmd_arg args[])
+void do_cmd_buy(int command, cmd_arg args[])
 {
     int item = args[0].item;
     int amt = args[1].number;
@@ -3693,7 +3501,7 @@ void do_cmd_buy(cmd_code code, cmd_arg args[])
     object_type object_type_body;
     object_type *i_ptr = &object_type_body;
 
-    char o_name[80];
+    QString o_name;
     int price, item_new;
 
     store_type *st_ptr;
@@ -3701,7 +3509,7 @@ void do_cmd_buy(cmd_code code, cmd_arg args[])
 
     if (this_store == STORE_NONE)
     {
-        msg_print("You cannot purchase items when not in a store.");
+        message("You cannot purchase items when not in a store.");
         return;
     }
 
@@ -3716,19 +3524,19 @@ void do_cmd_buy(cmd_code code, cmd_arg args[])
     /* Ensure we have room */
     if (!inven_carry_okay(i_ptr))
     {
-        msg_print("You cannot carry that many items.");
+        message("You cannot carry that many items.");
         return;
     }
 
     /* Describe the object (fully) */
-    object_desc(o_name, sizeof(o_name), i_ptr, ODESC_PREFIX | ODESC_FULL);
+    o_name = object_desc(i_ptr, ODESC_PREFIX | ODESC_FULL);
 
     /* Extract the price for the entire stack */
     price = price_item(i_ptr, FALSE) * i_ptr->number;
 
     if (price > p_ptr->au)
     {
-        msg_print("You cannot afford that purchase.");
+        message("You cannot afford that purchase.");
         return;
     }
 
@@ -3747,23 +3555,20 @@ void do_cmd_buy(cmd_code code, cmd_arg args[])
     /* The object no longer belongs to the store */
     i_ptr->ident &= ~(IDENT_STORE);
 
-    /* Clear the top line */
-    clear_message_line();
-
     /* Message */
-    if (one_in_(3)) message(MSG_STORE5, 0, ONE_OF(comment_accept));
-    msg_format("You bought %s for %ld gold.", o_name, (long)price);
+    if (one_in_(3)) color_message(ONE_OF(comment_accept), TERM_WHITE);
+    message(QString("You bought %1 for %ld gold.") .arg(o_name) .arg((long)price));
 
     /* Erase the inscription */
-    i_ptr->obj_note = 0;
+    i_ptr->inscription.clear();
 
     /* Give it to the player */
     item_new = inven_carry(i_ptr);
 
     /* Message */
-    object_desc(o_name, sizeof(o_name), &inventory[item_new], ODESC_PREFIX | ODESC_FULL);
+    o_name = object_desc(&inventory[item_new], ODESC_PREFIX | ODESC_FULL);
 
-    msg_format("You have %s (%c).", o_name, index_to_label(item_new));
+    message(QString("You have %1 (%2).") .arg(o_name) .arg(index_to_label(item_new)));
 
     /* Hack - Reduce the number of charges in the original stack */
     if (o_ptr->tval == TV_WAND || o_ptr->tval == TV_STAFF)
@@ -3772,7 +3577,7 @@ void do_cmd_buy(cmd_code code, cmd_arg args[])
     }
 
     /* Handle stuff */
-    handle_stuff();
+    // TODO handle_stuff();
 
     /* Remove the bought objects from the store */
     store_item_increase(this_store, item, -amt);
@@ -3787,7 +3592,7 @@ void do_cmd_buy(cmd_code code, cmd_arg args[])
         if (one_in_(STORE_SHUFFLE))
         {
             /* Message */
-            msg_print("The shopkeeper retires.");
+            message("The shopkeeper retires.");
 
             /* Shuffle the store */
             store_shuffle(this_store);
@@ -3799,7 +3604,7 @@ void do_cmd_buy(cmd_code code, cmd_arg args[])
         else
         {
             /* Message */
-            msg_print("The shopkeeper brings out some new stock.");
+            message("The shopkeeper brings out some new stock.");
         }
 
         /* New inventory */
@@ -3814,32 +3619,32 @@ void do_cmd_buy(cmd_code code, cmd_arg args[])
 /*
  * Retrieve the item with the given index from the home's inventory.
  */
-void do_cmd_reward(cmd_code code, cmd_arg args[])
+void do_cmd_reward(int code, cmd_arg args[])
 {
     quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
     int item = args[0].item;
     int amt = args[1].number;
-    char title[40];
+    QString title;
     object_type *o_ptr;
     object_kind *k_ptr;
     object_type picked_item;
-    char o_name[80];
+    QString o_name;
     int item_new;
 
     store_type *st_ptr;
 
     /*Get the current title*/
-    get_title(title, sizeof(title));
+    title = get_title();
 
     /* Paranoia */
     if (current_store() != STORE_GUILD)
     {
-        msg_print(format("You are not currently in the guild, %s.", title));
+        message(QString("You are not currently in the guild, %1.") .arg(title));
         return;
     }
     if (!guild_quest_complete())
     {
-        msg_print(format("You are not currently eligible for a quest reward, %s.", title));
+        message(QString("You are not currently eligible for a quest reward, %1.") .arg(title));
         return;
     }
 
@@ -3860,27 +3665,27 @@ void do_cmd_reward(cmd_code code, cmd_arg args[])
     /* Ensure we have room */
     if ((!inven_carry_okay(&picked_item)) && (o_ptr->tval != TV_GOLD))
     {
-        msg_print(format("You cannot carry that many items, %s.", title));
+        message(QString("You cannot carry that many items, %1.") .arg(title));
         return;
     }
 
     /* Give it to the player, with gold handled differently than objects */
     if (o_ptr->tval == TV_GOLD)
     {
-        object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
+        o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
         p_ptr->au += o_ptr->pval;
-        msg_format("You have been rewarded with %s, %s.", o_name, title);
+        message(QString("You have been rewarded with %1, %2.") .arg(o_name) .arg(title));
     }
     else
     {
         item_new = inven_carry(&picked_item);
 
         /* Describe just the result */
-        object_desc(o_name, sizeof(o_name), &inventory[item_new], ODESC_PREFIX | ODESC_FULL);
+        o_name = object_desc(&inventory[item_new], ODESC_PREFIX | ODESC_FULL);
 
         /* Message */
-        msg_format("You have been rewarded with %s (%c), %s.", o_name, index_to_label(item_new), title);
+        message(QString("You have been rewarded with %1 (%2), %3.") .arg(o_name) .arg(index_to_label(item_new)) .arg(title));
     }
 
     /*It's an ironman spellbook, so make the spells available. */
@@ -3917,19 +3722,19 @@ void do_cmd_reward(cmd_code code, cmd_arg args[])
         if (adult_take_notes)
         {
             int artifact_depth;
-            char note[120];
-            char shorter_desc[100];
+            QString note;
+            QString shorter_desc;
 
             /* Get a shorter description to fit the notes file */
-            object_desc(shorter_desc, sizeof(shorter_desc), o_ptr, ODESC_BASE);
+            shorter_desc = object_desc(o_ptr, ODESC_BASE);
 
             /* Build note and write */
-            sprintf(note, "Quest Reward: %s", shorter_desc);
+            note = (QString("Quest Reward: %1") .arg(shorter_desc));
 
             /*record the depth where the artifact was created */
             artifact_depth = o_ptr->xtra1;
 
-            do_cmd_note(note, artifact_depth);
+            write_note(note, artifact_depth);
 
             /*mark item creation depth as 0, which will indicate the artifact
              *has been previously identified.  This prevents an artifact from showing
@@ -3949,7 +3754,7 @@ void do_cmd_reward(cmd_code code, cmd_arg args[])
     }
 
     /* Handle stuff */
-    handle_stuff();
+    // TO DO handle_stuff();
 
     /* Remove the item from the guild before we wipe everything */
     store_item_increase(STORE_GUILD, item, -amt);
@@ -3966,21 +3771,21 @@ void do_cmd_reward(cmd_code code, cmd_arg args[])
 /*
  * Retrieve the item with the given index from the home's inventory.
  */
-void do_cmd_retrieve(cmd_code code, cmd_arg args[])
+void do_cmd_retrieve(int code, cmd_arg args[])
 {
     int item = args[0].item;
     int amt = args[1].number;
 
     object_type *o_ptr;
     object_type picked_item;
-    char o_name[80];
+    QString o_name;
     int item_new;
 
     store_type *st_ptr;
 
     if (current_store() != STORE_HOME)
     {
-        msg_print("You are not currently at home.");
+        message("You are not currently at home.");
         return;
     }
 
@@ -3995,7 +3800,7 @@ void do_cmd_retrieve(cmd_code code, cmd_arg args[])
     /* Ensure we have room */
     if (!inven_carry_okay(&picked_item))
     {
-        msg_print("You cannot carry that many items.");
+        message("You cannot carry that many items.");
         return;
     }
 
@@ -4006,14 +3811,13 @@ void do_cmd_retrieve(cmd_code code, cmd_arg args[])
     item_new = inven_carry(&picked_item);
 
     /* Describe just the result */
-    object_desc(o_name, sizeof(o_name), &inventory[item_new],
-                    ODESC_PREFIX | ODESC_FULL);
+    o_name = object_desc(&inventory[item_new], ODESC_PREFIX | ODESC_FULL);
 
     /* Message */
-    msg_format("You have %s (%c).", o_name, index_to_label(item_new));
+    message(QString("You have %1 (%1).") .arg(o_name) .arg(index_to_label(item_new)));
 
     /* Handle stuff */
-    handle_stuff();
+    // TODO handle_stuff();
 
     /* Remove the items from the home */
     store_item_increase(STORE_HOME, item, -amt);
@@ -4022,64 +3826,6 @@ void do_cmd_retrieve(cmd_code code, cmd_arg args[])
 }
 
 
-/*
- * The "randart" tester
- */
-bool item_tester_hook_randart(const object_type *o_ptr)
-{
-    /*Hack - don't allow cursed items*/
-    if(o_ptr->ident & (IDENT_CURSED)) return (FALSE);
-
-    /*Hack - don't allow broken items*/
-    if(o_ptr->ident & (IDENT_BROKEN)) return (FALSE);
-
-    /*Hack - don't allow unidentified items*/
-    if(!(o_ptr->ident & (IDENT_KNOWN))) return (FALSE);
-
-    /* Don't use current artifacts */
-    if (o_ptr->art_num) return (FALSE);
-
-    if (can_be_randart(o_ptr))
-    {
-        /*We don't use ego-items, unless dragon armor*/
-        if ((o_ptr->tval != TV_DRAG_ARMOR) && (o_ptr->tval != TV_DRAG_SHIELD))
-        {
-            if (o_ptr->ego_num) return(FALSE);
-        }
-
-        /*don't make artifacts out of stacks of items*/
-        if (o_ptr->number > 1) return (FALSE);
-
-        /*eligible to be a randart*/
-        return (TRUE);
-    }
-
-    /* Assume cannot be a randart */
-    return (FALSE);
-}
-
-/*
- * The flammable book tester
- */
-bool item_tester_hook_flammable_book(const object_type *o_ptr)
-{
-    u32b f1, f2, f3, fn;
-
-    if 	((o_ptr->tval != TV_PRAYER_BOOK) && (o_ptr->tval != TV_DRUID_BOOK) &&
-         (o_ptr->tval != TV_MAGIC_BOOK)) return (FALSE);
-
-    /* Get the "known" flags */
-    object_flags(o_ptr, &f1, &f2, &f3, &fn);
-
-    /*already flammable*/
-    if (f3 & TR3_IGNORE_FIRE) return (FALSE);
-
-    /* Immune to lava, so they should resist fire. */
-    if (fn & ELEMENT_LAVA) return (FALSE);
-
-    /* Flammable spellbook */
-    return (TRUE);
-}
 
 
 
@@ -4099,7 +3845,7 @@ static bool store_purchase(int oid)
     object_type object_type_body;
     object_type *i_ptr = &object_type_body;
 
-    char o_name[80];
+    QString o_name;
 
     s32b price;
 
@@ -4109,7 +3855,7 @@ static bool store_purchase(int oid)
 
     if (this_store == STORE_NONE)
     {
-        msg_print("You cannot purchase items when not in a store.");
+        message("You cannot purchase items when not in a store.");
         return FALSE;
     }
 
@@ -4177,7 +3923,7 @@ static bool store_purchase(int oid)
         if ((u32b)p_ptr->au < (u32b)price)
         {
             /* Tell the user */
-            msg_print("You do not have enough gold for this item.");
+            message("You do not have enough gold for this item.");
 
             /* Abort now */
             return FALSE;
@@ -4189,7 +3935,7 @@ static bool store_purchase(int oid)
     }
 
     /* Find the number of this item in the inventory */
-    if (!object_flavor_is_aware(o_ptr))
+    if (!o_ptr->is_flavor_known())
         num = 0;
     else
         num = find_inven(o_ptr);
@@ -4200,12 +3946,11 @@ static bool store_purchase(int oid)
     }
     else
     {
-        strnfmt(o_name, sizeof o_name, "%s how many%s? (max %d) ",
-            (this_store == STORE_HOME) ? "Take" : "Buy",
-            num ? format(" (you have %d)", num) : "", max_amount);
+        o_name = (QString("%s how many%s? (max %d) ") .arg((this_store == STORE_HOME) ? "Take" : "Buy")
+                  .arg(num ? (QString(" (you have %1)") .arg(num)) : "")  .arg(max_amount));
 
         /* Get a quantity */
-        amount_purchased = get_quantity(o_name, max_amount);
+        // TODO get quantity dialog box amount_purchased = get_quantity(o_name, max_amount);
     }
 
     /* Allow user abort */
@@ -4217,7 +3962,7 @@ static bool store_purchase(int oid)
     /* Ensure we have room */
     if ((!inven_carry_okay(i_ptr)) && (i_ptr->tval != TV_GOLD))
     {
-        msg_print("You cannot carry that many items.");
+        message("You cannot carry that many items.");
         return FALSE;
     }
 
@@ -4225,11 +3970,11 @@ static bool store_purchase(int oid)
     /* Home is much easier */
     if (this_store == STORE_HOME)
     {
-        cmd_insert(CMD_RETRIEVE, entry_num, amount_purchased);
+        // TODO cmd_insert(CMD_RETRIEVE, entry_num, amount_purchased);
     }
     else if (this_store == STORE_GUILD)
     {
-        cmd_insert(CMD_REWARD, entry_num, amount_purchased);
+        // TODO cmd_insert(CMD_REWARD, entry_num, amount_purchased);
     }
     else
     {
@@ -4241,16 +3986,13 @@ static bool store_purchase(int oid)
 
 
         /* Describe the object (fully) */
-        object_desc(o_name, sizeof(o_name), i_ptr, ODESC_PREFIX | ODESC_FULL);
-
-        screen_save();
+        o_name = object_desc(i_ptr, ODESC_PREFIX | ODESC_FULL);
 
         /* Show price */
-        prt(format("Price: %d", price), 1, 0);
+        // TODO show price
 
         /* Confirm purchase */
-        response = store_get_check(format("Buy %s? (y/n)", o_name));
-        screen_load();
+        response = get_check(QString("Buy %1? (y/n)") .arg(o_name));
 
         /* Negative response, so give up */
         if (!response)
@@ -4261,7 +4003,7 @@ static bool store_purchase(int oid)
             return FALSE;
         }
 
-        cmd_insert(CMD_BUY, entry_num, amount_purchased);
+        // TODO cmd_insert(CMD_BUY, entry_num, amount_purchased);
     }
 
     store_updates();
@@ -4275,7 +4017,7 @@ static bool store_purchase(int oid)
 /*
  * Determine if the current store will purchase the given object
  */
-static bool store_will_buy_tester(const object_type *o_ptr)
+static bool store_will_buy_tester(object_type *o_ptr)
 {
     int this_store = current_store();
 
@@ -4287,35 +4029,35 @@ static bool store_will_buy_tester(const object_type *o_ptr)
 /*
  * Sell an item to the current store.
  */
-void do_cmd_sell(cmd_code code, cmd_arg args[])
+void do_cmd_sell(int code, cmd_arg args[])
 {
     int item = args[0].item;
     int amt = args[1].number;
     object_type sold_item;
     int price, dummy, value;
-    char o_name[120];
+    QString o_name;
 
     /* Get the item */
     object_type *o_ptr = object_from_item_idx(item);
 
     /* Cannot remove cursed objects */
-    if ((item >= INVEN_WIELD) && cursed_p(o_ptr))
+    if ((item >= INVEN_WIELD) && o_ptr->is_cursed())
     {
-        msg_print("Hmmm, it seems to be cursed.");
+        message("Hmmm, it seems to be cursed.");
         return;
     }
 
     /* Check we are somewhere we can sell the items. */
     if (current_store() == STORE_NONE)
     {
-        msg_print("You cannot sell items when not in a store.");
+        message("You cannot sell items when not in a store.");
         return;
     }
 
     /* Check the store wants the items being sold */
     if (!store_will_buy(current_store(), o_ptr))
     {
-        msg_print("I do not wish to purchase this item.");
+        message("I do not wish to purchase this item.");
         return;
     }
 
@@ -4326,7 +4068,7 @@ void do_cmd_sell(cmd_code code, cmd_arg args[])
     /* Check if the store has space for the items */
     if (!store_check_num(current_store(), &sold_item))
     {
-        msg_print("I have not the room in my store to keep it.");
+        message("I have not the room in my store to keep it.");
         return;
     }
 
@@ -4370,11 +4112,10 @@ void do_cmd_sell(cmd_code code, cmd_arg args[])
     value = object_value(&sold_item) * amt;
 
     /* Get the description all over again */
-    object_desc(o_name, sizeof(o_name), &sold_item, ODESC_PREFIX | ODESC_FULL);
+    o_name = object_desc(&sold_item, ODESC_PREFIX | ODESC_FULL);
 
     /* Describe the result (in message buffer) */
-    msg_format("You sold %s (%c) for %ld gold.",
-               o_name, index_to_label(item), (long)price);
+    message(QString("You sold %1 (%2) for %3 gold.") .arg(o_name) .arg(index_to_label(item)) .arg((long)price));
 
     /* Analyze the prices (and comment verbally) */
     purchase_analyze(price, value, dummy);
@@ -4384,7 +4125,7 @@ void do_cmd_sell(cmd_code code, cmd_arg args[])
     inven_item_optimize(item);
 
     /* Handle stuff */
-    handle_stuff();
+    // TODO handle_stuff();
 
     /* The store gets that (known) object */
     store_carry(current_store(), &sold_item);
@@ -4394,25 +4135,25 @@ void do_cmd_sell(cmd_code code, cmd_arg args[])
 /*
  * Stash an item in the home.
  */
-void do_cmd_stash(cmd_code code, cmd_arg args[])
+void do_cmd_stash(int code, cmd_arg args[])
 {
     int item = args[0].item;
     int amt = args[1].number;
     object_type dropped_item;
     object_type *o_ptr = object_from_item_idx(item);
-    char o_name[120];
+    QString o_name;
 
     /* Check we are somewhere we can stash items. */
     if (current_store() != STORE_HOME)
     {
-        msg_print("You are not in your home.");
+        message("You are not in your home.");
         return;
     }
 
     /* Cannot remove cursed objects */
-    if ((item >= INVEN_WIELD) && cursed_p(o_ptr))
+    if ((item >= INVEN_WIELD) && o_ptr->is_cursed())
     {
-        msg_print("Hmmm, it seems to be cursed.");
+        message("Hmmm, it seems to be cursed.");
         return;
     }
 
@@ -4421,7 +4162,7 @@ void do_cmd_stash(cmd_code code, cmd_arg args[])
 
     if (!store_check_num(STORE_HOME, &dropped_item))
     {
-        msg_print("Your home is full.");
+        message("Your home is full.");
         return;
     }
 
@@ -4429,17 +4170,17 @@ void do_cmd_stash(cmd_code code, cmd_arg args[])
     distribute_charges(o_ptr, &dropped_item, amt);
 
     /* Describe */
-    object_desc(o_name, sizeof(o_name), &dropped_item, ODESC_PREFIX | ODESC_FULL);
+    o_name = object_desc(&dropped_item, ODESC_PREFIX | ODESC_FULL);
 
     /* Message */
-    msg_format("You drop %s (%c).", o_name, index_to_label(item));
+    message(QString("You drop %1 (%2).") .arg(o_name) .arg(index_to_label(item)));
 
     /* Take it from the players inventory */
     inven_item_increase(item, -amt);
     inven_item_optimize(item);
 
     /* Handle stuff */
-    handle_stuff();
+    // TODO  handle_stuff();
 
     /* Let the home carry it */
     home_carry(&dropped_item);
@@ -4459,7 +4200,7 @@ static bool store_sell(void)
     object_type object_type_body;
     object_type *i_ptr = &object_type_body;
 
-    char o_name[120];
+    QString o_name;
 
 
     const char *reject = "You have nothing that I want. ";
@@ -4469,20 +4210,15 @@ static bool store_sell(void)
 
     if (this_store == STORE_NONE)
     {
-        msg_print("You cannot sell items when not in a store.");
+        message("You cannot sell items when not in a store.");
         return (FALSE);
     }
 
     if (this_store == STORE_GUILD)
     {
-        prt("", 0, 0);
-        msg_print("The Guild does not purchase items.");
+        message("The Guild does not purchase items.");
         return (FALSE);
     }
-
-    /* Clear all current messages */
-    msg_flag = FALSE;
-    prt("", 0, 0);
 
     if (this_store == STORE_HOME)
         prompt = "Drop which item? ";
@@ -4494,7 +4230,7 @@ static bool store_sell(void)
     /* Get an item */
     p_ptr->command_wrk = USE_INVEN;
     p_ptr->command_cmd = 'd';
-    if (!get_item(&item, prompt, reject, get_mode))
+    if (0) // TODO (!get_item(&item, prompt, reject, get_mode))
     {
         return (FALSE);
     }
@@ -4503,17 +4239,17 @@ static bool store_sell(void)
     o_ptr = object_from_item_idx(item);
 
     /* Hack -- Cannot remove cursed objects */
-    if ((item >= INVEN_WIELD) && cursed_p(o_ptr))
+    if ((item >= INVEN_WIELD) && o_ptr->is_cursed())
     {
         /* Oops */
-        msg_print("Hmmm, it seems to be cursed.");
+        message("Hmmm, it seems to be cursed.");
 
         /* Nope */
         return (FALSE);
     }
 
     /* Get a quantity */
-    amt = get_quantity(NULL, o_ptr->number);
+    amt = 0; // TODO get_quantity(NULL, o_ptr->number);
 
     /* Allow user abort */
     if (amt <= 0) return (FALSE);
@@ -4525,16 +4261,16 @@ static bool store_sell(void)
     {
 
         if (this_store == STORE_HOME)
-            msg_print("Your home is full.");
+            message("Your home is full.");
 
         else
-            msg_print("I have not the room in my store to keep it.");
+            message("I have not the room in my store to keep it.");
 
         return (FALSE);
     }
 
     /* Get a full description */
-    object_desc(o_name, sizeof(o_name), i_ptr, ODESC_PREFIX | ODESC_FULL);
+    o_name = object_desc(i_ptr, ODESC_PREFIX | ODESC_FULL);
 
     /* Real store */
     if (this_store != STORE_HOME)
@@ -4542,28 +4278,23 @@ static bool store_sell(void)
         /* Extract the value of the items */
         u32b price = price_item(i_ptr, TRUE) * amt;
 
-        screen_save();
-
         /* Show price */
-        prt(format("Price: %d", price), 1, 0);
+        // TODO prt(format("Price: %d", price), 1, 0);
 
         /* Confirm sale */
-        if (!store_get_check(format("Sell %s? (y/n)", o_name)))
+        if (!get_check(QString("Sell %1? (y/n)") .arg(o_name)))
         {
-            screen_load();
             return (FALSE);
         }
 
-        screen_load();
-
-        cmd_insert(CMD_SELL, item, amt);
+        // TODO cmd_insert(CMD_SELL, item, amt);
 
     }
 
     /* Player is at home */
     else
     {
-        cmd_insert(CMD_STASH, item, amt);
+        // TODO cmd_insert(CMD_STASH, item, amt);
     }
 
     store_updates();
@@ -4588,27 +4319,21 @@ static void store_examine(int oid)
 
     entry_num = find_entry_type(&entry_type, oid);
 
-    screen_save();
-
-    /* Clear the screen */
-    Term_erase(0, 0, 255);
-    Term_gotoxy(0, 0);
-
     /* Display the entry name and, if object, weight*/
     if (entry_type == ENTRY_SERVICE)
     {
-        strnfmt(file_name, sizeof(file_name), "town.txt");
-        strnfmt(service_name, sizeof(service_name), service_names[services_offered[entry_num]]);
-        show_file(format("%s#%s", file_name, service_name), NULL,  0, 0);
-        screen_load();
+        // TODO display store service info
+        //strnfmt(file_name, sizeof(file_name), "town.txt");
+        //strnfmt(service_name, sizeof(service_name), service_names[services_offered[entry_num]]);
+        //show_file(format("%s#%s", file_name, service_name), NULL,  0, 0);
         return;
     }
     else if (entry_type == ENTRY_QUEST)
     {
-        strnfmt(file_name, sizeof(file_name), "quests.txt");
-        strnfmt(service_name, sizeof(service_name), quest_title[quests_offered[entry_num]]);
-        show_file(format("%s#%s", file_name, service_name), NULL,  0, 0);
-        screen_load();
+        // TODO display quest info
+        //strnfmt(file_name, sizeof(file_name), "quests.txt");
+        //strnfmt(service_name, sizeof(service_name), quest_title[quests_offered[entry_num]]);
+        //show_file(format("%s#%s", file_name, service_name), NULL,  0, 0);
         return;
     }
 
@@ -4618,9 +4343,7 @@ static void store_examine(int oid)
     o_ptr = &st_ptr->stock[entry_num];
 
     /* Show full info in most stores, but normal info in player home */
-    object_info_screen(o_ptr);
-
-    screen_load();
+    // TODO display object info object_info_screen(o_ptr);
 
     /* Process artifact lore */
     if (ARTIFACT_EASY_MENTAL(o_ptr))
@@ -4636,7 +4359,7 @@ static void store_examine(int oid)
     if (o_ptr->tval == cp_ptr->spell_book)
     {
         /* Call the aux function */
-        get_spell_menu(o_ptr, BOOK_BROWSE);
+        // TODO display the spells get_spell_menu(o_ptr, BOOK_BROWSE);
     }
 }
 
@@ -4657,7 +4380,7 @@ static bool store_overflow(void)
     if (current_store() != STORE_HOME)
     {
         /* Leave */
-        msg_print("Your pack is so full that you flee the store...");
+        message("Your pack is so full that you flee the store...");
         return TRUE;
     }
 
@@ -4665,7 +4388,7 @@ static bool store_overflow(void)
     else if (!store_check_num(current_store(), o_ptr))
     {
         /* Leave */
-        msg_print("Your pack is so full that you flee your home...");
+        message("Your pack is so full that you flee your home...");
         return TRUE;
     }
 
@@ -4675,23 +4398,23 @@ static bool store_overflow(void)
         object_type *i_ptr;
         object_type object_type_body;
 
-        char o_name[80];
+        QString o_name;
 
 
         /* Give a message */
-        msg_print("Your pack overflows!");
+        message("Your pack overflows!");
 
         /* Get local object */
         i_ptr = &object_type_body;
 
         /* Grab a copy of the object */
-        object_copy(i_ptr, o_ptr);
+        i_ptr->object_copy(o_ptr);
 
         /* Describe it */
-        object_desc(o_name, sizeof(o_name), o_ptr, ODESC_PREFIX | ODESC_FULL);
+        o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
         /* Message */
-        msg_format("You drop %s (%c).", o_name, index_to_label(item));
+        message(QString("You drop %1 (%2).") .arg(o_name) .arg(index_to_label(item)));
 
         /* Remove it from the players inventory */
         inven_item_increase(item, -255);
@@ -4699,7 +4422,7 @@ static bool store_overflow(void)
         inven_item_optimize(item);
 
         /* Handle stuff */
-        handle_stuff();
+        // TODO handle_stuff();
 
         /* Let the home carry it */
         home_carry(i_ptr);
@@ -4708,273 +4431,12 @@ static bool store_overflow(void)
     return FALSE;
 }
 
-/*
- * Process a command in a store
- *
- * Note that we must allow the use of a few "special" commands in the stores
- * which are not allowed in the dungeon, and we must disable some commands
- * which are allowed in the dungeon but not in the stores, to prevent chaos.
- */
-static bool store_process_command(char cmd, void *db, int oid)
-{
-    bool equip_toggle = FALSE;
-    bool redraw = FALSE;
-    bool command_processed = FALSE;
-
-    /* Parse the command */
-    switch (cmd)
-    {
-        /* Leave */
-        case ESCAPE:
-        {
-            command_processed = TRUE;
-            break;
-        }
-
-        /* Sell */
-        case 's':
-        case 'd':
-        {
-
-            command_processed = store_sell();
-            if (command_processed)
-            {
-                redraw = TRUE;
-                /* Changing the inventory usually changes the frame. */
-                store_flags |= (STORE_FRAME_CHANGE | STORE_GOLD_CHANGE);
-            }
-
-            break;
-        }
-
-        /* Buy */
-        case 'p':
-        case 'g':
-        {
-            /* On successful purchase, redraw */
-            command_processed = store_purchase(oid);
-            if (command_processed)
-            {
-                redraw = TRUE;
-                /* Changing the inventory usually changes the frame. */
-                store_flags |= (STORE_FRAME_CHANGE | STORE_GOLD_CHANGE);
-
-            }
-            break;
-        }
-
-        /* Examine */
-        case 'l':
-        case 'x':
-        {
-            store_examine(oid);
-            break;
-        }
-
-        /* Redraw */
-        case KTRL('R'):
-        {
-            Term_clear();
-            store_flags |= (STORE_FRAME_CHANGE | STORE_GOLD_CHANGE);
-            command_processed = TRUE;
-            break;
-        }
-
-
-        /*** Inventory Commands ***/
-
-        /* Wear/wield equipment */
-        case 'w':
-        {
-            textui_cmd_wield();
-            redraw = TRUE;
-            command_processed = TRUE;
-
-            break;
-        }
-
-        /* Take off equipment */
-        case 'T':
-        case 't':
-        {
-            textui_cmd_takeoff();
-            redraw = TRUE;
-            command_processed = TRUE;
-
-            break;
-        }
-
-        /* Destroy an item */
-        case KTRL('D'):
-        case 'k':
-        {
-            textui_cmd_destroy();
-            redraw = TRUE;
-            command_processed = TRUE;
-
-            break;
-        }
-
-        /* Equipment and inventory list */
-        case 'e':
-        case 'i':
-        {
-            /* Handle equipment command */
-            if (cmd == 'e') equip_toggle = TRUE;
-
-            /* Display the right thing until the user escapes */
-            do
-            {
-                if (equip_toggle) do_cmd_equip();
-                else do_cmd_inven();
-
-                /* Toggle the toggle */
-                equip_toggle = !equip_toggle;
-
-            } while (p_ptr->command_new == '/' || p_ptr->command_new == 'e' ||
-                     p_ptr->command_new == 'i');
-
-            /* Legal inventory commands are drop, inspect */
-            if (!strchr("dsI", p_ptr->command_new))
-                p_ptr->command_new = 0;
-
-            break;
-        }
-
-
-        /*** Various commands ***/
-
-        /* Identify an object */
-        case 'I':
-        {
-            do_cmd_observe();
-            break;
-        }
-
-        /* Hack -- toggle windows */
-        case KTRL('E'):
-        {
-            toggle_inven_equip();
-            break;
-        }
-
-
-
-        /*** Use various objects ***/
-
-        /* Browse a book */
-        case 'P':
-        case 'b':
-        {
-            do_cmd_browse();
-            break;
-        }
-
-        /* Inscribe an object */
-        case '{':
-        {
-            textui_cmd_inscribe();
-            redraw = TRUE;
-            command_processed = TRUE;
-
-            break;
-        }
-
-        /* Uninscribe an object */
-        case '}':
-        {
-            textui_cmd_uninscribe();
-            redraw = TRUE;
-            command_processed = TRUE;
-
-            break;
-        }
-
-
-        /*** Help and Such ***/
-
-        /* Character description */
-        case 'C':
-        {
-            do_cmd_change_name();
-            break;
-        }
-
-        case '?':
-        {
-            /* Toggle help */
-            if (store_flags & STORE_SHOW_HELP)
-                store_flags &= ~(STORE_SHOW_HELP);
-            else
-                store_flags |= STORE_SHOW_HELP;
-
-            /* Redisplay */
-            store_flags |= STORE_INIT_CHANGE;
-            redraw = TRUE;
-            command_processed = TRUE;
-            break;
-        }
-
-        /*** System Commands ***/
-
-        /* Interact with options */
-        case '=':
-        {
-            do_cmd_options();
-            redraw = TRUE;
-
-            break;
-        }
-
-
-        /*** Misc Commands ***/
-
-        /* Show previous messages */
-        case KTRL('P'):
-        {
-            do_cmd_messages();
-            break;
-        }
-
-        /* Check knowledge */
-        case '~':
-        {
-            do_cmd_knowledge();
-            break;
-        }
-
-        /* Save "screen dump" */
-        case ')':
-        {
-            do_cmd_save_screen();
-            break;
-        }
-    }
-
-    /* Let the game handle any core commands (equipping, etc) */
-    process_command(CMD_STORE, TRUE);
-
-    if (redraw)
-    {
-        command_processed = TRUE;
-
-        store_updates();
-        notice_stuff();
-        handle_stuff();
-
-        event_signal(EVENT_INVENTORY);
-        event_signal(EVENT_EQUIPMENT);
-
-    }
-
-    return command_processed;
-}
 
 
 /*
  * Enter a store, and interact with it.
  */
-void do_cmd_store(cmd_code code, cmd_arg args[])
+void do_cmd_store(int code, cmd_arg args[])
 {
     bool leave = FALSE;
 
@@ -4987,14 +4449,14 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
     /* Verify that there is a store */
     if (this_store == STORE_NONE)
     {
-        msg_print("You see no store here.");
+        message("You see no store here.");
         return;
     }
 
     /* Check if we can enter the store */
     if (adult_no_stores)
     {
-        msg_print("The doors are locked.");
+        message("The doors are locked.");
         return;
     }
 
@@ -5022,14 +4484,6 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
      */
     init_services_and_quests(this_store);
 
-    /*
-     * Shut down the normal game view - it won't be updated - and start
-     * up the store state.
-     */
-    event_signal(EVENT_LEAVE_GAME);
-    event_signal(EVENT_ENTER_STORE);
-    event_signal(EVENT_INIT_STATUSLINE);
-
     /* Forget the view */
     forget_view();
 
@@ -5040,169 +4494,35 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
 
     /*** Display ***/
 
-    /* Save current screen (ie. dungeon) */
-    screen_save();
 
-    /*** Inventory display ***/
+
+
+    /* Say a friendly hello. */
+    if (this_store != STORE_HOME)
     {
-
-        static region items_region = { 1, 4, -1, -1 };
-        static const menu_iter store_menu = { NULL, NULL, store_display_entry, store_process_command };
-        const menu_iter *cur_menu = &store_menu;
-
-        menu_type menu;
-        ui_event_data evt = EVENT_EMPTY;
-        int cursor = 0;
-
-        store_type *st_ptr = &store[this_store];
-
-        /* Wipe the menu and set it up */
-        WIPE(&menu, menu);
-        menu.flags = MN_DBL_TAP;
-
-        /* Calculate the positions of things and redraw */
-        store_flags = STORE_INIT_CHANGE;
-        store_display_recalc(this_store);
-        store_redraw();
-
-        /* Objects in inventory may have been re-drawn when entering the store */
-        notice_stuff();
-        handle_stuff();
-
-        /* Say a friendly hello. */
-        if (this_store != STORE_HOME)
+        if (this_store == STORE_GUILD)
         {
-            if (this_store == STORE_GUILD)
-            {
-                prt_welcome_guild();
-            }
-            else prt_welcome(store_owner(this_store));
+            prt_welcome_guild();
         }
-
-        /* Loop */
-        while (!leave)
-        {
-            /* add the store buttons */
-            button_kill_all();
-            button_add("[HELP]", '?');
-            if (this_store == STORE_HOME)
-            {
-                button_add("[GET]", 'p');
-                button_add("[DROP]", 's');
-            }
-            else if (this_store == STORE_GUILD)
-            {
-                button_add("[SELECT]", 'p');
-            }
-            else
-            {
-                button_add("[BUY]", 'p');
-                button_add("[SELL]", 's');
-            }
-            button_add("[EXAMINE]", 'x');
-            button_add("[LEAVE]", ESCAPE);
-            event_signal(EVENT_MOUSEBUTTONS);
-
-            /* As many rows in the menus as there are items in the store */
-            if ((this_store == STORE_GUILD) && (!guild_quest_complete())) menu.count = quests_max;
-            else menu.count = st_ptr->stock_num + quests_max;
-
-            /* Roguelike */
-            if (rogue_like_commands)
-            {
-                /* These two can't intersect! */
-                menu.cmd_keys = "\n\x04\x10\r?={}~CEIPTdegilpswx\x8B\x8C"; /* \x10 = ^p , \x04 = ^D */
-                menu.selections = "abcfmnoqrtuvyz13456790ABDFGHJKLMNO";
-            }
-
-            /* Original */
-            else
-            {
-                /* These two can't intersect! */
-                menu.cmd_keys = "\n\x010\r?={}~CEIbdegiklpstw\x8B\x8C"; /* \x10 = ^p */
-                menu.selections = "acfhmnoqruvyz13456790ABDFGHJKLMNO";
-            }
-
-            /* Keep the cursor in range of the stock */
-            if (cursor < 0 || cursor >= menu.count)
-                cursor = menu.count - 1;
-
-            items_region.page_rows = scr_places_y[LOC_MORE] - scr_places_y[LOC_ITEMS_START];
-
-            /* Init the menu structure */
-            menu_init(&menu, MN_SKIN_SCROLL, cur_menu, &items_region);
-
-            if (menu.count > items_region.page_rows)
-                menu.prompt = "  -more-";
-            else
-                menu.prompt = NULL;
-
-            menu_layout(&menu, &menu.boundary);
-
-            evt.type = EVT_MOVE;
-
-            /* Get a selection/action */
-            while (evt.type == EVT_MOVE)
-            {
-                evt = menu_select(&menu, &cursor, EVT_MOVE);
-            }
-            if (evt.key == ESCAPE || evt.type == EVT_BACK)
-            {
-                leave = TRUE;
-            }
-            /* Handle buttons */
-            else if (evt.type == EVT_BUTTON)
-            {
-                store_process_command(evt.key, FALSE, cursor);
-
-                /* Display the store */
-                store_display_recalc(this_store);
-                store_redraw();
-            }
-            else if (evt.type == EVT_RESIZE)
-            {
-                /* Resize event */
-                store_display_recalc(this_store);
-                store_redraw();
-            }
-            else
-            {
-
-                /* Display the store */
-                store_display_recalc(this_store);
-                store_redraw();
-
-                /* Notice and handle stuff */
-                notice_stuff();
-                handle_stuff();
-
-                /* XXX Pack Overflow */
-                if (inventory[INVEN_MAX_PACK].k_idx)
-                    leave = store_overflow();
-            }
-
-            /* Clear all current messages */
-            msg_flag = FALSE;
-        }
-
+        else prt_welcome(store_owner(this_store));
     }
 
-    /* Switch back to the normal game view. */
-    event_signal(EVENT_REMOVE_STATUSLINE);
-    event_signal(EVENT_LEAVE_STORE);
-    event_signal(EVENT_ENTER_GAME);
+    /* Loop */
+    while (!leave)
+    {
+        // TODO dialog box
+
+            /* XXX Pack Overflow */
+            if (inventory[INVEN_MAX_PACK].k_idx)
+                leave = store_overflow();
+    }
+
 
     /* Take a turn */
     p_ptr->p_energy_use = BASE_ENERGY_MOVE;
 
     /* Hack -- Cancel automatic command */
     p_ptr->command_new = 0;
-
-    /* Flush messages XXX XXX XXX */
-    message_flush();
-
-    /* Load the screen */
-    screen_load();
 
     /* Update the visuals */
     p_ptr->update |= (PU_UPDATE_VIEW | PU_MONSTERS);
@@ -5213,6 +4533,4 @@ void do_cmd_store(cmd_code code, cmd_arg args[])
     /* Redraw map */
     p_ptr->redraw |= (PR_MAP);
 
-    /* restore the buttons */
-    basic_buttons();
 }

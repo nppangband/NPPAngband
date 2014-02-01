@@ -38,6 +38,17 @@ static squelch_type_t squelch_type_of(object_type *o_ptr)
     return PS_TYPE_MAX;
 }
 
+/* Convert the values returned by squelch_itemp to string */
+QString squelch_to_label(int squelch)
+{
+    if (squelch == SQUELCH_YES) return ("(Squelched)");
+
+    if (squelch == SQUELCH_FAILED) return ("(Squelch Failed)");
+
+    return ("");
+}
+
+
 /*
  * Determines if an object is going to be squelched on identification.
  * Input:
@@ -213,6 +224,33 @@ void rearrange_stack(int y, int x)
     {
         dungeon_info[y][x].object_idx = first_bad_idx;
     }
+}
+
+/*
+ * This performs the squelch, actually removing the item from the
+ * game.  It returns 1 if the item was squelched, and 0 otherwise.
+ * This return value is never actually used.
+ */
+int do_squelch_item(int squelch, int item, object_type *o_ptr)
+{
+    if (squelch != SQUELCH_YES) return 0;
+
+    /*hack - never squelch quest items*/
+    if (o_ptr->ident & IDENT_QUEST) return 0;
+
+    if (item >= 0)
+    {
+        inven_item_increase(item, -o_ptr->number);
+        inven_item_optimize(item);
+    }
+
+    else
+    {
+        floor_item_increase(0 - item, -o_ptr->number);
+        floor_item_optimize(0 - item);
+    }
+
+    return 1;
 }
 
 bool squelch_item_ok(object_type *o_ptr)
