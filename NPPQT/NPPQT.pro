@@ -37,6 +37,7 @@ SOURCES +=  src/qt_main.cpp\
             src/object_desc.cpp \
             src/object_make.cpp \
             src/object_util.cpp \
+            src/optionsdialog.cpp \
             src/player_spell.cpp \
             src/projection.cpp \
             src/quest.cpp \
@@ -49,9 +50,9 @@ SOURCES +=  src/qt_main.cpp\
             src/tables.cpp \
             src/target.cpp \
             src/timed.cpp \
-            src/utilities.cpp \
+            src/utilities.cpp
 
-    src/optionsdialog.cpp
+
 
 
 
