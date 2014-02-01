@@ -49,7 +49,9 @@ SOURCES +=  src/qt_main.cpp\
             src/tables.cpp \
             src/target.cpp \
             src/timed.cpp \
-            src/utilities.cpp
+            src/utilities.cpp \
+
+    src/optionsdialog.cpp
 
 
 
@@ -73,8 +75,12 @@ HEADERS  += src/qt_mainwindow.h\
             src/squelch.h \
             src/randart.h \
             src/dun_classes.h \
-            src/dun_generate.h
+            src/dun_generate.h \
+            src/optionsdialog.h
 
 
 RESOURCES += \
     NPP_Resources.qrc
+
+FORMS += \
+    src/optionsdialog.ui

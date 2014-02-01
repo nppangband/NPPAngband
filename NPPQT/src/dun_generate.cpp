@@ -8451,6 +8451,7 @@ static void roll_level_flag(int num_rolls)
             {
                 QString name;
 
+
                 name = describe_one_level_flag(flag);
 
                 color_message(QString("Adding %1 to level_flag.") .arg(name), TERM_WHITE);

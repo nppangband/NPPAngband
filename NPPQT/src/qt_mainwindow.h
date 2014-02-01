@@ -37,6 +37,7 @@ private slots:
     void save_and_close();
     void open_recent_file();
     void about();
+    void options_dialog();
 
     // Functions to make sure the available menu commands are appropriate to the situation.
     //  For example, make the save game command unanavailable when no savefile is open.
@@ -88,6 +89,7 @@ private:
     QAction *close_cur_char;
     QAction *exit_npp;
 
+    QAction *options_act;
 
 
     // Holds the actual commands for the help menu.

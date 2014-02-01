@@ -4,6 +4,7 @@
 #include "src/qt_mainwindow.h"
 #include "src/npp.h"
 #include "src/init.h"
+#include "src/optionsdialog.h"
 
 
 // The main function - intitalize the main window and set the menus.
@@ -109,6 +110,13 @@ void MainWindow::open_recent_file()
     }
 }
 
+void MainWindow::options_dialog()
+{
+    OptionsDialog *dlg = new OptionsDialog(this);
+    dlg->exec();
+    delete dlg;
+}
+
 void MainWindow::about()
 {
    QMessageBox::about(this, tr("About NPPAngband and NPPMoria"),
@@ -167,6 +175,12 @@ void MainWindow::update_file_menu_game_inactive()
 //  Set's up all the QActions that will be added to the menu bar.  These are later added by create_menus.
 void MainWindow::create_actions()
 {
+    options_act = new QAction(tr("Options"), this);
+    options_act->setStatusTip(tr("Change the game options."));
+    //new_game_nppangband->setIcon(QIcon(":/icons/lib/icons/New_game_NPPAngband.png"));
+    //new_game_nppangband->setShortcut(tr("Ctrl+A"));
+    connect(options_act, SIGNAL(triggered()), this, SLOT(options_dialog()));
+
     // Set icon someday?? new_game_nppangband->setIcon(QIcon(":/images/new.png"));
     new_game_nppangband = new QAction(tr("New Game - NPPAngband"), this);
     new_game_nppangband->setStatusTip(tr("Start a new game of NPPAngband."));
@@ -244,8 +258,10 @@ void MainWindow::create_menus()
     file_menu->addAction(save_cur_char_as);
     file_menu->addAction(close_cur_char);
     separator_act = file_menu->addSeparator();
-    file_menu->addAction(exit_npp);
+    file_menu->addAction(options_act);
     separator_act = file_menu->addSeparator();
+    file_menu->addAction(exit_npp);
+    separator_act = file_menu->addSeparator();    
     for (int i = 0; i < MAX_RECENT_SAVEFILES; ++i)
         file_menu->addAction(recent_savefile_actions[i]);
     separator_act = file_menu->addSeparator();
@@ -268,7 +284,7 @@ void MainWindow::create_toolbars()
 
     file_toolbar->addAction(new_game_nppangband);
     file_toolbar->addAction(new_game_nppmoria);
-    file_toolbar->addAction(open_savefile);
+    file_toolbar->addAction(open_savefile);    
     file_toolbar->addSeparator();
     file_toolbar->addAction(save_cur_char);
     file_toolbar->addAction(save_cur_char_as);

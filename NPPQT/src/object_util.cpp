@@ -5330,6 +5330,8 @@ QString format_object_flags(object_type *o_ptr, int max, bool only_random_powers
             }
         }
     }
+
+    return QString("");
 }
 
 /*
