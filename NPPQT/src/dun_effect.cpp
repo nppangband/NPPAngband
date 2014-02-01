@@ -749,16 +749,6 @@ void effect_near(int feat, int y, int x, byte effect_type)
 }
 
 
-/*
- * Wipe the current effect.
- * This function should be called whenever an effect is terminated.
- */
-void effect_wipe(effect_type *x_ptr)
-{
-    /* Wipe it */
-    WIPE(x_ptr, effect_type);
-
-}
 
 
 /*
@@ -788,7 +778,7 @@ void wipe_x_list(void)
         dungeon_info[x_ptr->x_cur_y][x_ptr->x_cur_x].effect_idx = 0;
 
         /* Wipe it */
-        WIPE(x_ptr, effect_type);
+        x_ptr->effect_wipe();
     }
 
     /* Reset "o_max" */
