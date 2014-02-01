@@ -16,6 +16,9 @@ public:
     byte t_race;	/* Ghost race */
     byte t_class; 	/* Ghost class */
     byte t_depth; 	/* Ghost native depth */
+
+    // Wipe a player_ghost entry.  All variabled above need to be cleared.
+    void ghost_template_wipe();
 };
 
 
@@ -101,6 +104,9 @@ public:
 
     byte max_num;			/* Maximum population allowed per level */
     byte cur_num;			/* Monster population on current level */
+
+    // Wipe a monster_race entry.  All variabled above need to be cleared.  Intended for player ghosts.
+    void monster_race_wipe();
 };
 
 
@@ -148,6 +154,9 @@ public:
     u32b r_l_flags7;			/* Observed racial flags */
 
     u32b r_l_native;			/* Observed Nativity Flags*/
+
+    // Wipe a monster_lore entry.  All variabled above need to be cleared.
+    void monster_lore_wipe();
 };
 
 
@@ -199,6 +208,10 @@ public:
     byte mana;          /* Current mana level */
 
     byte using_flow;	/*Which movement flow is the creature using?*/
+
+    // Wipe a monster_type entry.  All variabled above need to be cleared.
+    void monster_wipe();
+
 
 };
 

@@ -1250,7 +1250,7 @@ void wipe_o_list(void)
         if (o_ptr->art_num) artifact_wipe(o_ptr->art_num, FALSE);
 
         /* Wipe the object */
-        (void)WIPE(o_ptr, object_type);
+        o_ptr->object_wipe();
     }
 
     /* Reset "o_max" */

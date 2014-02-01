@@ -199,7 +199,7 @@ void delete_monster_idx(int i)
 
 
     /* Wipe the Monster */
-    (void)WIPE(m_ptr, monster_type);
+    m_ptr->monster_wipe();
 
     /* Count monsters */
     mon_cnt--;
@@ -275,7 +275,7 @@ static void compact_monsters_aux(int i1, int i2)
     COPY(&mon_list[i2], &mon_list[i1], monster_type);
 
     /* Hack -- wipe hole */
-    (void)WIPE(&mon_list[i1], monster_type);
+    mon_list[i1].monster_wipe();
 }
 
 
@@ -455,7 +455,7 @@ void wipe_mon_list(void)
         dungeon_info[m_ptr->fy][m_ptr->fx].monster_idx = 0;
 
         /* Wipe the Monster */
-        (void)WIPE(m_ptr, monster_type);
+        m_ptr->monster_wipe();
     }
 
     /* Paranoia - Clear the move moment array */
@@ -2796,7 +2796,7 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
     n_ptr = &monster_type_body;
 
     /* Clean out the monster */
-    (void)WIPE(n_ptr, monster_type);
+    n_ptr->monster_wipe();
 
     /* Save the race */
     n_ptr->r_idx = r_idx;

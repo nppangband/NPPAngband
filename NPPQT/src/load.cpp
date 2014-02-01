@@ -1836,7 +1836,7 @@ static int rd_dungeon(void)
         n_ptr = &monster_type_body;
 
         /* Clear the monster */
-        (void)WIPE(n_ptr, monster_type);
+        n_ptr->monster_wipe();
 
         /* Read the monster */
         rd_monster(n_ptr);
