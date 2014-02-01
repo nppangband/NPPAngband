@@ -175,7 +175,7 @@ void object_prep(object_type *o_ptr, int k_idx)
     object_kind *k_ptr = &k_info[k_idx];
 
     /* Clear the record */
-    (void)WIPE(o_ptr, object_type);
+    o_ptr->object_wipe();
 
     /* Save the kind index */
     o_ptr->k_idx = k_idx;

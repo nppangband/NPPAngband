@@ -270,6 +270,10 @@ public:
     u16b time;			/* Activation time */
     u16b randtime;		/* Activation time dice */
 
+    // All variables should be included in this method.
+    // Shoudl only be used on randart slots!!!
+    void artifact_wipe();
+
 };
 
 

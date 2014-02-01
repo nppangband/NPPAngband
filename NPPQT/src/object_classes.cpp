@@ -20,6 +20,9 @@
 /*
  * Wipe all data in an object.
  * This function needs to have all variables in objct_type
+ * This function does not clear the monster pointer from dungeon_type.
+ * It should be not called directly on any object already mapped to
+ *dungeon square or held by a monster.
  */
 
 void object_type::object_wipe()
@@ -537,4 +540,24 @@ void object_type::uncurse()
 byte object_type::object_color()
 {
     return (k_info[k_idx].color_num);
+}
+
+/*
+ * Wipe all data in an randart.
+ * This function needs to have all variables in artifact_type
+ * This function does not clear the object that contains the randart.
+ * It should be not called directly on any artifact already mapped to an object.
+ */
+void artifact_type::artifact_wipe()
+{
+    a_name.clear();
+    a_text.clear();
+    sval = tval = 0;
+    to_h = to_d = to_a = ac = 0;
+    dd = ds = 0;
+    weight = 0;
+    cost = 0;
+    a_flags1 = a_flags2 = a_flags3 = a_native = 0;
+    a_level = a_rarity = a_cur_num = a_max_num = activation = 0;
+    time = randtime = 0;
 }

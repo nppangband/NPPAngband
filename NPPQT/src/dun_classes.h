@@ -48,6 +48,9 @@ public:
     bool has_effect();
     bool has_monster();
 
+    // All variables above should be included in this method.
+    void dungeon_square_wipe();
+
 };
 
 class effect_type
@@ -74,6 +77,7 @@ public:
 
     s16b x_r_idx;           /* Some monster race index. Used for inscriptions */
 
+    // All variables above should be included in this method.
     void effect_wipe();
 };
 
@@ -173,6 +177,9 @@ public:
     byte f_l_non_native_to_hit_adj;	/*Number of observed combat penalties for being non-native (percentage)*/
     byte f_l_stealth_adj;			/*Number of observed adjustments to stealth depending on terrain*/
 
+    // All variables above should be included in this method.
+    void feature_lore_wipe();
+
 };
 
 /*
@@ -213,6 +220,9 @@ public:
      * the counter becomes 0.
      */
     byte counter;
+
+    // All variables above should be included in this method.
+    void dynamic_grid_wipe();
 };
 
 

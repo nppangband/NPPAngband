@@ -5,10 +5,12 @@
 /**** Available macros ****/
 
 /* Wipe an array of type T[N], at location P, and return P */
+// Should not be used on any class or structure with methods.
 #define C_WIPE(P, N, T) \
     (memset((P), 0, (N) * sizeof(T)))
 
 /* Wipe a thing of type T, at location P, and return P */
+// Should not be used on any class or structure with methods.
 #define WIPE(P, T) \
     (memset((P), 0, sizeof(T)))
 

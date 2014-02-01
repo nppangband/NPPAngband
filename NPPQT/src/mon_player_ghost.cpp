@@ -794,7 +794,7 @@ void delete_player_ghost_entry(void)
         ghost_template *t_ptr = &t_info[player_ghost_num];
 
         /* Wipe the structure */
-        (void)WIPE(t_ptr, ghost_template);
+        t_ptr->ghost_template_wipe();
     }
 }
 

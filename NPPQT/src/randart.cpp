@@ -3567,7 +3567,7 @@ bool make_one_randart(object_type *o_ptr, int art_power, bool tailored)
     a_ptr = &a_info[a_idx];
 
     /* Clear the artifact record */
-    (void)WIPE(a_ptr, artifact_type);
+    a_ptr->artifact_wipe();
 
     /*point to the object type*/
     k_ptr = &k_info[o_ptr->k_idx];
@@ -3625,7 +3625,7 @@ bool make_one_randart(object_type *o_ptr, int art_power, bool tailored)
         get_obj_num_prep();
 
         /* Clear the artifact record */
-        (void)WIPE(a_ptr, artifact_type);
+        a_ptr->artifact_wipe();
 
         /*prepare a basic, non-magic artifact template based on the object kind*/
         artifact_prep(k_idx, a_idx);
@@ -3938,7 +3938,7 @@ void artifact_wipe(int a_idx, bool quest_art_wipe)
     if ((a_idx == QUEST_ART_SLOT) && (!quest_art_wipe)) return;
 
     /* Wipe the structure */
-    (void)WIPE(a_ptr, artifact_type);
+    a_ptr->artifact_wipe();
 
     /*terminate the string*/
     a_ptr->a_name[0] = '\0';
