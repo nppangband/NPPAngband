@@ -148,7 +148,9 @@ public:
     byte non_native_to_hit_adj;	/*combat bonus for being native (percentage)*/
     s32b f_stealth_adj;			/*Adjustment to stealth depending on terrain*/
 
+
     void feature_wipe();
+
 };
 
 /*
@@ -160,6 +162,7 @@ public:
 class feature_lore
 {
 public:
+
     feature_lore();
 
     byte f_l_sights;		/*Number of times seeing this terrain*/
@@ -183,6 +186,7 @@ public:
 
     // All variables above should be included in this method.
     void feature_lore_wipe();
+
 };
 
 /*
@@ -191,6 +195,7 @@ public:
 class vault_type
 {
 public:
+
     vault_type();
     void vault_wipe();
 
@@ -211,6 +216,7 @@ public:
 class dynamic_grid_type
 {
 public:
+
     dynamic_grid_type();
 
     /* Coordinates */

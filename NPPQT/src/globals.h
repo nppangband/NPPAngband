@@ -51,6 +51,7 @@ extern QString current_savefile;
 extern QFile notes_file;
 
 
+extern s16b add_wakeup_chance;
 extern s16b total_wakeup_chance;
 
 //Various game arrays and lists

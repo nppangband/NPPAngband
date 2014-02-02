@@ -569,6 +569,7 @@ byte object_type::object_color()
     return (k_info[k_idx].color_num);
 }
 
+
 object_kind::object_kind()
 {
     object_kind_wipe();
@@ -620,6 +621,7 @@ void artifact_type::artifact_wipe()
     time = randtime = 0;
 }
 
+
 flavor_type::flavor_type()
 {
     flavor_wipe();
@@ -632,3 +634,4 @@ void flavor_type::flavor_wipe()
     d_color = QColor("black");
     d_char = QChar(' ');
 }
+

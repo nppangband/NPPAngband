@@ -65,11 +65,11 @@ void effect_type::effect_wipe()
     x_r_idx = 0;
 }
 
+
 dungeon_type::dungeon_type()
 {
     dungeon_square_wipe();
 }
-
 
 /*
  * Wipe the dungeon_type class.
@@ -94,6 +94,7 @@ void dungeon_type::dungeon_square_wipe()
     monster_color.setRgb(0,0,0,0);
     monster_char = '\0';
 }
+
 
 feature_type::feature_type()
 {
@@ -141,6 +142,7 @@ feature_lore::feature_lore()
     feature_lore_wipe();
 }
 
+
 /*
  * Wipe the feature_lore class.
  * This function shoudld be used instead of WIPE command.
@@ -155,10 +157,12 @@ void feature_lore::feature_lore_wipe()
     for (int i = 0; i < MAX_FEAT_STATES; i++)  f_l_state[i] = 0;
 }
 
+
 dynamic_grid_type::dynamic_grid_type()
 {
     dynamic_grid_wipe();
 }
+
 
 /*
  * Wipe the feature_lore class.

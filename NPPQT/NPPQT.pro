@@ -29,19 +29,21 @@ SOURCES +=  src/qt_main.cpp\
             src/load.cpp \
             src/mon_cast.cpp \
             src/mon_classes.cpp \
+            src/mon_damage.cpp \
             src/mon_player_ghost.cpp \
             src/mon_ranged_attacks.cpp \
-            src/mon_timed.cpp \
             src/mon_util.cpp \
             src/object_classes.cpp \
             src/object_desc.cpp \
+            src/object_hooks.cpp \
             src/object_make.cpp \
             src/object_util.cpp \
             src/optionsdialog.cpp \
             src/player_classes.cpp \
             src/player_spell.cpp \
             src/player_util.cpp \
-            src/projection.cpp \
+            src/project.cpp \
+            src/project_util.cpp \
             src/quest.cpp \
             src/randart.cpp \
             src/random_numbers.cpp \
@@ -54,9 +56,6 @@ SOURCES +=  src/qt_main.cpp\
             src/timed.cpp \
             src/utilities.cpp \
     src/birthdialog.cpp
-
-
-
 
 
 

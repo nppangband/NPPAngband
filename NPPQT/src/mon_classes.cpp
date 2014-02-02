@@ -58,6 +58,7 @@ void lore_treasure(int m_idx, int num_item, int num_gold)
     }
 }
 
+
 monster_type::monster_type()
 {
     monster_wipe();
@@ -88,10 +89,35 @@ void monster_type::monster_wipe()
     min_range = best_range = mana = using_flow;
 }
 
+/*
+return the monster idx based on the position in the dungeon
+ */
+s16b monster_type::get_mon_idx()
+{
+    return (dungeon_info[fy][fx].monster_idx);
+}
+
+bool monster_type::mon_fully_healthy()
+{
+    monster_race *r_ptr = &r_info[r_idx];
+
+    /* Monster is wounded */
+    if (hp < maxhp) return (FALSE);
+    if (mana < r_ptr->mana) return (FALSE);
+    if (m_timed[MON_TMD_STUN]) return (FALSE);
+    if (m_timed[MON_TMD_FEAR]) return (FALSE);
+    if (m_timed[MON_TMD_CONF]) return (FALSE);
+
+    /* Fully healthy */
+    return (TRUE);
+}
+
+
 monster_lore::monster_lore()
 {
     monster_lore_wipe();
 }
+
 
 //  Wipe the monster_lore class. Should only be called at the beginning of a game
 void monster_lore::monster_lore_wipe()
@@ -105,10 +131,13 @@ void monster_lore::monster_lore_wipe()
     r_l_flags5 = r_l_flags6 = r_l_flags7 = r_l_native = 0;
 }
 
+
+
 monster_race::monster_race()
 {
     monster_race_wipe();
 }
+
 
 // Wipe the monster_race class.  This could be used on any entry, but is intended only for player ghosts.
 void monster_race::monster_race_wipe()
@@ -132,6 +161,8 @@ void monster_race::monster_race_wipe()
     d_char = '\0';
     max_num = cur_num = 0;
 }
+
+
 
 ghost_template::ghost_template()
 {

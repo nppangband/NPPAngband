@@ -330,7 +330,7 @@ static void other_beam_or_bolt(int y, int x, int typ, int dam, bool beam)
     if (beam) flg |= PROJECT_BEAM;
 
     /* Target the player with a bolt attack */
-    // TODO (void)project(SOURCE_EFFECT, 0, y, x, p_ptr->py, p_ptr->px, dam, typ, flg, 0 , 0);
+    (void)project(SOURCE_EFFECT, 0, y, x, p_ptr->py, p_ptr->px, dam, typ, flg, 0 , 0);
 }
 
 /*
@@ -597,7 +597,7 @@ u16b fire_trap_smart(int f_idx, int y, int x, byte mode)
                 {
                     hurt_player = FALSE;
 
-                    if (FALSE) // TODO (allow_player_confusion())
+                    if (allow_player_confusion())
                     {
                         (void)inc_timed(TMD_CONFUSED, rand_int(4) + 4 + x_ptr->x_power / 10, TRUE);
                     }
@@ -610,10 +610,10 @@ u16b fire_trap_smart(int f_idx, int y, int x, byte mode)
                 }
 
                 /*Affect the player for all others*/
-                // TODO if (hurt_player) project_p(SOURCE_TRAP, p_ptr->py, p_ptr->px, x_ptr->x_power, f_ptr->x_gf_type, NULL);
+                if (hurt_player) project_p(SOURCE_TRAP, p_ptr->py, p_ptr->px, x_ptr->x_power, f_ptr->x_gf_type, NULL);
 
                 /* affect all monsters within LOS*/
-                // TODO (void)project_los(y, x, x_ptr->x_power, f_ptr->x_gf_type);
+                (void)project_los(y, x, x_ptr->x_power, f_ptr->x_gf_type);
                 return (TRUE);
             }
             else if (mode == MODE_FLAGS) return (EF1_SM_TRAP_LOS);
@@ -747,7 +747,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                     (void)set_cut(p_ptr->timed[TMD_CUT] + randint(dam));
 
                     /* Take the damage */
-                    // TODO take_hit(dam, name);
+                    take_hit(dam, name);
                 }
             }
             break;
@@ -778,7 +778,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 else
                 {
                     dam = damroll(dice, sides);
-                    // TODO take_hit(dam, name);
+                    take_hit(dam, name);
                 }
 
                 /* New depth */
@@ -810,7 +810,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 else
                 {
                     dam = damroll(dice, sides);
-                    // TODO take_hit(dam, name);
+                    take_hit(dam, name);
                 }
             }
             break;
@@ -856,7 +856,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                     }
 
                     /* Take the damage */
-                    // TODO take_hit(dam, name);
+                    take_hit(dam, name);
                 }
             }
             break;
@@ -914,7 +914,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                     }
 
                     /* Take the damage */
-                    // TODO take_hit(dam, name);
+                    take_hit(dam, name);
                 }
             }
 
@@ -967,7 +967,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             {
 
                 message("You hit a teleport trap!");
-                // TODO teleport_player(dist, FALSE);
+                teleport_player(dist, FALSE);
             }
             break;
         }
@@ -986,7 +986,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             {
                 message("You are enveloped in flames!");
                 dam = damroll(dice, sides);
-               // TODO fire_dam(dam, "a fire trap");
+               fire_dam(dam, "a fire trap");
             }
             break;
         }
@@ -1005,7 +1005,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             {
                 message("You are splashed with acid!");
                 dam = damroll(dice, sides);
-                // TODO acid_dam(dam, "an acid trap");
+                acid_dam(dam, "an acid trap");
             }
             break;
         }
@@ -1028,7 +1028,9 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 {
                     message("A small dart hits you!");
                     dam = damroll(dice, sides);
-                    // TODO take_hit(dam, name);
+
+                    take_hit(dam, name);
+
                     (void)inc_timed(TMD_SLOW, rand_int(duration) + duration, TRUE);
                 }
                 else
@@ -1057,7 +1059,9 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 {
                     message("A small dart hits you!");
                     dam = damroll(dice, sides);
-                    // TODO take_hit(dam, name);
+
+                    take_hit(dam, name);
+
                     (void)do_dec_stat(A_STR);
                 }
                 else
@@ -1086,7 +1090,9 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 {
                     message("A small dart hits you!");
                     dam = damroll(1, 4);
-                    // TODO take_hit(dam, name);
+
+                    take_hit(dam, name);
+
                     (void)do_dec_stat(A_DEX);
                 }
                 else
@@ -1115,7 +1121,9 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 {
                     message("A small dart hits you!");
                     dam = damroll(1, 4);
-                    // TODO take_hit(dam, name);
+
+                    take_hit(dam, name);
+
                     (void)do_dec_stat(A_CON);
                 }
                 else
@@ -1171,7 +1179,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             {
 
                 message("You are surrounded by a gas of scintillating colors!");
-                //TODO  if (allow_player_confusion())
+                if (allow_player_confusion())
                 {
                     (void)inc_timed(TMD_CONFUSED, rand_int(rand_base) + base, TRUE);
                 }
@@ -2703,7 +2711,7 @@ static void process_dynamic_terrain_aux(dynamic_grid_type *g_ptr)
                 }
 
                 /* Burn/melt the feature */
-                // TODO project(SOURCE_OTHER, 0, y, x, yy, xx, dam, GF_FIRE, flg, 0, 0);
+                project(SOURCE_OTHER, 0, y, x, yy, xx, dam, GF_FIRE, flg, 0, 0);
 
                 /*Mark the lore if the player observed this*/
                 if (player_can_see_bold(yy, xx)) f_l_ptr->f_l_flags3 |= (FF3_DYNAMIC);
@@ -2758,7 +2766,7 @@ static void process_dynamic_terrain_aux(dynamic_grid_type *g_ptr)
         }
 
         /* Splash! */
-        // TODO project(SOURCE_OTHER, 2 + rand_int(2), y, x, y, x, dam, GF_BWATER, flg, 0, 0);
+        project(SOURCE_OTHER, 2 + rand_int(2), y, x, y, x, dam, GF_BWATER, flg, 0, 0);
 
         /* Done */
         return;
@@ -2944,7 +2952,7 @@ static void process_dynamic_terrain_aux(dynamic_grid_type *g_ptr)
         if (dam < 1) dam = 1;
 
         /* Fire a bolt to the player  */
-       // TODO  project(SOURCE_OTHER, 0, y, x, p_ptr->py, p_ptr->px, dam, gf_type, flg, 0, 0);
+       project(SOURCE_OTHER, 0, y, x, p_ptr->py, p_ptr->px, dam, gf_type, flg, 0, 0);
 
         /* Done */
         return;
@@ -3016,7 +3024,7 @@ static void process_dynamic_terrain_aux(dynamic_grid_type *g_ptr)
                 if (!one_in_(4)) continue;
 
                 /* Burn/melt the feature */
-                // TODO project(SOURCE_OTHER, 0, y, x, yy, xx, dam, GF_FIRE, flg, 0, 0);
+                project(SOURCE_OTHER, 0, y, x, yy, xx, dam, GF_FIRE, flg, 0, 0);
 
                 /* Mark the lore if the player observed this */
                 if (player_can_see_bold(yy, xx)) f_l_ptr->f_l_flags3 |= (FF3_DYNAMIC);
@@ -3444,7 +3452,7 @@ void decipher_strange_inscription(int x_idx)
         name = feature_desc(feat, TRUE, TRUE);
 
         /* Hurt the player */
-        // TODO project_p(SOURCE_EFFECT, p_ptr->py, p_ptr->px, dam, gf_type, (QString("a spell inscribed on %1") arg(name));
+        project_p(SOURCE_EFFECT, p_ptr->py, p_ptr->px, dam, gf_type, (QString("a spell inscribed on %1") .arg(name)));
 
         /* Remove effect */
         delete_effect_idx(x_idx);
@@ -3501,7 +3509,7 @@ void hit_silent_watcher(int y, int x)
     // TODO aggravate_monsters(SOURCE_OTHER);
 
     /* Fire a bolt to the player  */
-    // TODO project(SOURCE_OTHER, 0, y, x, p_ptr->py, p_ptr->px, dam, GF_NETHER, flg, 0, 0);
+    project(SOURCE_OTHER, 0, y, x, p_ptr->py, p_ptr->px, dam, GF_NETHER, flg, 0, 0);
 
 }
 
@@ -3541,7 +3549,7 @@ bool hit_wall(int y, int x, bool do_action)
         kb_str = (QString("touching %1") .arg(name));
 
         /* Take the hit */
-        // TODO take_terrain_hit(dam, feat, kb_str);
+        take_terrain_hit(dam, feat, kb_str);
 
         return (TRUE);
     }
@@ -3587,7 +3595,7 @@ bool hit_wall(int y, int x, bool do_action)
             cave_alter_feat(y, x, FS_TUNNEL);
 
             /* Burst of light */
-            // TODO project(SOURCE_OTHER, 2, y, x, y, x, dam, GF_LIGHT, flg, 0, 0);
+            project(SOURCE_OTHER, 2, y, x, y, x, dam, GF_LIGHT, flg, 0, 0);
         }
         /* It works most of the time */
         else
@@ -3603,7 +3611,7 @@ bool hit_wall(int y, int x, bool do_action)
             }
 
             /* Teleport */
-            // TODO teleport_player(100 + rand_int(p_ptr->depth), FALSE);
+            teleport_player(100 + rand_int(p_ptr->depth), FALSE);
         }
 
         return (TRUE);

@@ -4900,3 +4900,167 @@ bool monster_nonliving(monster_race *r_ptr)
     return (FALSE);
 }
 
+struct gf_type_match_flags
+{
+    int gf_type;	/* The GF type */
+    u32b gf_spell;		/* The monster flag */
+    byte flag_set;	/* Which monster flag set */
+};
+
+
+/*
+ * Events triggered by the various flags.
+ */
+static const struct gf_type_match_flags gf_and_flags[] =
+{
+    /* Ball spells */
+    {GF_ACID, 		RF5_BALL_ACID, 		5},
+    {GF_ELEC, 		RF5_BALL_ELEC, 		5},
+    {GF_FIRE, 		RF5_BALL_FIRE, 		5},
+    {GF_COLD, 		RF5_BALL_COLD, 		5},
+    {GF_POIS, 		RF5_BALL_POIS, 		5},
+    {GF_LIGHT, 		RF5_BALL_LIGHT, 	5},
+    {GF_DARK, 		RF5_BALL_DARK, 		5},
+    {GF_CONFUSION, 	RF5_BALL_CONFU, 	5},
+    {GF_SOUND, 		RF5_BALL_SOUND, 	5},
+    {GF_SHARD, 		RF5_BALL_SHARD, 	5},
+    {GF_WATER, 		RF5_BALL_STORM, 	5},
+    {GF_NETHER, 	RF5_BALL_NETHR, 	5},
+    {GF_CHAOS, 		RF5_BALL_CHAOS, 	5},
+    {GF_MANA, 		RF5_BALL_MANA, 		5},
+    {GF_WATER, 		RF5_BALL_WATER, 	5},
+
+    {GF_ACID, 		RF4_BRTH_ACID, 		4},
+    {GF_ELEC, 		RF4_BRTH_ELEC, 		4},
+    {GF_FIRE, 		RF4_BRTH_FIRE, 		4},
+    {GF_COLD, 		RF4_BRTH_COLD, 		4},
+    {GF_POIS, 		RF4_BRTH_POIS, 		4},
+    {GF_LIGHT, 		RF4_BRTH_LIGHT, 	4},
+    {GF_DARK, 		RF4_BRTH_DARK , 	4},
+    {GF_CONFUSION, 	RF4_BRTH_CONFU, 	4},
+    {GF_SOUND, 		RF4_BRTH_SOUND, 	4},
+    {GF_SHARD, 		RF4_BRTH_SHARD, 	4},
+    {GF_NETHER, 	RF4_BRTH_NETHR, 	4},
+    {GF_CHAOS, 		RF4_BRTH_CHAOS, 	4},
+    {GF_MANA, 		RF4_BRTH_MANA, 		4},
+    {GF_DISENCHANT,	RF4_BRTH_DISEN, 	4},
+    {GF_NEXUS, 		RF4_BRTH_NEXUS, 	4},
+    {GF_TIME, 		RF4_BRTH_TIME, 		4},
+    {GF_INERTIA,	RF4_BRTH_INER, 		4},
+    {GF_GRAVITY,	RF4_BRTH_GRAV, 		4},
+    {GF_SHARD, 		RF4_BRTH_SHARD, 	4},
+    {GF_PLASMA,		RF4_BRTH_PLAS, 		4},
+    {GF_FORCE, 		RF4_BRTH_FORCE, 	4},
+    {GF_MANA, 		RF4_BRTH_MANA, 		4},
+
+};
+
+
+/*
+ * Determines if the monster breathes the element, either by
+ * a ball spell, or by a breath spell.
+ */
+bool race_breathes_element(monster_race *r_ptr, int gf_type)
+{
+    u16b i;
+
+    /* Search through the list for breaths that match the right GF*/
+    for (i = 0; i < N_ELEMENTS(gf_and_flags); i++)
+    {
+        const struct gf_type_match_flags *gff = &gf_and_flags[i];
+
+        /* Find the right GF_TYPE */
+        if (gf_type != gf_and_flags->gf_type) continue;
+
+        /* Return true if the monster race has the right flag */
+        if ((gff->flag_set == 4) &&
+            (r_ptr->flags4 & (gf_and_flags->gf_spell))) return (TRUE);
+        if ((gff->flag_set == 5) &&
+            (r_ptr->flags5 & (gf_and_flags->gf_spell))) return (TRUE);
+        if ((gff->flag_set == 6) &&
+            (r_ptr->flags6 & (gf_and_flags->gf_spell))) return (TRUE);
+        if ((gff->flag_set == 7) &&
+            (r_ptr->flags7 & (gf_and_flags->gf_spell))) return (TRUE);
+    }
+
+    return FALSE;
+}
+
+/*
+ * Return true if monster race 2 breathes all of the breaths
+ * and ball spells that monster race 1 breathes.
+ */
+bool race_similar_breaths(monster_race *r_ptr, monster_race *r2_ptr)
+{
+    u32b f4 = r_ptr->flags4;
+    u32b f5 = r_ptr->flags5;
+    u32b f6 = r_ptr->flags6;
+    u32b f7 = r_ptr->flags7;
+    u32b f4_2 = r2_ptr->flags4;
+    u32b f5_2 = r2_ptr->flags5;
+    u32b f6_2 = r2_ptr->flags6;
+    u32b f7_2 = r2_ptr->flags7;
+
+    /* Limit to the breath and ball masks for each race.*/
+    f4   &= (RF4_BREATH_MASK | RF4_BALL_MASK);
+    f5   &= (RF5_BREATH_MASK | RF5_BALL_MASK);
+    f6   &= (RF6_BREATH_MASK | RF6_BALL_MASK);
+    f7   &= (RF7_BREATH_MASK | RF7_BALL_MASK);
+    f4_2 &= (RF4_BREATH_MASK | RF4_BALL_MASK);
+    f5_2 &= (RF5_BREATH_MASK | RF5_BALL_MASK);
+    f6_2 &= (RF6_BREATH_MASK | RF6_BALL_MASK);
+    f7_2 &= (RF7_BREATH_MASK | RF7_BALL_MASK);
+
+    /* One of the monsters doesn't have any ball or breath spells. */
+    if ((!f4)   && (!f5)   && (!f6)   && (!f7))   return (FALSE);
+    if ((!f4_2) && (!f5_2) && (!f6_2) && (!f7_2)) return (FALSE);
+
+    /* Filter second race breaths and ball spells to only what the first race casts */
+    f4_2 &= (f4);
+    f5_2 &= (f5);
+    f6_2 &= (f6);
+    f7_2 &= (f7);
+
+
+    /* Return false if any of the 4 flag sets don't match */
+    if (f4 != f4_2) return (FALSE);
+    if (f5 != f5_2) return (FALSE);
+    if (f6 != f6_2) return (FALSE);
+    if (f7 != f7_2) return (FALSE);
+
+    /* The second monster has all of the breaths/spells of the first */
+    return (TRUE);
+}
+
+/* States if monsters on two separate coordinates are similar or not*/
+bool race_similar_monsters(int m_idx, int m2y, int m2x)
+{
+    monster_type *m_ptr = &mon_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    monster_type *m2_ptr;
+    monster_race *r2_ptr;
+
+    /* First check if there are monsters on the target coordinates. */
+    if (!(dungeon_info[m2y][m2x].monster_idx > 0)) return(FALSE);
+
+    /* Access monster 2*/
+    m2_ptr = &mon_list[dungeon_info[m2y][m2x].monster_idx];
+    r2_ptr = &r_info[m2_ptr->r_idx];
+
+    /* the same character */
+    if (r_ptr->d_char == r2_ptr->d_char) return (TRUE);
+
+    /*
+     * Same race (we are not checking orcs, giants, or
+     * trolls because that would be true at
+     * the symbol check
+     */
+    if ((r_ptr->flags3 & (RF3_DRAGON)) && (r2_ptr->flags3 & (RF3_DRAGON))) return(TRUE);
+    if ((r_ptr->flags3 & (RF3_DEMON)) && (r2_ptr->flags3 & (RF3_DEMON))) return(TRUE);
+    if ((r_ptr->flags3 & (RF3_UNDEAD)) && (r2_ptr->flags3 & (RF3_UNDEAD))) return(TRUE);
+
+    /*We are not checking for animal*/
+
+    /*Not the same*/
+    return(FALSE);
+}

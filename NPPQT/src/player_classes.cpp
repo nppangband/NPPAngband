@@ -44,6 +44,7 @@ void player_class::player_class_wipe()
 }
 
 
+
 /*
  * Wipe the player state class.
  * This function shoudld be used instead of WIPE command.
