@@ -336,6 +336,12 @@ static int init_e_info(void)
     QString file_name;
 
     e_info = C_ZNEW(z_info->e_max, ego_item_type);
+    for (int i = 0; i < z_info->e_max; i++) {
+        ego_item_type *e_ptr = e_info + i;
+        C_WIPE(e_ptr->tval, EGO_TVALS_MAX, byte);
+        C_WIPE(e_ptr->min_sval, EGO_TVALS_MAX, byte);
+        C_WIPE(e_ptr->max_sval, EGO_TVALS_MAX, byte);
+    }
 
     if (game_mode == GAME_NPPANGBAND) file_name = "ego_item";
     else file_name = "m_ego_item";  /* game_mode == NPPMORIA */
@@ -358,6 +364,12 @@ static int init_r_info(void)
     QString file_name;
 
     r_info = C_ZNEW(z_info->r_max, monster_race);
+    for (int i = 0; i < z_info->r_max; i++) {
+        for (int j = 0; j < MONSTER_BLOW_MAX; j++) {
+            monster_blow *bl = r_info[i].blow + j;
+            bl->method = bl->d_dice = bl->d_side = bl->effect = 0;
+        }
+    }
 
     if (game_mode == GAME_NPPANGBAND) file_name = "monster";
     else file_name = "m_monster";  /* game_mode == NPPMORIA */
