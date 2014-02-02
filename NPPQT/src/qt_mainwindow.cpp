@@ -5,6 +5,7 @@
 #include "src/npp.h"
 #include "src/init.h"
 #include "src/optionsdialog.h"
+#include "src/birthdialog.h"
 
 
 // The main function - intitalize the main window and set the menus.
@@ -119,6 +120,11 @@ void MainWindow::options_dialog()
 
 void MainWindow::about()
 {
+   BirthDialog *dlg = new BirthDialog(this);
+   dlg->exec();
+   delete dlg;
+   return;
+
    QMessageBox::about(this, tr("About NPPAngband and NPPMoria"),
             tr("<h2>NPPAngband and NPPMoria"
                "<p>Copyright (c) 2003-2015 Jeff Greene and Diego González.</h2>"

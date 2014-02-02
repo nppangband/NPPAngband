@@ -1046,5 +1046,7 @@ enum
 
 #define NASTY_MON	(auto_scum ? 30 : 40)	/* 1/chance of inflated monster level */
 
+#define MON_DRAIN_LIFE	2		/* Percent of player exp drained per hit */
+
 
 #endif // MONSTER_H

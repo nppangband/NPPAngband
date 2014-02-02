@@ -22,6 +22,7 @@ enum
 class dungeon_type
 {
 public:
+    dungeon_type();
 
     //  the 4 layers of the dungeon, the last 3 are indexes to lists which store the information
     s16b feat;
@@ -50,12 +51,12 @@ public:
 
     // All variables above should be included in this method.
     void dungeon_square_wipe();
-
 };
 
 class effect_type
 {
 public:
+    effect_type();
 
     byte x_type;            /* Effect Type */
 
@@ -102,6 +103,7 @@ public:
 class feature_type
 {
 public:
+    feature_type();
 
     QString f_name;			/* Name (offset) */
     QString f_text;			/* Text (offset) */
@@ -146,6 +148,9 @@ public:
     byte non_native_to_hit_adj;	/*combat bonus for being native (percentage)*/
     s32b f_stealth_adj;			/*Adjustment to stealth depending on terrain*/
 
+
+    void feature_wipe();
+
 };
 
 /*
@@ -157,6 +162,8 @@ public:
 class feature_lore
 {
 public:
+
+    feature_lore();
 
     byte f_l_sights;		/*Number of times seeing this terrain*/
 
@@ -189,6 +196,9 @@ class vault_type
 {
 public:
 
+    vault_type();
+    void vault_wipe();
+
     QString vault_name;			/* Name (offset) */
     QString vault_text;			/* Text (offset) */
 
@@ -206,6 +216,8 @@ public:
 class dynamic_grid_type
 {
 public:
+
+    dynamic_grid_type();
 
     /* Coordinates */
     byte y;

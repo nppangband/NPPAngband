@@ -540,6 +540,12 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 #define SOURCE_OTHER			-4	/*Terrain, something other than player or monster*/
 #define SOURCE_MONSTER_START	 0	/*Greater than 0 monster is the source*/
 
+/*
+ * An arc with a width (in degrees) less than this value will lose less
+ * power over distance.
+ */
+#define ARC_STANDARD_WIDTH     90
+
 
 #define LEV_THEME_HEAD				11
 #define LEV_THEME_CREEPING_COIN		0	/*creeping coins*/

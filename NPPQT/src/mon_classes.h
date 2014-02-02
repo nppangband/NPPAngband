@@ -11,6 +11,9 @@
 class ghost_template
 {
 public:
+
+    ghost_template();
+
     QString t_name;	/* Ghost Name */
     byte t_gender;	/* Ghost gender (0 = male  1 = female) */
     byte t_race;	/* Ghost race */
@@ -61,6 +64,8 @@ class monster_race
 {
 public:
 
+    monster_race();
+
     QString r_name_full;
     QString r_name_short;
     QString r_text;				/* Text  */
@@ -107,6 +112,7 @@ public:
 
     // Wipe a monster_race entry.  All variabled above need to be cleared.  Intended for player ghosts.
     void monster_race_wipe();
+
 };
 
 
@@ -121,6 +127,9 @@ public:
 class monster_lore
 {
 public:
+
+    monster_lore();
+
 
     s16b sights;			/* Count sightings of this monster */
     s16b deaths;			/* Count deaths from this monster */
@@ -172,6 +181,8 @@ class monster_type
 {
 public:
 
+    monster_type();
+
     s16b r_idx;			/* Monster race index */
 
     byte fy;			/* Y location on map */
@@ -211,6 +222,10 @@ public:
 
     // Wipe a monster_type entry.  All variabled above need to be cleared.
     void monster_wipe();
+
+
+    s16b get_mon_idx();
+    bool mon_fully_healthy();
 
 
 };
