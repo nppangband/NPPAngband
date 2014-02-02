@@ -9,7 +9,16 @@
 
 
 //calcs.c
+/* calcs.c*/
+extern int stat_adj_moria(int stat);
+extern void calc_spells(void);
+extern int calc_blows(object_type *o_ptr, player_state *new_state);
+extern void calc_bonuses(object_type inventory[], player_state *state, bool id_only);
 extern byte calc_energy_gain(byte speed);
+extern void notice_stuff(void);
+extern void update_stuff(void);
+extern void redraw_stuff(void);
+extern void handle_stuff(void);
 
 //cave.cpp
 extern int distance(int y1, int x1, int y2, int x2);
@@ -311,7 +320,6 @@ extern void object_aware(object_type *o_ptr);
 extern void object_tried(object_type *o_ptr);
 extern void object_history(object_type *o_ptr, byte origin, s16b r_idx);
 extern void stack_histories(object_type *o_ptr, const object_type *j_ptr);
-extern void expand_inscription(const object_type *o_ptr, const char *src, char dest[], int max);
 extern bool item_tester_hook_wieldable_ided_weapon(object_type *o_ptr);
 extern bool item_tester_hook_wieldable_weapon(object_type *o_ptr);
 extern bool item_tester_hook_ided_weapon(object_type *o_ptr);
@@ -337,6 +345,11 @@ extern void save_player_ghost_file(void);
 
 // player_spell.cpp
 extern int get_player_spell_realm(void);
+extern QString get_spell_name(int tval, int spell);
+
+// player_util.cpp
+extern void player_flags(u32b *f1, u32b *f2, u32b *f3, u32b *fn);
+extern s16b modify_stat_value(int value, int amount);
 
 // projection.cpp
 extern byte gf_color(int type);
@@ -432,6 +445,11 @@ extern bool brand_ammo(bool enchant);
 extern bool brand_bolts(bool enchant);
 
 //squelch.cpp
+extern QString get_autoinscription(s16b kindIdx);
+extern void apply_autoinscription(object_type *o_ptr);
+extern int add_autoinscription(s16b kind, QString inscription);
+extern void autoinscribe_ground(void);
+extern void autoinscribe_pack(void);
 extern QString squelch_to_label(int squelch);
 extern int squelch_itemp(object_type *o_ptr, byte feeling, bool fullid);
 extern int do_squelch_item(int squelch, int item, object_type *o_ptr);

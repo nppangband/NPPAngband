@@ -40,6 +40,7 @@ SOURCES +=  src/qt_main.cpp\
             src/optionsdialog.cpp \
             src/player_classes.cpp \
             src/player_spell.cpp \
+            src/player_util.cpp \
             src/projection.cpp \
             src/quest.cpp \
             src/randart.cpp \
