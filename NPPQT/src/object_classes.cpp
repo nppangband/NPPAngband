@@ -17,6 +17,33 @@
 
 #include "src/npp.h"
 
+ego_item_type::ego_item_type()
+{
+    ego_item_wipe();
+}
+
+void ego_item_type::ego_item_wipe()
+{
+    e_name.clear();
+    e_text.clear();
+
+    cost = e_flags1 = e_flags2 = e_flags3 = 0;
+    level = rarity = rating = 0;
+
+    for (int i = 0; i < EGO_TVALS_MAX; i++) {
+        tval[i] = min_sval[i] = max_sval[i] = 0;
+    }
+
+    max_to_h = max_to_a = max_to_d = max_pval = 0;
+    xtra = 0;
+    everseen = squelch = 0;
+}
+
+object_type::object_type()
+{
+    object_wipe();
+}
+
 /*
  * Wipe all data in an object.
  * This function needs to have all variables in objct_type
@@ -542,6 +569,37 @@ byte object_type::object_color()
     return (k_info[k_idx].color_num);
 }
 
+object_kind::object_kind()
+{
+    object_kind_wipe();
+}
+
+void object_kind::object_kind_wipe()
+{
+    k_name.clear();
+    k_text.clear();
+
+    tval = sval = pval = 0;
+    to_h = to_d = to_a = 0;
+    ac = dd = ds = weight = cost = 0;
+    k_flags1 = k_flags2 = k_flags3 = 0;
+    effect = 0;
+    C_WIPE(locale, 4, byte);
+    C_WIPE(chance, 4, byte);
+    k_level = extra = 0;
+    color_num = 0;
+    d_color = QColor("black");
+    d_char = QChar(' ');
+    autoinscribe.clear();
+    flavor = squelch = 0;
+    aware = tried = everseen;
+}
+
+artifact_type::artifact_type()
+{
+    artifact_wipe();
+}
+
 /*
  * Wipe all data in an randart.
  * This function needs to have all variables in artifact_type
@@ -560,4 +618,17 @@ void artifact_type::artifact_wipe()
     a_flags1 = a_flags2 = a_flags3 = a_native = 0;
     a_level = a_rarity = a_cur_num = a_max_num = activation = 0;
     time = randtime = 0;
+}
+
+flavor_type::flavor_type()
+{
+    flavor_wipe();
+}
+
+void flavor_type::flavor_wipe()
+{
+    text.clear();
+    tval = sval = color_num = 0;
+    d_color = QColor("black");
+    d_char = QChar(' ');
 }

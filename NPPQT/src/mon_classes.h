@@ -11,6 +11,8 @@
 class ghost_template
 {
 public:
+    ghost_template();
+
     QString t_name;	/* Ghost Name */
     byte t_gender;	/* Ghost gender (0 = male  1 = female) */
     byte t_race;	/* Ghost race */
@@ -60,6 +62,7 @@ public:
 class monster_race
 {
 public:
+    monster_race();
 
     QString r_name_full;
     QString r_name_short;
@@ -121,6 +124,7 @@ public:
 class monster_lore
 {
 public:
+    monster_lore();
 
     s16b sights;			/* Count sightings of this monster */
     s16b deaths;			/* Count deaths from this monster */
@@ -171,6 +175,7 @@ public:
 class monster_type
 {
 public:
+    monster_type();
 
     s16b r_idx;			/* Monster race index */
 
@@ -221,7 +226,6 @@ public:
 class move_moment_type
 {
 public:
-
     s16b m_idx;
     s16b moment;
 };

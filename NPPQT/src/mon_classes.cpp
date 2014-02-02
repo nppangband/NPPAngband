@@ -58,6 +58,11 @@ void lore_treasure(int m_idx, int num_item, int num_gold)
     }
 }
 
+monster_type::monster_type()
+{
+    monster_wipe();
+}
+
 /*
  * Wipe the monster_type class.
  * This function shoudld be used instead of WIPE command.
@@ -82,6 +87,12 @@ void monster_type::monster_wipe()
     target_x = target_y = 0;
     min_range = best_range = mana = using_flow;
 }
+
+monster_lore::monster_lore()
+{
+    monster_lore_wipe();
+}
+
 //  Wipe the monster_lore class. Should only be called at the beginning of a game
 void monster_lore::monster_lore_wipe()
 {
@@ -92,6 +103,11 @@ void monster_lore::monster_lore_wipe()
     for (int i = 0; i < MONSTER_BLOW_MAX; i++) blows[i] = 0;
     r_l_flags1 = r_l_flags2 = r_l_flags3 = r_l_flags4 = 0;
     r_l_flags5 = r_l_flags6 = r_l_flags7 = r_l_native = 0;
+}
+
+monster_race::monster_race()
+{
+    monster_race_wipe();
 }
 
 // Wipe the monster_race class.  This could be used on any entry, but is intended only for player ghosts.
@@ -115,6 +131,11 @@ void monster_race::monster_race_wipe()
     d_color.setRgb(0,0,0,0);
     d_char = '\0';
     max_num = cur_num = 0;
+}
+
+ghost_template::ghost_template()
+{
+    ghost_template_wipe();
 }
 
 /*
