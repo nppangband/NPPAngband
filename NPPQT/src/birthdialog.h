@@ -20,8 +20,18 @@ private slots:
 
     void on_options_button_clicked();
 
+    void on_race_combo_currentIndexChanged(int index);
+
+    void on_class_combo_currentIndexChanged(int index);
+
+    void on_next_button_clicked();
+
+    void on_prev_button_clicked();
+
 private:
     Ui::BirthDialog *ui;
+
+    void update_stats();
 };
 
 #endif // BIRTHDIALOG_H
