@@ -1051,6 +1051,7 @@ bool restore_level(void)
         p_ptr->exp = p_ptr->max_exp;
 
         /* Check the experience */
+
         check_experience();
 
         /* Did something */

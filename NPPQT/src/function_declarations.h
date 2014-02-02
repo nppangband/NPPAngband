@@ -4,6 +4,7 @@
 #include "src/structures.h"
 #include <QString>
 #include <QFile>
+#include <QMessageBox>
 
 //was externs.h
 
@@ -157,6 +158,7 @@ extern bool load_gamemode(void);
 extern bool cave_exist_mon(const monster_race *r_ptr, int y, int x, bool occupied_ok, bool damage_ok, bool can_dig);
 
 //mon_classes.cpp
+
 
 
 // mon_damage.cpp
@@ -638,7 +640,7 @@ extern int letter_to_number (QChar let);
 extern QChar number_to_letter (int num);
 extern bool is_a_vowel(QChar single_letter);
 extern QString capitilize_first(QString line);
-extern void pop_up_message_box(QString message);
+extern void pop_up_message_box(QString message, QMessageBox::Icon the_icon = QMessageBox::Information);
 extern bool get_check(QString question);
 extern QString get_string(QString question);
 extern QColor add_preset_color(int which_color);

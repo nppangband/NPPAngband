@@ -1051,7 +1051,9 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
     /*** Reset ***/
 
     /* Reset player speed */
+
     new_state->player_state_wipe();
+
     if (game_mode == GAME_NPPMORIA) new_state->p_speed = NPPMORIA_NORMAL_SPEED;
     else new_state->p_speed = 110;
 
@@ -1507,7 +1509,9 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
         if (new_state->p_speed > 199) 		new_state->p_speed = 199;
     }
 
+
     /*** Apply modifier bonuses ***/
+
 
     /*** Modify skills ***/
 
@@ -1602,6 +1606,7 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
     {
         o_ptr = &calc_inven[INVEN_MAIN_WEAPON];
     }
+
 
     if (o_ptr->is_bow())
     {

@@ -57,6 +57,8 @@ struct artifact_lore
 class object_type
 {
     public:
+    object_type();
+
     s16b k_idx;			/* Kind index (zero if "dead") */
 
     byte iy;			/* Y-position on map, or zero */
@@ -169,6 +171,8 @@ class object_type
 class object_kind
 {
 public:
+    object_kind();
+    void object_kind_wipe();
 
     QString k_name;			/* Name  */
     QString k_text;			/* Text  */
@@ -234,6 +238,7 @@ public:
 class artifact_type
 {
 public:
+    artifact_type();
 
     QString a_name;       /* Name */
     QString a_text;		/* Text  */
@@ -283,6 +288,9 @@ public:
 class ego_item_type
 {
 public:
+    ego_item_type();
+    void ego_item_wipe();
+
     QString e_name;        /* Name  */
     QString e_text;			/* Text  */
 
@@ -316,6 +324,9 @@ public:
 class flavor_type
 {
 public:
+    flavor_type();
+    void flavor_wipe();
+
     QString text;      /* Text */
 
     byte tval;      /* Associated object type */
@@ -324,7 +335,6 @@ public:
     byte color_num;     //The number of any default color.  CUSTOM_COLOR for all others.
     QColor d_color;		/* Default flavor color */
     QChar d_char;    /* Default flavor character */
-
 };
 
 

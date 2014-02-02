@@ -1028,7 +1028,9 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 {
                     message("A small dart hits you!");
                     dam = damroll(dice, sides);
+
                     take_hit(dam, name);
+
                     (void)inc_timed(TMD_SLOW, rand_int(duration) + duration, TRUE);
                 }
                 else
@@ -1057,7 +1059,9 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 {
                     message("A small dart hits you!");
                     dam = damroll(dice, sides);
+
                     take_hit(dam, name);
+
                     (void)do_dec_stat(A_STR);
                 }
                 else
@@ -1086,7 +1090,9 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 {
                     message("A small dart hits you!");
                     dam = damroll(1, 4);
+
                     take_hit(dam, name);
+
                     (void)do_dec_stat(A_DEX);
                 }
                 else
@@ -1115,7 +1121,9 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 {
                     message("A small dart hits you!");
                     dam = damroll(1, 4);
+
                     take_hit(dam, name);
+
                     (void)do_dec_stat(A_CON);
                 }
                 else

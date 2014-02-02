@@ -54,7 +54,8 @@ SOURCES +=  src/qt_main.cpp\
             src/tables.cpp \
             src/target.cpp \
             src/timed.cpp \
-            src/utilities.cpp
+            src/utilities.cpp \
+    src/birthdialog.cpp
 
 
 
@@ -81,11 +82,13 @@ HEADERS  += src/qt_mainwindow.h\
             src/dun_generate.h \
             src/optionsdialog.h \
             src/mon_classes.h \
-            src/player_classes.h
+            src/player_classes.h \
+    src/birthdialog.h
 
 
 RESOURCES += \
     NPP_Resources.qrc
 
 FORMS += \
-    src/optionsdialog.ui
+    src/optionsdialog.ui \
+    src/birthdialog.ui

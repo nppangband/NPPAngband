@@ -92,6 +92,7 @@ s16b modify_stat_value(int value, int amount)
     return (value);
 }
 
+
 /* Players with chaos or confusion resistance don't get confused*/
 bool allow_player_confusion(void)
 {
@@ -101,3 +102,4 @@ bool allow_player_confusion(void)
     /*Don't have the right resists*/
     return (TRUE);
 }
+

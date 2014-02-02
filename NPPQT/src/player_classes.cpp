@@ -18,6 +18,32 @@
 
 #include "src/npp.h"
 
+player_class::player_class()
+{
+    player_class_wipe();
+}
+
+void player_class::player_class_wipe()
+{
+    cl_name.clear();
+    for (int i = 0; i < PY_MAX_LEVEL; i++) {
+        cl_title[i].clear();
+    }
+    C_WIPE(c_adj, A_MAX, s16b);
+    c_dis = c_dev = c_sav = c_stl = c_srh = c_fos = c_thn = c_thb = 0;
+    x_dis = x_dev = x_sav = x_stl = x_srh = x_fos = x_thn = x_thb = 0;
+    c_mhp = c_exp = flags = c_native = max_attacks = min_weight = att_multiply = 0;
+    spell_book = spell_first = spell_weight = sense_base = sense_div = 0;
+    for (int i = 0; i < MAX_START_ITEMS; i++) {
+        start_items[i].max = start_items[i].min = start_items[i].sval = start_items[i].tval = 0;
+    }
+    for (int i = 0; i < PY_MAX_SPELLS; i++) {
+        magic_type *m = spells.info + i;
+        m->sexp = m->sfail = m->slevel = m->smana = 0;
+    }
+}
+
+
 
 /*
  * Wipe the player state class.
