@@ -11,10 +11,20 @@ BirthDialog::BirthDialog(QWidget *parent) :
 
     byte mode = GAME_NPPANGBAND;
 
-    ui->sex_combo->addItem("");
     for (int i = 0; i < MAX_SEXES; i++) {
         ui->sex_combo->addItem(sex_info[i].title);
     }
+    ui->sex_combo->setCurrentIndex(-1);
+
+    for (int i = 0; i < z_info->p_max; i++) {
+        ui->race_combo->addItem(p_info[i].pr_name);
+    }
+    ui->race_combo->setCurrentIndex(-1);
+
+    for (int i; i < z_info->c_max; i++) {
+        ui->class_combo->addItem(c_info[i].cl_name);
+    }
+    ui->class_combo->setCurrentIndex(-1);
 }
 
 BirthDialog::~BirthDialog()
