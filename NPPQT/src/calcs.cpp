@@ -1051,72 +1051,12 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
     /*** Reset ***/
 
     /* Reset player speed */
+    new_state->player_state_wipe();
     if (game_mode == GAME_NPPMORIA) new_state->p_speed = NPPMORIA_NORMAL_SPEED;
     else new_state->p_speed = 110;
 
     /* Reset "blow" info */
     new_state->num_blow = 1;
-    extra_blows = 0;
-
-    /* Reset "fire" info */
-    new_state->num_fire = 0;
-    new_state->ammo_mult = 0;
-    new_state->ammo_tval = 0;
-    extra_shots = 0;
-    extra_might = 0;
-
-    /* Clear the stat modifiers */
-    for (i = 0; i < A_MAX; i++) new_state->stat_add[i] = 0;
-
-    /* Clear the Displayed/Real armor class */
-    new_state->dis_ac = new_state->ac = 0;
-
-    /* Clear the Displayed/Real Bonuses */
-    new_state->dis_to_h = new_state->to_h = 0;
-    new_state->dis_to_d = new_state->to_d = 0;
-    new_state->dis_to_a = new_state->to_a = 0;
-
-    /* Clear all the flags */
-    new_state->aggravate = FALSE;
-    new_state->teleport = FALSE;
-    new_state->exp_drain = FALSE;
-    new_state->bless_blade = FALSE;
-    new_state->impact = FALSE;
-    new_state->see_inv = FALSE;
-    new_state->free_act = FALSE;
-    new_state->slow_digest = FALSE;
-    new_state->regenerate = FALSE;
-    new_state->ffall = FALSE;
-    new_state->hold_life = FALSE;
-    new_state->telepathy = FALSE;
-    new_state->light = FALSE;
-    new_state->sustain_str = FALSE;
-    new_state->sustain_int = FALSE;
-    new_state->sustain_wis = FALSE;
-    new_state->sustain_con = FALSE;
-    new_state->sustain_dex = FALSE;
-    new_state->sustain_chr = FALSE;
-    new_state->resist_acid = FALSE;
-    new_state->resist_elec = FALSE;
-    new_state->resist_fire = FALSE;
-    new_state->resist_cold = FALSE;
-    new_state->resist_pois = FALSE;
-    new_state->resist_fear = FALSE;
-    new_state->resist_light = FALSE;
-    new_state->resist_dark = FALSE;
-    new_state->resist_blind = FALSE;
-    new_state->resist_confu = FALSE;
-    new_state->resist_sound = FALSE;
-    new_state->resist_chaos = FALSE;
-    new_state->resist_disen = FALSE;
-    new_state->resist_shard = FALSE;
-    new_state->resist_nexus = FALSE;
-    new_state->resist_nethr = FALSE;
-    new_state->immune_acid = FALSE;
-    new_state->immune_elec = FALSE;
-    new_state->immune_fire = FALSE;
-    new_state->immune_cold = FALSE;
-    new_state->immune_pois = FALSE;
 
 
     /*** Extract race/class info ***/
@@ -1349,8 +1289,6 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
         if (object_known_p(o_ptr)) new_state->dis_to_d += o_ptr->to_d;
     }
 
-    /* Find cursed ammo in the quiver */
-    new_state->cursed_quiver = FALSE;
 
     /* Scan the quiver */
     for (i = QUIVER_START; i < QUIVER_END; i++)
@@ -1569,12 +1507,7 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
         if (new_state->p_speed > 199) 		new_state->p_speed = 199;
     }
 
-
-
     /*** Apply modifier bonuses ***/
-
-
-
 
     /*** Modify skills ***/
 
@@ -1669,9 +1602,6 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
     {
         o_ptr = &calc_inven[INVEN_MAIN_WEAPON];
     }
-
-    /* Assume not heavy */
-    new_state->heavy_shoot = FALSE;
 
     if (o_ptr->is_bow())
     {
@@ -1783,9 +1713,6 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
     /* Examine the "current weapon" */
     o_ptr = &calc_inven[INVEN_WIELD];
 
-    /* Assume not heavy */
-    new_state->heavy_wield = FALSE;
-
     /* It is hard to hold a heavy weapon */
     if (hold < o_ptr->weight / 10)
     {
@@ -1813,9 +1740,6 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
         if ((p_ptr->lev >= LEV_EXTRA_COMBAT) && (cp_ptr->flags & CF_EXTRA_ATTACK) && o_ptr->is_weapon())
             new_state->num_blow += 1;
     }
-
-    /* Assume okay */
-    new_state->icky_wield = FALSE;
 
     /* Priest weapon penalty for non-blessed edged weapons */
     if ((cp_ptr->flags & CF_BLESS_WEAPON) && (!new_state->bless_blade) &&

@@ -82,6 +82,31 @@ void monster_type::monster_wipe()
     target_x = target_y = 0;
     min_range = best_range = mana = using_flow;
 }
+
+/*
+return the monster idx based on the position in the dungeon
+ */
+s16b monster_type::get_mon_idx()
+{
+    return (dungeon_info[fy][fx].monster_idx);
+}
+
+bool monster_type::mon_fully_healthy()
+{
+    monster_race *r_ptr = &r_info[r_idx];
+
+    /* Monster is wounded */
+    if (hp < maxhp) return (FALSE);
+    if (mana < r_ptr->mana) return (FALSE);
+    if (m_timed[MON_TMD_STUN]) return (FALSE);
+    if (m_timed[MON_TMD_FEAR]) return (FALSE);
+    if (m_timed[MON_TMD_CONF]) return (FALSE);
+
+    /* Fully healthy */
+    return (TRUE);
+}
+
+
 //  Wipe the monster_lore class. Should only be called at the beginning of a game
 void monster_lore::monster_lore_wipe()
 {

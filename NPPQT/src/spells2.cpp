@@ -799,7 +799,7 @@ bool light_area(int dam, int rad)
     }
 
     /* Hook into the "project()" function */
-    // TODO (void)project(SOURCE_PLAYER, rad, py, px, py, px, dam, GF_LIGHT_WEAK, flg, 0, 0);
+    (void)project(SOURCE_PLAYER, rad, py, px, py, px, dam, GF_LIGHT_WEAK, flg, 0, 0);
 
     /* Lite up the room */
     light_room(py, px);
@@ -827,7 +827,7 @@ bool unlight_area(int dam, int rad)
     }
 
     /* Hook into the "project()" function */
-    //TODO (void)project(SOURCE_PLAYER, rad, py, px, py, px, dam, GF_DARK_WEAK, flg, 0, 0);
+    (void)project(SOURCE_PLAYER, rad, py, px, py, px, dam, GF_DARK_WEAK, flg, 0, 0);
 
     /* Lite up the room */
     unlight_room(py, px);
@@ -1051,7 +1051,7 @@ bool restore_level(void)
         p_ptr->exp = p_ptr->max_exp;
 
         /* Check the experience */
-        // TODO check_experience();
+        check_experience();
 
         /* Did something */
         return (TRUE);

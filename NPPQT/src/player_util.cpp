@@ -91,3 +91,13 @@ s16b modify_stat_value(int value, int amount)
     /* Return new value */
     return (value);
 }
+
+/* Players with chaos or confusion resistance don't get confused*/
+bool allow_player_confusion(void)
+{
+    if (p_ptr->state.resist_confu) return (FALSE);
+    if (p_ptr->state.resist_chaos) return (FALSE);
+
+    /*Don't have the right resists*/
+    return (TRUE);
+}

@@ -107,6 +107,7 @@ public:
 
     // Wipe a monster_race entry.  All variabled above need to be cleared.  Intended for player ghosts.
     void monster_race_wipe();
+
 };
 
 
@@ -211,6 +212,9 @@ public:
 
     // Wipe a monster_type entry.  All variabled above need to be cleared.
     void monster_wipe();
+
+    s16b get_mon_idx();
+    bool mon_fully_healthy();
 
 
 };

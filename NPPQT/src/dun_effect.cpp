@@ -1028,7 +1028,7 @@ static bool effect_burst(const effect_type *x_ptr)
     }
 
     /* Make a effect 1 square */
-    return (0); // TODO (project(x_ptr->x_source, 1, y, x, y, x, x_ptr->x_power, f_ptr->x_gf_type, flg, 0, 0));
+    return (project(x_ptr->x_source, 1, y, x, y, x, x_ptr->x_power, f_ptr->x_gf_type, flg, 0, 0));
 }
 
 
@@ -1068,7 +1068,7 @@ static void effect_damage(const effect_type *x_ptr)
                 if (!(x_ptr->x_flags & (EF1_HURT_EVIL)) || (r_ptr->flags3 & (RF3_EVIL)))
                 {
 
-                    // TODO (void)project_m(source, y, x, x_ptr->x_power, f_ptr->x_gf_type, 0L);
+                    (void)project_m(source, y, x, x_ptr->x_power, f_ptr->x_gf_type, 0L);
                 }
             }
         }
@@ -1123,7 +1123,7 @@ static void effect_damage(const effect_type *x_ptr)
             else message("The air is not safe here!");
 
             /*Hit the player*/
-            // TODO project_p(source, y, x, x_ptr->x_power, f_ptr->x_gf_type, kb_str);
+            (void) project_p(source, y, x, x_ptr->x_power, f_ptr->x_gf_type, kb_str);
         }
     }
 }

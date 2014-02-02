@@ -83,7 +83,7 @@ void process_player_terrain_damage(void)
         kb_str.append(name);
 
         /* Take the hit */
-        // TODO take_terrain_hit(dam, feat, kb_str);
+        take_terrain_hit(dam, feat, kb_str);
 
         /* Reset terrain damage */
         p_ptr->cumulative_terrain_damage = 0;

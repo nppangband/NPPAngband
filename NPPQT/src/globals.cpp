@@ -43,7 +43,16 @@ QString current_savefile;
 QFile notes_file;
 
 
-s16b total_wakeup_chance;
+/*
+ * The character generates both directed (extra) noise (by doing noisy
+ * things) and ambient noise (the combination of directed and innate
+ * noise).
+ *
+ * Noise builds up as the character does certain things, and diminishes
+ * over time.
+ */
+s16b add_wakeup_chance = 0;
+s16b total_wakeup_chance = 0;
 
 s16b coin_type;			/* Hack -- force coin type */
 

@@ -159,16 +159,23 @@ extern bool cave_exist_mon(const monster_race *r_ptr, int y, int x, bool occupie
 //mon_classes.cpp
 
 
-//mon_ranged_attack.cpp
-extern int get_dam(monster_race *r_ptr, int attack);
-extern int get_breath_dam(s16b hit_points, int gf_type, bool powerful);
-extern int get_ball_beam_dam(int m_idx, monster_race *r_ptr, int attack, int gf_type, bool powerful);
-
-//mon_timed.cpp
+// mon_damage.cpp
 extern bool mon_inc_timed(int m_idx, int idx, int v, u16b flag);
 extern bool mon_dec_timed(int m_idx, int idx, int v, u16b flag);
 extern bool mon_clear_timed(int m_idx, int idx, u16b flag);
 extern void wake_monster_attack(monster_type *m_ptr, u16b flag);
+extern bool sleep_monster_spell(monster_type *m_ptr, int v, u16b flag);
+extern s32b get_experience_by_level(int level);
+extern void check_experience(void);
+extern void gain_exp(s32b amount);
+extern void lose_exp(s32b amount);
+extern void monster_death(int m_idx, int who);
+extern bool mon_take_hit(int m_idx, int dam, bool *fear, QString note, int who);
+
+//mon_ranged_attack.cpp
+extern int get_dam(monster_race *r_ptr, int attack);
+extern int get_breath_dam(s16b hit_points, int gf_type, bool powerful);
+extern int get_ball_beam_dam(int m_idx, monster_race *r_ptr, int attack, int gf_type, bool powerful);
 
 //mon_util.cpp
 extern s16b poly_r_idx(const monster_type *m_ptr);
@@ -205,13 +212,28 @@ extern bool add_monster_message(QString mon_name, int m_idx, int msg_code);
 extern void flush_monster_messages(void);
 extern void update_smart_learn(int m_idx, int what);
 extern bool monster_nonliving(monster_race *r_ptr);
+extern bool race_breathes_element(monster_race *r_ptr, int gf_type);
+extern bool race_similar_breaths(monster_race *r_ptr, monster_race *r2_ptr);
+extern bool race_similar_monsters(int m_idx, int m2y, int m2x);
 
 /* object_desc.c */
 extern QString strip_name(int k_idx);
 extern QString object_desc(object_type *o_ptr, byte mode);
 extern QString object_desc_spoil(object_type *o_ptr);
 
-
+// object_hooks.cpp
+extern bool item_tester_hook_wieldable_ided_weapon(object_type *o_ptr);
+extern bool item_tester_hook_wieldable_weapon(object_type *o_ptr);
+extern bool item_tester_hook_ided_weapon(object_type *o_ptr);
+extern bool item_tester_hook_weapon(object_type *o_ptr);
+extern bool item_tester_hook_ided_armour(object_type *o_ptr);
+extern bool item_tester_hook_armour(object_type *o_ptr);
+extern bool item_tester_hook_ided_ammo(object_type *o_ptr);
+extern bool item_tester_hook_ammo(object_type *o_ptr);
+extern bool item_tester_hook_recharge(object_type *o_ptr);
+extern bool item_tester_hook_randart(object_type *o_ptr);
+extern bool item_tester_hook_flammable_book(object_type *o_ptr);
+extern bool item_tester_hook_activate(object_type *o_ptr);
 
 /* object-make.cpp */
 extern s16b get_obj_num(int level);
@@ -320,17 +342,7 @@ extern void object_aware(object_type *o_ptr);
 extern void object_tried(object_type *o_ptr);
 extern void object_history(object_type *o_ptr, byte origin, s16b r_idx);
 extern void stack_histories(object_type *o_ptr, const object_type *j_ptr);
-extern bool item_tester_hook_wieldable_ided_weapon(object_type *o_ptr);
-extern bool item_tester_hook_wieldable_weapon(object_type *o_ptr);
-extern bool item_tester_hook_ided_weapon(object_type *o_ptr);
-extern bool item_tester_hook_weapon(object_type *o_ptr);
-extern bool item_tester_hook_ided_armour(object_type *o_ptr);
-extern bool item_tester_hook_armour(object_type *o_ptr);
-extern bool item_tester_hook_ided_ammo(object_type *o_ptr);
-extern bool item_tester_hook_ammo(object_type *o_ptr);
-extern bool item_tester_hook_recharge(object_type *o_ptr);
-extern bool item_tester_hook_randart(object_type *o_ptr);
-extern bool item_tester_hook_flammable_book(object_type *o_ptr);
+
 
 
 //player_ghost.cpp
@@ -350,9 +362,68 @@ extern QString get_spell_name(int tval, int spell);
 // player_util.cpp
 extern void player_flags(u32b *f1, u32b *f2, u32b *f3, u32b *fn);
 extern s16b modify_stat_value(int value, int amount);
+extern bool allow_player_confusion(void);
 
-// projection.cpp
+// project.cpp
+extern bool teleport_away(int m_idx, int dis);
+extern bool teleport_player(int dis, bool native);
+extern void teleport_player_to(int ny, int nx);
+extern void teleport_towards(int oy, int ox, int ny, int nx);
+extern bool teleport_player_level(int who);
+extern void disease(int *damage);
+extern bool apply_disenchant(int mode);
 extern byte gf_color(int type);
+extern void take_terrain_hit(int dam, int feat, QString kb_str);
+extern void take_hit(int dam, QString kb_str);
+extern bool object_hates_feature(int feat, object_type *o_ptr);
+extern bool object_hates_location(int y, int x, object_type *o_ptr);
+extern void acid_dam(int dam, QString kb_str);
+extern void elec_dam(int dam, QString kb_str);
+extern void fire_dam(int dam, QString kb_str);
+extern void cold_dam(int dam, QString kb_str);
+extern bool inc_stat(int stat);
+extern bool dec_stat(int stat, int amount, bool permanent);
+extern bool res_stat(int stat);
+extern void disease(int *damage);
+extern bool apply_disenchant(int mode);
+extern bool project_m(int who, int y, int x, int dam, int typ, u32b flg);
+extern bool project_p(int who, int y, int x, int dam, int typ, QString msg);
+extern bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
+             u32b flg, int degrees, byte source_diameter);
+
+// project_util.cpp
+extern bool project_bolt(int who, int rad, int y0, int x0, int y1, int x1, int dam,
+                  int typ, u32b flg);
+extern bool project_beam(int who, int rad, int y0, int x0, int y1, int x1, int dam,
+                  int typ, u32b flg);
+extern bool project_ball(int who, int rad, int y0, int x0, int y1, int x1, int dam,
+                  int typ, u32b flg, int source_diameter);
+extern bool explosion(int who, int rad, int y0, int x0, int dam, int typ, u32b flg);
+extern bool mon_explode(int who, int rad, int y0, int x0, int dam, int typ);
+extern bool project_arc(int who, int rad, int y0, int x0, int y1, int x1,
+    int dam, int typ, u32b flg, int degrees);
+extern bool project_star(int who, int rad, int y0, int x0, int dam, int typ,
+    u32b flg);
+extern bool project_los(int y0, int x0, int dam, int typ);
+extern void clear_temp_array(void);
+extern void cave_temp_mark(int y, int x, bool room);
+extern void spread_cave_temp(int y1, int x1, int range, bool room, bool pass_walls);
+extern bool fire_bolt_beam_special(int typ, int dir, int dam, int rad, u32b flg);
+extern bool fire_effect_orb(int typ, int dir, int dam, int rad);
+extern bool fire_ball(int typ, int dir, int dam, int rad);
+extern bool fire_orb(int typ, int dir, int dam, int rad);
+extern bool fire_ball_special(int typ, int dir, int dam, int rad, u32b flg,
+    int source_diameter);
+extern bool fire_arc(int typ, int dir, int dam, int rad, int degrees);
+extern bool fire_star(int typ, int dam, int rad, u32b flg);
+extern void fire_storm(int who, int typ0, int y0, int x0, int dam, int rad,
+    int len, byte projection, bool lingering);
+extern bool beam_burst(int y, int x, int typ, int num, int dam);
+extern bool fire_swarm(int num, int typ, int dir, int dam, int rad);
+extern bool fire_bolt(int typ, int dir, int dam);
+extern bool fire_beam(int typ, int dir, int dam, u32b flg);
+extern bool fire_bolt_or_beam(int prob, int typ, int dir, int dam);
+
 
 /* quest.c */
 extern QString plural_aux(QString name);
@@ -439,6 +510,7 @@ extern bool unlight_area(int dam, int rad);
 extern QString get_spell_type_from_feature(int f_idx, int *gf_type);
 extern bool is_player_immune(int gf_type);
 extern void identify_object(object_type *o_ptr, bool star_ident);
+extern int do_ident_item(int item, object_type *o_ptr);
 extern bool brand_object(object_type *o_ptr, byte brand_type, bool do_enchant);
 extern bool brand_weapon(bool enchant);
 extern bool brand_ammo(bool enchant);
