@@ -21,8 +21,9 @@ BirthDialog::BirthDialog(QWidget *parent) :
     }
     ui->race_combo->setCurrentIndex(-1);
 
-    for (int i; i < z_info->c_max; i++) {
+    for (int i = 0; i < z_info->c_max; i++) {
         ui->class_combo->addItem(c_info[i].cl_name);
+        //pop_up_message_box(c_info[i].cl_name);
     }
     ui->class_combo->setCurrentIndex(-1);
 }

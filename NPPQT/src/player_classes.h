@@ -111,6 +111,8 @@ public:
 class player_class
 {
 public:
+    player_class();
+    void player_class_wipe();
 
     QString cl_name;			/* Name  */
 
