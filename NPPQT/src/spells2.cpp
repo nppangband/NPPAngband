@@ -518,7 +518,7 @@ void identify_pack(void)
         object_aware(o_ptr);
         object_known(o_ptr);
 
-        // TODO if (!aware) apply_autoinscription(o_ptr);
+        if (!aware) apply_autoinscription(o_ptr);
     }
 
     /* Recalculate bonuses */
@@ -569,7 +569,7 @@ static void cave_temp_room_light(void)
     p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS);
 
     /* Update stuff */
-    // TODO update_stuff();
+    update_stuff();
 
     /* Process the grids */
     for (i = 0; i < temp_n; i++)
@@ -599,7 +599,7 @@ static void cave_temp_room_light(void)
             if ((m_ptr->m_timed[MON_TMD_SLEEP]) && (rand_int(100) < chance))
             {
                 /* Wake up! */
-                // TODO    wake_monster_attack(m_ptr, MON_TMD_FLG_NOTIFY);
+                wake_monster_attack(m_ptr, MON_TMD_FLG_NOTIFY);
 
                 /*possibly update the monster health bar*/
                 if ((p_ptr->health_who == m_idx)  || (m_ptr->sidebar))
@@ -656,7 +656,7 @@ static void cave_temp_room_unlite(void)
     p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_MONSTERS);
 
     /* Update stuff */
-    //TODO update_stuff();
+    update_stuff();
 
     /* Process the grids */
     for (i = 0; i < temp_n; i++)
@@ -1068,7 +1068,7 @@ void identify_object(object_type *o_ptr, bool star_ident)
     object_known(o_ptr);
 
     /* Apply an autoinscription, if necessary */
-    // TODO apply_autoinscription(o_ptr);
+    apply_autoinscription(o_ptr);
 
     /*   *identify the item if called for*/
     if (star_ident)
@@ -1102,6 +1102,9 @@ int do_ident_item(int item, object_type *o_ptr)
     /* Identify it */
     object_aware(o_ptr);
     object_known(o_ptr);
+
+    /* Apply an autoinscription, if necessary */
+    apply_autoinscription(o_ptr);
 
     /* Squelch it? */
     if (item < INVEN_WIELD) squelch = squelch_itemp(o_ptr, 0, TRUE);

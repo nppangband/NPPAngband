@@ -3577,7 +3577,7 @@ void do_cmd_buy(int command, cmd_arg args[])
     }
 
     /* Handle stuff */
-    // TODO handle_stuff();
+    handle_stuff();
 
     /* Remove the bought objects from the store */
     store_item_increase(this_store, item, -amt);
@@ -3817,7 +3817,7 @@ void do_cmd_retrieve(int code, cmd_arg args[])
     message(QString("You have %1 (%1).") .arg(o_name) .arg(index_to_label(item_new)));
 
     /* Handle stuff */
-    // TODO handle_stuff();
+    handle_stuff();
 
     /* Remove the items from the home */
     store_item_increase(STORE_HOME, item, -amt);
@@ -4125,7 +4125,7 @@ void do_cmd_sell(int code, cmd_arg args[])
     inven_item_optimize(item);
 
     /* Handle stuff */
-    // TODO handle_stuff();
+    handle_stuff();
 
     /* The store gets that (known) object */
     store_carry(current_store(), &sold_item);
@@ -4180,7 +4180,7 @@ void do_cmd_stash(int code, cmd_arg args[])
     inven_item_optimize(item);
 
     /* Handle stuff */
-    // TODO  handle_stuff();
+    handle_stuff();
 
     /* Let the home carry it */
     home_carry(&dropped_item);
@@ -4422,7 +4422,7 @@ static bool store_overflow(void)
         inven_item_optimize(item);
 
         /* Handle stuff */
-        // TODO handle_stuff();
+        handle_stuff();
 
         /* Let the home carry it */
         home_carry(i_ptr);

@@ -28,3 +28,15 @@ int get_player_spell_realm(void)
     if (cp_ptr->spell_book == TV_PRAYER_BOOK)	return (PRIEST_REALM);
     /*TV_DRUID_BOOK*/           				return (DRUID_REALM);
 }
+
+QString get_spell_name(int tval, int spell)
+{
+    if (tval == TV_MAGIC_BOOK) return ("mage");
+    // TODO return do_mage_spell(MODE_SPELL_NAME, spell,0);
+    else if (tval == TV_PRAYER_BOOK)return ("priest");
+
+    // TODO return do_priest_prayer(MODE_SPELL_NAME, spell, 0);
+    /*TV_DRUID_BOOK*/
+    else return ("druid");
+    // TODO else return do_druid_incantation(MODE_SPELL_NAME, spell,0);
+}

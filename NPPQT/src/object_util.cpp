@@ -3520,8 +3520,8 @@ s16b quiver_carry(object_type *o_ptr)
     /* Use that slot */
     i = j;
 
-    /* TODO see if we need this.Apply an autoinscription */
-    //apply_autoinscription(o_ptr);
+    /* Apply an autoinscription */
+    apply_autoinscription(o_ptr);
 
     /* Reorder the quiver */
     if (i < QUIVER_END)
@@ -3690,8 +3690,8 @@ s16b inven_carry(object_type *o_ptr)
     /* Use that slot */
     i = j;
 
-    /* TODO Apply an autoinscription */
-    //apply_autoinscription(o_ptr);
+    /* Apply an autoinscription */
+    apply_autoinscription(o_ptr);
 
     /* Reorder the pack */
     if (i < INVEN_MAX_PACK)
@@ -4954,14 +4954,14 @@ void pack_overflow(void)
     inven_item_describe(item);
     inven_item_optimize(item);
 
-    /* TODO Notice stuff (if needed) */
-    //if (p_ptr->notice) notice_stuff();
+    /* Notice stuff (if needed) */
+    if (p_ptr->notice) notice_stuff();
 
-    /* TODO Update stuff (if needed) */
-    //if (p_ptr->update) update_stuff();
+    /* Update stuff (if needed) */
+    if (p_ptr->update) update_stuff();
 
-    /* TODO Redraw stuff (if needed) */
-    //if (p_ptr->redraw) redraw_stuff();
+    /* Redraw stuff (if needed) */
+    if (p_ptr->redraw) redraw_stuff();
 
 }
 
@@ -5137,202 +5137,6 @@ void stack_histories(object_type *o_ptr, const object_type *j_ptr)
     }
 }
 
-
-
-
-
-/* Pseudo flag */
-#define RBASE (TR2_RES_FIRE | TR2_RES_COLD | TR2_RES_ELEC | TR2_RES_ACID)
-
-/* The amount of flag fields plus 1 */
-#define MAX_GROUPS 5
-
-/*
- * Create a string describing (some of) the known flags of the given object
- * If only_random_powers is TRUE the string will hold only a representation
- * of the random powers of ego-items
- */
-QString format_object_flags(object_type *o_ptr, int max, bool only_random_powers)
-{
-    u16b i;
-
-    u32b f1 = 0, f2 = 0, f3 = 0, native = 0;
-
-    /* It's easier to handle flags in arrays. See later */
-    u32b flags[MAX_GROUPS];
-
-    QString end;
-    QString buf;
-    /*
-     * Object flags and their names
-     */
-    static struct
-    {
-        u32b flag;
-        byte group;	/* The field (1 for flags1, 2 for flags2, 3 for flags3 and 4 for native) */
-        QString name;
-    } flag_info[] =
-    {
-        {TR2_IM_ACID,		2,	"ImAcid"},
-        {TR2_IM_ELEC,		2,	"ImElec"},
-        {TR2_IM_FIRE,		2,	"ImFire"},
-        {TR2_IM_COLD,		2,	"ImCold"},
-        {TR2_IM_POIS,		2,	"ImPois"},
-        {RBASE,			2,	"RBase"},
-        {TR2_RES_ACID,		2,	"RAcid"},
-        {TR2_RES_ELEC,		2,	"RElec"},
-        {TR2_RES_FIRE,		2,	"RFire"},
-        {TR2_RES_COLD,		2,	"RCold"},
-        {TR2_RES_POIS,		2,	"RPois"},
-        {TR2_RES_FEAR,		2,	"RFear"},
-        {TR2_RES_LIGHT,		2,	"RLite"},
-        {TR2_RES_DARK,		2,	"RDark"},
-        {TR2_RES_BLIND,		2,	"RBlind"},
-        {TR2_RES_CONFU,		2,	"RConfu"},
-        {TR2_RES_SOUND,		2,	"RSound"},
-        {TR2_RES_SHARD,		2,	"RShard"},
-        {TR2_RES_NEXUS,		2,	"RNexus"},
-        {TR2_RES_NETHR,		2,	"RNethr"},
-        {TR2_RES_CHAOS,		2,	"RChaos"},
-        {TR2_RES_DISEN,		2,	"RDisen"},
-        {TR3_SLOW_DIGEST,	3,	"S.Dig"},
-        {TR3_FEATHER,		3,	"Feath"},
-        {TR3_LIGHT,		3,	"PLite"},
-        {TR3_REGEN,		3,	"Regen"},
-        {TR3_TELEPATHY,		3,	"Telep"},
-        {TR3_SEE_INVIS,		3,	"Invis"},
-        {TR3_FREE_ACT,		3,	"FrAct"},
-        {TR3_HOLD_LIFE,		3,	"HLife"},
-        {TR1_STR,		1,	"STR"},
-        {TR1_INT,		1,	"INT"},
-        {TR1_WIS,		1,	"WIS"},
-        {TR1_DEX,		1,	"DEX"},
-        {TR1_CON,		1,	"CON"},
-        {TR1_CHR,		1,	"CHR"},
-        {TR2_SUST_STR,		2,	"SustSTR"},
-        {TR2_SUST_INT,		2,	"SustINT"},
-        {TR2_SUST_WIS,		2,	"SustWIS"},
-        {TR2_SUST_DEX,		2,	"SustDEX"},
-        {TR2_SUST_CON,		2,	"SustCON"},
-        {TR2_SUST_CHR,		2,	"SustCHR"},
-        {TR1_BRAND_ACID,	1,	"BrandAcid"},
-        {TR1_BRAND_ELEC,	1,	"BrandElec"},
-        {TR1_BRAND_FIRE,	1,	"BrandFire"},
-        {TR1_BRAND_COLD,	1,	"BrandCold"},
-        {TR1_BRAND_POIS,	1,	"BrandPois"},
-        {TR1_SLAY_ANIMAL,	1,	"SlayAnimal"},
-        {TR1_SLAY_EVIL,		1,	"SlayEvil"},
-        {TR1_SLAY_UNDEAD,	1,	"SlayUndead"},
-        {TR1_SLAY_DEMON,	1,	"SlayDemon"},
-        {TR1_SLAY_ORC,		1,	"SlayOrc"},
-        {TR1_SLAY_TROLL,	1,	"SlayTroll"},
-        {TR1_SLAY_GIANT,	1,	"SlayGiant"},
-        {TR1_SLAY_DRAGON,	1,	"SlayDragon"},
-        {TR1_KILL_DRAGON,	1,	"KillDragon"},
-        {TR1_KILL_DEMON,	1,	"KillDemon"},
-        {TR1_KILL_UNDEAD,	1,	"KillUndead"},
-        {TN1_NATIVE_LAVA,	4,	"NLava"},
-        {TN1_NATIVE_ICE,	4,	"NIce"},
-        {TN1_NATIVE_OIL,	4,	"NOil"},
-        {TN1_NATIVE_FIRE,	4,	"NFire"},
-        {TN1_NATIVE_SAND,	4,	"NSand"},
-        {TN1_NATIVE_FOREST,	4,	"NForest"},
-        {TN1_NATIVE_WATER,	4,	"NWater"},
-        {TN1_NATIVE_ACID,	4,	"NAcid"},
-        {TN1_NATIVE_MUD,	4,	"NMud"},
-    };
-
-    /* Get the known flags */
-    object_flags_known(o_ptr, &f1, &f2, &f3, &native);
-
-    /* Remove all the fixed flags if requested */
-    if (only_random_powers)
-    {
-        /* Get the object kind */
-        object_kind *k_ptr = &k_info[o_ptr->k_idx];
-
-        /* Remove the flags */
-        f1 &= ~(k_ptr->k_flags1);
-        f2 &= ~(k_ptr->k_flags2);
-        f3 &= ~(k_ptr->k_flags3);
-        native &= ~(k_ptr->k_native);
-
-        /* It's an artifact */
-        if (o_ptr->art_num)
-        {
-            /* Get the artifact template */
-            artifact_type *a_ptr = &a_info[o_ptr->art_num];
-
-            /* Remove the flags */
-            f1 &= ~(a_ptr->a_flags1);
-            f2 &= ~(a_ptr->a_flags2);
-            f3 &= ~(a_ptr->a_flags3);
-            native &= ~(a_ptr->a_native);
-        }
-
-        /* It's an ego-item */
-        if (o_ptr->ego_num)
-        {
-            /* Get the ego-item template */
-            ego_item_type *e_ptr = &e_info[o_ptr->ego_num];
-
-            /* Remove the flags */
-            f1 &= ~(e_ptr->e_flags1);
-            f2 &= ~(e_ptr->e_flags2);
-            f3 &= ~(e_ptr->e_flags3);
-            native &= ~(e_ptr->e_native);
-        }
-    }
-
-    /* Make an array of flags with the individual flags */
-    flags[0] = 0;
-    flags[1] = f1;
-    flags[2] = f2;
-    flags[3] = f3;
-    flags[4] = native;
-
-
-    /* Start with an empty string */
-    buf[0] = '\0';
-    end.clear();
-
-    /* Scan the flags */
-    for (i = 0; i < N_ELEMENTS(flag_info); i++)
-    {
-        /* Check presence of the flag */
-        if ((flags[flag_info[i].group] & flag_info[i].flag) ==
-            flag_info[i].flag)
-        {
-            /* Append a space if it's not the first flag we found */
-            if (end != NULL)
-            {
-                end.append(" ");
-            }
-
-            /* Append the flag name */
-            end.append(flag_info[i].name);
-
-            /* Special cases in flags2 */
-            if (flag_info[i].group == 2)
-            {
-                /* Analyze flag */
-                switch (flag_info[i].flag)
-                {
-                    /* Immunities remove the respective resistances */
-                    case TR2_IM_ACID: flags[2] &= ~(TR2_RES_ACID); break;
-                    case TR2_IM_FIRE: flags[2] &= ~(TR2_RES_FIRE); break;
-                    case TR2_IM_COLD: flags[2] &= ~(TR2_RES_COLD); break;
-                    case TR2_IM_ELEC: flags[2] &= ~(TR2_RES_ELEC); break;
-                    case TR2_IM_POIS: flags[2] &= ~(TR2_RES_POIS); break;
-                    /* Special flag, RBASE, remove individual resistances */
-                    case RBASE: flags[2] &= ~(RBASE); break;
-                }
-            }
-        }
-    }
-
-    return QString("");
-}
 
 /*
  * Hook to specify "weapon"

@@ -1356,7 +1356,7 @@ void process_effects(void)
     int i;
 
     /* Paranoia */
-    // TODO notice_stuff();
+    notice_stuff();
 
     /* Process all effects */
     for (i = 0; i < z_info->x_max; i++)
@@ -1381,7 +1381,7 @@ void process_effects(void)
     show_burst_effects();
 
     /* Paranoia */
-    // TODO notice_stuff();
+    notice_stuff();
 
     /*We can't let this array get too bloated.  There will be high turnover. */
     if ((x_cnt + 30) > x_max) compact_effects();

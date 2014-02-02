@@ -2241,8 +2241,8 @@ void quest_finished(quest_type *q_ptr)
     if (quest_fixed(q_ptr))
     {
         /* Handle and handle stuff */
-        // TODO notice_stuff();
-        // TODO handle_stuff();
+        notice_stuff();
+        handle_stuff();
         return;
     }
 
@@ -2299,8 +2299,8 @@ void quest_finished(quest_type *q_ptr)
 
     }
 
-    //TODO notice_stuff();
-    //TODO handle_stuff();
+    notice_stuff();
+    handle_stuff();
 }
 
 
