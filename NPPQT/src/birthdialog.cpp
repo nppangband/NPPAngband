@@ -13,6 +13,29 @@ static QString format_stat(s16b value)
     return QString("%1%2").arg(text).arg(value);
 }
 
+static QString stat_notation(int value)
+{
+    int right = value - 18;
+    if (value > 18) value = 18;
+    QString text = QString::number(value);
+    if (right > 0) {
+        text.append(QString("/"));
+        text.append(QString("%1").arg(right, 2, 10, QChar('0')));
+    }
+    return text;
+}
+
+void BirthDialog::update_points()
+{
+    for (int i = 0; i < A_MAX; i++) {
+        int self = ui->edit_table->item(i, 0)->text().toInt();
+        int effective = ui->edit_table->item(i, 3)->text().toInt();
+        int best = self + effective;
+        ui->edit_table->item(i, 4)->setText(stat_notation(best));
+    }
+    ui->edit_table->resizeColumnToContents(4);
+}
+
 void BirthDialog::on_bg1_clicked(int index)
 {
     cur_race = index;
@@ -136,9 +159,11 @@ void BirthDialog::on_next_button_clicked()
 {
     if (ui->stackedWidget->currentIndex() == 0) {
         if (ui->name_edit->text().trimmed().length() == 0) {
+            /*
             pop_up_message_box(tr("Complete the character name"), QMessageBox::Critical);
             ui->name_edit->setFocus();
             return;
+            */
         }
         if (ui->sex_combo->currentIndex() < 0) {
             pop_up_message_box(tr("Select the character sex"), QMessageBox::Critical);
@@ -165,6 +190,7 @@ void BirthDialog::on_next_button_clicked()
             ui->edit_table->item(i, 2)->setText(format_stat(c));
             ui->edit_table->item(i, 3)->setText(format_stat(p+c));
         }
+        update_points();
 
         ui->edit_table->resizeColumnsToContents();
     }

@@ -33,6 +33,8 @@ private:
 
     void update_stats();
 
+    void update_points();
+
     int cur_race;
     int cur_class;
 };
