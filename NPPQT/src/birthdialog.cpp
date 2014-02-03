@@ -90,6 +90,14 @@ BirthDialog::BirthDialog(QWidget *parent) :
             ui->stats_table->setItem(i, j, new QTableWidgetItem());
         }
     }
+
+    for (int i = 0; i < ui->edit_table->rowCount(); i++) {
+        for (int j = 0; j < ui->edit_table->columnCount(); j++) {
+            ui->edit_table->setItem(i, j, new QTableWidgetItem());
+        }
+    }
+
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 BirthDialog::~BirthDialog()
@@ -148,6 +156,17 @@ void BirthDialog::on_next_button_clicked()
         ui->stackedWidget->setCurrentIndex(1);
         ui->prev_button->setEnabled(true);
         ui->next_button->setText(tr("Finish"));
+
+        for (int i = 0; i < A_MAX; i++) {
+            int p = p_info[cur_race].r_adj[i];
+            int c = c_info[cur_class].c_adj[i];
+            ui->edit_table->item(i, 0)->setText(QString::number(10));
+            ui->edit_table->item(i, 1)->setText(format_stat(p));
+            ui->edit_table->item(i, 2)->setText(format_stat(c));
+            ui->edit_table->item(i, 3)->setText(format_stat(p+c));
+        }
+
+        ui->edit_table->resizeColumnsToContents();
     }
 }
 
