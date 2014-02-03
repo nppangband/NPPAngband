@@ -127,15 +127,27 @@ void BirthDialog::update_stats()
 void BirthDialog::on_next_button_clicked()
 {
     if (ui->stackedWidget->currentIndex() == 0) {
-        if ((ui->name_edit->text().trimmed().length() == 0) ||
-                (ui->sex_combo->currentIndex() == -1) ||
-                (cur_race < 0) ||
-                (cur_class < 0)) {
-            pop_up_message_box(tr("Please fill all the fields"), QMessageBox::Critical);
+        if (ui->name_edit->text().trimmed().length() == 0) {
+            pop_up_message_box(tr("Complete the character name"), QMessageBox::Critical);
+            ui->name_edit->setFocus();
+            return;
+        }
+        if (ui->sex_combo->currentIndex() < 0) {
+            pop_up_message_box(tr("Select the character sex"), QMessageBox::Critical);
+            ui->sex_combo->setFocus();
+            return;
+        }
+        if (cur_race < 0) {
+            pop_up_message_box(tr("Select the character race"), QMessageBox::Critical);
+            return;
+        }
+        if (cur_class < 0) {
+            pop_up_message_box(tr("Select the character class"), QMessageBox::Critical);
             return;
         }
         ui->stackedWidget->setCurrentIndex(1);
         ui->prev_button->setEnabled(true);
+        ui->next_button->setText(tr("Finish"));
     }
 }
 
@@ -145,6 +157,7 @@ void BirthDialog::on_prev_button_clicked()
     if (idx > 0) {
         --idx;
         ui->stackedWidget->setCurrentIndex(idx);
+        ui->next_button->setText(tr("Next"));
     }
     if (idx < 1) {
         ui->prev_button->setEnabled(false);
