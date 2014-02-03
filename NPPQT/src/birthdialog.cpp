@@ -5,6 +5,8 @@
 #include <QRadioButton>
 #include <QGridLayout>
 #include <QButtonGroup>
+#include <QHBoxLayout>
+#include <QToolButton>
 
 static QString format_stat(s16b value)
 {
@@ -29,8 +31,13 @@ void BirthDialog::update_points()
 {
     for (int i = 0; i < A_MAX; i++) {
         int self = ui->edit_table->item(i, 0)->text().toInt();
+        int cost = self - 10;
+        ui->edit_table->item(i, 5)->setText(QString::number(cost));
         int effective = ui->edit_table->item(i, 3)->text().toInt();
         int best = self + effective;
+        int right = best - 18;
+        if (best > 18) best = 18;
+        if (right > 0) best += (right * 10);
         ui->edit_table->item(i, 4)->setText(stat_notation(best));
     }
     ui->edit_table->resizeColumnToContents(4);
@@ -115,12 +122,50 @@ BirthDialog::BirthDialog(QWidget *parent) :
     }
 
     for (int i = 0; i < ui->edit_table->rowCount(); i++) {
-        for (int j = 0; j < ui->edit_table->columnCount(); j++) {
+        for (int j = 0; j < ui->edit_table->columnCount() - 1; j++) {
             ui->edit_table->setItem(i, j, new QTableWidgetItem());
         }
     }
 
+    for (int i = 0; i < A_MAX; i++) {
+        QWidget *container = new QWidget;
+        container->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+        QHBoxLayout *l1 = new QHBoxLayout;
+        container->setLayout(l1);
+        QToolButton *button1 = new QToolButton();
+        button1->setProperty("stat_idx", QVariant(i));
+        button1->setText("<");
+        l1->addWidget(button1);
+        connect(button1, SIGNAL(clicked()), this, SLOT(on_sell_clicked()));
+        QToolButton *button2 = new QToolButton();
+        button2->setProperty("stat_idx", QVariant(i));
+        button2->setText(">");
+        l1->addWidget(button2);
+        connect(button2, SIGNAL(clicked()), this, SLOT(on_buy_clicked()));
+        ui->edit_table->setCellWidget(i, 6, container);
+        ui->edit_table->resizeRowToContents(i);
+    }
+
     ui->stackedWidget->setCurrentIndex(0);
+}
+
+void BirthDialog::on_sell_clicked()
+{
+    QWidget *button = dynamic_cast<QWidget *>(sender());
+    int idx = button->property("stat_idx").toInt();
+    int self = ui->edit_table->item(idx, 0)->text().toInt();
+    if (--self < 10) return;
+    ui->edit_table->item(idx, 0)->setText(QString::number(self));
+    update_points();
+}
+
+void BirthDialog::on_buy_clicked()
+{
+    QWidget *button = dynamic_cast<QWidget *>(sender());
+    int idx = button->property("stat_idx").toInt();
+    int self = ui->edit_table->item(idx, 0)->text().toInt();
+    ui->edit_table->item(idx, 0)->setText(QString::number(self + 1));
+    update_points();
 }
 
 BirthDialog::~BirthDialog()
@@ -189,6 +234,7 @@ void BirthDialog::on_next_button_clicked()
             ui->edit_table->item(i, 1)->setText(format_stat(p));
             ui->edit_table->item(i, 2)->setText(format_stat(c));
             ui->edit_table->item(i, 3)->setText(format_stat(p+c));
+            ui->edit_table->item(i, 5)->setText("0");
         }
         update_points();
 
@@ -207,4 +253,5 @@ void BirthDialog::on_prev_button_clicked()
     if (idx < 1) {
         ui->prev_button->setEnabled(false);
     }
+    ui->stats_table->verticalHeader()->show();
 }

@@ -28,12 +28,16 @@ private slots:
 
     void on_bg2_clicked(int index);
 
+    void on_sell_clicked();
+
+    void on_buy_clicked();
+
 private:
     Ui::BirthDialog *ui;
 
     void update_stats();
 
-    void update_points();
+    void update_points();    
 
     int cur_race;
     int cur_class;
