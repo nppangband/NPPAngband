@@ -2,6 +2,9 @@
 #include "ui_birthdialog.h"
 #include "optionsdialog.h"
 #include "npp.h"
+#include <QRadioButton>
+#include <QGridLayout>
+#include <QButtonGroup>
 
 static QString format_stat(s16b value)
 {
@@ -10,28 +13,78 @@ static QString format_stat(s16b value)
     return QString("%1%2").arg(text).arg(value);
 }
 
+void BirthDialog::on_bg1_clicked(int index)
+{
+    cur_race = index;
+    player_race *r_ptr = p_info + index;
+    for (int i = 0; i < A_MAX; i++) {
+        ui->stats_table->item(i, 0)->setText(format_stat(r_ptr->r_adj[i]));
+    }
+    ui->stats_table->item(6, 0)->setText(QString::number(r_ptr->r_mhp));
+    ui->stats_table->item(7, 0)->setText(QString::number(r_ptr->r_exp).append('%'));
+    ui->stats_table->item(8, 0)->setText(QString::number(r_ptr->infra));
+    update_stats();
+}
+
+void BirthDialog::on_bg2_clicked(int index)
+{
+    cur_class = index;
+    player_class *c_ptr = c_info + index;
+    for (int i = 0; i < A_MAX; i++) {
+        ui->stats_table->item(i, 1)->setText(format_stat(c_ptr->c_adj[i]));
+    }
+    ui->stats_table->item(6, 1)->setText(QString::number(c_ptr->c_mhp));
+    ui->stats_table->item(7, 1)->setText(QString::number(c_ptr->c_exp).append('%'));
+    update_stats();
+}
+
 BirthDialog::BirthDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::BirthDialog)
 {
     ui->setupUi(this);
 
-    byte mode = GAME_NPPANGBAND;
+    cur_class = cur_race = -1;
 
     for (int i = 0; i < MAX_SEXES; i++) {
         ui->sex_combo->addItem(sex_info[i].title);
     }
     ui->sex_combo->setCurrentIndex(-1);
 
+    QGridLayout *g1 = new QGridLayout();
+    ui->raceBox->setLayout(g1);
+    QButtonGroup *bg1 = new QButtonGroup();
+    connect(bg1, SIGNAL(buttonClicked(int)), this, SLOT(on_bg1_clicked(int)));
+    int col = 0;
+    int row = 0;
     for (int i = 0; i < z_info->p_max; i++) {
-        ui->race_combo->addItem(p_info[i].pr_name);
+        QRadioButton *radio = new QRadioButton(p_info[i].pr_name);
+        bg1->addButton(radio, i);
+        g1->addWidget(radio, row, col);
+        ++col;
+        if (col > 1) {
+            col = 0;
+            ++row;
+        }
     }
-    ui->race_combo->setCurrentIndex(-1);
 
+    QGridLayout *g2 = new QGridLayout();
+    ui->classBox->setLayout(g2);
+    col = 0;
+    row = 0;
+    QButtonGroup *bg2 = new QButtonGroup();
+    connect(bg2, SIGNAL(buttonClicked(int)), this, SLOT(on_bg2_clicked(int)));
     for (int i = 0; i < z_info->c_max; i++) {
-        ui->class_combo->addItem(c_info[i].cl_name);
+        QRadioButton *radio = new QRadioButton(c_info[i].cl_name);
+        bg2->addButton(radio, i);
+        g2->addWidget(radio, row, col);
+        ++col;
+        if (col > 1) {
+            col = 0;
+            ++row;
+        }
     }
-    ui->class_combo->setCurrentIndex(-1);
+
     for (int i = 0; i < ui->stats_table->rowCount(); i++) {
         for (int j = 0; j < ui->stats_table->columnCount(); j++) {
             ui->stats_table->setItem(i, j, new QTableWidgetItem());
@@ -56,38 +109,10 @@ void BirthDialog::on_options_button_clicked()
     delete dlg;
 }
 
-void BirthDialog::on_race_combo_currentIndexChanged(int index)
-{
-    if (!this->isVisible()) return;
-    if (index < 0) return;
-    player_race *r_ptr = p_info + index;
-    for (int i = 0; i < A_MAX; i++) {
-        ui->stats_table->item(i, 0)->setText(format_stat(r_ptr->r_adj[i]));
-    }
-    ui->stats_table->item(6, 0)->setText(QString::number(r_ptr->r_mhp));
-    ui->stats_table->item(7, 0)->setText(QString::number(r_ptr->r_exp).append('%'));
-    ui->stats_table->item(8, 0)->setText(QString::number(r_ptr->infra));
-    this->update_stats();
-}
-
-void BirthDialog::on_class_combo_currentIndexChanged(int index)
-{
-    if (!this->isVisible()) return;
-    if (index < 0) return;
-    player_class *c_ptr = c_info + index;
-    for (int i = 0; i < A_MAX; i++) {
-        ui->stats_table->item(i, 1)->setText(format_stat(c_ptr->c_adj[i]));
-    }
-    ui->stats_table->item(6, 1)->setText(QString::number(c_ptr->c_mhp));
-    ui->stats_table->item(7, 1)->setText(QString::number(c_ptr->c_exp).append('%'));
-    this->update_stats();
-}
-
 void BirthDialog::update_stats()
 {
-    if (!this->isVisible()) return;
-    int p_idx = ui->race_combo->currentIndex();
-    int c_idx = ui->class_combo->currentIndex();
+    int p_idx = cur_race;
+    int c_idx = cur_class;
     if ((p_idx < 0) || (c_idx < 0)) return;
     for (int i = 0; i < A_MAX; i++) {
         int value = p_info[p_idx].r_adj[i] + c_info[c_idx].c_adj[i];
@@ -104,8 +129,8 @@ void BirthDialog::on_next_button_clicked()
     if (ui->stackedWidget->currentIndex() == 0) {
         if ((ui->name_edit->text().trimmed().length() == 0) ||
                 (ui->sex_combo->currentIndex() == -1) ||
-                (ui->race_combo->currentIndex() == -1) ||
-                (ui->class_combo->currentIndex() == -1)) {
+                (cur_race < 0) ||
+                (cur_class < 0)) {
             pop_up_message_box(tr("Please fill all the fields"), QMessageBox::Critical);
             return;
         }
