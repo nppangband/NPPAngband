@@ -55,6 +55,8 @@ void BirthDialog::update_points()
     ui->edit_table->item(6, 4)->setText(QString("Left:"));
     ui->edit_table->item(6, 5)->setText(QString::number(points_left));
     ui->edit_table->resizeColumnToContents(4);
+
+    update_others();
 }
 
 void BirthDialog::on_bg1_clicked(int index)
@@ -150,6 +152,12 @@ BirthDialog::BirthDialog(QWidget *parent) :
         }
     }
 
+    for (int i = 0; i < ui->abilities_table->rowCount(); i++) {
+        for (int j = 0; j < ui->abilities_table->columnCount(); j++) {
+            ui->abilities_table->setItem(i, j, new QTableWidgetItem());
+        }
+    }
+
     // Create the buy/sell buttons for all stats
     for (int i = 0; i < A_MAX; i++) {
         QWidget *container = new QWidget;
@@ -177,8 +185,25 @@ BirthDialog::BirthDialog(QWidget *parent) :
     ui->stats_table->verticalHeader()->setVisible(true);
     ui->edit_table->setShowGrid(false);
     ui->edit_table->verticalHeader()->setVisible(true);
+    ui->abilities_table->setShowGrid(false);
+    ui->abilities_table->verticalHeader()->setVisible(true);
+
+    ui->abilities_table->setFixedWidth(150);
+    ui->history_edit->setFixedHeight(50);
 
     ui->stackedWidget->setCurrentIndex(0);
+}
+
+void BirthDialog::update_others()
+{
+    ui->history_edit->clear();
+    ui->history_edit->appendPlainText(p_ptr->history);
+
+    ui->abilities_table->item(0, 0)->setText(QString::number(p_ptr->age));
+    ui->abilities_table->item(1, 0)->setText(QString::number(p_ptr->ht));
+    ui->abilities_table->item(2, 0)->setText(QString::number(p_ptr->wt));
+    ui->abilities_table->item(3, 0)->setText(QString::number(p_ptr->sc));
+    ui->abilities_table->item(4, 0)->setText(QString::number(p_ptr->au));
 }
 
 void BirthDialog::on_sell_clicked()

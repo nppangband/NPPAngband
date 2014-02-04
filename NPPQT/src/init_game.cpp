@@ -663,6 +663,7 @@ static int init_other(void)
     /*** Prepare the options ***/
 
     p_ptr->player_type_wipe();
+    op_ptr->player_other_wipe();
 
     /*Clear the update flags*/
     p_ptr->notice = 0L;

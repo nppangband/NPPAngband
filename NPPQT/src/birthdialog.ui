@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>466</width>
-    <height>600</height>
+    <width>650</width>
+    <height>601</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page1">
       <property name="sizePolicy">
@@ -173,7 +173,7 @@
           <bool>false</bool>
          </attribute>
          <attribute name="verticalHeaderVisible">
-          <bool>true</bool>
+          <bool>false</bool>
          </attribute>
          <row>
           <property name="text">
@@ -240,46 +240,159 @@
       </layout>
      </widget>
      <widget class="QWidget" name="page_2">
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QGroupBox" name="groupBox1">
-         <property name="title">
-          <string>Stat allocation</string>
+        <widget class="QWidget" name="widget_4" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QRadioButton" name="point_radio">
-            <property name="text">
-             <string>Point based</string>
+           <widget class="QGroupBox" name="groupBox1">
+            <property name="title">
+             <string>Stat allocation</string>
             </property>
-            <property name="checked">
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <widget class="QRadioButton" name="point_radio">
+               <property name="text">
+                <string>Point based</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="roller_radio">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Autoroller</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="roll_button">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Roll</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="edit_table">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="showGrid">
              <bool>true</bool>
             </property>
+            <attribute name="verticalHeaderVisible">
+             <bool>false</bool>
+            </attribute>
+            <row>
+             <property name="text">
+              <string>Strength</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>Intelligence</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>Wisdom</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>Dexterity</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>Constitution</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>Charisma</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string/>
+             </property>
+            </row>
+            <column>
+             <property name="text">
+              <string>Self</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Race</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Class</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Effective</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Best</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Spent</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Actions</string>
+             </property>
+            </column>
+            <item row="0" column="0">
+             <property name="text">
+              <string/>
+             </property>
+            </item>
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="roller_radio">
+           <widget class="QPlainTextEdit" name="history_edit">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="text">
-             <string>Autoroller</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="roll_button">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Roll</string>
+            <property name="readOnly">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -287,91 +400,49 @@
         </widget>
        </item>
        <item>
-        <widget class="QTableWidget" name="edit_table">
+        <widget class="QTableWidget" name="abilities_table">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
-         <property name="showGrid">
-          <bool>true</bool>
-         </property>
-         <attribute name="verticalHeaderVisible">
+         <attribute name="horizontalHeaderVisible">
           <bool>false</bool>
          </attribute>
          <row>
           <property name="text">
-           <string>Strength</string>
+           <string>Age</string>
           </property>
          </row>
          <row>
           <property name="text">
-           <string>Intelligence</string>
+           <string>Size</string>
           </property>
          </row>
          <row>
           <property name="text">
-           <string>Wisdom</string>
+           <string>Weight</string>
           </property>
          </row>
          <row>
           <property name="text">
-           <string>Dexterity</string>
+           <string>Status</string>
           </property>
          </row>
          <row>
           <property name="text">
-           <string>Constitution</string>
+           <string>Gold</string>
           </property>
          </row>
-         <row>
-          <property name="text">
-           <string>Charisma</string>
-          </property>
-         </row>
-         <row>
+         <column>
           <property name="text">
            <string/>
           </property>
-         </row>
-         <column>
-          <property name="text">
-           <string>Self</string>
-          </property>
          </column>
-         <column>
-          <property name="text">
-           <string>Race</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Class</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Effective</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Best</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Spent</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Actions</string>
-          </property>
-         </column>
-         <item row="0" column="0">
-          <property name="text">
-           <string/>
-          </property>
-         </item>
         </widget>
        </item>
       </layout>

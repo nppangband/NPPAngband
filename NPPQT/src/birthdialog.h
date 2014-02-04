@@ -48,7 +48,9 @@ private:
 
     void update_stats();
 
-    void update_points();    
+    void update_points();
+
+    void update_others();
 
     int cur_race;
     int cur_class;

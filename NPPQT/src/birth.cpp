@@ -971,4 +971,8 @@ void init_birth()
 
     /* Turn off many options for Moria */
     if (game_mode == GAME_NPPMORIA) set_moria_options();
+
+    else {
+        adult_maximize = birth_maximize;
+    }
 }
