@@ -11,18 +11,17 @@
 #include <QColor>
 
 
-
 typedef struct maxima maxima;
 typedef struct colors_preset colors_preset;
 typedef struct alloc_entry alloc_entry;
 typedef struct quest_type quest_type;
 typedef struct owner_type owner_type;
 typedef struct store_type store_type;
-typedef struct magic_type magic_type;
-typedef struct start_item start_item;
+//typedef struct magic_type magic_type;
+//typedef struct start_item start_item;
 typedef struct names_type names_type;
 typedef struct autoinscription autoinscription;
-typedef struct move_moment_type move_moment_type;
+//typedef struct move_moment_type move_moment_type;
 typedef struct coord coord;
 typedef struct quiver_group_type quiver_group_type;
 typedef struct option_entry option_entry;

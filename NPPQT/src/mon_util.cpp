@@ -4946,7 +4946,7 @@ static const struct gf_type_match_flags gf_and_flags[] =
     {GF_DISENCHANT,	RF4_BRTH_DISEN, 	4},
     {GF_NEXUS, 		RF4_BRTH_NEXUS, 	4},
     {GF_TIME, 		RF4_BRTH_TIME, 		4},
-    {GF_INERTIA,	RF4_BRTH_INER, 		4},
+    {GF_INERTIA_NPP,	RF4_BRTH_INER, 		4},
     {GF_GRAVITY,	RF4_BRTH_GRAV, 		4},
     {GF_SHARD, 		RF4_BRTH_SHARD, 	4},
     {GF_PLASMA,		RF4_BRTH_PLAS, 		4},

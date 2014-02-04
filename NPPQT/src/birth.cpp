@@ -421,3 +421,187 @@ void get_stats(int stat_use[A_MAX])
         p_ptr->stat_birth[i] = p_ptr->stat_max[i];
     }
 }
+
+
+static void set_moria_options(void)
+{
+    /* Paranoia */
+    if (game_mode != GAME_NPPMORIA) return;
+
+    /* Turn off options unused in Moria */
+    auto_scum = FALSE;
+    allow_themed_levels = FALSE;
+    verify_leave_quest = FALSE;
+    birth_maximize = adult_maximize = FALSE;
+    birth_rand_artifacts = adult_rand_artifacts = FALSE;
+    birth_force_small_lev = adult_force_small_lev = FALSE;
+    birth_no_artifacts = adult_no_artifacts = FALSE;
+    birth_simple_dungeons = adult_simple_dungeons = TRUE;
+    birth_swap_weapons = adult_swap_weapons = TRUE;
+    birth_no_xtra_artifacts = adult_no_xtra_artifacts = TRUE;
+    birth_no_store_services = adult_no_store_services = TRUE;
+    birth_no_player_ghosts = adult_no_player_ghosts = TRUE;
+    birth_no_quests = adult_no_quests = TRUE;
+    birth_connected_stairs = adult_connected_stairs = FALSE;
+    birth_preserve = adult_preserve = TRUE;
+
+}
+
+
+static void roll_hp(void)
+{
+    int i, j, min_value, max_value;
+
+    /* Minimum hitpoints at highest level */
+    min_value = (z_info->max_level * (p_ptr->hitdie - 1) * 3) / 8;
+    min_value += z_info->max_level;
+
+    /* Maximum hitpoints at highest level */
+    max_value = (z_info->max_level * (p_ptr->hitdie - 1) * 5) / 8;
+    max_value += z_info->max_level;
+
+    /* Roll out the hitpoints */
+    while (TRUE)
+    {
+        /* Roll the hitpoint values */
+        for (i = 1; i < z_info->max_level; i++)
+        {
+            j = randint1(p_ptr->hitdie);
+            p_ptr->player_hp[i] = p_ptr->player_hp[i-1] + j;
+        }
+
+        /* XXX Could also require acceptable "mid-level" hitpoints */
+
+        /* Require "valid" hitpoints at highest level */
+        if (p_ptr->player_hp[z_info->max_level-1] < min_value) continue;
+        if (p_ptr->player_hp[z_info->max_level-1] > max_value) continue;
+
+        /* Acceptable */
+        break;
+    }
+}
+
+/*
+ * Get the racial history, and social class, using the "history charts".
+ */
+static void get_history(void)
+{
+    int i, chart, roll, social_class;
+
+    /* Clear the previous history strings */
+    p_ptr->history.clear();
+
+    /* Initial social class */
+    social_class = randint1(4);
+
+    /* Starting place */
+    chart = rp_ptr->hist;
+
+    /* Process the history */
+    while (chart)
+    {
+        /* Start over */
+        i = 0;
+
+        /* Roll for nobility */
+        roll = randint1(100);
+
+        /* Get the proper entry in the table */
+        while ((chart != h_info[i].chart) || (roll > h_info[i].roll)) i++;
+
+        /* Get the textual history */
+        p_ptr->history.append(h_info[i].h_text);
+
+        /* Add a space */
+        p_ptr->history.append(' ');
+
+        /* Add in the social class */
+        social_class += (int)(h_info[i].bonus) - 50;
+
+        /* Enter the next chart */
+        chart = h_info[i].next;
+    }
+
+    /* Verify social class */
+    if (social_class > 75) social_class = 75;
+    else if (social_class < 1) social_class = 1;
+
+    /* Save the social class */
+    p_ptr->sc = p_ptr->sc_birth = social_class;
+}
+
+/*
+ * Computes character's age, height, and weight
+ */
+static void get_ahw(void)
+{
+    /* Calculate the age */
+    p_ptr->age = rp_ptr->b_age + randint1(rp_ptr->m_age);
+
+    /* Calculate the height/weight for males */
+    if (p_ptr->psex == SEX_MALE)
+    {
+        p_ptr->ht = p_ptr->ht_birth = Rand_normal(rp_ptr->m_b_ht, rp_ptr->m_m_ht);
+        p_ptr->wt = p_ptr->wt_birth = Rand_normal(rp_ptr->m_b_wt, rp_ptr->m_m_wt);
+    }
+
+    /* Calculate the height/weight for females */
+    else if (p_ptr->psex == SEX_FEMALE)
+    {
+        p_ptr->ht = p_ptr->ht_birth = Rand_normal(rp_ptr->f_b_ht, rp_ptr->f_m_ht);
+        p_ptr->wt = p_ptr->wt_birth = Rand_normal(rp_ptr->f_b_wt, rp_ptr->f_m_wt);
+    }
+}
+
+/*
+ * Get the player's starting money
+ */
+static void get_money(int stat_use[A_MAX])
+{
+    if (birth_money)
+    {
+        p_ptr->au_birth = 200;
+        p_ptr->au = 500;
+    }
+    else
+    {
+        p_ptr->au = p_ptr->au_birth = 200;
+    }
+}
+
+/*
+ * This fleshes out a full player based on the choices currently made,
+ * and so is called whenever things like race or class are chosen.
+ */
+void generate_player()
+{
+    /* Set sex according to p_ptr->sex */
+    sp_ptr = &sex_info[p_ptr->psex];
+
+    /* Set class according to p_ptr->class */
+    cp_ptr = &c_info[p_ptr->pclass];
+    mp_ptr = &cp_ptr->spells;
+
+    /* Set race according to p_ptr->race */
+    rp_ptr = &p_info[p_ptr->prace];
+
+    /* Level 1 */
+    p_ptr->max_lev = p_ptr->lev = 1;
+
+    /* Experience factor */
+    p_ptr->expfact = rp_ptr->r_exp + cp_ptr->c_exp;
+
+    /* Hitdice */
+    p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp;
+
+    /* Initial hitpoints */
+    p_ptr->mhp = p_ptr->hitdie;
+
+    /* Pre-calculate level 1 hitdice */
+    p_ptr->player_hp[0] = p_ptr->hitdie;
+
+    /* Roll for age/height/weight */
+    get_ahw();
+
+    get_history();
+}

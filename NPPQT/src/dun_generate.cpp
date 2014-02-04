@@ -4482,7 +4482,7 @@ static int fractal_map_is_connected(fractal_map map, fractal_template *t_ptr)
     if (GRID_QUEUE_EMPTY(que_ptr))
     {
         /* Free resources */
-        FREE(visited);
+        FREE_ARRAY(visited);
         grid_queue_destroy(que_ptr);
 
         /* Done */
@@ -4538,7 +4538,7 @@ static int fractal_map_is_connected(fractal_map map, fractal_template *t_ptr)
     }
 
     /* Free resources */
-    FREE(visited);
+    FREE_ARRAY(visited);
     grid_queue_destroy(que_ptr);
 
     /* Return answer */
@@ -4760,7 +4760,7 @@ static void fractal_map_merge_another(fractal_map map, fractal_template *t_ptr)
     }
 
     /* Free resources */
-    FREE(map2);
+    FREE_ARRAY(map2);
 }
 
 
@@ -4825,7 +4825,7 @@ static bool build_type_fractal(int y0, int x0, byte type)
         if (++tries >= 100)
         {
             /* Free resources */
-            FREE(map);
+            FREE_ARRAY(map);
 
             /* Failure */
             return (FALSE);
@@ -4842,7 +4842,7 @@ static bool build_type_fractal(int y0, int x0, byte type)
     fractal_map_to_room(map, type, y0, x0);
 
     /* Free resources */
-    FREE(map);
+    FREE_ARRAY(map);
 
     /* Success */
     return (TRUE);
@@ -4932,7 +4932,7 @@ static bool build_pool(int y0, int x0, int feat, bool do_big_pool)
     }
 
     /* Free resources */
-    FREE(map);
+    FREE_ARRAY(map);
 
     /* Success */
     return (TRUE);
@@ -7877,7 +7877,7 @@ static void build_fog(void)
     }
 
     /* Free resources */
-    FREE(map);
+    FREE_ARRAY(map);
 }
 
 
@@ -8273,7 +8273,7 @@ static void transform_regions(coord *grids, int num_grids, feature_selector_type
         }
 
         /* Free resources */
-        FREE(map);
+        FREE_ARRAY(map);
     }
 }
 
@@ -8866,7 +8866,7 @@ static void build_formation(int y0, int x0, u16b feat, byte fractal_type, int ch
     }
 
     /* Free resources */
-    FREE(map);
+    FREE_ARRAY(map);
 }
 
 

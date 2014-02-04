@@ -658,5 +658,6 @@ bool buy_stat(int choice, int stats[A_MAX], int points_spent[A_MAX], int *points
 bool sell_stat(int choice, int stats[A_MAX], int points_spent[A_MAX], int *points_left);
 void generate_stats(int stats[A_MAX], int points_spent[A_MAX], int *points_left);
 void get_stats(int stat_use[A_MAX]);
+void generate_player();
 
 #endif // FUNCTION_DECLARATIONS_H
