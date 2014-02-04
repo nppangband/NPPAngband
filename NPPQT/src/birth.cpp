@@ -69,7 +69,7 @@ void reset_stats(int stats[A_MAX], int points_spent[A_MAX], int *points_left)
     /* Use the new "birth stat" values to work out the "other"
        stat values (i.e. after modifiers) and tell the UI things have
        changed. */
-    //recalculate_stats(stats, *points_left);
+    recalculate_stats(stats, *points_left);
 }
 
 bool buy_stat(int choice, int stats[A_MAX], int points_spent[A_MAX],
@@ -307,5 +307,117 @@ void generate_stats(int stats[A_MAX], int points_spent[A_MAX],
                 break;
             }
         }
+    }
+}
+
+/*
+ * Adjust a stat by an amount.
+ *
+ * This just uses "modify_stat_value()" unless "maximize" mode is false,
+ * and a positive bonus is being applied, in which case, a special hack
+ * is used.
+ */
+static int adjust_stat(int value, int amount)
+{
+    /* Negative amounts or maximize mode */
+    if ((amount < 0) || adult_maximize)
+    {
+        return (modify_stat_value(value, amount));
+    }
+
+    /* Special hack */
+    else
+    {
+        int i;
+
+        /* Apply reward */
+        for (i = 0; i < amount; i++)
+        {
+            if (value < 18)
+            {
+                value++;
+            }
+            else if (value < 18+70)
+            {
+                value += randint1(15) + 5;
+            }
+            else if (value < 18+90)
+            {
+                value += randint1(6) + 2;
+            }
+            else if (value < 18+100)
+            {
+                value++;
+            }
+        }
+    }
+
+    /* Return the result */
+    return (value);
+}
+
+/*
+ * Roll for a character's stats
+ *
+ * For efficiency, we include a chunk of "calc_bonuses()".
+ */
+void get_stats(int stat_use[A_MAX])
+{
+    int i, j;
+
+    int bonus;
+
+    int dice[18];
+
+    /* Roll and verify some stats */
+    while (TRUE)
+    {
+        /* Roll some dice */
+        for (j = i = 0; i < 18; i++)
+        {
+            /* Roll the dice */
+            dice[i] = randint1(3 + i % 3);
+
+            /* Collect the maximum */
+            j += dice[i];
+        }
+
+        /* Verify totals */
+        if ((j > 42) && (j < 54)) break;
+    }
+
+    /* Roll the stats */
+    for (i = 0; i < A_MAX; i++)
+    {
+        /* Extract 5 + 1d3 + 1d4 + 1d5 */
+        j = 5 + dice[3*i] + dice[3*i+1] + dice[3*i+2];
+
+        /* Save that value */
+        p_ptr->stat_max[i] = j;
+
+        /* Obtain a "bonus" for "race" and "class" */
+        bonus = rp_ptr->r_adj[i] + cp_ptr->c_adj[i];
+
+        /* Variable stat maxes */
+        if (adult_maximize)
+        {
+            /* Start fully healed */
+            p_ptr->stat_cur[i] = p_ptr->stat_max[i];
+
+            /* Efficiency -- Apply the racial/class bonuses */
+            stat_use[i] = modify_stat_value(p_ptr->stat_max[i], bonus);
+        }
+
+        /* Fixed stat maxes */
+        else
+        {
+            /* Apply the bonus to the stat (somewhat randomly) */
+            stat_use[i] = adjust_stat(p_ptr->stat_max[i], bonus);
+
+            /* Save the resulting stat maximum */
+            p_ptr->stat_cur[i] = p_ptr->stat_max[i] = stat_use[i];
+        }
+
+        p_ptr->stat_birth[i] = p_ptr->stat_max[i];
     }
 }

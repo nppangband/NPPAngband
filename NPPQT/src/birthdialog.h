@@ -33,6 +33,12 @@ private slots:
 
     void on_buy_clicked();
 
+    void on_point_radio_clicked();
+
+    void on_roller_radio_clicked();
+
+    void on_roll_button_clicked();
+
 private:
     Ui::BirthDialog *ui;
 
@@ -46,6 +52,10 @@ private:
     int stats[A_MAX];
     int points_spent[A_MAX];
     int points_left;
+
+    bool dirty;
+
+    bool point_based;
 };
 
 #endif // BIRTHDIALOG_H

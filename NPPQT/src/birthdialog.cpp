@@ -29,16 +29,24 @@ static QString stat_notation(int value)
 
 void BirthDialog::update_points()
 {
-    for (int i = 0; i < A_MAX; i++) {
-        int self = stats[i];
+    for (int i = 0; i < A_MAX; i++) {        
+        int self = p_ptr->stat_max[i];
         ui->edit_table->item(i, 0)->setText(QString::number(self));
+
         int cost = points_spent[i];
         ui->edit_table->item(i, 5)->setText(QString::number(cost));
-        int effective = ui->edit_table->item(i, 3)->text().toInt();
-        int best = self + effective;
-        int right = best - 18;
-        if (best > 18) best = 18;
-        if (right > 0) best += (right * 10);
+
+        int best;        
+        if (point_based) {
+            int effective = ui->edit_table->item(i, 3)->text().toInt();
+            best = self + effective;
+            int right = best - 18;
+            if (best > 18) best = 18;
+            if (right > 0) best += (right * 10);
+        }
+        else {
+            best = stats[i];
+        }
         ui->edit_table->item(i, 4)->setText(stat_notation(best));
     }
     ui->edit_table->item(6, 4)->setText(QString("Left:"));
@@ -57,6 +65,7 @@ void BirthDialog::on_bg1_clicked(int index)
     ui->stats_table->item(7, 0)->setText(QString::number(r_ptr->r_exp).append('%'));
     ui->stats_table->item(8, 0)->setText(QString::number(r_ptr->infra));
     update_stats();
+    dirty = true;
 }
 
 void BirthDialog::on_bg2_clicked(int index)
@@ -69,6 +78,7 @@ void BirthDialog::on_bg2_clicked(int index)
     ui->stats_table->item(6, 1)->setText(QString::number(c_ptr->c_mhp));
     ui->stats_table->item(7, 1)->setText(QString::number(c_ptr->c_exp).append('%'));
     update_stats();
+    dirty = true;
 }
 
 BirthDialog::BirthDialog(QWidget *parent) :
@@ -77,6 +87,8 @@ BirthDialog::BirthDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    dirty = true;
+
     cur_class = cur_race = -1;
 
     for (int i = 0; i < MAX_SEXES; i++) {
@@ -84,6 +96,7 @@ BirthDialog::BirthDialog(QWidget *parent) :
     }
     ui->sex_combo->setCurrentIndex(-1);
 
+    // Create the race radios
     QGridLayout *g1 = new QGridLayout();
     ui->raceBox->setLayout(g1);
     QButtonGroup *bg1 = new QButtonGroup();
@@ -101,6 +114,7 @@ BirthDialog::BirthDialog(QWidget *parent) :
         }
     }
 
+    // Create the class radios
     QGridLayout *g2 = new QGridLayout();
     ui->classBox->setLayout(g2);
     col = 0;
@@ -118,6 +132,7 @@ BirthDialog::BirthDialog(QWidget *parent) :
         }
     }
 
+    // Fill the tables with empty items
     for (int i = 0; i < ui->stats_table->rowCount(); i++) {
         for (int j = 0; j < ui->stats_table->columnCount(); j++) {
             ui->stats_table->setItem(i, j, new QTableWidgetItem());
@@ -130,6 +145,7 @@ BirthDialog::BirthDialog(QWidget *parent) :
         }
     }
 
+    // Create the buy/sell buttons for all stats
     for (int i = 0; i < A_MAX; i++) {
         QWidget *container = new QWidget;
         container->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
@@ -149,11 +165,17 @@ BirthDialog::BirthDialog(QWidget *parent) :
         ui->edit_table->resizeRowToContents(i);
     }
 
+    ui->stats_table->setShowGrid(false);
+    ui->stats_table->verticalHeader()->setVisible(true);
+    ui->edit_table->setShowGrid(false);
+    ui->edit_table->verticalHeader()->setVisible(true);
+
     ui->stackedWidget->setCurrentIndex(0);
 }
 
 void BirthDialog::on_sell_clicked()
 {
+    if (!point_based) return;
     QWidget *button = dynamic_cast<QWidget *>(sender());
     int idx = button->property("stat_idx").toInt();
     if (sell_stat(idx, stats, points_spent, &points_left)) update_points();
@@ -161,6 +183,7 @@ void BirthDialog::on_sell_clicked()
 
 void BirthDialog::on_buy_clicked()
 {
+    if (!point_based) return;
     QWidget *button = dynamic_cast<QWidget *>(sender());
     int idx = button->property("stat_idx").toInt();
     if (buy_stat(idx, stats, points_spent, &points_left)) update_points();
@@ -201,6 +224,7 @@ void BirthDialog::update_stats()
 void BirthDialog::on_next_button_clicked()
 {
     if (ui->stackedWidget->currentIndex() == 0) {
+        // Validations
         if (ui->name_edit->text().trimmed().length() == 0) {
             /*
             pop_up_message_box(tr("Complete the character name"), QMessageBox::Critical);
@@ -231,6 +255,7 @@ void BirthDialog::on_next_button_clicked()
         ui->prev_button->setEnabled(true);
         ui->next_button->setText(tr("Finish"));
 
+        // Update race class bonuses
         for (int i = 0; i < A_MAX; i++) {
             int p = p_info[cur_race].r_adj[i];
             int c = c_info[cur_class].c_adj[i];
@@ -238,8 +263,13 @@ void BirthDialog::on_next_button_clicked()
             ui->edit_table->item(i, 2)->setText(format_stat(c));
             ui->edit_table->item(i, 3)->setText(format_stat(p+c));
         }
-        reset_stats(stats, points_spent, &points_left);
-        generate_stats(stats, points_spent, &points_left);
+
+        // Reset to point based generation if race or class changed
+        if (dirty) {
+            ui->point_radio->click();
+            dirty = false;
+        }
+
         update_points();
 
         ui->edit_table->resizeColumnsToContents();
@@ -258,5 +288,39 @@ void BirthDialog::on_prev_button_clicked()
     if (idx < 1) {
         ui->prev_button->setEnabled(false);
     }
-    ui->stats_table->verticalHeader()->show();
+    //ui->stats_table->verticalHeader()->show();
+}
+
+void BirthDialog::on_point_radio_clicked()
+{
+    point_based = true;
+    reset_stats(stats, points_spent, &points_left);
+    generate_stats(stats, points_spent, &points_left);
+    ui->edit_table->showColumn(5);
+    ui->edit_table->showColumn(6);
+    ui->edit_table->showRow(6);
+    ui->roll_button->setEnabled(false);
+    update_points();
+}
+
+void BirthDialog::on_roller_radio_clicked()
+{
+    point_based = false;
+    reset_stats(stats, points_spent, &points_left);
+    for (int i = 0; i < A_MAX; i++) {
+        points_spent[i] = 0;
+    }
+    points_left = 0;
+    ui->edit_table->hideColumn(5);
+    ui->edit_table->hideColumn(6);
+    ui->edit_table->hideRow(6);
+    ui->roll_button->setEnabled(true);
+    ui->roll_button->click();
+}
+
+void BirthDialog::on_roll_button_clicked()
+{
+    if (point_based) return;
+    get_stats(stats);
+    update_points();
 }

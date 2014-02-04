@@ -23,7 +23,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page1">
       <property name="sizePolicy">
@@ -167,13 +167,13 @@
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
          <property name="showGrid">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <attribute name="horizontalHeaderVisible">
           <bool>false</bool>
          </attribute>
          <attribute name="verticalHeaderVisible">
-          <bool>false</bool>
+          <bool>true</bool>
          </attribute>
          <row>
           <property name="text">
@@ -248,7 +248,7 @@
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
-           <widget class="QRadioButton" name="radioButton">
+           <widget class="QRadioButton" name="point_radio">
             <property name="text">
              <string>Point based</string>
             </property>
@@ -258,9 +258,28 @@
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="radioButton_2">
+           <widget class="QRadioButton" name="roller_radio">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text">
              <string>Autoroller</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="roll_button">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Roll</string>
             </property>
            </widget>
           </item>
@@ -273,8 +292,11 @@
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
          <property name="showGrid">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
+         <attribute name="verticalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
          <row>
           <property name="text">
            <string>Strength</string>

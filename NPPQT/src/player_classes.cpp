@@ -138,7 +138,9 @@ void player_type::player_type_wipe()
     p_turn = 0;
     dungeon_type = 0;
 
-    for (int i = 0; i < OPT_MAX; i++) {
-        op_ptr->opt[i] = (options[i].normal != 0);
+    if (!character_loaded) {
+        for (int i = 0; i < OPT_MAX; i++) {
+            op_ptr->opt[i] = (options[i].normal != 0);
+        }
     }
 }
