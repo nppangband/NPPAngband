@@ -89,6 +89,8 @@ BirthDialog::BirthDialog(QWidget *parent) :
 
     dirty = true;
 
+    done_birth = false;
+
     cur_class = cur_race = -1;
 
     for (int i = 0; i < MAX_SEXES; i++) {
@@ -151,16 +153,19 @@ BirthDialog::BirthDialog(QWidget *parent) :
         container->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
         QHBoxLayout *l1 = new QHBoxLayout;
         container->setLayout(l1);
+
         QToolButton *button1 = new QToolButton();
         button1->setProperty("stat_idx", QVariant(i));
         button1->setText("<");
         l1->addWidget(button1);
         connect(button1, SIGNAL(clicked()), this, SLOT(on_sell_clicked()));
+
         QToolButton *button2 = new QToolButton();
         button2->setProperty("stat_idx", QVariant(i));
         button2->setText(">");
         l1->addWidget(button2);
         connect(button2, SIGNAL(clicked()), this, SLOT(on_buy_clicked()));
+
         ui->edit_table->setCellWidget(i, 6, container);
         ui->edit_table->resizeRowToContents(i);
     }
@@ -244,16 +249,21 @@ void BirthDialog::on_next_button_clicked()
         if (cur_class < 0) {
             pop_up_message_box(tr("Select the character class"), QMessageBox::Critical);
             return;
-        }
+        }        
+
+        init_birth();
 
         // Set global variables
-        rp_ptr = p_info + cur_race;
-        cp_ptr = c_info + cur_class;
+        p_ptr->prace = cur_race;
+        p_ptr->pclass = cur_class;
+        p_ptr->psex = ui->sex_combo->currentIndex();
+        generate_player();
 
         ui->groupBox1->setTitle(QString("Stat allocation for %1 %2").arg(rp_ptr->pr_name).arg(cp_ptr->cl_name));
 
         ui->prev_button->setEnabled(true);
         ui->next_button->setText(tr("Finish"));
+        ui->options_button->setEnabled(false);
 
         // Update race class bonuses
         for (int i = 0; i < A_MAX; i++) {
@@ -275,6 +285,12 @@ void BirthDialog::on_next_button_clicked()
         ui->edit_table->resizeColumnsToContents();
         ui->stackedWidget->setCurrentIndex(1);
     }
+    // We finally ended with character birth
+    else if (ui->stackedWidget->currentIndex() == 1) {
+        finish_birth();
+        done_birth = true;
+        this->close();
+    }
 }
 
 void BirthDialog::on_prev_button_clicked()
@@ -283,12 +299,12 @@ void BirthDialog::on_prev_button_clicked()
     if (idx > 0) {
         --idx;
         ui->stackedWidget->setCurrentIndex(idx);
-        ui->next_button->setText(tr("Next"));
+        ui->next_button->setText(tr("Next"));        
     }
     if (idx < 1) {
+        ui->options_button->setEnabled(true);
         ui->prev_button->setEnabled(false);
-    }
-    //ui->stats_table->verticalHeader()->show();
+    } 
 }
 
 void BirthDialog::on_point_radio_clicked()
@@ -321,6 +337,12 @@ void BirthDialog::on_roller_radio_clicked()
 void BirthDialog::on_roll_button_clicked()
 {
     if (point_based) return;
-    get_stats(stats);
+    roll_player(stats);
     update_points();
+}
+
+bool BirthDialog::run()
+{
+    this->exec();
+    return this->done_birth;
 }

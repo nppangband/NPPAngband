@@ -1,4 +1,5 @@
 #include "npp.h"
+#include "store.h"
 
 /*
  * Cost of each "point" of a stat.
@@ -361,7 +362,7 @@ static int adjust_stat(int value, int amount)
  *
  * For efficiency, we include a chunk of "calc_bonuses()".
  */
-void get_stats(int stat_use[A_MAX])
+static void get_stats(int stat_use[A_MAX])
 {
     int i, j;
 
@@ -444,7 +445,6 @@ static void set_moria_options(void)
     birth_no_quests = adult_no_quests = TRUE;
     birth_connected_stairs = adult_connected_stairs = FALSE;
     birth_preserve = adult_preserve = TRUE;
-
 }
 
 
@@ -604,4 +604,371 @@ void generate_player()
     get_ahw();
 
     get_history();
+}
+
+void roll_player(int stats[A_MAX])
+{
+    /* Get a new character */
+    get_stats(stats);
+
+    /* Roll for gold */
+    get_money(stats);
+
+    /* Update stats with bonuses, etc. */
+    get_bonuses();
+
+    /* There's no real need to do this here, but it's tradition. */
+    get_ahw();
+    get_history();
+}
+
+/**
+ * Try to wield everything in the inventory.
+ */
+static void wield_all(void)
+{
+    object_type *o_ptr;
+    object_type *i_ptr;
+    object_type object_type_body;
+
+    int slot;
+    int item;
+    int num;
+    bool is_ammo;
+
+    /* Scan through the slots backwards */
+    for (item = INVEN_PACK - 1; item >= 0; item--)
+    {
+        o_ptr = &inventory[item];
+        is_ammo = o_ptr->is_ammo();
+
+        /* Skip non-objects */
+        if (!o_ptr->k_idx) continue;
+
+        /* Make sure we can wield it */
+        slot = wield_slot(o_ptr);
+        if (slot < INVEN_WIELD) continue;
+        i_ptr = &inventory[slot];
+
+        /* Make sure that there's an available slot */
+        if (is_ammo)
+        {
+            if (i_ptr->k_idx && !object_similar(o_ptr, i_ptr)) continue;
+        }
+        else
+        {
+            if (i_ptr->k_idx) continue;
+        }
+
+        /* Figure out how much of the item we'll be wielding */
+        num = is_ammo ? o_ptr->number : 1;
+
+        /* Get local object */
+        i_ptr = &object_type_body;
+        i_ptr->object_copy(o_ptr);
+
+        /* Modify quantity */
+        i_ptr->number = num;
+
+        /* Decrease the item (from the pack) */
+        inven_item_increase(item, -num);
+        inven_item_optimize(item);
+
+        /* Get the wield slot */
+        o_ptr = &inventory[slot];
+
+        /* Wear the new stuff */
+        o_ptr->object_copy(i_ptr);
+    }
+
+    save_quiver_size();
+
+    return;
+}
+
+/*
+ * Init players with some belongings
+ *
+ * Having an item identifies it and makes the player "aware" of its purpose.
+ */
+static void player_outfit(void)
+{
+    int i;
+    const start_item *e_ptr;
+    object_type *i_ptr;
+    object_type object_type_body;
+
+    /* Hack -- Give the player his equipment */
+    for (i = 0; i < MAX_START_ITEMS; i++)
+    {
+        /* Access the item */
+        e_ptr = &(cp_ptr->start_items[i]);
+
+        /* Get local object */
+        i_ptr = &object_type_body;
+
+        /* Hack	-- Give the player an object */
+        if (e_ptr->tval > 0)
+        {
+            /* Get the object_kind */
+            int k_idx = lookup_kind(e_ptr->tval, e_ptr->sval);
+
+            /* Valid item? */
+            if (!k_idx) continue;
+
+            /* Prepare the item */
+            object_prep(i_ptr, k_idx);
+            i_ptr->number = (byte)rand_range(e_ptr->min, e_ptr->max);
+
+            object_aware(i_ptr);
+            object_known(i_ptr);
+            (void)inven_carry(i_ptr);
+            k_info[k_idx].everseen = TRUE;
+
+            apply_autoinscription(i_ptr);
+
+            /* Remember history */
+            object_history(i_ptr, ORIGIN_BIRTH, 0);
+        }
+    }
+
+    /* Hack -- give the player hardcoded equipment XXX */
+
+    /* Get local object */
+    i_ptr = &object_type_body;
+
+    /* Hack -- Give the player some food */
+    object_prep(i_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
+    i_ptr->number = (byte)rand_range(3, 7);
+    object_aware(i_ptr);
+    object_known(i_ptr);
+    k_info[i_ptr->k_idx].everseen = TRUE;
+    apply_autoinscription(i_ptr);
+    /* Remember history */
+    object_history(i_ptr, ORIGIN_BIRTH, 0);
+    (void)inven_carry(i_ptr);
+
+    /* Get local object */
+    i_ptr = &object_type_body;
+
+    /* Hack -- Give the player some torches */
+    object_prep(i_ptr, lookup_kind(TV_LIGHT, SV_LIGHT_TORCH));
+    apply_magic(i_ptr, 0, FALSE, FALSE, FALSE, FALSE);
+    i_ptr->number = (byte)rand_range(3, 7);
+    object_aware(i_ptr);
+    object_known(i_ptr);
+    k_info[i_ptr->k_idx].everseen = TRUE;
+    apply_autoinscription(i_ptr);
+    /* Remember history */
+    object_history(i_ptr, ORIGIN_BIRTH, 0);
+    (void)inven_carry(i_ptr);
+
+    /* Now try wielding everything */
+    wield_all();
+}
+
+/*
+ * Clear all the global "character" data
+ */
+static void player_wipe(void)
+{
+    int i;
+
+    /* Wipe the player */
+    p_ptr->player_type_wipe();
+
+    /* Clear the inventory */
+    for (i = 0; i < ALL_INVEN_TOTAL; i++) {
+        inventory[i].object_wipe();
+    }
+
+    /* Start with no artifacts made yet */
+    for (i = 0; i < z_info->art_max; i++)
+    {
+        artifact_type *a_ptr = &a_info[i];
+        a_ptr->a_cur_num = 0;
+    }
+
+    /* Wipe the quest */
+    guild_quest_wipe(TRUE);
+
+    /* Reset the fixed quests */
+    for (i = 0; i < z_info->q_max; i++)
+    {
+        quest_type *q_ptr = &q_info[i];
+
+        /* Reset level */
+        if (quest_fixed(q_ptr))
+        {
+            q_ptr->q_flags = 0L;
+            q_ptr->q_num_killed = 0;
+        }
+    }
+
+    /* Reset the "objects" */
+    for (i = 1; i < z_info->k_max; i++)
+    {
+        object_kind *k_ptr = &k_info[i];
+
+        /* Reset "tried" */
+        k_ptr->tried = FALSE;
+
+        /* Reset "aware" */
+        k_ptr->aware = FALSE;
+    }
+
+    /* Reset the "monsters" */
+    for (i = 1; i < z_info->r_max; i++)
+    {
+        monster_race *r_ptr = &r_info[i];
+        monster_lore *l_ptr = &l_list[i];
+
+        /* Hack -- Reset the counter */
+        r_ptr->cur_num = 0;
+
+        /* Hack -- Reset the max counter */
+        r_ptr->max_num = 100;
+
+        /* Hack -- Reset the max counter */
+        if (r_ptr->flags1 & (RF1_UNIQUE)) r_ptr->max_num = 1;
+
+        /* Clear player kills */
+        l_ptr->pkills = 0;
+    }
+
+    /*No current player ghosts*/
+    player_ghost_num = -1;
+    ghost_r_idx = 0;
+
+    /* Hack -- Well fed player */
+    p_ptr->food = PY_FOOD_FULL - 1;
+
+    /*re-set the altered inventory counter*/
+    allow_altered_inventory = FALSE;
+    altered_inventory_counter = 0;
+
+    /* None of the spells have been learned yet */
+    for (i = 0; i < PY_MAX_SPELLS; i++) p_ptr->spell_order[i] = 99;
+}
+
+void finish_birth()
+{
+    int i, n;
+
+    // Hit points
+    roll_hp();
+
+    /* Set adult options from birth options */
+    for (i = OPT_BIRTH; i < OPT_CHEAT; i++)
+    {
+        op_ptr->opt[OPT_ADULT + (i - OPT_BIRTH)] = op_ptr->opt[i];
+    }
+
+    /* Reset score options from cheat options */
+    for (i = OPT_CHEAT; i < OPT_ADULT; i++)
+    {
+        op_ptr->opt[OPT_SCORE + (i - OPT_CHEAT)] = op_ptr->opt[i];
+    }
+
+    /*Re-set the squelch settings.  Spellbooks are never_pickup by default. */
+    for (i = 0; i < z_info->k_max; i++)
+    {
+        /* Analyze the item type */
+        switch (k_info[i].tval)
+        {
+            case TV_MAGIC_BOOK:
+            case TV_PRAYER_BOOK:
+            case TV_DRUID_BOOK:
+            {
+                k_info[i].squelch = NO_SQUELCH_NEVER_PICKUP;
+
+                break;
+            }
+            default:
+            {
+                k_info[i].squelch = SQUELCH_NEVER;
+
+                break;
+            }
+        }
+    }
+
+    /* Clear the squelch bytes */
+    for (i = 0; i < SQUELCH_BYTES; i++)
+    {
+        squelch_level[i] = SQUELCH_NONE;
+    }
+
+    /* Clear the ego-item squelching flags */
+    for (i = 0; i < z_info->e_max; i++)
+    {
+        e_info[i].squelch = false;
+    }
+
+#if 0
+    /* Make a note file if that option is set */
+    if (adult_take_notes)
+    {
+
+        /* Variables */
+        char long_day[25];
+        time_t ct = time((time_t*)0);
+
+        /* Open the file (notes_file and notes_fname are global) */
+        create_notes_file();
+
+        if (!notes_file) quit("Can't create the notes file");
+
+        /* Get date */
+        (void)strftime(long_day, 25, "%m/%d/%Y at %I:%M %p", localtime(&ct));
+
+        /* Add in "character start" information */
+        file_putf(notes_file, "{{full_character_name}} the %s %s\n",
+                                p_name + rp_ptr->name,
+                                c_name + cp_ptr->name);
+        if (game_mode == GAME_NPPMORIA) file_putf(notes_file, "Began the quest to kill The Balrog of Moria on %s\n",long_day);
+        else file_putf(notes_file, "Began the quest to kill Morgoth on %s\n",long_day);
+        file_putf(notes_file, "============================================================\n");
+        file_putf(notes_file, "                   CHAR.  \n");
+        file_putf(notes_file, "|   TURN  | DEPTH |LEVEL| EVENT\n");
+        file_putf(notes_file, "============================================================\n");
+
+        /* Paranoia. Remove the notes from memory */
+        file_flush(notes_file);
+    }
+
+    /* Note player birth in the message recall */
+    message_add(" ", MSG_GENERIC);
+    message_add("  ", MSG_GENERIC);
+    message_add("====================", MSG_GENERIC);
+    message_add("  ", MSG_GENERIC);
+    message_add(" ", MSG_GENERIC);
+
+    /* Reset message prompt (i.e. no extraneous -more-s) */
+    msg_flag = TRUE;
+#endif
+
+    /* Hack -- outfit the player */
+    if (!birth_money) player_outfit();
+
+    /* Shops */
+    for (n = 0; n < MAX_STORES; n++)
+    {
+        /* Initialize */
+        store_init(n);
+
+        /* Ignore home */
+        if ((n == STORE_HOME) || (n == STORE_GUILD)) continue;
+
+        /* Maintain the shop (ten times) */
+        for (i = 0; i < 10; i++) store_maint(n);
+    }
+}
+
+void init_birth()
+{
+    player_wipe();
+
+    /* Turn off many options for Moria */
+    if (game_mode == GAME_NPPMORIA) set_moria_options();
 }

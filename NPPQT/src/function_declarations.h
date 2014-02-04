@@ -653,11 +653,13 @@ extern void write_note(QString note, s16b depth);
 extern QString get_player_title(void);
 
 // birth.cpp
+void init_birth();
+void finish_birth();
 void reset_stats(int stats[A_MAX], int points_spent[A_MAX], int *points_left);
 bool buy_stat(int choice, int stats[A_MAX], int points_spent[A_MAX], int *points_left);
 bool sell_stat(int choice, int stats[A_MAX], int points_spent[A_MAX], int *points_left);
 void generate_stats(int stats[A_MAX], int points_spent[A_MAX], int *points_left);
-void get_stats(int stat_use[A_MAX]);
 void generate_player();
+void roll_player(int stats[A_MAX]);
 
 #endif // FUNCTION_DECLARATIONS_H

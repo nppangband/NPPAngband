@@ -68,7 +68,7 @@ void object_type::object_wipe()
 }
 
 // Copy object safely without using memset.
-void object_type::object_copy (object_type *j_ptr)
+void object_type::object_copy(object_type *j_ptr)
 {
     k_idx = j_ptr->k_idx;
     iy = j_ptr->iy;

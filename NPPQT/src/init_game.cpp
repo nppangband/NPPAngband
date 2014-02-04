@@ -1081,7 +1081,7 @@ void init_npp_games(void)
 {
     QLabel status_update;
     status_update.setText (QString("Starting game"));
-    status_update.show();
+    //status_update.show();
 
     /*** Initialize some arrays ***/
 

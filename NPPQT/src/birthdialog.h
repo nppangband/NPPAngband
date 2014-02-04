@@ -16,6 +16,10 @@ public:
     explicit BirthDialog(QWidget *parent = 0);
     ~BirthDialog();
 
+    bool done_birth;
+
+    bool run();
+
 private slots:
     void on_cancel_button_clicked();
 
