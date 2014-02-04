@@ -137,4 +137,8 @@ void player_type::player_type_wipe()
     vulnerability = next_quest = cumulative_terrain_damage = 0;
     p_turn = 0;
     dungeon_type = 0;
+
+    for (int i = 0; i < OPT_MAX; i++) {
+        op_ptr->opt[i] = (options[i].normal != 0);
+    }
 }

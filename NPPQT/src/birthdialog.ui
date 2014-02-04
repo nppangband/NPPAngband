@@ -23,7 +23,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page1">
       <property name="sizePolicy">
@@ -173,7 +173,7 @@
           <bool>false</bool>
          </attribute>
          <attribute name="verticalHeaderVisible">
-          <bool>true</bool>
+          <bool>false</bool>
          </attribute>
          <row>
           <property name="text">
@@ -242,7 +242,7 @@
      <widget class="QWidget" name="page_2">
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBox1">
          <property name="title">
           <string>Stat allocation</string>
          </property>
@@ -305,6 +305,11 @@
            <string>Charisma</string>
           </property>
          </row>
+         <row>
+          <property name="text">
+           <string/>
+          </property>
+         </row>
          <column>
           <property name="text">
            <string>Self</string>
@@ -332,7 +337,7 @@
          </column>
          <column>
           <property name="text">
-           <string>Cost</string>
+           <string>Spent</string>
           </property>
          </column>
          <column>

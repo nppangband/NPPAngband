@@ -90,6 +90,9 @@ enum
     GAME_NPPMORIA
 };
 
+/* It was feasible to get base 17 in 3 stats with the autoroller */
+#define MAX_BIRTH_POINTS 24 /* 3 * (1+1+1+1+1+1+2) */
+
 /*
  * Number of grids in each block (vertically)
  * Probably hard-coded to 11, see "generate.c"

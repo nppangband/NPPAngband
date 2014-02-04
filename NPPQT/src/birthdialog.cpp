@@ -1,7 +1,7 @@
-#include "birthdialog.h"
 #include "ui_birthdialog.h"
 #include "optionsdialog.h"
 #include "npp.h"
+#include "birthdialog.h"
 #include <QRadioButton>
 #include <QGridLayout>
 #include <QButtonGroup>
@@ -30,8 +30,9 @@ static QString stat_notation(int value)
 void BirthDialog::update_points()
 {
     for (int i = 0; i < A_MAX; i++) {
-        int self = ui->edit_table->item(i, 0)->text().toInt();
-        int cost = self - 10;
+        int self = stats[i];
+        ui->edit_table->item(i, 0)->setText(QString::number(self));
+        int cost = points_spent[i];
         ui->edit_table->item(i, 5)->setText(QString::number(cost));
         int effective = ui->edit_table->item(i, 3)->text().toInt();
         int best = self + effective;
@@ -40,6 +41,8 @@ void BirthDialog::update_points()
         if (right > 0) best += (right * 10);
         ui->edit_table->item(i, 4)->setText(stat_notation(best));
     }
+    ui->edit_table->item(6, 4)->setText(QString("Left:"));
+    ui->edit_table->item(6, 5)->setText(QString::number(points_left));
     ui->edit_table->resizeColumnToContents(4);
 }
 
@@ -153,19 +156,14 @@ void BirthDialog::on_sell_clicked()
 {
     QWidget *button = dynamic_cast<QWidget *>(sender());
     int idx = button->property("stat_idx").toInt();
-    int self = ui->edit_table->item(idx, 0)->text().toInt();
-    if (--self < 10) return;
-    ui->edit_table->item(idx, 0)->setText(QString::number(self));
-    update_points();
+    if (sell_stat(idx, stats, points_spent, &points_left)) update_points();
 }
 
 void BirthDialog::on_buy_clicked()
 {
     QWidget *button = dynamic_cast<QWidget *>(sender());
     int idx = button->property("stat_idx").toInt();
-    int self = ui->edit_table->item(idx, 0)->text().toInt();
-    ui->edit_table->item(idx, 0)->setText(QString::number(self + 1));
-    update_points();
+    if (buy_stat(idx, stats, points_spent, &points_left)) update_points();
 }
 
 BirthDialog::~BirthDialog()
@@ -223,22 +221,29 @@ void BirthDialog::on_next_button_clicked()
             pop_up_message_box(tr("Select the character class"), QMessageBox::Critical);
             return;
         }
-        ui->stackedWidget->setCurrentIndex(1);
+
+        // Set global variables
+        rp_ptr = p_info + cur_race;
+        cp_ptr = c_info + cur_class;
+
+        ui->groupBox1->setTitle(QString("Stat allocation for %1 %2").arg(rp_ptr->pr_name).arg(cp_ptr->cl_name));
+
         ui->prev_button->setEnabled(true);
         ui->next_button->setText(tr("Finish"));
 
         for (int i = 0; i < A_MAX; i++) {
             int p = p_info[cur_race].r_adj[i];
             int c = c_info[cur_class].c_adj[i];
-            ui->edit_table->item(i, 0)->setText(QString::number(10));
             ui->edit_table->item(i, 1)->setText(format_stat(p));
             ui->edit_table->item(i, 2)->setText(format_stat(c));
             ui->edit_table->item(i, 3)->setText(format_stat(p+c));
-            ui->edit_table->item(i, 5)->setText("0");
         }
+        reset_stats(stats, points_spent, &points_left);
+        generate_stats(stats, points_spent, &points_left);
         update_points();
 
         ui->edit_table->resizeColumnsToContents();
+        ui->stackedWidget->setCurrentIndex(1);
     }
 }
 

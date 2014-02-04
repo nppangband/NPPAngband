@@ -652,5 +652,10 @@ extern void cmd_disable_repeat(void);
 extern void write_note(QString note, s16b depth);
 extern QString get_player_title(void);
 
+// birth.cpp
+void reset_stats(int stats[A_MAX], int points_spent[A_MAX], int *points_left);
+bool buy_stat(int choice, int stats[A_MAX], int points_spent[A_MAX], int *points_left);
+bool sell_stat(int choice, int stats[A_MAX], int points_spent[A_MAX], int *points_left);
+void generate_stats(int stats[A_MAX], int points_spent[A_MAX], int *points_left);
 
 #endif // FUNCTION_DECLARATIONS_H

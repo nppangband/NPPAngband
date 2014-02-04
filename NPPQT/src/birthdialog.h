@@ -2,6 +2,7 @@
 #define BIRTHDIALOG_H
 
 #include <QDialog>
+#include "player.h"
 
 namespace Ui {
 class BirthDialog;
@@ -41,6 +42,10 @@ private:
 
     int cur_race;
     int cur_class;
+
+    int stats[A_MAX];
+    int points_spent[A_MAX];
+    int points_left;
 };
 
 #endif // BIRTHDIALOG_H
