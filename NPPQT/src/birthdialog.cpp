@@ -31,18 +31,21 @@ void BirthDialog::update_points()
 {
     for (int i = 0; i < A_MAX; i++) {        
         int self = p_ptr->stat_max[i];
-        ui->edit_table->item(i, 0)->setText(QString::number(self));
+        ui->edit_table->item(i, 0)->setText(stat_notation(self));
 
         int cost = points_spent[i];
         ui->edit_table->item(i, 5)->setText(QString::number(cost));
 
         int best;        
         if (point_based) {
-            int effective = ui->edit_table->item(i, 3)->text().toInt();
-            best = self + effective;
-            int right = best - 18;
-            if (best > 18) best = 18;
-            if (right > 0) best += (right * 10);
+            if (adult_maximize) {
+                int bonus = ui->edit_table->item(i, 3)->text().toInt();
+                best = modify_stat_value(stats[i], bonus);
+            }
+            else {
+                best = p_ptr->stat_max[i];
+            }
+
         }
         else {
             best = stats[i];
