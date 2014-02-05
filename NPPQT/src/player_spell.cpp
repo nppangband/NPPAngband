@@ -40,7 +40,7 @@ static void cast_prismatic_spray(int dir, int dam)
         }
         case (14):
         {
-            gftype = GF_INERTIA;
+            gftype = GF_INERTIA_NPP;
             dam *= 2;
             message("You conjure forth a torrent of inertia.");
             break;

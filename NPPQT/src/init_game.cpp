@@ -663,6 +663,7 @@ static int init_other(void)
     /*** Prepare the options ***/
 
     p_ptr->player_type_wipe();
+    op_ptr->player_other_wipe();
 
     /*Clear the update flags*/
     p_ptr->notice = 0L;
@@ -1081,7 +1082,7 @@ void init_npp_games(void)
 {
     QLabel status_update;
     status_update.setText (QString("Starting game"));
-    status_update.show();
+    //status_update.show();
 
     /*** Initialize some arrays ***/
 

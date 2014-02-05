@@ -1441,7 +1441,7 @@ static bool store_service_aux(int store_num, s16b choice)
             }
 
             /* Ask confirmation */
-            if (!get_check(QString("Really defer your reward, %1?") .arg(title))); return (FALSE);
+            if (!get_check(QString("Really defer your reward, %1?").arg(title))) return (FALSE);
 
             p_ptr->deferred_rewards += (q_ptr->q_fame_inc * 3) / 2;
 
@@ -1483,7 +1483,7 @@ static bool store_service_aux(int store_num, s16b choice)
             }
 
             /* Ask confirmation */
-            if (!get_check(QString("Do you wish to permanently increase your stats, %1?") .arg(title))); return (FALSE);
+            if (!get_check(QString("Do you wish to permanently increase your stats, %1?").arg(title))) return (FALSE);
 
             /* Boost all six stats */
             for (i = 0; i < A_MAX; i++) do_perm_stat_boost(i);

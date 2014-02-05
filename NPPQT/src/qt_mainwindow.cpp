@@ -1,12 +1,10 @@
 #include <QtWidgets>
 
-
 #include "src/qt_mainwindow.h"
 #include "src/npp.h"
 #include "src/init.h"
 #include "src/optionsdialog.h"
 #include "src/birthdialog.h"
-
 
 // The main function - intitalize the main window and set the menus.
 MainWindow::MainWindow()
@@ -25,9 +23,7 @@ MainWindow::MainWindow()
 
     read_settings();
 
-
     setWindowFilePath(QString());
-
 }
 
 //  Support functions for the file menu.
@@ -41,6 +37,8 @@ void MainWindow::start_game_nppangband()
     update_file_menu_game_active();
 
     init_npp_games();
+
+    launch_birth();
 }
 
 // Prepare to play a game of NPPMoria.
@@ -52,14 +50,14 @@ void MainWindow::start_game_nppmoria()
     update_file_menu_game_active();
 
     init_npp_games();
+
+    launch_birth();
 }
 
 void MainWindow::open_current_savefile()
 {
     // Let the user select the savefile
     QString fileName = QFileDialog::getOpenFileName(this, tr("Select a savefile"), NPP_DIR_SAVE, tr("NPP (*.npp)"));
-
-
 }
 
 void MainWindow::save_character()
@@ -98,8 +96,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     write_settings();
     event->accept();
-
-
 }
 
 void MainWindow::open_recent_file()
@@ -120,11 +116,6 @@ void MainWindow::options_dialog()
 
 void MainWindow::about()
 {
-   BirthDialog *dlg = new BirthDialog(this);
-   dlg->exec();
-   delete dlg;
-   return;
-
    QMessageBox::about(this, tr("About NPPAngband and NPPMoria"),
             tr("<h2>NPPAngband and NPPMoria"
                "<p>Copyright (c) 2003-2015 Jeff Greene and Diego González.</h2>"
@@ -362,7 +353,14 @@ void MainWindow::load_file(const QString &file_name)
 
 }
 
-
+void MainWindow::launch_birth()
+{
+    BirthDialog *dlg = new BirthDialog(this);
+    if (dlg->run()) {
+        pop_up_message_box("DONE WITH BIRTH!");
+    }
+    delete dlg;
+}
 
 void MainWindow::save_file(const QString &file_name)
 {

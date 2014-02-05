@@ -2,6 +2,7 @@
 #define BIRTHDIALOG_H
 
 #include <QDialog>
+#include "player.h"
 
 namespace Ui {
 class BirthDialog;
@@ -15,23 +16,52 @@ public:
     explicit BirthDialog(QWidget *parent = 0);
     ~BirthDialog();
 
+    bool done_birth;
+
+    bool run();
+
 private slots:
     void on_cancel_button_clicked();
 
     void on_options_button_clicked();
 
-    void on_race_combo_currentIndexChanged(int index);
-
-    void on_class_combo_currentIndexChanged(int index);
-
     void on_next_button_clicked();
 
     void on_prev_button_clicked();
+
+    void on_bg1_clicked(int index);
+
+    void on_bg2_clicked(int index);
+
+    void on_sell_clicked();
+
+    void on_buy_clicked();
+
+    void on_point_radio_clicked();
+
+    void on_roller_radio_clicked();
+
+    void on_roll_button_clicked();
 
 private:
     Ui::BirthDialog *ui;
 
     void update_stats();
+
+    void update_points();
+
+    void update_others();
+
+    int cur_race;
+    int cur_class;
+
+    int stats[A_MAX];
+    int points_spent[A_MAX];
+    int points_left;
+
+    bool dirty;
+
+    bool point_based;
 };
 
 #endif // BIRTHDIALOG_H
