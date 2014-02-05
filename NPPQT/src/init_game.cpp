@@ -1209,10 +1209,10 @@ void cleanup_npp_games(void)
     delete_notes_file();
 
     /* Free the allocation tables */
-    FREE(alloc_ego_table);
-    FREE(alloc_feat_table);
-    FREE(alloc_race_table);
-    FREE(alloc_kind_table);
+    FREE_ARRAY(alloc_ego_table);
+    FREE_ARRAY(alloc_feat_table);
+    FREE_ARRAY(alloc_race_table);
+    FREE_ARRAY(alloc_kind_table);
 
     if (store)
     {
@@ -1223,63 +1223,63 @@ void cleanup_npp_games(void)
             store_type *st_ptr = &store[i];
 
             /* Free the store inventory */
-            FREE(st_ptr->stock);
+            if (st_ptr->stock) FREE_ARRAY(st_ptr->stock);
         }
     }
 
     /* Free the stores */
-    FREE(store);
+    FREE_ARRAY(store);
 
     /* Free the player inventory */
-    FREE(inventory);
+    FREE_ARRAY(inventory);
 
     // Free the various edit file arrays
-    FREE(z_info);
-    FREE(f_info);
-    FREE(k_info);
-    FREE(t_info);
-    FREE(a_info);
-    FREE(e_info);
-    FREE(r_info);
-    FREE(v_info);
-    FREE(p_info);
-    FREE(c_info);
-    FREE(h_info);
-    FREE(b_info);
-    FREE(q_info);
-    FREE(n_info);
-    FREE(flavor_info);
+    FREE_ARRAY(z_info);
+    FREE_ARRAY(f_info);
+    FREE_ARRAY(k_info);
+    FREE_ARRAY(t_info);
+    FREE_ARRAY(a_info);
+    FREE_ARRAY(e_info);
+    FREE_ARRAY(r_info);
+    FREE_ARRAY(v_info);
+    FREE_ARRAY(p_info);
+    FREE_ARRAY(c_info);
+    FREE_ARRAY(h_info);
+    FREE_ARRAY(b_info);
+    FREE_ARRAY(q_info);
+    FREE_ARRAY(n_info);
+    FREE_ARRAY(flavor_info);
 
 
     /* Free the lore, monster, effects, and object lists */
-    FREE(l_list);
-    FREE(f_l_list);
-    FREE(a_l_list);
-    FREE(mon_list);
-    FREE(o_list);
-    FREE(x_list);
+    FREE_ARRAY(l_list);
+    FREE_ARRAY(f_l_list);
+    FREE_ARRAY(a_l_list);
+    FREE_ARRAY(mon_list);
+    FREE_ARRAY(o_list);
+    FREE_ARRAY(x_list);
 
 
     /* Prepare monster movement array*/
-    FREE(mon_moment_info);
+    FREE_ARRAY(mon_moment_info);
 
     /* Free the "update_view()" array */
-    FREE(view_g);
+    FREE_ARRAY(view_g);
 
     /* Free the other "update_view()" array */
-    FREE(fire_g);
+    FREE_ARRAY(fire_g);
 
     /* Free the temp array */
-    FREE(temp_g);
-    FREE(temp_y);
-    FREE(temp_x);
+    FREE_ARRAY(temp_g);
+    FREE_ARRAY(temp_y);
+    FREE_ARRAY(temp_x);
 
     /* Free the dynamic features array */
-    FREE(dyna_g);
+    FREE_ARRAY(dyna_g);
 
     /* Free the stacked monster messages */
-    FREE(mon_msg);
-    FREE(mon_message_hist);
+    FREE_ARRAY(mon_msg);
+    FREE_ARRAY(mon_message_hist);
 
     /*free the randart arrays*/
     free_randart_tables();
@@ -1359,7 +1359,7 @@ static void flavor_assign_random(byte tval)
 
         if (!flavor_count)
         {
-            FREE(flavor);
+            FREE_ARRAY(flavor);
             quit_npp_games(QString("Not enough flavors for tval %1.")  .arg(tval));
         }
 
@@ -1379,7 +1379,7 @@ static void flavor_assign_random(byte tval)
     }
 
     /* Free the array */
-    FREE(flavor);
+    FREE_ARRAY(flavor);
 }
 
 

@@ -3467,8 +3467,7 @@ void build_randart_tables(void)
 /*free the randart tables at the end of the game*/
 void free_randart_tables(void)
 {
-
-    FREE(kinds);
+    FREE_ARRAY(kinds);
 }
 
 

@@ -94,6 +94,8 @@ void MainWindow::save_and_close()
 
     set_current_savefile("");
 
+    character_loaded = false;
+
     update_file_menu_game_inactive();
 
     // close game
