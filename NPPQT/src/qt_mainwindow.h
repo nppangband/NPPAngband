@@ -52,6 +52,8 @@ private:
     // The editable part of the main window.
     QTextEdit *text_edit;
 
+    void setup_nppangband();
+    void setup_nppmoria();
     void launch_birth();
 
 
