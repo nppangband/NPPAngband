@@ -9,6 +9,7 @@ class BirthDialog;
 }
 
 class QButtonGroup;
+class QPushButton;
 
 class BirthDialog : public QDialog
 {
@@ -55,6 +56,8 @@ private slots:
 
     void on_sex_combo_currentIndexChanged(int index);
 
+    void on_ran_char_button_clicked();
+
 private:
     Ui::BirthDialog *ui;
 
@@ -77,6 +80,8 @@ private:
 
     QButtonGroup *bg1;
     QButtonGroup *bg2;
+    QPushButton *ran_race_button;
+    QPushButton *ran_class_button;
 };
 
 #endif // BIRTHDIALOG_H

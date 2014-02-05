@@ -945,12 +945,12 @@ static bool wr_savefile(void)
 
     u16b tmp16u;
 
-    // Open the current file
+    // Open the current file       
     save_file.setFileName(current_savefile);
     save_file.open(QIODevice::WriteOnly);
 
     // Ensure the data is read and written consistently
-    out.setVersion(QDataStream::Qt_5_1);
+    out.setVersion(QDataStream::Qt_5_1);    
 
     /*** Actually write the file ***/
 
@@ -973,11 +973,9 @@ static bool wr_savefile(void)
     /* Number of times saved */
     wr_u16b(sf_saves);
 
-
     /* Space */
     wr_u32b(0L);
     wr_u32b(0L);
-
 
     /* Write the RNG state */
     wr_randomizer();
@@ -988,7 +986,7 @@ static bool wr_savefile(void)
     /* Dump the number of "messages" */
     //TODO - create messages system
     //tmp16u = messages_num();
-    tmp16u = 80;
+    tmp16u = message_list.length();
     if (tmp16u > 80) tmp16u = 80;
     wr_u16b(tmp16u);
 
@@ -1001,7 +999,6 @@ static bool wr_savefile(void)
         wr_byte(message_list[i].msg_color.blue());
         wr_s32b(message_list[i].message_turn);
     }
-
 
     /* Dump the monster lore */
     tmp16u = z_info->r_max;
@@ -1131,6 +1128,8 @@ static bool wr_savefile(void)
         /* Dump the dungeon */
         wr_dungeon();
     }
+
+    save_file.close();
 
     /* Successful save */
     return TRUE;

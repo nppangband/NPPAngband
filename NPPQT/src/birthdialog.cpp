@@ -124,6 +124,7 @@ BirthDialog::BirthDialog(QWidget *parent) :
     button1->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
     connect(button1, SIGNAL(clicked()), this, SLOT(on_random_race_clicked()));
     g1->addWidget(button1, row + 1, 0);
+    ran_race_button = button1;
 
     // Create the class radios
     QGridLayout *g2 = new QGridLayout();
@@ -146,6 +147,7 @@ BirthDialog::BirthDialog(QWidget *parent) :
     button2->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
     connect(button2, SIGNAL(clicked()), this, SLOT(on_random_class_clicked()));
     g2->addWidget(button2, row + 1, 0);
+    ran_class_button = button2;
 
     // Fill the tables with empty items
     for (int i = 0; i < ui->stats_table->rowCount(); i++) {
@@ -345,6 +347,7 @@ void BirthDialog::on_next_button_clicked()
 
         // UGLY HACK!
         if (game_mode == GAME_NPPANGBAND) adult_maximize = birth_maximize;
+        else adult_maximize = birth_maximize = false;
 
         // Reset to point based generation if race or class changed
         if (dirty) {
@@ -448,4 +451,12 @@ void BirthDialog::on_ran_sex_button_clicked()
 void BirthDialog::on_sex_combo_currentIndexChanged(int index)
 {
     dirty = true;
+}
+
+void BirthDialog::on_ran_char_button_clicked()
+{
+    ui->ran_sex_button->click();
+    ui->gen_name_button->click();
+    ran_race_button->click();
+    ran_class_button->click();
 }

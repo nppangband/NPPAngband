@@ -357,7 +357,8 @@ void MainWindow::launch_birth()
 {
     BirthDialog *dlg = new BirthDialog(this);
     if (dlg->run()) {
-        pop_up_message_box("DONE WITH BIRTH!");
+        //pop_up_message_box("DONE WITH BIRTH!");
+        save_character();
         update_file_menu_game_active();
     }
     delete dlg;
@@ -365,17 +366,14 @@ void MainWindow::launch_birth()
 
 void MainWindow::save_file(const QString &file_name)
 {
-    QFile file(file_name);
+    set_current_savefile(file_name);
+
     if (!save_player())
     {
-        QMessageBox::warning(this, tr("Recent Files"),
-                             tr("Cannot write file %1:\n%2.")
-                             .arg(file_name)
-                             .arg(file.errorString()));
+        QMessageBox::warning(this, tr("Recent Files"), tr("Cannot write file %1").arg(file_name));
         return;
     }
 
-    set_current_savefile(file_name);
     statusBar()->showMessage(tr("File saved"), 2000);
 }
 
