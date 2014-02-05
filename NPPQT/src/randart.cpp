@@ -3512,10 +3512,10 @@ int do_randart(u32b randart_seed, bool full)
     {
 
         /* Free the "original powers" arrays */
-        FREE(base_power);
-        FREE(base_item_level);
-        FREE(base_item_rarity);
-        FREE(base_art_rarity);
+        FREE_ARRAY(base_power);
+        FREE_ARRAY(base_item_level);
+        FREE_ARRAY(base_item_rarity);
+        FREE_ARRAY(base_art_rarity);
     }
 
     /* When done, resume use of the Angband "complex" RNG. */
