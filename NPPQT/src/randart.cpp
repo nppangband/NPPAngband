@@ -72,6 +72,7 @@ startover:
     vow = 0;
     lnum = 0;
     tries = 0;
+    word_buf_position = 0;
     c_prev = c_cur = S_WORD;
 
     while (1)

@@ -106,7 +106,7 @@ BirthDialog::BirthDialog(QWidget *parent) :
     // Create the race radios
     QGridLayout *g1 = new QGridLayout();
     ui->raceBox->setLayout(g1);
-    QButtonGroup *bg1 = new QButtonGroup();
+    bg1 = new QButtonGroup();
     connect(bg1, SIGNAL(buttonClicked(int)), this, SLOT(on_bg1_clicked(int)));
     int col = 0;
     int row = 0;
@@ -126,7 +126,7 @@ BirthDialog::BirthDialog(QWidget *parent) :
     ui->classBox->setLayout(g2);
     col = 0;
     row = 0;
-    QButtonGroup *bg2 = new QButtonGroup();
+    bg2 = new QButtonGroup();
     connect(bg2, SIGNAL(buttonClicked(int)), this, SLOT(on_bg2_clicked(int)));
     for (int i = 0; i < z_info->c_max; i++) {
         QRadioButton *radio = new QRadioButton(c_info[i].cl_name);
@@ -194,16 +194,37 @@ BirthDialog::BirthDialog(QWidget *parent) :
     ui->stackedWidget->setCurrentIndex(0);
 }
 
+static QString fmt_bonus(int value)
+{
+    QString result;
+    if (value >= 0) result.append('+');
+    result.append(QString::number(value));
+    return result;
+}
+
 void BirthDialog::update_others()
 {
     ui->history_edit->clear();
     ui->history_edit->appendPlainText(p_ptr->history);
 
-    ui->abilities_table->item(0, 0)->setText(QString::number(p_ptr->age));
-    ui->abilities_table->item(1, 0)->setText(QString::number(p_ptr->ht));
-    ui->abilities_table->item(2, 0)->setText(QString::number(p_ptr->wt));
-    ui->abilities_table->item(3, 0)->setText(QString::number(p_ptr->sc));
-    ui->abilities_table->item(4, 0)->setText(QString::number(p_ptr->au));
+    calc_bonuses(inventory, &p_ptr->state, false);
+
+    player_state *state = &p_ptr->state;
+
+    QString data[] = {
+        QString::number(p_ptr->age),
+        QString::number(p_ptr->ht),
+        QString::number(p_ptr->wt),
+        QString::number(p_ptr->sc),
+        QString::number(p_ptr->au),
+        QString("[%1,%2]").arg(state->dis_ac).arg(fmt_bonus(state->dis_to_a)),
+        QString("(%1,%2)").arg(fmt_bonus(state->dis_to_h)).arg(fmt_bonus(state->dis_to_d)),
+        QString("%1/turn").arg(state->num_blow),
+        QString("-end")
+    };
+    for (int i = 0; data[i].compare("-end") != 0; i++) {
+        ui->abilities_table->item(i, 0)->setText(data[i]);
+    }
 }
 
 void BirthDialog::on_sell_clicked()
@@ -257,6 +278,13 @@ void BirthDialog::update_stats()
 void BirthDialog::on_next_button_clicked()
 {
     if (ui->stackedWidget->currentIndex() == 0) {
+        // TESTING: create a human warrior without clicking anything
+        /*
+        ui->sex_combo->setCurrentIndex(0);
+        bg1->button(0)->click();
+        bg2->button(0)->click();
+        */
+
         // Validations
         if (ui->name_edit->text().trimmed().length() == 0) {
             /*
@@ -373,4 +401,12 @@ bool BirthDialog::run()
 {
     this->exec();
     return this->done_birth;
+}
+
+void BirthDialog::on_gen_name_button_clicked()
+{
+    QString name = make_random_name(4, 12);
+    QChar chr = name.at(0).toUpper();
+    name.replace(0, 1, chr);
+    ui->name_edit->setText(name);
 }

@@ -8,6 +8,8 @@ namespace Ui {
 class BirthDialog;
 }
 
+class QButtonGroup;
+
 class BirthDialog : public QDialog
 {
     Q_OBJECT
@@ -43,6 +45,8 @@ private slots:
 
     void on_roll_button_clicked();
 
+    void on_gen_name_button_clicked();
+
 private:
     Ui::BirthDialog *ui;
 
@@ -62,6 +66,9 @@ private:
     bool dirty;
 
     bool point_based;
+
+    QButtonGroup *bg1;
+    QButtonGroup *bg2;
 };
 
 #endif // BIRTHDIALOG_H
