@@ -23,7 +23,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page1">
       <property name="sizePolicy">
@@ -436,6 +436,21 @@
          <row>
           <property name="text">
            <string>Gold</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>Armor</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>Fight</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>Blows</string>
           </property>
          </row>
          <column>
