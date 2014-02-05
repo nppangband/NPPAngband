@@ -274,7 +274,7 @@ static long eval_max_dam(int r_idx)
                     }
                     else if (flag_counter == RF4_BRTH_INER)
                     {
-                        which_gf = GF_INERTIA;
+                        which_gf = GF_INERTIA_NPP;
                         mult = 3;
                         div_by = 2;
                     }

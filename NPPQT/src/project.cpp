@@ -452,20 +452,15 @@ bool teleport_player_level(int who)
     /* Verify leaving normal quest level */
     if ((who == SOURCE_PLAYER) && (verify_leave_quest))
     {
-        char out_val[160];
-
         if (quest_might_fail_if_leave_level())
-        {
-            sprintf(out_val, "Really risk failing your quest? ");
-            if (!get_check(out_val)) return(FALSE);
+        {            
+            if (!get_check("Really risk failing your quest?")) return(FALSE);
         }
 
         /* Verify leaving normal quest level */
         else if (quest_shall_fail_if_leave_level())
-
-        {
-            sprintf(out_val, "Really fail your quest? ");
-            if (!get_check(out_val)) return(FALSE);
+        {            
+            if (!get_check("Really fail your quest?")) return(FALSE);
         }
     }
 
@@ -1119,7 +1114,7 @@ byte gf_color(int type)
         case GF_OLD_SLOW:	return (TERM_PINK);
         case GF_OLD_CONF:	return (confu_color());
         case GF_OLD_SLEEP:	return (TERM_L_DARK);
-        case GF_INERTIA:	return (iner_color());
+        case GF_INERTIA_NPP:	return (iner_color());
         case GF_GRAVITY:	return (grav_color());
         case GF_TIME:		return (TERM_L_BLUE);
         case GF_LIGHT_WEAK:	return (light_color());
@@ -4280,7 +4275,7 @@ bool project_m(int who, int y, int x, int damage, int typ, u32b flg)
         }
 
         /* Inertia -- breathers resist */
-        case GF_INERTIA:
+        case GF_INERTIA_NPP:
         {
             if (seen) obvious = TRUE;
             if (r_ptr->flags4 & (RF4_BRTH_INER))
@@ -6063,7 +6058,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         }
 
         /* Inertia -- slowness */
-        case GF_INERTIA:
+        case GF_INERTIA_NPP:
         {
             if (blind) message("You are hit by something strange!");
             (void)inc_timed(TMD_SLOW, rand_int(4) + 4, TRUE);
@@ -6391,7 +6386,7 @@ static bool project_x(int who, int y, int x, int dam, int typ, u32b project_flg)
             break;
         }
         case GF_GRAVITY:
-        case GF_INERTIA:
+        case GF_INERTIA_NPP:
         {
             int feat = ((typ == GF_GRAVITY) ? FEAT_GRAVITY : FEAT_INERTIA);
 

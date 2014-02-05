@@ -52,6 +52,8 @@ private:
     // The editable part of the main window.
     QTextEdit *text_edit;
 
+    void launch_birth();
+
 
     // Functions that initialize the file menu of the main window.
     void create_actions();

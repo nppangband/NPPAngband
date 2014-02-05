@@ -90,6 +90,9 @@ enum
     GAME_NPPMORIA
 };
 
+/* It was feasible to get base 17 in 3 stats with the autoroller */
+#define MAX_BIRTH_POINTS 24 /* 3 * (1+1+1+1+1+1+2) */
+
 /*
  * Number of grids in each block (vertically)
  * Probably hard-coded to 11, see "generate.c"
@@ -341,7 +344,7 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 #define GF_METEOR		10
 #define GF_ICE			11
 #define GF_GRAVITY		12
-#define GF_INERTIA		13
+#define GF_INERTIA_NPP		13
 #define GF_FORCE		14
 #define GF_TIME			15
 #define GF_ACID			16

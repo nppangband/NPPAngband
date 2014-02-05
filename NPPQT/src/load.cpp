@@ -1133,8 +1133,8 @@ static int rd_extra(void)
 
         if (i < file_e_max) rd_byte(&tmp8u);
 
-        e_ptr->squelch |= (tmp8u & 0x01);
-        e_ptr->everseen |= (tmp8u & 0x02);
+        e_ptr->squelch = ((tmp8u & 0x01) != 0);
+        e_ptr->everseen = ((tmp8u & 0x02) != 0);
 
         /* Hack - Repair the savefile */
         if (!e_ptr->everseen) e_ptr->squelch = FALSE;

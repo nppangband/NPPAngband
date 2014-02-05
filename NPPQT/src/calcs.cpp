@@ -991,16 +991,16 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 
     int old_speed;
 
-    int old_telepathy;
-    int old_see_inv;
+    bool old_telepathy;
+    bool old_see_inv;
 
 
     int old_dis_ac;
     int old_dis_to_a;
 
-    int extra_blows;
-    int extra_shots;
-    int extra_might;
+    int extra_blows = 0;
+    int extra_shots = 0;
+    int extra_might = 0;
 
     int old_stat_top[A_MAX];
     int old_stat_use[A_MAX];

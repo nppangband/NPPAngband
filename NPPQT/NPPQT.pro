@@ -55,7 +55,8 @@ SOURCES +=  src/qt_main.cpp\
             src/target.cpp \
             src/timed.cpp \
             src/utilities.cpp \
-    src/birthdialog.cpp
+    src/birthdialog.cpp \
+    src/birth.cpp
 
 
 

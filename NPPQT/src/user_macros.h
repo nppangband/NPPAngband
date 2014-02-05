@@ -23,6 +23,9 @@
 /* Free one thing at P, return NULL */
 #define FREE(P) (delete(P), P = NULL)
 
+/* Free one thing at P, return NULL */
+#define FREE_ARRAY(P) (delete [] (P), P = NULL)
+
 #define MIN(a,b)	(((a) > (b)) ? (b)  : (a))
 #define MAX(a,b)	(((a) < (b)) ? (b)  : (a))
 #define ABS(a)		(((a) < 0)   ? (-(a)) : (a))
