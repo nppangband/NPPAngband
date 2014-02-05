@@ -1,6 +1,7 @@
 #include <src/init.h>
 #include <src/npp.h>
 
+#include <ctime>
 #include <QMainWindow>
 #include <QLabel>
 #include <src/qt_mainwindow.h>
@@ -1031,6 +1032,31 @@ static int init_alloc(void)
     return (0);
 }
 
+static void init_rng()
+{
+    /* Init RNG */
+    if (Rand_quick)
+    {
+        u32b seed;
+
+        /* Basic seed */
+        seed = (time(NULL));
+
+#ifdef SET_UID
+
+        /* Mutate the seed on Unix machines */
+        seed = ((seed >> 3) * (getpid() << 1));
+
+#endif
+
+        /* Use the complex RNG */
+        Rand_quick = FALSE;
+
+        /* Seed the "complex" RNG */
+        Rand_state_init(seed);
+    }
+}
+
 /*
  * Hack -- main Angband initialization entry point
  *
@@ -1080,6 +1106,8 @@ static int init_alloc(void)
  */
 void init_npp_games(void)
 {
+    init_rng();
+
     QLabel status_update;
     status_update.setText (QString("Starting game"));
     //status_update.show();

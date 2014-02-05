@@ -61,19 +61,18 @@ static s16b cur_art_k_idx;
  */
 QString make_random_name(byte min_length, byte max_length)
 {
-    QString word_buf;
+    QString word_buf("");
     int r, totalfreq;
     int tries, lnum, vow;
-    int c_prev, c_cur, c_next;
-    int word_buf_position = 0;
+    int c_prev, c_cur, c_next;    
     QChar single_letter;
 
 startover:
     vow = 0;
     lnum = 0;
-    tries = 0;
-    word_buf_position = 0;
+    tries = 0;    
     c_prev = c_cur = S_WORD;
+    word_buf.clear();
 
     while (1)
     {
@@ -96,26 +95,25 @@ startover:
                 tries++;
                 if (tries < 10) goto getletter;
                 goto startover;
-            }
-            word_buf[word_buf_position] = '\0';
+            }            
             break;
         }
 
         if (lnum >= max_length) goto startover;
 
-        word_buf[word_buf_position] = number_to_letter(c_next);
+        single_letter = number_to_letter(c_next);
 
-        single_letter = word_buf[word_buf_position];
+        word_buf.append(QString(single_letter));
 
         if (is_a_vowel(single_letter)) vow++;
 
-        word_buf_position++;
         lnum++;
         c_prev = c_cur;
         c_cur = c_next;
     }
 
-    word_buf[0].toUpper();
+    QChar chr = word_buf.at(0).toUpper();
+    word_buf.replace(0, 1, chr);
 
     return (word_buf);
 }

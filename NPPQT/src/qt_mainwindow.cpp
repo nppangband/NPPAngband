@@ -34,7 +34,7 @@ void MainWindow::start_game_nppangband()
     game_mode = GAME_NPPANGBAND;
 
     setWindowTitle(tr("NPPAngband"));
-    update_file_menu_game_active();
+    //update_file_menu_game_active();
 
     init_npp_games();
 
@@ -47,7 +47,7 @@ void MainWindow::start_game_nppmoria()
     game_mode = GAME_NPPMORIA;
 
     setWindowTitle(tr("NPPMoria"));
-    update_file_menu_game_active();
+    //update_file_menu_game_active();
 
     init_npp_games();
 
@@ -358,6 +358,7 @@ void MainWindow::launch_birth()
     BirthDialog *dlg = new BirthDialog(this);
     if (dlg->run()) {
         pop_up_message_box("DONE WITH BIRTH!");
+        update_file_menu_game_active();
     }
     delete dlg;
 }

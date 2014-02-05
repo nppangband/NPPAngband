@@ -2606,15 +2606,15 @@ int parse_a_info(QString line_info)
  */
 static int build_prob(QString name, names_type *n_ptr)
 {
+    // eliminate spaces
+    name.remove(QChar(' '));
+
     int length = name.length();
 
     int c_prev, c_cur, c_next;
 
     // Make sure there is an actual name
-    if (!length)	return PARSE_ERROR_GENERIC;
-
-    // eliminate spaces
-    name.remove(QChar(' '));
+    if (!length)	return PARSE_ERROR_GENERIC;    
 
     c_prev = c_cur = S_WORD;
 
@@ -2624,7 +2624,7 @@ static int build_prob(QString name, names_type *n_ptr)
 
         if (character.isLetter())
         {
-            character.toLower();
+            character = character.toLower();
 
             c_next = letter_to_number(character);
             n_ptr->lprobs[c_prev][c_cur][c_next]++;

@@ -47,6 +47,14 @@ private slots:
 
     void on_gen_name_button_clicked();
 
+    void on_ran_sex_button_clicked();
+
+    void on_random_race_clicked();
+
+    void on_random_class_clicked();
+
+    void on_sex_combo_currentIndexChanged(int index);
+
 private:
     Ui::BirthDialog *ui;
 
