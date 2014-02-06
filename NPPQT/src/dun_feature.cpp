@@ -3253,7 +3253,7 @@ s16b select_powerful_race(void)
         if (n < MAX_RACES) ++n;
     }
 
-    FREE(marked);
+    FREE_ARRAY(marked);
 
     /* Paranoia */
     if (n == 0) return (0);

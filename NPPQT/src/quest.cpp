@@ -2053,7 +2053,7 @@ static bool place_greater_vault_quest(int lev)
     /* Paranoia - should never happen unless somebody has messed up vaults.txt. */
     if (!vault_choices)
     {
-        FREE(vaults);
+        FREE_ARRAY(vaults);
         return (FALSE);
     }
 
@@ -2061,7 +2061,7 @@ static bool place_greater_vault_quest(int lev)
     i = randint0(vault_choices);
     q_ptr->q_theme = vaults[i];
 
-    FREE(vaults);
+    FREE_ARRAY(vaults);
 
     /* For vault quests, the reward is found in the greater vault */
     q_ptr->q_reward |= REWARD_GOLD;

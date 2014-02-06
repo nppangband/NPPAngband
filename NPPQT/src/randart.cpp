@@ -61,19 +61,18 @@ static s16b cur_art_k_idx;
  */
 QString make_random_name(byte min_length, byte max_length)
 {
-    QString word_buf;
+    QString word_buf("");
     int r, totalfreq;
     int tries, lnum, vow;
-    int c_prev, c_cur, c_next;
-    int word_buf_position = 0;
+    int c_prev, c_cur, c_next;    
     QChar single_letter;
 
 startover:
     vow = 0;
     lnum = 0;
-    tries = 0;
-    word_buf_position = 0;
+    tries = 0;    
     c_prev = c_cur = S_WORD;
+    word_buf.clear();
 
     while (1)
     {
@@ -96,26 +95,25 @@ startover:
                 tries++;
                 if (tries < 10) goto getletter;
                 goto startover;
-            }
-            word_buf[word_buf_position] = '\0';
+            }            
             break;
         }
 
         if (lnum >= max_length) goto startover;
 
-        word_buf[word_buf_position] = number_to_letter(c_next);
+        single_letter = number_to_letter(c_next);
 
-        single_letter = word_buf[word_buf_position];
+        word_buf.append(QString(single_letter));
 
         if (is_a_vowel(single_letter)) vow++;
 
-        word_buf_position++;
         lnum++;
         c_prev = c_cur;
         c_cur = c_next;
     }
 
-    word_buf[0].toUpper();
+    QChar chr = word_buf.at(0).toUpper();
+    word_buf.replace(0, 1, chr);
 
     return (word_buf);
 }
@@ -3469,8 +3467,7 @@ void build_randart_tables(void)
 /*free the randart tables at the end of the game*/
 void free_randart_tables(void)
 {
-
-    FREE(kinds);
+    FREE_ARRAY(kinds);
 }
 
 
@@ -3515,10 +3512,10 @@ int do_randart(u32b randart_seed, bool full)
     {
 
         /* Free the "original powers" arrays */
-        FREE(base_power);
-        FREE(base_item_level);
-        FREE(base_item_rarity);
-        FREE(base_art_rarity);
+        FREE_ARRAY(base_power);
+        FREE_ARRAY(base_item_level);
+        FREE_ARRAY(base_item_rarity);
+        FREE_ARRAY(base_art_rarity);
     }
 
     /* When done, resume use of the Angband "complex" RNG. */

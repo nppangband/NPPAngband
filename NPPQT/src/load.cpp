@@ -2179,6 +2179,8 @@ static int read_savefile(void)
     /* Allow empty savefile name */
     if (current_savefile.isEmpty()) return (FALSE);
 
+    save_file.setFileName(current_savefile);
+
     /* Open the savefile */
     if (!save_file.exists())
     {
@@ -2238,6 +2240,9 @@ static int read_savefile(void)
 bool load_player(void)
 {
     byte savefile_game;
+
+    /* We start empty */
+    character_loaded = false;
 
     /* Paranoia */
     turn = 0;

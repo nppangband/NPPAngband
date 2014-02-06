@@ -26,17 +26,30 @@ MainWindow::MainWindow()
     setWindowFilePath(QString());
 }
 
+void MainWindow::setup_nppangband()
+{
+    game_mode = GAME_NPPANGBAND;
+
+    setWindowTitle(tr("NPPAngband"));
+
+    init_npp_games();
+}
+
+void MainWindow::setup_nppmoria()
+{
+    game_mode = GAME_NPPMORIA;
+
+    setWindowTitle(tr("NPPMoria"));
+
+    init_npp_games();
+}
+
 //  Support functions for the file menu.
 
 // Prepare to play a game of NPPAngband.
 void MainWindow::start_game_nppangband()
 {
-    game_mode = GAME_NPPANGBAND;
-
-    setWindowTitle(tr("NPPAngband"));
-    update_file_menu_game_active();
-
-    init_npp_games();
+    setup_nppangband();
 
     launch_birth();
 }
@@ -44,12 +57,7 @@ void MainWindow::start_game_nppangband()
 // Prepare to play a game of NPPMoria.
 void MainWindow::start_game_nppmoria()
 {
-    game_mode = GAME_NPPMORIA;
-
-    setWindowTitle(tr("NPPMoria"));
-    update_file_menu_game_active();
-
-    init_npp_games();
+    setup_nppmoria();
 
     launch_birth();
 }
@@ -57,7 +65,10 @@ void MainWindow::start_game_nppmoria()
 void MainWindow::open_current_savefile()
 {
     // Let the user select the savefile
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Select a savefile"), NPP_DIR_SAVE, tr("NPP (*.npp)"));
+    QString file_name = QFileDialog::getOpenFileName(this, tr("Select a savefile"), NPP_DIR_SAVE, tr("NPP (*.npp)"));
+    if (file_name.isEmpty()) return;
+
+    load_file(file_name);
 }
 
 void MainWindow::save_character()
@@ -79,23 +90,25 @@ void MainWindow::save_character_as()
 
 void MainWindow::save_and_close()
 {
-    if (current_savefile.isEmpty())
-        save_character_as();
-    else
-        save_file(current_savefile);
 
-    update_file_menu_game_inactive();
-    // close game
+    save_character();
+
     set_current_savefile("");
 
+    character_loaded = false;
+
+    update_file_menu_game_inactive();
+
+    // close game
     cleanup_npp_games();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (!current_savefile.isEmpty())
+    if (!current_savefile.isEmpty() && character_loaded)
     {
-        save_file(current_savefile);
+        save_character();
+        pop_up_message_box("Game saved");
     }
     write_settings();
     event->accept();
@@ -179,7 +192,6 @@ void MainWindow::update_file_menu_game_inactive()
 //  Set's up all the QActions that will be added to the menu bar.  These are later added by create_menus.
 void MainWindow::create_actions()
 {
-
     new_game_nppangband = new QAction(tr("New Game - NPPAngband"), this);
     new_game_nppangband->setStatusTip(tr("Start a new game of NPPAngband."));
     new_game_nppangband->setIcon(QIcon(":/icons/lib/icons/New_game_NPPAngband.png"));
@@ -318,13 +330,11 @@ void MainWindow::write_settings()
     settings.setValue("mainWindowGeometry", saveGeometry());
 
     settings.setValue("recentFiles", recent_savefiles);
-
 }
 
 
 void MainWindow::load_file(const QString &file_name)
-{
-    QFile file(file_name);
+{    
     if (!file_name.isEmpty())
     {
         set_current_savefile(file_name);
@@ -335,8 +345,8 @@ void MainWindow::load_file(const QString &file_name)
         if (game_mode == GAME_MODE_UNDEFINED) return;
 
         // Initialize game then load savefile
-        if (game_mode == GAME_NPPANGBAND) start_game_nppangband();
-        else if (game_mode == GAME_NPPMORIA) start_game_nppmoria();
+        if (game_mode == GAME_NPPANGBAND) setup_nppangband();
+        else if (game_mode == GAME_NPPMORIA) setup_nppmoria();
 
         if (load_player())
         {
@@ -344,40 +354,34 @@ void MainWindow::load_file(const QString &file_name)
             statusBar()->showMessage(tr("File loaded"), 2000);
         }
     }
-
     else
     {
-        QMessageBox::warning(this, tr("Recent Files"),
-                             tr("Cannot read file %1:\n%2.")
-                             .arg(file_name)
-                             .arg(file.errorString()));
+        QMessageBox::warning(this, tr("Recent Files"), tr("Cannot read file %1").arg(file_name));
         return;
     }
-
 }
 
 void MainWindow::launch_birth()
 {
     BirthDialog *dlg = new BirthDialog(this);
     if (dlg->run()) {
-        pop_up_message_box("DONE WITH BIRTH!");
+        //pop_up_message_box("DONE WITH BIRTH!");
+        save_character();
+        update_file_menu_game_active();
     }
     delete dlg;
 }
 
 void MainWindow::save_file(const QString &file_name)
 {
-    QFile file(file_name);
+    set_current_savefile(file_name);
+
     if (!save_player())
     {
-        QMessageBox::warning(this, tr("Recent Files"),
-                             tr("Cannot write file %1:\n%2.")
-                             .arg(file_name)
-                             .arg(file.errorString()));
+        QMessageBox::warning(this, tr("Recent Files"), tr("Cannot write file %1").arg(file_name));
         return;
     }
 
-    set_current_savefile(file_name);
     statusBar()->showMessage(tr("File saved"), 2000);
 }
 

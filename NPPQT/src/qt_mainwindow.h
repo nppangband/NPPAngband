@@ -52,6 +52,8 @@ private:
     // The editable part of the main window.
     QGraphicsView *graphics_view;
 
+    void setup_nppangband();
+    void setup_nppmoria();
     void launch_birth();
 
 
