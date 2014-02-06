@@ -1,6 +1,6 @@
+#include "npp.h"
 #include "ui_birthdialog.h"
 #include "optionsdialog.h"
-#include "npp.h"
 #include "birthdialog.h"
 #include <QRadioButton>
 #include <QGridLayout>
@@ -86,11 +86,18 @@ void BirthDialog::on_bg2_clicked(int index)
     dirty = true;
 }
 
+void BirthDialog::set_quick_start(bool enable)
+{
+    quick_start = enable;
+}
+
 BirthDialog::BirthDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::BirthDialog)
 {
-    ui->setupUi(this);
+    ui->setupUi(this);    
+
+    quick_start = false;
 
     dirty = true;
 
@@ -201,7 +208,7 @@ BirthDialog::BirthDialog(QWidget *parent) :
     ui->abilities_table->setFixedWidth(150);
     ui->history_edit->setFixedHeight(50);
 
-    ui->stackedWidget->setCurrentIndex(0);
+    ui->stackedWidget->setCurrentIndex(0);        
 }
 
 void BirthDialog::on_random_race_clicked()
@@ -359,7 +366,9 @@ void BirthDialog::on_next_button_clicked()
             p_ptr->psex = ui->sex_combo->currentIndex();
             generate_player();
 
-            ui->groupBox1->setTitle(QString("Stat allocation for %1 %2").arg(rp_ptr->pr_name).arg(cp_ptr->cl_name));
+            QString full_name = ui->name_edit->text().trimmed();
+            if (full_name.length() > 0) full_name.append(": ");
+            ui->groupBox1->setTitle(QString("Stat allocation for %1%2 %3").arg(full_name).arg(rp_ptr->pr_name).arg(cp_ptr->cl_name));
 
             ui->point_radio->click();
             dirty = false;
@@ -433,6 +442,22 @@ void BirthDialog::on_roll_button_clicked()
 
 bool BirthDialog::run()
 {
+    // Handle quick start
+    if (quick_start && has_prev_character()) {
+        ui->name_edit->setText(op_ptr->full_name);
+        ui->sex_combo->setCurrentIndex(p_ptr->psex);
+        bg1->button(p_ptr->prace)->click();
+        bg2->button(p_ptr->pclass)->click();
+        ui->next_button->click();
+        ui->roller_radio->click();
+        load_prev_character();
+        ui->history_edit->clear();
+        ui->history_edit->appendPlainText(p_ptr->history);
+        for (int i = 0; i < A_MAX; i++) {
+            stats[i] = p_ptr->stat_birth[i];
+        }
+        update_points();
+    }
     this->exec();
     return this->done_birth;
 }

@@ -54,7 +54,7 @@ private:
 
     void setup_nppangband();
     void setup_nppmoria();
-    void launch_birth();
+    void launch_birth(bool quick_start = false);
 
 
     // Functions that initialize the file menu of the main window.

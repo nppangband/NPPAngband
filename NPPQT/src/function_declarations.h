@@ -661,5 +661,8 @@ bool sell_stat(int choice, int stats[A_MAX], int points_spent[A_MAX], int *point
 void generate_stats(int stats[A_MAX], int points_spent[A_MAX], int *points_left);
 void generate_player();
 void roll_player(int stats[A_MAX]);
+void save_prev_character();
+void load_prev_character();
+bool has_prev_character();
 
 #endif // FUNCTION_DECLARATIONS_H

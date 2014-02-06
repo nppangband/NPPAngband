@@ -1,7 +1,7 @@
 #include <QtWidgets>
 
-#include "src/qt_mainwindow.h"
 #include "src/npp.h"
+#include "src/qt_mainwindow.h"
 #include "src/init.h"
 #include "src/optionsdialog.h"
 #include "src/birthdialog.h"
@@ -107,8 +107,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (!current_savefile.isEmpty() && character_loaded)
     {
-        save_character();
-        pop_up_message_box("Game saved");
+        //save_character();
+        //pop_up_message_box("Game saved");
     }
     write_settings();
     event->accept();
@@ -350,8 +350,11 @@ void MainWindow::load_file(const QString &file_name)
 
         if (load_player())
         {
-            update_file_menu_game_active();
+            //update_file_menu_game_active();
             statusBar()->showMessage(tr("File loaded"), 2000);
+
+            save_prev_character();
+            launch_birth(true);
         }
     }
     else
@@ -361,11 +364,11 @@ void MainWindow::load_file(const QString &file_name)
     }
 }
 
-void MainWindow::launch_birth()
+void MainWindow::launch_birth(bool quick_start)
 {
     BirthDialog *dlg = new BirthDialog(this);
-    if (dlg->run()) {
-        //pop_up_message_box("DONE WITH BIRTH!");
+    dlg->set_quick_start(quick_start);
+    if (dlg->run()) {        
         save_character();
         update_file_menu_game_active();
     }
