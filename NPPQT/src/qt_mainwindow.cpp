@@ -11,8 +11,8 @@ MainWindow::MainWindow()
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    text_edit = new QTextEdit;
-    setCentralWidget(text_edit);
+    graphics_view = new QGraphicsView;
+    setCentralWidget(graphics_view);
 
     create_actions();
     update_file_menu_game_inactive();
@@ -90,6 +90,7 @@ void MainWindow::save_character_as()
 
 void MainWindow::save_and_close()
 {
+
     save_character();
 
     set_current_savefile("");

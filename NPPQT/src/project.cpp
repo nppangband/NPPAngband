@@ -459,7 +459,6 @@ bool teleport_player_level(int who)
 
         /* Verify leaving normal quest level */
         else if (quest_shall_fail_if_leave_level())
-
         {            
             if (!get_check("Really fail your quest?")) return(FALSE);
         }
