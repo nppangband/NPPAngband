@@ -371,6 +371,10 @@ void MainWindow::launch_birth(bool quick_start)
     if (dlg->run()) {        
         save_character();
         update_file_menu_game_active();
+    } else {
+        cleanup_npp_games();
+        character_loaded = false;
+        current_savefile.clear();
     }
     delete dlg;
 }

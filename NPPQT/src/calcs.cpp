@@ -722,7 +722,7 @@ static int weight_limit(void)
 
 
 /*Re-calculate the player stealth*/
-static void calc_stealth(void)
+void calc_stealth(void)
 {
     int old_skill_stl, i;
 

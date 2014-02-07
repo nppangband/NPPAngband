@@ -15,6 +15,7 @@ extern int stat_adj_moria(int stat);
 extern void calc_spells(void);
 extern int calc_blows(object_type *o_ptr, player_state *new_state);
 extern void calc_bonuses(object_type inventory[], player_state *state, bool id_only);
+extern void calc_stealth(void);
 extern byte calc_energy_gain(byte speed);
 extern void notice_stuff(void);
 extern void update_stuff(void);

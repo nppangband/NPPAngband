@@ -3,8 +3,82 @@
 #include <QMessageBox>
 #include <QInputDialog>
 
+/*
+ * Returns a "rating" of x depending on y, and sets "attr" to the
+ * corresponding "attribute".
+ */
+QString likert(int x, int y, byte *attr)
+{
+    /* Paranoia */
+    if (y <= 0) y = 1;
 
+    /* Negative value */
+    if (x < 0)
+    {
+        *attr = TERM_RED;
+        return ("Very Bad");
+    }
 
+    /* Analyze the value */
+    switch ((x / y))
+    {
+        case 0:
+        case 1:
+        {
+            *attr = TERM_RED;
+            return ("Bad");
+        }
+        case 2:
+        {
+            *attr = TERM_RED;
+            return ("Poor");
+        }
+        case 3:
+        case 4:
+        {
+            *attr = TERM_YELLOW;
+            return ("Fair");
+        }
+        case 5:
+        {
+            *attr = TERM_YELLOW;
+            return ("Good");
+        }
+        case 6:
+        {
+            *attr = TERM_YELLOW;
+            return ("Very Good");
+        }
+        case 7:
+        case 8:
+        {
+            *attr = TERM_L_GREEN;
+            return ("Excellent");
+        }
+        case 9:
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+        {
+            *attr = TERM_L_GREEN;
+            return ("Superb");
+        }
+        case 14:
+        case 15:
+        case 16:
+        case 17:
+        {
+            *attr = TERM_L_GREEN;
+            return ("Heroic");
+        }
+        default:
+        {
+            *attr = TERM_L_GREEN;
+            return ("Legendary");
+        }
+    }
+}
 
 // There is probably a better way with QChar, but I can't find it.
 int letter_to_number (QChar let)

@@ -1735,8 +1735,10 @@ static int rd_dungeon(void)
     /* Place player in dungeon */
     if (!player_place(py, px))
     {
+        /*
         pop_up_message_box(QString("Cannot place player (%1,%2)!").arg(py) .arg(px));
         return (-1);
+        */
     }
 
 
