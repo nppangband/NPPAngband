@@ -106,7 +106,7 @@ BirthDialog::BirthDialog(QWidget *parent) :
     // Create the race radios
     QGridLayout *g1 = new QGridLayout();
     ui->raceBox->setLayout(g1);
-    QButtonGroup *bg1 = new QButtonGroup();
+    bg1 = new QButtonGroup();
     connect(bg1, SIGNAL(buttonClicked(int)), this, SLOT(on_bg1_clicked(int)));
     int col = 0;
     int row = 0;
@@ -120,13 +120,18 @@ BirthDialog::BirthDialog(QWidget *parent) :
             ++row;
         }
     }
+    QPushButton *button1 = new QPushButton("Random race");
+    button1->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+    connect(button1, SIGNAL(clicked()), this, SLOT(on_random_race_clicked()));
+    g1->addWidget(button1, row + 1, 0);
+    ran_race_button = button1;
 
     // Create the class radios
     QGridLayout *g2 = new QGridLayout();
     ui->classBox->setLayout(g2);
     col = 0;
     row = 0;
-    QButtonGroup *bg2 = new QButtonGroup();
+    bg2 = new QButtonGroup();
     connect(bg2, SIGNAL(buttonClicked(int)), this, SLOT(on_bg2_clicked(int)));
     for (int i = 0; i < z_info->c_max; i++) {
         QRadioButton *radio = new QRadioButton(c_info[i].cl_name);
@@ -138,6 +143,11 @@ BirthDialog::BirthDialog(QWidget *parent) :
             ++row;
         }
     }
+    QPushButton *button2 = new QPushButton("Random class");
+    button2->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+    connect(button2, SIGNAL(clicked()), this, SLOT(on_random_class_clicked()));
+    g2->addWidget(button2, row + 1, 0);
+    ran_class_button = button2;
 
     // Fill the tables with empty items
     for (int i = 0; i < ui->stats_table->rowCount(); i++) {
@@ -194,16 +204,51 @@ BirthDialog::BirthDialog(QWidget *parent) :
     ui->stackedWidget->setCurrentIndex(0);
 }
 
+void BirthDialog::on_random_race_clicked()
+{
+    int n = bg1->buttons().count();
+    bg1->buttons().at(rand_int(n))->click();
+}
+
+void BirthDialog::on_random_class_clicked()
+{
+    int n = bg2->buttons().count();
+    bg2->buttons().at(rand_int(n))->click();
+}
+
+static QString fmt_bonus(int value)
+{
+    QString result;
+    if (value >= 0) result.append('+');
+    result.append(QString::number(value));
+    return result;
+}
+
 void BirthDialog::update_others()
 {
     ui->history_edit->clear();
     ui->history_edit->appendPlainText(p_ptr->history);
 
-    ui->abilities_table->item(0, 0)->setText(QString::number(p_ptr->age));
-    ui->abilities_table->item(1, 0)->setText(QString::number(p_ptr->ht));
-    ui->abilities_table->item(2, 0)->setText(QString::number(p_ptr->wt));
-    ui->abilities_table->item(3, 0)->setText(QString::number(p_ptr->sc));
-    ui->abilities_table->item(4, 0)->setText(QString::number(p_ptr->au));
+    calc_bonuses(inventory, &p_ptr->state, false);
+
+    player_state *state = &p_ptr->state;
+
+    //pop_up_message_box(QString::number(state->dis_to_a));
+
+    QString data[] = {
+        QString::number(p_ptr->age),
+        QString::number(p_ptr->ht),
+        QString::number(p_ptr->wt),
+        QString::number(p_ptr->sc),
+        QString::number(p_ptr->au),
+        QString("[%1,%2]").arg(state->dis_ac).arg(fmt_bonus(state->dis_to_a)),
+        QString("(%1,%2)").arg(fmt_bonus(state->dis_to_h)).arg(fmt_bonus(state->dis_to_d)),
+        QString("%1/turn").arg(state->num_blow),
+        QString("-end")
+    };
+    for (int i = 0; data[i].compare("-end") != 0; i++) {
+        ui->abilities_table->item(i, 0)->setText(data[i]);
+    }
 }
 
 void BirthDialog::on_sell_clicked()
@@ -257,13 +302,21 @@ void BirthDialog::update_stats()
 void BirthDialog::on_next_button_clicked()
 {
     if (ui->stackedWidget->currentIndex() == 0) {
+        // TESTING: create a human warrior without clicking anything
+        /*
+        ui->sex_combo->setCurrentIndex(0);
+        bg1->button(0)->click();
+        bg2->button(0)->click();
+        */
+
         // Validations
         if (ui->name_edit->text().trimmed().length() == 0) {
+            // Uncomment to ensure a name
             /*
             pop_up_message_box(tr("Complete the character name"), QMessageBox::Critical);
             ui->name_edit->setFocus();
             return;
-            */
+            */            
         }
         if (ui->sex_combo->currentIndex() < 0) {
             pop_up_message_box(tr("Select the character sex"), QMessageBox::Critical);
@@ -279,16 +332,6 @@ void BirthDialog::on_next_button_clicked()
             return;
         }        
 
-        init_birth();
-
-        // Set global variables
-        p_ptr->prace = cur_race;
-        p_ptr->pclass = cur_class;
-        p_ptr->psex = ui->sex_combo->currentIndex();
-        generate_player();
-
-        ui->groupBox1->setTitle(QString("Stat allocation for %1 %2").arg(rp_ptr->pr_name).arg(cp_ptr->cl_name));
-
         ui->prev_button->setEnabled(true);
         ui->next_button->setText(tr("Finish"));
         ui->options_button->setEnabled(false);
@@ -302,8 +345,22 @@ void BirthDialog::on_next_button_clicked()
             ui->edit_table->item(i, 3)->setText(format_stat(p+c));
         }
 
+        // UGLY HACK!
+        if (game_mode == GAME_NPPANGBAND) adult_maximize = birth_maximize;
+        else adult_maximize = birth_maximize = false;
+
         // Reset to point based generation if race or class changed
         if (dirty) {
+            init_birth();
+
+            // Set global variables
+            p_ptr->prace = cur_race;
+            p_ptr->pclass = cur_class;
+            p_ptr->psex = ui->sex_combo->currentIndex();
+            generate_player();
+
+            ui->groupBox1->setTitle(QString("Stat allocation for %1 %2").arg(rp_ptr->pr_name).arg(cp_ptr->cl_name));
+
             ui->point_radio->click();
             dirty = false;
         }
@@ -315,6 +372,11 @@ void BirthDialog::on_next_button_clicked()
     }
     // We finally ended with character birth
     else if (ui->stackedWidget->currentIndex() == 1) {
+        p_ptr->history = ui->history_edit->toPlainText();
+
+        QString name = ui->name_edit->text().trimmed();
+        op_ptr->full_name = name;
+
         finish_birth();
         done_birth = true;
         this->close();
@@ -373,4 +435,28 @@ bool BirthDialog::run()
 {
     this->exec();
     return this->done_birth;
+}
+
+void BirthDialog::on_gen_name_button_clicked()
+{
+    QString name = make_random_name(4, 12);    
+    ui->name_edit->setText(name);
+}
+
+void BirthDialog::on_ran_sex_button_clicked()
+{
+    ui->sex_combo->setCurrentIndex(rand_int(MAX_SEXES));
+}
+
+void BirthDialog::on_sex_combo_currentIndexChanged(int index)
+{
+    dirty = true;
+}
+
+void BirthDialog::on_ran_char_button_clicked()
+{
+    ui->ran_sex_button->click();
+    ui->gen_name_button->click();
+    ran_race_button->click();
+    ran_class_button->click();
 }

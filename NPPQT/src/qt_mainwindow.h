@@ -9,7 +9,7 @@
 
 class QAction;
 class QMenu;
-class QTextEdit;
+class QGraphicsView;
 
 class MainWindow : public QMainWindow
 {
@@ -50,8 +50,10 @@ private slots:
 private:
 
     // The editable part of the main window.
-    QTextEdit *text_edit;
+    QGraphicsView *graphics_view;
 
+    void setup_nppangband();
+    void setup_nppmoria();
     void launch_birth();
 
 

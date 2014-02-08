@@ -150,7 +150,7 @@ static void grid_queue_destroy(grid_queue_type *q)
     /* Free the allocated grid storage */
     if (q->data)
     {
-        FREE(q->data);
+        FREE_ARRAY(q->data);
     }
 
     /* Clear all */
@@ -7964,7 +7964,7 @@ static bool pick_transform_center(coord *marked_grids, int num_marked_grids,
         }
 
         /* Free storage */
-        FREE(grids);
+        FREE_ARRAY(grids);
 
         /* Found? */
         if (found)
@@ -8728,7 +8728,7 @@ static void transform_walls_regions(void)
     }
 
     /* Free resources */
-    FREE(grids);
+    FREE_ARRAY(grids);
 }
 
 
@@ -9339,7 +9339,7 @@ static bool pick_monster_location(monster_race *r_ptr, int *py, int *px)
         }
 
         /* Free dynamic storage */
-        FREE(grids);
+        FREE_ARRAY(grids);
 
         /* Found the grid? */
         if (found)

@@ -403,8 +403,8 @@ void compact_monsters(int size)
         }
 
         /* Free the "mon_lev and mon_index" arrays */
-        FREE(mon_lev);
-        FREE(mon_index);
+        FREE_ARRAY(mon_lev);
+        FREE_ARRAY(mon_index);
     }
 
     /* Excise dead monsters (backwards!) */
@@ -3614,7 +3614,7 @@ static bool summon_from_level(int y1, int x1, int lev, int type)
     /* Failure */
     if (i == 75)
     {
-        FREE(monster_list);
+        FREE_ARRAY(monster_list);
         return (FALSE);
     }
 
@@ -3642,7 +3642,7 @@ static bool summon_from_level(int y1, int x1, int lev, int type)
     /* No eligible monsters */
     if (!mon_count)
     {
-        FREE(monster_list);
+        FREE_ARRAY(monster_list);
         return (FALSE);
     }
 
@@ -3655,7 +3655,7 @@ static bool summon_from_level(int y1, int x1, int lev, int type)
     wake_monster_attack(m_ptr, MON_TMD_FLG_NOMESSAGE);
     m_ptr->mflag |= (MFLAG_ACTV);
 
-    FREE(monster_list);
+    FREE_ARRAY(monster_list);
     return (TRUE);
 }
 
