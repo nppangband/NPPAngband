@@ -325,7 +325,17 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 #define STORE_MAX_KEEP_NPPMORIA		18		/* Max slots to "always" keep full */
 
 
-
+/*
+ * Misc constants
+ */
+#define TOWN_DAWN		10000	/* Number of turns from dawn to dawn XXX */
+#define BREAK_GLYPH		400		/* Rune of protection resistance */
+#define BTH_PLUS_ADJ	3		/* Adjust BTH per plus-to-hit */
+#define MON_MULT_ADJ	8		/* High value slows multiplication */
+#define QUEST_TURNS		1200	/* Number of turns between quest failure checks */
+#define MON_DRAIN_LIFE	2		/* Percent of player exp drained per hit */
+#define USE_DEVICE		3		/* x> Harder devices x< Easier devices */
+#define INTEREST_OFFSET	10		/* Amount of levels OOD before a history is interesting */
 
 
 

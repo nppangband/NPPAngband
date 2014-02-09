@@ -23,7 +23,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page1">
       <property name="sizePolicy">
@@ -427,46 +427,6 @@
          <attribute name="horizontalHeaderVisible">
           <bool>false</bool>
          </attribute>
-         <row>
-          <property name="text">
-           <string>Age</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>Size</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>Weight</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>Status</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>Gold</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>Armor</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>Fight</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>Blows</string>
-          </property>
-         </row>
          <column>
           <property name="text">
            <string/>

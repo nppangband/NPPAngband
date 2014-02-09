@@ -1,6 +1,6 @@
+#include "npp.h"
 #include "ui_birthdialog.h"
 #include "optionsdialog.h"
-#include "npp.h"
 #include "birthdialog.h"
 #include <QRadioButton>
 #include <QGridLayout>
@@ -86,11 +86,18 @@ void BirthDialog::on_bg2_clicked(int index)
     dirty = true;
 }
 
+void BirthDialog::set_quick_start(bool enable)
+{
+    quick_start = enable;
+}
+
 BirthDialog::BirthDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::BirthDialog)
 {
-    ui->setupUi(this);
+    ui->setupUi(this);    
+
+    quick_start = false;
 
     dirty = true;
 
@@ -162,12 +169,6 @@ BirthDialog::BirthDialog(QWidget *parent) :
         }
     }
 
-    for (int i = 0; i < ui->abilities_table->rowCount(); i++) {
-        for (int j = 0; j < ui->abilities_table->columnCount(); j++) {
-            ui->abilities_table->setItem(i, j, new QTableWidgetItem());
-        }
-    }
-
     // Create the buy/sell buttons for all stats
     for (int i = 0; i < A_MAX; i++) {
         QWidget *container = new QWidget;
@@ -201,7 +202,7 @@ BirthDialog::BirthDialog(QWidget *parent) :
     ui->abilities_table->setFixedWidth(150);
     ui->history_edit->setFixedHeight(50);
 
-    ui->stackedWidget->setCurrentIndex(0);
+    ui->stackedWidget->setCurrentIndex(0);        
 }
 
 void BirthDialog::on_random_race_clicked()
@@ -230,10 +231,85 @@ void BirthDialog::update_others()
     ui->history_edit->appendPlainText(p_ptr->history);
 
     calc_bonuses(inventory, &p_ptr->state, false);
+    calc_stealth();
 
     player_state *state = &p_ptr->state;
 
-    //pop_up_message_box(QString::number(state->dis_to_a));
+    /* Melee weapon */
+    object_type *o_ptr = &inventory[INVEN_WIELD];
+    /* Bow */
+    object_type object_type_body, *i_ptr;
+
+    /* Range weapon */
+    if (adult_swap_weapons)
+    {
+        if (inventory[INVEN_MAIN_WEAPON].tval == TV_BOW) i_ptr = &inventory[INVEN_MAIN_WEAPON];
+
+        /* A bow is not wielded, just set up a "dummy, blank" object and point to that */
+        else
+        {
+            i_ptr = &object_type_body;
+            i_ptr->object_wipe();
+        }
+    }
+    else i_ptr = &inventory[INVEN_BOW];
+
+    byte attr;
+
+    /* Fighting Skill (with current weapon) */
+    int tmp = p_ptr->state.to_h + o_ptr->to_h;
+    int xthn = p_ptr->state.skills[SKILL_TO_HIT_MELEE] + (tmp * BTH_PLUS_ADJ);
+
+    /* Shooting Skill (with current bow) */
+    tmp = p_ptr->state.to_h + i_ptr->to_h;
+    int xthb = p_ptr->state.skills[SKILL_TO_HIT_BOW] + (tmp * BTH_PLUS_ADJ);
+
+    /* Basic abilities */
+    int xdis = p_ptr->state.skills[SKILL_DISARM];
+    int xdev = p_ptr->state.skills[SKILL_DEVICE];
+    int xsav = p_ptr->state.skills[SKILL_SAVE];
+    int xstl = p_ptr->state.skills[SKILL_STEALTH];
+    int xsrh = p_ptr->state.skills[SKILL_SEARCH];
+    int xfos = p_ptr->state.skills[SKILL_SEARCH_FREQUENCY];
+
+    if (xsav < 0) xsav = 0;
+    else if (xsav > 100) xsav = 100;
+
+    if (p_ptr->timed[TMD_BLIND] || no_light()) xdis = xdis / 10;
+    if (p_ptr->timed[TMD_CONFUSED] || p_ptr->timed[TMD_IMAGE]) xdis = xdis / 10;
+    if (xdis < 0) xdis = 0;
+    else if (xdis > 100) xdis = 100;
+
+    QString perc_str;
+    if (xfos > 50) perc_str = QString("1 in 1");
+    else perc_str = QString("1 in %1").arg(50 - xfos);
+
+    if (xsrh < 0) xsrh = 0;
+    else if (xsrh > 100) xsrh = 100;
+
+    //pop_up_message_box(QString::number(xstl));
+
+    QString names[] = {
+        QString("Age"),
+        QString("Height"),
+        QString("Weight"),
+        QString("Status"),
+        QString("Gold"),
+        QString("Armor"),
+        QString("Fight"),
+        QString("Blows"),
+
+        QString("Saving throw"),
+        QString("Stealth"),
+        QString("Fighting"),
+        QString("Shooting"),
+        QString("Disarming"),
+        QString("Magic device"),
+        QString("Perception"),
+        QString("Searching"),
+
+        QString("-end")
+    };
 
     QString data[] = {
         QString::number(p_ptr->age),
@@ -244,10 +320,29 @@ void BirthDialog::update_others()
         QString("[%1,%2]").arg(state->dis_ac).arg(fmt_bonus(state->dis_to_a)),
         QString("(%1,%2)").arg(fmt_bonus(state->dis_to_h)).arg(fmt_bonus(state->dis_to_d)),
         QString("%1/turn").arg(state->num_blow),
+
+        QString("%1%").arg(xsav),
+        likert(xstl, 1, &attr),
+        likert(xthn, 12, &attr),
+        likert(xthb, 12, &attr),
+        QString("%1%").arg(xdis),
+        QString::number(xdev),
+        perc_str,
+        QString("%1%").arg(xsrh),
+
         QString("-end")
     };
-    for (int i = 0; data[i].compare("-end") != 0; i++) {
-        ui->abilities_table->item(i, 0)->setText(data[i]);
+    if (ui->abilities_table->rowCount() == 0) {
+        for (int i = 0; data[i].compare("-end") != 0; i++) {
+            ui->abilities_table->insertRow(i);
+            ui->abilities_table->setVerticalHeaderItem(i, new QTableWidgetItem(names[i]));
+            ui->abilities_table->setItem(i, 0, new QTableWidgetItem(data[i]));
+        }
+    }
+    else {
+        for (int i = 0; data[i].compare("-end") != 0; i++) {
+            ui->abilities_table->item(i, 0)->setText(data[i]);
+        }
     }
 }
 
@@ -279,9 +374,13 @@ void BirthDialog::on_cancel_button_clicked()
 
 void BirthDialog::on_options_button_clicked()
 {
+    bool old_maximize = birth_maximize;
     OptionsDialog *dlg = new OptionsDialog(this);
     dlg->exec();
     delete dlg;
+    if (birth_maximize != old_maximize) {
+        dirty = true;
+    }
 }
 
 void BirthDialog::update_stats()
@@ -301,14 +400,7 @@ void BirthDialog::update_stats()
 
 void BirthDialog::on_next_button_clicked()
 {
-    if (ui->stackedWidget->currentIndex() == 0) {
-        // TESTING: create a human warrior without clicking anything
-        /*
-        ui->sex_combo->setCurrentIndex(0);
-        bg1->button(0)->click();
-        bg2->button(0)->click();
-        */
-
+    if (ui->stackedWidget->currentIndex() == 0) {       
         // Validations
         if (ui->name_edit->text().trimmed().length() == 0) {
             // Uncomment to ensure a name
@@ -359,7 +451,9 @@ void BirthDialog::on_next_button_clicked()
             p_ptr->psex = ui->sex_combo->currentIndex();
             generate_player();
 
-            ui->groupBox1->setTitle(QString("Stat allocation for %1 %2").arg(rp_ptr->pr_name).arg(cp_ptr->cl_name));
+            QString full_name = ui->name_edit->text().trimmed();
+            if (full_name.length() > 0) full_name.append(": ");
+            ui->groupBox1->setTitle(QString("Stat allocation for %1%2 %3").arg(full_name).arg(rp_ptr->pr_name).arg(cp_ptr->cl_name));
 
             ui->point_radio->click();
             dirty = false;
@@ -433,6 +527,22 @@ void BirthDialog::on_roll_button_clicked()
 
 bool BirthDialog::run()
 {
+    // Handle quick start
+    if (quick_start && has_prev_character()) {
+        ui->name_edit->setText(op_ptr->full_name);
+        ui->sex_combo->setCurrentIndex(p_ptr->psex);
+        bg1->button(p_ptr->prace)->click();
+        bg2->button(p_ptr->pclass)->click();
+        ui->next_button->click();
+        ui->roller_radio->click();
+        load_prev_character();
+        ui->history_edit->clear();
+        ui->history_edit->appendPlainText(p_ptr->history);
+        for (int i = 0; i < A_MAX; i++) {
+            stats[i] = p_ptr->stat_birth[i];
+        }
+        update_points();
+    }
     this->exec();
     return this->done_birth;
 }

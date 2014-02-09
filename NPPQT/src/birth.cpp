@@ -972,3 +972,114 @@ void init_birth()
     /* Turn off many options for Moria */
     if (game_mode == GAME_NPPMORIA) set_moria_options();
 }
+
+/*
+ * A class to hold "rolled" information, and any
+ * other useful state for the birth process.
+ */
+class Birther
+{
+public:
+    Birther();
+
+    byte mode;
+
+    QString full_name;
+
+    byte p_sex;
+    byte p_race;
+    byte p_class;
+
+    s16b age;
+    s16b wt;
+    s16b ht;
+    s16b sc;
+
+    s32b au;
+
+    s16b stat[A_MAX];
+
+    QString history;
+
+    void save();
+    void load();
+};
+
+Birther::Birther()
+{
+    p_sex = p_race = p_class = age = wt = ht = sc = au = mode = 0;
+    C_WIPE(stat, A_MAX, s16b);
+    history.clear();
+}
+
+void Birther::save()
+{
+    int i;
+
+    mode = game_mode;
+
+    /* Save the data */
+    p_sex = p_ptr->psex;
+    p_race = p_ptr->prace;
+    p_class = p_ptr->pclass;
+    age = p_ptr->age;
+    wt = p_ptr->wt_birth;
+    ht = p_ptr->ht_birth;
+    sc = p_ptr->sc_birth;
+    au = p_ptr->au_birth;
+
+    /* Save the stats */
+    for (i = 0; i < A_MAX; i++)
+    {
+        stat[i] = p_ptr->stat_birth[i];
+    }
+
+    history = p_ptr->history;
+
+    full_name = op_ptr->full_name;
+}
+
+void Birther::load()
+{
+    if (!has_prev_character()) return;
+
+    /* Load the data */
+    p_ptr->psex = p_sex;
+    p_ptr->prace = p_race;
+    p_ptr->pclass = p_class;
+    p_ptr->age = age;
+    p_ptr->wt = p_ptr->wt_birth = wt;
+    p_ptr->ht = p_ptr->ht_birth = ht;
+    p_ptr->sc = p_ptr->sc_birth = sc;
+    p_ptr->au_birth = au;
+    if (birth_money)
+        p_ptr->au = 500;
+    else
+        p_ptr->au = p_ptr->au_birth;
+
+    /* Load the stats */
+    for (int i = 0; i < A_MAX; i++)
+    {
+        p_ptr->stat_max[i] = p_ptr->stat_cur[i] = p_ptr->stat_birth[i] = stat[i];
+    }
+
+    p_ptr->history = history;
+    op_ptr->full_name = full_name;
+}
+
+static Birther _birther;
+
+bool has_prev_character()
+{
+    return _birther.mode == game_mode;
+}
+
+void save_prev_character()
+{
+    _birther.save();
+}
+
+void load_prev_character()
+{
+    _birther.load();
+}

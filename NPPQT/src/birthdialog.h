@@ -2,6 +2,7 @@
 #define BIRTHDIALOG_H
 
 #include <QDialog>
+#include "defines.h"
 #include "player.h"
 
 namespace Ui {
@@ -22,6 +23,8 @@ public:
     bool done_birth;
 
     bool run();
+
+    void set_quick_start(bool enable);
 
 private slots:
     void on_cancel_button_clicked();
@@ -82,6 +85,8 @@ private:
     QButtonGroup *bg2;
     QPushButton *ran_race_button;
     QPushButton *ran_class_button;
+
+    bool quick_start;
 };
 
 #endif // BIRTHDIALOG_H
