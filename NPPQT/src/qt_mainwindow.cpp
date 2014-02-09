@@ -18,13 +18,18 @@ MainWindow::MainWindow()
     update_file_menu_game_inactive();
     create_menus();
     create_toolbars();
+    select_font();
     create_directories();
+    create_signals();
     (void)statusBar();
 
     read_settings();
+    set_map();
 
     setWindowFilePath(QString());
 }
+
+
 
 void MainWindow::setup_nppangband()
 {
@@ -128,6 +133,18 @@ void MainWindow::options_dialog()
     OptionsDialog *dlg = new OptionsDialog(this);
     dlg->exec();
     delete dlg;
+}
+
+void MainWindow::fontselect_dialog()
+{
+    bool selected;
+    cur_font = QFontDialog::getFont( &selected, cur_font, this );
+
+    if (selected)
+    {
+        //  Figure out - this sets the fonnt for everything setFont(cur_font);
+        set_map();
+    }
 }
 
 void MainWindow::about()
@@ -248,6 +265,16 @@ void MainWindow::create_actions()
     options_act->setIcon(QIcon(":/icons/lib/icons/options.png"));
     connect(options_act, SIGNAL(triggered()), this, SLOT(options_dialog()));
 
+    bigtile_act = new QAction(tr("Use Bigtile"), this);
+    bigtile_act->setCheckable(true);
+    bigtile_act->setChecked(use_bigtile);
+    bigtile_act->setStatusTip(tr("Doubles the width of each dungeon square."));
+    connect(bigtile_act, SIGNAL(changed()), this, SLOT(set_map()));
+
+    fontselect_act = new QAction(tr("Fonts"), this);
+    fontselect_act->setStatusTip(tr("Change the window font or font size."));
+    connect(fontselect_act, SIGNAL(triggered()), this, SLOT(fontselect_dialog()));
+
 
     about_act = new QAction(tr("&About"), this);
     about_act->setStatusTip(tr("Show the application's About box"));
@@ -256,6 +283,12 @@ void MainWindow::create_actions()
     about_Qt_act = new QAction(tr("About &Qt"), this);
     about_Qt_act->setStatusTip(tr("Show the Qt library's About box"));
     connect(about_Qt_act, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+}
+
+//  Set's up many of the keystrokes and commands used during the game.
+void MainWindow::create_signals()
+{
+    // currently empty
 }
 
 
@@ -285,6 +318,8 @@ void MainWindow::create_menus()
 
     settings = menuBar()->addMenu(tr("&Settings"));
     settings->addAction(options_act);
+    settings->addAction(fontselect_act);
+    settings->addAction(bigtile_act);
 
     // Help section of top menu.
     help_menu = menuBar()->addMenu(tr("&Help"));
@@ -309,6 +344,27 @@ void MainWindow::create_toolbars()
     file_toolbar->addAction(exit_npp);
 }
 
+// Just find an initial font to start the game
+// User preferences will be saved with the game.
+void MainWindow::select_font()
+{
+    bool have_font = FALSE;
+
+    foreach (QString family, font_database.families())
+    {
+        if (font_database.isFixedPitch(family))
+        {
+            font_database.addApplicationFont(family);
+            if (have_font) continue;
+            cur_font = QFont(family);
+            have_font = TRUE;
+        }
+    }
+
+    cur_font.setPointSize(12);
+    //  Figure out - this sets the font for everything setFont(cur_font);
+}
+
 
 
 // Read and write the game settings.
@@ -318,8 +374,13 @@ void MainWindow::read_settings()
     QSettings settings("NPPGames", "NPPQT");
 
     restoreGeometry(settings.value("mainWindowGeometry").toByteArray());
-
     recent_savefiles = settings.value("recentFiles").toStringList();
+    bool bigtile_setting = settings.value("set_bigtile", TRUE).toBool();
+    bigtile_act->setChecked((bigtile_setting));
+
+    QString load_font = settings.value("current_font", cur_font ).toString();
+    cur_font.fromString(load_font);
+
     update_recent_savefiles();
 }
 
@@ -328,8 +389,10 @@ void MainWindow::write_settings()
     QSettings settings("NPPGames", "NPPQT");
 
     settings.setValue("mainWindowGeometry", saveGeometry());
-
     settings.setValue("recentFiles", recent_savefiles);
+    settings.setValue("set_bigtile", bigtile_act->isChecked());
+    settings.setValue("current_font", cur_font.toString() );
+
 }
 
 
@@ -430,4 +493,45 @@ void MainWindow::update_recent_savefiles()
 QString MainWindow::stripped_name(const QString &full_file_name)
 {
     return QFileInfo(full_file_name).fileName();
+}
+
+
+// Overloaded function to ensure that set_map is called every time the window is re-sized
+void MainWindow::resizeEvent (QResizeEvent *event)
+{
+    (void) event;
+    set_map();
+}
+
+
+
+/*
+ *Set up the dungeon map according to the curren screen size
+ * Should be called every time the map or font is re-sized.
+ * or any other action that affects the main widget's size or dimensions.
+ */
+void MainWindow::set_map()
+{
+    QFontMetrics font_metrics(cur_font);
+
+    if (bigtile_act->isChecked()) use_bigtile = TRUE;
+    else use_bigtile = FALSE;
+
+    window_height = graphics_view->geometry().height(); // in pixels
+    window_width = graphics_view->geometry().width();  // in pixels
+
+    square_height = font_metrics.height(); // in pixels
+    square_width = font_metrics.width('X');   // in pixels
+
+    screen_num_rows = window_height / square_height;
+    screen_num_columns = window_width / square_width;
+
+    // TODO calculate the boundries of the current dungeon displayed onscreen.
+    // TODO factor in bigscreen.
+    // TODO
+    //int top_x;
+    //int top_y;
+    //int bottom_x;
+    //int bottom_y;
+    //bool use_bigtile;
 }
