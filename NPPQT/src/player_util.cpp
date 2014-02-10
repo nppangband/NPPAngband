@@ -102,4 +102,3 @@ bool allow_player_confusion(void)
     /*Don't have the right resists*/
     return (TRUE);
 }
-

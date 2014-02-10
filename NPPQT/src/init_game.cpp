@@ -104,7 +104,7 @@ void quit_npp_games(QString message)
     msg_box.setInformativeText(QString(QObject::tr("NPPGames will close now.")));
     msg_box.exec();
 
-    // TODO - figure out a way to force quit the game
+    exit(1);
 }
 
 /*

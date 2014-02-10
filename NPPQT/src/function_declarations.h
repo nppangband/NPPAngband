@@ -15,6 +15,7 @@ extern int stat_adj_moria(int stat);
 extern void calc_spells(void);
 extern int calc_blows(object_type *o_ptr, player_state *new_state);
 extern void calc_bonuses(object_type inventory[], player_state *state, bool id_only);
+extern void calc_stealth(void);
 extern byte calc_energy_gain(byte speed);
 extern void notice_stuff(void);
 extern void update_stuff(void);
@@ -661,5 +662,8 @@ bool sell_stat(int choice, int stats[A_MAX], int points_spent[A_MAX], int *point
 void generate_stats(int stats[A_MAX], int points_spent[A_MAX], int *points_left);
 void generate_player();
 void roll_player(int stats[A_MAX]);
+void save_prev_character();
+void load_prev_character();
+bool has_prev_character();
 
 #endif // FUNCTION_DECLARATIONS_H

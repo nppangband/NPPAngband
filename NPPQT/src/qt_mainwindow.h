@@ -4,6 +4,9 @@
 #include <QList>
 #include <QMainWindow>
 #include <QDir>
+#include <QPainter>
+#include <QImage>
+#include <QFontDatabase>
 
 #define MAX_RECENT_SAVEFILES    5
 
@@ -24,11 +27,13 @@ public:
 
 protected:
     void closeEvent(QCloseEvent *event);
+    void resizeEvent(QResizeEvent *event);
 
 
 private slots:
 
     // Functions called from signals from the top menu.
+
     void start_game_nppangband();
     void start_game_nppmoria();
     void open_current_savefile();
@@ -38,6 +43,8 @@ private slots:
     void open_recent_file();
     void about();
     void options_dialog();
+    void fontselect_dialog();
+
 
     // Functions to make sure the available menu commands are appropriate to the situation.
     //  For example, make the save game command unanavailable when no savefile is open.
@@ -45,6 +52,8 @@ private slots:
     void update_file_menu_game_inactive();
 
 
+    // Set up the games mapping
+    void set_map();
 
 
 private:
@@ -54,13 +63,17 @@ private:
 
     void setup_nppangband();
     void setup_nppmoria();
-    void launch_birth();
+    void launch_birth(bool quick_start = false);
 
 
     // Functions that initialize the file menu of the main window.
     void create_actions();
     void create_menus();
     void create_toolbars();
+    void select_font();
+
+    // Set up many of the game commands
+    void create_signals();
 
 
     // Remember the game settings
@@ -94,13 +107,33 @@ private:
     QAction *close_cur_char;
     QAction *exit_npp;
 
+    //Command for the settings menu
     QAction *options_act;
+    QAction *bigtile_act;
+    QAction *fontselect_act;
 
 
     // Holds the actual commands for the help menu.
     QAction *about_act;
     QAction *about_Qt_act;
     QAction *separator_act;
+
+    // information about the main window
+    qreal window_height; // in pixels
+    qreal window_width;  // in pixels
+    QFontDatabase font_database;
+    QFont cur_font;
+    int square_height;
+    int square_width;
+    int screen_num_rows;
+    int screen_num_columns;
+    int top_x;
+    int top_y;
+    int bottom_x;
+    int bottom_y;
+    bool use_bigtile;
+
+
 
 };
 

@@ -83,7 +83,7 @@ void player_state::player_state_wipe()
  * All variables in player other should be re-set in this function.
  */
 void player_other::player_other_wipe()
-{
+{            
     full_name.clear();
     base_name.clear();
     for (int i = 0; i < OPT_MAX; i++) op_ptr->opt[i] = options[i].normal;

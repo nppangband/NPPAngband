@@ -1605,7 +1605,7 @@ static int rd_dungeon(void)
     if ((depth < 0) || (depth >= MAX_DEPTH))
     {
         pop_up_message_box(QString("Ignoring illegal dungeon depth (%1)") .arg(depth));
-        return (0);
+        return (-1);
     }
 
     /* Ignore illegal dungeons */
@@ -1613,15 +1613,15 @@ static int rd_dungeon(void)
     {
         /* XXX XXX XXX */
         pop_up_message_box(QString("Ignoring illegal dungeon size (%1,%2).") .arg(p_ptr->cur_map_hgt) .arg(p_ptr->cur_map_wid));
-        return (0);
+        return (-1);
     }
 
     /* Ignore illegal dungeons */
     if ((px < 0) || (px >= p_ptr->cur_map_wid) ||
         (py < 0) || (py >= p_ptr->cur_map_hgt))
     {
-        pop_up_message_box(QString("Ignoring illegal player location (%1,%2).") .arg(py) .arg(px));
-        return (1);
+        //pop_up_message_box(QString("Ignoring illegal player location (%1,%2).") .arg(py) .arg(px));
+        //return (-1);
     }
 
 
@@ -1735,8 +1735,10 @@ static int rd_dungeon(void)
     /* Place player in dungeon */
     if (!player_place(py, px))
     {
+        /*
         pop_up_message_box(QString("Cannot place player (%1,%2)!").arg(py) .arg(px));
         return (-1);
+        */
     }
 
 
@@ -2083,7 +2085,7 @@ static int rd_savefile(void)
 
 
     /* Read the extra stuff */
-    if (rd_extra()) return (-1);
+    if (rd_extra()) return (-1);    
     if (arg_fiddle) pop_up_message_box("Loaded extra information");
 
     if (rd_randarts()) return (-1);
@@ -2117,8 +2119,7 @@ static int rd_savefile(void)
     for (i = 0; i < tmp16u; i++)
     {
         if (rd_store(i)) return (-1);
-    }
-
+    }    
 
     /* Read the stored number of terrain features */
     rd_u16b(&tmp16u);
@@ -2134,7 +2135,7 @@ static int rd_savefile(void)
     for (i = 0; i < tmp16u; i++)
     {
         if (rd_feature_lore(i)) return (-1);
-    }
+    }    
 
     /* Artifact lore */
     /* Read the stored number of artifacts (normal + special) */
@@ -2151,7 +2152,7 @@ static int rd_savefile(void)
     for (i = 0; i < tmp16u; i++)
     {
         if (rd_artifact_lore(i)) return (-1);
-    }
+    }    
 
     /* I'm not dead yet... */
     if (!p_ptr->is_dead)
@@ -2275,7 +2276,7 @@ bool load_player(void)
         save_file.close();
         return (FALSE);
     }
-    else if (!rd_savefile())
+    else if (rd_savefile())
     {
         /* Attempt to load */
         pop_up_message_box("Cannot parse savefile");
@@ -2288,11 +2289,13 @@ bool load_player(void)
     /* Invalid turn */
     if (!turn)
     {
+#if 0
         pop_up_message_box("Broken savefile");
 
         // We are done with the file
         save_file.close();
         return (FALSE);
+#endif
     }
 
     /* Give a conversion warning */
