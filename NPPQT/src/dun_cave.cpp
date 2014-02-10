@@ -1119,7 +1119,8 @@ static void map_monster (s16b y, s16b x)
         monster_type *m_ptr = &mon_list[dun_ptr->monster_idx];
 
         /* Visible monster*/
-        if (m_ptr->ml)
+        // TESTING!!!
+        if (true || m_ptr->ml)
         {
             monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -1148,7 +1149,7 @@ static void map_monster (s16b y, s16b x)
             }
 
             /* Normal attr, Clear char, monster */
-            else if (!(r_ptr->flags1 & (RF1_CHAR_CLEAR)))
+            else if (r_ptr->flags1 & (RF1_CHAR_CLEAR))
             {
                 if (dun_ptr->effect_char != ' ') dun_ptr->monster_char = dun_ptr->effect_char;
                 else if (dun_ptr->object_char != ' ') dun_ptr->monster_char = dun_ptr->object_char;
@@ -1156,7 +1157,7 @@ static void map_monster (s16b y, s16b x)
             }
 
             /* Normal attr, Clear char, monster */
-            else if (!(r_ptr->flags1 & (RF1_ATTR_CLEAR)))
+            else if (r_ptr->flags1 & (RF1_ATTR_CLEAR))
             {
                 if (dun_ptr->effect_char != ' ') dun_ptr->monster_color = dun_ptr->effect_color;
                 else if (dun_ptr->object_char != ' ') dun_ptr->monster_color = dun_ptr->object_color;

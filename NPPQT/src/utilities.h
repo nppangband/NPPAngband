@@ -53,6 +53,7 @@ static letters_and_numbers lowercase_and_numbers[26] =
 
 
 QString likert(int x, int y, byte *attr);
+QString _num(int n);
 
 
 #endif // UTILITIES_H

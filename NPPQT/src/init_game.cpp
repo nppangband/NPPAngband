@@ -616,6 +616,8 @@ static int init_other(void)
 
     /* Monsters */
     mon_list = C_ZNEW(z_info->m_max, monster_type);
+    mon_max = 1;
+    mon_cnt = 0;
 
     /* Effects */
     x_list = C_ZNEW(z_info->x_max, effect_type);

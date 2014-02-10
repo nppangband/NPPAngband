@@ -1681,7 +1681,7 @@ static int rd_dungeon(void)
                 int d;
 
                 /* Turn on super glow */
-                dungeon_info[y][x].feat |= (CAVE_HALO);
+                dungeon_info[y][x].cave_info |= (CAVE_HALO);
 
                 /* Spread super glow through adjacent grids */
                 for (d = 0; d < 8; d++)
@@ -1855,7 +1855,7 @@ static int rd_dungeon(void)
         /* Place monster in dungeon */
         if (monster_place(n_ptr->fy, n_ptr->fx, n_ptr) != i)
         {
-            pop_up_message_box(QString("Cannot place monster %d") .arg(i));
+            pop_up_message_box(QString("Cannot place monster %1") .arg(i));
             return (-1);
         }
     }

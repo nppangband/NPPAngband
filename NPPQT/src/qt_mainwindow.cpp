@@ -74,8 +74,9 @@ void MainWindow::debug_dungeon()
             light_spot(y, x);
             dungeon_type *d_ptr = &(dungeon_info[y][x]);
             QChar chr = d_ptr->dun_char;
-            if (d_ptr->monster_char != ' ') {
+            if (d_ptr->has_monster()) {
                 chr = d_ptr->monster_char;
+                //pop_up_message_box(QString(chr));
             }
             line.append(chr);            
         }
