@@ -986,7 +986,7 @@ static bool wr_savefile(void)
     /* Dump the number of "messages" */
     //TODO - create messages system
     //tmp16u = messages_num();
-    tmp16u = message_list.length();
+    tmp16u = message_list.size();
     if (tmp16u > 80) tmp16u = 80;
     wr_u16b(tmp16u);
 
