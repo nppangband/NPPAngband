@@ -1620,8 +1620,8 @@ static int rd_dungeon(void)
     if ((px < 0) || (px >= p_ptr->cur_map_wid) ||
         (py < 0) || (py >= p_ptr->cur_map_hgt))
     {
-        //pop_up_message_box(QString("Ignoring illegal player location (%1,%2).") .arg(py) .arg(px));
-        //return (-1);
+        pop_up_message_box(QString("Ignoring illegal player location (%1,%2).") .arg(py) .arg(px));
+        return (-1);
     }
 
 
@@ -1731,16 +1731,12 @@ static int rd_dungeon(void)
     /* Load depth */
     p_ptr->depth = depth;
 
-
     /* Place player in dungeon */
     if (!player_place(py, px))
-    {
-        /*
+    {        
         pop_up_message_box(QString("Cannot place player (%1,%2)!").arg(py) .arg(px));
         return (-1);
-        */
     }
-
 
     /*** Objects ***/
 

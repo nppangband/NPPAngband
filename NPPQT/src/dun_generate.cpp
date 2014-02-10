@@ -11431,12 +11431,14 @@ static void town_gen(void)
     /* Apply illumination */
     town_illuminate(daytime);
 
+#if 0
     /* Make some residents */
     for (i = 0; i < residents; i++)
     {
         /* Make a resident */
         (void)alloc_monster(3, (MPLACE_SLEEP | MPLACE_GROUP));
     }
+#endif
 }
 
 

@@ -1231,9 +1231,6 @@ void map_info(s16b y, s16b x)
     map_effects (y, x);
 
     map_monster (y, x);
-
-
-
 }
 
 /*

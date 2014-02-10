@@ -64,6 +64,7 @@ extern int get_spell_index(int sval, int index);
 // dungeon.cpp
 extern void dungeon_change_level(int dlev);
 extern void process_player_terrain_damage(void);
+extern void launch_game();
 
 /* effect.cpp */
 extern int scan_effects_grid(int *effects, int size, int y, int x);

@@ -65,6 +65,8 @@ private:
     void setup_nppmoria();
     void launch_birth(bool quick_start = false);
 
+    void debug_dungeon();
+
 
     // Functions that initialize the file menu of the main window.
     void create_actions();

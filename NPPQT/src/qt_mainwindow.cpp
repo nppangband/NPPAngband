@@ -51,6 +51,44 @@ void MainWindow::setup_nppmoria()
 
 //  Support functions for the file menu.
 
+void MainWindow::debug_dungeon()
+{
+    QDialog *dlg = new QDialog(this);
+
+    QPlainTextEdit *textbox = new QPlainTextEdit;
+
+    QFont font = QFont("Courier");
+    textbox->setFont(font);
+
+    dlg->setLayout(new QVBoxLayout());
+
+    dlg->layout()->addWidget(textbox);    
+
+    wiz_light();
+
+    pop_up_message_box(QString("Player: (%1,%2)").arg(p_ptr->py).arg(p_ptr->px));
+
+    for (int y = 0; y < p_ptr->cur_map_hgt; y++) {
+        QString line = QString("");
+        for (int x = 0; x < p_ptr->cur_map_wid; x++) {
+            light_spot(y, x);
+            dungeon_type *d_ptr = &(dungeon_info[y][x]);
+            QChar chr = d_ptr->dun_char;
+            if (d_ptr->monster_char != ' ') {
+                chr = d_ptr->monster_char;
+            }
+            line.append(chr);            
+        }
+        line.append(QChar::CarriageReturn);
+        textbox->appendPlainText(line);
+    }
+
+    dlg->resize(QSize(1024, 500));
+
+    dlg->exec();
+    delete dlg;
+}
+
 // Prepare to play a game of NPPAngband.
 void MainWindow::start_game_nppangband()
 {
@@ -416,8 +454,14 @@ void MainWindow::load_file(const QString &file_name)
             //update_file_menu_game_active();
             statusBar()->showMessage(tr("File loaded"), 2000);
 
-            save_prev_character();
-            launch_birth(true);
+            if (!character_loaded) {
+                save_prev_character();
+                launch_birth(true);
+            }
+            else {
+                launch_game();
+                debug_dungeon();
+            }
         }
     }
     else
@@ -431,9 +475,11 @@ void MainWindow::launch_birth(bool quick_start)
 {
     BirthDialog *dlg = new BirthDialog(this);
     dlg->set_quick_start(quick_start);
-    if (dlg->run()) {        
-        save_character();
+    if (dlg->run()) {                
         update_file_menu_game_active();
+        launch_game();
+        save_character();
+        debug_dungeon();
     } else {
         cleanup_npp_games();
         character_loaded = false;
