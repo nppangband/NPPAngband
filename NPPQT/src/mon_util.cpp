@@ -2572,13 +2572,11 @@ s16b monster_place(int y, int x, monster_type *n_ptr)
         /* Count racial occurances */
         r_ptr->cur_num++;
 
-#if 0
         /* Place as hidden as appropriate */
         monster_hide(m_ptr);
 
         /* Update the monster */
         update_mon(m_idx, TRUE);
-#endif
     }
 
     /* Result */

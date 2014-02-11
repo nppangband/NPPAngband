@@ -57,7 +57,8 @@ void MainWindow::debug_dungeon()
 
     QPlainTextEdit *textbox = new QPlainTextEdit;
 
-    QFont font = QFont("Courier");
+    // Any fixed-width font works
+    QFont font = QFont("Courier New");
     textbox->setFont(font);
 
     dlg->setLayout(new QVBoxLayout());
@@ -76,7 +77,9 @@ void MainWindow::debug_dungeon()
             QChar chr = d_ptr->dun_char;
             if (d_ptr->has_monster()) {
                 chr = d_ptr->monster_char;
-                //pop_up_message_box(QString(chr));
+            }
+            else if (d_ptr->has_object()) {
+                chr = d_ptr->object_char;
             }
             line.append(chr);            
         }

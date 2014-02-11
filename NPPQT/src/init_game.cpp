@@ -613,6 +613,8 @@ static int init_other(void)
 
     /* Objects */
     o_list = C_ZNEW(z_info->o_max, object_type);
+    o_max = 1;
+    o_cnt = 0;
 
     /* Monsters */
     mon_list = C_ZNEW(z_info->m_max, monster_type);
@@ -621,6 +623,8 @@ static int init_other(void)
 
     /* Effects */
     x_list = C_ZNEW(z_info->x_max, effect_type);
+    x_max = 1;
+    x_cnt = 0;
 
 
     /*** Prepare mosnter lore array ***/
