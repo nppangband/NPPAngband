@@ -8,6 +8,8 @@
 
 //was externs.h
 
+// cmd1.cpp
+extern s16b move_player(int dir, int jumping);
 
 //calcs.c
 /* calcs.c*/
@@ -346,6 +348,7 @@ extern void object_aware(object_type *o_ptr);
 extern void object_tried(object_type *o_ptr);
 extern void object_history(object_type *o_ptr, byte origin, s16b r_idx);
 extern void stack_histories(object_type *o_ptr, const object_type *j_ptr);
+extern int quiver_space_per_unit(object_type *o_ptr);
 
 
 

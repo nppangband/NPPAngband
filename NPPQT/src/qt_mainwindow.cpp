@@ -5,6 +5,7 @@
 #include "src/init.h"
 #include "src/optionsdialog.h"
 #include "src/birthdialog.h"
+#include "src/dungeonbox.h"
 
 // The main function - intitalize the main window and set the menus.
 MainWindow::MainWindow()
@@ -55,37 +56,17 @@ void MainWindow::debug_dungeon()
 {
     QDialog *dlg = new QDialog(this);
 
-    QPlainTextEdit *textbox = new QPlainTextEdit;
-
-    // Any fixed-width font works
-    QFont font = QFont("Courier New");
-    textbox->setFont(font);
+    DungeonBox *textbox = new DungeonBox;
 
     dlg->setLayout(new QVBoxLayout());
 
     dlg->layout()->addWidget(textbox);    
 
-    wiz_light();
+    //wiz_light();
 
     pop_up_message_box(QString("Player: (%1,%2)").arg(p_ptr->py).arg(p_ptr->px));
 
-    for (int y = 0; y < p_ptr->cur_map_hgt; y++) {
-        QString line = QString("");
-        for (int x = 0; x < p_ptr->cur_map_wid; x++) {
-            light_spot(y, x);
-            dungeon_type *d_ptr = &(dungeon_info[y][x]);
-            QChar chr = d_ptr->dun_char;
-            if (d_ptr->has_monster()) {
-                chr = d_ptr->monster_char;
-            }
-            else if (d_ptr->has_object()) {
-                chr = d_ptr->object_char;
-            }
-            line.append(chr);            
-        }
-        line.append(QChar::CarriageReturn);
-        textbox->appendPlainText(line);
-    }
+    textbox->redraw();
 
     dlg->resize(QSize(1024, 500));
 
