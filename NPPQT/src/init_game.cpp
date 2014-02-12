@@ -565,6 +565,8 @@ static int init_other(void)
 {
     int i;
 
+    reset_dungeon_info();
+
     /* Array of grids */
     view_g = C_ZNEW(VIEW_MAX, u16b);
 
@@ -1112,6 +1114,8 @@ static void init_rng()
  */
 void init_npp_games(void)
 {
+    Rand_quick = true;
+
     init_rng();
 
     QLabel status_update;
