@@ -444,6 +444,7 @@ void MainWindow::load_file(const QString &file_name)
                 launch_birth(true);
             }
             else {
+                update_file_menu_game_active();
                 launch_game();
                 debug_dungeon();
             }

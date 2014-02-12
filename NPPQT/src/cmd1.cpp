@@ -78,7 +78,7 @@ void search(void)
 						light_spot(y, x);
 
 						/* Message */
-                        //msg_print("You have found a trap!");
+                        message(QString("You have found a trap!"));
 
 						/* Disturb the player */
 						disturb(0, 0);
@@ -103,7 +103,7 @@ void search(void)
 					if (!object_known_p(o_ptr))
 					{
 						/* Message */
-                        //msg_print("You have discovered a trap on the chest!");
+                        message(QString("You have discovered a trap on the chest!"));
 
 						/* Know the trap */
 						object_known(o_ptr);
@@ -168,11 +168,12 @@ static int count_possible_pickups(void)
  */
 static bool auto_pickup_inscrip(const object_type *o_ptr)
 {
+    // Replaced some lines later -DG
 #if 0
 	cptr s;
 
 	/* No inscription */
-	if (!o_ptr->obj_note) return (FALSE);
+    if (!o_ptr->obj) return (FALSE);
 
 	/* Find a '=' */
 	s = strchr(quark_str(o_ptr->obj_note), '=');
@@ -187,6 +188,25 @@ static bool auto_pickup_inscrip(const object_type *o_ptr)
 		s = strchr(s + 1, '=');
 	}
 #endif
+
+    /* No inscription */
+    if (o_ptr->inscription.length() == 0) return (FALSE);
+
+    /* Find a '=' */
+    int i = o_ptr->inscription.indexOf(QString("="));
+
+    /* Process inscription */
+    while (i != -1)
+    {
+        // Discard the '='
+        ++i;
+
+        /* Auto-pickup on "=g" */
+        if ((i < o_ptr->inscription.length()) && (o_ptr->inscription.at(i) == 'g')) return (TRUE);
+
+        /* Find another '=' */
+        i = o_ptr->inscription.indexOf(QString("="), i);
+    }
 
 	/* Don't auto pickup */
 	return (FALSE);
@@ -234,13 +254,14 @@ static bool put_object_in_quiver(object_type *o_ptr)
 
 	/* Message */
     //msg_c_format(msgt, "You have readied %s (%c) in your quiver.", o_name, index_to_label(slot));
+    message(QString("You have readied %1 (%2) in your quiver.").arg(o_name).arg(index_to_label(slot)));
 
 	/* Cursed! */
     if (o_ptr->is_cursed())
 	{
 		/* Warn the player */
         //sound(MSG_CURSED);
-        //msg_print("Oops! It feels deathly cold!");
+        message(QString("Oops! It feels deathly cold!"));
 
 		/* Remove special inscription, if any */
 		if (o_ptr->discount >= INSCRIP_NULL) o_ptr->discount = 0;
@@ -301,6 +322,7 @@ bool put_object_in_inventory(object_type *o_ptr)
 
 	/* Message */
     //msg_c_format(msgt, "You have %s (%c).", o_name, index_to_label(slot));
+    message(QString("You have %1 (%2).").arg(o_name).arg(index_to_label(slot)));
 
 	/* No longer marked "in use */
 	o_ptr->obj_in_use = FALSE;
@@ -353,7 +375,7 @@ static int get_first_item_for_pickup(void)
  * any energy because it costs a player no extra energy
  * to walk into a grid and automatically pick up items
  */
-void do_cmd_pickup_from_pile(bool pickup, bool message)
+void do_cmd_pickup_from_pile(bool pickup, bool msg)
 {
 	object_type *o_ptr;
 
@@ -405,9 +427,9 @@ void do_cmd_pickup_from_pile(bool pickup, bool message)
 		/* Can't pick anything up */
 		if(!pickup_num)
 		{
-			if (!message) break;
+            if (!msg) break;
 
-            //msg_print("You do not have any room for these items.");
+            message(QString("You do not have any room for these items."));
 			break;
 		}
 
@@ -510,6 +532,7 @@ void py_pickup_gold(void)
 
 		/* Message */
         //message_format(sound_msg, 0, "You have found %s.", o_name);
+        message(QString("You have found %1.").arg(o_name));
 
 		/* Collect the gold */
 		p_ptr->au += gold;
@@ -765,18 +788,18 @@ void py_pickup(bool pickup)
 
         o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
-        //if (p_ptr->timed[TMD_BLIND]) msg_c_format(msgt, "You are aware of %s.", o_name);
+        if (p_ptr->timed[TMD_BLIND]) message(QString("You are aware of %1.").arg(o_name));
 
-        //else msg_c_format(msgt, "You see %s.", o_name);
+        else message(QString("You see %1.").arg(o_name));
 	}
 
 	/* Multiple objects */
 	else
 	{
-        //if (p_ptr->timed[TMD_BLIND]) msg_format("You are aware of a pile of %d objects.", objects_left);
+        if (p_ptr->timed[TMD_BLIND]) message(QString("You are aware of a pile of %1 objects.").arg(objects_left));
 
 		/* Message */
-        //else msg_format("You see a pile of %d objects.", objects_left);
+        else message(QString("You see a pile of %d objects.").arg(objects_left));
 	}
 
 	/* Done */
@@ -860,7 +883,7 @@ s16b move_player(int dir, int jumping)
             name = feature_desc(f_ptr - f_info, TRUE, TRUE);
 
 			/* Tell the player */
-            //msg_format("You feel %s blocking your way.", name);
+            message(QString("You feel %1 blocking your way.").arg(name));
 
             dungeon_info[y][x].cave_info |= (CAVE_MARK);
 
@@ -875,7 +898,7 @@ s16b move_player(int dir, int jumping)
             name = feature_desc(f_ptr - f_info, TRUE, TRUE);
 
 			/* Tell the player */
-            //msg_format("There is %s blocking your way.", name);
+            message(QString("There is %1 blocking your way.").arg(name));
 		}
 	}
 
@@ -916,7 +939,7 @@ s16b move_player(int dir, int jumping)
                 name = feature_desc(feat, TRUE, TRUE);
 
 				/* Tell the player */
-                //msg_format("There is %s blocking your way.", name);
+                message(QString("There is %1 blocking your way.").arg(name));
 
 				/* Done */
 				break;
@@ -927,7 +950,7 @@ s16b move_player(int dir, int jumping)
 		}
 
 		/* Paranoia */
-        //if (!x_idx) msg_print("You cannot move into this grid.");
+        if (!x_idx) message(QString("You cannot move into this grid."));
 	}
 
 	/* Some terrain prevents flying. */
@@ -950,7 +973,7 @@ s16b move_player(int dir, int jumping)
         name = feature_desc(feat, TRUE, TRUE);
 
 		/* Tell the player */
-        //msg_format("There is %s blocking your way.", name);
+        message(QString("There is %1 blocking your way.").arg(name));
 
 		/* Give the player the option to stop flying. */
 		sprintf(out_val, "So you want to stop flying? ");
@@ -958,7 +981,7 @@ s16b move_player(int dir, int jumping)
 		{
 			clear_timed(TMD_FLYING, FALSE);
 
-            //msg_print("You land.");
+            message(QString("You land."));
 
 			/*Little energy used*/
 			used_energy = BASE_ENERGY_MOVE / 10;
@@ -1080,7 +1103,7 @@ s16b move_player(int dir, int jumping)
             name = feature_desc(f_ptr - f_info, FALSE, TRUE);
 
 			/* Tell the player */
-            //msg_format("You feel you are in %s.", name);
+            message(QString("You feel you are in %1.").arg(name));
 
             dungeon_info[y][x].cave_info |= (CAVE_MARK);
 
@@ -1090,7 +1113,7 @@ s16b move_player(int dir, int jumping)
 		/* Walk on a monster trap */
 		else if (cave_monster_trap_bold(y,x))
 		{
-            //msg_print("You inspect your cunning trap.");
+            message(QString("You inspect your cunning trap."));
 		}
 
 	}
