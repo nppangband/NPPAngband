@@ -447,7 +447,7 @@ void do_cmd_pickup_from_pile(bool pickup, bool msg)
 			/* Pick up the object */
 			if (put_object_in_inventory(o_ptr))
 			{
-				/* Delete the gold */
+                /* Delete the gold */
 				delete_object_idx(item);
 				break;
 			}
@@ -513,7 +513,7 @@ void py_pickup_gold(void)
 		o_ptr = &o_list[this_o_idx];
 
 		/* Get the next object */
-		next_o_idx = o_ptr->next_o_idx;
+		next_o_idx = o_ptr->next_o_idx;        
 
 		if (o_ptr->tval != TV_GOLD) continue;
 
@@ -841,6 +841,7 @@ s16b move_player(int dir, int jumping)
 	{
 		/* Attack */
         //py_attack(y, x);
+        message(QString("You attack the monster!"));
 	}
 
 	/* Optionally alter known traps/doors on (non-jumping) movement */

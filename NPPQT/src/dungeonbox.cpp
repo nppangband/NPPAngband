@@ -45,7 +45,19 @@ void DungeonBox::redraw()
             }
             line.append(chr);
         }
-        line.append(QChar::CarriageReturn);
+        //line.append(QChar::CarriageReturn);
         this->appendPlainText(line);
+    }
+    for (int i = 0; i < message_list.size() && i < 5; i++) {
+        QString line = message_list.at(i).message;
+        //line.append(QChar::CarriageReturn);
+        this->appendPlainText(line);
+    }
+    this->moveCursor(QTextCursor::Start);
+    for (int y = 0; y < p_ptr->py; y++) {
+        this->moveCursor(QTextCursor::Down);
+    }
+    for (int x = 0; x < p_ptr->px; x++) {
+        this->moveCursor(QTextCursor::Right);
     }
 }

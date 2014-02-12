@@ -62,13 +62,15 @@ void MainWindow::debug_dungeon()
 
     dlg->layout()->addWidget(textbox);    
 
-    //wiz_light();
+    wiz_light();
 
     pop_up_message_box(QString("Player: (%1,%2)").arg(p_ptr->py).arg(p_ptr->px));
 
     textbox->redraw();
 
-    dlg->resize(QSize(1024, 500));
+    //dlg->resize(QSize(1024, 500));
+
+    dlg->setWindowState(Qt::WindowMaximized);
 
     dlg->exec();
     delete dlg;
