@@ -237,5 +237,6 @@ public:
     void dynamic_grid_wipe();
 };
 
+extern void reset_dungeon_info();
 
 #endif // DUN_CLASSES_H

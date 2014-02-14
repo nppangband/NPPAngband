@@ -5,6 +5,7 @@
 #include "src/init.h"
 #include "src/optionsdialog.h"
 #include "src/birthdialog.h"
+#include "src/dungeonbox.h"
 
 // The main function - intitalize the main window and set the menus.
 MainWindow::MainWindow()
@@ -50,6 +51,30 @@ void MainWindow::setup_nppmoria()
 }
 
 //  Support functions for the file menu.
+
+void MainWindow::debug_dungeon()
+{
+    QDialog *dlg = new QDialog(this);
+
+    DungeonBox *textbox = new DungeonBox;
+
+    dlg->setLayout(new QVBoxLayout());
+
+    dlg->layout()->addWidget(textbox);    
+
+    wiz_light();
+
+    pop_up_message_box(QString("Player: (%1,%2)").arg(p_ptr->py).arg(p_ptr->px));
+
+    textbox->redraw();
+
+    //dlg->resize(QSize(1024, 500));
+
+    dlg->setWindowState(Qt::WindowMaximized);
+
+    dlg->exec();
+    delete dlg;
+}
 
 // Prepare to play a game of NPPAngband.
 void MainWindow::start_game_nppangband()
@@ -416,8 +441,15 @@ void MainWindow::load_file(const QString &file_name)
             //update_file_menu_game_active();
             statusBar()->showMessage(tr("File loaded"), 2000);
 
-            save_prev_character();
-            launch_birth(true);
+            if (!character_loaded) {
+                save_prev_character();
+                launch_birth(true);
+            }
+            else {
+                update_file_menu_game_active();
+                launch_game();
+                debug_dungeon();
+            }
         }
     }
     else
@@ -431,9 +463,11 @@ void MainWindow::launch_birth(bool quick_start)
 {
     BirthDialog *dlg = new BirthDialog(this);
     dlg->set_quick_start(quick_start);
-    if (dlg->run()) {        
-        save_character();
+    if (dlg->run()) {                
         update_file_menu_game_active();
+        launch_game();
+        save_character();
+        debug_dungeon();
     } else {
         cleanup_npp_games();
         character_loaded = false;

@@ -614,13 +614,13 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
     quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
     bool quest_level = FALSE;
 
-    bool native_only = TRUE;
+    bool native_only = true;
 
     /* Cache damage to non-native monsters */
-    u16b dam_non_native = f_info[dungeon_info[y][x].cave_info].dam_non_native;
+    u16b dam_non_native = f_info[dungeon_info[y][x].feat].dam_non_native;
 
     /*Get the terrain native flags*/
-    u32b native_flags = f_info[dungeon_info[y][x].cave_info].f_flags3;
+    u32b native_flags = f_info[dungeon_info[y][x].feat].f_flags3;
 
     /*filter out non-terrain flags*/
     native_flags &= TERRAIN_MASK;
@@ -781,14 +781,12 @@ s16b get_mon_num(int level, int y, int x, byte mp_flags)
         }
 
         /*slowly reduce if the mindepth is too high*/
-        if (mindepth <= 6) mindepth --;
+        if (mindepth <= 6) mindepth--;
         else mindepth -= 5;
 
         /*We have gone through at least once*/
-        native_only = FALSE;
-
+        native_only = false;
     }
-
     while ((total <= 0) && (mindepth > 0));
 
     /* No legal monsters */
@@ -2545,7 +2543,8 @@ s16b monster_place(int y, int x, monster_type *n_ptr)
         m_ptr = &mon_list[m_idx];
 
         /* Copy the monster XXX */
-        COPY(m_ptr, n_ptr, monster_type);
+        //COPY(m_ptr, n_ptr, monster_type);
+        *m_ptr = *n_ptr;
 
         /* Location */
         m_ptr->fy = y;
@@ -2578,7 +2577,6 @@ s16b monster_place(int y, int x, monster_type *n_ptr)
 
         /* Update the monster */
         update_mon(m_idx, TRUE);
-
     }
 
     /* Result */
@@ -3390,7 +3388,10 @@ bool alloc_monster(int dis, byte mp_flags)
     if (!(*dun_cap->can_place_escorts)(r_idx)) mp_flags &= ~(MPLACE_GROUP);
 
     /* Check ability to place escorts */
-    if (place_monster_aux(y, x, r_idx, mp_flags)) return (TRUE);
+    if (place_monster_aux(y, x, r_idx, mp_flags)) {
+        //pop_up_message_box(QString("Exito"));
+        return (TRUE);
+    }
 
     /* Nope */
     return (FALSE);

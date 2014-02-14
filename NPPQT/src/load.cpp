@@ -1620,8 +1620,8 @@ static int rd_dungeon(void)
     if ((px < 0) || (px >= p_ptr->cur_map_wid) ||
         (py < 0) || (py >= p_ptr->cur_map_hgt))
     {
-        //pop_up_message_box(QString("Ignoring illegal player location (%1,%2).") .arg(py) .arg(px));
-        //return (-1);
+        pop_up_message_box(QString("Ignoring illegal player location (%1,%2).") .arg(py) .arg(px));
+        return (-1);
     }
 
 
@@ -1681,7 +1681,7 @@ static int rd_dungeon(void)
                 int d;
 
                 /* Turn on super glow */
-                dungeon_info[y][x].feat |= (CAVE_HALO);
+                dungeon_info[y][x].cave_info |= (CAVE_HALO);
 
                 /* Spread super glow through adjacent grids */
                 for (d = 0; d < 8; d++)
@@ -1731,16 +1731,12 @@ static int rd_dungeon(void)
     /* Load depth */
     p_ptr->depth = depth;
 
-
     /* Place player in dungeon */
     if (!player_place(py, px))
-    {
-        /*
+    {        
         pop_up_message_box(QString("Cannot place player (%1,%2)!").arg(py) .arg(px));
         return (-1);
-        */
     }
-
 
     /*** Objects ***/
 
@@ -1859,7 +1855,7 @@ static int rd_dungeon(void)
         /* Place monster in dungeon */
         if (monster_place(n_ptr->fy, n_ptr->fx, n_ptr) != i)
         {
-            pop_up_message_box(QString("Cannot place monster %d") .arg(i));
+            pop_up_message_box(QString("Cannot place monster %1") .arg(i));
             return (-1);
         }
     }

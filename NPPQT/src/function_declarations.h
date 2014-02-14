@@ -8,6 +8,8 @@
 
 //was externs.h
 
+// cmd1.cpp
+extern s16b move_player(int dir, int jumping);
 
 //calcs.cpp
 extern int stat_adj_moria(int stat);
@@ -63,6 +65,7 @@ extern int get_spell_index(int sval, int index);
 // dungeon.cpp
 extern void dungeon_change_level(int dlev);
 extern void process_player_terrain_damage(void);
+extern void launch_game();
 
 /* effect.cpp */
 extern int scan_effects_grid(int *effects, int size, int y, int x);
@@ -344,6 +347,7 @@ extern void object_aware(object_type *o_ptr);
 extern void object_tried(object_type *o_ptr);
 extern void object_history(object_type *o_ptr, byte origin, s16b r_idx);
 extern void stack_histories(object_type *o_ptr, const object_type *j_ptr);
+extern int quiver_space_per_unit(object_type *o_ptr);
 
 /* player_attack.cpp */
 extern bool test_hit(int chance, int ac, int vis);

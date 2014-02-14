@@ -58,7 +58,9 @@ SOURCES +=  src/qt_main.cpp\
             src/timed.cpp \
             src/utilities.cpp \
     src/birthdialog.cpp \
-    src/birth.cpp
+    src/birth.cpp \
+    src/dungeonbox.cpp \
+    src/cmd1.cpp
 
 
 
@@ -88,7 +90,8 @@ HEADERS  += src/qt_mainwindow.h\
             src/optionsdialog.h \
             src/mon_classes.h \
             src/player_classes.h \
-    src/birthdialog.h
+    src/birthdialog.h \
+    src/dungeonbox.h
 
 
 RESOURCES += \

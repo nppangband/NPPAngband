@@ -963,6 +963,34 @@ void finish_birth()
         /* Maintain the shop (ten times) */
         for (i = 0; i < 10; i++) store_maint(n);
     }
+
+    /* Start in town */
+    p_ptr->depth = 0;
+
+    /* Hack -- seed for flavors */
+    seed_flavor = rand_int(0x10000000);
+
+    /* Hack -- seed for town layout */
+    seed_town = rand_int(0x10000000);
+
+    /* Hack -- seed for random artifacts */
+    seed_randart = rand_int(0x10000000);
+
+    seed_ghost = rand_int(0x10000000);
+
+    /* Randomize the artifacts */
+    if (adult_rand_artifacts)
+    {
+        do_randart(seed_randart, TRUE);
+    }
+
+    /* Hack -- enter the world */
+    turn = 1;
+
+    p_ptr->p_turn = 0;
+
+    quest_indicator_timer = 0;
+    quest_indicator_complete = FALSE;
 }
 
 void init_birth()
@@ -971,6 +999,8 @@ void init_birth()
 
     /* Turn off many options for Moria */
     if (game_mode == GAME_NPPMORIA) set_moria_options();
+
+    character_loaded = character_dungeon = character_generated = false;
 }
 
 /*

@@ -73,6 +73,7 @@ void object_type::object_copy(object_type *j_ptr)
     k_idx = j_ptr->k_idx;
     iy = j_ptr->iy;
     ix = j_ptr->ix;
+    tval = j_ptr->tval;
     pval = j_ptr->pval;
     sval = j_ptr->sval;
     discount = j_ptr->discount;
