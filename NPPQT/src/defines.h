@@ -560,6 +560,24 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 #define ARC_STANDARD_WIDTH     90
 
 
+/*
+ * Bit flags for the "target_set" function
+ *
+ *	KILL: Target monsters
+ *	LOOK: Describe grid fully
+ *	XTRA: Currently unused flag
+ *	GRID: Select from all grids
+ *	PROBE: - Terrain can be targeted as well as a monster (for probing)
+ */
+#define TARGET_KILL		0x01
+#define TARGET_LOOK		0x02
+#define TARGET_XTRA		0x04
+#define TARGET_GRID		0x08
+#define TARGET_QUIET	0x08
+#define TARGET_TRAP		0x20
+#define TARGET_PROBE	0x40
+
+
 #define LEV_THEME_HEAD				11
 #define LEV_THEME_CREEPING_COIN		0	/*creeping coins*/
 #define LEV_THEME_ORC				1	/*orc*/

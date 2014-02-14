@@ -187,7 +187,7 @@
 #define SV_AMMO_HEAVY		2	/* seeker arrows and bolts */
 
 
-/* The "sval" codes for TV_BOW (note information in "sval") */
+/* The "sval" codes for TV_BOW (note inQStringion in "sval") */
 #define SV_SLING			2	/* (x2) */
 #define SV_SHORT_BOW		12	/* (x2) */
 #define SV_LONG_BOW			13	/* (x3) */
@@ -1358,7 +1358,7 @@
   */
 #define use_flavor_glyph(T) \
     ((k_info[(T)->k_idx].flavor) && \
-     !((k_info[(T)->k_idx].tval == TV_SCROLL) && object_aware_p(T)))
+     !((k_info[(T)->k_idx].tval == TV_SCROLL) && (T)->is_aware()))
 
 
 /*
@@ -1368,8 +1368,8 @@
  */
 #define object_attr(T) \
     (use_flavor_glyph(T) ? \
-     (flavor_info[k_info[(T)->k_idx].flavor].x_attr) : \
-     (k_info[(T)->k_idx].x_attr))
+     (flavor_info[k_info[(T)->k_idx].flavor].d_color) : \
+     (k_info[(T)->k_idx].d_color))
 
 /*
  * Return the "attr" for a given item.
@@ -1378,8 +1378,8 @@
  */
 #define object_attr_default(T) \
        ((k_info[(T)->k_idx].flavor) ? \
-        (flavor_info[k_info[(T)->k_idx].flavor].d_attr) : \
-        (k_info[(T)->k_idx].d_attr))
+        (flavor_info[k_info[(T)->k_idx].flavor].d_color) : \
+        (k_info[(T)->k_idx].d_color))
 
 
 /*
@@ -1389,8 +1389,8 @@
  */
 #define object_type_attr(T) \
     ((k_info[T].flavor) ? \
-     (flavor_info[k_info[T].flavor].x_attr) : \
-     (k_info[T].x_attr))
+     (flavor_info[k_info[T].flavor].d_color) : \
+     (k_info[T].d_color))
 
 /*
  * Return the "attr" for a k_idx.
@@ -1399,8 +1399,8 @@
  */
 #define object_type_attr_default(T) \
        ((k_info[T].flavor) ? \
-        (flavor_info[k_info[T].flavor].d_attr) : \
-        (k_info[T].d_attr))
+        (flavor_info[k_info[T].flavor].d_color) : \
+        (k_info[T].d_color))
 
 
         /*
@@ -1410,8 +1410,8 @@
  */
 #define object_kind_attr(K) \
     (use_flavor_glyph(K) ? \
-     (flavor_info[k_info[(K)].flavor].x_attr) : \
-     (k_info[(K)].x_attr))
+     (flavor_info[k_info[(K)].flavor].d_color) : \
+     (k_info[(K)].d_color))
 
 /*
  * Return the "char" for a given item kind.
@@ -1420,8 +1420,8 @@
  */
 #define object_kind_char(K) \
     (use_flavor_glyph(K) ? \
-     (flavor_info[k_info[(K)].flavor].x_char) : \
-     (k_info[(K)].x_char))
+     (flavor_info[k_info[(K)].flavor].d_char) : \
+     (k_info[(K)].d_char))
 
 
 /*
@@ -1431,8 +1431,8 @@
  */
 #define object_char(T) \
     (use_flavor_glyph(T) ? \
-     (flavor_info[k_info[(T)->k_idx].flavor].x_char) : \
-     (k_info[(T)->k_idx].x_char))
+     (flavor_info[k_info[(T)->k_idx].flavor].d_char) : \
+     (k_info[(T)->k_idx].d_char))
 
 /*
  * Return the "char" for a given item.
@@ -1451,8 +1451,8 @@
  */
 #define object_type_char(T) \
     ((k_info[T].flavor) ? \
-     (flavor_info[k_info[T].flavor].x_char) : \
-     (k_info[T].x_char))
+     (flavor_info[k_info[T].flavor].d_char) : \
+     (k_info[T].d_char))
 
 /*
  * Return the "char" for a k_idx.

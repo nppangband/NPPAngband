@@ -535,6 +535,21 @@ bool fire_ball_special(int typ, int dir, int dam, int rad, u32b flg,
 /*
  * Character casts an arc spell.
  */
+bool fire_arc_special(int typ, int dir, int dam, int rad, int degrees, u32b flg)
+{
+    int y1, x1;
+
+    /* Get target */
+    adjust_target(dir, p_ptr->py, p_ptr->px, &y1, &x1);
+
+    /* Cast an arc */
+    return (project_arc(SOURCE_PLAYER, rad, p_ptr->py, p_ptr->px, y1, x1, dam, typ,
+                        flg, degrees));
+}
+
+/*
+ * Character casts an arc spell.
+ */
 bool fire_arc(int typ, int dir, int dam, int rad, int degrees)
 {
     int y1, x1;
@@ -545,21 +560,6 @@ bool fire_arc(int typ, int dir, int dam, int rad, int degrees)
     /* Cast an arc */
     return (project_arc(SOURCE_PLAYER, rad, p_ptr->py, p_ptr->px, y1, x1, dam, typ,
                         0L, degrees));
-}
-
-/*
- * Character casts an arc spell.
- */
-static bool fire_arc_special(int typ, int dir, int dam, int rad, int degrees, u32b flg)
-{
-    int y1, x1;
-
-    /* Get target */
-    adjust_target(dir, p_ptr->py, p_ptr->px, &y1, &x1);
-
-    /* Cast an arc */
-    return (project_arc(SOURCE_PLAYER, rad, p_ptr->py, p_ptr->px, y1, x1, dam, typ,
-                        flg, degrees));
 }
 
 /*
@@ -924,4 +924,119 @@ bool fire_bolt_or_beam(int prob, int typ, int dir, int dam)
     {
         return (fire_bolt(typ, dir, dam));
     }
+}
+
+
+/*
+ * Cast a chain of beams of the given type, jumping through nearby monsters. Monsters
+ * must be inside the player's LOF.
+ * max_hits is the maximum number of beams that will be casted.
+ * decrement is a percentage of damage that is decreased with every beam. Use 0
+ * to keep the damage constant.
+ * Return TRUE if at least one monster was hit.
+ */
+bool beam_chain(int gf_type, int dam, int max_hits, int decrement)
+{
+    int yy, xx;
+
+    /* Must be from from player's location */
+    int py = p_ptr->py;
+    int px = p_ptr->px;
+
+    int y = py;
+    int x = px;
+
+    int i, k;
+
+    /* The indexes in mon_list of the reached monsters */
+    u16b *monsters;
+    u16b *hits;
+    u16b n = 0;
+
+    bool flag = FALSE;
+
+    hits = C_ZNEW(mon_max, u16b);
+    monsters = C_ZNEW(mon_max, u16b);
+
+    /* Cast max_hits beams */
+    for (i = 0; i < max_hits; i++)
+    {
+        int m_idx;
+        u16b m = 0;
+
+        /* Scan monsters as potential targets */
+
+        for (m_idx = 0; m_idx < mon_max; m_idx++)
+        {
+            monster_type *m_ptr = &mon_list[m_idx];
+
+            /* Paranoia -- Skip dead monsters */
+            if (!m_ptr->r_idx) continue;
+
+            /* It must be visible */
+            if (!m_ptr->ml) continue;
+
+            /* Get monster coordinates */
+            yy = m_ptr->fy;
+            xx = m_ptr->fx;
+
+            /* It must be in the line of fire of the player */
+            if(!m_ptr->project) continue;
+
+            /* It must be in the line of fire of the previous location */
+            if(!projectable(y, x, yy, xx, PROJECT_NONE)) continue;
+
+            /* It must be close enough to the previous location */
+            if (distance(y, x, yy, xx) > MAX_RANGE) continue;
+
+            /* Find the monster in the list */
+            for (k = 0; k < n; k++)
+            {
+                /* Found. Stop */
+                if (hits[k] == m_idx) break;
+            }
+
+            /* If the monster was found in the list we just ignore it */
+            if (k < n) continue;
+
+            /* Mark the monster as a possible candidate */
+            monsters[m++] = m_idx;
+        }
+
+        /* No monsters. Done */
+        if (!m) break;
+
+        /* Select a random monster from the list */
+        m_idx = monsters[rand_int(m)];
+
+        /* Get its location */
+        yy = mon_list[m_idx].fy;
+        xx = mon_list[m_idx].fx;
+
+        /* Remember the monster */
+        hits[n++] = m_idx;
+
+        /* Cast the beam */
+        project(SOURCE_PLAYER, 0, y, x, yy, xx, dam, gf_type,
+            (PROJECT_KILL | PROJECT_BEAM), 0, 0);
+
+        /* Success */
+        flag = TRUE;
+
+        /* Make the next beam weaker */
+        dam -= (decrement * dam) / 100;
+
+        /* No damage. Done */
+        if (dam < 1) break;
+
+        /* Remember the last location */
+        y = yy;
+        x = xx;
+
+    }
+
+    FREE(hits);
+    FREE(monsters);
+
+    return (flag);
 }
