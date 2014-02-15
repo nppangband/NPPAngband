@@ -125,8 +125,7 @@ void calc_spells(void)
 
     s16b old_spells;
 
-    // TODO add spells
-    QString p = ("TODO");//cast_spell(MODE_SPELL_NOUN, cp_ptr->spell_book, 1, 0);
+    QString p = cast_spell(MODE_SPELL_NOUN, cp_ptr->spell_book, 1, 0);
 
     /* Hack -- must be literate */
     if (!cp_ptr->spell_book) return;

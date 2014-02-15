@@ -8,6 +8,7 @@
 
 //was externs.h
 
+
 // cmd1.cpp
 extern s16b move_player(int dir, int jumping);
 

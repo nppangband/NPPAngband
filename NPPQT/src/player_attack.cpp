@@ -806,7 +806,7 @@ void py_attack(int y, int x)
     }
 
     /* Mega-Hack -- apply earthquake brand */
-    if (do_quake) // TODO earthquake(p_ptr->py, p_ptr->px, 10, TRUE);
+    if (do_quake) earthquake(p_ptr->py, p_ptr->px, 10, TRUE);
 
     return;
 }

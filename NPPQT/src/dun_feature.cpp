@@ -782,7 +782,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 }
 
                 /* New depth */
-                // TODO dungeon_change_level(p_ptr->depth + 1);
+                dungeon_change_level(p_ptr->depth + 1);
             }
 
             break;
@@ -948,7 +948,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 num = sum_base + randint(sum_plus);
                 for (i = 0; i < num; i++)
                 {
-                   // TODO (void)summon_specific(y, x, p_ptr->depth, 0, MPLACE_OVERRIDE);
+                   (void)summon_specific(y, x, p_ptr->depth, 0, MPLACE_OVERRIDE);
                 }
             }
             break;
@@ -1024,7 +1024,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             }
             if (mode == MODE_ACTION)
             {
-                if (TRUE) // TODO (check_hit(125))
+                if (check_hit(125))
                 {
                     message("A small dart hits you!");
                     dam = damroll(dice, sides);
@@ -1055,7 +1055,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             if (mode == MODE_ACTION)
             {
 
-                if (TRUE) //TODO (check_hit(125))
+                if (check_hit(125))
                 {
                     message("A small dart hits you!");
                     dam = damroll(dice, sides);
@@ -1086,7 +1086,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             if (mode == MODE_ACTION)
             {
 
-                if (0) //TODO (check_hit(125))
+                if (check_hit(125))
                 {
                     message("A small dart hits you!");
                     dam = damroll(1, 4);
@@ -1117,7 +1117,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             if (mode == MODE_ACTION)
             {
 
-                if (0) //TODO (check_hit(125))
+                if (check_hit(125))
                 {
                     message("A small dart hits you!");
                     dam = damroll(1, 4);
@@ -2980,7 +2980,7 @@ static void process_dynamic_terrain_aux(dynamic_grid_type *g_ptr)
         disturb(0, 0);
 
         /* Call monsters */
-        // TODO aggravate_monsters(SOURCE_OTHER);
+        aggravate_monsters(SOURCE_OTHER);
 
         /* Done */
         return;
@@ -3506,7 +3506,7 @@ void hit_silent_watcher(int y, int x)
     color_message("The silent watcher screams and curses at you!", TERM_WHITE);
 
     /* Aggravate */
-    // TODO aggravate_monsters(SOURCE_OTHER);
+    aggravate_monsters(SOURCE_OTHER);
 
     /* Fire a bolt to the player  */
     project(SOURCE_OTHER, 0, y, x, p_ptr->py, p_ptr->px, dam, GF_NETHER, flg, 0, 0);

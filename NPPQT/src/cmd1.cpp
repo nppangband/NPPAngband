@@ -78,7 +78,7 @@ void search(void)
 						light_spot(y, x);
 
 						/* Message */
-                        message(QString("You have found a trap!"));
+                        message("You have found a trap!");
 
 						/* Disturb the player */
 						disturb(0, 0);
@@ -89,7 +89,7 @@ void search(void)
 				for (o_ptr = get_first_object(y, x); o_ptr; o_ptr = get_next_object(o_ptr))
 				{
 					/* Skip non-chests */
-					if (o_ptr->tval != TV_CHEST) continue;
+                    if (!o_ptr->is_chest()) continue;
 
 					/* Skip disarmed chests */
 					if (o_ptr->pval <= 0) continue;
@@ -103,7 +103,7 @@ void search(void)
 					if (!object_known_p(o_ptr))
 					{
 						/* Message */
-                        message(QString("You have discovered a trap on the chest!"));
+                        message("You have discovered a trap on the chest!");
 
 						/* Know the trap */
 						object_known(o_ptr);
@@ -168,45 +168,7 @@ static int count_possible_pickups(void)
  */
 static bool auto_pickup_inscrip(const object_type *o_ptr)
 {
-    // Replaced some lines later -DG
-#if 0
-	cptr s;
-
-	/* No inscription */
-    if (!o_ptr->obj) return (FALSE);
-
-	/* Find a '=' */
-	s = strchr(quark_str(o_ptr->obj_note), '=');
-
-	/* Process inscription */
-	while (s)
-	{
-		/* Auto-pickup on "=g" */
-		if (s[1] == 'g') return (TRUE);
-
-		/* Find another '=' */
-		s = strchr(s + 1, '=');
-	}
-#endif
-
-    /* No inscription */
-    if (o_ptr->inscription.length() == 0) return (FALSE);
-
-    /* Find a '=' */
-    int i = o_ptr->inscription.indexOf(QString("="));
-
-    /* Process inscription */
-    while (i != -1)
-    {
-        // Discard the '='
-        ++i;
-
-        /* Auto-pickup on "=g" */
-        if ((i < o_ptr->inscription.length()) && (o_ptr->inscription.at(i) == 'g')) return (TRUE);
-
-        /* Find another '=' */
-        i = o_ptr->inscription.indexOf(QString("="), i);
-    }
+    if (o_ptr->inscription.contains("=g")) return TRUE;
 
 	/* Don't auto pickup */
 	return (FALSE);
@@ -224,7 +186,7 @@ static bool put_object_in_quiver(object_type *o_ptr)
     QString o_name;
 	int slot;
 
-	u16b msgt = MSG_GENERIC;
+    // TODO u16b msgt = MSG_GENERIC;
 
 	/*hack - don't pickup &nothings*/
 	if (!o_ptr->k_idx) return (FALSE);
@@ -253,7 +215,7 @@ static bool put_object_in_quiver(object_type *o_ptr)
     o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
 	/* Message */
-    //msg_c_format(msgt, "You have readied %s (%c) in your quiver.", o_name, index_to_label(slot));
+    // TODO msg_c_format(msgt, "You have readied %s (%c) in your quiver.", o_name, index_to_label(slot));
     message(QString("You have readied %1 (%2) in your quiver.").arg(o_name).arg(index_to_label(slot)));
 
 	/* Cursed! */
@@ -261,7 +223,7 @@ static bool put_object_in_quiver(object_type *o_ptr)
 	{
 		/* Warn the player */
         //sound(MSG_CURSED);
-        message(QString("Oops! It feels deathly cold!"));
+        message("Oops! It feels deathly cold!");
 
 		/* Remove special inscription, if any */
 		if (o_ptr->discount >= INSCRIP_NULL) o_ptr->discount = 0;
@@ -297,7 +259,7 @@ bool put_object_in_inventory(object_type *o_ptr)
 {
     QString o_name;
 
-	u16b msgt = MSG_GENERIC;
+    // TODO u16b msgt = MSG_GENERIC;
 
 	int slot = inven_carry(o_ptr);
 
@@ -321,7 +283,7 @@ bool put_object_in_inventory(object_type *o_ptr)
     o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
 	/* Message */
-    //msg_c_format(msgt, "You have %s (%c).", o_name, index_to_label(slot));
+    // TODO msg_c_format(msgt, "You have %s (%c).", o_name, index_to_label(slot));
     message(QString("You have %1 (%2).").arg(o_name).arg(index_to_label(slot)));
 
 	/* No longer marked "in use */
@@ -429,7 +391,7 @@ void do_cmd_pickup_from_pile(bool pickup, bool msg)
 		{
             if (!msg) break;
 
-            message(QString("You do not have any room for these items."));
+            message("You do not have any room for these items.");
 			break;
 		}
 
@@ -456,8 +418,8 @@ void do_cmd_pickup_from_pile(bool pickup, bool msg)
 		/*clear the restriction*/
 		item_tester_hook = NULL;
 
-        q.append("Pick up which object? (ESC to cancel):");
-        s.append("THere are no objects to pick up!");
+        q = "Pick up which object? (ESC to cancel):";
+        s = "There are no objects to pick up!";
 
         //if (!get_item(&item, q, s, (USE_FLOOR)))
         if (true)
@@ -466,7 +428,7 @@ void do_cmd_pickup_from_pile(bool pickup, bool msg)
 			break;
 		}
 
-		/* FLoor items are returned as negative numbers */
+        /* Floor items are returned as negative numbers */
 		item = -item;
 
 		o_ptr = &o_list[item];
@@ -531,7 +493,7 @@ void py_pickup_gold(void)
         o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
 		/* Message */
-        //message_format(sound_msg, 0, "You have found %s.", o_name);
+        // TODO message_format(sound_msg, 0, "You have found %s.", o_name);
         message(QString("You have found %1.").arg(o_name));
 
 		/* Collect the gold */
@@ -781,7 +743,7 @@ void py_pickup(bool pickup)
 	/* Only one object */
 	if (objects_left == 1)
 	{
-		u16b msgt = MSG_GENERIC;
+        // TODO u16b msgt = MSG_GENERIC;
 
 		/* Get the object */
         o_ptr = &o_list[dungeon_info[py][px].object_idx];
@@ -840,8 +802,7 @@ s16b move_player(int dir, int jumping)
     if (dungeon_info[y][x].monster_idx > 0)
 	{
 		/* Attack */
-        //py_attack(y, x);
-        message(QString("You attack the monster!"));
+        py_attack(y, x);
 	}
 
 	/* Optionally alter known traps/doors on (non-jumping) movement */
@@ -861,7 +822,7 @@ s16b move_player(int dir, int jumping)
 		}
 
 		/* Alter */
-        //do_cmd_alter_aux(dir);
+        // TODO do_cmd_alter_aux(dir);
 	}
 
 	/* Player can not walk through certain terrain */
@@ -877,7 +838,7 @@ s16b move_player(int dir, int jumping)
 			if (cave_passive_trap_bold(y, x))
 			{
 				/* Hit the trap */
-                //hit_trap(x_list[cave_x_idx[y][x]].x_f_idx, y, x, MODE_ACTION);
+                // TODO hit_trap(x_list[cave_x_idx[y][x]].x_f_idx, y, x, MODE_ACTION);
 			}
 
 			/* Get the feature name */
@@ -951,7 +912,7 @@ s16b move_player(int dir, int jumping)
 		}
 
 		/* Paranoia */
-        if (!x_idx) message(QString("You cannot move into this grid."));
+        if (!x_idx) message("You cannot move into this grid.");
 	}
 
 	/* Some terrain prevents flying. */
@@ -977,12 +938,11 @@ s16b move_player(int dir, int jumping)
         message(QString("There is %1 blocking your way.").arg(name));
 
 		/* Give the player the option to stop flying. */
-		sprintf(out_val, "So you want to stop flying? ");
-		if (get_check(out_val))
+        if (get_check("So you want to stop flying? "))
 		{
 			clear_timed(TMD_FLYING, FALSE);
 
-            message(QString("You land."));
+            message("You land.");
 
 			/*Little energy used*/
 			used_energy = BASE_ENERGY_MOVE / 10;
@@ -1114,7 +1074,7 @@ s16b move_player(int dir, int jumping)
 		/* Walk on a monster trap */
 		else if (cave_monster_trap_bold(y,x))
 		{
-            message(QString("You inspect your cunning trap."));
+            message("You inspect your cunning trap.");
 		}
 
 	}

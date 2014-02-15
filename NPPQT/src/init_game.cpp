@@ -159,13 +159,13 @@ static int read_edit_file(QString file_name)
 
     if (!edit_file.exists())
     {
-        quit_npp_games(QString(QObject::tr("Cannot find '%1.txt' file.")) .arg(file_name));
+        quit_npp_games(QString(QObject::tr("Cannot find '%1' file.")) .arg(file_name));
         return (1);
     }
 
     if (!edit_file.open(QIODevice::ReadOnly))
     {
-        quit_npp_games(QString(QObject::tr("Cannot open '%1.txt' file.")) .arg(file_name));
+        quit_npp_games(QString(QObject::tr("Cannot open '%1' file.")) .arg(file_name));
         return(1);
     }
 
@@ -188,8 +188,6 @@ static int read_edit_file(QString file_name)
              break;
         }
     }
-
-    //pop_up_message_box((QString(QObject::tr("finishing with line is %1 file-name is %2")).arg(error_line) .arg(file_name)));
 
     // close the file
     edit_file.close();
