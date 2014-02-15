@@ -623,7 +623,7 @@ u16b fire_trap_smart(int f_idx, int y, int x, byte mode)
 
         /*Oops!*/
         default:
-            message("unknown trap type");
+            message(QString("unknown trap type"));
 
             break;
     }
@@ -698,7 +698,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
     /* Don't describe if not set off*/
     if ((mode == MODE_DESCRIBE) && (!f_l_ptr->f_l_power))
     {
-        message("  The effects of this trap are unknown.");
+        message(QString("  The effects of this trap are unknown."));
         return;
     }
 
@@ -725,19 +725,19 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             {
                 if (p_ptr->state.ffall)
                 {
-                    message("You float gently to the floor of the pit.");
-                    message("You carefully avoid setting off the daggers.");
+                    message(QString("You float gently to the floor of the pit."));
+                    message(QString("You carefully avoid setting off the daggers."));
                 }
 
                 else
                 {
                     /* activate the ordinary daggers. */
-                    message("Daggers pierce you everywhere!");
+                    message(QString("Daggers pierce you everywhere!"));
 
                     /* Base damage */
                     dam = damroll(dice, sides);
 
-                    message("You are impaled!");
+                    message(QString("You are impaled!"));
 
                     for (i = 0; i < randint(reps); i++)
                     {
@@ -770,10 +770,10 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             if (mode == MODE_ACTION)
             {
 
-                message("You fall through a trap door!");
+                message(QString("You fall through a trap door!"));
                 if (p_ptr->state.ffall)
                 {
-                    message("You float gently down to the next level.");
+                    message(QString("You float gently down to the next level."));
                 }
                 else
                 {
@@ -802,10 +802,10 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             if (mode == MODE_ACTION)
             {
 
-                message("You fall into a pit!");
+                message(QString("You fall into a pit!"));
                 if (p_ptr->state.ffall)
                 {
-                    message("You float gently to the bottom of the pit.");
+                    message(QString("You float gently to the bottom of the pit."));
                 }
                 else
                 {
@@ -833,12 +833,12 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             if (mode == MODE_ACTION)
             {
 
-                message("You fall into a spiked pit!");
+                message(QString("You fall into a spiked pit!"));
 
                 if (p_ptr->state.ffall)
                 {
-                    message("You float gently to the floor of the pit.");
-                    message("You carefully avoid touching the spikes.");
+                    message(QString("You float gently to the floor of the pit."));
+                    message(QString("You carefully avoid touching the spikes."));
                 }
 
                 else
@@ -849,7 +849,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                     /* Extra spike damage */
                     if (rand_int(100) < 50)
                     {
-                        message("You are impaled!");
+                        message(QString("You are impaled!"));
 
                         dam = dam * 2;
                         (void)set_cut(p_ptr->timed[TMD_CUT] + randint(dam));
@@ -881,12 +881,12 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             if (mode == MODE_ACTION)
             {
 
-                message("You fall into a poison spiked pit!");
+                message(QString("You fall into a poison spiked pit!"));
 
                 if (p_ptr->state.ffall)
                 {
-                    message("You float gently to the floor of the pit.");
-                    message("You carefully avoid touching the poison spikes.");
+                    message(QString("You float gently to the floor of the pit."));
+                    message(QString("You carefully avoid touching the poison spikes."));
                 }
 
                 else
@@ -897,14 +897,14 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                     /* Extra spike damage */
                     if (rand_int(100) < percentage)
                     {
-                        message("You are impaled on poisonous spikes!");
+                        message(QString("You are impaled on poisonous spikes!"));
 
                         dam = dam * 2;
                         (void)set_cut(p_ptr->timed[TMD_CUT] + randint(dam));
 
                         if (p_ptr->state.resist_pois || p_ptr->timed[TMD_OPP_POIS] || p_ptr->state.immune_pois)
                         {
-                            message("The poison does not affect you!");
+                            message(QString("The poison does not affect you!"));
                         }
                         else
                         {
@@ -936,7 +936,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             if (mode == MODE_ACTION)
             {
 
-                message("You are enveloped in a cloud of smoke!");
+                message(QString("You are enveloped in a cloud of smoke!"));
                 dungeon_info[y][x].cave_info &= ~(CAVE_MARK);
 
                 /* Destroy the trap */
@@ -966,7 +966,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             if (mode == MODE_ACTION)
             {
 
-                message("You hit a teleport trap!");
+                message(QString("You hit a teleport trap!"));
                 teleport_player(dist, FALSE);
             }
             break;
@@ -984,7 +984,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             }
             if (mode == MODE_ACTION)
             {
-                message("You are enveloped in flames!");
+                message(QString("You are enveloped in flames!"));
                 dam = damroll(dice, sides);
                fire_dam(dam, "a fire trap");
             }
@@ -1003,7 +1003,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             }
             if (mode == MODE_ACTION)
             {
-                message("You are splashed with acid!");
+                message(QString("You are splashed with acid!"));
                 dam = damroll(dice, sides);
                 acid_dam(dam, "an acid trap");
             }
@@ -1026,7 +1026,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             {
                 if (check_hit(125))
                 {
-                    message("A small dart hits you!");
+                    message(QString("A small dart hits you!"));
                     dam = damroll(dice, sides);
 
                     take_hit(dam, name);
@@ -1035,7 +1035,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 }
                 else
                 {
-                    message("A small dart barely misses you.");
+                    message(QString("A small dart barely misses you."));
                 }
             }
             break;
@@ -1057,7 +1057,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
 
                 if (check_hit(125))
                 {
-                    message("A small dart hits you!");
+                    message(QString("A small dart hits you!"));
                     dam = damroll(dice, sides);
 
                     take_hit(dam, name);
@@ -1066,7 +1066,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 }
                 else
                 {
-                    message("A small dart barely misses you.");
+                    message(QString("A small dart barely misses you."));
                 }
             }
             break;
@@ -1088,7 +1088,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
 
                 if (check_hit(125))
                 {
-                    message("A small dart hits you!");
+                    message(QString("A small dart hits you!"));
                     dam = damroll(1, 4);
 
                     take_hit(dam, name);
@@ -1097,7 +1097,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 }
                 else
                 {
-                    message("A small dart barely misses you.");
+                    message(QString("A small dart barely misses you."));
                 }
             }
             break;
@@ -1119,7 +1119,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
 
                 if (check_hit(125))
                 {
-                    message("A small dart hits you!");
+                    message(QString("A small dart hits you!"));
                     dam = damroll(1, 4);
 
                     take_hit(dam, name);
@@ -1128,7 +1128,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
                 }
                 else
                 {
-                    message("A small dart barely misses you.");
+                    message(QString("A small dart barely misses you."));
                 }
             }
             break;
@@ -1149,7 +1149,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             if (mode == MODE_ACTION)
             {
 
-                message("You are surrounded by a black gas!");
+                message(QString("You are surrounded by a black gas!"));
                 if (!p_ptr->state.resist_blind)
                 {
                     (void)inc_timed(TMD_BLIND,rand_int(rand_base) + base, TRUE);
@@ -1178,7 +1178,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             if (mode == MODE_ACTION)
             {
 
-                message("You are surrounded by a gas of scintillating colors!");
+                message(QString("You are surrounded by a gas of scintillating colors!"));
                 if (allow_player_confusion())
                 {
                     (void)inc_timed(TMD_CONFUSED, rand_int(rand_base) + base, TRUE);
@@ -1207,7 +1207,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             {
 
 
-                message("You are surrounded by a pungent green gas!");
+                message(QString("You are surrounded by a pungent green gas!"));
                 if (!p_ptr->state.resist_pois && !p_ptr->timed[TMD_OPP_POIS] && !p_ptr->state.immune_pois)
                 {
                     (void)inc_timed(TMD_POISONED, rand_int(rand_base) + base, TRUE);
@@ -1234,7 +1234,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             }
             if (mode == MODE_ACTION)
             {
-                message("You are surrounded by a strange white mist!");
+                message(QString("You are surrounded by a strange white mist!"));
                 if (!p_ptr->state.free_act)
                 {
                     (void)inc_timed(TMD_PARALYZED, rand_int(rand_base) + base, TRUE);
@@ -1245,7 +1245,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
 
         /*Oops!*/
         default:
-            message("unknown trap type");
+            message(QString("unknown trap type"));
 
             break;
     }
@@ -2757,7 +2757,7 @@ static void process_dynamic_terrain_aux(dynamic_grid_type *g_ptr)
         /* Show a message */
         if (player_can_see_bold(y, x))
         {
-            message("The geyser explodes in a burst of boiling water!");
+            message(QString("The geyser explodes in a burst of boiling water!"));
 
             /*Mark the lore*/
             f_l_ptr->f_l_flags3 |= (FF3_DYNAMIC);
@@ -2804,7 +2804,7 @@ static void process_dynamic_terrain_aux(dynamic_grid_type *g_ptr)
         /* Message */
         if (player_can_see_bold(y, x))
         {
-            message("The forest seems to be alive.");
+            message(QString("The forest seems to be alive."));
 
             /*Mark the lore*/
             f_l_ptr->f_l_flags3 |= (FF3_DYNAMIC);
@@ -2919,11 +2919,11 @@ static void process_dynamic_terrain_aux(dynamic_grid_type *g_ptr)
         {
             if (gf_type == GF_ARROW)
             {
-                message("The putrid flower aims at you with spikes!");
+                message(QString("The putrid flower aims at you with spikes!"));
             }
             else if (gf_type == GF_POIS)
             {
-                message("The putrid flower spits poison in your face!");
+                message(QString("The putrid flower spits poison in your face!"));
             }
 
             /*Mark the lore*/
@@ -2935,11 +2935,11 @@ static void process_dynamic_terrain_aux(dynamic_grid_type *g_ptr)
         {
             if (gf_type == GF_ARROW)
             {
-                message("It aims at you with spikes!");
+                message(QString("It aims at you with spikes!"));
             }
             else if (gf_type == GF_POIS)
             {
-                message("It spits poison in your face!");
+                message(QString("It spits poison in your face!"));
             }
         }
 
@@ -2968,7 +2968,7 @@ static void process_dynamic_terrain_aux(dynamic_grid_type *g_ptr)
         if (!player_has_los_bold(y, x) || (distance(y, x, p_ptr->py, p_ptr->px) > 4)) return;
 
         /* Message */
-        message("The silent watcher howls in madness!");
+        message(QString("The silent watcher howls in madness!"));
 
         if (player_can_see_bold(y, x))
         {
@@ -3412,11 +3412,11 @@ void decipher_strange_inscription(int x_idx)
     /* Initial message */
     if (!x_ptr->x_r_idx)
     {
-        message("You try to decipher the inscription.");
+        message(QString("You try to decipher the inscription."));
     }
     else
     {
-        message("You try to decipher another part of the inscription.");
+        message(QString("You try to decipher another part of the inscription."));
     }
 
     /* Hurt the player in rare occasions */
@@ -3431,7 +3431,7 @@ void decipher_strange_inscription(int x_idx)
         if (one_in_(2))
         {
             /* Message */
-            color_message("It was a chaotic spell!", TERM_WHITE);
+            color_message(QString("It was a chaotic spell!"), TERM_WHITE);
 
             /* Set type */
             gf_type = GF_CHAOS;
@@ -3439,7 +3439,7 @@ void decipher_strange_inscription(int x_idx)
         else
         {
             /* Message */
-            color_message("It was a deadly spell!", TERM_WHITE);
+            color_message(QString("It was a deadly spell!"), TERM_WHITE);
 
             /* Set type */
             gf_type = GF_NETHER;
@@ -3465,7 +3465,7 @@ void decipher_strange_inscription(int x_idx)
     x_ptr->x_r_idx = select_powerful_race();
 
     /* We are printing thrash  */
-    if ((p_ptr->timed[TMD_CONFUSED] || p_ptr->timed[TMD_IMAGE]) && one_in_(2)) message("You don't trust your eyes.");
+    if ((p_ptr->timed[TMD_CONFUSED] || p_ptr->timed[TMD_IMAGE]) && one_in_(2)) message(QString("You don't trust your eyes."));
 
     /* Format the message */
     name = format_monster_inscription(x_ptr->x_r_idx);
@@ -3503,7 +3503,7 @@ void hit_silent_watcher(int y, int x)
     int dam = (300 * MAX(1, p_ptr->depth)) / 100;
 
     /* Message */
-    color_message("The silent watcher screams and curses at you!", TERM_WHITE);
+    color_message(QString("The silent watcher screams and curses at you!"), TERM_WHITE);
 
     /* Aggravate */
     aggravate_monsters(SOURCE_OTHER);
@@ -3589,7 +3589,7 @@ bool hit_wall(int y, int x, bool do_action)
             int dam = (800 * MAX(1, p_ptr->depth)) / 100;
 
             /* Message */
-            color_message("The wall explodes in a burst of light!", TERM_WHITE);
+            color_message(QString("The wall explodes in a burst of light!"), TERM_WHITE);
 
             /* Remove the wall */
             cave_alter_feat(y, x, FS_TUNNEL);
@@ -3601,7 +3601,7 @@ bool hit_wall(int y, int x, bool do_action)
         else
         {
             /* Message */
-            message("A blast of bright light teleports you away!");
+            message(QString("A blast of bright light teleports you away!"));
 
             /* Blind the player */
             if (!p_ptr->state.resist_blind && !p_ptr->state.resist_light)
@@ -3642,7 +3642,7 @@ bool hit_wall(int y, int x, bool do_action)
                 if (p_ptr->timed[TMD_BLIND] || no_light())
                 {
                     /* Message */
-                    message("You can not see!");
+                    message(QString("You can not see!"));
                 }
                 else
                 {
@@ -3674,7 +3674,7 @@ void update_level_flag(void)
     /* Debug */
     if (cheat_room)
     {
-        message("Updating level flags.");
+        message(QString("Updating level flags."));
         disturb(0, 0);
     }
 

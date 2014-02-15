@@ -44,25 +44,25 @@ bool hp_player(int num)
         /* Heal 0-4 */
         if (num < 5)
         {
-            message("You feel a little better.");
+            message(QString("You feel a little better."));
         }
 
         /* Heal 5-14 */
         else if (num < 15)
         {
-            message("You feel better.");
+            message(QString("You feel better."));
         }
 
         /* Heal 15-34 */
         else if (num < 35)
         {
-            message("You feel much better.");
+            message(QString("You feel much better."));
         }
 
         /* Heal 35+ */
         else
         {
-            message("You feel very good.");
+            message(QString("You feel very good."));
         }
 
         /* Notice */
@@ -90,15 +90,15 @@ bool warding_glyph(void)
 
         name = feature_desc(dungeon_info[py][px].feat, FALSE, TRUE);
 
-        if (dungeon_info[py][px].object_idx) message("The object resists the spell.");
+        if (dungeon_info[py][px].object_idx) message(QString("The object resists the spell."));
         else if (cave_any_trap_bold(py,px))
         {
             if (x_list[dungeon_info[py][px].effect_idx].x_flags & EF1_GLYPH)
             {
-                message("There is already a glyph where you are standing.");
+                message(QString("There is already a glyph where you are standing."));
             }
             /* Trap */
-            else message("The trap resists the spell.");
+            else message(QString("The trap resists the spell."));
         }
 
         /* Unsuitable terrain */
@@ -264,12 +264,12 @@ bool create_glacier(void)
     /* Must be in the line of fire */
     if (!player_can_fire_bold(y, x))
     {
-        message("That grid is out of your line of fire!");
+        message(QString("That grid is out of your line of fire!"));
     }
     /* Must be a passable grid free of monsters */
     else if (!cave_empty_bold(y, x))
     {
-        message("The grid resists your spell!");
+        message(QString("The grid resists your spell!"));
     }
     /* Valid grid */
     else
@@ -1253,7 +1253,7 @@ void destroy_area(int y1, int x1, int r)
     /* No effect in town */
     if ((*dun_cap->prevent_destruction)())
     {
-        message("The ground shakes for a moment.");
+        message(QString("The ground shakes for a moment."));
         return;
     }
 
@@ -1359,7 +1359,7 @@ void destroy_area(int y1, int x1, int r)
     if (flag)
     {
         /* Message */
-        message("There is a searing blast of light!");
+        message(QString("There is a searing blast of light!"));
 
         /* Blind the player */
         if (!p_ptr->state.resist_blind && !p_ptr->state.resist_light)
@@ -1414,7 +1414,7 @@ void earthquake(int cy, int cx, int r, bool kill_vault)
     /* No effect in town */
     if ((*dun_cap->prevent_destruction)())
     {
-        message("The ground shakes for a moment.");
+        message(QString("The ground shakes for a moment."));
         return;
     }
 
@@ -1503,18 +1503,18 @@ void earthquake(int cy, int cx, int r, bool kill_vault)
         {
             case 1:
             {
-                message("The cave ceiling collapses!");
+                message(QString("The cave ceiling collapses!"));
                 break;
             }
             case 2:
             {
-                message("The cave floor twists in an unnatural way!");
+                message(QString("The cave floor twists in an unnatural way!"));
                 break;
             }
             default:
             {
-                message("The cave quakes!");
-                message("You are pummeled with debris!");
+                message(QString("The cave quakes!"));
+                message(QString("You are pummeled with debris!"));
                 break;
             }
         }
@@ -1523,7 +1523,7 @@ void earthquake(int cy, int cx, int r, bool kill_vault)
         if (!sn)
         {
             /* Message and damage */
-            message("You are severely crushed!");
+            message(QString("You are severely crushed!"));
             damage = 300;
         }
 
@@ -1535,20 +1535,20 @@ void earthquake(int cy, int cx, int r, bool kill_vault)
             {
                 case 1:
                 {
-                    message("You nimbly dodge the blast!");
+                    message(QString("You nimbly dodge the blast!"));
                     damage = 0;
                     break;
                 }
                 case 2:
                 {
-                    message("You are bashed by rubble!");
+                    message(QString("You are bashed by rubble!"));
                     damage = damroll(10, 4);
                     (void)set_stun(p_ptr->timed[TMD_STUN] + randint(50));
                     break;
                 }
                 case 3:
                 {
-                    message("You are crushed between the floor and ceiling!");
+                    message(QString("You are crushed between the floor and ceiling!"));
                     damage = damroll(10, 4);
                     (void)set_stun(p_ptr->timed[TMD_STUN] + randint(50));
                     break;
@@ -1837,7 +1837,7 @@ bool light_area(int dam, int rad)
     /* Hack -- Message */
     if (!p_ptr->timed[TMD_BLIND])
     {
-        message("You are surrounded by a white light.");
+        message(QString("You are surrounded by a white light."));
     }
 
     /* Hook into the "project()" function */
@@ -1865,7 +1865,7 @@ bool unlight_area(int dam, int rad)
     /* Hack -- Message */
     if (!p_ptr->timed[TMD_BLIND])
     {
-        message("Darkness surrounds you.");
+        message(QString("Darkness surrounds you."));
     }
 
     /* Hook into the "project()" function */
@@ -2053,7 +2053,7 @@ static int remove_curse_aux(bool heavy)
         p_ptr->redraw |= (PR_INVEN | PR_EQUIP | PR_ITEMLIST);
     }
 
-    else message("Nothing happens.");
+    else message(QString("Nothing happens."));
 
     /* Return "something uncursed" */
     return (cnt);
@@ -2087,7 +2087,7 @@ bool restore_level(void)
     if (p_ptr->exp < p_ptr->max_exp)
     {
         /* Message */
-        message("You feel your life energies returning.");
+        message(QString("You feel your life energies returning."));
 
         /* Restore the experience */
         p_ptr->exp = p_ptr->max_exp;
@@ -2218,7 +2218,7 @@ int do_ident_item(int item, object_type *o_ptr)
         && a_l_list[o_ptr->art_num].was_fully_identified)
     {
         /* Message */
-        color_message("You are already familiar with this artifact.", TERM_BLUE);
+        color_message(QString("You are already familiar with this artifact."), TERM_BLUE);
 
         /* Fully identify the artifact for free */
         o_ptr->ident |= (IDENT_MENTAL);
@@ -2481,10 +2481,10 @@ bool recharge(int num, bool cannot_fail, int percent)
         {
 
             /*stack of rods*/
-            if (o_ptr->number > 1) message("The stack of rods is completely drained!");
+            if (o_ptr->number > 1) message(QString("The stack of rods is completely drained!"));
 
             /*one rod*/
-            else message("The recharge backfires, completely draining the rod!");
+            else message(QString("The recharge backfires, completely draining the rod!"));
 
             /*drain the rod or rods to max timeout*/
             o_ptr->timeout = o_ptr->pval;
@@ -2495,7 +2495,7 @@ bool recharge(int num, bool cannot_fail, int percent)
         else if (fail_type == 2)
         {
 
-            message("There is a bright flash of light");
+            message(QString("There is a bright flash of light"));
 
             /* Reduce the charges rods */
             reduce_charges(o_ptr, 1);
@@ -2566,7 +2566,7 @@ bool recharge(int num, bool cannot_fail, int percent)
         /* Destroy an object or one in a stack of objects. */
         if (fail_type == 1)
         {
-            message("There is a bright flash of light");
+            message(QString("There is a bright flash of light"));
 
             /* Drain wands and staffs. */
             o_ptr->pval = 0;
@@ -2605,9 +2605,9 @@ bool recharge(int num, bool cannot_fail, int percent)
             o_ptr->pval = 0;
 
             if ((o_ptr->number - counter) > 1)
-                message("There are several bright flashes of light");
+                message(QString("There are several bright flashes of light"));
             else
-                message("There is a bright flash of light");
+                message(QString("There is a bright flash of light"));
 
             /* Reduce and describe inventory */
             if (item >= 0)
@@ -2654,7 +2654,7 @@ void stair_creation(void)
     /* XXX XXX XXX */
     if (!cave_valid_bold(py, px))
     {
-        message("The object resists the spell.");
+        message(QString("The object resists the spell."));
         return;
     }
 
@@ -2739,7 +2739,7 @@ bool enchant(object_type *o_ptr, int n, int eflag)
                     (!(f3 & (TR3_PERMA_CURSE))) &&
                     (o_ptr->to_h >= 0) && (rand_int(100) < 25))
                 {
-                    message("The curse is broken!");
+                    message(QString("The curse is broken!"));
 
                     /* Uncurse the object */
                     o_ptr->uncurse();
@@ -2767,7 +2767,7 @@ bool enchant(object_type *o_ptr, int n, int eflag)
                     (!(f3 & (TR3_PERMA_CURSE))) &&
                     (o_ptr->to_d >= 0) && (rand_int(100) < 25))
                 {
-                    message("The curse is broken!");
+                    message(QString("The curse is broken!"));
 
                     /* Uncurse the object */
                     o_ptr->uncurse();
@@ -2795,7 +2795,7 @@ bool enchant(object_type *o_ptr, int n, int eflag)
                     (!(f3 & (TR3_PERMA_CURSE))) &&
                     (o_ptr->to_a >= 0) && (rand_int(100) < 25))
                 {
-                    message("The curse is broken!");
+                    message(QString("The curse is broken!"));
 
                     /* Uncurse the object */
                     o_ptr->uncurse();
@@ -2877,7 +2877,7 @@ bool enchant_spell(int num_hit, int num_dam, int num_ac)
     if (!okay)
     {
         /* Message */
-        message("The enchantment failed.");
+        message(QString("The enchantment failed."));
     }
 
     /* Something happened */
@@ -3476,7 +3476,7 @@ bool set_recall(void)
     /* Ironman */
     if (adult_ironman && !p_ptr->total_winner)
     {
-        message("Nothing happens.");
+        message(QString("Nothing happens."));
         return (FALSE);
     }
 
@@ -3514,14 +3514,14 @@ bool set_recall(void)
         }
 
         p_ptr->word_recall = rand_int(20) + 15;
-        message("The air about you becomes charged...");
+        message(QString("The air about you becomes charged..."));
     }
 
     /* Deactivate recall */
     else
     {
         p_ptr->word_recall = 0;
-        message("A tension leaves the air around you...");
+        message(QString("A tension leaves the air around you..."));
     }
 
     /* Redraw status line */
@@ -3605,7 +3605,7 @@ bool brand_object(object_type *o_ptr, byte brand_type, bool do_enchant)
     }
     else
     {
-        message("The Branding failed.");
+        message(QString("The Branding failed."));
     }
 
     return (FALSE);
@@ -3877,7 +3877,7 @@ void ring_of_power(int dir)
         case 2:
         {
             /* Message */
-            message("You are surrounded by a malignant aura.");
+            message(QString("You are surrounded by a malignant aura."));
 
             /* Decrease all stats (permanently) */
             (void)dec_stat(A_STR, 50, TRUE);
@@ -3898,7 +3898,7 @@ void ring_of_power(int dir)
         case 3:
         {
             /* Message */
-            message("You are surrounded by a powerful aura.");
+            message(QString("You are surrounded by a powerful aura."));
 
             /* Dispel monsters */
             dispel_monsters(1000);
@@ -4102,14 +4102,14 @@ bool read_minds(void)
     /* Show a message if some monsters wake up */
     if (count > 0)
     {
-        if (count == 1) message("A monster wakes up!");
+        if (count == 1) message(QString("A monster wakes up!"));
         else message(QString("%1 monsters wake up!") .arg(count));
     }
 
     /* Show a message if some monsters wake up */
     if (count > 0)
     {
-        if (count == 1) message("A monster wakes up!");
+        if (count == 1) message(QString("A monster wakes up!"));
         else message(QString("%1 monsters wake up!") .arg(count));
     }
 
@@ -4497,7 +4497,7 @@ bool steal_powers(int dir)
     /* No nearby monsters */
     if (m == 0)
     {
-        message("There are not animals nor vortices around you!");
+        message(QString("There are not animals nor vortices around you!"));
         return (FALSE);
     }
 
@@ -4524,7 +4524,7 @@ bool steal_powers(int dir)
     /* Paranoia. No attacks */
     if (n == 0)
     {
-        message("No powers!");
+        message(QString("No powers!"));
         return (FALSE);
     }
 
@@ -4575,7 +4575,7 @@ bool steal_powers(int dir)
     /* Paranoia */
     else
     {
-        message("Unknown attack type!");
+        message(QString("Unknown attack type!"));
         return (FALSE);
     }
 
@@ -4750,7 +4750,7 @@ bool call_huorns(void)
             /* Set new feature */
             cave_set_feat(y, x, (rand_int(100) < 30) ? FEAT_BURNING_TREE: FEAT_FSOIL_DYNAMIC);
             /* Message */
-            message("A huorn was destroyed!");
+            message(QString("A huorn was destroyed!"));
             /* Done */
             continue;
         }

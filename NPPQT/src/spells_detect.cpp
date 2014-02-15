@@ -578,7 +578,7 @@ bool detect(int dist, u16b detect_checks)
     {
         for (x = 0; x < p_ptr->cur_map_wid; x++)
         {
-            // TODO if (panel_contains(y, x)) light_spot(y, x);
+            if (main_window->panel_contains(y, x)) light_spot(y, x);
         }
     }
 

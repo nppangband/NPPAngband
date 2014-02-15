@@ -470,7 +470,7 @@ static void rd_monster(monster_type *m_ptr)
         /* Probably in trouble anyway */
         for (i = 0; i < num; i++) rd_s16b(&dummy);
 
-        message("Discarding unsupported monster timed effects");
+        message(QString("Discarding unsupported monster timed effects"));
     }
 
     rd_u32b(&m_ptr->mflag);

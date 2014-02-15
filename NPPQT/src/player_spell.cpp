@@ -35,112 +35,112 @@ static void cast_prismatic_spray(int dir, int dam)
         {
             gftype = GF_CHAOS;
             dam *= 12;
-            message("You conjure forth a massive torrent of raw chaos!");
+            message(QString("You conjure forth a massive torrent of raw chaos!"));
             break;
         }
         case (14):
         {
             gftype = GF_INERTIA_NPP;
             dam *= 2;
-            message("You conjure forth a torrent of inertia.");
+            message(QString("You conjure forth a torrent of inertia."));
             break;
         }
         case (13):
         {
             gftype = GF_GRAVITY;
             dam *= 2;
-            message("You conjure forth a torrent of gravity.");
+            message(QString("You conjure forth a torrent of gravity."));
             break;
         }
         case (12):
         {
             gftype = GF_CONFUSION;
             dam *= 3;
-            message("You conjure forth a torrent of confusion.");
+            message(QString("You conjure forth a torrent of confusion."));
             break;
         }
         case (11):
         {
             gftype = GF_FORCE;
             dam *= 3;
-            message("You conjure forth a torrent of pure force.");
+            message(QString("You conjure forth a torrent of pure force."));
             break;
         }
         case (10):
         {
             gftype = GF_TIME;
             dam *= 3;
-            message("You conjure forth a torrent of time.");
+            message(QString("You conjure forth a torrent of time."));
             break;
         }
         case (9):
         {
             gftype = GF_STATIC;
             dam *= 4;
-            message("You conjure forth a torrent of anti-magic static.");
+            message(QString("You conjure forth a torrent of anti-magic static."));
             break;
         }
         case (8):
         {
             gftype = GF_NEXUS;
             dam *= 4;
-            message("You conjure forth a torrent of dimensional energy.");
+            message(QString("You conjure forth a torrent of dimensional energy."));
             break;
         }
         case (7):
         {
             gftype = GF_DISENCHANT;
             dam *= 4;
-            message("You conjure forth a torrent of disenchantment.");
+            message(QString("You conjure forth a torrent of disenchantment."));
             break;
         }
         case (6):
         {
             gftype = GF_SHARD;
             dam *= 4;
-            message("You conjure forth a torrent of shrapnel.");
+            message(QString("You conjure forth a torrent of shrapnel."));
             break;
         }
         case (5):
         {
             gftype = GF_NETHER;
             dam *= 5;
-            message("You conjure forth a torrent of nether.");
+            message(QString("You conjure forth a torrent of nether."));
             break;
         }
         case (4):
         {
             gftype = GF_COLD;
             dam *= 5;
-            message("You conjure forth a torrent of frost.");
+            message(QString("You conjure forth a torrent of frost."));
             break;
         }
         case (3):
         {
             gftype = GF_FIRE;
             dam *= 5;
-            message("You conjure forth a torrent of flames.");
+            message(QString("You conjure forth a torrent of flames."));
             break;
         }
         case (2):
         {
             gftype = GF_ELEC;
             dam *= 5;
-            message("You conjure forth a torrent of electricity.");
+            message(QString("You conjure forth a torrent of electricity."));
             break;
         }
         case (1):
         {
             gftype = GF_ACID;
             dam *= 5;
-            message("You conjure forth a torrent of acid.");
+            message(QString("You conjure forth a torrent of acid."));
             break;
         }
         default:
         {
             gftype = GF_POIS;
             dam *= 5;
-            message("You conjure forth a torrent of poison.");
+            message(QString("You conjure forth a torrent of poison."));
             break;
         }
     }
@@ -541,7 +541,7 @@ QString do_mage_spell(int mode, int spell, int dir)
             if (desc_short) return (QString("dam %1d%2") .arg(dice) .arg(sides));
             if (cast)
             {
-                message("A line of blue shimmering light appears.");
+                message(QString("A line of blue shimmering light appears."));
                 (void)light_line(dir, damroll(dice, sides));
             }
 
@@ -1816,7 +1816,7 @@ QString do_druid_incantation(int mode, int spell, int dir)
             if (desc_short) return (QString("dam %1d%2") .arg(dice) .arg(sides));
             if (cast)
             {
-                message("A line of blue shimmering light appears.");
+                message(QString("A line of blue shimmering light appears."));
                 (void)light_line(dir, damroll(dice, sides));
             }
 
@@ -3424,7 +3424,7 @@ QString do_priest_prayer(int mode, int spell, int dir)
             {
                 if (banish_evil(dam))
                 {
-                    message("The power of your god banishes evil!");
+                    message(QString("The power of your god banishes evil!"));
                 }
             }
 
@@ -3626,12 +3626,12 @@ QString do_priest_prayer(int mode, int spell, int dir)
                 /* Ironman */
                 if (adult_ironman && !p_ptr->total_winner)
                 {
-                    message("Nothing happens.");
+                    message(QString("Nothing happens."));
                 }
 
                 else
                 {
-                    message("The world changes!");
+                    message(QString("The world changes!"));
 
                     /* Leaving */
                     p_ptr->leaving = TRUE;

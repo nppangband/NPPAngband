@@ -177,7 +177,7 @@ bool teleport_player(int dis, bool native)
         /* Check terrain */
         if (!flags || !is_player_native(py, px))
         {
-            message("You must be standing over native terrain!");
+            message(QString("You must be standing over native terrain!"));
             return (FALSE);
         }
     }
@@ -260,7 +260,7 @@ bool teleport_player(int dis, bool native)
         /* Make sure we aren't trapped in an infinite loop */
         if ((!min) && (dis == d))
         {
-            message("Failed to find a suitable spot for you!");
+            message(QString("Failed to find a suitable spot for you!"));
             return (FALSE);
         }
 
@@ -423,7 +423,7 @@ bool teleport_player_level(int who)
 
     if (adult_ironman)
     {
-        message("Nothing happens.");
+        message(QString("Nothing happens."));
         return(TRUE);
     }
 
@@ -474,7 +474,7 @@ bool teleport_player_level(int who)
     /*up*/
     if (go_up == TRUE)
     {
-        message("You rise up through the ceiling.");
+        message(QString("You rise up through the ceiling."));
 
         /* New depth */
         dungeon_change_level(p_ptr->depth - 1);
@@ -482,7 +482,7 @@ bool teleport_player_level(int who)
 
     else
     {
-        message("You sink through the floor.");
+        message(QString("You sink through the floor."));
 
         /* New depth */
         dungeon_change_level(p_ptr->depth + 1);
@@ -506,39 +506,39 @@ void disease(int *damage)
     /* Adjust damage and choose message based on constitution */
     if (con < 8)
     {
-        message("You feel deathly ill.");
+        message(QString("You feel deathly ill."));
         *damage *= 2;
     }
 
     else if (con < 14)
     {
-        message("You feel seriously ill.");
+        message(QString("You feel seriously ill."));
     }
 
     else if (con < 18)
     {
-        message("You feel quite ill.");
+        message(QString("You feel quite ill."));
         *damage = *damage * 2 / 3;
     }
 
     /* CON is at least 18, and less than 18/50 */
     else if (con < 68)
     {
-        message("You feel ill.");
+        message(QString("You feel ill."));
         *damage /= 2;
     }
 
     /* CON is at least 18/50, and less than 18/100 */
     else if (con < 118)
     {
-        message("You feel sick.");
+        message(QString("You feel sick."));
         *damage /= 3;
     }
 
     /* CON is at least 18/100 */
     else
     {
-        message("You feel a bit sick.");
+        message(QString("You feel a bit sick."));
         *damage /= 4;
     }
 
@@ -736,7 +736,7 @@ static void apply_nexus(int who)
         {
             if (rand_int(100) < p_ptr->state.skills[SKILL_SAVE])
             {
-                message("You resist the effects!");
+                message(QString("You resist the effects!"));
                 break;
             }
 
@@ -749,11 +749,11 @@ static void apply_nexus(int who)
         {
             if (rand_int(100) < p_ptr->state.skills[SKILL_SAVE])
             {
-                message("You resist the effects!");
+                message(QString("You resist the effects!"));
                 break;
             }
 
-            message("Your body starts to scramble...");
+            message(QString("Your body starts to scramble..."));
 
             /* Pick a pair of stats */
             ii = rand_int(A_MAX);
@@ -1215,7 +1215,7 @@ void take_hit(int dam, QString kb_str)
     if (p_ptr->chp < 0)
     {
         /* Hack -- Note death */
-        color_message("You die.", TERM_WHITE);
+        color_message(QString("You die."), TERM_WHITE);
 
         /* Note cause of death */
         p_ptr->died_from = kb_str;
@@ -1263,11 +1263,11 @@ void take_hit(int dam, QString kb_str)
         /* Hack -- bell on first notice */
         if (old_chp > warning)
         {
-            message("Low hitpoint warning!");
+            message(QString("Low hitpoint warning!"));
         }
 
         /* Message */
-        color_message("*** LOW HITPOINT WARNING! ***", TERM_RED);
+        color_message(QString("*** LOW HITPOINT WARNING! ***"), TERM_RED);
     }
 }
 
@@ -3036,7 +3036,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
                     feature_lore *f_l_ptr = &f_l_list[x_ptr->x_f_idx];
                     f_l_ptr->f_l_flags1 |= (FF1_CAN_DISARM);
 
-                    message("There is a bright flash of light!");
+                    message(QString("There is a bright flash of light!"));
                     obvious = TRUE;
                 }
 
@@ -3062,7 +3062,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
                     feature_lore *f_l_ptr = &f_l_list[dungeon_info[y][x].feat];
                     f_l_ptr->f_l_flags1 |= (FF1_CAN_OPEN);
 
-                    message("Click!");
+                    message(QString("Click!"));
 
                     obvious = TRUE;
                 }
@@ -3099,7 +3099,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
 
 
                     /* Message */
-                    message("There is a bright flash of light!");
+                    message(QString("There is a bright flash of light!"));
                     obvious = TRUE;
 
                 }
@@ -3604,7 +3604,7 @@ static bool project_o(int who, int y, int x, int dam, int typ)
                         /* Notice */
                         if (o_ptr->marked)
                         {
-                            message("Click!");
+                            message(QString("Click!"));
                             obvious = TRUE;
                         }
                     }
@@ -5593,7 +5593,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         {
             if (blind)
             {
-               if (!is_terrain) message("You are hit by acid!");
+               if (!is_terrain) message(QString("You are hit by acid!"));
                else message(QString("You are %1") .arg(msg));
             }
 
@@ -5606,7 +5606,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         {
             if (blind)
             {
-               if (!is_terrain) message("You are hit by fire!");
+               if (!is_terrain) message(QString("You are hit by fire!"));
                else message(QString("You are %1") .arg(msg));
             }
 
@@ -5619,7 +5619,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         {
             if (blind)
             {
-               if (!is_terrain) message("You are hit by cold!");
+               if (!is_terrain) message(QString("You are hit by cold!"));
                else message(QString("You are %1") .arg(msg));
             }
 
@@ -5632,7 +5632,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         {
             if (blind)
             {
-               if (!is_terrain) message("You are hit by lightning!");
+               if (!is_terrain) message(QString("You are hit by lightning!"));
                else message(QString("You are %1") .arg(msg));
             }
 
@@ -5645,7 +5645,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         {
             /*player is immune*/
             if (p_ptr->state.immune_pois) break;
-            if (blind) message("You are hit by poison!");
+            if (blind) message(QString("You are hit by poison!"));
             if (p_ptr->state.resist_pois) dam = (dam + 2) / 3;
             if (p_ptr->timed[TMD_OPP_POIS]) dam = (dam + 2) / 3;
             take_hit(dam, killer);
@@ -5659,7 +5659,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Standard damage */
         case GF_MISSILE:
         {
-            if ((blind) && (!is_terrain)) message("You are hit by something!");
+            if ((blind) && (!is_terrain)) message(QString("You are hit by something!"));
             take_hit(dam, killer);
             break;
         }
@@ -5685,11 +5685,11 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
             {
                 if (!player_native)
                 {
-                    message("You are seared by lava!");
+                    message(QString("You are seared by lava!"));
                 }
                 else
                 {
-                    message("You are hit by lava!");
+                    message(QString("You are hit by lava!"));
                 }
 
             }
@@ -5719,11 +5719,11 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
             {
                 if (!player_native)
                 {
-                    message("You are scorched by boiling water!");
+                    message(QString("You are scorched by boiling water!"));
                 }
                 else
                 {
-                    message("You are hit with boiling water!");
+                    message(QString("You are hit with boiling water!"));
                 }
 
             }
@@ -5754,11 +5754,11 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
             {
                 if (!player_native)
                 {
-                    message("You are seared by boiling mud!");
+                    message(QString("You are seared by boiling mud!"));
                 }
                 else
                 {
-                    message("You are hit with boiling mud!");
+                    message(QString("You are hit with boiling mud!"));
                 }
 
             }
@@ -5770,7 +5770,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Holy Orb -- Player only takes partial damage */
         case GF_HOLY_ORB:
         {
-            if (blind) message("You are hit by a holy force!");
+            if (blind) message(QString("You are hit by a holy force!"));
             take_hit(dam, killer);
             holy_orb_destroy(dam);
             break;
@@ -5798,9 +5798,9 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
                 {
                     if ((p_ptr->state.ac > 9) && (one_in_(2)))
                     {
-                        message("It glances off your armour.");
+                        message(QString("It glances off your armour."));
                     }
-                    else message("It misses.");
+                    else message(QString("It misses."));
 
                     /* No damage. */
                     dam = 0;
@@ -5814,7 +5814,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
                     (inventory[INVEN_ARM].ac  > rand_int(50)))
                 {
 
-                    message("It ricochets off your shield.");
+                    message(QString("It ricochets off your shield."));
 
                     /* No damage. */
                     dam = 0;
@@ -5827,7 +5827,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
 
             if (dam)
             {
-                if (blind) message("You are hit by something sharp!");
+                if (blind) message(QString("You are hit by something sharp!"));
                 take_hit(dam, killer);
             }
             break;
@@ -5836,7 +5836,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Plasma -- No resist XXX */
         case GF_PLASMA:
         {
-            if ((blind)  && (!is_terrain)) message("You are hit by something!");
+            if ((blind)  && (!is_terrain)) message(QString("You are hit by something!"));
             take_hit(dam, killer);
             if (!p_ptr->state.resist_sound)
             {
@@ -5849,7 +5849,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Nether -- drain experience */
         case GF_NETHER:
         {
-            if (blind) message("You are hit by something strange!");
+            if (blind) message(QString("You are hit by something strange!"));
             if (p_ptr->state.resist_nethr)
             {
                 dam *= 6; dam /= (randint(6) + 6);
@@ -5860,12 +5860,12 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
 
                 if (p_ptr->state.hold_life)
                 {
-                    message("You feel your life slipping away!");
+                    message(QString("You feel your life slipping away!"));
                     lose_exp(d / 10);
                 }
                 else
                 {
-                    message("You feel your life draining away!");
+                    message(QString("You feel your life draining away!"));
                     lose_exp(d);
                 }
             }
@@ -5878,7 +5878,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         {
             bool native = ((p_ptr->p_native & (P_NATIVE_WATER)) ? TRUE : FALSE);
 
-            if (blind) message("You are hit by something!");
+            if (blind) message(QString("You are hit by something!"));
 
             if (native)
             {
@@ -5899,7 +5899,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Chaos -- many effects */
         case GF_CHAOS:
         {
-            if (blind) message("You are hit by something strange!");
+            if (blind) message(QString("You are hit by something strange!"));
             if (p_ptr->state.resist_chaos)
             {
                 dam *= 6; dam /= (randint(6) + 6);
@@ -5916,7 +5916,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
             {
                 if (p_ptr->state.hold_life && (rand_int(100) < 75))
                 {
-                    message("You keep hold of your life force!");
+                    message(QString("You keep hold of your life force!"));
                 }
                 else
                 {
@@ -5924,12 +5924,12 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
 
                     if (p_ptr->state.hold_life)
                     {
-                        message("You feel your life slipping away!");
+                        message(QString("You feel your life slipping away!"));
                         lose_exp(d / 10);
                     }
                     else
                     {
-                        message("You feel your life draining away!");
+                        message(QString("You feel your life draining away!"));
                         lose_exp(d);
                     }
                 }
@@ -5941,7 +5941,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Shards -- mostly cutting */
         case GF_SHARD:
         {
-            if (blind) message("You are hit by something sharp!");
+            if (blind) message(QString("You are hit by something sharp!"));
             if (p_ptr->state.resist_shard)
             {
                 dam *= 6; dam /= (randint(6) + 6);
@@ -5957,7 +5957,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Sound -- mostly stunning */
         case GF_SOUND:
         {
-            if (blind) message("You are hit by something!");
+            if (blind) message(QString("You are hit by something!"));
             if (p_ptr->state.resist_sound)
             {
                 dam *= 5; dam /= (randint(6) + 6);
@@ -5974,7 +5974,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Pure confusion */
         case GF_CONFUSION:
         {
-            if (blind) message("You are hit by something!");
+            if (blind) message(QString("You are hit by something!"));
             if (p_ptr->state.resist_confu)
             {
                 dam *= 5; dam /= (randint(6) + 6);
@@ -5990,7 +5990,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Disenchantment -- see above */
         case GF_DISENCHANT:
         {
-            if (blind) message("You are hit by something strange!");
+            if (blind) message(QString("You are hit by something strange!"));
             if (p_ptr->state.resist_disen)
             {
                 dam *= 6; dam /= (randint(6) + 6);
@@ -6006,7 +6006,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Nexus -- see above */
         case GF_NEXUS:
         {
-            if (blind) message("You are hit by something strange!");
+            if (blind) message(QString("You are hit by something strange!"));
 
             if (p_ptr->state.resist_nexus)
             {
@@ -6027,11 +6027,11 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         case GF_STATIC:
         {
             int drain = MAX(dam / 25,1);
-            if (blind) message("You are hit by something!");
+            if (blind) message(QString("You are hit by something!"));
 
             if (p_ptr->csp > 0)
             {
-                if (blind) message("You feel your head cloud up!");
+                if (blind) message(QString("You feel your head cloud up!"));
                 if (drain > p_ptr->csp) p_ptr->csp = 0;
                 else p_ptr->csp -= drain;
 
@@ -6048,7 +6048,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Force -- mostly stun */
         case GF_FORCE:
         {
-            if (blind) message("You are hit by something!");
+            if (blind) message(QString("You are hit by something!"));
             if (!p_ptr->state.resist_sound)
             {
                 (void)set_stun(p_ptr->timed[TMD_STUN] + randint(20));
@@ -6060,7 +6060,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Inertia -- slowness */
         case GF_INERTIA_NPP:
         {
-            if (blind) message("You are hit by something strange!");
+            if (blind) message(QString("You are hit by something strange!"));
             (void)inc_timed(TMD_SLOW, rand_int(4) + 4, TRUE);
             take_hit(dam, killer);
             break;
@@ -6069,7 +6069,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Lite -- blinding */
         case GF_LIGHT:
         {
-            if (blind) message("You are hit by something!");
+            if (blind) message(QString("You are hit by something!"));
             if (p_ptr->state.resist_light)
             {
                 dam *= 4; dam /= (randint(6) + 6);
@@ -6085,7 +6085,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Dark -- blinding */
         case GF_DARK:
         {
-            if (blind) message("You are hit by something!");
+            if (blind) message(QString("You are hit by something!"));
             if (p_ptr->state.resist_dark)
             {
                 dam *= 4; dam /= (randint(6) + 6);
@@ -6101,13 +6101,13 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Time -- bolt fewer effects XXX */
         case GF_TIME:
         {
-            if (blind) message("You are hit by something strange!");
+            if (blind) message(QString("You are hit by something strange!"));
 
             switch (randint(10))
             {
                 case 1: case 2: case 3: case 4: case 5:
                 {
-                    message("You feel life has clocked back.");
+                    message(QString("You feel life has clocked back."));
                     lose_exp(100 + (p_ptr->exp / 100) * MON_DRAIN_LIFE);
                     break;
                 }
@@ -6134,7 +6134,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
 
                 case 10:
                 {
-                    message("You're not as powerful as you used to be...");
+                    message(QString("You're not as powerful as you used to be..."));
 
                     for (k = 0; k < A_MAX; k++)
                     {
@@ -6152,8 +6152,8 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Gravity -- stun plus slowness plus teleport */
         case GF_GRAVITY:
         {
-            if (blind) message("You are hit by something strange!");
-            message("Gravity warps around you.");
+            if (blind) message(QString("You are hit by something strange!"));
+            message(QString("Gravity warps around you."));
 
             /* Higher level players can resist the teleportation better */
             if (randint(127) > p_ptr->lev) teleport_player(5, FALSE);
@@ -6173,7 +6173,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Pure damage */
         case GF_MANA:
         {
-            if (blind) message("You are hit by something!");
+            if (blind) message(QString("You are hit by something!"));
             take_hit(dam, killer);
             break;
         }
@@ -6181,7 +6181,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
         /* Pure damage */
         case GF_METEOR:
         {
-            if (blind) message("You are hit by something!");
+            if (blind) message(QString("You are hit by something!"));
             take_hit(dam, killer);
             break;
         }
@@ -6192,7 +6192,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
             bool native = ((p_ptr->p_native & (P_NATIVE_ICE)) ? TRUE : FALSE);
             if (blind)
             {
-               if (!is_terrain) message("You are hit by something sharp!");
+               if (!is_terrain) message(QString("You are hit by something sharp!"));
                else message(QString("You are %1") .arg(msg));
             }
 
@@ -6230,7 +6230,7 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
             }
             else power = p_ptr->depth;
 
-            if (blind) message("You feel spores all around you...");
+            if (blind) message(QString("You feel spores all around you..."));
 
             take_hit(dam, killer);
 
@@ -6271,11 +6271,11 @@ bool project_p(int who, int y, int x, int dam, int typ, QString msg)
             {
                 if (!player_native)
                 {
-                    message("You are blasted by sand!");
+                    message(QString("You are blasted by sand!"));
                 }
                 else
                 {
-                    message("You are hit by sand!");
+                    message(QString("You are hit by sand!"));
                 }
 
             }
@@ -6997,7 +6997,7 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
             if (!blind && !(flg & (PROJECT_HIDE)))
             {
                 /* Only do visuals if the player can "see" the projection */
-                if (/*panel_contains(y, x) && */player_has_los_bold(y, x) &&  // TODO handle panel_contains
+                if (main_window->panel_contains(y, x) && player_has_los_bold(y, x) &&
                     (path_gx[i] < PATH_G_NONE))
                 {
                     u16b p;

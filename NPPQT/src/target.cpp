@@ -353,7 +353,7 @@ bool get_aim_dir(int *dp, bool target_trap)
     if (p_ptr->command_dir != dir)
     {
         /* Warn the user */
-        message("You are confused.");
+        message(QString("You are confused."));
     }
 
     /* Save direction */
@@ -385,14 +385,14 @@ bool target_set_closest(int mode)
     /* If nothing was prepared, then return */
     if (temp_n < 1)
     {
-        message("No Available Target.");
+        message(QString("No Available Target."));
         return FALSE;
     }
 
     /* Target the monster, if possible */
     if ((m_idx <= 0) || !target_able(m_idx))
     {
-        message("No Available Target.");
+        message(QString("No Available Target."));
         return FALSE;
     }
 

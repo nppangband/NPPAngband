@@ -78,7 +78,7 @@ void search(void)
 						light_spot(y, x);
 
 						/* Message */
-                        message("You have found a trap!");
+                        message(QString("You have found a trap!"));
 
 						/* Disturb the player */
 						disturb(0, 0);
@@ -103,7 +103,7 @@ void search(void)
 					if (!object_known_p(o_ptr))
 					{
 						/* Message */
-                        message("You have discovered a trap on the chest!");
+                        message(QString("You have discovered a trap on the chest!"));
 
 						/* Know the trap */
 						object_known(o_ptr);
@@ -223,7 +223,7 @@ static bool put_object_in_quiver(object_type *o_ptr)
 	{
 		/* Warn the player */
         //sound(MSG_CURSED);
-        message("Oops! It feels deathly cold!");
+        message(QString("Oops! It feels deathly cold!"));
 
 		/* Remove special inscription, if any */
 		if (o_ptr->discount >= INSCRIP_NULL) o_ptr->discount = 0;
@@ -391,7 +391,7 @@ void do_cmd_pickup_from_pile(bool pickup, bool msg)
 		{
             if (!msg) break;
 
-            message("You do not have any room for these items.");
+            message(QString("You do not have any room for these items."));
 			break;
 		}
 
@@ -912,7 +912,7 @@ s16b move_player(int dir, int jumping)
 		}
 
 		/* Paranoia */
-        if (!x_idx) message("You cannot move into this grid.");
+        if (!x_idx) message(QString("You cannot move into this grid."));
 	}
 
 	/* Some terrain prevents flying. */
@@ -942,7 +942,7 @@ s16b move_player(int dir, int jumping)
 		{
 			clear_timed(TMD_FLYING, FALSE);
 
-            message("You land.");
+            message(QString("You land."));
 
 			/*Little energy used*/
 			used_energy = BASE_ENERGY_MOVE / 10;
@@ -1074,7 +1074,7 @@ s16b move_player(int dir, int jumping)
 		/* Walk on a monster trap */
 		else if (cave_monster_trap_bold(y,x))
 		{
-            message("You inspect your cunning trap.");
+            message(QString("You inspect your cunning trap."));
 		}
 
 	}
