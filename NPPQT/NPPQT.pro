@@ -13,10 +13,13 @@ TARGET = NPPGAMES
 
 SOURCES +=  src/qt_main.cpp\
             src/qt_mainwindow.cpp\
+            src/birthdialog.cpp \
+            src/birth.cpp \
             src/calcs.cpp \
             src/dun_effect.cpp \
             src/dun_generate.cpp \
             src/dungeon.cpp \
+            src/cmd1.cpp \
             src/cmd4.cpp \
             src/cmd_spell.cpp \
             src/dun_cave.cpp \
@@ -30,6 +33,7 @@ SOURCES +=  src/qt_main.cpp\
             src/mon_cast.cpp \
             src/mon_classes.cpp \
             src/mon_damage.cpp \
+            src/mon_move.cpp \
             src/mon_player_ghost.cpp \
             src/mon_ranged_attacks.cpp \
             src/mon_util.cpp \
@@ -57,10 +61,10 @@ SOURCES +=  src/qt_main.cpp\
             src/target.cpp \
             src/timed.cpp \
             src/utilities.cpp \
-    src/birthdialog.cpp \
-    src/birth.cpp \
-    src/dungeonbox.cpp \
-    src/cmd1.cpp
+
+            src/dungeonbox.cpp
+
+
 
 
 

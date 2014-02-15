@@ -178,6 +178,10 @@ extern void lose_exp(s32b amount);
 extern void monster_death(int m_idx, int who);
 extern bool mon_take_hit(int m_idx, int dam, bool *fear, QString note, int who);
 
+// mon_move.cpp
+extern void apply_monster_trap(int f_idx, int y, int x, byte mode);
+extern s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash);
+
 //mon_ranged_attack.cpp
 extern int get_dam(monster_race *r_ptr, int attack);
 extern int get_breath_dam(s16b hit_points, int gf_type, bool powerful);
