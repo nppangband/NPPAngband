@@ -1009,8 +1009,8 @@ static bool effect_burst(const effect_type *x_ptr)
     /* Don't bother with graphics if the player is resting, running, etc. */
     if (CHECK_DISTURB(FALSE)) flg |= (PROJECT_HIDE);
 
-    /* Leave grapchis for later in empty grids */
-    else if ((op_ptr->delay_factor > 0) && !dungeon_info[y][x].has_effect() && player_has_los_bold(y, x)) //TODO && panel_contains(y, x))
+    /* Leave graphics for later in empty grids */
+    else if ((op_ptr->delay_factor > 0) && !dungeon_info[y][x].has_effect() && player_has_los_bold(y, x) && main_window->panel_contains(y, x))
     {
         /* Don't display anything now */
         flg |= (PROJECT_HIDE);
@@ -1120,7 +1120,7 @@ static void effect_damage(const effect_type *x_ptr)
                 message(QString("You are %1!") .arg(kb_str));
             }
 
-            else message("The air is not safe here!");
+            else message(QString("The air is not safe here!"));
 
             /*Hit the player*/
             (void) project_p(source, y, x, x_ptr->x_power, f_ptr->x_gf_type, kb_str);

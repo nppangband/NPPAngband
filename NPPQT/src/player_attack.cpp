@@ -278,7 +278,7 @@ static int brigand_shot(const object_type *o_ptr, u32b mon_race_flag_r1, bool as
     }
 
     /* Print message if applicable */
-    if (extra_dam) message("Your killer arts allowed you to create a poisoned shot!");
+    if (extra_dam) message(QString("Your killer arts allowed you to create a poisoned shot!"));
 
     return (extra_dam);
 }
@@ -413,19 +413,19 @@ static int critical_shot_check(object_type *o_ptr, int *dd, int *plus, bool thro
 
         if (k < 400)
         {
-            message("It was a good hit!");
+            message(QString("It was a good hit!"));
             *dd *= 2;
             *plus += 5;
         }
         else if (k < 1000)
         {
-            message("It was a great hit!");
+            message(QString("It was a great hit!"));
             *dd *= 2;
             *plus += 10;
         }
         else
         {
-            message("It was a superb hit!");
+            message(QString("It was a superb hit!"));
             *dd *= 3;
             *plus += 15;
         }
@@ -521,32 +521,32 @@ int critical_hit_check(const object_type *o_ptr, int *dd, int *plus)
         if (k < 400)
         {
             // TODO sound(MSG_HIT_GOOD);
-            message("It was a good hit!");
+            message(QString("It was a good hit!"));
             *dd *= 2;
             *plus += 5;
             // TODO sound MSG_HIT_GREAT);
-            message("It was a great hit!");
+            message(QString("It was a great hit!"));
             *dd *= 2;
             *plus += 10;
         }
         else if (k < 900)
         {
             // TODO sound(MSG_HIT_SUPERB);
-            message("It was a superb hit!");
+            message(QString("It was a superb hit!"));
             *dd *= 3;
             *plus += 15;
         }
         else if (k < 1300)
         {
             // TODO sound(MSG_HIT_HI_GREAT);
-            message("It was a *GREAT* hit!");
+            message(QString("It was a *GREAT* hit!"));
             *dd *= 3;
             *plus += 20;
         }
         else
         {
             // TODO sound(MSG_HIT_HI_SUPERB);
-            message("It was a *SUPERB* hit!");
+            message(QString("It was a *SUPERB* hit!"));
             *dd *= 7;
             *dd /= 2;
             *plus += 25;
@@ -790,7 +790,7 @@ void py_attack(int y, int x)
                 /* Cancel glowing hands */
                 p_ptr->confusing = FALSE;
                         /* Message */
-                message("Your hands stop glowing.");
+                message(QString("Your hands stop glowing."));
                         /* Confuse the monster */
                 mon_inc_timed(m_ptr->get_mon_idx(), MON_TMD_CONF,
                         (10 + rand_int(p_ptr->lev) / 10), (MON_TMD_FLG_NOTIFY));
@@ -806,7 +806,7 @@ void py_attack(int y, int x)
     }
 
     /* Mega-Hack -- apply earthquake brand */
-    if (do_quake) // TODO earthquake(p_ptr->py, p_ptr->px, 10, TRUE);
+    if (do_quake) earthquake(p_ptr->py, p_ptr->px, 10, TRUE);
 
     return;
 }
@@ -876,7 +876,7 @@ void do_cmd_fire(int code, cmd_arg args[])
 
         if (!j_ptr->is_bow() && (j_ptr->tval))
         {
-            message("You must first wield a weapon you can fire with.");
+            message(QString("You must first wield a weapon you can fire with."));
             return;
         }
     }
@@ -884,7 +884,7 @@ void do_cmd_fire(int code, cmd_arg args[])
     /* Require a usable launcher */
     if (!j_ptr->tval || !p_ptr->state.ammo_tval)
     {
-        message("You have nothing to fire with.");
+        message(QString("You have nothing to fire with."));
         return;
     }
 
@@ -895,7 +895,7 @@ void do_cmd_fire(int code, cmd_arg args[])
     /* Check the item being fired is usable by the player. */
     if (!item_is_available(item, NULL, (USE_EQUIP | USE_INVEN | USE_FLOOR | USE_QUIVER | QUIVER_FIRST)))
     {
-        message("That item is not within your reach.");
+        message(QString("That item is not within your reach."));
         return;
     }
 
@@ -908,14 +908,14 @@ void do_cmd_fire(int code, cmd_arg args[])
     /* A cursed quiver disables the use of non-cursed ammo */
     if (IS_QUIVER_SLOT(item) && p_ptr->state.cursed_quiver && !o_ptr->is_cursed())
     {
-        message("Your quiver is cursed!");
+        message(QString("Your quiver is cursed!"));
         return;
     }
 
     /* Check the ammo can be used with the launcher */
     if (o_ptr->tval != p_ptr->state.ammo_tval)
     {
-        message("That ammo cannot be fired by your current weapon.");
+        message(QString("That ammo cannot be fired by your current weapon."));
         return;
     }
 
@@ -1238,7 +1238,7 @@ void textui_cmd_fire(void)
 
         if (!j_ptr->is_bow() && (j_ptr->tval))
         {
-            message("You must first wield a weapon you can fire with.");
+            message(QString("You must first wield a weapon you can fire with."));
             return;
         }
     }
@@ -1246,7 +1246,7 @@ void textui_cmd_fire(void)
     /* Require a usable launcher */
     if (!j_ptr->tval || !p_ptr->state.ammo_tval)
     {
-        message("You have nothing to fire with.");
+        message(QString("You have nothing to fire with."));
         return;
     }
 
@@ -1277,7 +1277,7 @@ void textui_cmd_fire_at_nearest(void)
 
         if (!j_ptr->is_bow() && (j_ptr->tval))
         {
-            message("You must first wield a weapon you can fire with.");
+            message(QString("You must first wield a weapon you can fire with."));
             return;
         }
     }
@@ -1285,7 +1285,7 @@ void textui_cmd_fire_at_nearest(void)
     /* Require a usable launcher */
     if (!j_ptr->tval || !p_ptr->state.ammo_tval)
     {
-        message("You have nothing to fire with.");
+        message(QString("You have nothing to fire with."));
         return;
     }
 
@@ -1317,7 +1317,7 @@ void textui_cmd_fire_at_nearest(void)
     /* Require usable ammo */
     if (item < 0)
     {
-        message("You have no ammunition in the quiver to fire");
+        message(QString("You have no ammunition in the quiver to fire"));
         return;
     }
 
@@ -1328,7 +1328,7 @@ void textui_cmd_fire_at_nearest(void)
     /* Check for confusion */
     if (p_ptr->timed[TMD_CONFUSED])
     {
-        message("You are confused.");
+        message(QString("You are confused."));
         dir = ddd[randint0(8)];
     }
 
@@ -1358,7 +1358,7 @@ static bool do_flavor_breakage(const object_type *o_ptr, int y, int x)
             project(SOURCE_OTHER, 1, y, x, y, x, 0, GF_SMOKE, PROJECT_BOOM, 0, 0);
 
             /* Message. Flasks of oil are always broken now */
-            message("The flask is broken!");
+            message(QString("The flask is broken!"));
 
             /* Check if the grid can be transformed to oil */
             if (!_feat_ff3_match(f_ptr, TERRAIN_MASK) && cave_passable_bold(y, x) &&
@@ -1371,7 +1371,7 @@ static bool do_flavor_breakage(const object_type *o_ptr, int y, int x)
                 cave_set_feat(y, x, FEAT_OIL);
 
                 /* Message */
-                message("There is oil on the floor.");
+                message(QString("There is oil on the floor."));
             }
 
             /* Success */
@@ -1388,7 +1388,7 @@ static bool do_flavor_breakage(const object_type *o_ptr, int y, int x)
                 cave_alter_feat(y, x, FS_HURT_FIRE);
 
                 /* Message */
-                message("The torch sets the dungeon on fire!");
+                message(QString("The torch sets the dungeon on fire!"));
 
                 /* Get the fire feature */
                 f_ptr = &f_info[dungeon_info[y][x].feat];
@@ -1866,7 +1866,7 @@ void do_cmd_throw(int code, cmd_arg args[])
     /* Make sure the player isn't throwing wielded items */
     if (item >= INVEN_WIELD && item < QUIVER_START)
     {
-        message("You have cannot throw wielded items.");
+        message(QString("You have cannot throw wielded items."));
         return;
     }
 
@@ -1876,14 +1876,14 @@ void do_cmd_throw(int code, cmd_arg args[])
     /* A cursed quiver disables the use of non-cursed ammo */
     if (IS_QUIVER_SLOT(item) && p_ptr->state.cursed_quiver && !o_ptr->is_cursed())
     {
-        message("Your quiver is cursed!");
+        message(QString("Your quiver is cursed!"));
         return;
     }
 
     /* Check the item being thrown is usable by the player. */
     if (!item_is_available(item, NULL, (USE_EQUIP | USE_INVEN | USE_FLOOR | USE_QUIVER)))
     {
-        message("That item is not within your reach.");
+        message(QString("That item is not within your reach."));
         return;
     }
 
@@ -2215,7 +2215,7 @@ void textui_cmd_throw(void)
 
     if (item >= INVEN_WIELD && item < QUIVER_START)
     {
-        message("You have cannot throw wielded items.");
+        message(QString("You have cannot throw wielded items."));
         return;
     }
 

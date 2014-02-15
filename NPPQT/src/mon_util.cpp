@@ -320,7 +320,7 @@ void compact_monsters(int size)
         mon_index = C_ZNEW(mon_max, s16b);
 
         /* Message */
-        message("Compacting monsters...");
+        message(QString("Compacting monsters..."));
 
         /* Redraw map */
         p_ptr->redraw |= (PR_MAP | PR_MONSTER);
@@ -534,7 +534,7 @@ s16b mon_pop(void)
 
 
     /* Warn the player (except during dungeon creation) */
-    if (character_dungeon) message("Too many monsters!");
+    if (character_dungeon) message(QString("Too many monsters!"));
 
     /* Try not to crash */
     return (0);
@@ -1101,7 +1101,7 @@ QString monster_desc(monster_type *m_ptr, int mode)
         }
 
         /* Mention "offscreen" monsters XXX XXX */
-        if (!(mode & 0x100)) // TODO (!panel_contains(m_ptr->fy, m_ptr->fx))
+        if (!(mode & (0x100)) && main_window->panel_contains(m_ptr->fy, m_ptr->fx))
         {
             /* Append special notation */
             desc.append(" (offscreen)");
@@ -3372,7 +3372,7 @@ bool alloc_monster(int dis, byte mp_flags)
     {
         if (cheat_xtra || cheat_hear)
         {
-            message("Warning! Could not allocate a new monster.");
+            message(QString("Warning! Could not allocate a new monster."));
         }
 
         return (FALSE);
