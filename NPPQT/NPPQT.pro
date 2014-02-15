@@ -39,6 +39,7 @@ SOURCES +=  src/qt_main.cpp\
             src/object_make.cpp \
             src/object_util.cpp \
             src/optionsdialog.cpp \
+            src/player_attack.cpp \
             src/player_classes.cpp \
             src/player_spell.cpp \
             src/player_util.cpp \
@@ -48,6 +49,7 @@ SOURCES +=  src/qt_main.cpp\
             src/randart.cpp \
             src/random_numbers.cpp \
             src/save.cpp \
+            src/spells_detect.cpp \
             src/spells2.cpp \
             src/squelch.cpp \
             src/store.cpp \
@@ -56,7 +58,11 @@ SOURCES +=  src/qt_main.cpp\
             src/timed.cpp \
             src/utilities.cpp \
     src/birthdialog.cpp \
-    src/birth.cpp
+    src/birth.cpp \
+    src/dungeonbox.cpp \
+    src/cmd1.cpp
+
+
 
 
 
@@ -84,7 +90,8 @@ HEADERS  += src/qt_mainwindow.h\
             src/optionsdialog.h \
             src/mon_classes.h \
             src/player_classes.h \
-    src/birthdialog.h
+    src/birthdialog.h \
+    src/dungeonbox.h
 
 
 RESOURCES += \

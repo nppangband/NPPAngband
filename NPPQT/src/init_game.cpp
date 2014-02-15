@@ -565,6 +565,8 @@ static int init_other(void)
 {
     int i;
 
+    reset_dungeon_info();
+
     /* Array of grids */
     view_g = C_ZNEW(VIEW_MAX, u16b);
 
@@ -613,12 +615,18 @@ static int init_other(void)
 
     /* Objects */
     o_list = C_ZNEW(z_info->o_max, object_type);
+    o_max = 1;
+    o_cnt = 0;
 
     /* Monsters */
     mon_list = C_ZNEW(z_info->m_max, monster_type);
+    mon_max = 1;
+    mon_cnt = 0;
 
     /* Effects */
     x_list = C_ZNEW(z_info->x_max, effect_type);
+    x_max = 1;
+    x_cnt = 0;
 
 
     /*** Prepare mosnter lore array ***/
@@ -1106,6 +1114,8 @@ static void init_rng()
  */
 void init_npp_games(void)
 {
+    Rand_quick = true;
+
     init_rng();
 
     QLabel status_update;

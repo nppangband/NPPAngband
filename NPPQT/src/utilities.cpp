@@ -3,6 +3,11 @@
 #include <QMessageBox>
 #include <QInputDialog>
 
+QString _num(int n)
+{
+    return QString::number(n);
+}
+
 /*
  * Returns a "rating" of x depending on y, and sets "attr" to the
  * corresponding "attribute".
