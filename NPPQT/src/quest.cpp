@@ -1436,7 +1436,7 @@ static bool place_mon_quest(int lev, bool fixed)
     if (!total)
     {
         /* No monsters - no quest */
-        message("There are no eligible creatures to quest for");
+        message(QString("There are no eligible creatures to quest for"));
         return (FALSE);
 
     }
@@ -2181,7 +2181,7 @@ static void build_quest_stairs(int y, int x)
     delete_object(y, x);
 
     /* Explain the staircase */
-    message("A magical staircase appears...");
+    message(QString("A magical staircase appears..."));
 
     /* Create stairs down */
     cave_set_feat(y, x, FEAT_MORE);
@@ -2323,7 +2323,7 @@ bool guild_purchase(int choice)
         {
             if (q_info[i].base_level == qlev)
             {
-                message("A greater task lies before you!");
+                message(QString("A greater task lies before you!"));
                 return (FALSE);
             }
         }
@@ -2828,7 +2828,7 @@ void quest_fail(void)
     quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
 
     /* Message */
-    message("You have failed in your quest!");
+    message(QString("You have failed in your quest!"));
 
     /* Show a special mark for some player turns. Redraw if necessary */
     quest_indicator_timer = 50;

@@ -751,7 +751,7 @@ static bool store_service_aux(int store_num, s16b choice)
                 (!(k_ptr->k_flags3 & (TR3_PERMA_CURSE))) &&
                  (add_to >= 0) && (rand_int(100) < 25))
             {
-                message("The curse is broken!");
+                message(QString("The curse is broken!"));
 
                 /* Uncurse the object */
                 o_ptr->uncurse();
@@ -834,7 +834,7 @@ static bool store_service_aux(int store_num, s16b choice)
                 p_ptr->au -= price;
                 return (TRUE);
             }
-            message("Branding failed.");
+            message(QString("Branding failed."));
             return (FALSE);
         }
 
@@ -959,7 +959,7 @@ static bool store_service_aux(int store_num, s16b choice)
                 p_ptr->au -= price;
                 return (TRUE);
             }
-            message("You do not require any healing services.");
+            message(QString("You do not require any healing services."));
 
             return (FALSE);
         }
@@ -978,7 +978,7 @@ static bool store_service_aux(int store_num, s16b choice)
                 return (TRUE);
             }
             /* Not needed*/
-            message("Your life levels do not require restoring.");
+            message(QString("Your life levels do not require restoring."));
             return (FALSE);
         }
         case SERVICE_REMOVE_CURSE:
@@ -994,7 +994,7 @@ static bool store_service_aux(int store_num, s16b choice)
                 return (TRUE);
             }
 
-            else message("No items had a curse removed.");
+            else message(QString("No items had a curse removed."));
             return (FALSE);
 
         }
@@ -1024,16 +1024,16 @@ static bool store_service_aux(int store_num, s16b choice)
 
                 if (choice == SERVICE_RESTORE_STAT)
                 {
-                    message("None of your stats need restoring.");
+                    message(QString("None of your stats need restoring."));
                 }
                 else if (choice == SERVICE_INCREASE_STAT)
                 {
-                    message("Your stats cannot be increased any further.");
+                    message(QString("Your stats cannot be increased any further."));
                 }
                 /* must be SERVICE_QUEST_REWARD_INC_STAT*/
                 else
                 {
-                    message("Your stats cannot be permanently increased any further.");
+                    message(QString("Your stats cannot be permanently increased any further."));
                 }
                 return (FALSE);
             }
@@ -1072,7 +1072,7 @@ static bool store_service_aux(int store_num, s16b choice)
 
             if ((adult_no_artifacts) || (adult_no_xtra_artifacts))
             {
-                message("Nothing happens.");
+                message(QString("Nothing happens."));
                 return (FALSE);
             }
 
@@ -1137,7 +1137,7 @@ static bool store_service_aux(int store_num, s16b choice)
                 return (TRUE);
             }
 
-            message("The attempt at making an artifact has failed");
+            message(QString("The attempt at making an artifact has failed"));
             return (FALSE);
         }
 
@@ -1148,7 +1148,7 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Paranoia - should never happen */
             if ((adult_no_artifacts) || (adult_no_xtra_artifacts))
             {
-                message("Nothing happens.");
+                message(QString("Nothing happens."));
                 return (FALSE);
             }
 
@@ -1201,7 +1201,7 @@ static bool store_service_aux(int store_num, s16b choice)
 
                 return (TRUE);
             }
-            message("The attempt at making an artifact has failed");
+            message(QString("The attempt at making an artifact has failed"));
             return (FALSE);
         }
 
@@ -1214,7 +1214,7 @@ static bool store_service_aux(int store_num, s16b choice)
 
             if ((!quest_single_r_idx(q_ptr)) || (q_ptr->mon_idx == 0))
             {
-                message("You are not currently questing for a specific creature.");
+                message(QString("You are not currently questing for a specific creature."));
                 return (FALSE);
             }
 
@@ -1308,7 +1308,7 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Note that the pack is too full */
             if (!inven_carry_okay(i_ptr))
             {
-                message("You have no room in your backpack.");
+                message(QString("You have no room in your backpack."));
 
                 /* Drop the object */
                 drop_near(i_ptr, -1, p_ptr->py, p_ptr->px);
@@ -3509,7 +3509,7 @@ void do_cmd_buy(int command, cmd_arg args[])
 
     if (this_store == STORE_NONE)
     {
-        message("You cannot purchase items when not in a store.");
+        message(QString("You cannot purchase items when not in a store."));
         return;
     }
 
@@ -3524,7 +3524,7 @@ void do_cmd_buy(int command, cmd_arg args[])
     /* Ensure we have room */
     if (!inven_carry_okay(i_ptr))
     {
-        message("You cannot carry that many items.");
+        message(QString("You cannot carry that many items."));
         return;
     }
 
@@ -3536,7 +3536,7 @@ void do_cmd_buy(int command, cmd_arg args[])
 
     if (price > p_ptr->au)
     {
-        message("You cannot afford that purchase.");
+        message(QString("You cannot afford that purchase."));
         return;
     }
 
@@ -3592,7 +3592,7 @@ void do_cmd_buy(int command, cmd_arg args[])
         if (one_in_(STORE_SHUFFLE))
         {
             /* Message */
-            message("The shopkeeper retires.");
+            message(QString("The shopkeeper retires."));
 
             /* Shuffle the store */
             store_shuffle(this_store);
@@ -3604,7 +3604,7 @@ void do_cmd_buy(int command, cmd_arg args[])
         else
         {
             /* Message */
-            message("The shopkeeper brings out some new stock.");
+            message(QString("The shopkeeper brings out some new stock."));
         }
 
         /* New inventory */
@@ -3785,7 +3785,7 @@ void do_cmd_retrieve(int code, cmd_arg args[])
 
     if (current_store() != STORE_HOME)
     {
-        message("You are not currently at home.");
+        message(QString("You are not currently at home."));
         return;
     }
 
@@ -3800,7 +3800,7 @@ void do_cmd_retrieve(int code, cmd_arg args[])
     /* Ensure we have room */
     if (!inven_carry_okay(&picked_item))
     {
-        message("You cannot carry that many items.");
+        message(QString("You cannot carry that many items."));
         return;
     }
 
@@ -3855,7 +3855,7 @@ static bool store_purchase(int oid)
 
     if (this_store == STORE_NONE)
     {
-        message("You cannot purchase items when not in a store.");
+        message(QString("You cannot purchase items when not in a store."));
         return FALSE;
     }
 
@@ -3923,7 +3923,7 @@ static bool store_purchase(int oid)
         if ((u32b)p_ptr->au < (u32b)price)
         {
             /* Tell the user */
-            message("You do not have enough gold for this item.");
+            message(QString("You do not have enough gold for this item."));
 
             /* Abort now */
             return FALSE;
@@ -3962,7 +3962,7 @@ static bool store_purchase(int oid)
     /* Ensure we have room */
     if ((!inven_carry_okay(i_ptr)) && (i_ptr->tval != TV_GOLD))
     {
-        message("You cannot carry that many items.");
+        message(QString("You cannot carry that many items."));
         return FALSE;
     }
 
@@ -4043,21 +4043,21 @@ void do_cmd_sell(int code, cmd_arg args[])
     /* Cannot remove cursed objects */
     if ((item >= INVEN_WIELD) && o_ptr->is_cursed())
     {
-        message("Hmmm, it seems to be cursed.");
+        message(QString("Hmmm, it seems to be cursed."));
         return;
     }
 
     /* Check we are somewhere we can sell the items. */
     if (current_store() == STORE_NONE)
     {
-        message("You cannot sell items when not in a store.");
+        message(QString("You cannot sell items when not in a store."));
         return;
     }
 
     /* Check the store wants the items being sold */
     if (!store_will_buy(current_store(), o_ptr))
     {
-        message("I do not wish to purchase this item.");
+        message(QString("I do not wish to purchase this item."));
         return;
     }
 
@@ -4068,7 +4068,7 @@ void do_cmd_sell(int code, cmd_arg args[])
     /* Check if the store has space for the items */
     if (!store_check_num(current_store(), &sold_item))
     {
-        message("I have not the room in my store to keep it.");
+        message(QString("I have not the room in my store to keep it."));
         return;
     }
 
@@ -4146,14 +4146,14 @@ void do_cmd_stash(int code, cmd_arg args[])
     /* Check we are somewhere we can stash items. */
     if (current_store() != STORE_HOME)
     {
-        message("You are not in your home.");
+        message(QString("You are not in your home."));
         return;
     }
 
     /* Cannot remove cursed objects */
     if ((item >= INVEN_WIELD) && o_ptr->is_cursed())
     {
-        message("Hmmm, it seems to be cursed.");
+        message(QString("Hmmm, it seems to be cursed."));
         return;
     }
 
@@ -4162,7 +4162,7 @@ void do_cmd_stash(int code, cmd_arg args[])
 
     if (!store_check_num(STORE_HOME, &dropped_item))
     {
-        message("Your home is full.");
+        message(QString("Your home is full."));
         return;
     }
 
@@ -4210,13 +4210,13 @@ static bool store_sell(void)
 
     if (this_store == STORE_NONE)
     {
-        message("You cannot sell items when not in a store.");
+        message(QString("You cannot sell items when not in a store."));
         return (FALSE);
     }
 
     if (this_store == STORE_GUILD)
     {
-        message("The Guild does not purchase items.");
+        message(QString("The Guild does not purchase items."));
         return (FALSE);
     }
 
@@ -4242,7 +4242,7 @@ static bool store_sell(void)
     if ((item >= INVEN_WIELD) && o_ptr->is_cursed())
     {
         /* Oops */
-        message("Hmmm, it seems to be cursed.");
+        message(QString("Hmmm, it seems to be cursed."));
 
         /* Nope */
         return (FALSE);
@@ -4261,10 +4261,10 @@ static bool store_sell(void)
     {
 
         if (this_store == STORE_HOME)
-            message("Your home is full.");
+            message(QString("Your home is full."));
 
         else
-            message("I have not the room in my store to keep it.");
+            message(QString("I have not the room in my store to keep it."));
 
         return (FALSE);
     }
@@ -4380,7 +4380,7 @@ static bool store_overflow(void)
     if (current_store() != STORE_HOME)
     {
         /* Leave */
-        message("Your pack is so full that you flee the store...");
+        message(QString("Your pack is so full that you flee the store..."));
         return TRUE;
     }
 
@@ -4388,7 +4388,7 @@ static bool store_overflow(void)
     else if (!store_check_num(current_store(), o_ptr))
     {
         /* Leave */
-        message("Your pack is so full that you flee your home...");
+        message(QString("Your pack is so full that you flee your home..."));
         return TRUE;
     }
 
@@ -4402,7 +4402,7 @@ static bool store_overflow(void)
 
 
         /* Give a message */
-        message("Your pack overflows!");
+        message(QString("Your pack overflows!"));
 
         /* Get local object */
         i_ptr = &object_type_body;
@@ -4449,14 +4449,14 @@ void do_cmd_store(int code, cmd_arg args[])
     /* Verify that there is a store */
     if (this_store == STORE_NONE)
     {
-        message("You see no store here.");
+        message(QString("You see no store here."));
         return;
     }
 
     /* Check if we can enter the store */
     if (adult_no_stores)
     {
-        message("The doors are locked.");
+        message(QString("The doors are locked."));
         return;
     }
 

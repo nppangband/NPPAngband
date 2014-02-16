@@ -1083,7 +1083,7 @@ void monster_death(int m_idx, int who)
     if (!fixedquest)
     {
         /* Give a message */
-        message("You have completed your quest - collect your reward at the guild!");
+        message(QString("You have completed your quest - collect your reward at the guild!"));
 
         /* Turn on quest indicator */
         quest_indicator_timer = 50;
@@ -1116,9 +1116,9 @@ void monster_death(int m_idx, int who)
         altered_inventory_counter += 200;
 
         /* Congratulations */
-        message("*** CONGRATULATIONS ***");
-        message("You have won the game!");
-        message("You may retire (commit suicide) when you are ready.");
+        message(QString("*** CONGRATULATIONS ***"));
+        message(QString("You have won the game!"));
+        message(QString("You may retire (commit suicide) when you are ready."));
 
         /* Write a note, if that option is on */
         if (adult_take_notes)

@@ -560,6 +560,24 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 #define ARC_STANDARD_WIDTH     90
 
 
+/*
+ * Bit flags for the "target_set" function
+ *
+ *	KILL: Target monsters
+ *	LOOK: Describe grid fully
+ *	XTRA: Currently unused flag
+ *	GRID: Select from all grids
+ *	PROBE: - Terrain can be targeted as well as a monster (for probing)
+ */
+#define TARGET_KILL		0x01
+#define TARGET_LOOK		0x02
+#define TARGET_XTRA		0x04
+#define TARGET_GRID		0x08
+#define TARGET_QUIET	0x08
+#define TARGET_TRAP		0x20
+#define TARGET_PROBE	0x40
+
+
 #define LEV_THEME_HEAD				11
 #define LEV_THEME_CREEPING_COIN		0	/*creeping coins*/
 #define LEV_THEME_ORC				1	/*orc*/
@@ -934,16 +952,6 @@ typedef u16b u16b_dungeon[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 #define in_bounds_fully(Y,X) \
     (((Y) > 0) && ((Y) < p_ptr->cur_map_hgt-1) && \
      ((X) > 0) && ((X) < p_ptr->cur_map_wid-1))
-
-
-/*
- * Determines if a map location is currently "on screen"
- * Note that "panel_contains(Y,X)" always implies "in_bounds(Y,X)".
- * Pre-storing this into a cave_info flag would be nice.  XXX XXX
- */
-#define panel_contains(Y,X) \
-    (((unsigned)((Y) - Term->offset_y) < (unsigned)(SCREEN_HGT)) && \
-     ((unsigned)((X) - Term->offset_x) < (unsigned)(SCREEN_WID)))
 
 
 /*

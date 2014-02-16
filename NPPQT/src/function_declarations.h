@@ -8,11 +8,11 @@
 
 //was externs.h
 
+
 // cmd1.cpp
 extern s16b move_player(int dir, int jumping);
 
-//calcs.c
-/* calcs.c*/
+//calcs.cpp
 extern int stat_adj_moria(int stat);
 extern void calc_spells(void);
 extern int calc_blows(object_type *o_ptr, player_state *new_state);
@@ -350,7 +350,20 @@ extern void object_history(object_type *o_ptr, byte origin, s16b r_idx);
 extern void stack_histories(object_type *o_ptr, const object_type *j_ptr);
 extern int quiver_space_per_unit(object_type *o_ptr);
 
-
+/* player_attack.cpp */
+extern bool test_hit(int chance, int ac, int vis);
+extern int rogue_shot(const object_type *o_ptr, int *plus, player_state shot_state);
+extern bool check_hit(int power);
+extern int critical_hit_chance(const object_type *o_ptr, player_state a_state, bool id_only);
+extern int critical_hit_check(const object_type *o_ptr, int *dd, int *plus);
+extern int critical_shot_chance(object_type *o_ptr, player_state a_state, bool is_throw, bool id_only, u32b f3);
+extern void py_attack(int y, int x);
+extern void do_cmd_fire(int code, cmd_arg args[]);
+extern void textui_cmd_fire(void);
+extern void textui_cmd_fire_at_nearest(void);
+extern int weapon_throw_adjust(const object_type *o_ptr, u32b f3, int *plus, bool id_only);
+extern void do_cmd_throw(int code, cmd_arg args[]);
+extern void textui_cmd_throw(void);
 
 //player_ghost.cpp
 extern void prepare_ghost_name(void);
@@ -363,8 +376,14 @@ extern void load_player_ghost_file(void);
 extern void save_player_ghost_file(void);
 
 // player_spell.cpp
+extern bool spell_needs_aim(int tval, int spell);
+extern QString do_mage_spell(int mode, int spell, int dir);
+extern QString do_druid_incantation(int mode, int spell, int dir);
+extern QString do_priest_prayer(int mode, int spell, int dir);
+extern QString cast_spell(int mode, int tval, int index, int dir);
 extern int get_player_spell_realm(void);
 extern QString get_spell_name(int tval, int spell);
+
 
 // player_util.cpp
 extern void player_flags(u32b *f1, u32b *f2, u32b *f3, u32b *fn);
@@ -419,8 +438,8 @@ extern bool fire_bolt_beam_special(int typ, int dir, int dam, int rad, u32b flg)
 extern bool fire_effect_orb(int typ, int dir, int dam, int rad);
 extern bool fire_ball(int typ, int dir, int dam, int rad);
 extern bool fire_orb(int typ, int dir, int dam, int rad);
-extern bool fire_ball_special(int typ, int dir, int dam, int rad, u32b flg,
-    int source_diameter);
+extern bool fire_ball_special(int typ, int dir, int dam, int rad, u32b flg, int source_diameter);
+extern bool fire_arc_special(int typ, int dir, int dam, int rad, int degrees, u32b flg);
 extern bool fire_arc(int typ, int dir, int dam, int rad, int degrees);
 extern bool fire_star(int typ, int dam, int rad, u32b flg);
 extern void fire_storm(int who, int typ0, int y0, int x0, int dam, int rad,
@@ -430,6 +449,7 @@ extern bool fire_swarm(int num, int typ, int dir, int dam, int rad);
 extern bool fire_bolt(int typ, int dir, int dam);
 extern bool fire_beam(int typ, int dir, int dam, u32b flg);
 extern bool fire_bolt_or_beam(int prob, int typ, int dir, int dam);
+extern bool beam_chain(int gf_type, int dam, int max_hits, int decrement);
 
 
 /* quest.c */
@@ -491,8 +511,14 @@ extern bool can_be_randart(const object_type *o_ptr);
 /* save.c */
 extern bool save_player(void);
 
+// spells_detect.cpp
+extern bool detect(int dist, u16b detect_checks);
+
 /* spells2.c */
 extern bool hp_player(int num);
+extern bool warding_glyph(void);
+extern bool create_elements(int cy, int cx, int range);
+extern bool create_glacier(void);
 extern bool inc_stat(int stat);
 extern bool dec_stat(int stat, int amount, bool permanent);
 extern bool res_stat(int stat);
@@ -505,11 +531,33 @@ extern void uncurse_object(object_type *o_ptr);
 extern bool remove_curse(bool heavy);
 extern bool remove_all_curse(void);
 extern bool restore_level(void);
+extern void self_knowledge(void);
+extern bool set_recall(void);
+extern bool detect(int dist, u16b detect_checks);
+extern void stair_creation(void);
 extern bool enchant(object_type *o_ptr, int n, int eflag);
 extern bool enchant_spell(int num_hit, int num_dam, int num_ac);
 extern bool ident_spell(void);
 extern bool identify_fully(void);
 extern void recharge_staff_wand(object_type *o_ptr, int percent);
+extern bool recharge(int num, bool cannot_fail, int percent);
+extern bool speed_monsters(void);
+extern bool slow_monsters(int power);
+extern bool sleep_monsters(int power);
+extern bool banish_evil(int dist);
+extern bool turn_undead(int power);
+extern bool dispel_undead(int dam);
+extern bool dispel_evil(int dam);
+extern bool dispel_monsters(int dam);
+extern bool mass_polymorph(void);
+extern bool fire_player_los(int type, int dam);
+extern void aggravate_monsters(int who);
+extern void mass_aggravate_monsters(int who);
+extern bool banishment(void);
+extern bool mass_banishment(void);
+extern bool probing(void);
+extern void destroy_area(int y1, int x1, int r);
+extern void earthquake(int cy, int cx, int r, bool kill_vault);
 extern void light_room(int y1, int x1);
 extern void unlight_room(int y1, int x1);
 extern bool light_area(int dam, int rad);
@@ -522,6 +570,33 @@ extern bool brand_object(object_type *o_ptr, byte brand_type, bool do_enchant);
 extern bool brand_weapon(bool enchant);
 extern bool brand_ammo(bool enchant);
 extern bool brand_bolts(bool enchant);
+extern bool light_line(int dir, int dam);
+extern bool strong_light_line(int dir);
+extern bool drain_life(int dir, int dam);
+extern bool build_wall(int dir, int dam);
+extern bool wall_to_mud(int dir, int dam);
+extern bool destroy_door(int dir);
+extern bool disarm_trap(int dir);
+extern bool heal_monster(int dir, int dam);
+extern bool speed_monster(int dir);
+extern bool slow_monster(int dir);
+extern bool sleep_monster(int dir);
+extern bool confuse_monster(int dir, int plev);
+extern bool poly_monster(int dir);
+extern bool clone_monster(int dir);
+extern bool fear_monster(int dir, int plev);
+extern bool teleport_monster(int dir);
+extern bool door_creation(void);
+extern bool trap_creation(int who);
+extern bool destroy_doors_touch(void);
+extern bool sleep_monsters_touch(void);
+extern void ring_of_power(int dir);
+extern void identify_and_squelch_pack(void);
+extern bool mass_identify(int rad);
+extern bool read_minds(void);
+extern bool master_elements(int dam, int dir);
+extern bool steal_powers(int dir);
+extern bool call_huorns(void);
 
 //squelch.cpp
 extern QString get_autoinscription(s16b kindIdx);
@@ -626,6 +701,9 @@ extern bool target_able(int m_idx);
 extern bool target_okay(void);
 extern void target_set_monster(int m_idx);
 extern void target_set_location(int y, int x);
+extern int target_dir(QChar ch);
+extern bool get_aim_dir(int *dp, bool target_trap);
+extern bool target_set_closest(int mode);
 
 /* timed.c */
 

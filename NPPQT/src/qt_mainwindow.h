@@ -7,12 +7,16 @@
 #include <QPainter>
 #include <QImage>
 #include <QFontDatabase>
+#include <src/defines.h>
 
 #define MAX_RECENT_SAVEFILES    5
 
 class QAction;
 class QMenu;
 class QGraphicsView;
+class QGraphicsScene;
+
+class MainWindowPrivate;
 
 class MainWindow : public QMainWindow
 {
@@ -23,6 +27,11 @@ class MainWindow : public QMainWindow
 public:
     MainWindow();
 
+    bool panel_contains(s16b y, s16b x);
+    void write_colored_text(QChar letter, QColor color, s16b y, s16b x);
+    void display_square(s16b y, s16b x);
+    void screen_wipe();
+    void screen_redraw();
 
 
 protected:
@@ -31,6 +40,8 @@ protected:
 
 
 private slots:
+
+
 
     // Functions called from signals from the top menu.
 
@@ -53,13 +64,16 @@ private slots:
 
 
     // Set up the games mapping
+    void set_onscreen_dungeon_boundries();
     void set_map();
 
 
 private:
+    MainWindowPrivate *priv;
 
     // The editable part of the main window.
     QGraphicsView *graphics_view;
+    QGraphicsScene *dungeon_scene;
 
     void setup_nppangband();
     void setup_nppmoria();
@@ -125,15 +139,16 @@ private:
     qreal window_width;  // in pixels
     QFontDatabase font_database;
     QFont cur_font;
-    int square_height;
-    int square_width;
-    int screen_num_rows;
-    int screen_num_columns;
-    int top_x;
-    int top_y;
-    int bottom_x;
-    int bottom_y;
+    s16b square_height;
+    s16b square_width;
+    s16b screen_num_rows;
+    s16b screen_num_columns;
+    s16b first_x;
+    s16b first_y;
+    s16b last_x;
+    s16b last_y;
     bool use_bigtile;
+
 
 
 

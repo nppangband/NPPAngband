@@ -847,7 +847,7 @@ static void destroy_level(void)
 
 
     /* Note destroyed levels */
-    if (cheat_room) message("Destroyed Level");
+    if (cheat_room) message(QString("Destroyed Level"));
 
     /* Drop a few epi-centers (usually about two) */
     for (n = 0; n < randint(5); n++)
@@ -5811,7 +5811,7 @@ static bool new_player_spot_safe(void)
     {
         if (cheat_room)
         {
-            message("No unused block for the player.");
+            message(QString("No unused block for the player."));
         }
 
         return (FALSE);
@@ -5829,7 +5829,7 @@ static bool new_player_spot_safe(void)
         {
             if (cheat_room)
             {
-                message("No safe spot for the player.");
+                message(QString("No safe spot for the player."));
             }
 
             return (FALSE);
@@ -6292,7 +6292,7 @@ static bool scramble_and_connect_rooms_stairs(void)
     /* Place 3 or 5 down stairs near some walls */
     if (!alloc_stairs(FEAT_MORE, (3 + randint0(3))))
     {
-        if (cheat_room) message("failed to place down stairs");
+        if (cheat_room) message(QString("failed to place down stairs"));
 
         return (FALSE);
     }
@@ -6300,7 +6300,7 @@ static bool scramble_and_connect_rooms_stairs(void)
     /* Place 1 or 3 up stairs near some walls */
     if (!alloc_stairs(FEAT_LESS, (1 + randint0(3))))
     {
-        if (cheat_room) message("failed to place up stairs");
+        if (cheat_room) message(QString("failed to place up stairs"));
 
         return (FALSE);
     }
@@ -6889,7 +6889,7 @@ static bool build_lake(int feat, bool do_big_lake, int *y0, int *x0)
         {
             if (cheat_room)
             {
-                color_message("Can't place lakes in this dungeon!", TERM_WHITE);
+                color_message(QString("Can't place lakes in this dungeon!"), TERM_WHITE);
             }
 
             return (FALSE);
@@ -6904,7 +6904,7 @@ static bool build_lake(int feat, bool do_big_lake, int *y0, int *x0)
         {
             if (cheat_room)
             {
-                color_message("Can't find a blocks for lakes in this dungeon!", TERM_WHITE);
+                color_message(QString("Can't find a blocks for lakes in this dungeon!"), TERM_WHITE);
             }
 
             return (FALSE);
@@ -7213,7 +7213,7 @@ static void build_nature(void)
     /* Debug message */
     if (level_flag && cheat_room)
     {
-        color_message("Level flags added by quests.", TERM_WHITE);
+        color_message(QString("Level flags added by quests."), TERM_WHITE);
         debug_all_level_flags(level_flag);
     }
 
@@ -7278,7 +7278,7 @@ static void build_nature(void)
     /* Debug message */
     if (level_flag && cheat_room)
     {
-        color_message("Level flags added by lake generation.", TERM_WHITE);
+        color_message(QString("Level flags added by lake generation."), TERM_WHITE);
         debug_all_level_flags(level_flag);
     }
 }
@@ -7410,7 +7410,7 @@ static bool build_themed_level(void)
     /*start over on all themed levels with less than 4 rooms due to inevitable crash*/
     if (dun->cent_n < 4)
     {
-        if (cheat_room) message("not enough rooms");
+        if (cheat_room) message(QString("not enough rooms"));
         return (FALSE);
     }
 
@@ -7420,7 +7420,7 @@ static bool build_themed_level(void)
     /*make the tunnels*/
     if (!scramble_and_connect_rooms_stairs())
     {
-        if (cheat_room) message("unable to scramble and connect rooms");
+        if (cheat_room) message(QString("unable to scramble and connect rooms"));
 
         return (FALSE);
     }
@@ -9879,7 +9879,7 @@ static bool build_wilderness_level(void)
     {
         if (!build_forest_level())
         {
-            if (cheat_room) message("failed to build a forest level");
+            if (cheat_room) message(QString("failed to build a forest level"));
 
             return (FALSE);
         }
@@ -9889,7 +9889,7 @@ static bool build_wilderness_level(void)
     {
         if (!build_ice_level())
         {
-            if (cheat_room) message("failed to build an ice level");
+            if (cheat_room) message(QString("failed to build an ice level"));
 
             return (FALSE);
         }
@@ -9906,7 +9906,7 @@ static bool build_wilderness_level(void)
     /* Place 3 or 5 down stairs near some walls */
     if (!alloc_stairs(FEAT_MORE, (3 + randint(2))))
     {
-        if (cheat_room) message("failed to place down stairs");
+        if (cheat_room) message(QString("failed to place down stairs"));
 
         return (FALSE);
     }
@@ -9914,7 +9914,7 @@ static bool build_wilderness_level(void)
     /* Place 1 or 3 up stairs near some walls */
     if (!alloc_stairs(FEAT_LESS, (1 + randint(2))))
     {
-        if (cheat_room) message("failed to place down stairs");
+        if (cheat_room) message(QString("failed to place down stairs"));
 
         return (FALSE);
     }
@@ -9922,7 +9922,7 @@ static bool build_wilderness_level(void)
     /* Place some things */
     if (!place_traps_rubble_player())
     {
-        if (cheat_room) message("failed to place traps, rubble and player");
+        if (cheat_room) message(QString("failed to place traps, rubble and player"));
 
         return FALSE;
     }
@@ -9980,7 +9980,7 @@ static bool build_wilderness_level(void)
         get_mon_num_hook = NULL;
         get_mon_num_prep();
 
-        if (cheat_room) message("failed to place monsters and objects");
+        if (cheat_room) message(QString("failed to place monsters and objects"));
 
         return FALSE;
     }
@@ -10324,7 +10324,7 @@ static bool build_labyrinth_level(void)
     /* Place 1 or 2 down stairs  */
     if (!alloc_stairs(FEAT_MORE, (randint1(2))))
     {
-        if (cheat_room) message("failed to place down stairs");
+        if (cheat_room) message(QString("failed to place down stairs"));
 
         return (FALSE);
     }
@@ -10332,7 +10332,7 @@ static bool build_labyrinth_level(void)
     /* Place 1 or 2 up stairs */
     if (!alloc_stairs(FEAT_LESS, (randint1(2))))
     {
-        if (cheat_room) message("failed to place down stairs");
+        if (cheat_room) message(QString("failed to place down stairs"));
         return (FALSE);
     }
 
@@ -10359,7 +10359,7 @@ static bool build_labyrinth_level(void)
         /* Paranoia */
         if (!cave_squares_max)
         {
-            if (cheat_room) message("failed to place doors");
+            if (cheat_room) message(QString("failed to place doors"));
             return (FALSE);
         }
 
@@ -10390,7 +10390,7 @@ static bool build_labyrinth_level(void)
     /* Determine the character location, if it is needed */
     if (!new_player_spot_old())
     {
-        if (cheat_room) message("failed to place player");
+        if (cheat_room) message(QString("failed to place player"));
 
         return (FALSE);
     }
@@ -10410,7 +10410,7 @@ static bool build_labyrinth_level(void)
         /* Place some things */
         if (!place_monsters_objects())
         {
-            if (cheat_room) message("failed to place monsters and objects");
+            if (cheat_room) message(QString("failed to place monsters and objects"));
 
             /* Reset the allocation table */
             get_mon_num_hook = NULL;
@@ -10602,7 +10602,7 @@ static bool build_arena_level(void)
     /* Should never fail, since there is only a simple dungeon floor */
     if (!player_place_arena())
     {
-        if (cheat_room) message("Failed to place player");
+        if (cheat_room) message(QString("Failed to place player"));
 
         return (FALSE);
     }
@@ -10767,7 +10767,7 @@ static bool build_greater_vault_level(void)
     /* Should never fail, since there is only a simple dungeon floor */
     if (!player_place_greater_vault_level())
     {
-        if (cheat_room) message("Failed to place player");
+        if (cheat_room) message(QString("Failed to place player"));
 
         return (FALSE);
     }
@@ -11001,7 +11001,7 @@ static bool cave_gen(void)
                 /* Ensure the quest artifact was generated properly */
                 if (a_info[QUEST_ART_SLOT].a_cur_num != 1)
                 {
-                    if (cheat_room) message("quest artifact not generated properly");
+                    if (cheat_room) message(QString("quest artifact not generated properly"));
                     return (FALSE);
                 }
 
@@ -11099,14 +11099,14 @@ static bool cave_gen(void)
     /*start over on all levels with less than two rooms due to inevitable crash*/
     if (dun->cent_n < ROOM_MIN)
     {
-        if (cheat_room) message("not enough rooms");
+        if (cheat_room) message(QString("not enough rooms"));
         return (FALSE);
     }
 
     /*make the tunnels*/
     if (!scramble_and_connect_rooms_stairs())
     {
-        if (cheat_room) message("couldn't connect the rooms");
+        if (cheat_room) message(QString("couldn't connect the rooms"));
         return (FALSE);
     }
 
@@ -11119,7 +11119,7 @@ static bool cave_gen(void)
     /*place the stairs, traps, rubble, player, secret stairs*/
     if (!place_traps_rubble_player())
     {
-        if (cheat_room) message("couldn't place traps, rubble, or player");
+        if (cheat_room) message(QString("couldn't place traps, rubble, or player"));
         return (FALSE);
     }
 

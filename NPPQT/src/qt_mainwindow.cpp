@@ -7,12 +7,98 @@
 #include "src/birthdialog.h"
 #include "src/dungeonbox.h"
 
+class MainWindowPrivate
+{
+public:
+    QGraphicsScene *scene;
+    QGraphicsView *view;
+    QGraphicsSimpleTextItem *items[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
+
+    void init_scene(QGraphicsScene *_scene, QGraphicsView *_view);
+    void wipe();
+    void redraw();
+    void redraw_cell(int y, int x);
+};
+
+void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view)
+{
+    scene = _scene;
+    view = _view;
+
+    QFont font("Courier New"); // Use fixed size font. Right?
+    QFontMetrics metrics(font);
+    int hgt = metrics.height();
+    int wid = metrics.width('M');
+
+    QBrush brush(QColor("black"));
+    scene->setBackgroundBrush(brush);
+
+    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
+        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
+            items[y][x] = scene->addSimpleText(QString(" "), font);
+            items[y][x]->setPos(x * wid, y * hgt);
+        }
+    }
+}
+
+void MainWindowPrivate::wipe()
+{
+    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
+        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
+            items[y][x]->setText(QString(" "));
+        }
+    }
+}
+
+void MainWindowPrivate::redraw()
+{
+    wipe();
+
+    for (int y = 0; y < p_ptr->cur_map_hgt; y++) {
+        for (int x = 0; x < p_ptr->cur_map_wid; x++) {
+            light_spot(y, x);
+            redraw_cell(y, x);
+        }
+    }
+}
+
+void MainWindowPrivate::redraw_cell(int y, int x)
+{
+    dungeon_type *d_ptr = &dungeon_info[y][x];
+    QChar square_char = d_ptr->dun_char;
+    QColor square_color = d_ptr->dun_color;
+    if (d_ptr->has_monster())
+    {
+        square_char = d_ptr->monster_char;
+        square_color = d_ptr->monster_color;
+    }
+    else if (d_ptr->has_effect())
+    {
+        square_char = d_ptr->effect_char;
+        square_color = d_ptr->effect_color;
+    }
+    else if (d_ptr->has_object())
+    {
+        square_char = d_ptr->object_char;
+        square_color = d_ptr->object_color;
+    }
+
+    items[y][x]->setText(QString(square_char));
+    items[y][x]->setBrush(QBrush(square_color));
+}
+
 // The main function - intitalize the main window and set the menus.
 MainWindow::MainWindow()
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    graphics_view = new QGraphicsView;
+    priv = new MainWindowPrivate;
+
+    dungeon_scene = new QGraphicsScene;
+    graphics_view = new QGraphicsView(dungeon_scene);
+
+    priv->init_scene(dungeon_scene, graphics_view);
+
     setCentralWidget(graphics_view);
 
     create_actions();
@@ -405,6 +491,8 @@ void MainWindow::read_settings()
 
     QString load_font = settings.value("current_font", cur_font ).toString();
     cur_font.fromString(load_font);
+    restoreState(settings.value("window_state").toByteArray());
+
 
     update_recent_savefiles();
 }
@@ -416,7 +504,8 @@ void MainWindow::write_settings()
     settings.setValue("mainWindowGeometry", saveGeometry());
     settings.setValue("recentFiles", recent_savefiles);
     settings.setValue("set_bigtile", bigtile_act->isChecked());
-    settings.setValue("current_font", cur_font.toString() );
+    settings.setValue("current_font", cur_font.toString());
+    settings.setValue("window_state", saveState());
 
 }
 
@@ -448,7 +537,9 @@ void MainWindow::load_file(const QString &file_name)
             else {
                 update_file_menu_game_active();
                 launch_game();
-                debug_dungeon();
+                //debug_dungeon();
+                //screen_redraw();
+                priv->redraw();
             }
         }
     }
@@ -467,7 +558,9 @@ void MainWindow::launch_birth(bool quick_start)
         update_file_menu_game_active();
         launch_game();
         save_character();
-        debug_dungeon();
+        //debug_dungeon();
+        //screen_redraw();
+        priv->redraw();
     } else {
         cleanup_npp_games();
         character_loaded = false;
@@ -544,7 +637,142 @@ void MainWindow::resizeEvent (QResizeEvent *event)
     set_map();
 }
 
+// Write a single colored character on a designated square
+void MainWindow::write_colored_text(QChar letter, QColor color, s16b y, s16b x)
+{
+    QPainter painter(this);
 
+    // Paranoia
+    if (!panel_contains (y, x)) return;
+
+    // Get the coordinates
+    s16b pixel_y = (y - first_y) * square_height;
+    s16b pixel_x = (y - first_x) * square_width;
+
+    painter.setPen(color);
+    painter.drawText(QPoint(pixel_x, pixel_y), letter);
+}
+
+// Write a single colored character on a designated square
+void MainWindow::display_square(s16b y, s16b x)
+{
+    dungeon_type *d_ptr = &dungeon_info[y][x];
+    QChar square_char = d_ptr->dun_char;
+    QColor square_color = d_ptr->dun_color;
+    if (d_ptr->has_monster())
+    {
+        square_char = d_ptr->monster_char;
+        square_color = d_ptr->monster_color;
+    }
+    else if (d_ptr->has_effect())
+    {
+        square_char = d_ptr->effect_char;
+        square_color = d_ptr->effect_color;
+    }
+    else if (d_ptr->has_object())
+    {
+        square_char = d_ptr->object_char;
+        square_color = d_ptr->object_color;
+    }
+    write_colored_text(square_char, square_color, y, x);
+}
+
+void MainWindow::screen_wipe()
+{
+    QPainter painter(this);
+    QColor dark;
+    QRect window_size;
+
+    window_size.setTopLeft(QPoint(0,0));
+    window_size.setBottomRight(QPoint(graphics_view->geometry().width(), graphics_view->geometry().height()));
+    dark.setRgb(0,0,0,255);
+    painter.fillRect(window_size, dark);
+}
+
+// Complete screen redraw
+void MainWindow::screen_redraw()
+{
+    screen_wipe();
+
+    for (int y = 0; y < last_y; y++)
+    {
+        s32b screen_y = y + first_y;
+
+        for (int x =0; x < last_x; x++)
+        {
+            s32b screen_x = x + first_x;
+
+            light_spot(screen_y, screen_x);
+            display_square(screen_y, screen_x);
+        }
+    }
+}
+
+// determine of a dungeon square is onscreen at present
+bool MainWindow::panel_contains(s16b y, s16b x)
+{
+    if (first_x > x) return (FALSE);
+    if (last_x < x)  return (FALSE);
+    if (first_y > y) return (FALSE);
+    if (last_y < y)  return (FALSE);
+    return (TRUE);
+}
+
+// Try to center the onscreen map around the player.
+// should be followed by a total screen redraw
+void MainWindow::set_onscreen_dungeon_boundries()
+{
+    /*
+     * First find the upper left boundries
+     */
+    first_y = p_ptr->py - (window_height / 2);
+    if (first_y < 0) first_y = 0;
+    first_x = p_ptr->px - (window_width / 2);
+    if (first_x < 0) first_x = 0;
+
+    // Now find the lower right boundries
+    last_y = first_y + window_height;
+    last_x = first_x + window_width;
+
+    // Verify the top and bottom boundries of the dungeon.
+    if (last_y > p_ptr->cur_map_hgt)
+    {
+        last_y = p_ptr->cur_map_hgt - 1;
+        first_y = last_y - p_ptr->cur_map_hgt;
+
+        //Maybe the screen is higher than the dungeon
+        if (first_y < 0)
+        {
+            first_y = 0;
+        }
+    }
+
+    // Verify the top and bottom boundries of the dungeon.
+    if (last_y >= p_ptr->cur_map_hgt)
+    {
+        last_y = p_ptr->cur_map_hgt - 1;
+        first_y = last_y - p_ptr->cur_map_hgt;
+
+        //Maybe the screen is higher than the dungeon
+        if (first_y < 0)
+        {
+            first_y = 0;
+        }
+    }
+
+    // Verify the left and right boundries of the dungeon.
+    if (last_x >= p_ptr->cur_map_wid)
+    {
+        last_x = p_ptr->cur_map_wid - 1;
+        first_x = last_x - p_ptr->cur_map_wid;
+
+        //Maybe the screen is wider than the dungeon
+        if (first_x < 0)
+        {
+            first_x = 0;
+        }
+    }
+}
 
 /*
  *Set up the dungeon map according to the curren screen size
@@ -567,12 +795,6 @@ void MainWindow::set_map()
     screen_num_rows = window_height / square_height;
     screen_num_columns = window_width / square_width;
 
-    // TODO calculate the boundries of the current dungeon displayed onscreen.
     // TODO factor in bigscreen.
-    // TODO
-    //int top_x;
-    //int top_y;
-    //int bottom_x;
-    //int bottom_y;
     //bool use_bigtile;
 }

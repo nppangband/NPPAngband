@@ -2,6 +2,8 @@
 #include "src/npp.h"
 
 
+MainWindow *main_window;
+
 // It is important to make sure that all global variables are wiped in between games,
 // and all arrays freed.
 

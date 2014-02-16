@@ -167,3 +167,249 @@ void target_set_location(int y, int x)
 
     p_ptr->redraw |= (PR_HEALTH);
 }
+
+
+
+/*
+ * Extract a direction (or zero) from a character
+ */
+int target_dir(QChar ch)
+{
+    int d = 0;
+
+    int mode;
+
+    QString act;
+
+    QString s;
+
+
+    /* Already a direction? */
+    if (ch.isDigit())
+    {
+        d = letter_to_number(ch);
+    }
+    // TODO handle arrow directions else if (isarrow(ch))
+    {
+
+    }
+    //else
+    {
+        // TODO handle keystroke commands
+    }
+
+    /* Paranoia */
+    if (d == 5) d = 0;
+
+    /* Return direction */
+    return (d);
+}
+
+
+
+int dir_transitions[10][10] =
+{
+    /* 0-> */ { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+    /* 1-> */ { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    /* 2-> */ { 0, 0, 2, 0, 1, 0, 3, 0, 5, 0 },
+    /* 3-> */ { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    /* 4-> */ { 0, 0, 1, 0, 4, 0, 5, 0, 7, 0 },
+    /* 5-> */ { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    /* 6-> */ { 0, 0, 3, 0, 5, 0, 6, 0, 9, 0 },
+    /* 7-> */ { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    /* 8-> */ { 0, 0, 5, 0, 7, 0, 9, 0, 8, 0 },
+    /* 9-> */ { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+};
+
+
+
+
+/*
+ * Get an "aiming direction" (1,2,3,4,6,7,8,9 or 5) from the user.
+ *
+ * Return TRUE if a direction was chosen, otherwise return FALSE.
+ *
+ * The direction "5" is special, and means "use current target".
+ *
+ * This function tracks and uses the "global direction", and uses
+ * that as the "desired direction", if it is set.
+ *
+ * Note that "Force Target", if set, will pre-empt user interaction,
+ * if there is a usable target already set.
+ *
+ * Currently this function applies confusion directly.
+ */
+bool get_aim_dir(int *dp, bool target_trap)
+{
+    /* Global direction */
+    int dir = p_ptr->command_dir;
+
+    QString p;
+
+    /* Initialize */
+    (*dp) = 0;
+
+    /* Hack -- auto-target if requested */
+    if (use_old_target && target_okay() && !dir) dir = 5;
+
+    /* Ask until satisfied */
+    while (!dir)
+    {
+        /* Choose a prompt */
+        if (!target_okay())
+            p = "Direction ('*' or <click> to target, 'c' for closest, Escape to cancel)? ";
+        else
+            p = "Direction ('5' for target, '*' or <click> to re-target, Escape to cancel)? ";
+
+        /* Get a command (or Cancel) */
+        // TODO if (!get_com_ex(p, &ke)) break;
+
+        //TODO
+        int ke = 0;
+
+        /* Analyze */
+        switch (ke)  // TODO
+        {
+            /* Mouse aiming */
+            case 0: // TODO
+            {
+
+                //TODO handle mouseclick target
+
+                break;
+            }
+
+            /* Set new target, use target if legal */
+            case '*':
+            {
+                int mode = TARGET_KILL;
+                if (target_trap) mode |= TARGET_TRAP;
+                // TODO handle targetingif (target_set_interactive(mode, -1, -1)) dir = 5;
+                break;
+            }
+
+            /* Set to closest target */
+            case 'c':
+            {
+                if (target_set_closest(TARGET_KILL)) dir = 5;
+                break;
+            }
+
+            /* Use current target, if set and legal */
+            case 't':
+            case '5':
+            case '0':
+            case '.':
+            {
+                if (target_okay()) dir = 5;
+                break;
+            }
+
+            /* Possible direction */
+            default:
+            {
+                int keypresses_handled = 0;
+                QChar fake_char = 'c'; //TODO
+
+                while (ke != 0) //TODO
+                {
+                    int this_dir;
+
+                    /* XXX Ideally show and move the cursor here to indicate
+                       the currently "Pending" direction. XXX */
+                    this_dir = target_dir(fake_char);
+
+                    if (this_dir)
+                    {
+                        dir = dir_transitions[dir][this_dir];
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
+        /* Error */
+        if (!dir) pop_up_message_box("Illegal aim direction!");
+    }
+
+
+    /* No direction */
+    if (!dir) return (FALSE);
+
+    /* Save the direction */
+    p_ptr->command_dir = dir;
+
+    /* Check for confusion */
+    if (p_ptr->timed[TMD_CONFUSED])
+    {
+        /* Random direction */
+        dir = ddd[randint0(8)];
+    }
+
+    /* Notice confusion */
+    if (p_ptr->command_dir != dir)
+    {
+        /* Warn the user */
+        message(QString("You are confused."));
+    }
+
+    /* Save direction */
+    (*dp) = dir;
+
+    /* A "valid" direction was entered */
+    return (TRUE);
+}
+
+
+bool target_set_closest(int mode)
+{
+    int y, x, m_idx;
+    monster_type *m_ptr;
+    QString m_name;
+    bool visibility;
+
+    /* Cancel old target */
+    target_set_monster(0);
+
+    /* Get ready to do targetting */
+    // TODO target_set_interactive_prepare(mode);
+
+    /* Find the first monster in the queue */
+    y = temp_y[0];
+    x = temp_x[0];
+    m_idx = dungeon_info[y][x].monster_idx;
+
+    /* If nothing was prepared, then return */
+    if (temp_n < 1)
+    {
+        message(QString("No Available Target."));
+        return FALSE;
+    }
+
+    /* Target the monster, if possible */
+    if ((m_idx <= 0) || !target_able(m_idx))
+    {
+        message(QString("No Available Target."));
+        return FALSE;
+    }
+
+    /* Target the monster */
+    m_ptr = &mon_list[m_idx];
+    m_name = monster_desc(m_ptr, 0x00);
+    if (!(mode & TARGET_QUIET))
+        message(QString("%^1 is targeted.") .arg(m_name));
+
+    /* Set up target inQStringion */
+    monster_race_track(m_ptr->r_idx);
+    // TODO health_track(cave_m_idx[y][x]);
+    target_set_monster(m_idx);
+
+    /* Visual cue */
+    // TODO draw it
+
+
+    return TRUE;
+}

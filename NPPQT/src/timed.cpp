@@ -392,21 +392,21 @@ bool set_stun(int v)
             /* Stun */
             case 1:
             {
-                message("You have been stunned.");
+                message(QString("You have been stunned."));
                 break;
             }
 
             /* Heavy stun */
             case 2:
             {
-                message("You have been heavily stunned.");
+                message(QString("You have been heavily stunned."));
                 break;
             }
 
             /* Knocked out */
             case 3:
             {
-                message("You have been knocked out.");
+                message(QString("You have been knocked out."));
                 break;
             }
         }
@@ -424,7 +424,7 @@ bool set_stun(int v)
             /* None */
             case 0:
             {
-                message("You are no longer stunned.");
+                message(QString("You are no longer stunned."));
                 if (disturb_state) disturb(0, 0);
                 break;
             }
@@ -576,49 +576,49 @@ bool set_cut(int v)
             /* Graze */
             case 1:
             {
-                message("You have been given a graze.");
+                message(QString("You have been given a graze."));
                 break;
             }
 
             /* Light cut */
             case 2:
             {
-                message("You have been given a light cut.");
+                message(QString("You have been given a light cut."));
                 break;
             }
 
             /* Bad cut */
             case 3:
             {
-                message("You have been given a bad cut.");
+                message(QString("You have been given a bad cut."));
                 break;
             }
 
             /* Nasty cut */
             case 4:
             {
-                message("You have been given a nasty cut.");
+                message(QString("You have been given a nasty cut."));
                 break;
             }
 
             /* Severe cut */
             case 5:
             {
-                message("You have been given a severe cut.");
+                message(QString("You have been given a severe cut."));
                 break;
             }
 
             /* Deep gash */
             case 6:
             {
-                message("You have been given a deep gash.");
+                message(QString("You have been given a deep gash."));
                 break;
             }
 
             /* Mortal wound */
             case 7:
             {
-                message("You have been given a mortal wound.");
+                message(QString("You have been given a mortal wound."));
                 break;
             }
         }
@@ -636,7 +636,7 @@ bool set_cut(int v)
             /* None */
             case 0:
             {
-                message("You are no longer bleeding.");
+                message(QString("You are no longer bleeding."));
                 if (disturb_state) disturb(0, 0);
                 break;
             }
@@ -782,35 +782,35 @@ bool set_food(int v)
             /* Weak */
             case 1:
             {
-                message("You are still weak.");
+                message(QString("You are still weak."));
                 break;
             }
 
             /* Hungry */
             case 2:
             {
-                message("You are still hungry.");
+                message(QString("You are still hungry."));
                 break;
             }
 
             /* Normal */
             case 3:
             {
-                message("You are no longer hungry.");
+                message(QString("You are no longer hungry."));
                 break;
             }
 
             /* Full */
             case 4:
             {
-                message("You are full!");
+                message(QString("You are full!"));
                 break;
             }
 
             /* Bloated */
             case 5:
             {
-                message("You have gorged yourself!");
+                message(QString("You have gorged yourself!"));
                 break;
             }
         }
@@ -828,35 +828,35 @@ bool set_food(int v)
             /* Fainting / Starving */
             case 0:
             {
-                message("You are getting faint from hunger!");
+                message(QString("You are getting faint from hunger!"));
                 break;
             }
 
             /* Weak */
             case 1:
             {
-                message("You are getting weak from hunger!");
+                message(QString("You are getting weak from hunger!"));
                 break;
             }
 
             /* Hungry */
             case 2:
             {
-                message("You are getting hungry.");
+                message(QString("You are getting hungry."));
                 break;
             }
 
             /* Normal */
             case 3:
             {
-                message("You are no longer full.");
+                message(QString("You are no longer full."));
                 break;
             }
 
             /* Full */
             case 4:
             {
-                message("You are no longer gorged.");
+                message(QString("You are no longer gorged."));
                 break;
             }
         }

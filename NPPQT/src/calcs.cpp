@@ -125,8 +125,7 @@ void calc_spells(void)
 
     s16b old_spells;
 
-    // TODO add spells
-    QString p = ("TODO");//cast_spell(MODE_SPELL_NOUN, cp_ptr->spell_book, 1, 0);
+    QString p = cast_spell(MODE_SPELL_NOUN, cp_ptr->spell_book, 1, 0);
 
     /* Hack -- must be literate */
     if (!cp_ptr->spell_book) return;
@@ -450,11 +449,11 @@ static void calc_mana(void)
         /* Message */
         if (p_ptr->state.cumber_glove)
         {
-            message("Your covered hands feel unsuitable for spellcasting.");
+            message(QString("Your covered hands feel unsuitable for spellcasting."));
         }
         else
         {
-            message("Your hands feel more suitable for spellcasting.");
+            message(QString("Your hands feel more suitable for spellcasting."));
         }
     }
 
@@ -464,11 +463,11 @@ static void calc_mana(void)
         /* Message */
         if (p_ptr->state.cumber_armor)
         {
-            message("The weight of your equipment is reducing your mana.");
+            message(QString("The weight of your equipment is reducing your mana."));
         }
         else
         {
-            message("Your equipment is no longer reducing your mana.");
+            message(QString("Your equipment is no longer reducing your mana."));
         }
     }
 }
@@ -1911,15 +1910,15 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
         /* Message */
         if (new_state->icky_wield)
         {
-            message("You do not feel comfortable with your weapon.");
+            message(QString("You do not feel comfortable with your weapon."));
         }
         else if (calc_inven[INVEN_WIELD].k_idx)
         {
-            message("You feel comfortable with your weapon.");
+            message(QString("You feel comfortable with your weapon."));
         }
         else
         {
-            message("You feel more comfortable after removing your weapon.");
+            message(QString("You feel more comfortable after removing your weapon."));
         }
     }
 

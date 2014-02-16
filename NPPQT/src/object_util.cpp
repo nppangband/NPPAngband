@@ -1052,7 +1052,7 @@ void compact_objects(int size)
     if (size)
     {
         /* Message */
-        message("Compacting objects...");
+        message(QString("Compacting objects..."));
 
         /* Redraw map */
         p_ptr->redraw |= (PR_MAP);
@@ -2417,7 +2417,7 @@ bool drop_near(object_type *j_ptr, int chance, int y, int x)
 
 
         /* Debug */
-        if (p_ptr->wizard) message("Breakage (breakage).");
+        if (p_ptr->wizard) message(QString("Breakage (breakage)."));
 
         p_ptr->redraw |= (PR_ITEMLIST);
 
@@ -2539,7 +2539,7 @@ bool drop_near(object_type *j_ptr, int chance, int y, int x)
         }
 
         /* Debug */
-        if (p_ptr->wizard) message("Breakage (no floor space).");
+        if (p_ptr->wizard) message(QString("Breakage (no floor space)."));
 
         p_ptr->redraw |= (PR_ITEMLIST);
 
@@ -2590,7 +2590,7 @@ bool drop_near(object_type *j_ptr, int chance, int y, int x)
         }
 
         /* Debug */
-        if (p_ptr->wizard) message("Breakage (too many objects).");
+        if (p_ptr->wizard) message(QString("Breakage (too many objects)."));
 
         /* Hack -- Preserve artifacts */
         a_info[j_ptr->art_num].a_cur_num = 0;
@@ -2615,7 +2615,7 @@ bool drop_near(object_type *j_ptr, int chance, int y, int x)
             last_turn = turn;
 
             /* Message */
-            message("You feel something roll beneath your feet.");
+            message(QString("You feel something roll beneath your feet."));
         }
     }
 
@@ -3116,7 +3116,7 @@ int sort_quiver(int slot)
         p_ptr->window |= (PW_EQUIP);
 
         /* Message */
-        if (!slot) message("You reorganize your quiver.");
+        if (!slot) message(QString("You reorganize your quiver."));
     }
 
     return (slot);
@@ -4027,7 +4027,7 @@ void combine_pack(void)
     }
 
     /* Message */
-    if (flag) message("You combine some items in your pack.");
+    if (flag) message(QString("You combine some items in your pack."));
 }
 
 
@@ -4094,7 +4094,7 @@ void combine_quiver(void)
         p_ptr->window |= (PW_EQUIP);
 
         /* Message */
-        message("You combine your quiver.");
+        message(QString("You combine your quiver."));
     }
 }
 
@@ -4208,7 +4208,7 @@ void reorder_pack(void)
     }
 
     /* Message */
-    if (flag) message("You reorder some items in your pack.");
+    if (flag) message(QString("You reorder some items in your pack."));
 }
 
 
@@ -4937,7 +4937,7 @@ void pack_overflow(void)
     disturb(0, 0);
 
     /* Warning */
-    message("Your pack overflows!");
+    message(QString("Your pack overflows!"));
 
     /* Describe */
     o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
