@@ -7,16 +7,115 @@
 #include "src/birthdialog.h"
 #include "src/dungeonbox.h"
 
+class MainWindowPrivate
+{
+public:
+    QGraphicsScene *scene;
+    QGraphicsView *view;
+    QGraphicsSimpleTextItem *items[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
+    int cell_hgt, cell_wid;
+    QFont font;
+
+    void init_scene(QGraphicsScene *_scene, QGraphicsView *_view);
+    void wipe();
+    void redraw();
+    void redraw_cell(int y, int x);
+    bool panel_contains(int y, int x);
+};
+
+void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view)
+{
+    scene = _scene;
+    view = _view;
+
+    /*
+    font = QFont("Courier New"); // Use fixed size font. Right?
+    QFontMetrics metrics(font);
+    cell_hgt = metrics.height();
+    cell_wid = metrics.width('M');
+    */
+
+    QBrush brush(QColor("black"));
+    scene->setBackgroundBrush(brush);
+
+    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
+        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
+            items[y][x] = scene->addSimpleText(QString(" "), font);
+            items[y][x]->setPos(x * cell_wid, y * cell_hgt);
+        }
+    }
+}
+
+void MainWindowPrivate::wipe()
+{
+    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
+        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
+            items[y][x]->setFont(font);
+            items[y][x]->setText(QString(" "));
+            items[y][x]->setPos(x * cell_wid, y * cell_hgt);
+        }
+    }
+}
+
+void MainWindowPrivate::redraw()
+{
+    wipe();
+
+    // Adjust scrollbars
+    view->setSceneRect(0, 0, p_ptr->cur_map_wid * cell_wid, p_ptr->cur_map_hgt * cell_hgt);
+
+    for (int y = 0; y < p_ptr->cur_map_hgt; y++) {
+        for (int x = 0; x < p_ptr->cur_map_wid; x++) {
+            light_spot(y, x);
+            redraw_cell(y, x);
+        }
+    }
+}
+
+bool MainWindowPrivate::panel_contains(int y, int x)
+{
+    QRect rect = view->geometry();
+    QPolygonF pol = view->mapToScene(rect);
+    QPointF point(x * cell_wid, y * cell_hgt);
+    return pol.containsPoint(point, Qt::OddEvenFill);
+}
+
+void MainWindowPrivate::redraw_cell(int y, int x)
+{
+    dungeon_type *d_ptr = &dungeon_info[y][x];
+    QChar square_char = d_ptr->dun_char;
+    QColor square_color = d_ptr->dun_color;
+    if (d_ptr->has_monster())
+    {
+        square_char = d_ptr->monster_char;
+        square_color = d_ptr->monster_color;
+    }
+    else if (d_ptr->has_effect())
+    {
+        square_char = d_ptr->effect_char;
+        square_color = d_ptr->effect_color;
+    }
+    else if (d_ptr->has_object())
+    {
+        square_char = d_ptr->object_char;
+        square_color = d_ptr->object_color;
+    }
+
+    items[y][x]->setText(QString(square_char));
+    items[y][x]->setBrush(QBrush(square_color));
+}
+
 // The main function - intitalize the main window and set the menus.
 MainWindow::MainWindow()
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    graphics_view = new QGraphicsView;
+    priv = new MainWindowPrivate;
+
+    dungeon_scene = new QGraphicsScene;
+    graphics_view = new QGraphicsView(dungeon_scene);
 
     setCentralWidget(graphics_view);
-    dungeon_scene = new QGraphicsScene(graphics_view->rect());
-    graphics_view->setScene(dungeon_scene);
 
     create_actions();
     update_file_menu_game_inactive();
@@ -29,6 +128,8 @@ MainWindow::MainWindow()
 
     read_settings();
     set_map();
+    priv->init_scene(dungeon_scene, graphics_view);
+
 
     setWindowFilePath(QString());
 }
@@ -172,6 +273,7 @@ void MainWindow::fontselect_dialog()
     {
         //  Figure out - this sets the fonnt for everything setFont(cur_font);
         set_map();
+        priv->redraw();
     }
 }
 
@@ -408,6 +510,7 @@ void MainWindow::read_settings()
 
     QString load_font = settings.value("current_font", cur_font ).toString();
     cur_font.fromString(load_font);
+    //pop_up_message_box(load_font);
     restoreState(settings.value("window_state").toByteArray());
 
 
@@ -454,8 +557,9 @@ void MainWindow::load_file(const QString &file_name)
             else {
                 update_file_menu_game_active();
                 launch_game();
-                debug_dungeon();
-                screen_redraw();
+                //debug_dungeon();
+                //screen_redraw();
+                priv->redraw();
             }
         }
     }
@@ -474,8 +578,9 @@ void MainWindow::launch_birth(bool quick_start)
         update_file_menu_game_active();
         launch_game();
         save_character();
-        debug_dungeon();
-        screen_redraw();
+        //debug_dungeon();
+        //screen_redraw();
+        priv->redraw();
     } else {
         cleanup_npp_games();
         character_loaded = false;
@@ -626,11 +731,15 @@ void MainWindow::screen_redraw()
 // determine of a dungeon square is onscreen at present
 bool MainWindow::panel_contains(s16b y, s16b x)
 {
+    /*
     if (first_x > x) return (FALSE);
     if (last_x < x)  return (FALSE);
     if (first_y > y) return (FALSE);
     if (last_y < y)  return (FALSE);
     return (TRUE);
+    */
+
+    return priv->panel_contains(y, x);
 }
 
 // Try to center the onscreen map around the player.
@@ -709,6 +818,10 @@ void MainWindow::set_map()
 
     screen_num_rows = window_height / square_height;
     screen_num_columns = window_width / square_width;
+
+    priv->font = cur_font;
+    priv->cell_hgt = square_height;
+    priv->cell_wid = square_width;
 
     // TODO factor in bigscreen.
     //bool use_bigtile;

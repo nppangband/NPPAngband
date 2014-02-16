@@ -16,6 +16,8 @@ class QMenu;
 class QGraphicsView;
 class QGraphicsScene;
 
+class MainWindowPrivate;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -67,6 +69,7 @@ private slots:
 
 
 private:
+    MainWindowPrivate *priv;
 
     // The editable part of the main window.
     QGraphicsView *graphics_view;
