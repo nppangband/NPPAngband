@@ -85,8 +85,10 @@ bool MainWindowPrivate::panel_contains(int y, int x)
 {
     QRect rect = view->geometry();
     QPolygonF pol = view->mapToScene(rect);
-    QPointF point(x * cell_wid, y * cell_hgt);
-    return pol.containsPoint(point, Qt::OddEvenFill);
+    // We test top-left and bottom-right corners of the cell
+    QPointF point1(x * cell_wid, y * cell_hgt);
+    QPointF point2(x * cell_wid + cell_wid, y * cell_hgt + cell_hgt);
+    return pol.containsPoint(point1, Qt::OddEvenFill) && pol.containsPoint(point2, Qt::OddEvenFill);
 }
 
 void MainWindowPrivate::redraw_cell(int y, int x)
