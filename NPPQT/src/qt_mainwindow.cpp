@@ -21,26 +21,37 @@ public:
     void redraw();
     void redraw_cell(int y, int x);
     bool panel_contains(int y, int x);
+    void set_font(QFont _font);
 };
+
+void MainWindowPrivate::set_font(QFont _font)
+{
+    font = _font;
+    QFontMetrics metrics(font);
+    cell_hgt = metrics.height();
+    cell_wid = metrics.width('M');
+
+    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
+        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
+            items[y][x]->setFont(font);
+            items[y][x]->setPos(x * cell_wid, y * cell_hgt);
+        }
+    }
+}
 
 void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view)
 {
     scene = _scene;
     view = _view;
 
-    /*
-    font = QFont("Courier New"); // Use fixed size font. Right?
-    QFontMetrics metrics(font);
-    cell_hgt = metrics.height();
-    cell_wid = metrics.width('M');
-    */
+    cell_hgt = cell_wid = 0;
 
     QBrush brush(QColor("black"));
     scene->setBackgroundBrush(brush);
 
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            items[y][x] = scene->addSimpleText(QString(" "), font);
+            items[y][x] = scene->addSimpleText(QString(" "));
             items[y][x]->setPos(x * cell_wid, y * cell_hgt);
         }
     }
@@ -50,9 +61,7 @@ void MainWindowPrivate::wipe()
 {
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            items[y][x]->setFont(font);
             items[y][x]->setText(QString(" "));
-            items[y][x]->setPos(x * cell_wid, y * cell_hgt);
         }
     }
 }
@@ -129,7 +138,7 @@ MainWindow::MainWindow()
     read_settings();
     set_map();
     priv->init_scene(dungeon_scene, graphics_view);
-
+    priv->set_font(cur_font);
 
     setWindowFilePath(QString());
 }
@@ -273,6 +282,7 @@ void MainWindow::fontselect_dialog()
     {
         //  Figure out - this sets the fonnt for everything setFont(cur_font);
         set_map();
+        priv->set_font(cur_font);
         priv->redraw();
     }
 }
@@ -818,10 +828,6 @@ void MainWindow::set_map()
 
     screen_num_rows = window_height / square_height;
     screen_num_columns = window_width / square_width;
-
-    priv->font = cur_font;
-    priv->cell_hgt = square_height;
-    priv->cell_wid = square_width;
 
     // TODO factor in bigscreen.
     //bool use_bigtile;
