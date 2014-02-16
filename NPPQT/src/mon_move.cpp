@@ -14,7 +14,7 @@
  */
 
 #include "src/npp.h"
-#include "src/store.h"
+
 
 
 /*
@@ -27,7 +27,7 @@
 /*
  * Calculate minimum and desired combat ranges.  -BR-
  */
-static void find_range(monster_type *m_ptr)
+void find_range(monster_type *m_ptr)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -867,7 +867,7 @@ static byte side_dirs[20][8] =
  * another is also a tad iffy, but ensures that black orcs can always
  * push past other black orcs.
  */
-static int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash)
+int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -1129,91 +1129,6 @@ static int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash)
 }
 
 
-/*
- * Get a target for a monster using the special "townsman" AI.
- */
-static void get_town_target(monster_type *m_ptr)
-{
-    int i;
-    int y, x;
-
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-    /* Clear target */
-    m_ptr->target_y = 0;
-    m_ptr->target_x = 0;
-
-    /* Hack -- Usually choose a random store, but not cats and dogs */
-    if ((r_ptr->d_char != 'f') && (r_ptr->d_char != 'C') && (!one_in_(3)))
-    {
-        /* shop base - note that shop power is the shop -1*/
-        i = rand_int(MAX_STORES);
-
-        /* Try to find the store XXX XXX */
-        for (y =1; y < p_ptr->cur_map_hgt - 1; y++)
-        {
-            for (x = 1; x < p_ptr->cur_map_wid - 1; x++)
-            {
-                if (cave_shop_bold(y, x))
-                {
-
-                    /* Is our store */
-                    if (f_info[dungeon_info[y][x].feat].f_power == i)
-                    {
-                        m_ptr->target_y = y;
-                        m_ptr->target_x = x;
-                        break;
-                    }
-                }
-            }
-
-            /* Store found */
-            if (m_ptr->target_y) return;
-        }
-    }
-
-    /* No store chosen */
-    if (!m_ptr->target_y)
-    {
-        for (i = 0;; i++)
-        {
-            /* Pick a grid on the edge of the map (simple test) */
-            if (i < 100)
-            {
-                if (one_in_(2))
-                {
-                    /* Pick a random location along the N/S walls */
-                    y = rand_range(1, p_ptr->cur_map_hgt - 1);
-
-                    if (one_in_(2)) x = p_ptr->cur_map_wid - 2 ;
-                    else            x = 2 ;
-
-                }
-                else
-                {
-                    /* Pick a random location along the E/W walls */
-                    x = rand_range(1, p_ptr->cur_map_wid -1);
-
-                    if (one_in_(2)) y = p_ptr->cur_map_hgt -2 ;
-                    else            y = 2 ;
-                }
-            }
-            else
-            {
-                y = rand_range(1, p_ptr->cur_map_hgt - 2);
-                x = rand_range(1, p_ptr->cur_map_wid - 2);
-            }
-
-            /* Require "empty" floor grids */
-            if (cave_empty_bold(y, x))
-            {
-                m_ptr->target_y = y;
-                m_ptr->target_x = x;
-                break;
-            }
-        }
-    }
-}
 
 /*Returns true if the monster is holding a quest artifact, false if they aren't.*/
 static bool holding_quest_artifact(const monster_type *m_ptr)
@@ -2192,8 +2107,7 @@ static void calc_vulnerability(void)
  *
  * Return FALSE if monster doesn't want to move or can't.
  */
-static bool get_move(monster_type *m_ptr, int *ty, int *tx, bool *fear,
-                     bool must_use_target)
+bool get_move(monster_type *m_ptr, int *ty, int *tx, bool *fear, bool must_use_target)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     monster_lore *l_ptr = &l_list[m_ptr->r_idx];
@@ -2734,8 +2648,7 @@ static void make_confused_move(monster_type *m_ptr, int y, int x)
  * the number of such variables becomes greater, a structure to hold them
  * would look better than passing them around from function to function.
  */
-static bool make_move(monster_type *m_ptr, int *ty, int *tx, bool fear,
-    bool *bash)
+bool make_move(monster_type *m_ptr, int *ty, int *tx, bool fear, bool *bash)
 {
     int i, j;
 

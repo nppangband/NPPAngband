@@ -51,45 +51,7 @@ void dungeon_change_level(int dlev)
     p_ptr->redraw |= (PR_DEPTH | PR_QUEST_ST | PR_FEELING);
 }
 
-/*
- * Process the player terrain damage
- * This function can kill the player, so all calls to this function should be able to handle this.
- */
-void process_player_terrain_damage(void)
-{
-    /* No damage to take terrain */
-    if (p_ptr->cumulative_terrain_damage > 0)
-    {
-        /*
-         * IMPORTANT: we divide cumulative damage by 10
-         * to get a value nearly equal to "dam_non_native" at
-         * normal speed (1 player turn every 10 game turns)
-         */
-        int dam = p_ptr->cumulative_terrain_damage / 10;
 
-        QString name,  kb_str;
-
-        /* Get the feature */
-        int feat = dungeon_info[p_ptr->py][p_ptr->px].feat;
-
-        /* Uncomment this if you want a damage cap */
-        /*dam = MIN(dam, f_info[feat].dam_non_native);*/
-
-        /* Get the feature name */
-        name = feature_desc(feat, TRUE, TRUE);
-
-        /* Format the killer string */
-        kb_str = "standing in ";
-        kb_str.append(name);
-
-        /* Take the hit */
-        take_terrain_hit(dam, feat, kb_str);
-
-        /* Reset terrain damage */
-        p_ptr->cumulative_terrain_damage = 0;
-
-    }
-}
 
 /*
  * Remove the ironman ego_items of the probability tables.
@@ -171,34 +133,6 @@ static void remove_ironman_items(void)
         }
     }
 }
-
-#if 0
-/*
- * Process some user pref files
- */
-static void process_some_user_pref_files(void)
-{
-    char buf[1024];
-
-    /* Process the "user.prf" file */
-    (void)process_pref_file("user.prf");
-
-    /* Process the "user.scb" autoinscriptions file */
-    (void)process_pref_file("user.scb");
-
-    /* Process the "classes.prf" file */
-    (void)process_pref_file("classes.prf");
-
-    /* Process the "races.prf" file */
-    (void)process_pref_file("races.prf");
-
-    /* Get the "PLAYER.prf" filename */
-    (void)strnfmt(buf, sizeof(buf), "%s.prf", op_ptr->base_name);
-
-    /* Process the "PLAYER.prf" file */
-    (void)process_pref_file(buf);
-}
-#endif
 
 void launch_game()
 {
