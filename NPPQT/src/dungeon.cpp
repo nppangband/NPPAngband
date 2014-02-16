@@ -52,7 +52,6 @@ void dungeon_change_level(int dlev)
 }
 
 
-
 /*
  * Remove the ironman ego_items of the probability tables.
  */

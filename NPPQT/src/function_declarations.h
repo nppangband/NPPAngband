@@ -10,6 +10,7 @@
 
 
 // cmd1.cpp
+
 extern void search(void);
 extern bool put_object_in_inventory(object_type *o_ptr);
 extern void do_cmd_pickup_from_pile(bool pickup, bool message);
@@ -166,6 +167,7 @@ extern bool load_gamemode(void);
 extern int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x);
 extern bool cave_exist_mon(const monster_race *r_ptr, int y, int x, bool occupied_ok, bool damage_ok, bool can_dig);
 extern bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px);
+bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px);
 
 //mon_classes.cpp
 
@@ -206,11 +208,22 @@ extern void save_player_ghost_file(void);
 
 // mon_process.cpp
 extern void process_entities(void);
+extern void find_range(monster_type *m_ptr);
+extern bool make_move(monster_type *m_ptr, int *ty, int *tx, bool fear, bool *bash);
+extern s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash);
+extern bool get_move(monster_type *m_ptr, int *ty, int *tx, bool *fear, bool must_use_target);
+extern int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash);
 
 //mon_ranged_attack.cpp
 extern int get_dam(monster_race *r_ptr, int attack);
 extern int get_breath_dam(s16b hit_points, int gf_type, bool powerful);
 extern int get_ball_beam_dam(int m_idx, monster_race *r_ptr, int attack, int gf_type, bool powerful);
+extern void mon_bolt_no_effect(int m_idx, int typ, int dam);
+extern void mon_bolt(int m_idx, int typ, int dam, u32b flg);
+extern void mon_beam(int m_idx, int typ, int dam, int range);
+extern void mon_ball(int m_idx, int typ, int dam, int rad, int py, int px);
+extern void mon_cloud(int m_idx, int typ, int dam, int rad);
+extern void mon_arc(int m_idx, int typ, bool noharm, int dam, int rad, int degrees_of_arc);
 
 //mon_util.cpp
 extern s16b poly_r_idx(const monster_type *m_ptr);
@@ -400,6 +413,11 @@ extern void textui_cmd_throw(void);
 extern void process_player_terrain_damage(void);
 extern void process_player(void);
 
+// player_process
+extern void process_player_terrain_damage(void);
+extern void process_player(void);
+
+
 // player_spell.cpp
 extern bool spell_needs_aim(int tval, int spell);
 extern QString do_mage_spell(int mode, int spell, int dir);
@@ -529,6 +547,9 @@ extern bool quest_might_fail_now(void);
 
 // quest_process.cpp
 extern void do_cmd_quest(void);
+extern void process_arena_quest(void);
+extern void process_labyrinth_quest(void);
+extern void process_wilderness_quest(void);
 extern void process_greater_vault_quest(void);
 extern void process_guild_quests(void);
 

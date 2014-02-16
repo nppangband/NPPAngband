@@ -351,7 +351,7 @@ static void add_arena_object(byte stage)
 /*
  * This function assumes it is called every 10 game turns during an arena level.
  */
-static void process_arena_quest(void)
+void process_arena_quest(void)
 {
     int i;
     quest_type *q_ptr = &q_info[GUILD_QUEST_SLOT];
@@ -579,7 +579,7 @@ static bool add_labyrinth_monster_object(bool add_object, bool add_parchment)
 /*
  * This function assumes it is called every 10 game turns during a labyrinth level.
  */
-static void process_labyrinth_quest(void)
+void process_labyrinth_quest(void)
 {
     int i;
     s32b turns_lapsed = turn - q_info->turn_counter;
@@ -825,7 +825,7 @@ static void clear_square(int y, int x, bool do_wall, u16b feat)
 /*
  * Alter terrain during wilderness quest
  */
-static void process_wilderness_quest(void)
+void process_wilderness_quest(void)
 {
     int y, x;
     int ice_or_mud = 0;

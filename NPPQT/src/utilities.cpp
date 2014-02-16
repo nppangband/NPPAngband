@@ -147,6 +147,7 @@ QString capitilize_first(QString line)
 void pop_up_message_box(QString message, QMessageBox::Icon the_icon)
 {
     QMessageBox msg_box;
+    msg_box.setModal(true);
     msg_box.setIcon(the_icon);
     msg_box.setText(message);
     msg_box.exec();
