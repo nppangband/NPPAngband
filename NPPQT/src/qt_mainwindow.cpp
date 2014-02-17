@@ -63,33 +63,63 @@ void MainWindowPrivate::calculate_cell_size()
 
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            items[y][x]->setPos(x * cell_wid, y * cell_hgt);
-            items_g[y][x]->setPos(x * cell_wid, y * cell_hgt);
+            // Center on cell
+            items[y][x]->setPos(x * cell_wid + (cell_wid - font_wid) / 2,
+                                y * cell_hgt + (cell_hgt - font_hgt) / 2);
+            items_g[y][x]->setPos(x * cell_wid + (cell_wid - tile_wid) / 2,
+                                  y * cell_hgt + (cell_hgt - tile_hgt) / 2);
         }
     }
 }
 
 void MainWindowPrivate::set_graphic_mode(int mode)
 {
-    tile_hgt = tile_wid = 32;
+    int hgt, wid;
+    QString fname;
 
-    tile_map = blank_pix;
-
-    tile_map = QPixmap(NPP_DIR_GRAF.append("32x32.png"));
-    if (tile_map.isNull()) {
-        pop_up_message_box(QString("Can't load tiles"));
-        tile_map = blank_pix;
-        return;
+    switch (mode) {
+    case GRAPHICS_DAVID_GERVAIS:
+        hgt = 32;
+        wid = 32;
+        fname.append("32x32.png");
+        break;
+    case GRAPHICS_ORIGINAL:
+        hgt = 16;
+        wid = 16;
+        fname.append("16x16.png");
+        break;
+    default:
+        hgt = 0;
+        wid = 0;
+        break;
     }
 
-    destroy_tiles();
-    tiles.clear();
+    if (fname.length() > 0) {
+        fname.prepend(NPP_DIR_GRAF);
+        QPixmap pix = QPixmap(fname);
+        if (pix.isNull()) {
+            pop_up_message_box(QString("Can't load tiles"));
+            return;
+        }
+        tile_hgt = hgt;
+        tile_wid = wid;
+        calculate_cell_size();
+        destroy_tiles();
+        tiles.clear();
+        tile_map = pix;
+        tiles.insert("23x22", blank_pix);
+        rebuild_tiles();
+    }
+    else {
+        tile_hgt = hgt;
+        tile_wid = wid;
+        calculate_cell_size();
+        destroy_tiles();
+        tiles.clear();
+        tile_map = blank_pix;
+    }
 
-    tiles.insert("23x22", blank_pix);
-
-    calculate_cell_size();
-
-    rebuild_tiles();
+    use_graphics = mode;
 }
 
 void MainWindowPrivate::rebuild_tiles()
@@ -209,8 +239,14 @@ void MainWindowPrivate::redraw_cell(int y, int x)
 
     items_g[y][x]->setPixmap(tiles["23x22"]);
 
-    items[y][x]->setVisible(square_char != '#');
-    items_g[y][x]->setVisible(square_char == '#');
+    if (use_graphics) {
+        items[y][x]->setVisible(square_char != '#');
+        items_g[y][x]->setVisible(square_char == '#');
+    }
+    else {
+        items[y][x]->setVisible(true);
+        items_g[y][x]->setVisible(false);
+    }
 }
 
 // The main function - intitalize the main window and set the menus.
