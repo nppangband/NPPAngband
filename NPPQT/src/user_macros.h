@@ -39,5 +39,8 @@
  */
 #define N_ELEMENTS(a) (sizeof(a) / sizeof((a)[0]))
 
+/*Square a number*/
+#define GET_SQUARE(X) 	((X) * (X))
+
 
 #endif // USER_MACROS_H
