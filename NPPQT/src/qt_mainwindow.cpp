@@ -15,6 +15,8 @@ public:
     QGraphicsView *view;
     QGraphicsSimpleTextItem *items[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
     QGraphicsPixmapItem *items_g[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
+    int font_hgt, font_wid;
+    int tile_hgt, tile_wid;
     int cell_hgt, cell_wid;
     QFont font;
 
@@ -32,6 +34,7 @@ public:
     void set_graphic_mode(int mode);
     void destroy_tiles();
     void rebuild_tiles();
+    void calculate_cell_size();
 };
 
 void MainWindowPrivate::destroy_tiles()
@@ -50,30 +53,43 @@ void MainWindowPrivate::destroy_tiles()
     }
 }
 
+void MainWindowPrivate::calculate_cell_size()
+{
+    cell_hgt = font_hgt;
+    if (tile_hgt > cell_hgt) cell_hgt = tile_hgt;
+
+    cell_wid = font_wid;
+    if (tile_wid > cell_wid) cell_wid = tile_wid;
+
+    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
+        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
+            items[y][x]->setPos(x * cell_wid, y * cell_hgt);
+            items_g[y][x]->setPos(x * cell_wid, y * cell_hgt);
+        }
+    }
+}
+
 void MainWindowPrivate::set_graphic_mode(int mode)
 {
-    cell_hgt = cell_wid = 32;
+    tile_hgt = tile_wid = 32;
 
     tile_map = blank_pix;
 
     tile_map = QPixmap(NPP_DIR_GRAF.append("32x32.png"));
+    if (tile_map.isNull()) {
+        pop_up_message_box(QString("Can't load tiles"));
+        tile_map = blank_pix;
+        return;
+    }
 
     destroy_tiles();
     tiles.clear();
 
-    tiles.insert("32x32", blank_pix);
-    tiles.insert("64x64", blank_pix);
+    tiles.insert("23x22", blank_pix);
+
+    calculate_cell_size();
 
     rebuild_tiles();
-
-    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
-        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            items[y][x]->setVisible(false);
-
-            items_g[y][x]->setVisible(true);
-            items_g[y][x]->setPos(x * cell_wid, y * cell_hgt);
-        }
-    }
 }
 
 void MainWindowPrivate::rebuild_tiles()
@@ -85,10 +101,8 @@ void MainWindowPrivate::rebuild_tiles()
         if (coords.size() != 2) continue;
         int x = coords.at(1).toInt();
         int y = coords.at(0).toInt();
-        QPixmap pix = tile_map.copy(x, y, cell_wid, cell_hgt);
+        QPixmap pix = tile_map.copy(x * tile_wid, y * tile_hgt, tile_wid, tile_hgt);
         tiles[k] = pix;
-
-        items_g[i][0]->setPixmap(tiles[k]);
     }
 }
 
@@ -96,13 +110,14 @@ void MainWindowPrivate::set_font(QFont _font)
 {
     font = _font;
     QFontMetrics metrics(font);
-    cell_hgt = metrics.height();
-    cell_wid = metrics.width('M');
+    font_hgt = metrics.height();
+    font_wid = metrics.width('M');
+
+    calculate_cell_size();
 
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
             items[y][x]->setFont(font);
-            items[y][x]->setPos(x * cell_wid, y * cell_hgt);
         }
     }
 }
@@ -112,6 +127,8 @@ void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view)
     scene = _scene;
     view = _view;
 
+    font_hgt = font_wid = 0;
+    tile_hgt = tile_wid = 0;
     cell_hgt = cell_wid = 0;
 
     QBrush brush(QColor("black"));
@@ -123,7 +140,7 @@ void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view)
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
             items[y][x] = scene->addSimpleText(QString(" "));
-            items[y][x]->setPos(x * cell_wid, y * cell_hgt);
+            items[y][x]->setVisible(false);
 
             items_g[y][x] = scene->addPixmap(blank_pix);
             items_g[y][x]->setVisible(false);
@@ -136,6 +153,7 @@ void MainWindowPrivate::wipe()
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
             items[y][x]->setText(QString(" "));
+            items_g[y][x]->setPixmap(blank_pix);
         }
     }
 }
@@ -188,6 +206,11 @@ void MainWindowPrivate::redraw_cell(int y, int x)
 
     items[y][x]->setText(QString(square_char));
     items[y][x]->setBrush(QBrush(square_color));
+
+    items_g[y][x]->setPixmap(tiles["23x22"]);
+
+    items[y][x]->setVisible(square_char != '#');
+    items_g[y][x]->setVisible(square_char == '#');
 }
 
 // The main function - intitalize the main window and set the menus.
