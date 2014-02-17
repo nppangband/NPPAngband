@@ -95,16 +95,6 @@
 
 
 
-#ifdef MONSTER_SMELL
-/*
- * Character turns it takes for smell to totally dissipate
- */
-#define SMELL_STRENGTH   50
-
-
-#endif /*MONSTER_SMELL*/
-
-
 /*
  * Number of feats we change to (Excluding default). Used in f_info.txt.
  */

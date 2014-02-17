@@ -1040,3 +1040,4 @@ bool beam_chain(int gf_type, int dam, int max_hits, int decrement)
 
     return (flag);
 }
+
