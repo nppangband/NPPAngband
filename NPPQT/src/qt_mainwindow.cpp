@@ -63,11 +63,15 @@ void MainWindowPrivate::calculate_cell_size()
 
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            // Center on cell
-            items[y][x]->setPos(x * cell_wid + (cell_wid - font_wid) / 2,
-                                y * cell_hgt + (cell_hgt - font_hgt) / 2);
-            items_g[y][x]->setPos(x * cell_wid + (cell_wid - tile_wid) / 2,
-                                  y * cell_hgt + (cell_hgt - tile_hgt) / 2);
+            // Center text on cell
+            int off_x = (cell_wid - font_wid) / 2;
+            if (off_x < 0) off_x = 0;
+            int off_y = (cell_hgt - font_hgt) / 2;
+            if (off_y < 0) off_y = 0;
+            items[y][x]->setPos(x * cell_wid + off_x, y * cell_hgt + off_y);
+
+            // Tile position. They are scaled so no offset
+            items_g[y][x]->setPos(x * cell_wid, y * cell_hgt);
         }
     }
 }
@@ -107,9 +111,12 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         destroy_tiles();
         tiles.clear();
         tile_map = pix;
-        tiles.insert("23x22", blank_pix);
+
+        tiles.insert("23x22", blank_pix); // TODO read pref files
+
         rebuild_tiles();
     }
+    // Go to text mode
     else {
         tile_hgt = hgt;
         tile_wid = wid;
@@ -131,7 +138,12 @@ void MainWindowPrivate::rebuild_tiles()
         if (coords.size() != 2) continue;
         int x = coords.at(1).toInt();
         int y = coords.at(0).toInt();
+        // Grab a chunk from the tile map
         QPixmap pix = tile_map.copy(x * tile_wid, y * tile_hgt, tile_wid, tile_hgt);
+        // Scale if necessary
+        if ((cell_wid != tile_wid) || (cell_hgt != tile_hgt)) {
+            pix = pix.scaled(QSize(cell_wid, cell_hgt));
+        }
         tiles[k] = pix;
     }
 }
@@ -150,6 +162,8 @@ void MainWindowPrivate::set_font(QFont _font)
             items[y][x]->setFont(font);
         }
     }
+
+    rebuild_tiles();
 }
 
 void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view)
@@ -237,9 +251,9 @@ void MainWindowPrivate::redraw_cell(int y, int x)
     items[y][x]->setText(QString(square_char));
     items[y][x]->setBrush(QBrush(square_color));
 
-    items_g[y][x]->setPixmap(tiles["23x22"]);
-
     if (use_graphics) {
+        items_g[y][x]->setPixmap(tiles["23x22"]);
+
         items[y][x]->setVisible(square_char != '#');
         items_g[y][x]->setVisible(square_char == '#');
     }
