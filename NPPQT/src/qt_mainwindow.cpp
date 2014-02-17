@@ -1,4 +1,5 @@
 #include <QtWidgets>
+#include <QHash>
 
 #include "src/npp.h"
 #include "src/qt_mainwindow.h"
@@ -13,8 +14,13 @@ public:
     QGraphicsScene *scene;
     QGraphicsView *view;
     QGraphicsSimpleTextItem *items[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
+    QGraphicsPixmapItem *items_g[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
     int cell_hgt, cell_wid;
     QFont font;
+
+    // The key must me strings of the form "[row]x[col]"
+    QHash<QString, QPixmap *> tiles;
+    QPixmap *tile_map;
 
     void init_scene(QGraphicsScene *_scene, QGraphicsView *_view);
     void wipe();
@@ -22,7 +28,49 @@ public:
     void redraw_cell(int y, int x);
     bool panel_contains(int y, int x);
     void set_font(QFont _font);
+    void set_graphic_mode(int mode);
+    void destroy_tiles();
+    void rebuild_tiles();
 };
+
+void MainWindowPrivate::destroy_tiles()
+{
+    QList<QString> keys = tiles.keys();
+    for (int i = 0; i < keys.size(); i++) {
+        QString k = keys.at(i);
+        QPixmap *pix = tiles.value(k);
+        if (pix) delete pix;
+        tiles[k] = 0;
+    }
+}
+
+void MainWindowPrivate::set_graphic_mode(int mode)
+{
+    cell_hgt = cell_wid = 32;
+
+    if (tile_map) {
+        delete tile_map;
+        tile_map = 0;
+    }
+
+    destroy_tiles();
+    tiles.clear();
+
+    tiles.insert("32x32", 0);
+
+    rebuild_tiles();
+
+    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
+        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
+            //items[y][x]->setVisible(false);
+        }
+    }
+}
+
+void MainWindowPrivate::rebuild_tiles()
+{
+
+}
 
 void MainWindowPrivate::set_font(QFont _font)
 {
@@ -49,10 +97,14 @@ void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view)
     QBrush brush(QColor("black"));
     scene->setBackgroundBrush(brush);
 
+    tile_map = 0;
+
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
             items[y][x] = scene->addSimpleText(QString(" "));
             items[y][x]->setPos(x * cell_wid, y * cell_hgt);
+
+            items_g[y][x] = 0;
         }
     }
 }
@@ -141,6 +193,7 @@ MainWindow::MainWindow()
     set_map();
     priv->init_scene(dungeon_scene, graphics_view);
     priv->set_font(cur_font);
+    priv->set_graphic_mode(GRAPHICS_DAVID_GERVAIS);
 
     setWindowFilePath(QString());
 }
