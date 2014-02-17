@@ -18,9 +18,10 @@ public:
     int cell_hgt, cell_wid;
     QFont font;
 
+    QPixmap blank_pix;
     // The key must me strings of the form "[row]x[col]"
-    QHash<QString, QPixmap *> tiles;
-    QPixmap *tile_map;
+    QHash<QString, QPixmap> tiles;
+    QPixmap tile_map;
 
     void init_scene(QGraphicsScene *_scene, QGraphicsView *_view);
     void wipe();
@@ -38,9 +39,14 @@ void MainWindowPrivate::destroy_tiles()
     QList<QString> keys = tiles.keys();
     for (int i = 0; i < keys.size(); i++) {
         QString k = keys.at(i);
-        QPixmap *pix = tiles.value(k);
-        if (pix) delete pix;
-        tiles[k] = 0;
+        tiles[k] = blank_pix;
+    }
+    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
+        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
+            if (items_g[y][x]) {
+                items_g[y][x]->setPixmap(blank_pix);
+            }
+        }
     }
 }
 
@@ -48,28 +54,42 @@ void MainWindowPrivate::set_graphic_mode(int mode)
 {
     cell_hgt = cell_wid = 32;
 
-    if (tile_map) {
-        delete tile_map;
-        tile_map = 0;
-    }
+    tile_map = blank_pix;
+
+    tile_map = QPixmap(NPP_DIR_GRAF.append("32x32.png"));
 
     destroy_tiles();
     tiles.clear();
 
-    tiles.insert("32x32", 0);
+    tiles.insert("32x32", blank_pix);
+    tiles.insert("64x64", blank_pix);
 
     rebuild_tiles();
 
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            //items[y][x]->setVisible(false);
+            items[y][x]->setVisible(false);
+
+            items_g[y][x]->setVisible(true);
+            items_g[y][x]->setPos(x * cell_wid, y * cell_hgt);
         }
     }
 }
 
 void MainWindowPrivate::rebuild_tiles()
 {
+    QList<QString> keys = tiles.keys();
+    for (int i = 0; i < keys.size(); i++) {
+        QString k = keys.at(i);
+        QList<QString> coords = k.split("x");
+        if (coords.size() != 2) continue;
+        int x = coords.at(1).toInt();
+        int y = coords.at(0).toInt();
+        QPixmap pix = tile_map.copy(x, y, cell_wid, cell_hgt);
+        tiles[k] = pix;
 
+        items_g[i][0]->setPixmap(tiles[k]);
+    }
 }
 
 void MainWindowPrivate::set_font(QFont _font)
@@ -97,14 +117,16 @@ void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view)
     QBrush brush(QColor("black"));
     scene->setBackgroundBrush(brush);
 
-    tile_map = 0;
+    blank_pix = QPixmap(1, 1);
+    blank_pix.fill(QColor("black"));
 
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
             items[y][x] = scene->addSimpleText(QString(" "));
             items[y][x]->setPos(x * cell_wid, y * cell_hgt);
 
-            items_g[y][x] = 0;
+            items_g[y][x] = scene->addPixmap(blank_pix);
+            items_g[y][x]->setVisible(false);
         }
     }
 }

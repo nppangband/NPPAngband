@@ -130,7 +130,8 @@ void create_directories()
 {
     NPP_DIR_BASE = QDir::currentPath();
     NPP_DIR_BASE.append ("/NPPQT");
-    NPP_DIR_EDIT = NPP_DIR_HELP = NPP_DIR_ICON = NPP_DIR_PREF = NPP_DIR_SAVE = NPP_DIR_BONE = NPP_DIR_USER = NPP_DIR_BASE;
+    NPP_DIR_EDIT = NPP_DIR_HELP = NPP_DIR_ICON = NPP_DIR_PREF = NPP_DIR_GRAF =
+            NPP_DIR_SAVE = NPP_DIR_BONE = NPP_DIR_USER = NPP_DIR_BASE;
     NPP_DIR_EDIT.append ("/lib/edit/");
     NPP_DIR_BONE.append ("/lib/bone/");
     NPP_DIR_HELP.append ("/lib/help/");
@@ -138,6 +139,7 @@ void create_directories()
     NPP_DIR_PREF.append ("/lib/pref/");
     NPP_DIR_SAVE.append ("/lib/save/");
     NPP_DIR_SAVE.append ("/lib/user/");
+    NPP_DIR_GRAF.append ("/lib/xtra/graf/");
 }
 
 
