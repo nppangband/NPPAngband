@@ -64,7 +64,8 @@ SOURCES +=  src/qt_main.cpp\
             src/target.cpp \
             src/timed.cpp \
             src/utilities.cpp \
-            src/dungeonbox.cpp
+            src/dungeonbox.cpp \
+    src/prefs.cpp
 
 
 

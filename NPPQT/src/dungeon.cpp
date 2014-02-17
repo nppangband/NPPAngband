@@ -133,15 +133,53 @@ static void remove_ironman_items(void)
     }
 }
 
+#if 0
+/*
+ * Reset the "visual" lists
+ *
+ * This involves resetting various things to their "default" state.
+ *
+ * If the "prefs" flag is TRUE, then we will also load the appropriate
+ * "user pref file" based on the current setting of the "use_graphics"
+ * flag.  This is useful for switching "graphics" on/off.
+ *
+ * The features, objects, and monsters, should all be encoded in the
+ * relevant "font.pref" and/or "graf.prf" files.  XXX XXX XXX
+ *
+ * The "prefs" parameter is no longer meaningful.  XXX XXX XXX
+ */
+void reset_visuals(bool unused)
+{
+    /* Graphic symbols */
+    if (use_graphics)
+    {
+        if (game_mode == GAME_NPPMORIA) process_pref_file("m_graf.prf");
+
+        /* Process "graf.prf" */
+        else process_pref_file("graf.prf");
+    }
+
+    /* Normal symbols */
+    else
+    {
+        /* Process "font.prf" */
+        process_pref_file("font.prf");
+    }
+
+}
+#endif
+
 void launch_game()
 {
     /* Hack -- Enter wizard mode */
+    // TODO
     //if (arg_wizard && enter_wizard_mode()) p_ptr->wizard = TRUE;
 
     /* Flavor the objects */
     flavor_init();
 
     /* Process some user pref files */
+    // TODO
     //process_some_user_pref_files();
 
     /* Remove ironman ego-items if needed */
