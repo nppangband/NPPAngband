@@ -246,6 +246,8 @@ void MainWindow::save_and_close()
 
     // close game
     cleanup_npp_games();
+
+    priv->wipe();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
