@@ -140,7 +140,12 @@ static void pref_header(QTextStream &fff, const QString mark)
     fff << QString("# Don't edit them; changes will be deleted and replaced automatically.") << endl;
 }
 
-#if 0
+static int read_number(QString text)
+{
+    bool ok;
+    if (text.startsWith("0x")) return text.toInt(&ok, 16);
+    return text.toInt();
+}
 
 /*
  * Parse a sub-file of the "extra info" (format shown below)
@@ -203,56 +208,71 @@ static void pref_header(QTextStream &fff, const QString mark)
  * Specify the attr/char values for "flavors" by flavors index.
  *   L:<num>:<a>/<c>
  */
-errr process_pref_file_command(char *buf)
+int process_pref_file_command(QString buf)
 {
     long i, j, n1, n2, sq;
 
     char c;
     byte a;
 
-    char *zz[16];
-
+    QList<QString> tokens;
 
     /* Skip "empty" lines */
-    if (!buf[0]) return (0);
+    if (buf.length() == 0) return (0);
 
     /* Skip "blank" lines */
-    if (isspace((unsigned char)buf[0])) return (0);
+    if (buf[0].isSpace()) return (0);
 
     /* Skip comments */
     if (buf[0] == '#') return (0);
 
-    /* Paranoia */
-    /* if (strlen(buf) >= 1024) return (1); */
-
     /* Require "?:*" format */
-    if (buf[1] != ':') return (1);
-
+    if ((buf.length() < 2) || (buf[1] != ':')) return (1);
 
     /* Process "R:<num>:<a>/<c>" -- attr/char for monster races */
     if (buf[0] == 'R')
     {
-        if (tokenize(buf+2, 3, zz) == 3)
+        tokens = buf.mid(2).split(":");
+
+        if (tokens.size() == 3)
         {
             monster_race *r_ptr;
-            i = strtol(zz[0], NULL, 0);
+            i = tokens.at(0).toInt();
             if ((i < 0) || (i >= (long)z_info->r_max)) return (1);
             r_ptr = &r_info[i];
 
-            /* Get monster color */
-            if (read_byte_or_char(zz[1], &a, &c))
-                  r_ptr->x_attr = a;
-            else  r_ptr->x_attr = (byte)color_char_to_attr(c);
+            int y = read_number(tokens.at(1)) & 0x7F;
+            int x = read_number(tokens.at(2)) & 0x7F;
 
-            /* Get monster symbol */
-            if (read_byte_or_char(zz[2], &a, &c))
-                  r_ptr->x_char = (char)a;
-            else  r_ptr->x_char = c;
+            r_ptr->tile_id = QString("%1x%2").arg(y).arg(x);
 
             return (0);
         }
     }
 
+    if (buf[0] == 'F')
+    {
+        tokens = buf.mid(2).split(":");
+
+        if (tokens.size() == 3)
+        {
+            feature_type *f_ptr;
+            i = tokens.at(0).toInt();
+            if ((i < 0) || (i >= (long)z_info->f_max)) return (1);
+            f_ptr = &f_info[i];
+
+            int y = read_number(tokens.at(1)) & 0x7F;
+            int x = read_number(tokens.at(2)) & 0x7F;
+
+            f_ptr->tile_id = QString("%1x%2").arg(y).arg(x);
+
+            return (0);
+        }
+    }
+
+    return 0;
+
+#if 0
     /* Process "B:<k_idx>:inscription */
     else if (buf[0] == 'B')
     {
@@ -674,228 +694,138 @@ errr process_pref_file_command(char *buf)
         }
     }
 
+#endif
 
     /* Failure */
     return (1);
 }
 
-
-/*
- * Helper function for "process_pref_file()"
- *
- * Input:
- *   v: output buffer array
- *   f: final character
- *
- * Output:
- *   result
- */
-static cptr process_pref_file_expr(char **sp, char *fp)
+class Parser
 {
-    cptr v;
+public:
+    QString buffer;
+    QString cur_token;
+    QString saved_token;
 
-    char *b;
-    char *s;
+    Parser(QString _buffer);
+    bool get_token();
+    QString parse();
+    void unget_token();
+};
 
-    char b1 = '[';
-    char b2 = ']';
-
-    char f = ' ';
-
-    /* Initial */
-    s = (*sp);
-
-    /* Skip spaces */
-    while (isspace((unsigned char)*s)) s++;
-
-    /* Save start */
-    b = s;
-
-    /* Default */
-    v = "?o?o?";
-
-    /* Analyze */
-    if (*s == b1)
-    {
-        const char *p;
-        const char *t;
-
-        /* Skip b1 */
-        s++;
-
-        /* First */
-        t = process_pref_file_expr(&s, &f);
-
-        /* Oops */
-        if (!*t)
-        {
-            /* Nothing */
-        }
-
-        /* Function: IOR */
-        else if (streq(t, "IOR"))
-        {
-            v = "0";
-            while (*s && (f != b2))
-            {
-                t = process_pref_file_expr(&s, &f);
-                if (*t && !streq(t, "0")) v = "1";
-            }
-        }
-
-        /* Function: AND */
-        else if (streq(t, "AND"))
-        {
-            v = "1";
-            while (*s && (f != b2))
-            {
-                t = process_pref_file_expr(&s, &f);
-                if (*t && streq(t, "0")) v = "0";
-            }
-        }
-
-        /* Function: NOT */
-        else if (streq(t, "NOT"))
-        {
-            v = "1";
-            while (*s && (f != b2))
-            {
-                t = process_pref_file_expr(&s, &f);
-                if (*t && !streq(t, "0")) v = "0";
-            }
-        }
-
-        /* Function: EQU */
-        else if (streq(t, "EQU"))
-        {
-            v = "1";
-            if (*s && (f != b2))
-            {
-                t = process_pref_file_expr(&s, &f);
-            }
-            while (*s && (f != b2))
-            {
-                p = t;
-                t = process_pref_file_expr(&s, &f);
-                if (*t && !streq(p, t)) v = "0";
-            }
-        }
-
-        /* Function: LEQ */
-        else if (streq(t, "LEQ"))
-        {
-            v = "1";
-            if (*s && (f != b2))
-            {
-                t = process_pref_file_expr(&s, &f);
-            }
-            while (*s && (f != b2))
-            {
-                p = t;
-                t = process_pref_file_expr(&s, &f);
-                if (*t && (strcmp(p, t) >= 0)) v = "0";
-            }
-        }
-
-        /* Function: GEQ */
-        else if (streq(t, "GEQ"))
-        {
-            v = "1";
-            if (*s && (f != b2))
-            {
-                t = process_pref_file_expr(&s, &f);
-            }
-            while (*s && (f != b2))
-            {
-                p = t;
-                t = process_pref_file_expr(&s, &f);
-                if (*t && (strcmp(p, t) <= 0)) v = "0";
-            }
-        }
-
-        /* Oops */
-        else
-        {
-            while (*s && (f != b2))
-            {
-                t = process_pref_file_expr(&s, &f);
-            }
-        }
-
-        /* Verify ending */
-        if (f != b2) v = "?x?x?";
-
-        /* Extract final and Terminate */
-        if ((f = *s) != '\0') *s++ = '\0';
-    }
-
-    /* Other */
-    else
-    {
-        /* Accept all printables except spaces and brackets */
-        while (my_isprint((unsigned char)*s) && !strchr(" []", *s)) ++s;
-
-        /* Extract final and Terminate */
-        if ((f = *s) != '\0') *s++ = '\0';
-
-        /* Variable */
-        if (*b == '$')
-        {
-            /* System */
-            if (streq(b+1, "SYS"))
-            {
-                v = ANGBAND_SYS;
-            }
-
-            /* Graphics */
-            else if (streq(b+1, "GRAF"))
-            {
-                v = ANGBAND_GRAF;
-            }
-
-            /* Race */
-            else if (streq(b+1, "RACE"))
-            {
-                v = p_name + rp_ptr->name;
-            }
-
-            /* Class */
-            else if (streq(b+1, "CLASS"))
-            {
-                v = c_name + cp_ptr->name;
-            }
-
-            /* Player */
-            else if (streq(b+1, "PLAYER"))
-            {
-                v = op_ptr->base_name;
-            }
-
-            /* Game version */
-            else if (streq(b+1, "VERSION"))
-            {
-                v = VERSION_STRING;
-            }
-        }
-
-        /* Constant */
-        else
-        {
-            v = b;
-        }
-    }
-
-    /* Save */
-    (*fp) = f;
-
-    /* Save */
-    (*sp) = s;
-
-    /* Result */
-    return (v);
+void Parser::unget_token()
+{
+    saved_token = cur_token;
 }
-#endif
 
+Parser::Parser(QString _buffer)
+{
+    buffer = _buffer;
+}
+
+bool Parser::get_token()
+{
+    // Return previous token
+    if (saved_token.length() > 0) {
+        cur_token = saved_token;
+        saved_token.clear();
+        return true;
+    }
+
+    int n = buffer.length();
+    int i = 0;
+
+    // Discard whitespace
+    while ((i < n) && buffer[i].isSpace()) i++;    
+    if (i >= n) return false;
+    buffer = buffer.mid(i);
+
+    // Delimiters
+    if (buffer[0] == '[' || buffer[0] == ']') {
+        cur_token = QString(buffer[0]);
+        buffer = buffer.mid(1);
+        return true;
+    }
+
+    // Collect token chars
+    i = 1;
+    while ((i < n) && (buffer[i] != '[') && (buffer[i] != ']') && !buffer[i].isSpace()) {
+        i++;
+    }
+
+    cur_token = buffer.mid(0, i);
+    buffer = buffer.mid(i);
+
+    // Special tokens
+    if (cur_token.compare("$RACE") == 0) {
+        cur_token = rp_ptr->pr_name;
+    }
+    else if (cur_token.compare("$CLASS") == 0) {
+        cur_token = cp_ptr->cl_name;
+    }
+
+    return true;
+}
+
+QString Parser::parse()
+{
+    if (!get_token()) return "0";
+
+    if (cur_token[0] == '[') {
+        if (!get_token()) return "0";
+
+        QString op = cur_token;
+
+        QList<QString> args;
+
+        while (get_token() && (cur_token[0] != ']')) {
+            unget_token();
+            QString text = parse();
+            args.append(text);
+        }
+
+        if (op.compare("EQU") == 0) {
+            if (args.size() < 2) return "0";
+            QString x = args.at(0);
+            for (int i = 1; i < args.size(); i++) {
+                QString y = args.at(i);
+                if (x.compare(y)) return "0";
+            }
+            return "1";
+        }
+
+        if (op.compare("AND") == 0) {
+            if (args.size() < 2) return "0";
+            for (int i = 0; i < args.size(); i++) {
+                QString x = args.at(i);
+                if (x.compare("0") == 0) return "0";
+            }
+            return "1";
+        }
+
+        if (op.compare("OR") == 0) {
+            if (args.size() < 2) return "0";
+            for (int i = 0; i < args.size(); i++) {
+                QString x = args.at(i);
+                if (x.compare("0") != 0) return "1";
+            }
+            return "0";
+        }
+
+        if (op.compare("NOT") == 0) {
+            if (args.size() != 1) return "0";
+            for (int i = 0; i < args.size(); i++) {
+                QString x = args.at(i);
+                if (x.compare("0") == 0) return "1";
+            }
+            return "0";
+        }
+
+        return "0";
+    }
+
+    return cur_token;
+}
 
 /*
  * Open the "user pref file" and parse it.
@@ -943,41 +873,33 @@ static int process_pref_file_aux(QString name)
         {
             buf = buf.mid(2);
 
-#if 0
-            char f;
-            cptr v;
-            char *s;
+            Parser p(buf);
 
-            /* Start */
-            s = buf + 2;
-
-            /* Parse the expr */
-            v = process_pref_file_expr(&s, &f);
+            QString v = p.parse();
 
             /* Set flag */
-            bypass = (streq(v, "0") ? TRUE : FALSE);
+            bypass = (v.compare("0") == 0);
 
-            /* Continue */
             continue;
-#endif
         }
 
         /* Apply conditionals */
         if (bypass) continue;
 
-
         /* Process "%:<file>" */
         if (buf.startsWith("%:"))
         {
             /* Process that file if allowed */
-            (void)process_pref_file(buf.mid(2));
+            err = process_pref_file(buf.mid(2));
+
+            if (err) return err;
 
             /* Continue */
             continue;
         }
 
         /* Process the line */
-        //err = process_pref_file_command(buf);
+        err = process_pref_file_command(buf);
 
         /* Oops */
         if (err) break;

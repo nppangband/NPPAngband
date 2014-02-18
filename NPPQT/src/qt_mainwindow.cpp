@@ -109,7 +109,7 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         calculate_cell_size();
         destroy_tiles();
         tile_map = pix;
-        if (game_mode != GAME_MODE_UNDEFINED) init_graphics();
+        if (character_loaded) init_graphics();
 
         pop_up_message_box(QString("Loading davig gervais tiles: %1 milli").arg(QString::number(t1.elapsed())));
     }

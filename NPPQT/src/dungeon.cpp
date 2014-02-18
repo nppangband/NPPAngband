@@ -182,6 +182,8 @@ void launch_game()
     // TODO
     //process_some_user_pref_files();
 
+    init_graphics();
+
     /* Remove ironman ego-items if needed */
     if (!adult_ironman && !adult_no_stores)
     {

@@ -1197,7 +1197,6 @@ void init_npp_games(void)
     if (init_alloc()) quit_npp_games(QObject::tr("Cannot initialize alloc stuff"));
 
     /*** Load default user pref files ***/
-    init_graphics();
 
 
     /* Initialize randart tables info */
@@ -1589,48 +1588,12 @@ void init_graphics()
 {
     clear_graphics();
 
-    QString fname("/lib/pref/graf-dvg.prf");
+    QString fname("graf-dvg.prf");
     if (game_mode == GAME_NPPMORIA) {
         fname.clear();
-        fname.append("/lib/pref/m_graf-dvg.prf");
+        fname.append("m_graf-dvg.prf");
     }
 
-    fname.prepend(NPP_DIR_BASE);
-
-    QFile file(fname);
-    if (!file.open(QIODevice::ReadOnly)) return;
-
-    QTextStream in(&file);
-
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-
-        if (line.startsWith("F:")) {
-            QList<QString> parts = line.split(":");
-
-            if (parts.size() != 4) continue;
-
-            int f_idx = parts[1].toInt();
-            int row = read_coordinate(parts[2]) & 0x7F;
-            int col = read_coordinate(parts[3]) & 0x7F;
-            QString key = QString("%1x%2").arg(row).arg(col);
-
-            f_info[f_idx].tile_id = key;
-        }
-        else if (line.startsWith("R:")) {
-            QList<QString> parts = line.split(":");
-
-            if (parts.size() != 4) continue;
-
-            int r_idx = parts[1].toInt();
-            int row = read_coordinate(parts[2]) & 0x7F;
-            int col = read_coordinate(parts[3]) & 0x7F;
-            QString key = QString("%1x%2").arg(row).arg(col);
-
-            r_info[r_idx].tile_id = key;
-        }
-    }
-
-    file.close();
+    process_pref_file(fname);
 }
 
