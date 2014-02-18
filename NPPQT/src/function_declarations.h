@@ -10,12 +10,7 @@
 
 
 // cmd1.cpp
-
-extern void search(void);
-extern bool put_object_in_inventory(object_type *o_ptr);
-extern void do_cmd_pickup_from_pile(bool pickup, bool message);
 extern void py_pickup_gold(void);
-extern void py_pickup(bool pickup);
 extern s16b move_player(int dir, int jumping);
 
 //calcs.cpp
@@ -61,6 +56,7 @@ extern void feature_kind_track(int f_idx);
 extern void disturb(int stop_search, int unused_flag);
 
 // cmd4.cpp
+extern void do_cmd_feeling(void);
 extern void create_notes_file(void);
 extern void delete_notes_file(void);
 
@@ -73,7 +69,7 @@ extern int get_spell_index(int sval, int index);
 extern void dungeon_change_level(int dlev);
 extern void launch_game();
 
-/* effect.cpp */
+/* dun_effect.cpp */
 extern int scan_effects_grid(int *effects, int size, int y, int x);
 extern void effect_prep(int x_idx, byte type, u16b f_idx, byte y, byte x, byte countdown,
                             byte repeats, u16b power, s16b source, u16b flags);
@@ -97,7 +93,7 @@ extern void excise_effect_idx(int x_idx);
 extern s16b x_pop(void);
 extern void process_effects(void);
 
-/* feature.c */
+/* dun_feature.c */
 extern QString feature_desc(u16b feat, bool add_prefix,	bool get_mimic);
 extern int feat_adjust_combat_for_player(int chance, bool being_attacked);
 extern int feat_adjust_combat_for_monster(const monster_type *m_ptr,
@@ -140,7 +136,7 @@ extern QString describe_one_level_flag(u32b flag);
 extern void debug_all_level_flags(u32b flags);
 
 
-//generate.cpp
+// dun_generate.cpp
 extern void place_random_stairs(int y, int x);
 extern void get_mon_hook(byte theme);
 extern byte get_nest_theme(int nestlevel, bool quest_theme);
@@ -153,6 +149,8 @@ extern void generate_cave(void);
 extern void set_dungeon_type(u16b dungeon_type);
 
 
+//dun_process.cpp
+extern void process_world(void);
 
 /* init2.c */
 extern void init_npp_games(void);
@@ -166,8 +164,8 @@ extern bool load_gamemode(void);
 //mon_cast.cpp
 extern int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x);
 extern bool cave_exist_mon(const monster_race *r_ptr, int y, int x, bool occupied_ok, bool damage_ok, bool can_dig);
-extern bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px);
 bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px);
+
 
 //mon_classes.cpp
 
@@ -187,27 +185,6 @@ extern void monster_death(int m_idx, int who);
 extern bool mon_take_hit(int m_idx, int dam, bool *fear, QString note, int who);
 
 // mon_move.cpp
-extern void cloud_surround(int r_idx, int *typ, int *dam, int *rad);
-extern void find_range(monster_type *m_ptr);
-extern int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash);
-extern void apply_monster_trap(int f_idx, int y, int x, byte mode);
-extern bool make_move(monster_type *m_ptr, int *ty, int *tx, bool fear, bool *bash);
-extern bool get_move(monster_type *m_ptr, int *ty, int *tx, bool *fear, bool must_use_target);
-extern s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash);
-
-
-//mon_player_ghost.cpp
-extern void prepare_ghost_name(void);
-extern bool prepare_ghost(int r_idx);
-extern void ghost_challenge(void);
-extern void remove_player_ghost(void);
-extern void delete_player_ghost_entry(void);
-extern void add_player_ghost_entry(void);
-extern void load_player_ghost_file(void);
-extern void save_player_ghost_file(void);
-
-// mon_process.cpp
-extern void process_entities(void);
 extern void find_range(monster_type *m_ptr);
 extern bool make_move(monster_type *m_ptr, int *ty, int *tx, bool fear, bool *bash);
 extern s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash);
@@ -407,11 +384,15 @@ extern int weapon_throw_adjust(const object_type *o_ptr, u32b f3, int *plus, boo
 extern void do_cmd_throw(int code, cmd_arg args[]);
 extern void textui_cmd_throw(void);
 
-
-
-//player_process.cpp
-extern void process_player_terrain_damage(void);
-extern void process_player(void);
+//player_ghost.cpp
+extern void prepare_ghost_name(void);
+extern bool prepare_ghost(int r_idx);
+extern void ghost_challenge(void);
+extern void remove_player_ghost(void);
+extern void delete_player_ghost_entry(void);
+extern void add_player_ghost_entry(void);
+extern void load_player_ghost_file(void);
+extern void save_player_ghost_file(void);
 
 // player_process
 extern void process_player_terrain_damage(void);
@@ -493,12 +474,6 @@ extern bool fire_bolt(int typ, int dir, int dam);
 extern bool fire_beam(int typ, int dir, int dam, u32b flg);
 extern bool fire_bolt_or_beam(int prob, int typ, int dir, int dam);
 extern bool beam_chain(int gf_type, int dam, int max_hits, int decrement);
-extern void mon_cloud(int m_idx, int typ, int dam, int rad);
-extern void mon_bolt(int m_idx, int typ, int dam, u32b flg);
-extern void mon_bolt_no_effect(int m_idx, int typ, int dam);
-extern void mon_beam(int m_idx, int typ, int dam, int range);
-extern void mon_ball(int m_idx, int typ, int dam, int rad, int py, int px);
-extern void mon_arc(int m_idx, int typ, bool noharm, int dam, int rad, int degrees_of_arc);
 
 
 /* quest.c */
@@ -546,7 +521,6 @@ extern bool quest_fail_immediately(void);
 extern bool quest_might_fail_now(void);
 
 // quest_process.cpp
-extern void do_cmd_quest(void);
 extern void process_arena_quest(void);
 extern void process_labyrinth_quest(void);
 extern void process_wilderness_quest(void);
@@ -683,6 +657,9 @@ extern void do_cmd_stash(int command, cmd_arg args[]);
 extern void do_cmd_store(int command, cmd_arg args[]);
 extern void store_maint(int which);
 extern void store_init(int which);
+
+// sound.cpp
+extern void sound(int val);
 
 //tables.cpp
 extern const byte moria_class_level_adj[MORIA_MAX_CLASS][MORIA_MAX_LEV_ADJ];

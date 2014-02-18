@@ -348,7 +348,7 @@ static bool other_orb_or_ball(int y, int x, int typ, int rad, int dam, bool orb)
     if (rad > 9) rad = 9;
 
     /* Cast a ball */
-    return (0); //todo (project(SOURCE_EFFECT, rad, y, x, p_ptr->py, p_ptr->px, dam, typ, flg,   0, source_diameter));
+    return (project(SOURCE_EFFECT, rad, y, x, p_ptr->py, p_ptr->px, dam, typ, flg,   0, source_diameter));
 }
 
 

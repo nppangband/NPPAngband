@@ -579,7 +579,7 @@ static s16b process_monster(monster_type *m_ptr)
             if (multiply_monster(dungeon_info[m_ptr->fy][m_ptr->fx].monster_idx, FALSE))
             {
                 /* Make a sound */
-                // TODO sound(MSG_MULTIPLY);
+                sound(MSG_MULTIPLY);
 
                 /* Take note if visible */
                 if (m_ptr->ml)

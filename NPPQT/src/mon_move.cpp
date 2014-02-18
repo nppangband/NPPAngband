@@ -3237,7 +3237,6 @@ s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash)
                 }
             }
 
-
             // TODO (void)make_attack_normal(m_ptr);
         }
 
