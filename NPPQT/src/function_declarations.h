@@ -153,6 +153,7 @@ extern void set_dungeon_type(u16b dungeon_type);
 extern void process_world(void);
 
 /* init2.c */
+extern void clear_graphics();
 extern void init_graphics();
 extern void init_npp_games(void);
 extern void cleanup_npp_games(void);

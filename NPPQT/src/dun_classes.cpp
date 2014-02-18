@@ -93,6 +93,11 @@ void dungeon_type::dungeon_square_wipe()
     effect_char = '\0';
     monster_color.setRgb(0,0,0,0);
     monster_char = '\0';
+
+    monster_tile.clear();
+    object_tile.clear();
+    dun_tile.clear();
+    effect_tile.clear();
 }
 
 

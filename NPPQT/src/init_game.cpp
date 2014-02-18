@@ -1564,7 +1564,7 @@ int read_coordinate(QString text)
     return text.toInt();
 }
 
-void init_graphics()
+void clear_graphics()
 {
     for (int i = 0; i < z_info->f_max; i++) {
         f_info[i].tile_id.clear();
@@ -1573,6 +1573,21 @@ void init_graphics()
     for (int i = 0; i < z_info->r_max; i++) {
         r_info[i].tile_id.clear();
     }
+
+    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
+        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
+            dungeon_type *d_ptr = &dungeon_info[y][x];
+            d_ptr->monster_tile.clear();
+            d_ptr->object_tile.clear();
+            d_ptr->dun_tile.clear();
+            d_ptr->effect_tile.clear();
+        }
+    }
+}
+
+void init_graphics()
+{
+    clear_graphics();
 
     QString fname("/lib/pref/graf-dvg.prf");
     if (game_mode == GAME_NPPMORIA) {

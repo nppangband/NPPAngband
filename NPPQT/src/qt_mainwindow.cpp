@@ -45,8 +45,10 @@ void MainWindowPrivate::destroy_tiles()
 
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            items_g[y][x]->setPixmap(blank_pix);
-            b_items_g[y][x]->setPixmap(blank_pix);
+            //items_g[y][x]->setPixmap(blank_pix);
+            items_g[y][x]->setVisible(false);
+            //b_items_g[y][x]->setPixmap(blank_pix);
+            b_items_g[y][x]->setVisible(false);
         }
     }
 }
@@ -93,6 +95,9 @@ void MainWindowPrivate::set_graphic_mode(int mode)
     }
 
     if (fname.length() > 0) {
+        QTime t1;
+        t1.start();
+
         fname.prepend(NPP_DIR_GRAF);
         QPixmap pix = QPixmap(fname);
         if (pix.isNull()) {
@@ -105,6 +110,8 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         destroy_tiles();
         tile_map = pix;
         if (game_mode != GAME_MODE_UNDEFINED) init_graphics();
+
+        //pop_up_message_box(QString::number(t1.elapsed()));
     }
     // Go to text mode
     else {
@@ -113,14 +120,17 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         calculate_cell_size();
         destroy_tiles();
         tile_map = blank_pix;
+        clear_graphics();
     }
 
     use_graphics = mode;
     view->update();
 }
 
+// Tile creation on demmand
 void MainWindowPrivate::rebuild_tile(QString key)
 {
+    // Already created
     if (tiles.contains(key)) return;
 
     QList<QString> coords = key.split("x");
@@ -190,9 +200,15 @@ void MainWindowPrivate::wipe()
 {
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            items[y][x]->setText(QString(" "));
+            /*
+            items[y][x]->setText(QString(" "));            
             items_g[y][x]->setPixmap(blank_pix);
             b_items_g[y][x]->setPixmap(blank_pix);
+            */
+
+            items[y][x]->setVisible(false);
+            items_g[y][x]->setVisible(false);
+            b_items_g[y][x]->setVisible(false);
         }
     }
 
@@ -201,6 +217,10 @@ void MainWindowPrivate::wipe()
 
 void MainWindowPrivate::redraw()
 {
+    QTime t1;
+
+    t1.start();
+
     wipe();
 
     // Adjust scrollbars
@@ -212,6 +232,9 @@ void MainWindowPrivate::redraw()
             redraw_cell(y, x);
         }
     }
+
+    // TODO comment this out
+    pop_up_message_box(QString("Redrawing: %1 milli").arg(QString::number(t1.elapsed())));
 }
 
 bool MainWindowPrivate::panel_contains(int y, int x)
@@ -231,18 +254,23 @@ void MainWindowPrivate::redraw_cell(int y, int x)
     QColor square_color = d_ptr->dun_color;
     bool empty = true;
     QString key2;
-    if (d_ptr->has_monster())
+
+    // TODO REMOVE THIS!!! JUST FOR TESTING
+    if (d_ptr->monster_idx > 0) {
+        mon_list[d_ptr->monster_idx].ml = true;
+    }
+
+    // Draw visible monsters
+    if (d_ptr->has_monster() && ((d_ptr->monster_idx == -1) || mon_list[d_ptr->monster_idx].ml))
     {
         square_char = d_ptr->monster_char;
         square_color = d_ptr->monster_color;
 
         empty = false;
 
-        if (d_ptr->monster_idx > 0) {
-            int r_idx = mon_list[d_ptr->monster_idx].r_idx;
-            key2 = r_info[r_idx].tile_id;
-        }
+        key2 = d_ptr->monster_tile;
     }
+    // Draw effects
     else if (d_ptr->has_effect())
     {
         square_char = d_ptr->effect_char;
@@ -250,6 +278,7 @@ void MainWindowPrivate::redraw_cell(int y, int x)
 
         empty = false;
     }
+    // Draw objects
     else if (d_ptr->has_object())
     {
         square_char = d_ptr->object_char;
@@ -258,16 +287,12 @@ void MainWindowPrivate::redraw_cell(int y, int x)
         empty = false;
     }
 
-    items[y][x]->setText(QString(square_char));
-    items[y][x]->setBrush(QBrush(square_color));
-
     if (use_graphics) {
         bool done_bg = false;
-        bool done_fg = false;
-        bool do_ascii = false;
+        bool done_fg = false;        
 
-        s16b feat = d_ptr->feat;
-        QString key1 = f_info[feat].tile_id;
+        // Draw background tile
+        QString key1 = d_ptr->dun_tile;
         if (key1.length() > 0) {
             rebuild_tile(key1);
             b_items_g[y][x]->setPixmap(tiles[key1]);
@@ -275,6 +300,7 @@ void MainWindowPrivate::redraw_cell(int y, int x)
         }
         b_items_g[y][x]->setVisible(done_bg);
 
+        // Draw foreground tile
         if (key2.length() > 0) {
            rebuild_tile(key2);
            items_g[y][x]->setPixmap(tiles[key2]);
@@ -282,14 +308,24 @@ void MainWindowPrivate::redraw_cell(int y, int x)
         }
         items_g[y][x]->setVisible(done_fg);
 
-        if (!done_fg && (!empty || !done_bg)) do_ascii = true;
-        items[y][x]->setVisible(do_ascii);
+        // Draw ascii?
+        if (!done_fg && (!empty || !done_bg)) {
+            items[y][x]->setVisible(true);
+            items[y][x]->setText(QString(square_char));
+            items[y][x]->setBrush(QBrush(square_color));
+        }
+        else {
+            items[y][x]->setVisible(false);
+        }
     }
     else {
         items[y][x]->setVisible(true);
+        items[y][x]->setText(QString(square_char));
+        items[y][x]->setBrush(QBrush(square_color));
+
         items_g[y][x]->setVisible(false);
         b_items_g[y][x]->setVisible(false);
-    }
+    }    
 }
 
 // The main function - intitalize the main window and set the menus.
@@ -424,8 +460,8 @@ void MainWindow::save_and_close()
     // close game
     cleanup_npp_games();
 
-    priv->wipe();
     priv->destroy_tiles();
+    priv->wipe();    
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -750,7 +786,7 @@ void MainWindow::load_file(const QString &file_name)
                 update_file_menu_game_active();
                 launch_game();
                 //debug_dungeon();
-                //screen_redraw();
+                //screen_redraw();                
                 priv->redraw();
             }
         }
@@ -764,14 +800,15 @@ void MainWindow::load_file(const QString &file_name)
 
 void MainWindow::launch_birth(bool quick_start)
 {
-    BirthDialog *dlg = new BirthDialog(this);
+    BirthDialog *dlg = new BirthDialog(this);    
+
     dlg->set_quick_start(quick_start);
     if (dlg->run()) {                
         update_file_menu_game_active();
         launch_game();
         save_character();
         //debug_dungeon();
-        //screen_redraw();
+        //screen_redraw();        
         priv->redraw();
     } else {
         cleanup_npp_games();

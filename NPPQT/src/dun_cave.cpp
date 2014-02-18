@@ -815,6 +815,7 @@ static void map_terrain (s16b y, s16b x)
             /* Get attribute and color */
             dun_ptr->dun_char = f_ptr->d_char;
             dun_ptr->dun_color = f_ptr->d_color;
+            dun_ptr->dun_tile = f_ptr->tile_id;
 
             /* Special lighting effects */
             if (view_special_light)
@@ -830,6 +831,7 @@ static void map_terrain (s16b y, s16b x)
             f_ptr = &f_info[FEAT_NONE];
             dun_ptr->dun_color = f_ptr->d_color;
             dun_ptr->dun_char = f_ptr->d_char;
+            dun_ptr->dun_tile = f_ptr->tile_id;
         }
     }
 
@@ -846,6 +848,7 @@ static void map_terrain (s16b y, s16b x)
             f_ptr = &f_info[feat];
             dun_ptr->dun_color = f_ptr->d_color;
             dun_ptr->dun_char = f_ptr->d_char;
+            dun_ptr->dun_tile = f_ptr->tile_id;
 
             /* We have seen the feature */
             f_ptr->f_everseen = TRUE;
@@ -867,6 +870,7 @@ static void map_terrain (s16b y, s16b x)
             f_ptr = &f_info[FEAT_NONE];
             dun_ptr->dun_color = f_ptr->d_color;
             dun_ptr->dun_char = f_ptr->d_char;
+            dun_ptr->dun_tile = f_ptr->tile_id;
         }
     }
 
@@ -890,6 +894,7 @@ static void map_objects (s16b y, s16b x)
     dun_ptr->object_char = ' ';
     dun_ptr->object_color = add_preset_color(TERM_DARK);
     dun_ptr->obj_special_symbol = OBJ_SYMBOL_NONE;
+    dun_ptr->object_tile.clear();
 
     //nothing there
     if (!dun_ptr->has_object()) return;
@@ -954,6 +959,7 @@ static void map_effects (s16b y, s16b x)
 
     dun_ptr->effect_char = ' ';
     dun_ptr->effect_color = add_preset_color(TERM_DARK);
+    dun_ptr->effect_tile.clear();
 
     if (!dun_ptr->has_effect()) return;
     if (!(dun_ptr->cave_info & (CAVE_SEEN | CAVE_MARK))) return;
@@ -1109,6 +1115,7 @@ static void map_monster (s16b y, s16b x)
     dungeon_type *dun_ptr = &dungeon_info[y][x];
     dun_ptr->monster_char = ' ';
     dun_ptr->monster_color = add_preset_color(TERM_DARK);
+    dun_ptr->monster_tile.clear();
 
     // Nothing there
     if (!dun_ptr->has_monster()) return;
@@ -1127,7 +1134,7 @@ static void map_monster (s16b y, s16b x)
             /* Desired attr */
             dun_ptr->monster_color = r_ptr->d_color;
             dun_ptr->monster_char = r_ptr->d_char;
-
+            dun_ptr->monster_tile = r_ptr->tile_id;
 
             /* Hack -- monster hallucination */
             if (p_ptr->timed[TMD_IMAGE])
@@ -1136,6 +1143,7 @@ static void map_monster (s16b y, s16b x)
 
                 dun_ptr->monster_color = r_info[i].d_color;
                 dun_ptr->monster_char =   r_info[i].d_char;
+                dun_ptr->monster_tile = r_info[i].tile_id;
 
                 return;
 
@@ -1216,6 +1224,8 @@ static void map_monster (s16b y, s16b x)
         {
             dun_ptr->monster_color = r_ptr->d_color;
         }
+
+        dun_ptr->monster_tile = r_ptr->tile_id;
 
         /* Get the "player" char */
         dun_ptr->monster_char = r_ptr->d_char;

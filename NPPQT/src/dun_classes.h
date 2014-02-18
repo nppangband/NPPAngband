@@ -45,6 +45,12 @@ public:
     QColor monster_color;
     QChar  monster_char;
 
+    // Tiles for the 4 layers
+    QString dun_tile;
+    QString object_tile;
+    QString effect_tile;
+    QString monster_tile;
+
     bool has_object();
     bool has_effect();
     bool has_monster();
