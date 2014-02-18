@@ -1,5 +1,6 @@
 #include <QtWidgets>
 #include <QHash>
+#include <QTextStream>
 
 #include "src/npp.h"
 #include "src/qt_mainwindow.h"
@@ -15,6 +16,7 @@ public:
     QGraphicsView *view;
     QGraphicsSimpleTextItem *items[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
     QGraphicsPixmapItem *items_g[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
+    QGraphicsPixmapItem *b_items_g[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
     int font_hgt, font_wid;
     int tile_hgt, tile_wid;
     int cell_hgt, cell_wid;
@@ -35,6 +37,8 @@ public:
     void destroy_tiles();
     void rebuild_tile(QString key);
     void calculate_cell_size();
+    void process_pref_file(QString fname);
+    int read_number(QString text);
 };
 
 void MainWindowPrivate::destroy_tiles()
@@ -49,8 +53,45 @@ void MainWindowPrivate::destroy_tiles()
             if (items_g[y][x]) {
                 items_g[y][x]->setPixmap(blank_pix);
             }
+            if (b_items_g[y][x]) {
+                b_items_g[y][x]->setPixmap(blank_pix);
+            }
         }
     }
+}
+
+int MainWindowPrivate::read_number(QString text)
+{
+    bool ok;
+    if (text.startsWith("0x")) return text.toInt(&ok, 16);
+    return text.toInt();
+}
+
+void MainWindowPrivate::process_pref_file(QString fname)
+{
+    QFile file(fname);
+    if (!file.open(QIODevice::ReadOnly)) return;
+
+    QTextStream in(&file);
+
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+
+        if (line.startsWith("F:")) {
+            QList<QString> parts = line.split(":");
+
+            if (parts.size() != 4) continue;
+
+            int f_idx = parts[1].toInt();
+            int row = read_number(parts[2]) & 0x7F;
+            int col = read_number(parts[3]) & 0x7F;
+            QString key = QString("%1x%2").arg(row).arg(col);
+
+            tiles.insert(key, blank_pix);
+        }
+    }
+
+    file.close();
 }
 
 void MainWindowPrivate::calculate_cell_size()
@@ -72,6 +113,7 @@ void MainWindowPrivate::calculate_cell_size()
 
             // Tile position. They are scaled so no offset
             items_g[y][x]->setPos(x * cell_wid, y * cell_hgt);
+            b_items_g[y][x]->setPos(x * cell_wid, y * cell_hgt);
         }
     }
 }
@@ -80,12 +122,14 @@ void MainWindowPrivate::set_graphic_mode(int mode)
 {
     int hgt, wid;
     QString fname;
+    QString pref_fname;
 
     switch (mode) {
     case GRAPHICS_DAVID_GERVAIS:
         hgt = 32;
         wid = 32;
         fname.append("32x32.png");
+        pref_fname.append("/lib/pref/graf-dvg.prf");
         break;
     case GRAPHICS_ORIGINAL:
         hgt = 16;
@@ -111,8 +155,6 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         destroy_tiles();
         tiles.clear();
         tile_map = pix;
-
-        tiles.insert("23x22", blank_pix); // TODO read pref files
     }
     // Go to text mode
     else {
@@ -122,6 +164,11 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         destroy_tiles();
         tiles.clear();
         tile_map = blank_pix;
+    }
+
+    if (pref_fname.length() > 0) {
+        pref_fname.prepend(NPP_DIR_BASE);
+        process_pref_file(pref_fname);
     }
 
     use_graphics = mode;
@@ -185,7 +232,12 @@ void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view)
             items[y][x]->setVisible(false);
 
             items_g[y][x] = scene->addPixmap(blank_pix);
+            items_g[y][x]->setZValue(100);
             items_g[y][x]->setVisible(false);
+
+            b_items_g[y][x] = scene->addPixmap(blank_pix);
+            b_items_g[y][x]->setZValue(50);
+            b_items_g[y][x]->setVisible(false);
         }
     }
 }
@@ -196,6 +248,7 @@ void MainWindowPrivate::wipe()
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
             items[y][x]->setText(QString(" "));
             items_g[y][x]->setPixmap(blank_pix);
+            b_items_g[y][x]->setPixmap(blank_pix);
         }
     }
 }
@@ -252,9 +305,14 @@ void MainWindowPrivate::redraw_cell(int y, int x)
     if (use_graphics) {
         QString key("23x22");
         rebuild_tile(key);
-        items_g[y][x]->setPixmap(tiles.value(key));
+        b_items_g[y][x]->setPixmap(tiles.value(key));
+
+        QString key2("15x15");
+        rebuild_tile(key2);
+        items_g[y][x]->setPixmap(tiles.value(key2));
 
         items[y][x]->setVisible(square_char != '#');
+        b_items_g[y][x]->setVisible(square_char == '#');
         items_g[y][x]->setVisible(square_char == '#');
     }
     else {

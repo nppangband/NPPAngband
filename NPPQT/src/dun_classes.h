@@ -148,6 +148,7 @@ public:
     byte non_native_to_hit_adj;	/*combat bonus for being native (percentage)*/
     s32b f_stealth_adj;			/*Adjustment to stealth depending on terrain*/
 
+    QString tile_id;
 
     void feature_wipe();
 
