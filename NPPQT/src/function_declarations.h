@@ -784,4 +784,7 @@ void save_prev_character();
 void load_prev_character();
 bool has_prev_character();
 
+// prefs.cpp
+extern int process_pref_file(QString name);
+
 #endif // FUNCTION_DECLARATIONS_H
