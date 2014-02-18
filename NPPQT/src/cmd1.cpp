@@ -838,7 +838,7 @@ s16b move_player(int dir, int jumping)
 			if (cave_passive_trap_bold(y, x))
 			{
 				/* Hit the trap */
-                // TODO hit_trap(x_list[cave_x_idx[y][x]].x_f_idx, y, x, MODE_ACTION);
+                hit_trap(x_list[dungeon_info[y][x].effect_idx].x_f_idx, y, x, MODE_ACTION);
 			}
 
 			/* Get the feature name */

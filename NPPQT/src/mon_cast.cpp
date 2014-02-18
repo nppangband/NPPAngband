@@ -1111,7 +1111,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+0:
         {
             disturb(1, 0);
-            // TODO // TODO sound(MSG_SHRIEK);
+            sound(MSG_SHRIEK);
             if (r_ptr->flags2 & (RF2_SMART))
                 message(QString("%^1 shouts for help.") .arg(m_name));
             else
@@ -1421,7 +1421,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+8:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_ACID);
+            sound(MSG_BR_ACID);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes acid.") .arg(m_name));
 
@@ -1445,7 +1445,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+9:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_ELEC);
+            sound(MSG_BR_ELEC);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes lightning.") .arg(m_name));
 
@@ -1465,7 +1465,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+10:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_FIRE);
+            sound(MSG_BR_FIRE);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes fire.") .arg(m_name));
 
@@ -1485,7 +1485,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+11:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_FROST);
+            sound(MSG_BR_FROST);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes frost.") .arg(m_name));
 
@@ -1505,7 +1505,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+12:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_GAS);
+            sound(MSG_BR_GAS);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes gas.") .arg(m_name));
 
@@ -1525,7 +1525,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+13:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_PLASMA);
+            sound(MSG_BR_PLASMA);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes plasma.") .arg(m_name));
 
@@ -1545,7 +1545,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+14:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_LIGHT);
+            sound(MSG_BR_LIGHT);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes light.") .arg(m_name));
 
@@ -1565,7 +1565,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+15:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_DARK);
+            sound(MSG_BR_DARK);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             message(QString("%^1 breathes darkness.") .arg(m_name));
 
@@ -1585,7 +1585,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+16:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_CONF);
+            sound(MSG_BR_CONF);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes confusion.") .arg(m_name));
 
@@ -1605,7 +1605,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+17:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_SOUND);
+            sound(MSG_BR_SOUND);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes sound.") .arg(m_name));
 
@@ -1625,7 +1625,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+18:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_SHARDS);
+            sound(MSG_BR_SHARDS);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes shards.") .arg(m_name));
 
@@ -1645,7 +1645,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+19:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_INERTIA);
+            sound(MSG_BR_INERTIA);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes inertia.") .arg(m_name));
 
@@ -1665,7 +1665,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+20:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_GRAVITY);
+            sound(MSG_BR_GRAVITY);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes gravity.") .arg(m_name));
 
@@ -1691,7 +1691,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+22:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_FORCE);
+            sound(MSG_BR_FORCE);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes force.") .arg(m_name));
 
@@ -1711,7 +1711,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+23:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_NEXUS);
+            sound(MSG_BR_NEXUS);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes nexus.") .arg(m_name));
 
@@ -1730,7 +1730,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+24:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_NETHER);
+            sound(MSG_BR_NETHER);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes nether.") .arg(m_name));
 
@@ -1750,7 +1750,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+25:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_CHAOS);
+            sound(MSG_BR_CHAOS);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes chaos.") .arg(m_name));
 
@@ -1770,7 +1770,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+26:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_DISENCHANT);
+            sound(MSG_BR_DISENCHANT);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes disenchantment.") .arg(m_name));
 
@@ -1790,7 +1790,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 96+27:
         {
             disturb(1, 0);
-            // TODO sound(MSG_BR_TIME);
+            sound(MSG_BR_TIME);
             if (blind) message(QString("%^1 breathes.") .arg(m_name));
             else message(QString("%^1 breathes time.") .arg(m_name));
 
@@ -3142,7 +3142,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 160+13:
         {
             disturb(1, 0);
-            // TODO sound(MSG_CREATE_TRAP);
+            sound(MSG_CREATE_TRAP);
             if (blind) message(QString("%^1 mumbles, and then cackles evilly.") .arg(m_name));
             else message(QString("%^1 casts a spell and cackles evilly.") .arg(m_name));
             (void)trap_creation(SOURCE_OTHER);
@@ -3417,7 +3417,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 160+27:
         {
             disturb(1, 0);
-            // TODO sound(MSG_CAST_FEAR);
+            sound(MSG_CAST_FEAR);
             if (blind) message(QString("%^1 mumbles, and you hear scary noises.") .arg(m_name));
             else message(QString("%^1 casts a fearful illusion.") .arg(m_name));
             if (p_ptr->state.resist_fear)
@@ -3565,7 +3565,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 192 + 3:
         {
             disturb(1, 0);
-            // TODO sound(MSG_SUM_MONSTER);
+            sound(MSG_SUM_MONSTER);
             if (blind) message(QString("%^1 mumbles.") .arg(m_name));
             else message(QString("%^1 magically summons help!") .arg(m_name));
             for (k = 0; k < 1; k++)
@@ -3584,7 +3584,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 192 + 4:
         {
             disturb(1, 0);
-            // TODO sound(MSG_SUM_MONSTER);
+            sound(MSG_SUM_MONSTER);
             if (blind) message(QString("%^1 mumbles.") .arg(m_name));
             else message(QString("%^1 magically summons monsters!") .arg(m_name));
             for (k = 0; k < 4; k++)
@@ -3625,7 +3625,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 192 + 9:
         {
             disturb(1, 0);
-            // TODO sound(MSG_SUM_SPIDER);
+            sound(MSG_SUM_SPIDER);
             if (blind) message(QString("%^1 mumbles.") .arg(m_name));
             else message(QString("%^1 magically summons spiders.") .arg(m_name));
             for (k = 0; k < 4; k++)
@@ -3644,7 +3644,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 192 + 10:
         {
             disturb(1, 0);
-            // TODO sound(MSG_SUM_HOUND);
+            sound(MSG_SUM_HOUND);
             if (blind) message(QString("%^1 mumbles.") .arg(m_name));
             else message(QString("%^1 magically summons hounds.") .arg(m_name));
             for (k = 0; k < 2; k++)
@@ -3663,7 +3663,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 192 + 11:
         {
             disturb(1, 0);
-            // TODO sound(MSG_SUM_ANIMAL);
+            sound(MSG_SUM_ANIMAL);
             if (blind) message(QString("%^1 mumbles.") .arg(m_name));
             else message(QString("%^1 magically summons natural creatures.") .arg(m_name));
             for (k = 0; k < 4; k++)
@@ -3682,7 +3682,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 192 + 12:
         {
             disturb(1, 0);
-            // TODO sound(MSG_SUM_HYDRA);
+            sound(MSG_SUM_HYDRA);
             if (blind) message(QString("%^1 mumbles.") .arg(m_name));
             else message(QString("%^1 magically summons hydras.") .arg(m_name));
             for (k = 0; k < 3; k++)
@@ -3750,7 +3750,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 192 + 17:
         {
             disturb(1, 0);
-            // TODO sound(MSG_SUM_AINU);
+            sound(MSG_SUM_AINU);
             if (blind) message(QString("%^1 mumbles.") .arg(m_name));
             else message(QString("%^1 magically summons a maia!") .arg(m_name));
             for (k = 0; k < 1; k++)
@@ -3771,7 +3771,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 192 + 20:
         {
             disturb(1, 0);
-            // TODO sound(MSG_SUM_DRAGON);
+            sound(MSG_SUM_DRAGON);
             if (blind) message(QString("%^1 mumbles.") .arg(m_name));
             else message(QString("%^1 magically summons a dragon!") .arg(m_name));
             for (k = 0; k < 1; k++)
@@ -3790,7 +3790,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 192 + 21:
         {
             disturb(1, 0);
-            // TODO sound(MSG_SUM_HI_DRAGON);
+            sound(MSG_SUM_HI_DRAGON);
             if (blind) message(QString("%^1 mumbles.") .arg(m_name));
             else message(QString("%^1 magically summons ancient dragons!") .arg(m_name));
             for (k = 0; k < 4; k++)
@@ -3816,7 +3816,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 192 + 24:
         {
             disturb(1, 0);
-            // TODO sound(MSG_SUM_DEMON);
+            sound(MSG_SUM_DEMON);
             if (blind) message(QString("%^1 mumbles.") .arg(m_name));
             {
                 if (!(blind)) message(QString("%^1 magically summons a hellish adversary!") .arg(m_name));
@@ -3836,7 +3836,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 192 + 25:
         {
             disturb(1, 0);
-            // TODO sound(MSG_SUM_HI_DEMON);
+            sound(MSG_SUM_HI_DEMON);
             if (blind) message(QString("%^1 mumbles.") .arg(m_name));
             else message(QString("%^1 magically summons greater demons!") .arg(m_name));
             for (k = 0; k < 4; k++)
@@ -3861,7 +3861,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 192 + 27:
         {
             disturb(1, 0);
-            // TODO sound(MSG_SUM_UNIQUE);
+            sound(MSG_SUM_UNIQUE);
             if (blind) message(QString("%^1 mumbles.") .arg(m_name));
 
             for (k = 0; k < 3
@@ -3891,7 +3891,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 192 + 28:
         {
             disturb(1, 0);
-            // TODO sound(MSG_SUM_UNIQUE);
+            sound(MSG_SUM_UNIQUE);
             if (blind) message(QString("%^1 mumbles.") .arg(m_name));
 
             for (k = 0; k < 3
@@ -3920,7 +3920,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 192 + 29:
         {
             disturb(1, 0);
-            // TODO sound(MSG_SUM_UNDEAD);
+            sound(MSG_SUM_UNDEAD);
             if (blind) message(QString("%^1 mumbles.") .arg(m_name));
             else message(QString("%^1 magically summons an undead adversary!") .arg(m_name));
             for (k = 0; k < 1; k++)
@@ -3939,7 +3939,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         case 192 + 30:
         {
             disturb(1, 0);
-            // TODO sound(MSG_SUM_HI_UNDEAD);
+            sound(MSG_SUM_HI_UNDEAD);
             if (blind) message(QString("%^1 mumbles.") .arg(m_name));
             else message(QString("%^1 magically summons greater undead!") .arg(m_name));
             for (k = 0; k < 4; k++)
@@ -3965,7 +3965,7 @@ bool make_attack_ranged(monster_type *m_ptr, int attack, int py, int px)
         {
             int old_count;
             disturb(1, 0);
-            // TODO sound(MSG_SUM_WRAITH);
+            sound(MSG_SUM_WRAITH);
             if (blind) message(QString("%^1 mumbles.") .arg(m_name));
             else message(QString("%^1 magically summons mighty undead opponents!") .arg(m_name));
             for (k = 0; k < 6; k++)

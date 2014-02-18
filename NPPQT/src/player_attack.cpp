@@ -520,32 +520,32 @@ int critical_hit_check(const object_type *o_ptr, int *dd, int *plus)
 
         if (k < 400)
         {
-            // TODO sound(MSG_HIT_GOOD);
+            sound(MSG_HIT_GOOD);
             message(QString("It was a good hit!"));
             *dd *= 2;
             *plus += 5;
-            // TODO sound MSG_HIT_GREAT);
+            sound(MSG_HIT_GREAT);
             message(QString("It was a great hit!"));
             *dd *= 2;
             *plus += 10;
         }
         else if (k < 900)
         {
-            // TODO sound(MSG_HIT_SUPERB);
+            sound(MSG_HIT_SUPERB);
             message(QString("It was a superb hit!"));
             *dd *= 3;
             *plus += 15;
         }
         else if (k < 1300)
         {
-            // TODO sound(MSG_HIT_HI_GREAT);
+            sound(MSG_HIT_HI_GREAT);
             message(QString("It was a *GREAT* hit!"));
             *dd *= 3;
             *plus += 20;
         }
         else
         {
-            // TODO sound(MSG_HIT_HI_SUPERB);
+            sound(MSG_HIT_HI_SUPERB);
             message(QString("It was a *SUPERB* hit!"));
             *dd *= 7;
             *dd /= 2;
@@ -555,7 +555,7 @@ int critical_hit_check(const object_type *o_ptr, int *dd, int *plus)
 
     else
     {
-        // TODO sound(MSG_HIT);
+        sound(MSG_HIT);
         return (1);
     }
 
@@ -952,7 +952,7 @@ void do_cmd_fire(int code, cmd_arg args[])
 
 
     /* Sound */
-    // TODO sound(MSG_SHOOT);
+    sound(MSG_SHOOT);
 
     /* Describe the object */
     o_name = object_desc(i_ptr, (ODESC_FULL | ODESC_SINGULAR));

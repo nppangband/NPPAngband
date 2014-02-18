@@ -85,12 +85,7 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         hgt = 32;
         wid = 32;
         fname.append("32x32.png");
-        break;
-    case GRAPHICS_ORIGINAL:
-        hgt = 16;
-        wid = 16;
-        fname.append("16x16.png");
-        break;
+        break;    
     default:
         hgt = 0;
         wid = 0;
@@ -109,6 +104,7 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         calculate_cell_size();
         destroy_tiles();
         tile_map = pix;
+        if (game_mode != GAME_MODE_UNDEFINED) init_graphics();
     }
     // Go to text mode
     else {
@@ -120,6 +116,7 @@ void MainWindowPrivate::set_graphic_mode(int mode)
     }
 
     use_graphics = mode;
+    view->update();
 }
 
 void MainWindowPrivate::rebuild_tile(QString key)
