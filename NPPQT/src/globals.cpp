@@ -326,6 +326,7 @@ QString NPP_DIR_ICON;
 QString NPP_DIR_PREF;
 QString NPP_DIR_SAVE;
 QString NPP_DIR_USER;
+QString NPP_DIR_GRAF;
 
 /*
  * Total Hack -- allow all items to be listed (even empty ones)

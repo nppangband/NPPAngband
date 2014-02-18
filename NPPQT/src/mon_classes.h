@@ -110,6 +110,8 @@ public:
     byte max_num;			/* Maximum population allowed per level */
     byte cur_num;			/* Monster population on current level */
 
+    QString tile_id;
+
     // Wipe a monster_race entry.  All variabled above need to be cleared.  Intended for player ghosts.
     void monster_race_wipe();
 

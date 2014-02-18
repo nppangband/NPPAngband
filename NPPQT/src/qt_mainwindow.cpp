@@ -1,4 +1,6 @@
 #include <QtWidgets>
+#include <QHash>
+#include <QTextStream>
 
 #include "src/npp.h"
 #include "src/qt_mainwindow.h"
@@ -13,35 +15,173 @@ public:
     QGraphicsScene *scene;
     QGraphicsView *view;
     QGraphicsSimpleTextItem *items[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
+    QGraphicsPixmapItem *items_g[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
+    QGraphicsPixmapItem *b_items_g[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
+    int font_hgt, font_wid;
+    int tile_hgt, tile_wid;
     int cell_hgt, cell_wid;
     QFont font;
+
+    QPixmap blank_pix;
+    // The key must me strings of the form "[row]x[col]"
+    QHash<QString, QPixmap> tiles;
+    QPixmap tile_map;
 
     void init_scene(QGraphicsScene *_scene, QGraphicsView *_view);
     void wipe();
     void redraw();
     void redraw_cell(int y, int x);
     bool panel_contains(int y, int x);
+    void set_font(QFont _font);
+    void set_graphic_mode(int mode);
+    void destroy_tiles();
+    void rebuild_tile(QString key);
+    void calculate_cell_size();
 };
+
+void MainWindowPrivate::destroy_tiles()
+{
+    tiles.clear();
+
+    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
+        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
+            items_g[y][x]->setPixmap(blank_pix);
+            b_items_g[y][x]->setPixmap(blank_pix);
+        }
+    }
+}
+
+void MainWindowPrivate::calculate_cell_size()
+{
+    cell_hgt = font_hgt;
+    if (tile_hgt > cell_hgt) cell_hgt = tile_hgt;
+
+    cell_wid = font_wid;
+    if (tile_wid > cell_wid) cell_wid = tile_wid;
+
+    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
+        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
+            // Center text on cell
+            int off_x = (cell_wid - font_wid) / 2;
+            if (off_x < 0) off_x = 0;
+            int off_y = (cell_hgt - font_hgt) / 2;
+            if (off_y < 0) off_y = 0;
+            items[y][x]->setPos(x * cell_wid + off_x, y * cell_hgt + off_y);
+
+            // Tile position. They are scaled so no offset
+            items_g[y][x]->setPos(x * cell_wid, y * cell_hgt);
+            b_items_g[y][x]->setPos(x * cell_wid, y * cell_hgt);
+        }
+    }
+}
+
+void MainWindowPrivate::set_graphic_mode(int mode)
+{
+    int hgt, wid;
+    QString fname;
+
+    switch (mode) {
+    case GRAPHICS_DAVID_GERVAIS:
+        hgt = 32;
+        wid = 32;
+        fname.append("32x32.png");
+        break;    
+    default:
+        hgt = 0;
+        wid = 0;
+        break;
+    }
+
+    if (fname.length() > 0) {
+        fname.prepend(NPP_DIR_GRAF);
+        QPixmap pix = QPixmap(fname);
+        if (pix.isNull()) {
+            pop_up_message_box(QString("Can't load tiles"));
+            return;
+        }
+        tile_hgt = hgt;
+        tile_wid = wid;
+        calculate_cell_size();
+        destroy_tiles();
+        tile_map = pix;
+        if (game_mode != GAME_MODE_UNDEFINED) init_graphics();
+    }
+    // Go to text mode
+    else {
+        tile_hgt = hgt;
+        tile_wid = wid;
+        calculate_cell_size();
+        destroy_tiles();
+        tile_map = blank_pix;
+    }
+
+    use_graphics = mode;
+    view->update();
+}
+
+void MainWindowPrivate::rebuild_tile(QString key)
+{
+    if (tiles.contains(key)) return;
+
+    QList<QString> coords = key.split("x");
+    if (coords.size() != 2) return;
+    int x = coords.at(1).toInt();
+    int y = coords.at(0).toInt();
+    // Grab a chunk from the tile map
+    QPixmap pix = tile_map.copy(x * tile_wid, y * tile_hgt, tile_wid, tile_hgt);
+    // Scale if necessary
+    if ((cell_wid != tile_wid) || (cell_hgt != tile_hgt)) {
+        pix = pix.scaled(QSize(cell_wid, cell_hgt));
+    }
+    tiles.insert(key, pix);
+}
+
+void MainWindowPrivate::set_font(QFont _font)
+{
+    font = _font;
+    QFontMetrics metrics(font);
+    font_hgt = metrics.height();
+    font_wid = metrics.width('M');
+
+    calculate_cell_size();
+
+    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
+        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
+            items[y][x]->setFont(font);
+        }
+    }
+
+    destroy_tiles();
+}
 
 void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view)
 {
     scene = _scene;
     view = _view;
 
-    /*
-    font = QFont("Courier New"); // Use fixed size font. Right?
-    QFontMetrics metrics(font);
-    cell_hgt = metrics.height();
-    cell_wid = metrics.width('M');
-    */
+    font_hgt = font_wid = 0;
+    tile_hgt = tile_wid = 0;
+    cell_hgt = cell_wid = 0;
 
     QBrush brush(QColor("black"));
     scene->setBackgroundBrush(brush);
 
+    blank_pix = QPixmap(1, 1);
+    blank_pix.fill(QColor("black"));
+
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            items[y][x] = scene->addSimpleText(QString(" "), font);
-            items[y][x]->setPos(x * cell_wid, y * cell_hgt);
+            items[y][x] = scene->addSimpleText(QString(" "));
+            items[y][x]->setZValue(200);
+            items[y][x]->setVisible(false);
+
+            items_g[y][x] = scene->addPixmap(blank_pix);
+            items_g[y][x]->setZValue(100);
+            items_g[y][x]->setVisible(false);
+
+            b_items_g[y][x] = scene->addPixmap(blank_pix);
+            b_items_g[y][x]->setZValue(50);
+            b_items_g[y][x]->setVisible(false);
         }
     }
 }
@@ -50,11 +190,13 @@ void MainWindowPrivate::wipe()
 {
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            items[y][x]->setFont(font);
             items[y][x]->setText(QString(" "));
-            items[y][x]->setPos(x * cell_wid, y * cell_hgt);
+            items_g[y][x]->setPixmap(blank_pix);
+            b_items_g[y][x]->setPixmap(blank_pix);
         }
     }
+
+    view->update();
 }
 
 void MainWindowPrivate::redraw()
@@ -76,8 +218,10 @@ bool MainWindowPrivate::panel_contains(int y, int x)
 {
     QRect rect = view->geometry();
     QPolygonF pol = view->mapToScene(rect);
-    QPointF point(x * cell_wid, y * cell_hgt);
-    return pol.containsPoint(point, Qt::OddEvenFill);
+    // We test top-left and bottom-right corners of the cell
+    QPointF point1(x * cell_wid, y * cell_hgt);
+    QPointF point2(x * cell_wid + cell_wid, y * cell_hgt + cell_hgt);
+    return pol.containsPoint(point1, Qt::OddEvenFill) && pol.containsPoint(point2, Qt::OddEvenFill);
 }
 
 void MainWindowPrivate::redraw_cell(int y, int x)
@@ -85,24 +229,67 @@ void MainWindowPrivate::redraw_cell(int y, int x)
     dungeon_type *d_ptr = &dungeon_info[y][x];
     QChar square_char = d_ptr->dun_char;
     QColor square_color = d_ptr->dun_color;
+    bool empty = true;
+    QString key2;
     if (d_ptr->has_monster())
     {
         square_char = d_ptr->monster_char;
         square_color = d_ptr->monster_color;
+
+        empty = false;
+
+        if (d_ptr->monster_idx > 0) {
+            int r_idx = mon_list[d_ptr->monster_idx].r_idx;
+            key2 = r_info[r_idx].tile_id;
+        }
     }
     else if (d_ptr->has_effect())
     {
         square_char = d_ptr->effect_char;
         square_color = d_ptr->effect_color;
+
+        empty = false;
     }
     else if (d_ptr->has_object())
     {
         square_char = d_ptr->object_char;
         square_color = d_ptr->object_color;
+
+        empty = false;
     }
 
     items[y][x]->setText(QString(square_char));
     items[y][x]->setBrush(QBrush(square_color));
+
+    if (use_graphics) {
+        bool done_bg = false;
+        bool done_fg = false;
+        bool do_ascii = false;
+
+        s16b feat = d_ptr->feat;
+        QString key1 = f_info[feat].tile_id;
+        if (key1.length() > 0) {
+            rebuild_tile(key1);
+            b_items_g[y][x]->setPixmap(tiles[key1]);
+            done_bg = true;
+        }
+        b_items_g[y][x]->setVisible(done_bg);
+
+        if (key2.length() > 0) {
+           rebuild_tile(key2);
+           items_g[y][x]->setPixmap(tiles[key2]);
+           done_fg = true;
+        }
+        items_g[y][x]->setVisible(done_fg);
+
+        if (!done_fg && (!empty || !done_bg)) do_ascii = true;
+        items[y][x]->setVisible(do_ascii);
+    }
+    else {
+        items[y][x]->setVisible(true);
+        items_g[y][x]->setVisible(false);
+        b_items_g[y][x]->setVisible(false);
+    }
 }
 
 // The main function - intitalize the main window and set the menus.
@@ -129,7 +316,8 @@ MainWindow::MainWindow()
     read_settings();
     set_map();
     priv->init_scene(dungeon_scene, graphics_view);
-
+    priv->set_font(cur_font);
+    priv->set_graphic_mode(GRAPHICS_DAVID_GERVAIS);
 
     setWindowFilePath(QString());
 }
@@ -235,6 +423,9 @@ void MainWindow::save_and_close()
 
     // close game
     cleanup_npp_games();
+
+    priv->wipe();
+    priv->destroy_tiles();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -273,6 +464,7 @@ void MainWindow::fontselect_dialog()
     {
         //  Figure out - this sets the fonnt for everything setFont(cur_font);
         set_map();
+        priv->set_font(cur_font);
         priv->redraw();
     }
 }
@@ -818,10 +1010,6 @@ void MainWindow::set_map()
 
     screen_num_rows = window_height / square_height;
     screen_num_columns = window_width / square_width;
-
-    priv->font = cur_font;
-    priv->cell_hgt = square_height;
-    priv->cell_wid = square_width;
 
     // TODO factor in bigscreen.
     //bool use_bigtile;

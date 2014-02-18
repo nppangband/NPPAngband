@@ -160,6 +160,7 @@ void monster_race::monster_race_wipe()
     d_color.setRgb(0,0,0,0);
     d_char = '\0';
     max_num = cur_num = 0;
+    tile_id.clear();
 }
 
 

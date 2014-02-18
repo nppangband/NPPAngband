@@ -1119,7 +1119,7 @@ static void map_monster (s16b y, s16b x)
         monster_type *m_ptr = &mon_list[dun_ptr->monster_idx];
 
         /* Visible monster*/        
-        // TESTING
+        // TODO remove the "true"
         if (true || m_ptr->ml)
         {
             monster_race *r_ptr = &r_info[m_ptr->r_idx];
