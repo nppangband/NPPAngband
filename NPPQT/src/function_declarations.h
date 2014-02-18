@@ -161,6 +161,9 @@ extern void flavor_init(void);
 extern bool load_player(void);
 extern bool load_gamemode(void);
 
+// mon_attack.cpp
+extern bool make_attack_normal(monster_type *m_ptr);
+
 //mon_cast.cpp
 extern int choose_ranged_attack(int m_idx, int *tar_y, int *tar_x);
 extern bool cave_exist_mon(const monster_race *r_ptr, int y, int x, bool occupied_ok, bool damage_ok, bool can_dig);
@@ -420,6 +423,7 @@ extern bool teleport_player(int dis, bool native);
 extern void teleport_player_to(int ny, int nx);
 extern void teleport_towards(int oy, int ox, int ny, int nx);
 extern bool teleport_player_level(int who);
+extern int drain_charges(object_type *o_ptr, u32b heal);
 extern void disease(int *damage);
 extern bool apply_disenchant(int mode);
 extern byte gf_color(int type);
