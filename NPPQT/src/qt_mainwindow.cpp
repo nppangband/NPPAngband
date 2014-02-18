@@ -37,61 +37,18 @@ public:
     void destroy_tiles();
     void rebuild_tile(QString key);
     void calculate_cell_size();
-    void process_pref_file(QString fname);
-    int read_number(QString text);
 };
 
 void MainWindowPrivate::destroy_tiles()
 {
-    QList<QString> keys = tiles.keys();
-    for (int i = 0; i < keys.size(); i++) {
-        QString k = keys.at(i);
-        tiles[k] = blank_pix;
-    }
+    tiles.clear();
+
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            if (items_g[y][x]) {
-                items_g[y][x]->setPixmap(blank_pix);
-            }
-            if (b_items_g[y][x]) {
-                b_items_g[y][x]->setPixmap(blank_pix);
-            }
+            items_g[y][x]->setPixmap(blank_pix);
+            b_items_g[y][x]->setPixmap(blank_pix);
         }
     }
-}
-
-int MainWindowPrivate::read_number(QString text)
-{
-    bool ok;
-    if (text.startsWith("0x")) return text.toInt(&ok, 16);
-    return text.toInt();
-}
-
-void MainWindowPrivate::process_pref_file(QString fname)
-{
-    QFile file(fname);
-    if (!file.open(QIODevice::ReadOnly)) return;
-
-    QTextStream in(&file);
-
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-
-        if (line.startsWith("F:")) {
-            QList<QString> parts = line.split(":");
-
-            if (parts.size() != 4) continue;
-
-            int f_idx = parts[1].toInt();
-            int row = read_number(parts[2]) & 0x7F;
-            int col = read_number(parts[3]) & 0x7F;
-            QString key = QString("%1x%2").arg(row).arg(col);
-
-            tiles.insert(key, blank_pix);
-        }
-    }
-
-    file.close();
 }
 
 void MainWindowPrivate::calculate_cell_size()
@@ -122,14 +79,12 @@ void MainWindowPrivate::set_graphic_mode(int mode)
 {
     int hgt, wid;
     QString fname;
-    QString pref_fname;
 
     switch (mode) {
     case GRAPHICS_DAVID_GERVAIS:
         hgt = 32;
         wid = 32;
         fname.append("32x32.png");
-        pref_fname.append("/lib/pref/graf-dvg.prf");
         break;
     case GRAPHICS_ORIGINAL:
         hgt = 16;
@@ -153,7 +108,6 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         tile_wid = wid;
         calculate_cell_size();
         destroy_tiles();
-        tiles.clear();
         tile_map = pix;
     }
     // Go to text mode
@@ -162,13 +116,7 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         tile_wid = wid;
         calculate_cell_size();
         destroy_tiles();
-        tiles.clear();
         tile_map = blank_pix;
-    }
-
-    if (pref_fname.length() > 0) {
-        pref_fname.prepend(NPP_DIR_BASE);
-        process_pref_file(pref_fname);
     }
 
     use_graphics = mode;
@@ -176,21 +124,19 @@ void MainWindowPrivate::set_graphic_mode(int mode)
 
 void MainWindowPrivate::rebuild_tile(QString key)
 {
-    QPixmap pix = tiles.value(key);
-
-    if ((pix.height() > 1) || (pix.width() > 1)) return;
+    if (tiles.contains(key)) return;
 
     QList<QString> coords = key.split("x");
     if (coords.size() != 2) return;
     int x = coords.at(1).toInt();
     int y = coords.at(0).toInt();
     // Grab a chunk from the tile map
-    pix = tile_map.copy(x * tile_wid, y * tile_hgt, tile_wid, tile_hgt);
+    QPixmap pix = tile_map.copy(x * tile_wid, y * tile_hgt, tile_wid, tile_hgt);
     // Scale if necessary
     if ((cell_wid != tile_wid) || (cell_hgt != tile_hgt)) {
         pix = pix.scaled(QSize(cell_wid, cell_hgt));
     }
-    tiles[key] = pix;
+    tiles.insert(key, pix);
 }
 
 void MainWindowPrivate::set_font(QFont _font)
@@ -229,6 +175,7 @@ void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view)
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
             items[y][x] = scene->addSimpleText(QString(" "));
+            items[y][x]->setZValue(200);
             items[y][x]->setVisible(false);
 
             items_g[y][x] = scene->addPixmap(blank_pix);
@@ -251,6 +198,8 @@ void MainWindowPrivate::wipe()
             b_items_g[y][x]->setPixmap(blank_pix);
         }
     }
+
+    view->update();
 }
 
 void MainWindowPrivate::redraw()
@@ -283,41 +232,66 @@ void MainWindowPrivate::redraw_cell(int y, int x)
     dungeon_type *d_ptr = &dungeon_info[y][x];
     QChar square_char = d_ptr->dun_char;
     QColor square_color = d_ptr->dun_color;
+    bool empty = true;
+    QString key2;
     if (d_ptr->has_monster())
     {
         square_char = d_ptr->monster_char;
         square_color = d_ptr->monster_color;
+
+        empty = false;
+
+        if (d_ptr->monster_idx > 0) {
+            int r_idx = mon_list[d_ptr->monster_idx].r_idx;
+            key2 = r_info[r_idx].tile_id;
+        }
     }
     else if (d_ptr->has_effect())
     {
         square_char = d_ptr->effect_char;
         square_color = d_ptr->effect_color;
+
+        empty = false;
     }
     else if (d_ptr->has_object())
     {
         square_char = d_ptr->object_char;
         square_color = d_ptr->object_color;
+
+        empty = false;
     }
 
     items[y][x]->setText(QString(square_char));
     items[y][x]->setBrush(QBrush(square_color));
 
     if (use_graphics) {
-        QString key("23x22");
-        rebuild_tile(key);
-        b_items_g[y][x]->setPixmap(tiles.value(key));
+        bool done_bg = false;
+        bool done_fg = false;
+        bool do_ascii = false;
 
-        QString key2("15x15");
-        rebuild_tile(key2);
-        items_g[y][x]->setPixmap(tiles.value(key2));
+        s16b feat = d_ptr->feat;
+        QString key1 = f_info[feat].tile_id;
+        if (key1.length() > 0) {
+            rebuild_tile(key1);
+            b_items_g[y][x]->setPixmap(tiles[key1]);
+            done_bg = true;
+        }
+        b_items_g[y][x]->setVisible(done_bg);
 
-        items[y][x]->setVisible(square_char != '#');
-        b_items_g[y][x]->setVisible(square_char == '#');
-        items_g[y][x]->setVisible(square_char == '#');
+        if (key2.length() > 0) {
+           rebuild_tile(key2);
+           items_g[y][x]->setPixmap(tiles[key2]);
+           done_fg = true;
+        }
+        items_g[y][x]->setVisible(done_fg);
+
+        if (!done_fg && (!empty || !done_bg)) do_ascii = true;
+        items[y][x]->setVisible(do_ascii);
     }
     else {
         items[y][x]->setVisible(true);
         items_g[y][x]->setVisible(false);
+        b_items_g[y][x]->setVisible(false);
     }
 }
 
@@ -454,6 +428,7 @@ void MainWindow::save_and_close()
     cleanup_npp_games();
 
     priv->wipe();
+    priv->destroy_tiles();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

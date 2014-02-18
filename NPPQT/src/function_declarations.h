@@ -155,6 +155,7 @@ extern void set_dungeon_type(u16b dungeon_type);
 
 
 /* init2.c */
+extern void init_graphics();
 extern void init_npp_games(void);
 extern void cleanup_npp_games(void);
 extern void flavor_init(void);
