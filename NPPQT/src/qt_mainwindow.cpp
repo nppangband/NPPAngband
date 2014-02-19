@@ -37,7 +37,29 @@ public:
     void destroy_tiles();
     void rebuild_tile(QString key);
     void calculate_cell_size();
+    QPixmap darken_pix(QPixmap src);
+    QPixmap lighten_pix(QPixmap src);
 };
+
+QPixmap MainWindowPrivate::darken_pix(QPixmap src)
+{
+    QImage img = src.toImage();
+    QPainter p(&img);
+    p.setCompositionMode(QPainter::CompositionMode_Darken);
+    p.fillRect(img.rect(), QColor("#888"));
+    QPixmap pix = QPixmap::fromImage(img);
+    return pix;
+}
+
+QPixmap MainWindowPrivate::lighten_pix(QPixmap src)
+{
+    QImage img = src.toImage();
+    QPainter p(&img);
+    p.setCompositionMode(QPainter::CompositionMode_Lighten);
+    p.fillRect(img.rect(), QColor("#444"));
+    QPixmap pix = QPixmap::fromImage(img);
+    return pix;
+}
 
 void MainWindowPrivate::destroy_tiles()
 {
@@ -299,7 +321,11 @@ void MainWindowPrivate::redraw_cell(int y, int x)
         QString key1 = d_ptr->dun_tile;
         if (key1.length() > 0) {
             rebuild_tile(key1);
-            b_items_g[y][x]->setPixmap(tiles[key1]);
+            QPixmap pix = tiles[key1];
+            int z = rand_int(3);
+            if (z == 0) pix = darken_pix(pix);
+            else if (z == 1) pix = lighten_pix(pix);
+            b_items_g[y][x]->setPixmap(pix);
             done_bg = true;
         }
         b_items_g[y][x]->setVisible(done_bg);
