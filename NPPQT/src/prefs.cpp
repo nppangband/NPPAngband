@@ -250,7 +250,8 @@ int process_pref_file_command(QString buf)
         }
     }
 
-    if (buf[0] == 'F')
+    /* Process "F:<num>:<a>/<c>" -- attr/char for terrain features */
+    else if (buf[0] == 'F')
     {
         tokens = buf.mid(2).split(":");
 
@@ -265,6 +266,27 @@ int process_pref_file_command(QString buf)
             int x = read_number(tokens.at(2)) & 0x7F;
 
             f_ptr->tile_id = QString("%1x%2").arg(y).arg(x);
+
+            return (0);
+        }
+    }
+
+    /* Process "K:<num>:<a>/<c>"  -- attr/char for object kinds */
+    else if (buf[0] == 'K')
+    {
+        tokens = buf.mid(2).split(":");
+
+        if (tokens.size() == 3)
+        {
+            object_kind *k_ptr;
+            i = tokens.at(0).toInt();
+            if ((i < 0) || (i >= (long)z_info->k_max)) return (1);
+            k_ptr = &k_info[i];
+
+            int y = read_number(tokens.at(1)) & 0x7F;
+            int x = read_number(tokens.at(2)) & 0x7F;
+
+            k_ptr->tile_id = QString("%1x%2").arg(y).arg(x);
 
             return (0);
         }
@@ -347,7 +369,7 @@ int process_pref_file_command(QString buf)
     }
 
 
-    /* Process "F:<num>:<a>/<c>" -- attr/char for terrain features */
+
     else if (buf[0] == 'F')
     {
         if (tokenize(buf+2, 3, zz) == 3)

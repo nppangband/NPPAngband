@@ -912,6 +912,7 @@ static void map_objects (s16b y, s16b x)
 
             dun_ptr->object_color = k_info[i].d_color;
             dun_ptr->object_char =  k_info[i].d_char;
+            dun_ptr->object_tile = k_info[i].tile_id;
 
             return;
         }
@@ -926,6 +927,7 @@ static void map_objects (s16b y, s16b x)
             /* Normal attr */
             dun_ptr->object_color = k_info[o_ptr->k_idx].d_color;
             dun_ptr->object_char =  k_info[o_ptr->k_idx].d_char;
+            dun_ptr->object_tile = k_info[o_ptr->k_idx].tile_id;
 
             /*found a non-squelchable item, unless showing piles, display this one*/
             if (!show_piles) break;

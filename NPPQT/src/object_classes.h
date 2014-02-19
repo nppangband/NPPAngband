@@ -212,6 +212,8 @@ public:
     QColor d_color;		/* Default feature color */
     QChar d_char;		/* Default object character */
 
+    QString tile_id;
+
     QString autoinscribe;  //Default inscription for this object
 
     u16b flavor;		/* Special object flavor (or zero) */

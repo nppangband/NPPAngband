@@ -595,6 +595,8 @@ void object_kind::object_kind_wipe()
     autoinscribe.clear();
     flavor = squelch = 0;
     aware = tried = everseen;
+
+    tile_id.clear();
 }
 
 artifact_type::artifact_type()

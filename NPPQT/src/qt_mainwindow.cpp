@@ -223,6 +223,9 @@ void MainWindowPrivate::redraw()
 
     wipe();
 
+    // TODO REMOVE THIS
+    wiz_light();
+
     // Adjust scrollbars
     view->setSceneRect(0, 0, p_ptr->cur_map_wid * cell_wid, p_ptr->cur_map_hgt * cell_hgt);
 
@@ -285,6 +288,10 @@ void MainWindowPrivate::redraw_cell(int y, int x)
         square_color = d_ptr->object_color;
 
         empty = false;
+
+        key2 = d_ptr->object_tile;
+
+        //pop_up_message_box(key2);
     }
 
     if (use_graphics) {
