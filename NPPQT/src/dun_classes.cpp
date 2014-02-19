@@ -189,3 +189,27 @@ void reset_dungeon_info()
         }
     }
 }
+
+bool dungeon_type::has_visible_object()
+{
+    if (object_char != ' ') return true;
+    if (object_color != QColor("black")) return true;
+    if (use_graphics && (object_tile.length() > 0)) return true;
+    return false;
+}
+
+bool dungeon_type::has_visible_effect()
+{
+    if (effect_char != ' ') return true;
+    if (effect_color != QColor("black")) return true;
+    if (use_graphics && (effect_tile.length() > 0)) return true;
+    return false;
+}
+
+bool dungeon_type::has_visible_monster()
+{
+    if (monster_char != ' ') return true;
+    if (monster_color != QColor("black")) return true;
+    if (use_graphics && (monster_tile.length() > 0)) return true;
+    return false;
+}

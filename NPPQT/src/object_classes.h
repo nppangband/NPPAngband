@@ -337,6 +337,7 @@ public:
     byte color_num;     //The number of any default color.  CUSTOM_COLOR for all others.
     QColor d_color;		/* Default flavor color */
     QChar d_char;    /* Default flavor character */
+    QString tile_id;
 };
 
 

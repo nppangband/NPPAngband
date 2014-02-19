@@ -1577,6 +1577,10 @@ void clear_graphics()
         k_info[i].tile_id.clear();
     }
 
+    for (int i = 0; i < z_info->flavor_max; i++) {
+        flavor_info[i].tile_id.clear();
+    }
+
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
             dungeon_type *d_ptr = &dungeon_info[y][x];

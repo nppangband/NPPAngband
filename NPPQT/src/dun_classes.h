@@ -55,6 +55,10 @@ public:
     bool has_effect();
     bool has_monster();
 
+    bool has_visible_object();
+    bool has_visible_effect();
+    bool has_visible_monster();
+
     // All variables above should be included in this method.
     void dungeon_square_wipe();
 };

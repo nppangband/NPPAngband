@@ -111,7 +111,7 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         tile_map = pix;
         if (character_loaded) init_graphics();
 
-        pop_up_message_box(QString("Loading davig gervais tiles: %1 milli").arg(QString::number(t1.elapsed())));
+        //pop_up_message_box(QString("Loading davig gervais tiles: %1 milli").arg(QString::number(t1.elapsed())));
     }
     // Go to text mode
     else {
@@ -237,7 +237,7 @@ void MainWindowPrivate::redraw()
     }
 
     // TODO comment this out
-    pop_up_message_box(QString("Redrawing: %1 milli").arg(QString::number(t1.elapsed())));
+    //pop_up_message_box(QString("Redrawing: %1 milli").arg(QString::number(t1.elapsed())));
 }
 
 bool MainWindowPrivate::panel_contains(int y, int x)
@@ -256,15 +256,10 @@ void MainWindowPrivate::redraw_cell(int y, int x)
     QChar square_char = d_ptr->dun_char;
     QColor square_color = d_ptr->dun_color;
     bool empty = true;
-    QString key2;
-
-    // TODO REMOVE THIS!!! JUST FOR TESTING
-    if (d_ptr->monster_idx > 0) {
-        mon_list[d_ptr->monster_idx].ml = true;
-    }
+    QString key2;    
 
     // Draw visible monsters
-    if (d_ptr->has_monster() && ((d_ptr->monster_idx == -1) || mon_list[d_ptr->monster_idx].ml))
+    if (d_ptr->has_visible_monster())
     {
         square_char = d_ptr->monster_char;
         square_color = d_ptr->monster_color;
@@ -274,15 +269,17 @@ void MainWindowPrivate::redraw_cell(int y, int x)
         key2 = d_ptr->monster_tile;
     }
     // Draw effects
-    else if (d_ptr->has_effect())
+    else if (d_ptr->has_visible_effect())
     {
         square_char = d_ptr->effect_char;
         square_color = d_ptr->effect_color;
 
         empty = false;
+
+        key2 = d_ptr->effect_tile;
     }
     // Draw objects
-    else if (d_ptr->has_object())
+    else if (d_ptr->has_visible_object())
     {
         square_char = d_ptr->object_char;
         square_color = d_ptr->object_color;

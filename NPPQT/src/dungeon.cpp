@@ -18,6 +18,7 @@
  */
 
 #include "src/npp.h"
+#include <QTime>
 
 /*
  * Change dungeon level.
@@ -176,11 +177,4 @@ void launch_game()
 
     /* Hack -- Enforce "delayed death" */
     if (p_ptr->chp < 0) p_ptr->is_dead = TRUE;
-
-    // TODO REMOVE THIS
-    for (int i = 0; i < 5; i++) {
-        int y = rand_int(p_ptr->cur_map_hgt);
-        int x = rand_int(p_ptr->cur_map_wid);
-        place_object(y, x, true, true, DROP_TYPE_POTION);
-    }
 }

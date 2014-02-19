@@ -292,6 +292,24 @@ int process_pref_file_command(QString buf)
         }
     }
 
+    /* Process "L:<num>:<a>/<c>" -- attr/char for flavors */
+    else if (buf[0] == 'L')
+    {
+        tokens = buf.mid(2).split(":");
+
+        if (tokens.size() == 3)
+        {
+            flavor_type *flavor_ptr;
+            i = tokens.at(0).toInt();
+            if ((i < 0) || (i >= (long)z_info->flavor_max)) return (1);
+            flavor_ptr = &flavor_info[i];
+            int y = read_number(tokens.at(1)) & 0x7F;
+            int x = read_number(tokens.at(2)) & 0x7F;
+            flavor_ptr->tile_id = QString("%1x%2").arg(y).arg(x);
+            return (0);
+        }
+    }
+
     return 0;
 
 #if 0
@@ -340,94 +358,6 @@ int process_pref_file_command(QString buf)
                     }
                 }
             }
-        }
-    }
-
-
-    /* Process "K:<num>:<a>/<c>"  -- attr/char for object kinds */
-    else if (buf[0] == 'K')
-    {
-        if (tokenize(buf+2, 3, zz) == 3)
-        {
-            object_kind *k_ptr;
-            i = strtol(zz[0], NULL, 0);
-            if ((i < 0) || (i >= (long)z_info->k_max)) return (1);
-            k_ptr = &k_info[i];
-
-            /* Get object kind color */
-            if (read_byte_or_char(zz[1], &a, &c))
-                  k_ptr->x_attr = a;
-            else  k_ptr->x_attr = (byte)color_char_to_attr(c);
-
-            /* Get object kind symbol */
-            if (read_byte_or_char(zz[2], &a, &c))
-                  k_ptr->x_char = (char)a;
-            else  k_ptr->x_char = c;
-
-            return (0);
-        }
-    }
-
-
-
-    else if (buf[0] == 'F')
-    {
-        if (tokenize(buf+2, 3, zz) == 3)
-        {
-            int attr = -1;
-
-            feature_type *f_ptr;
-            i = strtol(zz[0], NULL, 0);
-            if ((i < 0) || (i >= (long)z_info->f_max)) return (1);
-            f_ptr = &f_info[i];
-
-            /* Get feature color */
-
-            /* Color string has more than one character */
-            if (zz[1][0] && zz[1][1])
-            {
-                /* Try to get a shade */
-                attr = color_text_to_attr(zz[1]);
-            }
-
-            /* Got one? */
-            if (attr >= 0)
-            {
-                f_ptr->x_attr = attr;
-            }
-            /* Try to parse single character or number */
-            else
-            {
-
-                if (read_byte_or_char(zz[1], &a, &c))
-                    f_ptr->x_attr = a;
-                else  f_ptr->x_attr = (byte)color_char_to_attr(c);
-            }
-
-            /* Get feature symbol */
-            if (read_byte_or_char(zz[2], &a, &c))
-                  f_ptr->x_char = (char)a;
-            else  f_ptr->x_char = c;
-
-            return (0);
-        }
-    }
-
-
-    /* Process "L:<num>:<a>/<c>" -- attr/char for flavors */
-    else if (buf[0] == 'L')
-    {
-        if (tokenize(buf+2, 3, zz) == 3)
-        {
-            flavor_type *flavor_ptr;
-            i = strtol(zz[0], NULL, 0);
-            n1 = strtol(zz[1], NULL, 0);
-            n2 = strtol(zz[2], NULL, 0);
-            if ((i < 0) || (i >= (long)z_info->flavor_max)) return (1);
-            flavor_ptr = &flavor_info[i];
-            if (n1) flavor_ptr->x_attr = (byte)n1;
-            if (n2) flavor_ptr->x_char = (char)n2;
-            return (0);
         }
     }
 
@@ -912,9 +842,7 @@ static int process_pref_file_aux(QString name)
         if (buf.startsWith("%:"))
         {
             /* Process that file if allowed */
-            err = process_pref_file(buf.mid(2));
-
-            if (err) return err;
+            (void)process_pref_file(buf.mid(2));
 
             /* Continue */
             continue;
@@ -955,7 +883,7 @@ static int process_pref_file_aux(QString name)
  * allow conditional evaluation and filename inclusion.
  */
 int process_pref_file(QString name)
-{
+{    
     QString buf(NPP_DIR_PREF);
 
     int err = 0;

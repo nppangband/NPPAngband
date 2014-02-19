@@ -52,8 +52,9 @@ static letters_and_numbers lowercase_and_numbers[26] =
 };
 
 
-QString likert(int x, int y, byte *attr);
-QString _num(int n);
+extern QString likert(int x, int y, byte *attr);
+extern QString _num(int n);
+extern void popup1(QString message, int id = 0);
 
 
 #endif // UTILITIES_H

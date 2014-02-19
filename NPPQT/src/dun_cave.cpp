@@ -925,9 +925,17 @@ static void map_objects (s16b y, s16b x)
         if ((!sq_flag) || (o_ptr->ident & IDENT_QUEST))
         {
             /* Normal attr */
-            dun_ptr->object_color = k_info[o_ptr->k_idx].d_color;
-            dun_ptr->object_char =  k_info[o_ptr->k_idx].d_char;
-            dun_ptr->object_tile = k_info[o_ptr->k_idx].tile_id;
+            if (k_info[o_ptr->k_idx].flavor > 0) {
+                flavor_type *fl_ptr = flavor_info + k_info[o_ptr->k_idx].flavor;
+                dun_ptr->object_color = fl_ptr->d_color;
+                dun_ptr->object_char =  fl_ptr->d_char;
+                dun_ptr->object_tile = fl_ptr->tile_id;
+            }
+            else {
+                dun_ptr->object_color = k_info[o_ptr->k_idx].d_color;
+                dun_ptr->object_char =  k_info[o_ptr->k_idx].d_char;
+                dun_ptr->object_tile = k_info[o_ptr->k_idx].tile_id;
+            }
 
             /*found a non-squelchable item, unless showing piles, display this one*/
             if (!show_piles) break;
@@ -966,14 +974,7 @@ static void map_effects (s16b y, s16b x)
     if (!dun_ptr->has_effect()) return;
     if (!(dun_ptr->cave_info & (CAVE_SEEN | CAVE_MARK))) return;
 
-    bool has_object = TRUE;
-    if ((dun_ptr->object_char == ' ') &&
-            ((dun_ptr->object_color.red()) +
-             dun_ptr->object_color.blue() +
-             dun_ptr->object_color.green()) == 0)
-    {
-         has_object = FALSE;
-    }
+    bool has_object = dun_ptr->has_visible_object();
 
     /* Handle effects */
 
@@ -1059,6 +1060,7 @@ static void map_effects (s16b y, s16b x)
         if (use_graphics)
         {
             dun_ptr->effect_color = f_ptr->d_color;
+            dun_ptr->effect_tile = f_ptr->tile_id;
         }
         /* Permanent clouds */
         else if (x_ptr->x_type == EFFECT_PERMANENT_CLOUD)

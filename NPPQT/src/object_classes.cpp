@@ -636,5 +636,6 @@ void flavor_type::flavor_wipe()
     tval = sval = color_num = 0;
     d_color = QColor("black");
     d_char = QChar(' ');
+    tile_id.clear();
 }
 
