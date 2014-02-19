@@ -31,6 +31,7 @@ SOURCES +=  src/qt_main.cpp\
             src/init_edit_files.cpp\
             src/init_game.cpp\
             src/load.cpp \
+            src/mon_attack.cpp \
             src/mon_cast.cpp \
             src/mon_classes.cpp \
             src/mon_damage.cpp \
@@ -68,6 +69,7 @@ SOURCES +=  src/qt_main.cpp\
             src/utilities.cpp \
             src/dungeonbox.cpp \
     src/prefs.cpp
+
 
 
 

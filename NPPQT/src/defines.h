@@ -255,6 +255,12 @@ typedef qint32          s32b;
 #define MAX_SHORT		32767
 
 /*
+ * An item's pval (for charges, amount of gold, etc) is limited to s16b
+ */
+#define MAX_PVAL	 MAX_SHORT
+#define MIN_PVAL	(-MAX_SHORT)
+
+/*
  * An array of 256 byte's
  */
 typedef byte byte_256[256];
