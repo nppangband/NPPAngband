@@ -881,6 +881,7 @@ static void map_terrain (s16b y, s16b x)
     }
 }
 
+#define GRAF_BROKEN_BONE 440
 
 static void map_objects (s16b y, s16b x)
 {
@@ -948,12 +949,34 @@ static void map_objects (s16b y, s16b x)
         if (do_purple_dot)
         {
             dun_ptr->cave_info = OBJ_SYMBOL_SQUELCH;
+
+            if (use_graphics) {
+                if (use_graphics == GRAPHICS_DAVID_GERVAIS) {
+                    dun_ptr->object_tile = QString("%1x%2").arg(0x9A & 0x7F).arg(0xC4 & 0x7F);
+                }
+                else {
+                    // HACK
+                    dun_ptr->object_tile = k_info[GRAF_BROKEN_BONE].tile_id;
+                }
+            }
+            else {
+                dun_ptr->object_color = defined_colors[TERM_VIOLET];
+                dun_ptr->object_char = f_info[1].d_char; // Floor
+            }
         }
 
         /* Special stack symbol, unless everything in the pile is squelchable */
         else if (++floor_num > 1)
         {
             dun_ptr->cave_info = OBJ_SYMBOL_PILE;
+
+            if (use_graphics == GRAPHICS_DAVID_GERVAIS) {
+                dun_ptr->object_tile = QString("%1x%2").arg(0x87 & 0x7F).arg(0xB7 & 0x7F);
+            }
+            else {
+                dun_ptr->object_char = k_info[0].d_char;
+                dun_ptr->object_color = k_info[0].d_color;
+            }
 
             // We are done
             return;
