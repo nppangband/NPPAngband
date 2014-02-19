@@ -3,7 +3,7 @@
 
 
 # This file is used to initialize the 
-# 'terrain feature' information for the Angband game.
+# 'terrain feature' information for the NPPAngband and NPPMoria games.
 
 # Do not modify this file unless you know exactly what you are doing,
 # unless you wish to risk possible system crashes and broken savefiles.
@@ -13,12 +13,12 @@
 # === Understanding terrain.txt ===
 
 # G: symbol : color {alternatively} G: symbol : red : green : blue
-# G: symbol : color
 # M: feature to mimic
 # E: edge with feature
 # W: depth : rarity : priority : power : timeout
 # C: damage to non-native: native energy move : non-native energy move :
 #          native to hit adj : non-native to hit adj : stealth_adjust
+# T: 32x32 y coord : 32x32 x coord : 8x8 y coord : 8x8 x coord 
 # K: action name : change with feature : change chance
 # F: flag | flag | etc
 # D: Description
@@ -26,7 +26,7 @@
 # red-green-blue format (values from 0-255, or any of the preset
 # colors below may be used.  
 
-# TERM_DARK is defined as 0-0-0 and nothing will appear onscreen
+#TERM_DARK is defined as 0-0-0 and nothing will appear onscreen
 
 # TERM_DARK - {see note above - should not be used
 # TERM_L_DARK
@@ -79,6 +79,9 @@
 # timeout set base time between effect instances 
 # timeout rand is the random time between effects 
 
+# 'T' is for tile information.  It gives the mapping for the
+# 32x32 and 8x8 tilesets.
+
 # All features have an implicit ' Default' action, which is actually a null
 # transition (it doesn't do anything).
 # This action can be changed using the DEFAULT action name.
@@ -105,9 +108,12 @@ V:7.1.0
 
 N:0:nothing
 G: :TERM_DARK
+T:1:2:0:2
+
 
 N:1:open floor
 G:.:TERM_WHITE
+T:23:1:0:0
 W:0:1:15:0
 C:0:100:100:100:100:0
 K:HURT_WATER:107:2000
@@ -118,6 +124,7 @@ F:RUN | FLOOR | ATTR_LIGHT | CAN_FLY
 
 N:2:Book Shop
 G:0:TERM_ORANGE
+T:22:36:84:15
 W:0:1:20:9
 C:0:100:100:100:100:0
 F:LOS | PROJECT | MOVE | NOTICE | REMEMBER
@@ -126,6 +133,7 @@ F:SHOP | PERMANENT | GLOW | ATTR_LIGHT
 
 N:3:glyph of warding
 G:;:TERM_YELLOW
+T:7:42:10:28
 X:0:1:0:0:1:0:0
 F:LOS | PROJECT | MOVE | NOTICE | REMEMBER
 F:CAN_DISARM | GLYPH | ATTR_LIGHT | EFFECT
@@ -133,6 +141,7 @@ F:CAN_DISARM | GLYPH | ATTR_LIGHT | EFFECT
 
 N:4:General Store
 G:1:TERM_L_UMBER
+T:22:38:1:17
 W:0:1:20:0
 C:0:100:100:100:100:0
 F:LOS | PROJECT | MOVE | NOTICE | REMEMBER
@@ -141,6 +150,7 @@ F:SHOP | PERMANENT | GLOW | ATTR_LIGHT
 
 N:5:Armoury
 G:2:TERM_SLATE
+T:22:39:1:18
 W:0:1:20:1
 C:0:100:100:100:100:0
 F:LOS | PROJECT | MOVE | NOTICE | REMEMBER
@@ -149,6 +159,7 @@ F:SHOP | PERMANENT | GLOW | ATTR_LIGHT
 
 N:6:Weapon Smiths
 G:3:TERM_WHITE
+T:22:40:1:19
 W:0:1:20:2
 C:0:100:100:100:100:0
 F:LOS | PROJECT | MOVE | NOTICE | REMEMBER
@@ -157,6 +168,7 @@ F:SHOP | PERMANENT | GLOW | ATTR_LIGHT
 
 N:7:Temple
 G:4:TERM_GREEN
+T:22:41:1:20
 W:0:1:20:3
 C:0:100:100:100:100:0
 F:LOS | PROJECT | MOVE | NOTICE | REMEMBER
@@ -165,6 +177,7 @@ F:SHOP | PERMANENT | GLOW | ATTR_LIGHT
 
 N:8:Alchemy Shop
 G:5:TERM_BLUE
+T:22:42:1:21
 W:0:1:20:4
 C:0:100:100:100:100:0
 F:LOS | PROJECT | MOVE | NOTICE | REMEMBER
@@ -173,6 +186,7 @@ F:SHOP | PERMANENT | GLOW | ATTR_LIGHT
 
 N:9:Magic Shop
 G:6:TERM_RED
+T:22:43:1:22
 W:0:1:20:5
 C:0:100:100:100:100:0
 F:LOS | PROJECT | MOVE | NOTICE | REMEMBER
@@ -181,6 +195,7 @@ F:SHOP | PERMANENT | GLOW | ATTR_LIGHT
 
 N:10:Black Market
 G:7:TERM_L_DARK
+T:22:45:1:23
 W:0:1:20:6
 C:0:100:100:100:100:0
 F:LOS | PROJECT | MOVE | NOTICE | REMEMBER
@@ -189,6 +204,7 @@ F:SHOP | PERMANENT | GLOW | ATTR_LIGHT
 
 N:11:Home
 G:8:TERM_YELLOW
+T:22:44:1:24
 W:0:1:20:7
 C:0:100:100:100:100:0
 F:LOS | PROJECT | MOVE | NOTICE | REMEMBER
@@ -197,6 +213,7 @@ F:SHOP | PERMANENT | GLOW | ATTR_LIGHT
 
 N:12:Adventurer's Guild
 G:9:TERM_VIOLET
+T:22:37:76:18
 W:0:1:20:8
 C:0:100:100:100:100:0
 F:LOS | PROJECT | MOVE | NOTICE | REMEMBER
@@ -205,6 +222,7 @@ F:SHOP | PERMANENT | GLOW | ATTR_LIGHT
 
 N:13:dagger pit
 G:^:TERM_SLATE_GRAY
+T:25:97:98:0
 X:15:1:0:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -214,6 +232,7 @@ D:You fall into a pit full of daggers!
 
 N:14:trap door
 G:^:TERM_WHITE
+T:7:39:98:1
 X:1:1:1:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -223,6 +242,7 @@ D:You fall through a trap door!
 
 N:15:pit
 G:^:TERM_SLATE
+T:7:37:98:2
 X:3:1:2:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -232,6 +252,7 @@ D:You fall into a pit!
 
 N:16:spiked pit
 G:^:TERM_SLATE_GRAY
+T:7:38:98:3
 X:4:1:3:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -241,6 +262,7 @@ D:You fall into a spiked pit!
 
 N:17:poison spiked pit
 G:^:TERM_GREEN
+T:7:68:98:4
 X:6:1:4:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -250,6 +272,7 @@ D:You fall into a poison spiked pit!
 
 N:18:strange spot
 G:^:TERM_ORANGE_PEEL
+T:7:36:98:5
 X:2:1:5:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -259,6 +282,7 @@ D:You are enveloped in a cloud of smoke!
 
 N:19:luminous spot
 G:^:TERM_ORANGE
+T:25:23:98:6
 X:4:1:6:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -268,6 +292,7 @@ D:You hit a teleport trap!
 
 N:20:brown spot
 G:^:TERM_AUBURN
+T:25:24:98:7
 X:4:1:7:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -277,6 +302,7 @@ D:You are enveloped in flames!
 
 N:21:burning spot
 G:^:TERM_UMBER
+T:25:25:98:8
 X:4:1:8:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -286,6 +312,7 @@ D:You are splashed with acid!
 
 N:22:gray dart trap
 G:^:TERM_SLATE
+T:7:62:98:9
 X:1:1:9:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -295,6 +322,7 @@ D:A small dart shoots out at you!
 
 N:23:red dart trap
 G:^:TERM_RED_LAVA
+T:7:58:98:10
 X:2:1:10:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -304,6 +332,7 @@ D:A small dart shoots out at you!
 
 N:24:violet dart trap
 G:^:TERM_VIOLET
+T:7:60:98:11
 X:3:1:11:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -313,6 +342,7 @@ D:A small dart shoots out at you!
 
 N:25:brown dart trap
 G:^:TERM_AUBURN
+T:7:34:98:12
 X:4:1:12:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -322,6 +352,7 @@ D:A small dart shoots out at you!
 
 N:26:orange dart trap
 G:^:TERM_ORANGE
+T:7:61:98:13
 X:2:1:13:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -331,6 +362,7 @@ D:You are surrounded by a cloud of orange gas!
 
 N:27:light red gas trap
 G:^:TERM_RASPBERRY
+T:25:99:98:14
 X:1:1:14:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -340,6 +372,7 @@ D:You are surrounded by a gas of scintillating colors!
 
 N:28:light gray gas trap
 G:^:TERM_LIGHT_GRAY
+T:25:98:98:15
 X:3:1:15:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -349,6 +382,7 @@ D:You are surrounded by a pungent gray gas!
 
 N:29:yellow gas trap
 G:^:TERM_MAIZE
+T:7:35:98:16
 X:4:1:16:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -358,6 +392,7 @@ D:You are surrounded by a strange mist!
 
 N:30:broken wooden door
 G:':TERM_L_BROWN
+T:22:11:96:0
 W:1:1:17:0
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -371,6 +406,7 @@ D:The door appears to be broken.
 
 N:31:broken steel door
 G:':TERM_SLATE_GRAY
+T:23:15:96:1
 W:8:1:17:0
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -383,6 +419,7 @@ D:The door appears to be broken.
 
 N:32:broken iron door
 G:':TERM_TAUPE
+T:23:16:96:2
 W:10:1:17:0
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -396,6 +433,7 @@ D:The door appears to be broken.
 N:33:locked wooden door
 G:+:TERM_L_UMBER
 M:36
+T:23:9:96:3
 W:1:2:17:5
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -414,6 +452,7 @@ D:The door appears to be locked.
 N:34:locked steel door
 G:+:TERM_SLATE
 M:37
+T:23:10:96:4
 W:8:2:17:10
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -431,6 +470,7 @@ D:The door appears to be locked.
 N:35:locked iron door
 G:+:TERM_L_DARK
 M:38
+T:23:11:96:5
 W:10:2:17:20
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -447,6 +487,7 @@ D:The door appears to be locked.
 
 N:36:closed wooden door
 G:+:TERM_L_UMBER
+T:22:4:96:6
 W:1:1:17:0
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -463,6 +504,7 @@ F:HURT_ACID | DOOR_CLOSED
 
 N:37:closed steel door
 G:+:TERM_SLATE
+T:23:17:96:7
 W:8:1:17:0
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -478,6 +520,7 @@ F:DOOR_CLOSED
 
 N:38:closed iron door
 G:+:TERM_L_DARK
+T:23:18:96:8
 W:10:1:17:0
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -494,6 +537,7 @@ F:DOOR_CLOSED
 N:39:jammed wooden door
 G:+:TERM_L_UMBER
 M:36
+T:23:12:96:9
 W:1:8:17:10
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -512,6 +556,7 @@ D:The door appears to be stuck.
 N:40:jammed steel door
 G:+:TERM_SLATE
 M:37
+T:23:13:96:10
 W:8:8:17:20
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -529,6 +574,7 @@ D:The door appears to be stuck.
 N:41:jammed iron door
 G:+:TERM_L_DARK
 M:38
+T:23:14:96:11
 W:10:8:17:40
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -545,6 +591,7 @@ D:The door appears to be stuck.
 
 N:42:open wooden door
 G:':TERM_L_UMBER
+T:22:7:96:12
 W:1:1:17:0
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -559,6 +606,7 @@ F:HURT_ACID | CAN_FLY | DOOR_OPEN
 
 N:43:open steel door
 G:':TERM_SLATE
+T:22:7:96:13
 W:8:1:17:0
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -572,6 +620,7 @@ F:CAN_FLY | DOOR_OPEN
 
 N:44:open iron door
 G:':TERM_L_DARK
+T:22:7:96:14
 W:10:1:17:0
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -586,6 +635,7 @@ F:CAN_FLY | DOOR_OPEN
 N:45:secret wooden door
 G:#:TERM_WHITE
 M:53
+T:23:22:96:15
 W:2:1:10:0
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -600,6 +650,7 @@ D:You have found a secret wooden door.
 N:46:secret steel door
 G:#:TERM_WHITE
 M:53
+T:23:22:96:16
 W:8:1:10:0
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -613,6 +664,7 @@ D:You have found a secret steel door.
 N:47:secret iron door
 G:#:TERM_WHITE
 M:53
+T:23:22:96:17
 W:10:1:10:0
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -625,6 +677,7 @@ D:You have found a secret iron door.
 
 N:48:pile of rubble
 G:::TERM_WHITE
+T:23:97:96:18
 W:1:1:22:5
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -634,6 +687,7 @@ F:NOTICE | REMEMBER | CAN_TUNNEL | ATTR_LIGHT | HURT_ROCK
 
 N:49:magma vein
 G:%:TERM_SLATE
+T:23:43:96:19
 W:1:8:20:10
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -644,6 +698,7 @@ F:LAKE | ATTR_LIGHT | HURT_ROCK
 
 N:50:quartz vein
 G:%:TERM_WHITE
+T:24:20:96:20
 W:1:6:11:20
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -654,6 +709,7 @@ F:LAKE | ATTR_LIGHT | HURT_ROCK
 
 N:51:magma vein with treasure
 G:*:TERM_ORANGE
+T:23:46:96:21
 W:1:1:19:10
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -664,6 +720,7 @@ F:WALL | ATTR_LIGHT | HURT_ROCK
 
 N:52:quartz vein with treasure
 G:*:TERM_ORANGE
+T:24:23:96:22
 W:1:1:19:20
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -674,6 +731,7 @@ F:WALL | ATTR_LIGHT | HURT_ROCK
 
 N:53:granite wall
 G:#:TERM_WHITE
+T:23:22:96:24
 W:1:1:10:40
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -686,6 +744,7 @@ F:HURT_ROCK | HURT_FIRE
 N:54:granite wall (inner)
 G:#:TERM_WHITE
 M:53
+T:23:22:96:25
 W:1:1:10:40
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -698,6 +757,7 @@ F:ATTR_LIGHT | HURT_ROCK | HURT_FIRE
 N:55:granite wall (outer)
 G:?:TERM_WHITE
 M:53
+T:23:22:96:26
 W:1:1:10:40
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -710,6 +770,7 @@ F:ATTR_LIGHT | HURT_ROCK | HURT_FIRE
 N:56:granite wall (solid)
 G:#:TERM_WHITE
 M:53
+T:23:22:96:27
 W:1:1:10:40
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -721,6 +782,7 @@ F:ATTR_LIGHT | HURT_ROCK | HURT_FIRE
 
 N:57:permanent wall
 G:#:TERM_WHITE
+T:23:37:96:28
 W:0:1:10:0
 C:0:100:100:100:100:0
 F:REMEMBER | CAN_TUNNEL | RUN | WALL | PERMANENT
@@ -731,6 +793,7 @@ D:This seems to be permanent rock.
 N:58:permanent wall (inner)
 G:#:TERM_WHITE
 M:57
+T:23:37:96:29
 W:0:1:10:0
 C:0:100:100:100:100:0
 F:REMEMBER | CAN_TUNNEL | RUN | WALL | PERMANENT
@@ -741,6 +804,7 @@ D:This seems to be permanent rock.
 N:59:permanent wall (outer)
 G:#:TERM_WHITE
 M:57
+T:23:37:96:30
 W:0:1:10:0
 C:0:100:100:100:100:0
 F:REMEMBER | CAN_TUNNEL | RUN | WALL | PERMANENT
@@ -751,6 +815,7 @@ D:This seems to be permanent rock.
 N:60:permanent wall (solid)
 G:#:TERM_WHITE
 M:57
+T:23:37:96:31
 W:0:1:10:0
 C:0:100:100:100:100:0
 F:REMEMBER | CAN_TUNNEL | RUN | WALL | PERMANENT
@@ -760,6 +825,7 @@ D:This seems to be permanent rock.
 
 N:61:monster trap (basic)
 G:^:TERM_YELLOW
+T:25:26:98:22
 X:1:1:0:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -769,6 +835,7 @@ D:You inspect your cunning trap.
 
 N:62:monster trap (sturdy)
 G:^:TERM_L_GREEN
+T:25:27:98:23
 X:1:1:1:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -778,6 +845,7 @@ D:You inspect your cunning trap.
 
 N:63:monster trap (slowing)
 G:^:TERM_NAVY_BLUE
+T:25:28:98:24
 X:1:1:2:0:55:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -787,6 +855,7 @@ D:You inspect your cunning trap.
 
 N:64:monster trap (confusion)
 G:^:TERM_ORANGE
+T:25:29:98:25
 X:1:1:3:0:25:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -796,6 +865,7 @@ D:You inspect your cunning trap.
 
 N:65:monster trap (poison gas)
 G:^:TERM_GREEN
+T:25:30:98:26
 X:1:1:4:0:20:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -805,6 +875,7 @@ D:You inspect your cunning trap.
 
 N:66:monster trap (drain life)
 G:^:TERM_MAIZE
+T:25:31:98:27
 X:1:1:5:0:58:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -814,6 +885,7 @@ D:You inspect your cunning trap.
 
 N:67:monster trap (lightning)
 G:^:TERM_BLUE
+T:25:32:98:28
 X:1:1:6:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -823,6 +895,7 @@ D:You inspect your cunning trap.
 
 N:68:monster trap (explosive)
 G:^:TERM_L_DARK
+T:25:33:98:29
 X:1:1:7:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -832,6 +905,7 @@ D:You inspect your cunning trap.
 
 N:69:monster trap (portal)
 G:^:TERM_SLATE
+T:25:34:98:30
 X:1:1:8:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -841,6 +915,7 @@ D:You inspect your cunning trap.
 
 N:70:monster trap (dispel monsters)
 G:^:TERM_RED
+T:25:35:98:31
 X:1:1:9:0:1:0:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -850,6 +925,7 @@ D:You inspect your cunning trap.
 
 N:71:up staircase
 G:<:TERM_WHITE
+T:22:13:2:15
 W:1:1:25:0
 C:0:100:100:100:100:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
@@ -859,6 +935,7 @@ F:ATTR_LIGHT
 
 N:72:down staircase
 G:>:TERM_WHITE
+T:22:16:2:12
 W:0:1:25:0
 C:0:100:100:100:100:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
@@ -868,6 +945,7 @@ F:ATTR_LIGHT | CAN_FLY
 
 N:73:up shaft
 G:<:TERM_L_UMBER
+T:23:20:2:11
 W:2:1:25:0
 C:0:100:100:100:100:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
@@ -877,6 +955,7 @@ F:ATTR_LIGHT | SHAFT
 
 N:74:down shaft
 G:>:TERM_L_UMBER
+T:23:19:2:14
 W:1:1:25:0
 C:0:100:100:100:100:0
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
@@ -886,6 +965,7 @@ F:ATTR_LIGHT | CAN_FLY | SHAFT
 
 N:75:limestone wall
 G:%:TERM_LIME_GREEN
+T:23:88:92:0
 W:12:3:11:4
 C:0:75:125:110:90:0
 K:DEFAULT:1
@@ -896,6 +976,7 @@ F:BRIDGE | LAKE | ATTR_LIGHT | HURT_ROCK | WATER
 
 N:76:sandstone wall
 G:%:TERM_YELLOW
+T:23:49:92:1
 W:3:2:11:8
 C:0:90:110:110:90:0
 K:DEFAULT:95
@@ -906,6 +987,7 @@ F:LAKE | ATTR_LIGHT | HURT_ROCK | SAND
 
 N:77:cracked granite wall
 G:%:TERM_WHITE
+T:23:25:92:2
 W:3:3:20:20
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -917,6 +999,7 @@ F:LAKE | ATTR_LIGHT | HURT_ROCK | HURT_FIRE
 
 N:78:earth wall
 G:#:TERM_UMBER
+T:23:91:92:3
 W:1:2:20:5
 C:0:100:100:100:100:0
 K:DEFAULT:84
@@ -928,6 +1011,7 @@ F:LAKE | ATTR_LIGHT | HURT_ROCK | HURT_FIRE
 
 N:79:cracked ice wall
 G:%:TERM_L_BLUE
+T:23:70:92:4
 W:30:2:20:16
 C:0:90:110:110:90:0
 K:DEFAULT:85
@@ -940,6 +1024,7 @@ F:LAKE | ATTR_LIGHT | HURT_FIRE | HURT_COLD | ICE
 
 N:80:oil shale
 G:%:TERM_SLATE
+T:23:109:92:5
 W:40:3:20:32
 C:0:90:130:110:90:0
 K:DEFAULT:1
@@ -950,6 +1035,7 @@ F:HURT_ROCK | OIL
 
 N:81:~coal
 G:%:TERM_L_DARK
+T:23:103:92:6
 W:30:3:20:16
 C:0:90:120:110:90:0
 K:DEFAULT:1
@@ -961,6 +1047,7 @@ F:ATTR_LIGHT | HURT_ROCK | HURT_FIRE | OIL
 
 N:82:~burning coal
 G:%:TERM_ORANGE
+T:23:106:92:7
 W:30:3:22:16
 C:70:90:110:110:90:0
 K:DEFAULT:139
@@ -974,6 +1061,7 @@ F:DYNAMIC
 
 N:83:loose rock
 G:;:TERM_LIGHT_GRAY
+T:23:94:92:8
 W:6:2:15:0
 C:0:100:100:100:100:0
 K:SECRET:111:0
@@ -987,6 +1075,7 @@ D:Hmm... there was something under this rock.
 N:84:earth floor
 G:.:TERM_UMBER
 E:78
+T:23:73:92:9
 W:6:3:10:0
 C:0:100:100:100:100:0
 K:HURT_WATER:108:1000
@@ -999,6 +1088,7 @@ F:HURT_WATER | CAN_FLY
 N:85:~ice
 G:.:TERM_L_BLUE
 E:86
+T:23:64:92:10
 W:45:3:20:0
 C:0:80:110:110:90:0
 K:HURT_FIRE:87:2000
@@ -1010,6 +1100,7 @@ F:ATTR_LIGHT | HURT_FIRE | CAN_FLY | ICE
 
 N:86:ice wall
 G:#:TERM_L_BLUE
+T:23:67:92:11
 W:45:2:20:40
 C:0:90:110:110:90:0
 K:CAN_TUNNEL:85:40
@@ -1021,6 +1112,7 @@ F:ATTR_LIGHT | HURT_FIRE | ICE
 
 N:87:~water
 G:;:TERM_NAVY_BLUE
+T:24:26:92:12
 W:18:2:7:0
 C:0:85:125:110:90:-2
 K:HURT_COLD:85:800
@@ -1035,6 +1127,7 @@ F:CAN_FLY | WATER
 N:88:~deep water (hidden)
 G:;:TERM_NAVY_BLUE
 M:87
+T:24:29:92:13
 W:45:3:7:0
 C:0:75:150:130:70:-4
 K:HURT_WATER:127:1000
@@ -1051,6 +1144,7 @@ D:The water is deeper than it looks.
 N:89:~acid
 G:;:TERM_GREEN
 E:77
+T:24:35:92:14
 W:67:2:22:0
 C:150:85:125:120:80:-2
 K:BRIDGE:1:0
@@ -1063,6 +1157,7 @@ N:90:~deep acid (hidden)
 G:;:TERM_GREEN
 M:89
 E:77
+T:24:38:92:15
 W:72:3:22:0
 C:300:75:150:140:60:-4
 K:BRIDGE:1:0
@@ -1081,6 +1176,7 @@ D:The acid is deeper than it looks.
 
 N:94:~burning oil
 G:::TERM_ORANGE
+T:24:65:92:16
 W:40:2:22:0
 C:200:80:150:120:80:-3
 K:BRIDGE:1:0
@@ -1092,6 +1188,7 @@ F:CAN_FLY | FIRE | DYNAMIC
 
 N:95:~sand
 G:.:TERM_YELLOW
+T:23:52:92:17
 W:16:2:20:0
 C:0:90:110:110:90:1
 K:HURT_WATER:109:1000
@@ -1103,6 +1200,7 @@ F:SHALLOW | HURT_WATER | CAN_FLY | SAND
 N:96:~deep sand (hidden)
 G:.:TERM_YELLOW
 M:95
+T:23:55:92:18
 W:22:3:20:0
 C:0:80:135:130:70:2
 K:SECRET:145:0
@@ -1114,6 +1212,7 @@ D:The sand is deeper than it looks.
 
 N:97:~mud
 G:;:TERM_UMBER
+T:24:44:92:19
 W:21:3:20:0
 C:0:90:125:110:90:-1
 K:BRIDGE:84:0
@@ -1128,6 +1227,7 @@ F:HURT_FIRE | HURT_WATER | CAN_FLY | MUD
 N:98:~deep mud (hidden)
 G:;:TERM_UMBER
 M:97
+T:24:47:92:20
 W:48:3:20:0
 C:0:85:150:130:70:-2
 K:BRIDGE:84:0
@@ -1144,6 +1244,7 @@ D:The mud is deeper than it looks.
 
 N:99:~boiling mud
 G:::TERM_ORANGE
+T:24:50:92:21
 W:60:2:22:0
 C:150:75:150:150:50:-2
 K:BRIDGE:1:0
@@ -1157,6 +1258,7 @@ F:HURT_COLD | HURT_WATER | CAN_FLY | LAVA | MUD
 N:100:~boiling water
 G:::TERM_VIOLET
 E:49
+T:24:32:92:22
 W:81:2:22:0
 C:150:75:150:150:50:-4
 K:BRIDGE:1:0
@@ -1170,6 +1272,7 @@ F:HURT_COLD | HURT_WATER | CAN_FLY | LAVA | WATER
 N:101:~lava
 G:;:TERM_RED
 E:198
+T:24:53:92:23
 W:87:1:22:0
 C:200:80:135:140:60:-3
 K:DEFAULT:139
@@ -1184,6 +1287,7 @@ N:102:~deep lava (hidden)
 G:;:TERM_RED
 M:101
 E:198
+T:24:56:92:24
 W:90:2:22:0
 C:400:75:150:160:40:-5
 K:DEFAULT:139
@@ -1199,6 +1303,7 @@ D:The lava is deeper than it looks.
 
 N:103:~oil
 G:;:TERM_L_DARK
+T:24:59:92:25
 W:40:2:22:0
 C:0:90:125:110:90:-2
 K:HURT_FIRE:94:0
@@ -1212,6 +1317,7 @@ N:104:~deep oil (hidden)
 G:;:TERM_L_DARK
 M:103
 E:80
+T:24:62:92:26
 W:48:3:20:0
 C:0:80:150:130:70:-4
 K:HURT_FIRE:94:0
@@ -1225,6 +1331,7 @@ D:The oil is deeper than it looks.
 
 N:105:wall of fire
 G:;:TERM_ORANGE
+T:24:98:92:27
 W:87:2:22:0
 C:75:85:150:140:60:-4
 K:HURT_WATER:139:500
@@ -1238,6 +1345,7 @@ F:FIRE | DYNAMIC
 
 N:106:storm cloud
 G:':TERM_YELLOW
+T:26:77:92:28
 W:20:2:22:0
 C:0:100:100:100:100:0
 F:PROJECT | MOVE | PLACE | DROP | NOTICE
@@ -1247,6 +1355,7 @@ D:You are struck by lightning!
 
 N:107:wet floor
 G:.:TERM_NAVY_BLUE
+T:23:4:92:29
 W:18:2:20:0
 C:0:95:105:100:100:-1
 K:HURT_WATER:87:500
@@ -1259,6 +1368,7 @@ F:HURT_COLD | HURT_WATER | CAN_FLY | WATER
 
 N:108:muddy floor
 G:.:TERM_ORANGE
+T:24:41:92:30
 W:21:2:12:0
 C:0:95:110:105:95:-1
 K:NEED_TREE:133:0
@@ -1271,6 +1381,7 @@ F:HURT_FIRE | HURT_WATER | CAN_FLY | MUD
 
 N:109:~wet sand
 G:.:TERM_LIGHT_GRAY
+T:23:58:92:31
 W:22:3:20:0
 C:0:90:110:115:85:-1
 K:HURT_WATER:128:1000
@@ -1283,6 +1394,7 @@ F:HURT_FIRE | HURT_COLD | HURT_WATER | CAN_FLY | WATER
 
 N:110:~earth
 G:.:TERM_UMBER
+T:24:80:93:0
 W:20:2:20:0
 C:0:100:100:100:100:0
 K:HURT_WATER:108:800
@@ -1294,6 +1406,7 @@ F:CAN_FLY
 
 N:111:rock
 G:;:TERM_LIGHT_GRAY
+T:23:94:93:1
 W:6:2:15:0
 C:0:100:100:100:100:0
 K:HURT_ROCK:110:0
@@ -1304,6 +1417,7 @@ F:CAN_FLY
 
 N:112:~pebbles
 G:.:TERM_SLATE
+T:24:68:93:2
 W:6:2:19:0
 C:0:100:100:100:100:0
 K:BRIDGE:84:0
@@ -1314,6 +1428,7 @@ F:NOTICE | RUN | BRIDGE | ATTR_LIGHT | CAN_FLY
 
 N:113:fire
 G:':TERM_ORANGE
+T:24:17:93:3
 W:30:2:22:0
 C:25:85:130:110:90:-3
 K:HURT_WATER:139:100
@@ -1328,6 +1443,7 @@ F:DYNAMIC
 
 N:114:thicket
 G:::TERM_L_GREEN
+T:24:71:93:4
 W:20:2:17:10
 C:0:100:125:110:90:-3
 K:DEFAULT:110
@@ -1342,6 +1458,7 @@ F:ATTR_LIGHT | HURT_FIRE | CAN_FLY | FOREST
 
 N:115:tree
 G:::TERM_L_UMBER
+T:24:74:93:5
 W:8:2:20:30
 C:0:100:130:110:90:0
 K:CAN_BASH:134:6
@@ -1353,6 +1470,7 @@ F:ATTR_LIGHT | HURT_FIRE | CAN_FLY | FOREST | TREE
 
 N:116:burning tree
 G:#:TERM_ORANGE
+T:24:77:93:6
 W:8:2:22:15
 C:50:90:150:110:90:-3
 K:HURT_WATER:139:100
@@ -1368,6 +1486,7 @@ F:HURT_COLD | HURT_WATER | CAN_FLY | FIRE | DYNAMIC
 
 N:118:bush
 G:;:TERM_LIME_GREEN
+T:23:82:93:7
 W:20:2:19:0
 C:0:100:120:105:95:-3
 K:BRIDGE:135:0
@@ -1381,6 +1500,7 @@ F:CAN_FLY | FOREST
 
 N:119:~thorns
 G:;:TERM_LIME_GREEN
+T:24:95:93:8
 W:20:2:19:0
 C:3:100:130:115:85:-5
 K:BRIDGE:135:0
@@ -1394,6 +1514,7 @@ D:The bush is full of thorns.
 
 N:120:bush fire
 G:':TERM_ORANGE
+T:24:89:93:9
 W:20:2:22:0
 C:25:85:130:110:90:-3
 K:HURT_WATER:139:100
@@ -1407,6 +1528,7 @@ F:HURT_COLD | HURT_WATER | CAN_FLY | FIRE | DYNAMIC
 
 N:121:~brambles
 G:;:TERM_L_RED
+T:24:92:93:10
 W:20:2:19:0
 C:5:100:135:115:85:-5
 K:BRIDGE:135:0
@@ -1422,6 +1544,7 @@ D:The bush has shiny berries amidst sharp thorns.
 
 N:123:crest of a wave over sand
 G:*:TERM_SNOW_WHITE
+T:24:107:93:11
 W:22:3:7:0
 C:0:90:150:130:70:-2
 K:HURT_COLD:85:1000
@@ -1433,6 +1556,7 @@ F:HURT_FIRE | HURT_COLD | CAN_FLY | WATER | DYNAMIC
 
 N:124:crest of a wave over water
 G:*:TERM_L_BLUE
+T:24:110:93:12
 W:18:2:7:0
 C:0:90:150:130:70:-2
 K:HURT_COLD:85:800
@@ -1445,6 +1569,7 @@ F:HURT_FIRE | HURT_COLD | CAN_FLY | WATER | DYNAMIC
 N:125:crest of a wave over deep water (hidden)
 G:*:TERM_L_BLUE
 M:124
+T:24:113:93:13
 W:45:2:7:0
 C:0:90:175:150:50:-4
 K:HURT_COLD:85:1000
@@ -1458,6 +1583,7 @@ D:The water is deeper than it looks.
 
 N:126:wave over water
 G:':TERM_NAVY_BLUE
+T:24:116:93:14
 W:18:2:7:0
 C:0:90:135:120:80:-2
 K:HURT_FIRE:87:200
@@ -1471,6 +1597,7 @@ F:HURT_COLD | HURT_WATER | CAN_FLY | WATER | DYNAMIC
 N:127:wave over deep water (hidden)
 G:':TERM_NAVY_BLUE
 M:126
+T:24:119:93:15
 W:45:2:7:0
 C:0:90:160:135:65:-4
 K:HURT_FIRE:88:300
@@ -1486,6 +1613,7 @@ D:The water is deeper than it looks.
 
 N:128:wave over sand
 G:':TERM_LIGHT_GRAY
+T:24:122:93:16
 W:22:3:7:0
 C:0:90:135:120:80:-2
 K:HURT_WATER:123:1000
@@ -1498,6 +1626,7 @@ F:HURT_COLD | CAN_FLY | WATER | DYNAMIC
 
 N:129:wave breaking over a stone bridge
 G:*:TERM_WHITE
+T:-128:-128:93:17
 W:18:2:8:0
 C:0:100:100:100:100:0
 K:DEFAULT:136
@@ -1508,6 +1637,7 @@ F:WATER
 
 N:130:sand dune
 G:<:TERM_YELLOW
+T:23:61:93:18
 W:22:3:15:0
 C:0:75:150:140:60:2
 K:HURT_ROCK:145:150
@@ -1522,6 +1652,7 @@ F:SAND
 
 N:133:tree branch
 G:%:TERM_GREEN
+T:24:83:93:19
 W:8:2:20:1
 C:0:100:150:120:85:-1
 K:NEED_TREE:110:1
@@ -1533,6 +1664,7 @@ F:FOREST | NEED_TREE
 
 N:134:~forest soil
 G:.:TERM_L_GREEN
+T:23:76:93:20
 W:8:3:17:1
 C:0:85:100:100:100:1
 K:DEFAULT:135
@@ -1545,6 +1677,7 @@ F:HURT_FIRE | CAN_FLY | FOREST
 
 N:135:~dry forest soil
 G:.:TERM_YELLOW
+T:23:79:93:21
 W:8:2:19:1
 C:0:90:100:100:100:-1
 K:TREE:133:1
@@ -1557,6 +1690,7 @@ F:CAN_FLY | FOREST
 
 N:136:stone bridge
 G:.:TERM_WHITE
+T:-128:-128:93:22
 W:1:2:17:1
 C:0:100:100:100:100:0
 F:LOS | PROJECT | MOVE | PLACE | DROP
@@ -1565,6 +1699,7 @@ F:NOTICE | RUN | BRIDGED | ATTR_LIGHT | CAN_FLY
 
 N:137:boiling water geyser
 G:*:TERM_RASPBERRY
+T:24:125:93:23
 W:81:2:22:0
 C:250:75:175:155:45:-4
 K:BRIDGE:1:0
@@ -1576,6 +1711,7 @@ F:WATER | DYNAMIC
 
 N:138:cracked wall over lava
 G:%:TERM_RED_LAVA
+T:23:124:93:24
 W:87:2:22:40
 C:100:80:150:130:70:0
 K:DEFAULT:101
@@ -1586,6 +1722,7 @@ F:ATTR_LIGHT | HURT_ROCK | LAVA | DYNAMIC
 
 N:139:burnt spot
 G:.:TERM_L_DARK
+T:23:7:94:0
 W:30:2:20:0
 C:0:100:100:100:100:0
 K:TREE:133:0
@@ -1595,6 +1732,7 @@ F:NOTICE | RUN | BRIDGE | ATTR_LIGHT | CAN_FLY
 
 N:140:~deep water
 G:::TERM_NAVY_BLUE
+T:24:29:93:25
 W:45:3:7:0
 C:0:75:150:130:70:-4
 K:HURT_WATER:147:1000
@@ -1608,6 +1746,7 @@ F:HURT_FIRE | HURT_COLD | HURT_WATER | CAN_FLY | WATER
 N:141:~deep oil
 G:::TERM_L_DARK
 E:80
+T:24:62:93:26
 W:48:3:20:0
 C:0:80:150:130:70:-4
 K:HURT_FIRE:94:0
@@ -1620,6 +1759,7 @@ F:HURT_FIRE | CAN_FLY | OIL
 N:142:~deep lava
 G:::TERM_RED
 E:198
+T:24:56:93:27
 W:90:2:22:0
 C:400:75:150:160:40:-5
 K:DEFAULT:139
@@ -1633,6 +1773,7 @@ F:HURT_COLD | CAN_FLY | LAVA | DYNAMIC
 N:143:~deep acid
 G:::TERM_GREEN
 E:77
+T:24:38:93:28
 W:81:3:22:0
 C:300:75:150:140:60:-4
 K:BRIDGE:1:0
@@ -1643,6 +1784,7 @@ F:CAN_FLY | ACID
 
 N:144:~deep mud
 G:::TERM_UMBER
+T:24:47:93:29
 W:48:3:20:0
 C:0:85:150:130:70:-2
 K:BRIDGE:84:0
@@ -1656,6 +1798,7 @@ F:HURT_FIRE | CAN_FLY | MUD
 
 N:145:~deep sand
 G:.:TERM_MAIZE
+T:23:55:93:30
 W:22:3:20:0
 C:0:80:135:130:70:2
 F:LOS | PROJECT | MOVE | PLACE | DROP
@@ -1665,6 +1808,7 @@ F:SAND
 
 N:146:crest of a wave over deep water
 G:*:TERM_L_BLUE
+T:24:116:93:31
 W:45:2:7:0
 C:0:90:175:150:50:-4
 K:HURT_COLD:85:1000
@@ -1676,6 +1820,7 @@ F:HURT_COLD | CAN_FLY | WATER | DYNAMIC
 
 N:147:wave over deep water
 G:':TERM_NAVY_BLUE
+T:24:122:94:1
 W:45:2:7:0
 C:0:90:160:135:65:-4
 K:HURT_FIRE:140:300
@@ -1690,6 +1835,7 @@ F:DYNAMIC
 N:148:pile of rubble (hidden)
 G:::TERM_WHITE
 M:48
+T:23:97:96:18
 W:1:1:22:5
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -1702,6 +1848,7 @@ D:You have found something under the rubble.
 
 N:149:pile of rubble over an object
 G:*:TERM_WHITE
+T:23:100:2:20
 W:1:1:22:5
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -1712,6 +1859,7 @@ F:HURT_ROCK
 
 N:150:shimmering violet rune
 G:^:TERM_VIOLET
+T:25:0:95:0
 X:2:8:1:200:3:5:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1721,6 +1869,7 @@ D:fires a magic missile!
 
 N:151:shimmering gray rune
 G:^:TERM_LIGHT_GRAY
+T:25:1:95:1
 X:10:8:2:150:5:5:10
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1730,6 +1879,7 @@ D:fires a holy orb!
 
 N:152:shimmering white rune
 G:^:TERM_WHITE
+T:25:2:95:2
 X:1:8:3:250:2:2:3
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1739,6 +1889,7 @@ D:shoots an arrow!
 
 N:153:green cloudy rune
 G:^:TERM_GREEN
+T:25:3:95:3
 X:15:8:4:88:20:10:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1748,6 +1899,7 @@ D:casts a ball of poison!
 
 N:154:fiery rune
 G:^:TERM_RED
+T:25:4:95:4
 X:15:8:5:32:18:10:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | GLOW | ATTR_LIGHT
@@ -1757,6 +1909,7 @@ D:casts a ball of flames!
 
 N:155:rune of sparks
 G:^:TERM_BLUE
+T:25:5:95:5
 X:15:8:6:32:17:10:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1766,6 +1919,7 @@ D:casts a beam of lightning!
 
 N:156:frozen rune
 G:^:TERM_WHITE
+T:25:6:95:6
 X:15:8:7:32:19:10:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1775,6 +1929,7 @@ D:casts a ball of frost!
 
 N:157:shimmering light gray rune
 G:^:TERM_LIGHT_GRAY
+T:25:7:95:7
 X:15:8:8:32:16:10:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1784,6 +1939,7 @@ D:casts a ball of acid!
 
 N:158:shimmering light green rune
 G:^:TERM_L_GREEN
+T:25:8:95:8
 X:40:8:9:44:29:15:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1793,6 +1949,7 @@ D:casts a ball of nether!
 
 N:159:shimmering light red rune
 G:^:TERM_L_RED
+T:25:9:95:9
 X:25:8:10:44:28:10:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1802,6 +1959,7 @@ D:casts a ball of nexus!
 
 N:160:shimmering tan rune
 G:^:TERM_L_BROWN
+T:25:10:95:10
 X:40:8:11:200:25:10:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1811,6 +1969,7 @@ D:creates an air of confusion!
 
 N:161:shimmering green rune
 G:^:TERM_GREEN
+T:25:11:95:11
 X:40:8:12:250:26:20:20
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1820,6 +1979,7 @@ D:unleashes a cacophany of sound!
 
 N:162:shimmering light brown rune
 G:^:TERM_L_UMBER
+T:25:12:95:12
 X:20:8:13:144:27:10:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1829,6 +1989,7 @@ D:fires a ball of shards!
 
 N:163:blurry white rune
 G:^:TERM_WHITE
+T:25:13:95:13
 X:35:8:14:200:12:5:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1838,6 +1999,7 @@ D:makes the whole area become distorted!
 
 N:164:humming rune
 G:^:TERM_VIOLET
+T:25:14:95:14
 X:5:8:15:200:54:20:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1847,6 +2009,7 @@ D:makes a high pitched scream!
 
 N:165:dull white rune
 G:^:TERM_WHITE
+T:25:15:95:15
 X:45:8:16:200:13:5:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1856,6 +2019,7 @@ D:makes everything slow down!
 
 N:166:shimmering blue rune
 G:^:TERM_L_BLUE
+T:25:16:95:16
 X:50:16:17:250:15:5:10
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1865,6 +2029,7 @@ D:makes time slow down!
 
 N:167:shimmering orange rune
 G:^:TERM_ORANGE
+T:25:17:95:17
 X:5:8:18:144:22:5:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1874,6 +2039,7 @@ D:makes the area brighten!
 
 N:168:dull gray rune
 G:^:TERM_SLATE
+T:25:18:95:18
 X:5:8:19:144:23:5:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1883,6 +2049,7 @@ D:makes the area go dark!
 
 N:169:bright red rune
 G:^:TERM_RED
+T:25:19:95:19
 X:50:8:20:250:10:5:15
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1892,6 +2059,7 @@ D:fires a meteor!
 
 N:170:bubbling red rune
 G:^:TERM_RED
+T:25:20:95:20
 X:60:8:21:250:9:10:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1901,6 +2069,7 @@ D:fires a ball of plasma!
 
 N:171:bright violet rune
 G:^:TERM_VIOLET
+T:25:21:95:21
 X:45:8:22:44:31:5:10
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1910,6 +2079,7 @@ D:fires a ball of disenchantment!
 
 N:172:shimmering yellow rune
 G:^:TERM_YELLOW
+T:25:22:95:22
 X:20:8:23:200:21:10:5
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:REMEMBER | CAN_DISARM | TRAP | ATTR_LIGHT | EFFECT
@@ -1919,6 +2089,7 @@ D:fires a ball of static!
 
 N:173:cloud of frost
 G:*:TERM_SNOW_WHITE
+T:24:8:5:17
 X:1:1:0:30:19:3:3
 F:LOS | PROJECT | MOVE | PLACE | DROP
 F:NOTICE | ATTR_LIGHT | EFFECT
@@ -1926,6 +2097,7 @@ F:NOTICE | ATTR_LIGHT | EFFECT
 
 N:174:inertia cloud
 G:*:TERM_LIGHT_GRAY
+T:24:5:5:12
 X:1:1:0:20:13:5:15
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:ATTR_LIGHT | EFFECT
@@ -1933,6 +2105,7 @@ F:ATTR_LIGHT | EFFECT
 
 N:175:~smoke
 G:':TERM_L_DARK
+T:24:2:97:0
 X:30:2:0:3:98:2:5
 F:PROJECT | MOVE | PLACE | DROP | NOTICE
 F:ATTR_LIGHT | EFFECT
@@ -1940,6 +2113,7 @@ F:ATTR_LIGHT | EFFECT
 
 N:176:~fog
 G:*:TERM_VIOLET
+T:24:1:97:1
 X:20:2:0:0:99:5:5
 F:PROJECT | MOVE | PLACE | DROP | NOTICE
 F:ATTR_LIGHT | EFFECT
@@ -1947,6 +2121,7 @@ F:ATTR_LIGHT | EFFECT
 
 N:177:poison cloud
 G:*:TERM_L_GREEN
+T:24:4:97:2
 X:20:2:0:15:20:3:5
 F:PROJECT | MOVE | PLACE | DROP | NOTICE
 F:ATTR_LIGHT | EFFECT
@@ -1954,6 +2129,7 @@ F:ATTR_LIGHT | EFFECT
 
 N:178:static cloud
 G:*:TERM_YELLOW
+T:24:10:97:3
 X:20:2:0:25:21:5:5
 F:LOS | PROJECT | MOVE | PLACE | DROP
 F:NOTICE | ATTR_LIGHT | EFFECT
@@ -1961,6 +2137,7 @@ F:NOTICE | ATTR_LIGHT | EFFECT
 
 N:179:steam cloud
 G:*:TERM_SNOW_WHITE
+T:24:0:97:4
 X:1:1:0:5:97:1:4
 F:PROJECT | MOVE | PLACE | DROP | NOTICE
 F:ATTR_LIGHT | EFFECT
@@ -1968,6 +2145,7 @@ F:ATTR_LIGHT | EFFECT
 
 N:180:gravity cloud
 G:*:TERM_TAUPE
+T:24:15:97:5
 X:1:1:0:20:12:5:15
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:ATTR_LIGHT | EFFECT
@@ -1975,6 +2153,7 @@ F:ATTR_LIGHT | EFFECT
 
 N:181:~sparks
 G:*:TERM_BLUE
+T:24:13:97:6
 X:1:1:0:10:17:3:3
 F:LOS | PROJECT | MOVE | PLACE | NOTICE
 F:ATTR_LIGHT | EFFECT
@@ -1982,6 +2161,7 @@ F:ATTR_LIGHT | EFFECT
 
 N:182:~flashing lite
 G:*:TERM_YELLOW
+T:24:6:97:7
 X:1:1:0:5:22:5:5
 F:LOS | PROJECT | MOVE | PLACE | DROP
 F:NOTICE | ATTR_LIGHT | EFFECT
@@ -1989,6 +2169,7 @@ F:NOTICE | ATTR_LIGHT | EFFECT
 
 N:183:~flashing darkness
 G:*:TERM_L_DARK
+T:24:11:97:8
 X:1:1:0:20:23:5:5
 F:PROJECT | MOVE | PLACE | DROP | NOTICE
 F:ATTR_LIGHT | EFFECT
@@ -1996,6 +2177,7 @@ F:ATTR_LIGHT | EFFECT
 
 N:184:nether cloud
 G:*:TERM_L_GREEN
+T:24:3:97:9
 X:1:1:0:30:29:3:5
 F:LOS | PROJECT | MOVE | PLACE | DROP
 F:NOTICE | ATTR_LIGHT | EFFECT
@@ -2003,6 +2185,7 @@ F:NOTICE | ATTR_LIGHT | EFFECT
 
 N:185:cloud of chaos
 G:*:TERM_L_RED
+T:24:12:97:10
 X:1:1:0:30:30:3:3
 F:LOS | PROJECT | MOVE | PLACE | DROP
 F:NOTICE | ATTR_LIGHT | EFFECT
@@ -2010,6 +2193,7 @@ F:NOTICE | ATTR_LIGHT | EFFECT
 
 N:186:cloud of disenchantment
 G:*:TERM_VIOLET
+T:24:7:97:11
 X:1:1:0:10:31:3:5
 F:LOS | PROJECT | MOVE | PLACE | DROP
 F:NOTICE | ATTR_LIGHT | EFFECT
@@ -2017,6 +2201,7 @@ F:NOTICE | ATTR_LIGHT | EFFECT
 
 N:187:nexus cloud
 G:*:TERM_L_RED
+T:24:14:97:12
 X:1:1:0:30:28:3:5
 F:LOS | PROJECT | MOVE | PLACE | DROP
 F:NOTICE | ATTR_LIGHT | EFFECT
@@ -2024,6 +2209,7 @@ F:NOTICE | ATTR_LIGHT | EFFECT
 
 N:188:time cloud
 G:*:TERM_L_BLUE
+T:24:9:97:13
 X:1:1:0:30:15:3:5
 F:LOS | PROJECT | MOVE | PLACE | DROP
 F:NOTICE | ATTR_LIGHT | EFFECT
@@ -2031,6 +2217,7 @@ F:NOTICE | ATTR_LIGHT | EFFECT
 
 N:189:cloud of confusion
 G:*:TERM_L_UMBER
+T:24:6:97:14
 X:1:1:0:15:25:3:3
 F:LOS | PROJECT | MOVE | PLACE | DROP
 F:NOTICE | ATTR_LIGHT | EFFECT
@@ -2039,6 +2226,7 @@ F:NOTICE | ATTR_LIGHT | EFFECT
 N:190:~forest soil (dynamic)
 G:.:TERM_L_GREEN
 M:134
+T:-128:-128:93:20
 W:8:3:17:1
 C:0:85:100:100:100:1
 K:DEFAULT:135
@@ -2051,6 +2239,7 @@ F:CAN_FLY | FOREST | DYNAMIC
 
 N:191:~drain life
 G:*:TERM_VIOLET
+T:26:78:94:11
 X:1:1:0:30:58:2:3
 F:LOS | PROJECT | MOVE | PLACE | DROP
 F:NOTICE | ATTR_LIGHT | EFFECT
@@ -2058,18 +2247,21 @@ F:NOTICE | ATTR_LIGHT | EFFECT
 
 N:192:glacier
 G:#:TERM_L_BLUE
+T:24:101:94:10
 X:1:1:0:0:11:15:15
 F:LOS | NOTICE | ATTR_LIGHT | EFFECT
 
 
 N:193:strange inscription
 G:*:TERM_VIOLET
+T:23:28:1:5
 X:1:1:0:0:1:0:0
 F:NOTICE | ATTR_LIGHT | EFFECT
 
 
 N:194:putrid flower
 G:;:TERM_WHITE
+T:23:85:34:27
 W:35:2:19:0
 C:0:100:100:100:100:-1
 K:HURT_FIRE:139:20
@@ -2082,6 +2274,7 @@ D:The putrid flower was destroyed!
 
 N:195:tree branch covered with snow
 G:%:TERM_WHITE
+T:24:86:94:9
 W:8:2:20:1
 C:0:100:150:120:85:-1
 K:NEED_TREE:85:1
@@ -2093,6 +2286,7 @@ F:FOREST | NEED_TREE
 
 N:196:cracked wall over boiling water
 G:%:TERM_VIOLET
+T:23:118:94:2
 W:81:2:22:40
 C:75:80:135:140:60:0
 K:DEFAULT:100
@@ -2103,6 +2297,7 @@ F:ATTR_LIGHT | HURT_ROCK | LAVA | WATER
 
 N:197:cracked wall over boiling mud
 G:%:TERM_ORANGE_PEEL
+T:23:115:94:3
 W:60:2:22:40
 C:75:80:135:140:60:0
 K:DEFAULT:99
@@ -2113,6 +2308,7 @@ F:ATTR_LIGHT | HURT_ROCK | LAVA | MUD
 
 N:198:scorched wall
 G:#:TERM_L_DARK
+T:23:34:94:4
 W:30:2:10:20
 C:0:100:100:100:100:0
 K:DEFAULT:139
@@ -2123,6 +2319,7 @@ F:HURT_ROCK
 
 N:199:wall carved by elvish hands
 G:*:TERM_LIME_GREEN
+T:23:112:94:5
 W:1:2:10:40
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -2133,6 +2330,7 @@ F:ATTR_LIGHT | HURT_ROCK
 
 N:200:wall covered with vines
 G:%:TERM_UMBER
+T:22:19:94:6
 W:8:2:10:40
 C:0:90:110:105:95:0
 K:DEFAULT:110
@@ -2144,6 +2342,7 @@ F:HURT_ROCK | HURT_FIRE | FOREST
 
 N:201:silent watcher
 G:*:TERM_RASPBERRY
+T:23:31:94:7
 W:35:1:15:40
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -2154,6 +2353,7 @@ F:ATTR_LIGHT | HURT_ROCK | DYNAMIC
 
 N:202:ethereal wall
 G:*:TERM_YELLOW
+T:23:40:94:8
 W:35:1:15:40
 C:0:100:100:100:100:0
 K:DEFAULT:1
@@ -2165,6 +2365,7 @@ F:ATTR_LIGHT | HURT_ROCK | HURT_FIRE
 
 N:203:shard cloud
 G:*:TERM_UMBER
+T:26:79:5:20
 X:1:1:0:15:27:3:5
 F:LOS | PROJECT | MOVE | PLACE | DROP
 F:NOTICE | ATTR_LIGHT | EFFECT
@@ -2172,6 +2373,7 @@ F:NOTICE | ATTR_LIGHT | EFFECT
 
 N:204:meteor strike
 G:*:TERM_RASPBERRY
+T:26:82:5:12
 X:1:1:0:30:10:4:4
 F:LOS | PROJECT | MOVE | PLACE | DROP
 F:NOTICE | ATTR_LIGHT | EFFECT
@@ -2179,6 +2381,7 @@ F:NOTICE | ATTR_LIGHT | EFFECT
 
 N:205:cracked wall over acid
 G:%:TERM_JUNGLE_GREEN
+T:23:121:94:3
 W:67:2:22:0
 C:80:80:135:140:60:0
 K:DEFAULT:89
@@ -2189,6 +2392,7 @@ F:HURT_ROCK | ACID
 
 N:206:cobblestone street
 G:.:TERM_SILVER
+T:24:104:0:0
 W:0:1:15:0
 C:0:100:100:100:100:0
 F:LOS | PROJECT | MOVE | PLACE | DROP

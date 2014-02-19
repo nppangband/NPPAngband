@@ -594,7 +594,8 @@ void object_kind::object_kind_wipe()
     d_char = QChar(' ');
     autoinscribe.clear();
     flavor = squelch = 0;
-    aware = tried = everseen;
+    aware = tried = everseen = 0;
+    tile_32x32_y = tile_32x32_x = tile_8x8_y = tile_8x8_x = 0;
 }
 
 artifact_type::artifact_type()
@@ -634,5 +635,6 @@ void flavor_type::flavor_wipe()
     tval = sval = color_num = 0;
     d_color = QColor("black");
     d_char = QChar(' ');
+    tile_32x32_y = tile_32x32_x = tile_8x8_y = tile_8x8_x = 0;
 }
 
