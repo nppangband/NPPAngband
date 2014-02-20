@@ -794,6 +794,20 @@ static void map_terrain (s16b y, s16b x)
     dun_ptr->special_lighting = FLOOR_LIGHT_NORMAL;
     dun_ptr->dtrap = FALSE;
 
+    // TODO REMOVE THIS
+    /*
+    int dist = distance(p_ptr->py, p_ptr->px, y, x);
+    if (dist < 2) {
+        dun_ptr->ui_flags |= UI_LIGHT_TORCH;
+    }
+    else if (dist < 3) {
+        dun_ptr->ui_flags |= UI_LIGHT_BRIGHT;
+    }
+    else if (dist < 4) {
+        dun_ptr->ui_flags |= UI_LIGHT_DIM;
+    }
+    */
+
     /* Boring grids (floors, etc) */
     if (!(f_info[feat].f_flags1 & (FF1_REMEMBER)))
     {
@@ -1084,6 +1098,7 @@ static void map_effects (s16b y, s16b x)
         {
             dun_ptr->effect_color = f_ptr->d_color;
             dun_ptr->effect_tile = f_ptr->tile_id;
+            // dun_ptr->ui_flags |= UI_TRANSPARENT_EFFECT; // TODO REMOVE THIS
         }
         /* Permanent clouds */
         else if (x_ptr->x_type == EFFECT_PERMANENT_CLOUD)
@@ -1162,6 +1177,7 @@ static void map_monster (s16b y, s16b x)
             dun_ptr->monster_color = r_ptr->d_color;
             dun_ptr->monster_char = r_ptr->d_char;
             dun_ptr->monster_tile = r_ptr->tile_id;
+            //dun_ptr->ui_flags |= UI_TRANSPARENT_MONSTER;
 
             /* Hack -- monster hallucination */
             if (p_ptr->timed[TMD_IMAGE])
@@ -1261,6 +1277,8 @@ static void map_monster (s16b y, s16b x)
 
 void map_info(s16b y, s16b x)
 {
+    dungeon_info[y][x].ui_flags = 0;
+
     // Map each layer of the dungeon
     map_terrain (y, x);
 

@@ -39,14 +39,25 @@ public:
     void calculate_cell_size();
     QPixmap darken_pix(QPixmap src);
     QPixmap lighten_pix(QPixmap src);
+    QPixmap torch_pix(QPixmap src);
 };
+
+QPixmap MainWindowPrivate::torch_pix(QPixmap src)
+{
+    QImage img = src.toImage();
+    QPainter p(&img);
+    p.setCompositionMode(QPainter::CompositionMode_HardLight);
+    p.fillRect(img.rect(), QColor("yellow").darker(150));
+    QPixmap pix = QPixmap::fromImage(img);
+    return pix;
+}
 
 QPixmap MainWindowPrivate::darken_pix(QPixmap src)
 {
     QImage img = src.toImage();
     QPainter p(&img);
-    p.setCompositionMode(QPainter::CompositionMode_Darken);
-    p.fillRect(img.rect(), QColor("#888"));
+    p.setCompositionMode(QPainter::CompositionMode_HardLight);
+    p.fillRect(img.rect(), QColor("#444"));
     QPixmap pix = QPixmap::fromImage(img);
     return pix;
 }
@@ -55,8 +66,8 @@ QPixmap MainWindowPrivate::lighten_pix(QPixmap src)
 {
     QImage img = src.toImage();
     QPainter p(&img);
-    p.setCompositionMode(QPainter::CompositionMode_Lighten);
-    p.fillRect(img.rect(), QColor("#444"));
+    p.setCompositionMode(QPainter::CompositionMode_HardLight);
+    p.fillRect(img.rect(), QColor("#999"));
     QPixmap pix = QPixmap::fromImage(img);
     return pix;
 }
@@ -278,7 +289,11 @@ void MainWindowPrivate::redraw_cell(int y, int x)
     QChar square_char = d_ptr->dun_char;
     QColor square_color = d_ptr->dun_color;
     bool empty = true;
-    QString key2;    
+    u32b flags = 0;
+    QString key2;
+    qreal opacity = 1;
+
+    flags = (d_ptr->ui_flags & (UI_LIGHT_BRIGHT | UI_LIGHT_DIM | UI_LIGHT_TORCH));
 
     // Draw visible monsters
     if (d_ptr->has_visible_monster())
@@ -289,6 +304,9 @@ void MainWindowPrivate::redraw_cell(int y, int x)
         empty = false;
 
         key2 = d_ptr->monster_tile;
+
+        flags |= (d_ptr->ui_flags & UI_TRANSPARENT_MONSTER);
+        opacity = 0.5;
     }
     // Draw effects
     else if (d_ptr->has_visible_effect())
@@ -299,6 +317,9 @@ void MainWindowPrivate::redraw_cell(int y, int x)
         empty = false;
 
         key2 = d_ptr->effect_tile;
+
+        flags |= (d_ptr->ui_flags & UI_TRANSPARENT_EFFECT);
+        opacity = 0.7;
     }
     // Draw objects
     else if (d_ptr->has_visible_object())
@@ -322,18 +343,28 @@ void MainWindowPrivate::redraw_cell(int y, int x)
         if (key1.length() > 0) {
             rebuild_tile(key1);
             QPixmap pix = tiles[key1];
-            int z = rand_int(3);
-            if (z == 0) pix = darken_pix(pix);
-            else if (z == 1) pix = lighten_pix(pix);
+            if (flags & UI_LIGHT_TORCH) {
+                pix = torch_pix(pix);
+            }
+            else if (flags & UI_LIGHT_BRIGHT) {
+                pix = lighten_pix(pix);
+            }
+            else if (flags & UI_LIGHT_DIM) {
+                pix = darken_pix(pix);
+            }
             b_items_g[y][x]->setPixmap(pix);
             done_bg = true;
         }
         b_items_g[y][x]->setVisible(done_bg);
 
+        items_g[y][x]->setOpacity(1);
         // Draw foreground tile
         if (key2.length() > 0) {
            rebuild_tile(key2);
            items_g[y][x]->setPixmap(tiles[key2]);
+           if (flags & (UI_TRANSPARENT_EFFECT | UI_TRANSPARENT_MONSTER)) {
+               items_g[y][x]->setOpacity(opacity);
+           }
            done_fg = true;
         }
         items_g[y][x]->setVisible(done_fg);
