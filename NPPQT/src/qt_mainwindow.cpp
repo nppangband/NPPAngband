@@ -417,7 +417,7 @@ MainWindow::MainWindow()
     set_map();
     priv->init_scene(dungeon_scene, graphics_view);
     priv->set_font(cur_font);
-    //priv->set_graphic_mode(GRAPHICS_DAVID_GERVAIS);
+    priv->set_graphic_mode(GRAPHICS_DAVID_GERVAIS);
 
     setWindowFilePath(QString());
 }

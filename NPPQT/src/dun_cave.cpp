@@ -710,7 +710,7 @@ static void special_lighting_floor(dungeon_type *dun_ptr)
                 dun_ptr->ui_flags |= UI_COSMIC_TORCH;
             }
 
-            if (dun_ptr->dun_color.red() + dun_ptr->dun_color.green() == dun_ptr->dun_color.blue() * 2) {
+            if (IS_GRAY(dun_ptr->dun_color)) {
                 dun_ptr->dun_color = defined_colors[TERM_YELLOW];
             }
         }                
@@ -730,9 +730,7 @@ static void special_lighting_floor(dungeon_type *dun_ptr)
     else if (view_bright_light) {
         dun_ptr->ui_flags |= UI_LIGHT_BRIGHT;
 
-        if (dun_ptr->dun_color.red() + dun_ptr->dun_color.green() == dun_ptr->dun_color.blue() * 2) {
-            dun_ptr->dun_color = defined_colors[TERM_SLATE];
-        }
+        dun_ptr->dun_color = dun_ptr->dun_color.darker(150);
 
         return;
     }
@@ -760,9 +758,7 @@ static void special_lighting_wall(dungeon_type *dun_ptr)
     else if (view_bright_light) {
         dun_ptr->ui_flags |= UI_LIGHT_BRIGHT;
 
-        if (dun_ptr->dun_color.red() + dun_ptr->dun_color.green() == dun_ptr->dun_color.blue() * 2) {
-            dun_ptr->dun_color = defined_colors[TERM_SLATE];
-        }
+        dun_ptr->dun_color = dun_ptr->dun_color.darker(150);
 
         return;
     }
