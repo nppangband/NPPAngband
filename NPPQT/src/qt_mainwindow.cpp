@@ -39,27 +39,28 @@ public:
     void calculate_cell_size();
     QPixmap darken_pix(QPixmap src);
     QPixmap lighten_pix(QPixmap src);
-    QPixmap torch_pix(QPixmap src);
+    QPixmap colorize_pix(QPixmap src, QColor color);
 };
 
-QPixmap MainWindowPrivate::torch_pix(QPixmap src)
+QPixmap MainWindowPrivate::colorize_pix(QPixmap src, QColor color)
 {
     QImage img = src.toImage();
     QPainter p(&img);
     p.setCompositionMode(QPainter::CompositionMode_HardLight);
-    p.fillRect(img.rect(), QColor("yellow").darker(150));
+    p.fillRect(img.rect(), color);
     QPixmap pix = QPixmap::fromImage(img);
     return pix;
 }
 
 QPixmap MainWindowPrivate::darken_pix(QPixmap src)
 {
+
     QImage img = src.toImage();
     QPainter p(&img);
     p.setCompositionMode(QPainter::CompositionMode_HardLight);
     p.fillRect(img.rect(), QColor("#444"));
     QPixmap pix = QPixmap::fromImage(img);
-    return pix;
+    return pix;    
 }
 
 QPixmap MainWindowPrivate::lighten_pix(QPixmap src)
@@ -257,7 +258,7 @@ void MainWindowPrivate::redraw()
     wipe();
 
     // TODO REMOVE THIS
-    wiz_light();
+    //wiz_light();
 
     // Adjust scrollbars
     view->setSceneRect(0, 0, p_ptr->cur_map_wid * cell_wid, p_ptr->cur_map_hgt * cell_hgt);
@@ -293,7 +294,7 @@ void MainWindowPrivate::redraw_cell(int y, int x)
     QString key2;
     qreal opacity = 1;
 
-    flags = (d_ptr->ui_flags & (UI_LIGHT_BRIGHT | UI_LIGHT_DIM | UI_LIGHT_TORCH));
+    flags = (d_ptr->ui_flags & (UI_LIGHT_BRIGHT | UI_LIGHT_DIM | UI_LIGHT_TORCH | UI_COSMIC_TORCH));
 
     // Draw visible monsters
     if (d_ptr->has_visible_monster())
@@ -344,10 +345,12 @@ void MainWindowPrivate::redraw_cell(int y, int x)
             rebuild_tile(key1);
             QPixmap pix = tiles[key1];
             if (flags & UI_LIGHT_TORCH) {
-                pix = torch_pix(pix);
+                QColor color = QColor("yellow").darker(150);
+                if (flags & UI_COSMIC_TORCH) color = QColor("cyan").darker(150);
+                pix = colorize_pix(pix, color);
             }
             else if (flags & UI_LIGHT_BRIGHT) {
-                pix = lighten_pix(pix);
+                pix = darken_pix(pix);
             }
             else if (flags & UI_LIGHT_DIM) {
                 pix = darken_pix(pix);
@@ -414,7 +417,7 @@ MainWindow::MainWindow()
     set_map();
     priv->init_scene(dungeon_scene, graphics_view);
     priv->set_font(cur_font);
-    priv->set_graphic_mode(GRAPHICS_DAVID_GERVAIS);
+    //priv->set_graphic_mode(GRAPHICS_DAVID_GERVAIS);
 
     setWindowFilePath(QString());
 }

@@ -569,9 +569,11 @@ static int init_other(void)
 
     /* Array of grids */
     view_g = C_ZNEW(VIEW_MAX, u16b);
+    view_n = 0;
 
     /* Array of grids */
     temp_g = C_ZNEW(TEMP_MAX, u16b);
+    temp_n = 0;
 
     /* Hack -- use some memory twice */
     temp_y = ((byte*)(temp_g)) + 0;
@@ -579,6 +581,7 @@ static int init_other(void)
 
     /* Array of grids */
     fire_g = C_ZNEW(VIEW_MAX, u16b);
+    fire_n = 0;
 
     /* has_LIGHT patch causes both temp_g and temp_x/y to be used
        in targetting mode: can't use the same memory any more. */
@@ -608,7 +611,7 @@ static int init_other(void)
     /*** Prepare "vinfo" array ***/
 
     /* Used by "update_view()" */
-    // (void)vinfo_init();  add in cave.later
+    (void)vinfo_init();
 
 
     /*** Prepare entity arrays ***/

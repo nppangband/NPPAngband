@@ -186,4 +186,7 @@ void launch_game()
         set_effect_lingering_cloud(FEAT_POISON_CLOUD, y, x, 1000, -1, 0);
     }
     */
+
+    p_ptr->update = (PU_TORCH | PU_UPDATE_VIEW | PU_FORGET_VIEW);
+    update_stuff();
 }

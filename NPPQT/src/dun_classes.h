@@ -24,6 +24,7 @@ enum
 #define UI_LIGHT_DIM           0x00000004
 #define UI_LIGHT_BRIGHT        0x00000008
 #define UI_LIGHT_TORCH         0x00000010
+#define UI_COSMIC_TORCH         0x00000020
 
 class dungeon_type
 {

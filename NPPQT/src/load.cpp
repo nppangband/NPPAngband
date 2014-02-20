@@ -1668,12 +1668,12 @@ static int rd_dungeon(void)
             feature_type *f_ptr;
 
             /* Extract "feat" */
-            dungeon_info[y][x].feat = tmp8u;
+            dungeon_info[y][x].feat = tmp8u;            
 
             update_los_proj_move(y, x);
 
             /* Get fast access to feature */
-            f_ptr = &f_info[tmp8u];
+            f_ptr = &f_info[tmp8u];            
 
             /* Handle glowing grids */
             if (_feat_ff2_match(f_ptr, FF2_GLOW))
