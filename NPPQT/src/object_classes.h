@@ -153,6 +153,7 @@ class object_type
     bool can_takeoff();
     bool can_wear();
     bool has_inscription();
+    bool has_charges();
     void uncurse();
     byte object_color();
 

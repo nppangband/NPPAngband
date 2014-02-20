@@ -1535,6 +1535,13 @@ extern QString scroll_adj[MAX_TITLES];
  * The order of the groups is determined by the value of these constants
  */
 
+/* Types of item use */
+typedef enum
+{
+    USE_TIMEOUT,
+    USE_CHARGE,
+    USE_SINGLE
+} use_type;
 
 /*
  * Modes of object_flags_aux()

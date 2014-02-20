@@ -55,6 +55,11 @@ extern void monster_race_track(int r_idx);
 extern void feature_kind_track(int f_idx);
 extern void disturb(int stop_search, int unused_flag);
 
+// cmd3.cpp
+extern bool make_monster_trap(void);
+extern void py_set_trap(int y, int x);
+extern bool py_modify_trap(int y, int x);
+
 // cmd4.cpp
 extern void do_cmd_feeling(void);
 extern void create_notes_file(void);
@@ -285,6 +290,9 @@ extern void steal_object_from_monster(int y, int x);
 extern void acquirement(int y1, int x1, int num, bool great);
 extern void create_food(void);
 
+// object_use.cpp
+extern bool find_object_in_use(int *item);
+extern void do_cmd_use(int code, cmd_arg args[]);
 
 //obj_util.cpp
 extern void object_flags(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3, u32b *native);
@@ -602,6 +610,8 @@ extern QString get_spell_type_from_feature(int f_idx, int *gf_type);
 extern bool is_player_immune(int gf_type);
 extern void identify_object(object_type *o_ptr, bool star_ident);
 extern int do_ident_item(int item, object_type *o_ptr);
+extern bool curse_armor(void);
+extern bool curse_weapon(void);
 extern bool brand_object(object_type *o_ptr, byte brand_type, bool do_enchant);
 extern bool brand_weapon(bool enchant);
 extern bool brand_ammo(bool enchant);

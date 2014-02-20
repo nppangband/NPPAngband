@@ -20,6 +20,7 @@ SOURCES +=  src/qt_main.cpp\
             src/dun_generate.cpp \
             src/dungeon.cpp \
             src/cmd1.cpp \
+            src/cmd3.cpp \
             src/cmd4.cpp \
             src/cmd_spell.cpp \
             src/dun_cave.cpp \
@@ -44,6 +45,7 @@ SOURCES +=  src/qt_main.cpp\
             src/object_desc.cpp \
             src/object_hooks.cpp \
             src/object_make.cpp \
+            src/object_use.cpp \
             src/object_util.cpp \
             src/optionsdialog.cpp \
             src/player_attack.cpp \
@@ -68,7 +70,9 @@ SOURCES +=  src/qt_main.cpp\
             src/timed.cpp \
             src/utilities.cpp \
             src/dungeonbox.cpp \
-    src/prefs.cpp
+    src/prefs.cpp \
+
+
 
 
 
