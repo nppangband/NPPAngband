@@ -9,6 +9,8 @@
 #include "src/birthdialog.h"
 #include "src/dungeonbox.h"
 
+static MainWindow *main_window = 0;
+
 class MainWindowPrivate
 {
 public:
@@ -21,6 +23,7 @@ public:
     int tile_hgt, tile_wid;
     int cell_hgt, cell_wid;
     QFont font;
+    bool do_pseudo_ascii;
 
     QPixmap blank_pix;
     // The key must me strings of the form "[row]x[col]"
@@ -37,7 +40,56 @@ public:
     void destroy_tiles();
     void rebuild_tile(QString key);
     void calculate_cell_size();
+    QPixmap darken_pix(QPixmap src);
+    QPixmap lighten_pix(QPixmap src);
+    QPixmap colorize_pix(QPixmap src, QColor color);
+    QPixmap gray_pix(QPixmap src);
+    QPixmap pseudo_ascii(QChar chr, QColor color);
 };
+
+QPixmap MainWindowPrivate::gray_pix(QPixmap src)
+{
+    QImage img = src.toImage();
+    for (int x = 0; x < img.width(); x++) {
+        for (int y = 0; y < img.height(); y++) {
+            QColor col = QColor(img.pixel(x, y)).darker();
+            int gray = qGray(col.rgb());
+            img.setPixel(x, y, qRgb(gray, gray, gray));
+        }
+    }
+    return QPixmap::fromImage(img);
+}
+
+QPixmap MainWindowPrivate::colorize_pix(QPixmap src, QColor color)
+{
+    QImage img = src.toImage();
+    QPainter p(&img);
+    p.setCompositionMode(QPainter::CompositionMode_HardLight);
+    p.fillRect(img.rect(), color);
+    QPixmap pix = QPixmap::fromImage(img);
+    return pix;
+}
+
+QPixmap MainWindowPrivate::darken_pix(QPixmap src)
+{
+
+    QImage img = src.toImage();
+    QPainter p(&img);
+    p.setCompositionMode(QPainter::CompositionMode_HardLight);
+    p.fillRect(img.rect(), QColor("#444"));
+    QPixmap pix = QPixmap::fromImage(img);
+    return pix;    
+}
+
+QPixmap MainWindowPrivate::lighten_pix(QPixmap src)
+{
+    QImage img = src.toImage();
+    QPainter p(&img);
+    p.setCompositionMode(QPainter::CompositionMode_HardLight);
+    p.fillRect(img.rect(), QColor("#999"));
+    QPixmap pix = QPixmap::fromImage(img);
+    return pix;
+}
 
 void MainWindowPrivate::destroy_tiles()
 {
@@ -45,8 +97,10 @@ void MainWindowPrivate::destroy_tiles()
 
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            items_g[y][x]->setPixmap(blank_pix);
-            b_items_g[y][x]->setPixmap(blank_pix);
+            //items_g[y][x]->setPixmap(blank_pix);
+            items_g[y][x]->setVisible(false);
+            //b_items_g[y][x]->setPixmap(blank_pix);
+            b_items_g[y][x]->setVisible(false);
         }
     }
 }
@@ -93,6 +147,9 @@ void MainWindowPrivate::set_graphic_mode(int mode)
     }
 
     if (fname.length() > 0) {
+        QTime t1;
+        t1.start();
+
         fname.prepend(NPP_DIR_GRAF);
         QPixmap pix = QPixmap(fname);
         if (pix.isNull()) {
@@ -104,7 +161,9 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         calculate_cell_size();
         destroy_tiles();
         tile_map = pix;
-        if (game_mode != GAME_MODE_UNDEFINED) init_graphics();
+        if (character_loaded) init_graphics();
+
+        //pop_up_message_box(QString("Loading davig gervais tiles: %1 milli").arg(QString::number(t1.elapsed())));
     }
     // Go to text mode
     else {
@@ -113,14 +172,16 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         calculate_cell_size();
         destroy_tiles();
         tile_map = blank_pix;
+        clear_graphics();
     }
 
-    use_graphics = mode;
-    view->update();
+    use_graphics = mode;    
 }
 
+// Tile creation on demmand
 void MainWindowPrivate::rebuild_tile(QString key)
 {
+    // Already created
     if (tiles.contains(key)) return;
 
     QList<QString> coords = key.split("x");
@@ -159,6 +220,8 @@ void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view)
     scene = _scene;
     view = _view;
 
+    do_pseudo_ascii = false;
+
     font_hgt = font_wid = 0;
     tile_hgt = tile_wid = 0;
     cell_hgt = cell_wid = 0;
@@ -190,9 +253,15 @@ void MainWindowPrivate::wipe()
 {
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            items[y][x]->setText(QString(" "));
+            /*
+            items[y][x]->setText(QString(" "));            
             items_g[y][x]->setPixmap(blank_pix);
             b_items_g[y][x]->setPixmap(blank_pix);
+            */
+
+            items[y][x]->setVisible(false);
+            items_g[y][x]->setVisible(false);
+            b_items_g[y][x]->setVisible(false);
         }
     }
 
@@ -200,8 +269,18 @@ void MainWindowPrivate::wipe()
 }
 
 void MainWindowPrivate::redraw()
-{
+{    
+    QTime t1;
+
+    t1.start();
+
     wipe();
+
+    // Important. No dungeon yet
+    if (!character_dungeon) return;
+
+    // TODO REMOVE THIS
+    wiz_light();
 
     // Adjust scrollbars
     view->setSceneRect(0, 0, p_ptr->cur_map_wid * cell_wid, p_ptr->cur_map_hgt * cell_hgt);
@@ -209,9 +288,10 @@ void MainWindowPrivate::redraw()
     for (int y = 0; y < p_ptr->cur_map_hgt; y++) {
         for (int x = 0; x < p_ptr->cur_map_wid; x++) {
             light_spot(y, x);
-            redraw_cell(y, x);
         }
     }
+
+    ui_center(p_ptr->py, p_ptr->px);
 }
 
 bool MainWindowPrivate::panel_contains(int y, int x)
@@ -224,77 +304,178 @@ bool MainWindowPrivate::panel_contains(int y, int x)
     return pol.containsPoint(point1, Qt::OddEvenFill) && pol.containsPoint(point2, Qt::OddEvenFill);
 }
 
+QPixmap MainWindowPrivate::pseudo_ascii(QChar chr, QColor color)
+{
+    QImage img(cell_wid, cell_hgt, QImage::Format_ARGB32);
+    // Fill with transparent color
+    for (int x = 0; x < cell_wid; x++) {
+        for (int y = 0; y < cell_hgt; y++) {
+            img.setPixel(x, y, QColor(0, 0, 0, 0).rgba());
+        }
+    }
+
+    QPainter p(&img);
+    p.setPen(color);
+    p.setFont(font);
+    // Draw the text once to get the shape of the letter plus antialiasing
+    p.drawText(img.rect(), Qt::AlignCenter, QString(chr));
+
+    // Mark colored grids
+    bool marks[img.width()][img.height()];
+    for (int x = 0; x < cell_wid; x++) {
+        for (int y = 0; y < cell_hgt; y++) {
+            QRgb pixel = img.pixel(x, y);
+            if (qAlpha(pixel) > 0) {
+                marks[x][y] = true;
+            }
+            else {
+                marks[x][y] = false;
+            }
+        }
+    }
+
+    // Surround with black. Note that all concerning grids are burned, even marked ones
+    for (int x = 0; x < cell_wid; x++) {
+        for (int y = 0; y < cell_hgt; y++) {
+            if (!marks[x][y]) continue;
+            for (int y1 = y - 1; y1 <= y + 1; y1++) {
+                for (int x1 = x - 1; x1 <= x + 1; x1++) {
+                    if (!img.rect().contains(x1, y1, false)) continue;
+                    img.setPixel(x1, y1, qRgba(0, 0, 0, 255));
+                }
+            }
+        }
+    }
+
+    // Draw the text again so the antialiasing pixels blend with black properly
+    p.drawText(img.rect(), Qt::AlignCenter, QString(chr));
+
+    return QPixmap::fromImage(img);
+}
+
 void MainWindowPrivate::redraw_cell(int y, int x)
 {
+    if (!character_dungeon) return;
+
     dungeon_type *d_ptr = &dungeon_info[y][x];
     QChar square_char = d_ptr->dun_char;
     QColor square_color = d_ptr->dun_color;
     bool empty = true;
+    u32b flags = 0;
     QString key2;
-    if (d_ptr->has_monster())
+    qreal opacity = 1;
+    bool do_shadow = false;
+
+    flags = (d_ptr->ui_flags & (UI_LIGHT_BRIGHT | UI_LIGHT_DIM | UI_LIGHT_TORCH | UI_COSMIC_TORCH));
+
+    // Draw visible monsters
+    if (d_ptr->has_visible_monster())
     {
         square_char = d_ptr->monster_char;
         square_color = d_ptr->monster_color;
 
         empty = false;
 
-        if (d_ptr->monster_idx > 0) {
-            int r_idx = mon_list[d_ptr->monster_idx].r_idx;
-            key2 = r_info[r_idx].tile_id;
-        }
+        if (!do_pseudo_ascii) key2 = d_ptr->monster_tile;
+        else do_shadow = true;
+
+        flags |= (d_ptr->ui_flags & UI_TRANSPARENT_MONSTER);
+        opacity = 0.5;
     }
-    else if (d_ptr->has_effect())
+    // Draw effects
+    else if (d_ptr->has_visible_effect())
     {
         square_char = d_ptr->effect_char;
         square_color = d_ptr->effect_color;
 
         empty = false;
+
+        key2 = d_ptr->effect_tile;
+
+        flags |= (d_ptr->ui_flags & UI_TRANSPARENT_EFFECT);
+        opacity = 0.7;
     }
-    else if (d_ptr->has_object())
+    // Draw objects
+    else if (d_ptr->has_visible_object())
     {
         square_char = d_ptr->object_char;
         square_color = d_ptr->object_color;
 
         empty = false;
-    }
 
-    items[y][x]->setText(QString(square_char));
-    items[y][x]->setBrush(QBrush(square_color));
+        key2 = d_ptr->object_tile;
+    }
 
     if (use_graphics) {
         bool done_bg = false;
-        bool done_fg = false;
-        bool do_ascii = false;
+        bool done_fg = false;        
 
-        s16b feat = d_ptr->feat;
-        QString key1 = f_info[feat].tile_id;
+        // Draw background tile
+        QString key1 = d_ptr->dun_tile;
         if (key1.length() > 0) {
             rebuild_tile(key1);
-            b_items_g[y][x]->setPixmap(tiles[key1]);
+            QPixmap pix = tiles[key1];
+            if (flags & UI_LIGHT_TORCH) {
+                QColor color = QColor("yellow").darker(150);
+                if (flags & UI_COSMIC_TORCH) color = QColor("cyan").darker(150);
+                pix = colorize_pix(pix, color);
+            }
+            else if (flags & UI_LIGHT_BRIGHT) {
+                pix = darken_pix(pix);
+            }
+            else if (flags & UI_LIGHT_DIM) {
+                pix = gray_pix(pix);
+            }
+            b_items_g[y][x]->setPixmap(pix);
             done_bg = true;
         }
         b_items_g[y][x]->setVisible(done_bg);
 
+        items_g[y][x]->setOpacity(1);
+        // Draw foreground tile
         if (key2.length() > 0) {
            rebuild_tile(key2);
            items_g[y][x]->setPixmap(tiles[key2]);
+           if (flags & (UI_TRANSPARENT_EFFECT | UI_TRANSPARENT_MONSTER)) {
+               items_g[y][x]->setOpacity(opacity);
+           }
            done_fg = true;
         }
         items_g[y][x]->setVisible(done_fg);
 
-        if (!done_fg && (!empty || !done_bg)) do_ascii = true;
-        items[y][x]->setVisible(do_ascii);
+        if (do_shadow) {
+            QPixmap pix = pseudo_ascii(square_char, square_color);
+            items_g[y][x]->setPixmap(pix);
+            items_g[y][x]->setVisible(true);
+            done_fg = true;
+        }
+
+        // Draw ascii?
+        if (!done_fg && (!empty || !done_bg)) {
+            items[y][x]->setVisible(true);
+            items[y][x]->setText(QString(square_char));
+            items[y][x]->setBrush(QBrush(square_color));
+        }
+        else {
+            items[y][x]->setVisible(false);
+        }
     }
     else {
         items[y][x]->setVisible(true);
+        items[y][x]->setText(QString(square_char));
+        items[y][x]->setBrush(QBrush(square_color));
+
         items_g[y][x]->setVisible(false);
         b_items_g[y][x]->setVisible(false);
-    }
+    }    
 }
 
 // The main function - intitalize the main window and set the menus.
 MainWindow::MainWindow()
 {
+    // Store a reference for public functions (panel_contains and others)
+    if (!main_window) main_window = this;
+
     setAttribute(Qt::WA_DeleteOnClose);
 
     priv = new MainWindowPrivate;
@@ -313,11 +494,10 @@ MainWindow::MainWindow()
     create_signals();
     (void)statusBar();
 
-    read_settings();
-    set_map();
     priv->init_scene(dungeon_scene, graphics_view);
-    priv->set_font(cur_font);
-    priv->set_graphic_mode(GRAPHICS_DAVID_GERVAIS);
+    read_settings();
+    priv->set_font(cur_font);    
+    priv->set_graphic_mode(use_graphics);
 
     setWindowFilePath(QString());
 }
@@ -424,8 +604,8 @@ void MainWindow::save_and_close()
     // close game
     cleanup_npp_games();
 
-    priv->wipe();
     priv->destroy_tiles();
+    priv->wipe();    
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -452,6 +632,7 @@ void MainWindow::options_dialog()
 {
     OptionsDialog *dlg = new OptionsDialog(this);
     dlg->exec();
+    ui_redraw_all();
     delete dlg;
 }
 
@@ -587,6 +768,20 @@ void MainWindow::create_actions()
     options_act->setIcon(QIcon(":/icons/lib/icons/options.png"));
     connect(options_act, SIGNAL(triggered()), this, SLOT(options_dialog()));
 
+    ascii_mode_act = new QAction(tr("Ascii graphics"), this);
+    ascii_mode_act->setStatusTip(tr("Set the graphics to ascii mode."));
+    connect(ascii_mode_act, SIGNAL(triggered()), this, SLOT(set_ascii()));
+
+    dvg_mode_act = new QAction(tr("David Gervais tiles"), this);
+    dvg_mode_act->setStatusTip(tr("Set the graphics to David Gervais tiles mode."));
+    connect(dvg_mode_act, SIGNAL(triggered()), this, SLOT(set_dvg()));
+
+    pseudo_ascii_act = new QAction(tr("Pseudo-Ascii monsters"), this);
+    pseudo_ascii_act->setCheckable(true);
+    pseudo_ascii_act->setChecked(false);
+    pseudo_ascii_act->setStatusTip(tr("Set the monsters graphics to pseudo-ascii."));
+    connect(pseudo_ascii_act, SIGNAL(changed()), this, SLOT(set_pseudo_ascii()));
+
     bigtile_act = new QAction(tr("Use Bigtile"), this);
     bigtile_act->setCheckable(true);
     bigtile_act->setChecked(use_bigtile);
@@ -597,7 +792,6 @@ void MainWindow::create_actions()
     fontselect_act->setStatusTip(tr("Change the window font or font size."));
     connect(fontselect_act, SIGNAL(triggered()), this, SLOT(fontselect_dialog()));
 
-
     about_act = new QAction(tr("&About"), this);
     about_act->setStatusTip(tr("Show the application's About box"));
     connect(about_act, SIGNAL(triggered()), this, SLOT(about()));
@@ -605,6 +799,25 @@ void MainWindow::create_actions()
     about_Qt_act = new QAction(tr("About &Qt"), this);
     about_Qt_act->setStatusTip(tr("Show the Qt library's About box"));
     connect(about_Qt_act, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+}
+
+void MainWindow::set_dvg()
+{
+    //popup1("hola");
+    main_window->priv->set_graphic_mode(GRAPHICS_DAVID_GERVAIS);
+    ui_redraw_all();
+}
+
+void MainWindow::set_ascii()
+{
+    main_window->priv->set_graphic_mode(0);
+    ui_redraw_all();
+}
+
+void MainWindow::set_pseudo_ascii()
+{
+    main_window->priv->do_pseudo_ascii = pseudo_ascii_act->isChecked();
+    ui_redraw_all();
 }
 
 //  Set's up many of the keystrokes and commands used during the game.
@@ -641,6 +854,9 @@ void MainWindow::create_menus()
     settings = menuBar()->addMenu(tr("&Settings"));
     settings->addAction(options_act);
     settings->addAction(fontselect_act);
+    settings->addAction(ascii_mode_act);
+    settings->addAction(dvg_mode_act);
+    settings->addAction(pseudo_ascii_act);
     settings->addAction(bigtile_act);
 
     // Help section of top menu.
@@ -699,12 +915,13 @@ void MainWindow::read_settings()
     recent_savefiles = settings.value("recentFiles").toStringList();
     bool bigtile_setting = settings.value("set_bigtile", TRUE).toBool();
     bigtile_act->setChecked((bigtile_setting));
+    priv->do_pseudo_ascii = settings.value("pseudo_ascii", false).toBool();
+    pseudo_ascii_act->setChecked(priv->do_pseudo_ascii);
+    use_graphics = settings.value("use_graphics", 0).toInt();
 
     QString load_font = settings.value("current_font", cur_font ).toString();
-    cur_font.fromString(load_font);
-    //pop_up_message_box(load_font);
+    cur_font.fromString(load_font);    
     restoreState(settings.value("window_state").toByteArray());
-
 
     update_recent_savefiles();
 }
@@ -718,7 +935,8 @@ void MainWindow::write_settings()
     settings.setValue("set_bigtile", bigtile_act->isChecked());
     settings.setValue("current_font", cur_font.toString());
     settings.setValue("window_state", saveState());
-
+    settings.setValue("pseudo_ascii", priv->do_pseudo_ascii);
+    settings.setValue("use_graphics", use_graphics);
 }
 
 
@@ -748,9 +966,7 @@ void MainWindow::load_file(const QString &file_name)
             }
             else {
                 update_file_menu_game_active();
-                launch_game();
-                //debug_dungeon();
-                //screen_redraw();
+                launch_game();                
                 priv->redraw();
             }
         }
@@ -764,14 +980,13 @@ void MainWindow::load_file(const QString &file_name)
 
 void MainWindow::launch_birth(bool quick_start)
 {
-    BirthDialog *dlg = new BirthDialog(this);
+    BirthDialog *dlg = new BirthDialog(this);    
+
     dlg->set_quick_start(quick_start);
     if (dlg->run()) {                
         update_file_menu_game_active();
         launch_game();
-        save_character();
-        //debug_dungeon();
-        //screen_redraw();
+        save_character();        
         priv->redraw();
     } else {
         cleanup_npp_games();
@@ -855,7 +1070,7 @@ void MainWindow::write_colored_text(QChar letter, QColor color, s16b y, s16b x)
     QPainter painter(this);
 
     // Paranoia
-    if (!panel_contains (y, x)) return;
+    if (!panel_contains(y, x)) return;
 
     // Get the coordinates
     s16b pixel_y = (y - first_y) * square_height;
@@ -921,17 +1136,31 @@ void MainWindow::screen_redraw()
 }
 
 // determine of a dungeon square is onscreen at present
-bool MainWindow::panel_contains(s16b y, s16b x)
+bool panel_contains(int y, int x)
 {
-    /*
-    if (first_x > x) return (FALSE);
-    if (last_x < x)  return (FALSE);
-    if (first_y > y) return (FALSE);
-    if (last_y < y)  return (FALSE);
-    return (TRUE);
-    */
+    return main_window->priv->panel_contains(y, x);
+}
 
-    return priv->panel_contains(y, x);
+void ui_ensure(int y, int x)
+{
+    MainWindowPrivate *priv = main_window->priv;
+    main_window->priv->view->ensureVisible(QRectF(x * priv->cell_wid, y * priv->cell_hgt, priv->cell_wid, priv->cell_hgt));
+}
+
+void ui_center(int y, int x)
+{
+    MainWindowPrivate *priv = main_window->priv;
+    main_window->priv->view->centerOn(x * priv->cell_wid, y * priv->cell_hgt);
+}
+
+void ui_redraw_grid(int y, int x)
+{
+    main_window->priv->redraw_cell(y, x);
+}
+
+void ui_redraw_all()
+{
+    main_window->priv->redraw();
 }
 
 // Try to center the onscreen map around the player.

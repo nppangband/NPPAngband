@@ -569,9 +569,11 @@ static int init_other(void)
 
     /* Array of grids */
     view_g = C_ZNEW(VIEW_MAX, u16b);
+    view_n = 0;
 
     /* Array of grids */
     temp_g = C_ZNEW(TEMP_MAX, u16b);
+    temp_n = 0;
 
     /* Hack -- use some memory twice */
     temp_y = ((byte*)(temp_g)) + 0;
@@ -579,6 +581,7 @@ static int init_other(void)
 
     /* Array of grids */
     fire_g = C_ZNEW(VIEW_MAX, u16b);
+    fire_n = 0;
 
     /* has_LIGHT patch causes both temp_g and temp_x/y to be used
        in targetting mode: can't use the same memory any more. */
@@ -608,7 +611,7 @@ static int init_other(void)
     /*** Prepare "vinfo" array ***/
 
     /* Used by "update_view()" */
-    // (void)vinfo_init();  add in cave.later
+    (void)vinfo_init();
 
 
     /*** Prepare entity arrays ***/
@@ -1197,7 +1200,6 @@ void init_npp_games(void)
     if (init_alloc()) quit_npp_games(QObject::tr("Cannot initialize alloc stuff"));
 
     /*** Load default user pref files ***/
-    init_graphics();
 
 
     /* Initialize randart tables info */
@@ -1294,6 +1296,8 @@ void cleanup_npp_games(void)
 
     /*free the randart arrays*/
     free_randart_tables();
+
+    clear_graphics();
 }
 
 
@@ -1564,8 +1568,10 @@ int read_coordinate(QString text)
     return text.toInt();
 }
 
-void init_graphics()
+void clear_graphics()
 {
+    if (!character_loaded) return;
+
     for (int i = 0; i < z_info->f_max; i++) {
         f_info[i].tile_id.clear();
     }
@@ -1574,48 +1580,37 @@ void init_graphics()
         r_info[i].tile_id.clear();
     }
 
-    QString fname("/lib/pref/graf-dvg.prf");
+    for (int i = 0; i < z_info->k_max; i++) {
+        k_info[i].tile_id.clear();
+    }
+
+    for (int i = 0; i < z_info->flavor_max; i++) {
+        flavor_info[i].tile_id.clear();
+    }
+
+    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
+        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
+            dungeon_type *d_ptr = &dungeon_info[y][x];
+            d_ptr->monster_tile.clear();
+            d_ptr->object_tile.clear();
+            d_ptr->dun_tile.clear();
+            d_ptr->effect_tile.clear();
+        }
+    }
+}
+
+void init_graphics()
+{
+    if (!character_loaded) return;
+
+    clear_graphics();
+
+    QString fname("graf-dvg.prf");
     if (game_mode == GAME_NPPMORIA) {
         fname.clear();
-        fname.append("/lib/pref/m_graf-dvg.prf");
+        fname.append("m_graf-dvg.prf");
     }
 
-    fname.prepend(NPP_DIR_BASE);
-
-    QFile file(fname);
-    if (!file.open(QIODevice::ReadOnly)) return;
-
-    QTextStream in(&file);
-
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-
-        if (line.startsWith("F:")) {
-            QList<QString> parts = line.split(":");
-
-            if (parts.size() != 4) continue;
-
-            int f_idx = parts[1].toInt();
-            int row = read_coordinate(parts[2]) & 0x7F;
-            int col = read_coordinate(parts[3]) & 0x7F;
-            QString key = QString("%1x%2").arg(row).arg(col);
-
-            f_info[f_idx].tile_id = key;
-        }
-        else if (line.startsWith("R:")) {
-            QList<QString> parts = line.split(":");
-
-            if (parts.size() != 4) continue;
-
-            int r_idx = parts[1].toInt();
-            int row = read_coordinate(parts[2]) & 0x7F;
-            int col = read_coordinate(parts[3]) & 0x7F;
-            QString key = QString("%1x%2").arg(row).arg(col);
-
-            r_info[r_idx].tile_id = key;
-        }
-    }
-
-    file.close();
+    process_pref_file(fname);
 }
 

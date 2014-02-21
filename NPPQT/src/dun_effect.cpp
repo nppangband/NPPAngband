@@ -1010,7 +1010,7 @@ static bool effect_burst(const effect_type *x_ptr)
     if (CHECK_DISTURB(FALSE)) flg |= (PROJECT_HIDE);
 
     /* Leave graphics for later in empty grids */
-    else if ((op_ptr->delay_factor > 0) && !dungeon_info[y][x].has_effect() && player_has_los_bold(y, x) && main_window->panel_contains(y, x))
+    else if ((op_ptr->delay_factor > 0) && !dungeon_info[y][x].has_effect() && player_has_los_bold(y, x) && panel_contains(y, x))
     {
         /* Don't display anything now */
         flg |= (PROJECT_HIDE);

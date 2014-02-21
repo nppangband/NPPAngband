@@ -18,6 +18,7 @@
  */
 
 #include "src/npp.h"
+#include <QTime>
 
 /*
  * Change dungeon level.
@@ -147,6 +148,8 @@ void launch_game()
     // TODO
     //process_some_user_pref_files();
 
+    init_graphics();
+
     /* Remove ironman ego-items if needed */
     if (!adult_ironman && !adult_no_stores)
     {
@@ -174,4 +177,16 @@ void launch_game()
 
     /* Hack -- Enforce "delayed death" */
     if (p_ptr->chp < 0) p_ptr->is_dead = TRUE;
+
+    /*
+    // TESTING
+    for (int i = 0; i < 5; i++) {
+        int y = randint(p_ptr->cur_map_hgt);
+        int x = randint(p_ptr->cur_map_wid);
+        set_effect_lingering_cloud(FEAT_POISON_CLOUD, y, x, 1000, -1, 0);
+    }
+    */
+
+    p_ptr->update = (PU_TORCH | PU_UPDATE_VIEW | PU_FORGET_VIEW);
+    update_stuff();
 }

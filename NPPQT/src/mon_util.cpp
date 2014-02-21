@@ -1101,7 +1101,7 @@ QString monster_desc(monster_type *m_ptr, int mode)
         }
 
         /* Mention "offscreen" monsters XXX XXX */
-        if (!(mode & (0x100)) && main_window->panel_contains(m_ptr->fy, m_ptr->fx))
+        if (!(mode & (0x100)) && panel_contains(m_ptr->fy, m_ptr->fx))
         {
             /* Append special notation */
             desc.append(" (offscreen)");
