@@ -70,7 +70,7 @@ SOURCES +=  src/qt_main.cpp\
             src/timed.cpp \
             src/utilities.cpp \
             src/dungeonbox.cpp \
-    src/prefs.cpp \
+    src/prefs.cpp
 
 
 

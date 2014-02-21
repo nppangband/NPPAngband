@@ -66,7 +66,16 @@ extern void create_notes_file(void);
 extern void delete_notes_file(void);
 
 // cmd_spell.cpp
+extern s16b spell_chance(int spell);
 extern bool spell_okay(int spell, bool known);
+extern int get_spell_menu(const object_type *o_ptr, int mode_dummy);
+extern bool player_can_cast(void);
+extern bool player_can_study(void);
+extern bool player_can_use_book(const object_type *o_ptr, bool cast);
+extern void do_cmd_study_spell(int code, cmd_arg args[]);
+extern void do_cmd_study_book(int code, cmd_arg args[]);
+extern void do_cmd_cast(int code, cmd_arg args[]);
+extern void spell_learn(int spell);
 extern s16b get_spell_from_list(s16b book, s16b spell);
 extern int get_spell_index(int sval, int index);
 
@@ -268,6 +277,7 @@ extern bool item_tester_hook_recharge(object_type *o_ptr);
 extern bool item_tester_hook_randart(object_type *o_ptr);
 extern bool item_tester_hook_flammable_book(object_type *o_ptr);
 extern bool item_tester_hook_activate(object_type *o_ptr);
+extern bool obj_can_browse(object_type *o_ptr);
 
 /* object-make.cpp */
 extern s16b get_obj_num(int level);
@@ -380,6 +390,7 @@ extern void object_tried(object_type *o_ptr);
 extern void object_history(object_type *o_ptr, byte origin, s16b r_idx);
 extern void stack_histories(object_type *o_ptr, const object_type *j_ptr);
 extern int quiver_space_per_unit(object_type *o_ptr);
+
 
 /* player_attack.cpp */
 extern bool test_hit(int chance, int ac, int vis);
