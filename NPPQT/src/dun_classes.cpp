@@ -81,7 +81,7 @@ dungeon_type::dungeon_type()
  */
 void dungeon_type::dungeon_square_wipe()
 {
-    feat = effect_idx = monster_idx = 0;
+    feat = effect_idx = monster_idx = object_idx = 0;
     effect_idx = cave_info = 0;
     special_lighting = obj_special_symbol = 0;
     dtrap = FALSE;

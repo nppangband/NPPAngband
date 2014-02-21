@@ -1296,6 +1296,8 @@ void cleanup_npp_games(void)
 
     /*free the randart arrays*/
     free_randart_tables();
+
+    clear_graphics();
 }
 
 
