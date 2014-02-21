@@ -43,6 +43,7 @@ public:
     QPixmap lighten_pix(QPixmap src);
     QPixmap colorize_pix(QPixmap src, QColor color);
     QPixmap gray_pix(QPixmap src);
+    QPixmap pseudo_ascii(QChar chr, QColor color);
 };
 
 QPixmap MainWindowPrivate::gray_pix(QPixmap src)
@@ -296,6 +297,55 @@ bool MainWindowPrivate::panel_contains(int y, int x)
     return pol.containsPoint(point1, Qt::OddEvenFill) && pol.containsPoint(point2, Qt::OddEvenFill);
 }
 
+QPixmap MainWindowPrivate::pseudo_ascii(QChar chr, QColor color)
+{
+    QImage img(cell_wid, cell_hgt, QImage::Format_ARGB32);
+    // Fill with transparent color
+    for (int x = 0; x < cell_wid; x++) {
+        for (int y = 0; y < cell_hgt; y++) {
+            img.setPixel(x, y, QColor(0, 0, 0, 0).rgba());
+        }
+    }
+
+    QPainter p(&img);
+    p.setPen(color);
+    p.setFont(font);
+    // Draw the text once to get the shape of the letter plus antialiasing
+    p.drawText(img.rect(), Qt::AlignCenter, QString(chr));
+
+    // Mark colored grids
+    bool marks[img.width()][img.height()];
+    for (int x = 0; x < cell_wid; x++) {
+        for (int y = 0; y < cell_hgt; y++) {
+            QRgb pixel = img.pixel(x, y);
+            if (qAlpha(pixel) > 0) {
+                marks[x][y] = true;
+            }
+            else {
+                marks[x][y] = false;
+            }
+        }
+    }
+
+    // Surround with black. Note that all concerning grids are burned, even marked ones
+    for (int x = 0; x < cell_wid; x++) {
+        for (int y = 0; y < cell_hgt; y++) {
+            if (!marks[x][y]) continue;
+            for (int y1 = y - 1; y1 <= y + 1; y1++) {
+                for (int x1 = x - 1; x1 <= x + 1; x1++) {
+                    if (!img.rect().contains(x1, y1, false)) continue;
+                    img.setPixel(x1, y1, qRgba(0, 0, 0, 255));
+                }
+            }
+        }
+    }
+
+    // Draw the text again so the antialiasing pixels blend with black properly
+    p.drawText(img.rect(), Qt::AlignCenter, QString(chr));
+
+    return QPixmap::fromImage(img);
+}
+
 void MainWindowPrivate::redraw_cell(int y, int x)
 {
     dungeon_type *d_ptr = &dungeon_info[y][x];
@@ -305,6 +355,7 @@ void MainWindowPrivate::redraw_cell(int y, int x)
     u32b flags = 0;
     QString key2;
     qreal opacity = 1;
+    bool do_shadow = false;
 
     flags = (d_ptr->ui_flags & (UI_LIGHT_BRIGHT | UI_LIGHT_DIM | UI_LIGHT_TORCH | UI_COSMIC_TORCH));
 
@@ -316,7 +367,8 @@ void MainWindowPrivate::redraw_cell(int y, int x)
 
         empty = false;
 
-        key2 = d_ptr->monster_tile;
+        //key2 = d_ptr->monster_tile;
+        do_shadow = true;
 
         flags |= (d_ptr->ui_flags & UI_TRANSPARENT_MONSTER);
         opacity = 0.5;
@@ -381,6 +433,13 @@ void MainWindowPrivate::redraw_cell(int y, int x)
            done_fg = true;
         }
         items_g[y][x]->setVisible(done_fg);
+
+        if (do_shadow) {
+            QPixmap pix = pseudo_ascii(square_char, square_color);
+            items_g[y][x]->setPixmap(pix);
+            items_g[y][x]->setVisible(true);
+            done_fg = true;
+        }
 
         // Draw ascii?
         if (!done_fg && (!empty || !done_bg)) {
