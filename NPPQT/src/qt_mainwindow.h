@@ -68,6 +68,11 @@ private slots:
     void set_onscreen_dungeon_boundries();
     void set_map();
 
+    // Graphics
+    void set_dvg();
+    void set_ascii();
+    void set_pseudo_ascii();
+
 
 private:
 
@@ -126,6 +131,9 @@ private:
     //Command for the settings menu
     QAction *options_act;
     QAction *bigtile_act;
+    QAction *ascii_mode_act;
+    QAction *dvg_mode_act;
+    QAction *pseudo_ascii_act;
     QAction *fontselect_act;
 
 

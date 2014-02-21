@@ -23,6 +23,7 @@ public:
     int tile_hgt, tile_wid;
     int cell_hgt, cell_wid;
     QFont font;
+    bool do_pseudo_ascii;
 
     QPixmap blank_pix;
     // The key must me strings of the form "[row]x[col]"
@@ -174,8 +175,7 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         clear_graphics();
     }
 
-    use_graphics = mode;
-    view->update();
+    use_graphics = mode;    
 }
 
 // Tile creation on demmand
@@ -219,6 +219,8 @@ void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view)
 {
     scene = _scene;
     view = _view;
+
+    do_pseudo_ascii = false;
 
     font_hgt = font_wid = 0;
     tile_hgt = tile_wid = 0;
@@ -267,12 +269,15 @@ void MainWindowPrivate::wipe()
 }
 
 void MainWindowPrivate::redraw()
-{
+{    
     QTime t1;
 
     t1.start();
 
     wipe();
+
+    // Important. No dungeon yet
+    if (!character_dungeon) return;
 
     // TODO REMOVE THIS
     wiz_light();
@@ -350,6 +355,8 @@ QPixmap MainWindowPrivate::pseudo_ascii(QChar chr, QColor color)
 
 void MainWindowPrivate::redraw_cell(int y, int x)
 {
+    if (!character_dungeon) return;
+
     dungeon_type *d_ptr = &dungeon_info[y][x];
     QChar square_char = d_ptr->dun_char;
     QColor square_color = d_ptr->dun_color;
@@ -369,8 +376,8 @@ void MainWindowPrivate::redraw_cell(int y, int x)
 
         empty = false;
 
-        //key2 = d_ptr->monster_tile;
-        do_shadow = true;
+        if (!do_pseudo_ascii) key2 = d_ptr->monster_tile;
+        else do_shadow = true;
 
         flags |= (d_ptr->ui_flags & UI_TRANSPARENT_MONSTER);
         opacity = 0.5;
@@ -487,11 +494,10 @@ MainWindow::MainWindow()
     create_signals();
     (void)statusBar();
 
-    read_settings();
-    set_map();
     priv->init_scene(dungeon_scene, graphics_view);
-    priv->set_font(cur_font);
-    priv->set_graphic_mode(GRAPHICS_DAVID_GERVAIS);
+    read_settings();
+    priv->set_font(cur_font);    
+    priv->set_graphic_mode(use_graphics);
 
     setWindowFilePath(QString());
 }
@@ -762,6 +768,20 @@ void MainWindow::create_actions()
     options_act->setIcon(QIcon(":/icons/lib/icons/options.png"));
     connect(options_act, SIGNAL(triggered()), this, SLOT(options_dialog()));
 
+    ascii_mode_act = new QAction(tr("Ascii graphics"), this);
+    ascii_mode_act->setStatusTip(tr("Set the graphics to ascii mode."));
+    connect(ascii_mode_act, SIGNAL(triggered()), this, SLOT(set_ascii()));
+
+    dvg_mode_act = new QAction(tr("David Gervais tiles"), this);
+    dvg_mode_act->setStatusTip(tr("Set the graphics to David Gervais tiles mode."));
+    connect(dvg_mode_act, SIGNAL(triggered()), this, SLOT(set_dvg()));
+
+    pseudo_ascii_act = new QAction(tr("Pseudo-Ascii monsters"), this);
+    pseudo_ascii_act->setCheckable(true);
+    pseudo_ascii_act->setChecked(false);
+    pseudo_ascii_act->setStatusTip(tr("Set the monsters graphics to pseudo-ascii."));
+    connect(pseudo_ascii_act, SIGNAL(changed()), this, SLOT(set_pseudo_ascii()));
+
     bigtile_act = new QAction(tr("Use Bigtile"), this);
     bigtile_act->setCheckable(true);
     bigtile_act->setChecked(use_bigtile);
@@ -772,7 +792,6 @@ void MainWindow::create_actions()
     fontselect_act->setStatusTip(tr("Change the window font or font size."));
     connect(fontselect_act, SIGNAL(triggered()), this, SLOT(fontselect_dialog()));
 
-
     about_act = new QAction(tr("&About"), this);
     about_act->setStatusTip(tr("Show the application's About box"));
     connect(about_act, SIGNAL(triggered()), this, SLOT(about()));
@@ -780,6 +799,25 @@ void MainWindow::create_actions()
     about_Qt_act = new QAction(tr("About &Qt"), this);
     about_Qt_act->setStatusTip(tr("Show the Qt library's About box"));
     connect(about_Qt_act, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+}
+
+void MainWindow::set_dvg()
+{
+    //popup1("hola");
+    main_window->priv->set_graphic_mode(GRAPHICS_DAVID_GERVAIS);
+    ui_redraw_all();
+}
+
+void MainWindow::set_ascii()
+{
+    main_window->priv->set_graphic_mode(0);
+    ui_redraw_all();
+}
+
+void MainWindow::set_pseudo_ascii()
+{
+    main_window->priv->do_pseudo_ascii = pseudo_ascii_act->isChecked();
+    ui_redraw_all();
 }
 
 //  Set's up many of the keystrokes and commands used during the game.
@@ -816,6 +854,9 @@ void MainWindow::create_menus()
     settings = menuBar()->addMenu(tr("&Settings"));
     settings->addAction(options_act);
     settings->addAction(fontselect_act);
+    settings->addAction(ascii_mode_act);
+    settings->addAction(dvg_mode_act);
+    settings->addAction(pseudo_ascii_act);
     settings->addAction(bigtile_act);
 
     // Help section of top menu.
@@ -874,12 +915,13 @@ void MainWindow::read_settings()
     recent_savefiles = settings.value("recentFiles").toStringList();
     bool bigtile_setting = settings.value("set_bigtile", TRUE).toBool();
     bigtile_act->setChecked((bigtile_setting));
+    priv->do_pseudo_ascii = settings.value("pseudo_ascii", false).toBool();
+    pseudo_ascii_act->setChecked(priv->do_pseudo_ascii);
+    use_graphics = settings.value("use_graphics", 0).toInt();
 
     QString load_font = settings.value("current_font", cur_font ).toString();
-    cur_font.fromString(load_font);
-    //pop_up_message_box(load_font);
+    cur_font.fromString(load_font);    
     restoreState(settings.value("window_state").toByteArray());
-
 
     update_recent_savefiles();
 }
@@ -893,7 +935,8 @@ void MainWindow::write_settings()
     settings.setValue("set_bigtile", bigtile_act->isChecked());
     settings.setValue("current_font", cur_font.toString());
     settings.setValue("window_state", saveState());
-
+    settings.setValue("pseudo_ascii", priv->do_pseudo_ascii);
+    settings.setValue("use_graphics", use_graphics);
 }
 
 
@@ -923,9 +966,7 @@ void MainWindow::load_file(const QString &file_name)
             }
             else {
                 update_file_menu_game_active();
-                launch_game();
-                //debug_dungeon();
-                //screen_redraw();                
+                launch_game();                
                 priv->redraw();
             }
         }
@@ -945,9 +986,7 @@ void MainWindow::launch_birth(bool quick_start)
     if (dlg->run()) {                
         update_file_menu_game_active();
         launch_game();
-        save_character();
-        //debug_dungeon();
-        //screen_redraw();        
+        save_character();        
         priv->redraw();
     } else {
         cleanup_npp_games();

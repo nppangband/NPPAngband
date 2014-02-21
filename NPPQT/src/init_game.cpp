@@ -1568,6 +1568,8 @@ int read_coordinate(QString text)
 
 void clear_graphics()
 {
+    if (!character_loaded) return;
+
     for (int i = 0; i < z_info->f_max; i++) {
         f_info[i].tile_id.clear();
     }
@@ -1597,6 +1599,8 @@ void clear_graphics()
 
 void init_graphics()
 {
+    if (!character_loaded) return;
+
     clear_graphics();
 
     QString fname("graf-dvg.prf");
