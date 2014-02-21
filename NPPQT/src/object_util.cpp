@@ -2812,6 +2812,8 @@ void save_quiver_size(void)
  */
 int compare_ammo(int slot1, int slot2)
 {
+    (void)slot1;
+    (void)slot2;
     /* Right now there is no sorting criteria */
     return 0;
 }
@@ -4315,7 +4317,6 @@ void reduce_charges(object_type *o_ptr, int amt)
  */
 unsigned check_for_inscrip(const object_type *o_ptr, QString inscrip)
 {
-    unsigned i = 0;
 
 
     if (o_ptr->inscription.isNull()) return 0;

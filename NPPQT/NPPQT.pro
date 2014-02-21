@@ -25,11 +25,13 @@ SOURCES +=  src/qt_main.cpp\
             src/dun_cave.cpp \
             src/dun_classes.cpp \
             src/dun_feature.cpp \
+            src/dun_process.cpp \
             src/dun_util.cpp \
             src/globals.cpp \
             src/init_edit_files.cpp\
             src/init_game.cpp\
             src/load.cpp \
+            src/mon_attack.cpp \
             src/mon_cast.cpp \
             src/mon_classes.cpp \
             src/mon_damage.cpp \
@@ -56,6 +58,7 @@ SOURCES +=  src/qt_main.cpp\
             src/randart.cpp \
             src/random_numbers.cpp \
             src/save.cpp \
+            src/sound.cpp \
             src/spells_detect.cpp \
             src/spells2.cpp \
             src/squelch.cpp \
@@ -64,7 +67,9 @@ SOURCES +=  src/qt_main.cpp\
             src/target.cpp \
             src/timed.cpp \
             src/utilities.cpp \
-            src/dungeonbox.cpp
+            src/dungeonbox.cpp \
+    src/prefs.cpp
+
 
 
 

@@ -1275,7 +1275,7 @@ void take_hit(int dam, QString kb_str)
  * Drain rods wands and staves charges.
  * Return amount to heal monster if applicable.
  */
-static int drain_charges(object_type *o_ptr, u32b heal)
+int drain_charges(object_type *o_ptr, u32b heal)
 {
 
     int counter, old_charges;

@@ -119,6 +119,7 @@ extern QString NPP_DIR_ICON;
 extern QString NPP_DIR_PREF;
 extern QString NPP_DIR_SAVE;
 extern QString NPP_DIR_USER;
+extern QString NPP_DIR_GRAF;
 
 extern bool item_tester_full;
 extern byte item_tester_tval;
