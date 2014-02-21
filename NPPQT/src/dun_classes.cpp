@@ -82,17 +82,18 @@ dungeon_type::dungeon_type()
 void dungeon_type::dungeon_square_wipe()
 {
     feat = effect_idx = monster_idx = object_idx = 0;
-    effect_idx = cave_info = 0;
+    cave_info = 0;
     special_lighting = obj_special_symbol = 0;
+    ui_flags = 0;
     dtrap = FALSE;
-    dun_color.setRgb(0,0,0,0);
-    dun_char = '\0';
-    object_color.setRgb(0,0,0,0);
-    object_char = '\0';
-    effect_color.setRgb(0,0,0,0);
-    effect_char = '\0';
-    monster_color.setRgb(0,0,0,0);
-    monster_char = '\0';
+    dun_color = Qt::black;
+    dun_char = ' ';
+    object_color = Qt::black;
+    object_char = ' ';
+    effect_color = Qt::black;
+    effect_char = ' ';
+    monster_color = Qt::black;
+    monster_char = ' ';
 
     monster_tile.clear();
     object_tile.clear();
