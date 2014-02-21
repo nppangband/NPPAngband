@@ -275,7 +275,7 @@ void MainWindowPrivate::redraw()
     wipe();
 
     // TODO REMOVE THIS
-    //wiz_light();
+    wiz_light();
 
     // Adjust scrollbars
     view->setSceneRect(0, 0, p_ptr->cur_map_wid * cell_wid, p_ptr->cur_map_hgt * cell_hgt);
@@ -285,6 +285,8 @@ void MainWindowPrivate::redraw()
             light_spot(y, x);
         }
     }
+
+    ui_center(p_ptr->py, p_ptr->px);
 }
 
 bool MainWindowPrivate::panel_contains(int y, int x)
@@ -1098,6 +1100,18 @@ void MainWindow::screen_redraw()
 bool panel_contains(int y, int x)
 {
     return main_window->priv->panel_contains(y, x);
+}
+
+void ui_ensure(int y, int x)
+{
+    MainWindowPrivate *priv = main_window->priv;
+    main_window->priv->view->ensureVisible(QRectF(x * priv->cell_wid, y * priv->cell_hgt, priv->cell_wid, priv->cell_hgt));
+}
+
+void ui_center(int y, int x)
+{
+    MainWindowPrivate *priv = main_window->priv;
+    main_window->priv->view->centerOn(x * priv->cell_wid, y * priv->cell_hgt);
 }
 
 void ui_redraw_grid(int y, int x)
