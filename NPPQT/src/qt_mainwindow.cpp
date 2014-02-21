@@ -9,6 +9,8 @@
 #include "src/birthdialog.h"
 #include "src/dungeonbox.h"
 
+static MainWindow *main_window = 0;
+
 class MainWindowPrivate
 {
 public:
@@ -40,7 +42,21 @@ public:
     QPixmap darken_pix(QPixmap src);
     QPixmap lighten_pix(QPixmap src);
     QPixmap colorize_pix(QPixmap src, QColor color);
+    QPixmap gray_pix(QPixmap src);
 };
+
+QPixmap MainWindowPrivate::gray_pix(QPixmap src)
+{
+    QImage img = src.toImage();
+    for (int x = 0; x < img.width(); x++) {
+        for (int y = 0; y < img.height(); y++) {
+            QColor col = QColor(img.pixel(x, y)).darker();
+            int gray = qGray(col.rgb());
+            img.setPixel(x, y, qRgb(gray, gray, gray));
+        }
+    }
+    return QPixmap::fromImage(img);
+}
 
 QPixmap MainWindowPrivate::colorize_pix(QPixmap src, QColor color)
 {
@@ -266,12 +282,8 @@ void MainWindowPrivate::redraw()
     for (int y = 0; y < p_ptr->cur_map_hgt; y++) {
         for (int x = 0; x < p_ptr->cur_map_wid; x++) {
             light_spot(y, x);
-            redraw_cell(y, x);
         }
     }
-
-    // TODO comment this out
-    //pop_up_message_box(QString("Redrawing: %1 milli").arg(QString::number(t1.elapsed())));
 }
 
 bool MainWindowPrivate::panel_contains(int y, int x)
@@ -331,8 +343,6 @@ void MainWindowPrivate::redraw_cell(int y, int x)
         empty = false;
 
         key2 = d_ptr->object_tile;
-
-        //pop_up_message_box(key2);
     }
 
     if (use_graphics) {
@@ -353,7 +363,7 @@ void MainWindowPrivate::redraw_cell(int y, int x)
                 pix = darken_pix(pix);
             }
             else if (flags & UI_LIGHT_DIM) {
-                pix = darken_pix(pix);
+                pix = gray_pix(pix);
             }
             b_items_g[y][x]->setPixmap(pix);
             done_bg = true;
@@ -395,6 +405,9 @@ void MainWindowPrivate::redraw_cell(int y, int x)
 // The main function - intitalize the main window and set the menus.
 MainWindow::MainWindow()
 {
+    // Store a reference for public functions (panel_contains and others)
+    if (!main_window) main_window = this;
+
     setAttribute(Qt::WA_DeleteOnClose);
 
     priv = new MainWindowPrivate;
@@ -552,6 +565,7 @@ void MainWindow::options_dialog()
 {
     OptionsDialog *dlg = new OptionsDialog(this);
     dlg->exec();
+    ui_redraw_all();
     delete dlg;
 }
 
@@ -956,7 +970,7 @@ void MainWindow::write_colored_text(QChar letter, QColor color, s16b y, s16b x)
     QPainter painter(this);
 
     // Paranoia
-    if (!panel_contains (y, x)) return;
+    if (!panel_contains(y, x)) return;
 
     // Get the coordinates
     s16b pixel_y = (y - first_y) * square_height;
@@ -1022,17 +1036,19 @@ void MainWindow::screen_redraw()
 }
 
 // determine of a dungeon square is onscreen at present
-bool MainWindow::panel_contains(s16b y, s16b x)
+bool panel_contains(int y, int x)
 {
-    /*
-    if (first_x > x) return (FALSE);
-    if (last_x < x)  return (FALSE);
-    if (first_y > y) return (FALSE);
-    if (last_y < y)  return (FALSE);
-    return (TRUE);
-    */
+    return main_window->priv->panel_contains(y, x);
+}
 
-    return priv->panel_contains(y, x);
+void ui_redraw_grid(int y, int x)
+{
+    main_window->priv->redraw_cell(y, x);
+}
+
+void ui_redraw_all()
+{
+    main_window->priv->redraw();
 }
 
 // Try to center the onscreen map around the player.

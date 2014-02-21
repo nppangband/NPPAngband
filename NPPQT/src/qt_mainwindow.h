@@ -25,9 +25,10 @@ class MainWindow : public QMainWindow
 
 
 public:
+    MainWindowPrivate *priv;
+
     MainWindow();
 
-    bool panel_contains(s16b y, s16b x);
     void write_colored_text(QChar letter, QColor color, s16b y, s16b x);
     void display_square(s16b y, s16b x);
     void screen_wipe();
@@ -69,7 +70,6 @@ private slots:
 
 
 private:
-    MainWindowPrivate *priv;
 
     // The editable part of the main window.
     QGraphicsView *graphics_view;

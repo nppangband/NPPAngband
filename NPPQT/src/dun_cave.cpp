@@ -1325,8 +1325,8 @@ void light_spot(int y, int x)
     /* Hack -- redraw the grid */
     map_info(y, x);
 
-    // TODO print the square onscreen
-
+    // print the square onscreen
+    ui_redraw_grid(y, x);
 }
 
 
