@@ -1121,6 +1121,8 @@ void init_npp_games(void)
 
     init_rng();
 
+    character_dungeon = character_generated = character_loaded = character_icky = false;
+
     QLabel status_update;
     status_update.setText (QString("Starting game"));
     //status_update.show();
@@ -1221,6 +1223,8 @@ void cleanup_npp_games(void)
 
     delete_notes_file();
 
+    clear_graphics();
+
     /* Free the allocation tables */
     FREE_ARRAY(alloc_ego_table);
     FREE_ARRAY(alloc_feat_table);
@@ -1296,8 +1300,6 @@ void cleanup_npp_games(void)
 
     /*free the randart arrays*/
     free_randart_tables();
-
-    clear_graphics();
 }
 
 
@@ -1570,7 +1572,7 @@ int read_coordinate(QString text)
 
 void clear_graphics()
 {
-    if (!character_loaded) return;
+    if (!character_dungeon) return;
 
     for (int i = 0; i < z_info->f_max; i++) {
         f_info[i].tile_id.clear();
@@ -1601,7 +1603,7 @@ void clear_graphics()
 
 void init_graphics()
 {
-    if (!character_loaded) return;
+    if (!character_dungeon) return;
 
     clear_graphics();
 

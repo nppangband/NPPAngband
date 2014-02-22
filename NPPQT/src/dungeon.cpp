@@ -148,8 +148,6 @@ void launch_game()
     // TODO
     //process_some_user_pref_files();
 
-    init_graphics();
-
     /* Remove ironman ego-items if needed */
     if (!adult_ironman && !adult_no_stores)
     {
@@ -159,6 +157,9 @@ void launch_game()
 
     /* Generate a dungeon level if needed */
     if (!character_dungeon) generate_cave();
+
+    // Load tile specifications
+    init_graphics();
 
     /* Character is now "complete" */
     character_generated = TRUE;
