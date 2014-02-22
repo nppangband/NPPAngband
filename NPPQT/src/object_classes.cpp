@@ -474,6 +474,17 @@ bool object_type::has_inscription()
     return (!inscription.isEmpty());
 }
 
+/*
+ * Determine if an object has charges
+ */
+bool object_type::has_charges()
+{
+    if (!is_wand() && !is_staff()) return (FALSE);
+
+    if (pval <= 0) return (FALSE);
+
+    return (TRUE);
+}
 
 /*
  * Return a "feeling" (or NULL) about an item.  Method 1 (Heavy).
