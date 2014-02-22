@@ -595,6 +595,8 @@ void object_kind::object_kind_wipe()
     autoinscribe.clear();
     flavor = squelch = 0;
     aware = tried = everseen;
+
+    tile_id.clear();
 }
 
 artifact_type::artifact_type()
@@ -634,5 +636,6 @@ void flavor_type::flavor_wipe()
     tval = sval = color_num = 0;
     d_color = QColor("black");
     d_char = QChar(' ');
+    tile_id.clear();
 }
 

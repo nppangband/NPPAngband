@@ -905,6 +905,7 @@ void finish_birth()
         e_info[i].squelch = false;
     }
 
+    // TODO IMPLEMENT THIS
 #if 0
     /* Make a note file if that option is set */
     if (adult_take_notes)

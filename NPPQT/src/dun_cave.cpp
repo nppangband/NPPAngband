@@ -29,6 +29,7 @@
  */
 static int (*get_energy_to_move)(int y, int x, byte which_flow, u32b elem_flag);
 
+#define FAST_CAVE_INFO(g) (dungeon_info[GRID_Y(g)][GRID_X(g)].cave_info)
 
 /*
  * Approximate distance between two points.
@@ -702,22 +703,35 @@ static void special_lighting_floor(dungeon_type *dun_ptr)
         /* Only lit by "torch" lite */
         if (view_yellow_light && !(dun_ptr->cave_info & (CAVE_GLOW | CAVE_HALO)))
         {
-            dun_ptr->special_lighting = FLOOR_LIGHT_BRIGHT;
-        }
+            dun_ptr->ui_flags |= UI_LIGHT_TORCH;
+            object_type *o_ptr = &inventory[INVEN_LIGHT];
+            // Hack - Special light effect for the phial
+            if ((o_ptr->k_idx > 0) && (k_info[o_ptr->k_idx].k_name.contains("Phial~"))) {
+                dun_ptr->ui_flags |= UI_COSMIC_TORCH;
+            }
+
+            if (IS_GRAY(dun_ptr->dun_color)) {
+                dun_ptr->dun_color = defined_colors[TERM_YELLOW];
+            }
+        }                
         return;
     }
 
     /* Handle "dark" grids and "blindness" */
     else if (p_ptr->timed[TMD_BLIND] || !(dun_ptr->cave_info & (CAVE_GLOW | CAVE_HALO)))
-    {
-        dun_ptr->special_lighting = FLOOR_LIGHT_DIM;
+    {             
+        dun_ptr->ui_flags |= UI_LIGHT_DIM;
+
+        dun_ptr->dun_color = defined_colors[TERM_L_DARK];
+
         return;
     }
 
-    /* Handle "view_bright_light" */
-    else if (view_bright_light)
-    {
-        dun_ptr->special_lighting = FLOOR_LIGHT_BRIGHT;
+    else if (view_bright_light) {
+        dun_ptr->ui_flags |= UI_LIGHT_BRIGHT;
+
+        dun_ptr->dun_color = dun_ptr->dun_color.darker(150);
+
         return;
     }
 }
@@ -727,21 +741,25 @@ static void special_lighting_wall(dungeon_type *dun_ptr)
 {
     /* Handle "seen" grids */
     if (dun_ptr->cave_info & (CAVE_SEEN))
-    {
+    {        
         return;
     }
 
     /* Handle "blind" */
     else if (p_ptr->timed[TMD_BLIND])
     {
-        dun_ptr->special_lighting = FLOOR_LIGHT_DIM;
+        dun_ptr->ui_flags |= UI_LIGHT_DIM;
+
+        dun_ptr->dun_color = defined_colors[TERM_L_DARK];
+
         return;
     }
 
-    /* Handle "view_bright_light" */
-    else if (view_bright_light)
-    {
-        dun_ptr->special_lighting = FLOOR_LIGHT_BRIGHT;
+    else if (view_bright_light) {
+        dun_ptr->ui_flags |= UI_LIGHT_BRIGHT;
+
+        dun_ptr->dun_color = dun_ptr->dun_color.darker(150);
+
         return;
     }
 }
@@ -794,6 +812,20 @@ static void map_terrain (s16b y, s16b x)
     dun_ptr->special_lighting = FLOOR_LIGHT_NORMAL;
     dun_ptr->dtrap = FALSE;
 
+    // TODO REMOVE THIS    
+    /*
+    int dist = distance(p_ptr->py, p_ptr->px, y, x);
+    if (dist < 2) {
+        dun_ptr->ui_flags |= (UI_LIGHT_TORCH | UI_COSMIC_TORCH);
+    }
+    else if (dist < 3) {
+        dun_ptr->ui_flags |= UI_LIGHT_BRIGHT;
+    }
+    else if (dist < 4) {
+        dun_ptr->ui_flags |= UI_LIGHT_DIM;
+    }
+    */
+
     /* Boring grids (floors, etc) */
     if (!(f_info[feat].f_flags1 & (FF1_REMEMBER)))
     {
@@ -815,6 +847,7 @@ static void map_terrain (s16b y, s16b x)
             /* Get attribute and color */
             dun_ptr->dun_char = f_ptr->d_char;
             dun_ptr->dun_color = f_ptr->d_color;
+            dun_ptr->dun_tile = f_ptr->tile_id;
 
             /* Special lighting effects */
             if (view_special_light)
@@ -830,6 +863,7 @@ static void map_terrain (s16b y, s16b x)
             f_ptr = &f_info[FEAT_NONE];
             dun_ptr->dun_color = f_ptr->d_color;
             dun_ptr->dun_char = f_ptr->d_char;
+            dun_ptr->dun_tile = f_ptr->tile_id;
         }
     }
 
@@ -846,6 +880,7 @@ static void map_terrain (s16b y, s16b x)
             f_ptr = &f_info[feat];
             dun_ptr->dun_color = f_ptr->d_color;
             dun_ptr->dun_char = f_ptr->d_char;
+            dun_ptr->dun_tile = f_ptr->tile_id;
 
             /* We have seen the feature */
             f_ptr->f_everseen = TRUE;
@@ -867,6 +902,7 @@ static void map_terrain (s16b y, s16b x)
             f_ptr = &f_info[FEAT_NONE];
             dun_ptr->dun_color = f_ptr->d_color;
             dun_ptr->dun_char = f_ptr->d_char;
+            dun_ptr->dun_tile = f_ptr->tile_id;
         }
     }
 
@@ -877,6 +913,7 @@ static void map_terrain (s16b y, s16b x)
     }
 }
 
+#define GRAF_BROKEN_BONE 440
 
 static void map_objects (s16b y, s16b x)
 {
@@ -890,6 +927,7 @@ static void map_objects (s16b y, s16b x)
     dun_ptr->object_char = ' ';
     dun_ptr->object_color = add_preset_color(TERM_DARK);
     dun_ptr->obj_special_symbol = OBJ_SYMBOL_NONE;
+    dun_ptr->object_tile.clear();
 
     //nothing there
     if (!dun_ptr->has_object()) return;
@@ -907,6 +945,7 @@ static void map_objects (s16b y, s16b x)
 
             dun_ptr->object_color = k_info[i].d_color;
             dun_ptr->object_char =  k_info[i].d_char;
+            dun_ptr->object_tile = k_info[i].tile_id;
 
             return;
         }
@@ -919,8 +958,17 @@ static void map_objects (s16b y, s16b x)
         if ((!sq_flag) || (o_ptr->ident & IDENT_QUEST))
         {
             /* Normal attr */
-            dun_ptr->object_color = k_info[o_ptr->k_idx].d_color;
-            dun_ptr->object_char =  k_info[o_ptr->k_idx].d_char;
+            if (k_info[o_ptr->k_idx].flavor > 0) {
+                flavor_type *fl_ptr = flavor_info + k_info[o_ptr->k_idx].flavor;
+                dun_ptr->object_color = fl_ptr->d_color;
+                dun_ptr->object_char =  fl_ptr->d_char;
+                dun_ptr->object_tile = fl_ptr->tile_id;
+            }
+            else {
+                dun_ptr->object_color = k_info[o_ptr->k_idx].d_color;
+                dun_ptr->object_char =  k_info[o_ptr->k_idx].d_char;
+                dun_ptr->object_tile = k_info[o_ptr->k_idx].tile_id;
+            }
 
             /*found a non-squelchable item, unless showing piles, display this one*/
             if (!show_piles) break;
@@ -932,13 +980,37 @@ static void map_objects (s16b y, s16b x)
 
         if (do_purple_dot)
         {
-            dun_ptr->cave_info = OBJ_SYMBOL_SQUELCH;
+            // DONT OVERWRITE CAVE_INFO -DG
+            //dun_ptr->cave_info = OBJ_SYMBOL_SQUELCH;
+
+            if (use_graphics) {
+                if (use_graphics == GRAPHICS_DAVID_GERVAIS) {
+                    dun_ptr->object_tile = QString("%1x%2").arg(0x9A & 0x7F).arg(0xC4 & 0x7F);
+                }
+                else {
+                    // HACK
+                    dun_ptr->object_tile = k_info[GRAF_BROKEN_BONE].tile_id;
+                }
+            }
+            else {
+                dun_ptr->object_color = defined_colors[TERM_VIOLET];
+                dun_ptr->object_char = f_info[1].d_char; // Floor
+            }
         }
 
         /* Special stack symbol, unless everything in the pile is squelchable */
         else if (++floor_num > 1)
         {
-            dun_ptr->cave_info = OBJ_SYMBOL_PILE;
+            // DONT OVERWRITE CAVE_INFO -DG
+            //dun_ptr->cave_info = OBJ_SYMBOL_PILE;
+
+            if (use_graphics == GRAPHICS_DAVID_GERVAIS) {
+                dun_ptr->object_tile = QString("%1x%2").arg(0x87 & 0x7F).arg(0xB7 & 0x7F);
+            }
+            else {
+                dun_ptr->object_char = k_info[0].d_char;
+                dun_ptr->object_color = k_info[0].d_color;
+            }
 
             // We are done
             return;
@@ -954,18 +1026,12 @@ static void map_effects (s16b y, s16b x)
 
     dun_ptr->effect_char = ' ';
     dun_ptr->effect_color = add_preset_color(TERM_DARK);
+    dun_ptr->effect_tile.clear();
 
     if (!dun_ptr->has_effect()) return;
     if (!(dun_ptr->cave_info & (CAVE_SEEN | CAVE_MARK))) return;
 
-    bool has_object = TRUE;
-    if ((dun_ptr->object_char == ' ') &&
-            ((dun_ptr->object_color.red()) +
-             dun_ptr->object_color.blue() +
-             dun_ptr->object_color.green()) == 0)
-    {
-         has_object = FALSE;
-    }
+    bool has_object = dun_ptr->has_visible_object();
 
     /* Handle effects */
 
@@ -1051,6 +1117,11 @@ static void map_effects (s16b y, s16b x)
         if (use_graphics)
         {
             dun_ptr->effect_color = f_ptr->d_color;
+            dun_ptr->effect_tile = f_ptr->tile_id;
+            if (x_ptr->x_type == EFFECT_PERMANENT_CLOUD || x_ptr->x_type == EFFECT_LINGERING_CLOUD
+                    || x_ptr->x_type == EFFECT_SHIMMERING_CLOUD) {
+                dun_ptr->ui_flags |= UI_TRANSPARENT_EFFECT;
+            }
         }
         /* Permanent clouds */
         else if (x_ptr->x_type == EFFECT_PERMANENT_CLOUD)
@@ -1109,6 +1180,7 @@ static void map_monster (s16b y, s16b x)
     dungeon_type *dun_ptr = &dungeon_info[y][x];
     dun_ptr->monster_char = ' ';
     dun_ptr->monster_color = add_preset_color(TERM_DARK);
+    dun_ptr->monster_tile.clear();
 
     // Nothing there
     if (!dun_ptr->has_monster()) return;
@@ -1127,7 +1199,10 @@ static void map_monster (s16b y, s16b x)
             /* Desired attr */
             dun_ptr->monster_color = r_ptr->d_color;
             dun_ptr->monster_char = r_ptr->d_char;
-
+            dun_ptr->monster_tile = r_ptr->tile_id;
+            if (r_ptr->flags2 & RF2_PASS_WALL) {
+                dun_ptr->ui_flags |= UI_TRANSPARENT_MONSTER;
+            }
 
             /* Hack -- monster hallucination */
             if (p_ptr->timed[TMD_IMAGE])
@@ -1136,6 +1211,7 @@ static void map_monster (s16b y, s16b x)
 
                 dun_ptr->monster_color = r_info[i].d_color;
                 dun_ptr->monster_char =   r_info[i].d_char;
+                dun_ptr->monster_tile = r_info[i].tile_id;
 
                 return;
 
@@ -1217,6 +1293,8 @@ static void map_monster (s16b y, s16b x)
             dun_ptr->monster_color = r_ptr->d_color;
         }
 
+        dun_ptr->monster_tile = r_ptr->tile_id;
+
         /* Get the "player" char */
         dun_ptr->monster_char = r_ptr->d_char;
     }
@@ -1224,6 +1302,8 @@ static void map_monster (s16b y, s16b x)
 
 void map_info(s16b y, s16b x)
 {
+    dungeon_info[y][x].ui_flags = 0;
+
     // Map each layer of the dungeon
     map_terrain (y, x);
 
@@ -1250,8 +1330,8 @@ void light_spot(int y, int x)
     /* Hack -- redraw the grid */
     map_info(y, x);
 
-    // TODO print the square onscreen
-
+    // print the square onscreen
+    ui_redraw_grid(y, x);
 }
 
 
@@ -1827,10 +1907,7 @@ void forget_view(void)
     int i, g;
 
     int fast_view_n = view_n;
-    u16b *fast_view_g = view_g;
-
-    u16b *fast_cave_info = &dungeon_info[0][0].cave_info;
-
+    u16b *fast_view_g = view_g;    
 
     /* None to forget */
     if (!fast_view_n) return;
@@ -1848,7 +1925,7 @@ void forget_view(void)
         x = GRID_X(g);
 
         /* Clear "CAVE_VIEW" and "CAVE_SEEN" flags */
-        fast_cave_info[g] &= ~(CAVE_VIEW | CAVE_SEEN);
+        FAST_CAVE_INFO(g) &= ~(CAVE_VIEW | CAVE_SEEN);
 
         /* Clear "CAVE_LITE" flag */
         /* fast_cave_info[g] &= ~(CAVE_LITE); */
@@ -1870,7 +1947,7 @@ void forget_view(void)
         g = fire_g[i];
 
         /* Clear */
-        fast_cave_info[g] &= ~(CAVE_FIRE);
+        FAST_CAVE_INFO(g) &= ~(CAVE_FIRE);
     }
 
     /* None left */
@@ -1983,9 +2060,7 @@ void update_view(void)
     u16b *fast_view_g = view_g;
 
     int fast_temp_n = 0;
-    u16b *fast_temp_g = temp_g;
-
-    u16b *fast_cave_info = &dungeon_info[0][0].cave_info;
+    u16b *fast_temp_g = temp_g;    
 
     u16b info;
 
@@ -1998,7 +2073,7 @@ void update_view(void)
         g = fast_view_g[i];
 
         /* Get grid info */
-        info = fast_cave_info[g];
+        info = FAST_CAVE_INFO(g);
 
         /* Save "CAVE_SEEN" grids */
         if (info & (CAVE_SEEN))
@@ -2017,7 +2092,7 @@ void update_view(void)
         /* info &= ~(CAVE_LIGHT); */
 
         /* Save cave info */
-        fast_cave_info[g] = info;
+        FAST_CAVE_INFO(g) = info;
     }
 
     /* Reset the "view" array */
@@ -2030,7 +2105,7 @@ void update_view(void)
         g = fire_g[i];
 
         /* Clear */
-        fast_cave_info[g] &= ~(CAVE_FIRE);
+        FAST_CAVE_INFO(g) &= ~(CAVE_FIRE);
     }
 
     /* Reset the "fire" array */
@@ -2040,7 +2115,7 @@ void update_view(void)
     radius = p_ptr->state.cur_light;
 
     /* Handle real light */
-    if (radius > 0) ++radius;
+    if (radius > 0) ++radius;    
 
     /* Scan monster list and add monster lites */
     for ( k = 1; k < mon_max; k++)
@@ -2078,13 +2153,13 @@ void update_view(void)
                     {
                         g = GRID(fy+i,fx+j);
 
-                        info = fast_cave_info[g];
+                        info = FAST_CAVE_INFO(g);
 
                         info |= (CAVE_VIEW);
                         info |= (CAVE_SEEN);
 
                         /* Save cave info */
-                        fast_cave_info[g] = info;
+                        FAST_CAVE_INFO(g) = info;
 
                         /* Save in array */
                         fast_view_g[fast_view_n++] = g;
@@ -2103,7 +2178,7 @@ void update_view(void)
     g = pg;
 
     /* Get grid info */
-    info = fast_cave_info[g];
+    info = FAST_CAVE_INFO(g);
 
     /* Assume viewable */
     info |= (CAVE_VIEW | CAVE_FIRE);
@@ -2123,7 +2198,7 @@ void update_view(void)
     }
 
     /* Save cave info */
-    fast_cave_info[g] = info;
+    FAST_CAVE_INFO(g) = info;
 
     /* Save in the "view" array */
     fast_view_g[fast_view_n++] = g;
@@ -2163,7 +2238,7 @@ void update_view(void)
         while (queue_head < queue_tail)
         {
             /* Dequeue next grid */
-            p = queue[queue_head++];
+            p = queue[queue_head++];            
 
             /* Check bits */
             if ((bits0 & (p->bits_0)) ||
@@ -2175,11 +2250,11 @@ void update_view(void)
                 g = pg + p->grid[o2];
 
                 /* Get grid info */
-                info = fast_cave_info[g];
+                info = FAST_CAVE_INFO(g);
 
                 /* Handle opaque grids */
                 if (!(info & (CAVE_LOS)))
-                {
+                {                    
                     /* Clear bits */
                     bits0 &= ~(p->bits_0);
                     bits1 &= ~(p->bits_1);
@@ -2234,7 +2309,7 @@ void update_view(void)
 
                 /* Handle transparent grids */
                 else
-                {
+                {                    
                     /* Enqueue child */
                     if (last != p->next_0)
                     {
@@ -2257,7 +2332,7 @@ void update_view(void)
                         if (p->d < radius)
                         {
                             /* Mark as "CAVE_SEEN" */
-                            info |= (CAVE_SEEN);
+                            info |= (CAVE_SEEN);                            
 
                             /* Mark as "CAVE_LIGHT" */
                             /* info |= (CAVE_LIGHT); */
@@ -2276,7 +2351,7 @@ void update_view(void)
                 }
 
                 /* Save cave info */
-                fast_cave_info[g] = info;
+                FAST_CAVE_INFO(g) = info;
 
             }
         }
@@ -2329,7 +2404,7 @@ void update_view(void)
                 g = pg + p->grid[o2];
 
                 /* Get grid info */
-                info = fast_cave_info[g];
+                info = FAST_CAVE_INFO(g);
 
                 /* Check for first possible line of fire */
                 i = p->slope_fire_index1;
@@ -2409,7 +2484,7 @@ void update_view(void)
                 }
 
                 /* Save cave info */
-                fast_cave_info[g] = info;
+                FAST_CAVE_INFO(g) = info;
             }
         }
     }
@@ -2427,7 +2502,7 @@ void update_view(void)
             g = fast_view_g[i];
 
             /* Grid cannot be "CAVE_SEEN" */
-            fast_cave_info[g] &= ~(CAVE_SEEN);
+            FAST_CAVE_INFO(g) &= ~(CAVE_SEEN);
         }
     }
 
@@ -2438,7 +2513,7 @@ void update_view(void)
         g = fast_view_g[i];
 
         /* Get grid info */
-        info = fast_cave_info[g];
+        info = FAST_CAVE_INFO(g);
 
         /* Was not "CAVE_SEEN", is now "CAVE_SEEN" */
         if ((info & (CAVE_SEEN)) && !(info & (CAVE_TEMP)))
@@ -2464,13 +2539,13 @@ void update_view(void)
         g = fast_temp_g[i];
 
         /* Get grid info */
-        info = fast_cave_info[g];
+        info = FAST_CAVE_INFO(g);
 
         /* Clear "CAVE_TEMP" flag */
         info &= ~(CAVE_TEMP);
 
         /* Save cave info */
-        fast_cave_info[g] = info;
+        FAST_CAVE_INFO(g) = info;
 
         /* Was "CAVE_SEEN", is now not "CAVE_SEEN" */
         if (!(info & (CAVE_SEEN)))

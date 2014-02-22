@@ -153,6 +153,7 @@ extern void set_dungeon_type(u16b dungeon_type);
 extern void process_world(void);
 
 /* init2.c */
+extern void clear_graphics();
 extern void init_graphics();
 extern void init_npp_games(void);
 extern void cleanup_npp_games(void);
@@ -532,6 +533,13 @@ extern void process_wilderness_quest(void);
 extern void process_greater_vault_quest(void);
 extern void process_guild_quests(void);
 
+// qt_mainwindow.cpp
+extern bool panel_contains(int y, int x);
+extern void ui_redraw_grid(int y, int x);
+extern void ui_redraw_all();
+extern void ui_ensure(int y, int x);
+extern void ui_center(int y, int x);
+
 /* randart.c */
 extern QString make_random_name(byte min_length, byte max_length);
 extern s32b artifact_power(int a_idx);
@@ -786,5 +794,8 @@ void roll_player(int stats[A_MAX]);
 void save_prev_character();
 void load_prev_character();
 bool has_prev_character();
+
+// prefs.cpp
+extern int process_pref_file(QString name);
 
 #endif // FUNCTION_DECLARATIONS_H

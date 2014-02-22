@@ -7,11 +7,8 @@
 #include "src/player_classes.h"
 #include <QString>
 #include <QFile>
-#include <src/qt_mainwindow.h>
 
 //was externs.h
-
-extern MainWindow *main_window;
 
 
 extern byte game_mode;
