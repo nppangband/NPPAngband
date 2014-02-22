@@ -112,6 +112,12 @@ public:
 
     QString tile_id;
 
+    // Tile mapping
+    byte tile_32x32_y;
+    byte tile_32x32_x;
+    byte tile_8x8_y;
+    byte tile_8x8_x;
+
     // Wipe a monster_race entry.  All variabled above need to be cleared.  Intended for player ghosts.
     void monster_race_wipe();
 

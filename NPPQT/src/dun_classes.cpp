@@ -130,6 +130,8 @@ void feature_type::feature_wipe()
     dam_non_native = native_energy_move = non_native_energy_move = native_to_hit_adj =
             non_native_to_hit_adj = f_stealth_adj = 0;
 
+    tile_32x32_y = tile_32x32_x = tile_8x8_y = tile_8x8_x = 0;
+
     tile_id.clear();
 }
 

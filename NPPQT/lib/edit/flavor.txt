@@ -1,6 +1,6 @@
 # File: flavor.txt
 
-# This file is used to initialize the "flavor" information for the Angband game.
+# This file is used to initialize the "flavor" information for the NPPAngband and NPPMoria game.
 
 # Do not modify this file unless you know exactly what you are doing,
 # unless you wish to risk possible system crashes and broken savefiles.
@@ -8,6 +8,7 @@
 # N:<index>:<tval>:<sval>
 # G:<char>:<color> {alternatively} G: /<char> : <red> : <green> : <blue>
 # D:<text>
+# T:<tile 32x32 Y-coord><tile 32x3X-coord><tile 8x8 Y-coord><tile 8x8 X-coord>
 
 #color can be entered as either preset color or in 24-bit RGB format (0-255 for each)
 
@@ -19,1732 +20,2030 @@ V:7.1.0
 N:1:45:37
 G:=:TERM_GOLD
 D:Plain Gold
+T:5:23:53:15
 
 # Azurite Ring     
 N:2:45
 G:=:TERM_BLUE
 D:Azurite
+T:5:13:53:4
 
 # Sapphire Ring     
 N:3:45
 G:=:TERM_BLUE
 D:Sapphire
+T:5:5:53:4
 
 # Engagement Ring     
 N:4:45
 G:=:TERM_L_BLUE
 D:Engagement
+T:5:77:53:3
 
 # Mithril Ring     
 N:5:45
 G:=:TERM_L_BLUE
 D:Mithril
+T:5:58:53:3
 
 # Lapis Lazulii Ring     
 N:6:45
 G:=:TERM_NAVY_BLUE
 D:Lapis Lazulii
+T:5:62:53:4
 
 # Apatite Ring     
 N:7:45
 G:=:TERM_SKY_BLUE
 D:Apatite
+T:5:63:53:3
 
 # Aquamarine Ring     
 N:8:45
 G:=:TERM_SKY_BLUE
 D:Aquamarine
+T:5:61:53:3
 
 # Moonstone Ring     
 N:9:45
 G:=:TERM_SKY_BLUE
 D:Moonstone
+T:5:18:53:3
 
 # Opal Ring     
 N:10:45
 G:=:TERM_SKY_BLUE
 D:Opal
+T:5:17:53:3
 
 # Granite Ring     
 N:11:45
 G:=:TERM_L_DARK
 D:Granite
+T:5:84:53:11
 
 # Hematite Ring     
 N:12:45
 G:=:TERM_L_DARK
 D:Hematite
+T:5:7:53:11
 
 # Obsidian Ring     
 N:13:45
 G:=:TERM_L_DARK
 D:Obsidian
+T:5:66:53:11
 
 # Onyx Ring     
 N:14:45
 G:=:TERM_L_DARK
 D:Onyx
+T:5:67:53:11
 
 # Emerald Ring     
 N:15:45
 G:=:TERM_GREEN
 D:Emerald
+T:5:4:53:6
 
 # Fluorite Ring     
 N:16:45
 G:=:TERM_GREEN
 D:Fluorite
+T:5:12:53:6
 
 # Kornerupine Ring     
 N:17:45
 G:=:TERM_GREEN
 D:Kornerupine
+T:5:79:53:6
 
 # Fucite Ring     
 N:18:45
 G:=:TERM_L_GREEN
 D:Fucite
+T:5:73:53:2
 
 # Adamantite Ring     
 N:19:45
 G:=:TERM_JUNGLE_GREEN
 D:Adamantite
+T:5:57:53:2
 
 # Bloodstone Ring     
 N:20:45
 G:=:TERM_JUNGLE_GREEN
 D:Bloodstone
+T:5:71:53:2
 
 # Jade Ring     
 N:21:45
 G:=:TERM_JUNGLE_GREEN
 D:Jade
+T:5:74:53:2
 
 # Clinohumite Ring     
 N:22:45
 G:=:TERM_ORANGE
 D:Clinohumite
+T:5:2:53:5
 
 # Clinohumite Ring     
 N:23:45
 G:=:TERM_ORANGE
 D:Clinohumite
+T:5:69:53:5
 
 # Rhodonite Ring     
 N:24:45
 G:=:TERM_ORANGE
 D:Rhodonite
+T:5:72:53:5
 
 # Tortoise Shell Ring     
 N:25:45
 G:=:TERM_ORANGE
 D:Tortoise Shell
+T:5:11:53:5
 
 # Jasper Ring     
 N:26:45
 G:=:TERM_RED
 D:Jasper
+T:5:65:53:1
 
 # Agate Ring     
 N:27:45
 G:=:TERM_L_RED
 D:Agate
+T:5:75:53:10
 
 # Carnelian Ring     
 N:28:45
 G:=:TERM_RED_LAVA
 D:Carnelian
+T:5:70:53:1
 
 # Garnet Ring     
 N:29:45
 G:=:TERM_RED_LAVA
 D:Garnet
+T:5:3:53:1
 
 # Ruby Ring     
 N:30:45
 G:=:TERM_RED_LAVA
 D:Ruby
+T:5:15:53:1
 
 # Tiger Eye Ring     
 N:31:45
 G:=:TERM_RASPBERRY
 D:Tiger Eye
+T:5:16:53:10
 
 # Steel Ring     
 N:32:45
 G:=:TERM_SLATE
 D:Steel
+T:5:1:53:9
 
 # Corundum Ring     
 N:33:45
 G:=:TERM_SLATE_GRAY
 D:Corundum
+T:5:8:53:9
 
 # Quartzite Ring     
 N:34:45
 G:=:TERM_SLATE_GRAY
 D:Quartzite
+T:5:85:53:9
 
 # Silver Ring     
 N:35:45
 G:=:TERM_SILVER
 D:Silver
+T:5:0:53:9
 
 # Zircon Ring     
 N:36:45
 G:=:TERM_SILVER
 D:Zircon
+T:5:6:53:14
 
 # Serpent Ring     
 N:37:45
 G:=:TERM_L_UMBER
 D:Serpent
+T:5:86:53:14
 
 # Bronze Ring     
 N:38:45
 G:=:TERM_COPPER
 D:Bronze
+T:5:14:53:14
 
 # Tanzanite Ring     
 N:39:45
 G:=:TERM_VIOLET
 D:Tanzanite
+T:5:78:53:0
 
 # Amethyst Ring     
 N:40:45
 G:=:TERM_PURPLE
 D:Amethyst
+T:5:9:53:0
 
 # Calcite Ring     
 N:41:45
 G:=:TERM_WHITE
 D:Calcite
+T:5:83:53:12
 
 # Diamond Ring     
 N:42:45
 G:=:TERM_WHITE
 D:Diamond
+T:5:60:53:12
 
 # Mother of Pearl Ring     
 N:43:45
 G:=:TERM_WHITE
 D:Mother of Pearl
+T:5:68:53:12
 
 # Platinum Ring     
 N:44:45
 G:=:TERM_WHITE
 D:Platinum
+T:5:80:53:12
 
 # Alexandrite Ring     
 N:45:45
 G:=:TERM_LIGHT_GRAY
 D:Alexandrite
+T:5:59:53:13
 
 # Marble Ring     
 N:46:45
 G:=:TERM_LIGHT_GRAY
 D:Marble
+T:5:81:53:13
 
 # Beryl Ring     
 N:47:45
 G:=:TERM_SNOW_WHITE
 D:Beryl
+T:5:76:53:12
 
 # Pearl Ring     
 N:48:45
 G:=:TERM_LIGHT_GRAY
 D:Pearl
+T:5:64:53:13
 
 # Quartz Ring     
 N:49:45
 G:=:TERM_YELLOW
 D:Quartz
+T:5:82:53:15
 
 # Yellow Gold Ring     
 N:50:45
 G:=:TERM_YELLOW
 D:Yellow Gold
+T:5:10:53:15
 
 # Kyanite Amulet     
 N:51:40
 G:":TERM_BLUE
 D:Kyanite
+T:5:49:54:3
 
 # Saphire Amulet     
 N:52:40
 G:":TERM_BLUE
 D:Saphire
+T:5:50:54:3
 
 # Apatite Amulet     
 N:53:40
 G:":TERM_SKY_BLUE
 D:Apatite
+T:5:35:54:8
 
 # Blue Topaz Amulet     
 N:54:40
 G:":TERM_SKY_BLUE
 D:Blue Topaz
+T:5:37:54:8
 
 # Onyx Amulet     
 N:55:40
 G:":TERM_L_DARK
 D:Onyx
+T:5:27:54:6
 
 # Tektite Amulet     
 N:56:40
 G:":TERM_L_DARK
 D:Tektite
+T:5:54:54:6
 
 # Emerald Amulet     
 N:57:40
 G:":TERM_L_GREEN
 D:Emerald
+T:5:47:54:2
 
 # Jasper Amulet     
 N:58:40
 G:":TERM_LIME_GREEN
 D:Jasper
+T:5:53:54:14
 
 # Amber Amulet     
 N:59:40
 G:":TERM_ORANGE
 D:Amber
+T:5:29:54:5
 
 # Sunstone Amulet     
 N:60:40
 G:":TERM_ORANGE
 D:Sunstone
+T:5:44:54:5
 
 # Tourmaline Amulet     
 N:61:40
 G:":TERM_ORANGE
 D:Tourmaline
+T:5:45:54:5
 
 # Citrine Amulet     
 N:62:40
 G:":TERM_ORANGE_PEEL
 D:Citrine
+T:5:36:54:5
 
 # Ruby Amulet     
 N:63:40
 G:":TERM_RED
 D:Ruby
+T:5:34:54:1
 
 # Fire Opal Amulet     
 N:64:40
 G:":TERM_L_RED
 D:Fire Opal
+T:5:31:54:9
 
 # Cuprite Amulet     
 N:65:40
 G:":TERM_RED_LAVA
 D:Cuprite
+T:5:34:54:1
 
 # Red Garnet Amulet     
 N:66:40
 G:":TERM_RED_LAVA
 D:Red Garnet
+T:5:51:54:1
 
 # Pewter Amulet     
 N:67:40
 G:":TERM_SLATE_GRAY
 D:Pewter
+T:5:32:54:5
 
 # Calcite Amulet     
 N:68:40
 G:":TERM_SILVER
 D:Calcite
+T:5:38:54:5
 
 # Silver Amulet     
 N:69:40
 G:":TERM_SILVER
 D:Silver
+T:5:25:54:5
 
 # Copper Amulet     
 N:70:40
 G:":TERM_COPPER
 D:Copper
+T:5:52:54:4
 
 # Amethyst Amulet     
 N:71:40
 G:":TERM_VIOLET
 D:Amethyst
+T:5:48:54:0
 
 # Lilac Stone Amulet     
 N:72:40
 G:":TERM_VIOLET
 D:Lilac Stone
+T:5:33:54:0
 
 # Titanium Amulet     
 N:73:40
 G:":TERM_PURPLE
 D:Titanium
+T:5:56:54:19
 
 # Bone Amulet     
 N:74:40
 G:":TERM_WHITE
 D:Bone
+T:5:46:54:7
 
 # Cirtine Amulet     
 N:75:40
 G:":TERM_WHITE
 D:Cirtine
+T:5:55:54:7
 
 # Ivory Amulet     
 N:76:40
 G:":TERM_WHITE
 D:Ivory
+T:5:24:54:7
 
 # Snow Quartz Amulet     
 N:77:40
 G:":TERM_WHITE
 D:Snow Quartz
+T:5:30:54:7
 
 # Agate Amulet     
 N:78:40
 G:":TERM_LIGHT_GRAY
 D:Agate
+T:5:43:54:16
 
 # Riverstone Amulet     
 N:79:40
 G:":TERM_LIGHT_GRAY
 D:Riverstone
+T:5:26:54:16
 
 # Golden Amulet     
 N:80:40
 G:":TERM_GOLD
 D:Golden
+T:5:28:54:17
 
 # Ice tipped Staff     
 N:81:55
 G:_:TERM_NAVY_BLUE
 D:Ice tipped
+T:9:60:57:0
 
 # Saphire Fir Staff     
 N:82:55
 G:_:TERM_SKY_BLUE
 D:Saphire Fir
+T:9:63:57:0
 
 # Saphire Maple Staff     
 N:83:55
 G:_:TERM_SKY_BLUE
 D:Saphire Maple
+T:9:62:57:0
 
 # Saphire Pine Staff     
 N:84:55
 G:_:TERM_SKY_BLUE
 D:Saphire Pine
+T:9:61:57:0
 
 # Teak Staff     
 N:85:55
 G:_:TERM_TAUPE
 D:Teak
+T:9:26:57:4
 
 # Emerald Ashen Staff     
 N:86:55
 G:_:TERM_GREEN
 D:Emerald Ashen
+T:9:66:57:2
 
 # Emerald Cedar Staff     
 N:87:55
 G:_:TERM_GREEN
 D:Emerald Cedar
+T:9:65:57:2
 
 # Emerald Pine Staff     
 N:88:55
 G:_:TERM_GREEN
 D:Emerald Pine
+T:9:64:57:2
 
 # Mistletoe Staff     
 N:89:55
 G:_:TERM_GREEN
 D:Mistletoe
+T:9:39:57:2
 
 # Emerald Birch Staff     
 N:90:55
 G:_:TERM_L_GREEN
 D:Emerald Birch
+T:9:53:57:2
 
 # Emerald Elm Staff     
 N:91:55
 G:_:TERM_JUNGLE_GREEN
 D:Emerald Elm
+T:9:52:57:2
 
 # Emerald Oak Staff     
 N:92:55
 G:_:TERM_JUNGLE_GREEN
 D:Emerald Oak
+T:9:51:57:2
 
 # Hemlock Staff     
 N:93:55
 G:_:TERM_JUNGLE_GREEN
 D:Hemlock
+T:9:41:57:2
 
 # Fir Staff     
 N:94:55
 G:_:TERM_LIME_GREEN
 D:Fir
+T:9:31:57:2
 
 # Willow Staff     
 N:95:55
 G:_:TERM_LIME_GREEN
 D:Willow
+T:9:21:57:2
 
 # Gnarled Staff     
 N:96:55
 G:_:TERM_ORANGE
 D:Gnarled
+T:9:59:57:6
 
 # Elm Staff     
 N:97:55
 G:_:TERM_MAHAGONY
 D:Elm
+T:9:22:57:6
 
 # Mahogany Staff     
 N:98:55
 G:_:TERM_MAHAGONY
 D:Mahogany
+T:9:27:57:6
 
 # Rosewood Staff     
 N:99:55
 G:_:TERM_L_RED
 D:Rosewood
+T:9:25:57:1
 
 # Sycamore Staff     
 N:100:55
 G:_:TERM_L_RED
 D:Sycamore
+T:9:40:57:1
 
 # Cedar Staff     
 N:101:55
 G:_:TERM_RED_LAVA
 D:Cedar
+T:9:30:57:1
 
 # Fire Tipped Staff     
 N:102:55
 G:_:TERM_RED_LAVA
 D:Fire Tipped
+T:9:49:57:1
 
 # Ironwood Staff     
 N:103:55
 G:_:TERM_RED_LAVA
 D:Ironwood
+T:9:47:57:1
 
 # Ashen Staff     
 N:104:55
 G:_:TERM_RASPBERRY
 D:Ashen
+T:9:55:57:1
 
 # Cypress Staff     
 N:105:55
 G:_:TERM_RASPBERRY
 D:Cypress
+T:9:56:57:1
 
 # Locust Staff     
 N:106:55
 G:_:TERM_RASPBERRY
 D:Locust
+T:9:54:57:1
 
 # Redwood Staff     
 N:107:55
 G:_:TERM_RED_RUST
 D:Redwood
+T:9:20:57:1
 
 # Silver Staff     
 N:108:55
 G:_:TERM_SILVER
 D:Silver
+T:9:23:57:4
 
 # Silver Painted Staff     
 N:109:55
 G:_:TERM_SILVER
 D:Silver Painted
+T:9:48:57:4
 
 # Maple Staff     
 N:110:55
 G:_:TERM_SILVER
 D:Maple
+T:9:43:57:7
 
 # Mulberry Staff     
 N:111:55
 G:_:TERM_SILVER
 D:Mulberry
+T:9:29:57:7
 
 # Oak Staff     
 N:112:55
 G:_:TERM_SILVER
 D:Oak
+T:9:46:57:7
 
 # Pine Staff     
 N:113:55
 G:_:TERM_SILVER
 D:Pine
+T:9:36:57:7
 
 # Aspen Staff     
 N:114:55
 G:_:TERM_L_UMBER
 D:Aspen
+T:9:19:57:7
 
 # Bamboo Staff     
 N:115:55
 G:_:TERM_L_UMBER
 D:Bamboo
+T:9:32:57:7
 
 # Birch Staff     
 N:116:55
 G:_:TERM_L_UMBER
 D:Birch
+T:9:45:57:7
 
 # Cottonwood Staff     
 N:117:55
 G:_:TERM_L_UMBER
 D:Cottonwood
+T:9:38:57:7
 
 # Dogwood Staff     
 N:118:55
 G:_:TERM_L_UMBER
 D:Dogwood
+T:9:24:57:7
 
 # Eucalyptus Staff     
 N:119:55
 G:_:TERM_L_UMBER
 D:Eucalyptus
+T:9:42:57:7
 
 # Hawthorn Staff     
 N:120:55
 G:_:TERM_L_UMBER
 D:Hawthorn
+T:9:50:57:7
 
 # Hickory Staff     
 N:121:55
 G:_:TERM_AUBURN
 D:Hickory
+T:9:33:57:7
 
 # Walnut Staff     
 N:122:55
 G:_:TERM_AUBURN
 D:Walnut
+T:9:28:57:7
 
 # Jeweled Balsa Staff     
 N:123:55
 G:_:TERM_L_BROWN
 D:Jeweled Balsa
+T:9:34:57:7
 
 # Jeweled Oak Staff     
 N:124:55
 G:_:TERM_L_BROWN
 D:Jeweled Oak
+T:9:44:57:7
 
 # Spruce Staff     
 N:125:55
 G:_:TERM_L_BROWN
 D:Spruce
+T:9:18:57:7
 
 # Garnet Maple Staff     
 N:126:55
 G:_:TERM_VIOLET
 D:Garnet Maple
+T:9:67:57:3
 
 # Purple Stained Staff     
 N:127:55
 G:_:TERM_VIOLET
 D:Purple Stained
+T:9:57:57:3
 
 # Ivory Staff     
 N:128:55
 G:_:TERM_WHITE
 D:Ivory
+T:9:35:57:5
 
 # White bleached Staff     
 N:129:55
 G:_:TERM_LIGHT_GRAY
 D:White bleached
+T:9:58:57:5
 
 # Golden Staff     
 N:130:55
 G:_:TERM_GOLD
 D:Golden
+T:9:37:57:6
 
 # Blue Tipped Wand     
 N:131:65
 G:-:TERM_BLUE
 D:Blue Tipped
+T:9:79:55:0
 
 # Aluminium Wand     
 N:132:65
 G:-:TERM_L_BLUE
 D:Aluminium
+T:9:0:55:0
 
 # Mithril Wand     
 N:133:65
 G:-:TERM_L_BLUE
 D:Mithril
+T:9:84:55:0
 
 # Aluminum-Plated Wand     
 N:134:65
 G:-:TERM_SKY_BLUE
 D:Aluminum-Plated
+T:9:70:55:0
 
 # Mithril-Plated Wand     
 N:135:65
 G:-:TERM_SKY_BLUE
 D:Mithril-Plated
+T:9:75:55:0
 
 # Green Tipped Wand     
 N:136:65
 G:-:TERM_GREEN
 D:Green Tipped
+T:9:73:55:2
 
 # Green Tipped Wand     
 N:137:65
 G:-:TERM_L_GREEN
 D:Green Tipped
+T:9:74:55:2
 
 # Red Tipped Wand     
 N:138:65
 G:-:TERM_RED
 D:Red Tipped
+T:9:86:55:1
 
 # Iron Wand     
 N:139:65
 G:-:TERM_SLATE
 D:Iron
+T:9:5:55:4
 
 # Lead Wand     
 N:140:65
 G:-:TERM_SLATE
 D:Lead
+T:9:78:55:4
 
 # Lead-Plated Wand     
 N:141:65
 G:-:TERM_SLATE
 D:Lead-Plated
+T:9:1:55:4
 
 # Pewter Wand     
 N:142:65
 G:-:TERM_SLATE
 D:Pewter
+T:9:3:55:4
 
 # Steel Wand     
 N:143:65
 G:-:TERM_SLATE
 D:Steel
+T:9:69:55:4
 
 # Chromium Wand     
 N:144:65
 G:-:TERM_SLATE_GRAY
 D:Chromium
+T:9:7:55:4
 
 # Nickel Plated Wand     
 N:145:65
 G:-:TERM_SLATE_GRAY
 D:Nickel Plated
+T:9:81:55:4
 
 # Cadmium Wand     
 N:146:65
 G:-:TERM_SILVER
 D:Cadmium
+T:9:91:55:4
 
 # Silver Wand     
 N:147:65
 G:-:TERM_SILVER
 D:Silver
+T:9:68:55:4
 
 # Silver-Plated Wand     
 N:148:65
 G:-:TERM_SILVER
 D:Silver-Plated
+T:9:77:55:4
 
 # Brown Painted Wand     
 N:149:65
 G:-:TERM_SILVER
 D:Brown Painted
+T:9:92:55:7
 
 # Brass Wand     
 N:150:65
 G:-:TERM_L_UMBER
 D:Brass
+T:9:2:55:7
 
 # Bronze Wand     
 N:151:65
 G:-:TERM_L_UMBER
 D:Bronze
+T:9:83:55:7
 
 # Nickel-Plated Wand     
 N:152:65
 G:-:TERM_L_UMBER
 D:Nickel-Plated
+T:9:71:55:7
 
 # Nickel Wand     
 N:153:65
 G:-:TERM_L_BROWN
 D:Nickel
+T:9:4:55:7
 
 # Copper Wand     
 N:154:65
 G:-:TERM_COPPER
 D:Copper
+T:9:6:55:7
 
 # Copper-Plated Wand     
 N:155:65
 G:-:TERM_COPPER
 D:Copper-Plated
+T:9:82:55:7
 
 # Steel-Plated Wand     
 N:156:65
 G:-:TERM_LIGHT_GRAY
 D:Steel-Plated
+T:9:88:55:5
 
 # Zinc Wand     
 N:157:65
 G:-:TERM_LIGHT_GRAY
 D:Zinc
+T:9:72:55:5
 
 # Zinc-Plated Wand     
 N:158:65
 G:-:TERM_LIGHT_GRAY
 D:Zinc-Plated
+T:9:90:55:5
 
 # Platinum Wand     
 N:159:65
 G:-:TERM_SNOW_WHITE
 D:Platinum
+T:9:80:55:5
 
 # Magnesium Wand     
 N:160:65
 G:-:TERM_LIGHT_GRAY
 D:Magnesium
+T:9:93:55:5
 
 # Ruby Tipped Wand     
 N:161:65
 G:-:TERM_LIGHT_GRAY
 D:Ruby Tipped
+T:9:87:55:5
 
 # Tin-Plated Wand     
 N:162:65
 G:-:TERM_LIGHT_GRAY
 D:Tin-Plated
+T:9:89:55:5
 
 # Yellow Painted Wand     
 N:163:65
 G:-:TERM_YELLOW
 D:Yellow Painted
+T:9:94:55:6
 
 # Gold Wand     
 N:164:65
 G:-:TERM_GOLD
 D:Gold
+T:9:8:55:6
 
 # Gold Covered Wand     
 N:165:65
 G:-:TERM_GOLD
 D:Gold Covered
+T:9:85:55:6
 
 # Gold-Plated Wand     
 N:166:65
 G:-:TERM_GOLD
 D:Gold-Plated
+T:9:76:55:6
 
 # Sapphire Tipped Rod     
 N:167:66
 G:-:TERM_BLUE
 D:Sapphire Tipped
+T:9:100:56:0
 
 # Aluminum Rod     
 N:168:66
 G:-:TERM_L_BLUE
 D:Aluminum
+T:9:107:56:0
 
 # Mithril Rod     
 N:169:66
 G:-:TERM_L_BLUE
 D:Mithril
+T:9:16:56:0
 
 # Aluminum-Plated Rod     
 N:170:66
 G:-:TERM_SKY_BLUE
 D:Aluminum-Plated
+T:9:113:56:0
 
 # Mithril-Plated Rod     
 N:171:66
 G:-:TERM_SKY_BLUE
 D:Mithril-Plated
+T:9:101:56:0
 
 # Cast Iron Rod     
 N:172:66
 G:-:TERM_L_DARK
 D:Cast Iron
+T:9:95:56:4
 
 # Cirtine Tipped Rod     
 N:173:66
 G:-:TERM_ORANGE
 D:Cirtine Tipped
+T:9:109:56:6
 
 # Orange Tipped Rod     
 N:174:66
 G:-:TERM_ORANGE
 D:Orange Tipped
+T:9:110:56:6
 
 # Rust Tipped Rod     
 N:175:66
 G:-:TERM_ORANGE
 D:Rust Tipped
+T:9:108:56:6
 
 # Red Tipped Rod     
 N:176:66
 G:-:TERM_RED
 D:Red Tipped
+T:9:12:56:1
 
 # Ruby Tipped Rod     
 N:177:66
 G:-:TERM_RED
 D:Ruby Tipped
+T:9:116:56:1
 
 # Iron Rod     
 N:178:66
 G:-:TERM_SLATE
 D:Iron
+T:9:103:56:4
 
 # Lead Rod     
 N:179:66
 G:-:TERM_SLATE
 D:Lead
+T:9:119:56:4
 
 # Pewter Rod     
 N:180:66
 G:-:TERM_SLATE
 D:Pewter
+T:9:117:56:4
 
 # Lead-Plated Rod     
 N:181:66
 G:-:TERM_SLATE_GRAY
 D:Lead-Plated
+T:9:121:56:4
 
 # Steel Rod     
 N:182:66
 G:-:TERM_SLATE_GRAY
 D:Steel
+T:9:13:56:4
 
 # Steel-Plated Rod     
 N:183:66
 G:-:TERM_SLATE_GRAY
 D:Steel-Plated
+T:9:111:56:4
 
 # Chromium Rod     
 N:184:66
 G:-:TERM_SILVER
 D:Chromium
+T:9:118:56:4
 
 # Silver Rod     
 N:185:66
 G:-:TERM_SILVER
 D:Silver
+T:9:9:56:4
 
 # Silver-Plated Rod     
 N:186:66
 G:-:TERM_SILVER
 D:Silver-Plated
+T:9:115:56:4
 
 # Brown Tipped Rod     
 N:187:66
 G:-:TERM_SILVER
 D:Brown Tipped
+T:9:114:56:7
 
 # Solid Brown Rod     
 N:188:66
 G:-:TERM_SILVER
 D:Solid Brown
+T:9:98:56:7
 
 # Brass Rod     
 N:189:66
 G:-:TERM_L_UMBER
 D:Brass
+T:9:15:56:7
 
 # Bronze Rod     
 N:190:66
 G:-:TERM_L_UMBER
 D:Bronze
+T:9:106:56:7
 
 # Nickel-Plated Rod     
 N:191:66
 G:-:TERM_L_BROWN
 D:Nickel-Plated
+T:9:104:56:7
 
 # Copper Rod     
 N:192:66
 G:-:TERM_COPPER
 D:Copper
+T:9:96:56:7
 
 # Copper-Plated Rod     
 N:193:66
 G:-:TERM_COPPER
 D:Copper-Plated
+T:9:14:56:7
 
 # Purple Tipped Rod     
 N:194:66
 G:-:TERM_VIOLET
 D:Purple Tipped
+T:9:120:56:3
 
 # Blue Tipped Rod     
 N:195:66
 G:-:TERM_WHITE
 D:Blue Tipped
+T:9:99:56:5
 
 # Titanium Rod     
 N:196:66
 G:-:TERM_WHITE
 D:Titanium
+T:9:11:56:5
 
 # Tungsten Rod     
 N:197:66
 G:-:TERM_WHITE
 D:Tungsten
+T:9:97:56:5
 
 # Molybdenum Rod     
 N:198:66
 G:-:TERM_LIGHT_GRAY
 D:Molybdenum
+T:9:102:56:5
 
 # Tin-Plated Rod     
 N:199:66
 G:-:TERM_LIGHT_GRAY
 D:Tin-Plated
+T:9:112:56:5
 
 # Zinc-Plated Rod     
 N:200:66
 G:-:TERM_LIGHT_GRAY
 D:Zinc-Plated
+T:9:105:56:5
 
 # Gold Rod     
 N:201:66
 G:-:TERM_YELLOW
 D:Gold
+T:9:17:56:6
 
 # Gold-Tipped Rod     
 N:202:66
 G:-:TERM_MAIZE
 D:Gold-Tipped
+T:9:10:56:6
 
 # Dark Blue Mushroom     
 N:203:80
 G:,:TERM_BLUE
 D:Dark Blue
+T:2:13:58:0
 
 # Light Blue Mushroom     
 N:204:80
 G:,:TERM_L_BLUE
 D:Light Blue
+T:2:22:58:0
 
 # Blue Mushroom     
 N:205:80
 G:,:TERM_NAVY_BLUE
 D:Blue
+T:2:13:58:0
 
 # Black Mushroom     
 N:206:80
 G:,:TERM_L_DARK
 D:Black
+T:2:7:58:4
 
 # Black Spotted Mushroom     
 N:207:80
 G:,:TERM_L_DARK
 D:Black Spotted
+T:2:15:58:4
 
 # Green Mushroom     
 N:208:80
 G:,:TERM_GREEN
 D:Green
+T:2:21:58:2
 
 # Light Green Mushroom     
 N:209:80
 G:,:TERM_L_GREEN
 D:Light Green
+T:2:25:58:2
 
 # Dark Green Mushroom     
 N:210:80
 G:,:TERM_JUNGLE_GREEN
 D:Dark Green
+T:2:12:58:2
 
 # Orange Mushroon     
 N:211:80
 G:,:TERM_ORANGE
 D:Orange
+T:2:27:58:6
 
 # Slimy Mushroom     
 N:212:80
 G:,:TERM_ORANGE
 D:Slimy
+T:2:10:58:6
 
 # Red Mushroom     
 N:213:80
 G:,:TERM_RED
 D:Red
+T:2:20:58:1
 
 # Dark Red Mushroom     
 N:214:80
 G:,:TERM_RED_LAVA
 D:Dark Red
+T:2:11:58:1
 
 # Pink Mushroon     
 N:215:80
 G:,:TERM_PINK
 D:Pink
+T:2:24:58:1
 
 # Grey Mushroom     
 N:216:80
 G:,:TERM_SLATE
 D:Grey
+T:2:9:58:4
 
 # Wrinkled Mushroom     
 N:217:80
 G:,:TERM_SILVER
 D:Wrinkled
+T:2:14:58:7
 
 # Light Brown Mushroom     
 N:218:80
 G:,:TERM_L_UMBER
 D:Light Brown
+T:2:23:58:7
 
 # Tan Mushroom     
 N:219:80
 G:,:TERM_L_UMBER
 D:Tan
+T:2:26:58:7
 
 # Violet Mushroom     
 N:220:80
 G:,:TERM_VIOLET
 D:Violet
+T:2:17:58:3
 
 # White Mushroom     
 N:221:80
 G:,:TERM_WHITE
 D:White
+T:2:8:58:5
 
 # White Spotted Mushroom     
 N:222:80
 G:,:TERM_WHITE
 D:White Spotted
+T:2:16:58:5
 
 # Furry Mushroom     
 N:223:80
 G:,:TERM_LIGHT_GRAY
 D:Furry
+T:2:16:58:5
 
 # Yellow Mushroom     
 N:224:80
 G:,:TERM_YELLOW
 D:Yellow
+T:2:18:58:6
 
 # Clear Potion     Fixed - Water
 N:225:75:0
 G:!:TERM_WHITE
 D:Clear
+T:8:43:60:3
 
 # Light Brown Potion     Fixed - Apple Juice
 N:226:75:1
 G:!:TERM_L_UMBER
 D:Light Brown
+T:8:9:60:9
 
 # Icky Green Potion     Fixed - Slime Mold Juice
 N:227:75:2
 G:!:TERM_GREEN
 D:Icky Green
+T:8:60:60:6
 
 # Blue Potion     
 N:228:75
 G:!:TERM_BLUE
 D:Blue
+T:8:5:60:5
 
 # Blueberry Potion     
 N:229:75
 G:!:TERM_BLUE
 D:Blueberry
+T:8:25:60:5
 
 # Dark Blue Potion     
 N:230:75
 G:!:TERM_BLUE
 D:Dark Blue
+T:8:15:60:5
 
 # Metallic Blue Potion     
 N:231:75
 G:!:TERM_BLUE
 D:Metallic Blue
+T:8:64:60:5
 
 # Cyan Potion     
 N:232:75
 G:!:TERM_L_BLUE
 D:Cyan
+T:8:62:60:13
 
 # Blue Speckled Potion     
 N:233:75
 G:!:TERM_NAVY_BLUE
 D:Blue Speckled
+T:8:6:60:5
 
 # Navy Blue Potion     
 N:234:75
 G:!:TERM_NAVY_BLUE
 D:Navy Blue
+T:8:16:60:5
 
 # Sparkling Navy Blue Potion     
 N:235:75
 G:!:TERM_NAVY_BLUE
 D:Sparkling Navy Blue
+T:8:29:60:5
 
 # Azure Potion     
 N:236:75
 G:!:TERM_SKY_BLUE
 D:Azure
+T:8:4:60:13
 
 # Sparkling Sky Blue Potion     
 N:237:75
 G:!:TERM_SKY_BLUE
 D:Sparkling Sky Blue
+T:8:26:60:13
 
 # Black Potion     
 N:238:75
 G:!:TERM_L_DARK
 D:Black
+T:8:0:60:4
 
 # Cloudy Potion     
 N:239:75
 G:!:TERM_L_DARK
 D:Cloudy
+T:8:7:60:4
 
 # Dark Green Potion     
 N:240:75
 G:!:TERM_GREEN
 D:Dark Green
+T:8:55:60:6
 
 # Gloopy Green Potion     
 N:241:75
 G:!:TERM_GREEN
 D:Gloopy Green
+T:8:17:60:6
 
 # Green Potion     
 N:242:75
 G:!:TERM_GREEN
 D:Green
+T:8:21:60:6
 
 # Green Speckled Potion     
 N:243:75
 G:!:TERM_GREEN
 D:Green Speckled
+T:8:27:60:6
 
 # Thick Green Potion     
 N:244:75
 G:!:TERM_GREEN
 D:Thick Green
+T:8:20:60:6
 
 # Chartreuse Potion     
 N:245:75
 G:!:TERM_L_GREEN
 D:Chartreuse
+T:8:61:60:12
 
 # Metallic Green Potion     
 N:246:75
 G:!:TERM_JUNGLE_GREEN
 D:Metallic Green
+T:8:31:60:6
 
 # Orange Potion     
 N:247:75
 G:!:TERM_ORANGE
 D:Orange
+T:8:13:60:11
 
 # Light Orange Potion     
 N:248:75
 G:!:TERM_ORANGE_PEEL
 D:Light Orange
+T:8:51:60:11
 
 # Orange Speckled Potion     
 N:249:75
 G:!:TERM_ORANGE_PEEL
 D:Orange Speckled
+T:8:45:60:11
 
 # Tangerine Potion     
 N:250:75
 G:!:TERM_ORANGE_PEEL
 D:Tangerine
+T:8:35:60:11
 
 # Clotted Red Potion     
 N:251:75
 G:!:TERM_RED
 D:Clotted Red
+T:8:10:60:7
 
 # Dark Red Potion     
 N:252:75
 G:!:TERM_RED
 D:Dark Red
+T:8:30:60:7
 
 # Red Potion     
 N:253:75
 G:!:TERM_RED
 D:Red
+T:8:47:60:7
 
 # Red Speckled Potion     
 N:254:75
 G:!:TERM_RED
 D:Red Speckled
+T:8:42:60:7
 
 # Bubbling Red Potion     
 N:255:75
 G:!:TERM_L_RED
 D:Bubbling Red
+T:8:69:60:7
 
 # Crimson Potion     
 N:256:75
 G:!:TERM_RED_LAVA
 D:Crimson
+T:8:18:60:7
 
 # Metallic Red Potion     
 N:257:75
 G:!:TERM_RED_LAVA
 D:Metallic Red
+T:8:41:60:7
 
 # Sparkling Red Potion     
 N:258:75
 G:!:TERM_RED_LAVA
 D:Sparkling Red
+T:8:57:60:7
 
 # Vermilion Potion     
 N:259:75
 G:!:TERM_RED_LAVA
 D:Vermilion
+T:8:66:60:7
 
 # Coagulated Crimson Potion     
 N:260:75
 G:!:TERM_RASPBERRY
 D:Coagulated Crimson
+T:8:52:60:7
 
 # Raspberry Potion     
 N:261:75
 G:!:TERM_RASPBERRY
 D:Raspberry
+T:8:28:60:7
 
 # Sparkling Raspberry Potion     
 N:262:75
 G:!:TERM_RASPBERRY
 D:Sparkling Raspberry
+T:8:14:60:7
 
 # Carnation Potion     
 N:263:75
 G:!:TERM_PINK
 D:Carnation
+T:8:53:60:7
 
 # Pink Potion     
 N:264:75
 G:!:TERM_PINK
 D:Pink
+T:8:37:60:7
 
 # Viscous Pink Potion     
 N:265:75
 G:!:TERM_PINK
 D:Viscous Pink
+T:8:36:60:7
 
 # Grey Potion     
 N:266:75
 G:!:TERM_SLATE
 D:Grey
+T:8:22:60:10
 
 # Grey Speckled Potion     
 N:267:75
 G:!:TERM_SLATE
 D:Grey Speckled
+T:8:23:60:10
 
 # Smoky Potion     
 N:268:75
 G:!:TERM_SLATE
 D:Smoky
+T:8:24:60:10
 
 # Gainsboro Potion     
 N:269:75
 G:!:TERM_SLATE_GRAY
 D:Gainsboro
+T:8:48:60:10
 
 # Metallic Silver Potion     
 N:270:75
 G:!:TERM_SILVER
 D:Metallic Silver
+T:8:72:60:10
 
 # Silver Speckled Potion     
 N:271:75
 G:!:TERM_SILVER
 D:Silver Speckled
+T:8:44:60:10
 
 # Brown Potion     
 N:272:75
 G:!:TERM_SILVER
 D:Brown
+T:8:8:60:9
 
 # Copper Potion     
 N:273:75
 G:!:TERM_COPPER
 D:Copper
+T:8:1:60:9
 
 # Copper Speckled Potion     
 N:274:75
 G:!:TERM_COPPER
 D:Copper Speckled
+T:8:34:60:9
 
 # Metallic Purple Potion     
 N:275:75
 G:!:TERM_VIOLET
 D:Metallic Purple
+T:8:32:60:14
 
 # Puce Potion     
 N:276:75
 G:!:TERM_VIOLET
 D:Puce
+T:8:65:60:14
 
 # Purple Potion     
 N:277:75
 G:!:TERM_VIOLET
 D:Purple
+T:8:39:60:14
 
 # Bubbling Purple Potion     
 N:278:75
 G:!:TERM_PURPLE
 D:Bubbling Purple
+T:8:68:60:14
 
 # Dark Purple Potion     
 N:279:75
 G:!:TERM_PURPLE
 D:Dark Purple
+T:8:50:60:14
 
 # Indigo Potion     
 N:280:75
 G:!:TERM_PURPLE
 D:Indigo
+T:8:46:60:14
 
 # Magenta Potion     
 N:281:75
 G:!:TERM_PURPLE
 D:Magenta
+T:8:63:60:14
 
 # Violet Potion     
 N:282:75
 G:!:TERM_PURPLE
 D:Violet
+T:8:38:60:14
 
 # Violet Speckled Potion     
 N:283:75
 G:!:TERM_PURPLE
 D:Violet Speckled
+T:8:40:60:14
 
 # White Potion     
 N:284:75
 G:!:TERM_WHITE
 D:White
+T:8:67:60:3
 
 # Bubbling Potion     
 N:285:75
 G:!:TERM_LIGHT_GRAY
 D:Bubbling
+T:8:12:60:3
 
 # Hazy Potion     
 N:286:75
 G:!:TERM_LIGHT_GRAY
 D:Hazy
+T:8:2:60:3
 
 # Misty Potion     
 N:287:75
 G:!:TERM_LIGHT_GRAY
 D:Misty
+T:8:33:60:3
 
 # Gold Potion     
 N:288:75
 G:!:TERM_YELLOW
 D:Gold
+T:8:56:60:8
 
 # Oily Yellow Potion     
 N:289:75
 G:!:TERM_YELLOW
 D:Oily Yellow
+T:8:11:60:8
 
 # Sparkling Lemon Potion     
 N:290:75
 G:!:TERM_YELLOW
 D:Sparkling Lemon
+T:8:70:60:8
 
 # Yellow Potion     
 N:291:75
 G:!:TERM_YELLOW
 D:Yellow
+T:8:58:60:8
 
 # Bubbling Yellow Potion     
 N:292:75
 G:!:TERM_MAIZE
 D:Bubbling Yellow
+T:8:49:60:8
 
 # Gold Speckled Potion     
 N:293:75
 G:!:TERM_MAIZE
 D:Gold Speckled
+T:8:19:60:8
 
 # Maize Potion     
 N:294:75
 G:!:TERM_MAIZE
 D:Maize
+T:8:54:60:8
 
 # Yellow Speckled Potion     
 N:295:75
 G:!:TERM_MAIZE
 D:Yellow Speckled
+T:8:70:60:8
 
 # Sparkling Gold Potion     
 N:296:75
 G:!:TERM_GOLD
 D:Sparkling Gold
+T:8:59:60:8
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:297:70
 G:?:TERM_WHITE
-
+T:7:18:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:298:70
 G:?:TERM_WHITE
-
+T:7:18:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:299:70
 G:?:TERM_WHITE
-
+T:7:18:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:300:70
 G:?:TERM_WHITE
-
+T:7:18:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:301:70
 G:?:TERM_WHITE
-
+T:7:18:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:302:70
 G:?:TERM_WHITE
-
+T:7:18:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:303:70
 G:?:TERM_WHITE
-
+T:7:18:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:304:70
 G:?:TERM_WHITE
-
+T:7:18:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:305:70
 G:?:TERM_WHITE
-
+T:7:18:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:306:70
 G:?:TERM_WHITE
-
+T:7:18:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:307:70
 G:?:TERM_WHITE
-
+T:7:18:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:308:70
 G:?:TERM_WHITE
-
+T:7:18:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:309:70
 G:?:TERM_WHITE
-
+T:7:18:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:310:70
 G:?:TERM_WHITE
-
+T:7:19:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:311:70
 G:?:TERM_WHITE
-
+T:7:19:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:312:70
 G:?:TERM_WHITE
-
+T:7:19:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:313:70
 G:?:TERM_WHITE
-
+T:7:19:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:314:70
 G:?:TERM_WHITE
-
+T:7:19:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:315:70
 G:?:TERM_WHITE
-
+T:7:19:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:316:70
 G:?:TERM_WHITE
-
+T:7:19:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:317:70
 G:?:TERM_WHITE
-
+T:7:19:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:318:70
 G:?:TERM_WHITE
-
+T:7:19:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:319:70
 G:?:TERM_WHITE
-
+T:7:19:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:320:70
 G:?:TERM_WHITE
-
+T:7:19:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:321:70
 G:?:TERM_WHITE
-
+T:7:19:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:322:70
 G:?:TERM_WHITE
-
+T:7:20:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:323:70
 G:?:TERM_WHITE
-
+T:7:20:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:324:70
 G:?:TERM_WHITE
-
+T:7:20:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:325:70
 G:?:TERM_WHITE
-
+T:7:20:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:326:70
 G:?:TERM_WHITE
-
+T:7:20:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:327:70
 G:?:TERM_WHITE
-
+T:7:20:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:328:70
 G:?:TERM_WHITE
-
+T:7:20:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:329:70
 G:?:TERM_WHITE
-
+T:7:20:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:330:70
 G:?:TERM_WHITE
-
+T:7:20:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:331:70
 G:?:TERM_WHITE
-
+T:7:20:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:332:70
 G:?:TERM_WHITE
-
+T:7:20:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:333:70
 G:?:TERM_WHITE
-
+T:7:20:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:334:70
 G:?:TERM_WHITE
-
+T:7:21:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:335:70
 G:?:TERM_WHITE
-
+T:7:21:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:336:70
 G:?:TERM_WHITE
-
+T:7:21:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:337:70
 G:?:TERM_WHITE
-
+T:7:21:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:338:70
 G:?:TERM_WHITE
-
+T:7:21:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:339:70
 G:?:TERM_WHITE
-
+T:7:21:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:340:70
 G:?:TERM_WHITE
-
+T:7:21:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:341:70
 G:?:TERM_WHITE
-
+T:7:21:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:342:70
 G:?:TERM_WHITE
-
+T:7:21:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:343:70
 G:?:TERM_WHITE
-
+T:7:21:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:344:70
 G:?:TERM_WHITE
-
+T:7:21:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:345:70
 G:?:TERM_WHITE
-
+T:7:21:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:346:70
 G:?:TERM_WHITE
-
+T:7:21:6:2
 
 #  Scroll     - Scrolls assigned random names at character startup
 N:347:70
 G:?:TERM_WHITE
+T:7:21:6:2
+
