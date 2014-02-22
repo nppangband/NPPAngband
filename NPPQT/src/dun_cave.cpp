@@ -1118,7 +1118,10 @@ static void map_effects (s16b y, s16b x)
         {
             dun_ptr->effect_color = f_ptr->d_color;
             dun_ptr->effect_tile = f_ptr->tile_id;
-            // dun_ptr->ui_flags |= UI_TRANSPARENT_EFFECT; // TODO REMOVE THIS
+            if (x_ptr->x_type == EFFECT_PERMANENT_CLOUD || x_ptr->x_type == EFFECT_LINGERING_CLOUD
+                    || x_ptr->x_type == EFFECT_SHIMMERING_CLOUD) {
+                dun_ptr->ui_flags |= UI_TRANSPARENT_EFFECT;
+            }
         }
         /* Permanent clouds */
         else if (x_ptr->x_type == EFFECT_PERMANENT_CLOUD)
@@ -1197,7 +1200,9 @@ static void map_monster (s16b y, s16b x)
             dun_ptr->monster_color = r_ptr->d_color;
             dun_ptr->monster_char = r_ptr->d_char;
             dun_ptr->monster_tile = r_ptr->tile_id;
-            //dun_ptr->ui_flags |= UI_TRANSPARENT_MONSTER;
+            if (r_ptr->flags2 & RF2_PASS_WALL) {
+                dun_ptr->ui_flags |= UI_TRANSPARENT_MONSTER;
+            }
 
             /* Hack -- monster hallucination */
             if (p_ptr->timed[TMD_IMAGE])
