@@ -147,7 +147,7 @@ T:12:0:3:7
 
 N:1:Filthy street urchin
 A:StreetUrchin
-G:t:TERM_SLATE
+G:t:TERM_L_DARK
 I:110:1d4:4:1:40
 W:0:2:0:0
 T:11:0:27:10
@@ -158,7 +158,7 @@ D:He looks squalid and thoroughly revolting.
 
 N:2:Scrawny cat
 A:Scrawny cat
-G:f:TERM_SKY_BLUE
+G:f:TERM_L_UMBER
 I:110:1d2:30:1:10
 W:0:3:0:0
 T:16:54:24:11
@@ -180,7 +180,7 @@ D:A thin flea-ridden mutt, growling as you get close.
 
 N:4:Lotho Pimple
 A:Lotho Pimple
-G:h:TERM_L_RED
+G:h:TERM_WHITE
 I:110:7d30:15:10:200
 W:0:4:17:0
 T:11:12:27:11
@@ -198,7 +198,7 @@ D: long!
 
 N:5:Blubbering idiot
 A:BlubberIdiot
-G:t:TERM_NAVY_BLUE
+G:t:TERM_LIGHT_GRAY
 I:110:1d2:6:1:0
 W:0:1:0:0
 T:11:2:27:12
@@ -209,7 +209,7 @@ D:He tends to blubber a lot.
 
 N:6:Boil-covered wretch
 A:BoilCvrdWrch
-G:t:TERM_BLUE
+G:t:TERM_GREEN
 I:110:1d2:6:1:0
 W:0:1:0:0
 T:11:3:27:13
@@ -220,7 +220,7 @@ D:Ugly doesn't begin to describe him.
 
 N:7:Village idiot
 A:Villageidiot
-G:t:TERM_WHITE
+G:t:TERM_L_GREEN
 I:120:4d4:6:1:0
 W:0:1:0:0
 T:11:4:27:14
@@ -231,7 +231,7 @@ D:Drooling and comical, but then, what do you expect?
 
 N:8:Pitiful-looking beggar
 A:PitifulBeggr
-G:t:TERM_TAUPE
+G:t:TERM_L_UMBER
 I:110:1d4:10:1:40
 W:0:1:0:0
 T:11:5:27:15
@@ -242,7 +242,7 @@ D:You just can't help feeling sorry for him.
 
 N:9:Mangy-looking leper
 A:Mangy leper
-G:t:TERM_L_RED
+G:t:TERM_UMBER
 I:110:1d1:10:1:50
 W:0:1:0:0
 T:11:6:27:16
@@ -253,7 +253,7 @@ D:You feel it isn't safe to touch him.
 
 N:10:Squint-eyed rogue
 A:Street rogue
-G:t:TERM_RED_LAVA
+G:t:TERM_BLUE
 I:110:2d8:10:8:99
 W:0:1:0:0
 T:11:7:27:17
@@ -267,7 +267,7 @@ D:A hardy, street-wise crook that knows an easy catch when it sees one.
 
 N:11:Singing, happy drunk
 A:Happy drunk
-G:t:TERM_JUNGLE_GREEN
+G:t:TERM_YELLOW
 I:110:2d3:10:1:0
 W:0:1:0:0
 T:11:8:27:18
@@ -279,7 +279,7 @@ D:He makes you glad to be sober.
 
 N:12:Aimless-looking merchant
 A:Merchant
-G:t:TERM_WHITE
+G:t:TERM_ORANGE
 I:110:3d3:10:1:255
 W:0:1:0:0
 T:11:9:27:19
@@ -292,7 +292,7 @@ D: more amulets of adornment to buy.
 
 N:13:Mean-looking mercenary
 A:Mercenary
-G:t:TERM_WHITE
+G:t:TERM_RED
 I:110:5d8:10:20:250
 W:0:1:0:0
 T:11:10:27:20
@@ -304,7 +304,7 @@ D:No job is too low for him.
 
 N:14:Battle-scarred veteran
 A:Scarred vet
-G:t:TERM_WHITE
+G:t:TERM_L_BLUE
 I:110:7d8:10:30:250
 W:0:1:0:0
 T:11:11:27:21
@@ -319,7 +319,7 @@ D:He doesn't take to strangers kindly.
 
 N:15:Grey mold
 A:Grey mold
-G:m:TERM_VIOLET
+G:m:TERM_SLATE
 I:110:1d2:2:1:0
 W:1:1:0:1
 T:14:66:26:8
@@ -332,7 +332,7 @@ D:A small strange grey growth.
 
 N:16:Grey mushroom patch
 A:GreyMushroom
-G:,:TERM_RED
+G:,:TERM_SLATE
 I:110:1d2:2:1:0
 W:1:1:0:1
 T:14:85:14:5
@@ -344,7 +344,7 @@ D:Yum!  It looks quite tasty.
 
 N:17:White icky thing
 A:WhiIckyThing
-G:i:TERM_TAUPE
+G:i:TERM_WHITE
 I:110:2d5:12:7:10
 W:1:1:0:1
 T:14:78:25:12
@@ -355,7 +355,7 @@ D:It is a smallish, slimy, icky creature.
 
 N:18:Giant white mouse
 A:GtWhiteMouse
-G:r:TERM_BLUE
+G:r:TERM_WHITE
 I:110:1d3:8:4:20
 W:1:1:0:1
 T:13:24:29:15
@@ -366,7 +366,7 @@ D:It is about three feet long with large teeth.
 
 N:19:Floating eye
 A:Floating eye
-G:e:TERM_GREEN
+G:e:TERM_ORANGE
 I:110:3d6:2:6:10
 W:1:1:0:1
 T:18:65:24:4
@@ -377,7 +377,7 @@ D:A disembodied eye, floating a few feet above the ground.
 
 N:20:Jackal
 A:Jackal
-G:C:TERM_RED
+G:C:TERM_L_UMBER
 I:110:1d4:10:3:10
 W:1:1:0:1
 T:16:49:14:30
@@ -388,7 +388,7 @@ D:It is a yapping snarling dog, dangerous when in a pack.
 
 N:21:Fruit bat
 A:Fruit bat
-G:b:TERM_L_UMBER
+G:b:TERM_ORANGE
 I:120:1d6:20:3:10
 W:1:1:0:1
 T:16:1:22:24
@@ -399,7 +399,7 @@ D:A fast-moving pest.
 
 N:22:Giant yellow centipede
 A:GtYellowCent
-G:c:TERM_WHITE
+G:c:TERM_YELLOW
 I:110:2d6:8:12:30
 W:1:1:0:2
 T:17:32:22:29
@@ -411,7 +411,7 @@ D:It is about four feet long and carnivorous.
 
 N:23:Giant white centipede
 A:GtWhiteCent
-G:c:TERM_RED
+G:c:TERM_WHITE
 I:110:3d5:7:10:40
 W:1:1:0:2
 T:17:33:22:30
@@ -423,7 +423,7 @@ D:It is about four feet long and carnivorous.
 
 N:24:Clear icky thing
 A:ClrIckyThing
-G:i:TERM_UMBER
+G:i:TERM_SNOW_WHITE
 I:110:2d5:12:6:10
 W:1:1:0:2
 T:14:79:25:13
@@ -434,7 +434,7 @@ D:It is a smallish, slimy, icky, blobby creature.
 
 N:25:Large white snake
 A:LGWhiteSnake
-G:J:TERM_L_BLUE
+G:J:TERM_WHITE
 I:100:3d6:4:30:99
 W:1:1:0:2
 T:16:19:19:10
@@ -446,7 +446,7 @@ D:It is about eight feet long.
 
 N:26:White worm mass
 A:WhteWormMass
-G:w:TERM_GREEN
+G:w:TERM_WHITE
 I:100:4d4:7:1:10
 W:1:1:0:2
 T:17:16:30:8
@@ -458,7 +458,7 @@ D:It is a large slimy mass of worms.
 
 N:27:Rock lizard
 A:Rock lizard
-G:R:TERM_RASPBERRY
+G:R:TERM_L_UMBER
 I:110:3d4:20:4:15
 W:1:1:0:2
 T:19:12:19:11
@@ -469,7 +469,7 @@ D:It is a small lizard with a hardened hide.
 
 N:28:Large brown snake
 A:LgBrownSnake
-G:J:TERM_ORANGE_PEEL
+G:J:TERM_UMBER
 I:100:4d6:4:35:99
 W:1:1:0:3
 T:16:18:19:9
@@ -481,7 +481,7 @@ D:It is about eight feet long.
 
 N:29:Soldier ant
 A:Soldier ant
-G:a:TERM_VIOLET
+G:a:TERM_LIGHT_GRAY
 I:110:2d5:10:3:10
 W:1:1:0:3
 T:17:0:22:15
@@ -492,7 +492,7 @@ D:A large ant with powerful mandibles.
 
 N:30:Small kobold
 A:Small kobold
-G:k:TERM_PINK
+G:k:TERM_YELLOW
 I:110:2d7:20:16:10
 W:1:1:0:5
 T:13:11:26:2
@@ -516,7 +516,7 @@ D:Yum!  It looks quite tasty.  It doesn't sound so nice, though...
 
 N:32:Yellow mushroom patch
 A:YellowMushrm
-G:,:TERM_L_BLUE
+G:,:TERM_YELLOW
 I:110:1d1:2:1:0
 W:2:1:0:2
 T:14:87:14:7
@@ -528,7 +528,7 @@ D:Yum!  It looks quite tasty.
 
 N:33:Metallic green centipede
 A:GreenCentipe
-G:c:TERM_L_RED
+G:c:TERM_GREEN
 I:120:4d4:5:4:10
 W:2:1:0:3
 T:17:34:22:31
@@ -539,7 +539,7 @@ D:It is about four feet long and carnivorous.
 
 N:34:Green worm mass
 A:GreenWormMs
-G:w:TERM_LIGHT_GRAY
+G:w:TERM_GREEN
 I:100:6d4:7:3:10
 W:2:1:0:3
 T:17:17:30:9
@@ -551,7 +551,7 @@ D:It is a large slimy mass of worms.
 
 N:35:Blue yeek
 A:Blue yeek
-G:y:TERM_JUNGLE_GREEN
+G:y:TERM_BLUE
 I:110:2d6:18:14:10
 W:2:1:0:4
 T:15:58:30:18
@@ -562,7 +562,7 @@ D:A small humanoid figure.
 
 N:36:Kobold
 A:Kobold
-G:k:TERM_UMBER
+G:k:TERM_L_GREEN
 I:110:3d7:20:16:10
 W:2:1:0:5
 T:13:12:26:3
@@ -573,7 +573,7 @@ D:It is a small, dog-headed humanoid.
 
 N:37:White harpy
 A:White harpy
-G:H:TERM_L_BLUE
+G:H:TERM_WHITE
 I:110:2d5:16:17:10
 W:2:1:0:5
 T:19:10:17:12
@@ -586,7 +586,7 @@ D:A flying, screeching bird with a woman's face.
 
 N:38:Novice warrior
 A:NoviceWarior
-G:p:TERM_VIOLET
+G:p:TERM_UMBER
 I:110:9d4:20:16:5
 W:2:1:0:6
 T:4:0:27:22
@@ -598,7 +598,7 @@ D:He looks inexperienced but tough.
 
 N:39:Novice rogue
 A:Novice rogue
-G:p:TERM_RASPBERRY
+G:p:TERM_BLUE
 I:110:8d4:20:12:5
 W:2:1:0:6
 T:4:1:27:23
@@ -625,7 +625,7 @@ D:He is tripping over his priestly robes.
 
 N:41:Novice mage
 A:Novice mage
-G:p:TERM_LIME_GREEN
+G:p:TERM_RED
 I:110:6d4:20:6:5
 W:2:1:23:6
 T:4:3:27:25
@@ -639,7 +639,7 @@ D:He is leaving behind a trail of dropped spell components.
 
 N:42:Giant green frog
 A:GtGreenFrog
-G:R:TERM_RED
+G:R:TERM_GREEN
 I:110:2d8:12:8:30
 W:2:1:0:6
 T:19:8:19:12
@@ -650,7 +650,7 @@ D:It is as big as a wolf.
 
 N:43:Cave spider
 A:Cave spider
-G:S:TERM_L_GREEN
+G:S:TERM_L_DARK
 I:120:2d6:8:16:80
 W:2:1:0:7
 T:15:56:20:2
@@ -661,7 +661,7 @@ D:It is a black spider that moves in fits and starts.
 
 N:44:Blubbering icky thing
 A:BlubberrIcky
-G:i:TERM_RED
+G:i:TERM_LIGHT_GRAY
 I:110:5d6:14:4:10
 W:2:1:0:8
 T:14:80:25:14
@@ -674,7 +674,7 @@ D:It is a smallish, slimy, icky, hungry creature.
 
 N:45:Giant black ant
 A:Gt black ant
-G:a:TERM_UMBER
+G:a:TERM_L_DARK
 I:110:3d6:8:20:80
 W:2:1:0:8
 T:17:1:22:16
@@ -685,7 +685,7 @@ D:It is about three feet long.
 
 N:46:Wild cat
 A:Wild cat
-G:f:TERM_UMBER
+G:f:TERM_L_UMBER
 I:120:3d5:40:12:0
 W:2:2:0:8
 T:16:50:24:12
@@ -698,7 +698,7 @@ D: a fistful of needles.
 
 N:47:Crow
 A:Crow
-G:B:TERM_GOLD
+G:B:TERM_SLATE
 I:120:3d5:40:12:0
 W:2:2:0:8
 T:19:37:61:11
@@ -710,7 +710,7 @@ D:It is a hooded crow, gray except for the black wings and head.
 
 N:48:Large yellow snake
 A:LgYellwSnake
-G:J:TERM_VIOLET
+G:J:TERM_YELLOW
 I:100:4d8:5:38:75
 W:2:1:0:9
 T:16:20:19:17
@@ -722,7 +722,7 @@ D:It is about ten feet long.
 
 N:49:White jelly
 A:White jelly
-G:j:TERM_L_UMBER
+G:j:TERM_WHITE
 I:120:8d8:2:1:99
 W:2:1:0:10
 T:15:19:25:19
@@ -734,7 +734,7 @@ D:Its a large pile of white flesh.
 
 N:50:Salamander
 A:Salamander
-G:R:TERM_L_RED
+G:R:TERM_ORANGE
 I:110:4d6:8:20:80
 W:2:1:0:10
 T:19:13:19:13
@@ -745,7 +745,7 @@ D:A small black and orange lizard.
 
 N:51:Grip, Farmer Maggot's dog
 A:Grip
-G:C:TERM_YELLOW
+G:C:TERM_L_BROWN
 I:120:5d5:30:30:0
 W:2:1:0:30
 T:15:73:14:31
@@ -758,7 +758,7 @@ D: stealing mushrooms.
 
 N:52:Fang, Farmer Maggot's dog
 A:Fang
-G:C:TERM_ORANGE
+G:C:TERM_L_BROWN
 I:120:5d5:30:30:0
 W:2:1:0:30
 T:15:75:15:0
@@ -771,7 +771,7 @@ D: stealing mushrooms.
 
 N:53:Giant white louse
 A:GtWhiteLouse
-G:l:TERM_VIOLET
+G:l:TERM_WHITE
 I:120:1d1:6:5:10
 W:3:1:0:1
 T:25:76:26:6
@@ -782,7 +782,7 @@ D:It is six inches long.
 
 N:54:Spotted mushroom patch
 A:SpottedMshrm
-G:,:TERM_VIOLET
+G:,:TERM_ORANGE
 I:110:1d1:2:1:0
 W:3:1:0:1
 T:14:88:14:8
@@ -794,7 +794,7 @@ D:Yum!  It looks quite tasty.
 
 N:55:Green ooze
 A:Green ooze
-G:j:TERM_ORANGE
+G:j:TERM_GREEN
 I:120:3d4:8:16:80
 W:3:2:0:4
 T:15:0:25:20
@@ -806,7 +806,7 @@ D:It's green and it's oozing.
 
 N:56:Scruffy looking hobbit
 A:Scruf.hobbit
-G:h:TERM_RED
+G:h:TERM_BLUE
 I:110:3d5:16:8:10
 W:3:1:0:4
 T:13:0:24:28
@@ -820,7 +820,7 @@ D: for a good tavern.
 
 N:57:Yellow worm mass
 A:Yellow worm
-G:w:TERM_TAUPE
+G:w:TERM_YELLOW
 I:100:4d8:7:4:10
 W:3:2:0:4
 T:17:18:30:10
@@ -832,7 +832,7 @@ D:It is a large slimy mass of worms.
 
 N:58:Clear worm mass
 A:Clear worm
-G:w:TERM_WHITE
+G:w:TERM_SNOW_WHITE
 I:100:4d4:7:1:10
 W:3:2:0:4
 T:17:19:30:11
@@ -845,7 +845,7 @@ D:It is a disgusting mass of poisonous worms.
 
 N:59:Radiation eye
 A:RadiationEye
-G:e:TERM_UMBER
+G:e:TERM_PINK
 I:110:3d6:2:6:10
 W:3:1:0:6
 T:16:7:24:5
@@ -858,7 +858,7 @@ D:A disembodied eye, crackling with energy.
 
 N:60:Metallic blue centipede
 A:BlueCentiped
-G:c:TERM_VIOLET
+G:c:TERM_BLUE
 I:120:4d5:6:6:15
 W:3:1:0:7
 T:17:35:23:0
@@ -869,7 +869,7 @@ D:It is about four feet long and carnivorous.
 
 N:61:Giant white ant
 A:Gt White ant
-G:a:TERM_SLATE
+G:a:TERM_WHITE
 I:110:3d6:8:16:80
 W:3:1:0:7
 T:25:77:22:17
@@ -880,7 +880,7 @@ D:It is about two feet long and has sharp pincers.
 
 N:62:Poltergeist
 A:Poltergeist
-G:G:TERM_PINK
+G:G:TERM_LIGHT_GRAY
 I:130:2d5:8:15:10
 W:3:1:23:9
 T:20:23:16:29
@@ -896,7 +896,7 @@ D:It is a ghastly, ghostly form.
 
 N:63:Yellow mold
 A:Yellow mold
-G:m:TERM_RED
+G:m:TERM_YELLOW
 I:110:8d8:2:10:99
 W:3:1:0:9
 T:14:70:26:9
@@ -908,7 +908,7 @@ D:It is a strange yellow growth on the dungeon floor.
 
 N:64:Silver jelly
 A:Silver jelly
-G:j:TERM_L_RED
+G:j:TERM_SILVER
 I:120:10d8:2:1:99
 W:3:2:0:12
 T:15:20:25:21
@@ -962,7 +962,7 @@ D:It is a kobold dressed in skins and gesturing wildly.
 
 N:68:Black naga
 A:Black naga
-G:n:TERM_SILVER
+G:n:TERM_L_DARK
 I:110:6d8:16:40:120
 W:3:1:0:20
 T:16:13:26:17
@@ -973,7 +973,7 @@ D:A large black serpent's body with a female torso.
 
 N:69:Wolf, Farmer Maggot's dog
 A:Wolf
-G:C:TERM_L_UMBER
+G:C:TERM_L_BROWN
 I:120:6d6:30:30:0
 W:3:1:0:30
 T:15:94:14:31
@@ -985,7 +985,7 @@ D:The biggest and most vicious dog belonging to Farmer Maggot
 
 N:70:Sméagol
 A:Sméagol
-G:h:TERM_VIOLET
+G:h:TERM_L_BLUE
 I:120:20d20:20:12:5
 W:3:2:0:50
 T:15:60:27:26
@@ -1000,7 +1000,7 @@ D: 'precious.'
 
 N:71:Giant white rat
 A:Gt white rat
-G:r:TERM_RED
+G:r:TERM_LIGHT_GRAY
 I:110:2d2:8:7:30
 W:4:1:0:1
 T:25:96:29:16
@@ -1011,7 +1011,7 @@ D:It is a very vicious rodent.
 
 N:72:Silver mouse
 A:Silver mouse
-G:r:TERM_RED
+G:r:TERM_SILVER
 I:110:1d3:8:4:20
 W:4:1:0:1
 T:25:75:48:3
@@ -1023,7 +1023,7 @@ D: lamp falls on it, it seems to grow stronger.
 
 N:73:Blue worm mass
 A:BlueWormMass
-G:w:TERM_UMBER
+G:w:TERM_BLUE
 I:100:5d8:7:12:10
 W:4:1:0:5
 T:17:20:30:12
@@ -1035,7 +1035,7 @@ D:It is a large slimy mass of worms.
 
 N:74:Cave lizard
 A:Cave lizard
-G:R:TERM_RED
+G:R:TERM_UMBER
 I:110:3d6:8:16:80
 W:4:1:0:8
 T:19:14:19:15
@@ -1046,7 +1046,7 @@ D:It is an armoured lizard with a powerful bite.
 
 N:75:Creeping copper coins
 A:Copper coins
-G:$:TERM_UMBER
+G:$:TERM_COPPER
 I:100:7d8:3:24:10
 W:4:3:0:9
 T:5:89:14:0
@@ -1059,7 +1059,7 @@ D:It appears to be a pile of copper coins.
 
 N:76:Raven
 A:Raven
-G:B:TERM_YELLOW
+G:B:TERM_L_DARK
 I:120:4d5:40:12:0
 W:4:2:0:10
 T:19:35:61:12
@@ -1071,7 +1071,7 @@ D:Larger than a crow, and pitch black.
 
 N:77:Blue jelly
 A:Blue jelly
-G:j:TERM_GREEN
+G:j:TERM_BLUE
 I:110:12d8:2:1:99
 W:4:1:0:14
 T:15:6:25:23
@@ -1083,7 +1083,7 @@ D:It's a large pile of pulsing blue flesh.
 
 N:78:Large grey snake
 A:Lg GreySnake
-G:J:TERM_UMBER
+G:J:TERM_SLATE
 I:100:6d8:6:41:50
 W:4:1:0:14
 T:16:21:19:16
@@ -1095,7 +1095,7 @@ D:It is about ten feet long.
 
 N:79:Novice ranger
 A:NoviceRanger
-G:p:TERM_RASPBERRY
+G:p:TERM_LIGHT_GRAY
 I:110:6d8:20:8:5
 W:4:1:23:18
 T:4:4:27:27
@@ -1110,7 +1110,7 @@ D:An agile hunter, ready and relaxed.
 
 N:80:Novice paladin
 A:Nov. paladin
-G:p:TERM_L_UMBER
+G:p:TERM_WHITE
 I:110:6d8:20:16:5
 W:4:1:23:18
 T:4:5:27:28
@@ -1125,7 +1125,7 @@ D:An adventurer both devoutly religious and skillful in combat.
 
 N:81:Kobold archer
 A:KoboldArcher
-G:k:TERM_L_DARK
+G:k:TERM_LIGHT_GRAY
 I:110:6d7:20:16:10
 W:4:1:0:20
 T:3:88:71:0
@@ -1138,7 +1138,7 @@ D:It is an ugly dog-headed humanoid wielding a bow.
 
 N:82:Red worm mass
 A:Red WormMass
-G:w:TERM_L_DARK
+G:w:TERM_RED
 I:100:5d8:7:12:10
 W:5:1:0:6
 T:17:21:30:13
@@ -1150,7 +1150,7 @@ D:It is a large slimy mass of worms.
 
 N:83:Blue ooze
 A:Blue ooze
-G:j:TERM_ORANGE
+G:j:TERM_NAVY_BLUE
 I:110:3d4:8:16:80
 W:5:1:0:7
 T:15:1:25:24
@@ -1162,7 +1162,7 @@ D:It's blue and it's oozing.
 
 N:84:Grey icky thing
 A:GreyIckyThin
-G:i:TERM_YELLOW
+G:i:TERM_SLATE
 I:110:4d8:14:12:15
 W:5:1:0:10
 T:14:81:25:15
@@ -1173,7 +1173,7 @@ D:It is a smallish, slimy, icky, nasty creature.
 
 N:85:Skeleton kobold
 A:SkeltnKobold
-G:s:TERM_L_BROWN
+G:s:TERM_WHITE
 I:110:5d8:20:26:40
 W:5:1:0:12
 T:20:59:29:19
@@ -1186,7 +1186,7 @@ D:It is a small animated kobold skeleton.
 
 N:86:Green glutton ghost
 A:Gr.GlutGhost
-G:G:TERM_L_BROWN
+G:G:TERM_GREEN
 I:130:3d4:10:20:10
 W:5:1:0:15
 T:20:2:16:30
@@ -1199,7 +1199,7 @@ D:It is a very ugly green ghost with a voracious appetite.
 
 N:87:Copperhead snake
 A:Cpprhd Snake
-G:J:TERM_L_DARK
+G:J:TERM_ORANGE
 I:110:4d6:6:20:1
 W:5:1:0:15
 T:16:22:19:17
@@ -1210,7 +1210,7 @@ D:It has a copper head and sharp venomous fangs.
 
 N:88:Rot jelly
 A:Rot jelly
-G:j:TERM_L_DARK
+G:j:TERM_UMBER
 I:120:20d8:2:30:99
 W:5:1:0:15
 T:15:13:49:17
@@ -1224,7 +1224,7 @@ D: terrible smell it exudes is also very hard to get rid of.
 
 N:89:Green jelly
 A:Green jelly
-G:j:TERM_L_GREEN
+G:j:TERM_JUNGLE_GREEN
 I:120:22d8:2:1:99
 W:5:1:0:18
 T:15:17:25:25
@@ -1236,7 +1236,7 @@ D:It is a large pile of pulsing green flesh.
 
 N:90:Disenchanter eye
 A:DisenchanEye
-G:e:TERM_WHITE
+G:e:TERM_VIOLET
 I:100:7d8:2:6:10
 W:5:2:0:20
 T:16:6:24:6
@@ -1249,7 +1249,7 @@ D:A disembodied eye, crackling with magic.
 
 N:91:Large kobold
 A:Large kobold
-G:k:TERM_VIOLET
+G:k:TERM_BLUE
 I:110:13d9:20:32:30
 W:5:1:0:25
 T:13:13:26:4
@@ -1260,7 +1260,7 @@ D:It a man-sized figure with the all too recognizable face of a kobold.
 
 N:92:Green naga
 A:Green naga
-G:n:TERM_BLUE
+G:n:TERM_GREEN
 I:110:9d8:18:40:120
 W:5:1:0:30
 T:16:14:26:18
@@ -1289,7 +1289,7 @@ D: vigour.  He can prove a troublesome opponent.
 
 N:94:Purple mushroom patch
 A:PrpMshrmPtch
-G:,:TERM_RED
+G:,:TERM_VIOLET
 I:110:1d1:2:1:0
 W:6:2:0:3
 T:14:89:14:9
@@ -1303,7 +1303,7 @@ D:Yum!  It looks quite tasty.
 
 N:95:Novice mage
 A:Novice mage
-G:p:TERM_BLUE
+G:p:TERM_RED
 I:110:6d4:20:6:10
 W:6:2:23:6
 T:4:6:27:29
@@ -1317,7 +1317,7 @@ D:He is leaving behind a trail of dropped spell components.
 
 N:96:Novice priest
 A:NovicePriest
-G:p:TERM_SLATE
+G:p:TERM_GREEN
 I:110:7d4:20:10:5
 W:6:2:23:6
 T:4:7:27:30
@@ -1331,7 +1331,7 @@ D:He is tripping over his priestly robes.
 
 N:97:Novice warrior
 A:NoviceWrrior
-G:p:TERM_VIOLET
+G:p:TERM_UMBER
 I:110:9d4:20:16:5
 W:6:2:0:6
 T:4:8:27:31
@@ -1344,7 +1344,7 @@ D:He looks inexperienced but tough.
 
 N:98:Novice rogue
 A:Novice rogue
-G:p:TERM_RED
+G:p:TERM_BLUE
 I:110:8d4:20:12:5
 W:6:2:0:6
 T:4:9:28:0
@@ -1357,7 +1357,7 @@ D:A rather shifty individual.
 
 N:99:Giant brown bat
 A:Gt brown bat
-G:b:TERM_RED
+G:b:TERM_UMBER
 I:130:3d8:10:15:30
 W:6:1:0:10
 T:16:2:22:25
@@ -1368,7 +1368,7 @@ D:It screeches as it attacks.
 
 N:100:Snaga
 A:Snaga
-G:o:TERM_ORANGE
+G:o:TERM_L_UMBER
 I:110:8d8:20:32:30
 W:6:1:0:15
 T:13:19:26:23
@@ -1381,7 +1381,7 @@ D: goblin.
 
 N:101:Creeping silver coins
 A:Silver coins
-G:$:TERM_L_UMBER
+G:$:TERM_SILVER
 I:100:12d8:4:30:10
 W:6:3:0:18
 T:5:90:14:1
@@ -1395,7 +1395,7 @@ D:It appears to be a pile of silver coins.
 
 N:102:Brown mold
 A:Brown mold
-G:m:TERM_BLUE
+G:m:TERM_UMBER
 I:110:15d8:2:12:99
 W:6:1:0:20
 T:14:71:26:10
@@ -1407,7 +1407,7 @@ D:A strange brown growth on the dungeon floor.
 
 N:103:Rattlesnake
 A:Rattlesnake
-G:J:TERM_L_DARK
+G:J:TERM_RED
 I:110:6d7:6:24:1
 W:6:1:0:20
 T:16:23:19:18
@@ -1421,7 +1421,7 @@ D: rattled to frighten its prey.
 
 N:104:Zombified kobold
 A:ZombfdKobold
-G:z:TERM_NAVY_BLUE
+G:z:TERM_SLATE
 I:110:6d8:20:14:30
 W:7:1:0:14
 T:20:27:30:23
@@ -1436,7 +1436,7 @@ D: it shambles forward.
 
 N:105:Wood spider
 A:Wood spider
-G:S:TERM_SLATE
+G:S:TERM_L_UMBER
 I:120:3d6:8:16:80
 W:7:3:0:15
 T:15:53:20:3
@@ -1449,7 +1449,7 @@ D:It scuttles towards you.
 
 N:106:Bloodshot eye
 A:BloodshotEye
-G:e:TERM_WHITE
+G:e:TERM_RED
 I:110:10d8:2:6:10
 W:7:3:0:15
 T:16:5:24:7
@@ -1462,7 +1462,7 @@ D:A disembodied eye, bloodshot and nasty.
 
 N:107:Manes
 A:Manes
-G:u:TERM_GREEN
+G:u:TERM_UMBER
 I:110:8d8:20:32:30
 W:7:2:0:16
 T:13:36:17:22
@@ -1474,7 +1474,7 @@ D:It is a minor but aggressive demon.
 
 N:108:Giant red frog
 A:Gt red frog
-G:R:TERM_LIGHT_GRAY
+G:R:TERM_RED
 I:110:5d8:12:16:50
 W:7:1:0:16
 T:19:9:19:19
@@ -1485,7 +1485,7 @@ D:It looks poisonous.
 
 N:109:Green icky thing
 A:GrnIckyThing
-G:i:TERM_L_UMBER
+G:i:TERM_GREEN
 I:110:5d8:14:12:20
 W:7:2:0:18
 T:14:82:25:16
@@ -1496,7 +1496,7 @@ D:It is a smallish, slimy, icky, acidic creature.
 
 N:110:Lost soul
 A:Lost soul
-G:G:TERM_YELLOW
+G:G:TERM_L_BLUE
 I:110:2d8:12:10:10
 W:7:2:26:18
 T:20:22:16:31
@@ -1512,7 +1512,7 @@ D:It is almost insubstantial.
 
 N:111:Cave orc
 A:Cave orc
-G:o:TERM_L_BLUE
+G:o:TERM_L_GREEN
 I:110:11d9:20:32:30
 W:7:1:0:20
 T:13:20:26:24
@@ -1524,7 +1524,7 @@ D:He is often found in huge numbers in deep caves.
 
 N:112:Dark elf
 A:Dark elf
-G:h:TERM_UMBER
+G:h:TERM_L_DARK
 I:110:7d10:20:16:20
 W:7:2:26:25
 T:13:1:24:30
@@ -1540,7 +1540,7 @@ D: and twisted with evil.
 
 N:113:Red jelly
 A:Red jelly
-G:j:TERM_L_GREEN
+G:j:TERM_RED
 I:110:26d8:2:1:99
 W:7:1:0:26
 T:15:18:25:26
@@ -1552,7 +1552,7 @@ D:It is a large pulsating mound of red flesh.
 
 N:114:Night lizard
 A:Night lizard
-G:R:TERM_PURPLE
+G:R:TERM_BLUE
 I:110:4d8:20:16:30
 W:7:2:0:35
 T:19:15:19:20
@@ -1564,7 +1564,7 @@ D:It is a black lizard with overlapping scales and a powerful jaw.
 
 N:115:Red naga
 A:Red naga
-G:n:TERM_RED_LAVA
+G:n:TERM_RED
 I:110:11d8:20:40:120
 W:7:2:0:40
 T:16:15:26:19
@@ -1603,7 +1603,7 @@ D:It is a strange small humanoid.
 
 N:118:Lemure
 A:Lemure
-G:u:TERM_SLATE
+G:u:TERM_L_UMBER
 I:110:13d9:20:32:30
 W:8:3:0:16
 T:13:37:17:23
@@ -1615,7 +1615,7 @@ D:It is the larval form of a major demon.
 
 N:119:Novice ranger
 A:NoviceRanger
-G:p:TERM_SLATE
+G:p:TERM_LIGHT_GRAY
 I:110:6d8:20:8:5
 W:8:2:17:18
 T:4:11:28:3
@@ -1645,7 +1645,7 @@ D:An adventurer both devoutly religious and skillful in combat.
 
 N:121:Nighthawk
 A:Nighthawk
-G:B:TERM_L_BLUE
+G:B:TERM_UMBER
 I:120:8d8:30:25:10
 W:8:2:0:22
 T:14:59:71:3
@@ -1658,7 +1658,7 @@ D:Trained to hunt and kill without fear.
 
 N:122:Hill orc
 A:Hill orc
-G:o:TERM_WHITE
+G:o:TERM_UMBER
 I:110:13d9:20:32:30
 W:8:1:0:25
 T:18:24:26:26
@@ -1670,7 +1670,7 @@ D:He is a hardy well-weathered survivor.
 
 N:123:Skeleton orc
 A:Skeleton orc
-G:s:TERM_VIOLET
+G:s:TERM_WHITE
 I:110:10d8:20:36:40
 W:8:1:0:26
 T:20:62:29:20
@@ -1683,7 +1683,7 @@ D:It is an animated orc skeleton.
 
 N:124:Bandit
 A:Bandit
-G:p:TERM_ORANGE
+G:p:TERM_BLUE
 I:110:8d8:20:24:10
 W:8:2:0:26
 T:4:13:28:5
@@ -1698,7 +1698,7 @@ D:He is after your cash!
 
 N:125:Green mold
 A:Green mold
-G:m:TERM_L_RED
+G:m:TERM_GREEN
 I:110:21d8:2:14:75
 W:8:1:0:28
 T:14:73:26:11
@@ -1723,7 +1723,7 @@ D:A large black and yellow lizard.  You'd better run away!
 
 N:127:Lagduf, the Snaga
 A:Lagduf
-G:o:TERM_L_GREEN
+G:o:TERM_YELLOW
 I:110:19d10:20:32:30
 W:8:2:0:80
 T:21:3:26:25
@@ -1740,7 +1740,7 @@ D: order with displays of excessive violence.
 
 N:128:Giant grey rat
 A:Gt grey rat
-G:r:TERM_LIME_GREEN
+G:r:TERM_SLATE
 I:110:2d3:8:12:20
 W:9:1:0:2
 T:13:25:29:17
@@ -1751,7 +1751,7 @@ D:It is a rodent of unusual size.
 
 N:129:Black harpy
 A:Black harpy
-G:H:TERM_L_BROWN
+G:H:TERM_L_DARK
 I:120:3d8:16:22:10
 W:9:1:0:19
 T:19:11:17:13
@@ -1764,7 +1764,7 @@ D:A woman's face on the body of a vicious black bird.
 
 N:130:Giant red ant
 A:GiantRedAnt
-G:a:TERM_SLATE
+G:a:TERM_RED
 I:110:4d8:12:34:60
 W:9:2:0:22
 T:17:7:22:18
@@ -1776,7 +1776,7 @@ D:It is large and has venomous mandibles.
 
 N:131:Bloodshot icky thing
 A:BloodshtIcky
-G:i:TERM_LIGHT_GRAY
+G:i:TERM_RED
 I:110:7d8:14:18:20
 W:9:3:23:24
 T:14:83:25:17
@@ -1804,7 +1804,7 @@ D: hungry, and you are trespassing in its territory.
 
 N:133:King cobra
 A:King cobra
-G:J:TERM_BLUE
+G:J:TERM_GREEN
 I:110:8d10:8:30:1
 W:9:2:0:28
 T:16:24:19:22
@@ -1818,7 +1818,7 @@ D:It is a large snake with a hooded face.
 
 N:134:Yeti
 A:Yeti
-G:Y:TERM_L_UMBER
+G:Y:TERM_WHITE
 I:110:11d9:20:24:10
 W:9:3:0:30
 T:14:50:21:25
@@ -1832,7 +1832,7 @@ D:A large white figure covered in shaggy fur.
 
 N:135:Orc shaman
 A:Orc shaman
-G:o:TERM_SLATE_GRAY
+G:o:TERM_RED
 I:110:9d8:20:15:20
 W:9:1:23:30
 T:18:25:26:27
@@ -1847,7 +1847,7 @@ D:An orc dressed in skins who gestures wildly.
 
 N:136:Baby blue dragon
 A:BabyBlueDrag
-G:d:TERM_L_UMBER
+G:d:TERM_BLUE
 I:110:10d10:20:30:70
 W:9:2:0:35
 T:12:0:23:6
@@ -1864,7 +1864,7 @@ D: and its scales a pale blue.
 
 N:137:Baby white dragon
 A:BabyWhiteDr
-G:d:TERM_L_BROWN
+G:d:TERM_WHITE
 I:110:10d10:20:30:70
 W:9:2:0:35
 T:12:2:23:7
@@ -1882,7 +1882,7 @@ D: and its scales a pale white.
 
 N:138:Baby green dragon
 A:BabyGreenDr
-G:d:TERM_ORANGE
+G:d:TERM_GREEN
 I:110:10d10:20:30:70
 W:9:2:0:35
 T:12:3:23:8
@@ -1899,7 +1899,7 @@ D: and its scales a sickly green.
 
 N:139:Baby black dragon
 A:BabyBlackDr
-G:d:TERM_L_DARK
+G:d:TERM_SLATE
 I:110:10d10:20:30:70
 W:9:2:0:35
 T:12:4:23:9
@@ -1917,7 +1917,7 @@ D: and its scales a dull black.
 
 N:140:Baby red dragon
 A:BabyRedDr
-G:d:TERM_L_BROWN
+G:d:TERM_RED
 I:110:10d10:20:30:70
 W:9:2:0:35
 T:12:5:23:10
@@ -1935,7 +1935,7 @@ D: and its scales a pale red.
 
 N:141:Baby bronze dragon
 A:BabyBronzeDr
-G:d:TERM_SLATE
+G:d:TERM_L_UMBER
 I:110:10d10:20:30:70
 W:9:2:0:35
 T:12:6:48:9
@@ -1952,7 +1952,7 @@ D: and its scales a dull bronze.
 
 N:142:Baby gold dragon
 A:BabyGoldDr
-G:d:TERM_WHITE
+G:d:TERM_GOLD
 I:110:10d10:20:30:70
 W:9:2:0:35
 T:12:1:48:10
@@ -1969,7 +1969,7 @@ D: and its scales a pale gold.
 
 N:143:Brodda, the Easterling
 A:Brodda
-G:p:TERM_GREEN
+G:p:TERM_L_BROWN
 I:110:21d10:20:25:20
 W:9:2:0:100
 T:21:4:28:6
@@ -1984,7 +1984,7 @@ D:A nasty piece of work, Brodda picks on defenseless women and children.
 
 N:144:Giant fruit fly
 A:Gt fruit fly
-G:I:TERM_L_DARK
+G:I:TERM_L_GREEN
 I:120:2d2:8:14:10
 W:10:3:0:1
 T:15:49:16:21
@@ -1996,7 +1996,7 @@ D:A fast-breeding, annoying pest.
 
 N:145:Clear mushroom patch
 A:ClrMshrmPtch
-G:,:TERM_UMBER
+G:,:TERM_WHITE
 I:120:3d3:4:1:0
 W:10:2:0:3
 T:14:90:14:10
@@ -2008,7 +2008,7 @@ D:Yum!  It looks quite tasty.
 
 N:146:Panther
 A:Panther
-G:f:TERM_SLATE
+G:f:TERM_UMBER
 I:120:10d8:40:30:0
 W:10:2:0:25
 T:16:53:24:13
@@ -2032,7 +2032,7 @@ D:It is moving slowly towards you.
 
 N:148:Wolf
 A:Wolf
-G:C:TERM_L_BLUE
+G:C:TERM_UMBER
 I:120:6d6:30:30:20
 W:10:1:0:30
 T:15:83:15:1
@@ -2043,7 +2043,7 @@ D:It howls and snaps at you.
 
 N:149:Hairy mold
 A:Hairy mold
-G:m:TERM_RED
+G:m:TERM_ORANGE
 I:110:15d8:2:15:70
 W:10:1:0:32
 T:14:72:26:12
@@ -2055,7 +2055,7 @@ D:It is a strange hairy growth on the dungeon floor.
 
 N:150:Creeping gold coins
 A:CreepingGold
-G:$:TERM_BLUE
+G:$:TERM_GOLD
 I:100:18d8:5:36:10
 W:10:3:0:32
 T:5:91:14:2
@@ -2070,7 +2070,7 @@ D: towards you on tiny legs.
 
 N:151:Giant spider
 A:Giant spider
-G:S:TERM_TAUPE
+G:S:TERM_VIOLET
 I:110:10d10:8:16:80
 W:10:2:0:35
 T:15:52:20:4
@@ -2084,7 +2084,7 @@ D:It is a vast black spider whose bulbous body is bloated with poison.
 
 N:152:Brigand
 A:Brigand
-G:p:TERM_RED
+G:p:TERM_NAVY_BLUE
 I:110:9d8:20:32:10
 W:10:2:28:35
 T:4:14:28:7
@@ -2099,7 +2099,7 @@ D:He is eyeing your backpack.
 
 N:153:Disenchanter mold
 A:DisenchaMold
-G:m:TERM_L_UMBER
+G:m:TERM_VIOLET
 I:110:16d8:2:20:70
 W:10:1:0:40
 T:14:67:26:13
@@ -2113,7 +2113,7 @@ D:It is a strange glowing growth on the dungeon floor.
 
 N:154:Tengu
 A:Tengu
-G:u:TERM_L_UMBER
+G:u:TERM_L_RED
 I:120:16d9:20:32:30
 W:10:1:32:40
 T:13:38:17:24
@@ -2128,7 +2128,7 @@ D: no other demon matches its teleporting mastery.
 
 N:155:Dark elven mage
 A:DrkElvenMage
-G:h:TERM_ORANGE
+G:h:TERM_RASPBERRY
 I:120:7d10:20:16:20
 W:10:1:28:50
 T:13:2:24:31
@@ -2145,7 +2145,7 @@ D:A dark elven figure, dressed all in black, hurling spells at you.
 
 N:156:Dark elven warrior
 A:DrkElvenWarr
-G:h:TERM_NAVY_BLUE
+G:h:TERM_UMBER
 I:110:10d11:20:16:20
 W:10:1:0:50
 T:13:3:25:0
@@ -2160,7 +2160,7 @@ D:A dark elven figure in armour and ready with his sword.
 
 N:157:Orfax, Son of Boldor
 A:Orfax
-G:y:TERM_RED
+G:y:TERM_L_BLUE
 I:115:12d10:18:20:10
 W:10:3:43:75
 T:21:5:30:20
@@ -2181,7 +2181,7 @@ D: is a yeek.
 
 N:158:Pseudo-dragon
 A:PseudoDragon
-G:d:TERM_GREEN
+G:d:TERM_ORANGE
 I:110:20d10:20:30:70
 W:10:2:26:150
 T:12:71:23:11
@@ -2198,7 +2198,7 @@ D:A small relative of the dragon that inhabits dark caves.
 
 N:159:Grishnákh, the Hill Orc
 A:Grishnákh
-G:o:TERM_ORANGE_PEEL
+G:o:TERM_EARTH_YELLOW
 I:110:23d10:20:20:20
 W:10:3:0:160
 T:21:6:26:28
@@ -2214,7 +2214,7 @@ D:He is a cunning and devious orc with a chaotic nature.
 
 N:160:Wormtongue, Agent of Saruman
 A:Wormtongue
-G:p:TERM_GREEN
+G:p:TERM_L_BLUE
 I:115:25d10:20:30:20
 W:10:1:56:170
 T:21:2:28:2
@@ -2234,7 +2234,7 @@ D: morals and disgusting habits.
 
 N:161:Hippogriff
 A:Hippogriff
-G:H:TERM_VIOLET
+G:H:TERM_L_UMBER
 I:110:20d9:12:14:10
 W:11:1:0:30
 T:17:15:17:14
@@ -2246,7 +2246,7 @@ D:A strange hybrid of eagle and horse.  It looks weird.
 
 N:162:Zombified orc
 A:ZombifiedOrc
-G:z:TERM_PURPLE
+G:z:TERM_SLATE
 I:110:11d8:20:24:25
 W:11:1:0:30
 T:20:26:30:24
@@ -2261,7 +2261,7 @@ D:It is a shambling orcish corpse leaving behind a trail of flesh.
 
 N:163:Gnome mage
 A:Gnome mage
-G:h:TERM_ORANGE
+G:h:TERM_RED
 I:110:7d8:18:20:10
 W:11:2:28:38
 T:13:4:25:1
@@ -2276,7 +2276,7 @@ D:A mage of short stature.
 
 N:164:Baby chromatic dragon
 A:BabyChromDrg
-G:d:TERM_YELLOW
+G:d:TERM_VIOLET
 I:110:13d10:20:30:70
 W:11:2:0:45
 T:12:7:23:12
@@ -2296,7 +2296,7 @@ D: and its scales shimmering with hints of many different colours.
 
 N:165:Nether worm mass
 A:Nether Worm
-G:w:TERM_VIOLET
+G:w:TERM_L_DARK
 I:100:5d8:10:15:3
 W:12:3:0:6
 T:17:22:30:14
@@ -2309,7 +2309,7 @@ D: the air, you....
 
 N:166:White wolf
 A:White wolf
-G:C:TERM_SLATE
+G:C:TERM_WHITE
 I:120:7d7:30:30:20
 W:12:1:0:25
 T:15:84:15:2
@@ -2323,7 +2323,7 @@ D: and icy and its fur coated in frost.
 
 N:167:Master yeek
 A:Master yeek
-G:y:TERM_GREEN
+G:y:TERM_L_UMBER
 I:110:12d9:18:24:10
 W:12:2:35:28
 T:15:59:30:21
@@ -2338,7 +2338,7 @@ D:A small humanoid that radiates some power.
 
 N:168:Spotted jelly
 A:SpottedJelly
-G:j:TERM_L_DARK
+G:j:TERM_ORANGE
 I:120:13d8:12:18:1
 W:12:3:0:33
 T:15:16:25:28
@@ -2352,7 +2352,7 @@ D:A strange jelly thing, covered in discoloured blotches.
 
 N:169:Zombified human
 A:Zombie human
-G:z:TERM_VIOLET
+G:z:TERM_SLATE
 I:110:12d8:20:24:20
 W:12:1:0:34
 T:20:25:30:25
@@ -2366,7 +2366,7 @@ D:It is a shambling human corpse dropping chunks of flesh behind it.
 
 N:170:Priest
 A:Priest
-G:p:TERM_RED
+G:p:TERM_JUNGLE_GREEN
 I:110:12d8:20:22:40
 W:12:1:50:36
 T:4:15:28:8
@@ -2381,7 +2381,7 @@ D:A robed man, dedicated to his god.
 
 N:171:Skeleton human
 A:Skeltn Human
-G:s:TERM_SNOW_WHITE
+G:s:TERM_WHITE
 I:110:10d8:20:30:30
 W:12:1:0:38
 T:20:30:29:21
@@ -2394,7 +2394,7 @@ D:It is an animated human skeleton.
 
 N:172:Black mamba
 A:Black mamba
-G:J:TERM_LIGHT_GRAY
+G:J:TERM_L_DARK
 I:120:10d8:10:32:1
 W:12:3:0:40
 T:16:25:19:23
@@ -2407,7 +2407,7 @@ D:It has glistening black skin, a sleek body and highly venomous fangs.
 
 N:173:Air spirit
 A:Air spirit
-G:E:TERM_ORANGE
+G:E:TERM_L_BLUE
 I:125:8d8:12:40:20
 W:12:2:0:40
 T:15:21:16:3
@@ -2420,7 +2420,7 @@ D:A whirlwind of sentient air.
 
 N:174:Tiger
 A:Tiger
-G:f:TERM_SLATE
+G:f:TERM_ORANGE
 I:120:12d10:40:40:0
 W:12:2:0:40
 T:16:52:24:14
@@ -2434,7 +2434,7 @@ D: creeps towards you, ready to pounce.
 
 N:175:Swordsman
 A:Swordsman
-G:p:TERM_ORANGE_PEEL
+G:p:TERM_L_BROWN
 I:110:12d8:20:34:20
 W:12:1:0:40
 T:4:16:28:9
@@ -2446,7 +2446,7 @@ D:A warrior of considerable skill.
 
 N:176:Stegocentipede
 A:Stegocentipd
-G:c:TERM_L_DARK
+G:c:TERM_UMBER
 I:120:13d8:12:30:30
 W:12:2:0:40
 T:17:37:23:2
@@ -2460,7 +2460,7 @@ D: tail.
 
 N:177:Moaning spirit
 A:Moaning Sprt
-G:G:TERM_LIGHT_GRAY
+G:G:TERM_UMBER
 I:120:5d8:14:20:10
 W:12:2:35:44
 T:20:20:17:0
@@ -2476,7 +2476,7 @@ D:A ghostly apparition that shrieks horribly.
 
 N:178:Dark elven priest
 A:DrkElvenPrst
-G:h:TERM_GOLD
+G:h:TERM_GREEN
 I:120:7d10:20:30:30
 W:12:1:50:50
 T:13:5:25:2
@@ -2494,7 +2494,7 @@ D: to deliver your soul to hell.
 
 N:179:Grape jelly
 A:Grape jelly
-G:j:TERM_TAUPE
+G:j:TERM_VIOLET
 I:110:52d8:2:1:99
 W:12:3:0:60
 T:15:11:25:27
@@ -2508,7 +2508,7 @@ D:Yum!  It looks quite tasty.  It is a pulsing mound of glowing flesh.
 
 N:180:Golfimbul, the Hill Orc Chief
 A:Golfimbul
-G:o:TERM_YELLOW
+G:o:TERM_L_BROWN
 I:110:24d10:20:60:20
 W:12:3:0:230
 T:21:7:26:29
@@ -2524,7 +2524,7 @@ D:A leader of a band of raiding orcs, he picks on hobbits.
 
 N:181:Giant flea
 A:Giant flea
-G:I:TERM_GREEN
+G:I:TERM_SLATE
 I:120:2d2:8:25:10
 W:13:3:0:1
 T:25:85:16:22
@@ -2536,7 +2536,7 @@ D:It makes you itch just to look at it.
 
 N:182:Giant black louse
 A:GtBlackLouse
-G:l:TERM_SLATE
+G:l:TERM_L_DARK
 I:120:1d2:6:7:10
 W:13:1:0:1
 T:15:45:26:7
@@ -2547,7 +2547,7 @@ D:It makes you itch just to look at it.
 
 N:183:Giant white dragon fly
 A:GtWhiteDrFly
-G:F:TERM_SLATE
+G:F:TERM_WHITE
 I:110:3d8:12:20:50
 W:13:2:0:10
 T:17:56:16:23
@@ -2561,7 +2561,7 @@ D:It is a large fly that drips frost.
 
 N:184:Killer brown beetle
 A:Brown beetle
-G:K:TERM_L_RED
+G:K:TERM_UMBER
 I:110:13d8:10:40:30
 W:13:1:0:38
 T:19:17:18:0
@@ -2572,7 +2572,7 @@ D:It is a vicious insect with a tough carapace.
 
 N:185:Creeping mithril coins
 A:CreepngMthrl
-G:$:TERM_WHITE
+G:$:TERM_L_BLUE
 I:110:20d8:5:50:10
 W:13:3:0:45
 T:5:92:14:3
@@ -2587,7 +2587,7 @@ D: being picked up.
 
 N:186:Black orc
 A:Black orc
-G:o:TERM_COPPER
+G:o:TERM_L_DARK
 I:110:12d10:20:36:20
 W:13:1:0:45
 T:18:26:26:30
@@ -2602,7 +2602,7 @@ D:He is a large orc with powerful arms and deep black skin.
 
 N:187:Ogre
 A:Ogre
-G:O:TERM_LIGHT_GRAY
+G:O:TERM_L_UMBER
 I:110:13d9:20:33:30
 W:13:2:0:50
 T:13:14:18:16
@@ -2614,7 +2614,7 @@ D:A hideous, smallish giant that is often found near or with orcs.
 
 N:188:Illusionist
 A:Illusionist
-G:p:TERM_BLUE
+G:p:TERM_L_RED
 I:120:12d8:20:10:10
 W:13:2:37:50
 T:4:17:28:10
@@ -2629,7 +2629,7 @@ D:A deceptive spell caster.
 
 N:189:Drider
 A:Drider
-G:S:TERM_SLATE
+G:S:TERM_BLUE
 I:110:10d13:8:30:80
 W:13:2:37:55
 T:19:26:20:5
@@ -2644,7 +2644,7 @@ D:A dark elven torso merged with the bloated form of a giant spider.
 
 N:190:Boldor, King of the Yeeks
 A:Boldor
-G:y:TERM_GREEN
+G:y:TERM_VIOLET
 I:120:18d10:18:24:10
 W:13:3:56:200
 T:21:8:30:22
@@ -2663,7 +2663,7 @@ D:A great yeek, powerful in magic and sorcery, but a yeek all the same.
 
 N:191:Blue icky thing
 A:BlueIckyThng
-G:i:TERM_WHITE
+G:i:TERM_BLUE
 I:100:10d6:15:20:20
 W:14:4:37:20
 T:14:84:25:18
@@ -2681,7 +2681,7 @@ D: but evil cunning.  It hungers for food, and you look tasty.
 
 N:192:Ochre jelly
 A:Ochre jelly
-G:j:TERM_TAUPE
+G:j:TERM_L_UMBER
 I:120:13d8:12:18:1
 W:14:3:0:40
 T:15:8:25:29
@@ -2697,7 +2697,7 @@ D: it rests on.
 
 N:193:Warg
 A:Warg
-G:C:TERM_LIGHT_GRAY
+G:C:TERM_SLATE
 I:120:8d8:20:20:40
 W:14:2:0:40
 T:16:46:15:3
@@ -2708,7 +2708,7 @@ D:It is a large wolf with eyes full of cunning.
 
 N:194:Druid
 A:Druid
-G:p:TERM_WHITE
+G:p:TERM_L_GREEN
 I:110:12d12:20:10:10
 W:14:2:37:50
 T:4:18:28:11
@@ -2725,7 +2725,7 @@ D:A priest devoted to Nature.
 
 N:195:Flesh golem
 A:Flesh golem
-G:g:TERM_YELLOW
+G:g:TERM_L_RED
 I:110:12d8:12:30:10
 W:14:2:0:50
 T:18:0:24:18
@@ -2738,7 +2738,7 @@ D:A shambling humanoid monster with long scars.
 
 N:196:Lurker
 A:Lurker
-G:.:TERM_PINK
+G:.:TERM_WHITE
 I:110:20d10:30:25:10
 W:14:3:0:80
 T:0:0:14:13
@@ -2752,7 +2752,7 @@ D: victims by enveloping them within its perfectly disguised form.
 
 N:197:Ufthak of Cirith Ungol
 A:Ufthak
-G:o:TERM_VIOLET
+G:o:TERM_JUNGLE_GREEN
 I:110:32d10:20:50:20
 W:14:3:0:250
 T:21:9:26:31
@@ -2769,7 +2769,7 @@ D: of spiders.
 
 N:198:Magic mushroom patch
 A:MgcMshrmPtch
-G:,:TERM_L_UMBER
+G:,:TERM_L_BLUE
 I:135:3d3:40:10:0
 W:15:2:50:10
 T:14:91:14:11
@@ -2786,7 +2786,7 @@ D:Yum!  It looks quite tasty.  It seems to glow with an unusual light.
 
 N:199:Giant tan bat
 A:GiantTanBat
-G:b:TERM_UMBER
+G:b:TERM_L_UMBER
 I:130:3d8:12:20:50
 W:15:2:0:18
 T:25:79:22:25
@@ -2800,7 +2800,7 @@ D: noise.
 
 N:200:Giant clear centipede
 A:GtClearCenti
-G:c:TERM_BLUE
+G:c:TERM_SNOW_WHITE
 I:110:5d8:12:30:30
 W:15:2:0:20
 T:17:38:23:3
@@ -2812,7 +2812,7 @@ D:It is about four feet long and carnivorous.
 
 N:201:Mirkwood spider
 A:MirkwoodSpdr
-G:S:TERM_BLUE
+G:S:TERM_GREEN
 I:120:9d8:15:25:80
 W:15:2:0:25
 T:15:54:20:7
@@ -2827,7 +2827,7 @@ D: it seeks to taste your juicy insides.
 
 N:202:Homunculus
 A:Homunculus
-G:u:TERM_BLUE
+G:u:TERM_YELLOW
 I:110:8d8:20:32:30
 W:15:3:0:40
 T:13:39:17:25
@@ -2840,7 +2840,7 @@ D:It is a small demonic spirit full of malevolence.
 
 N:203:Gnome mage
 A:Gnome mage
-G:h:TERM_NAVY_BLUE
+G:h:TERM_RED
 I:110:7d8:20:20:20
 W:15:2:28:40
 T:13:6:25:3
@@ -2855,7 +2855,7 @@ D:A mage of short stature.
 
 N:204:Clear hound
 A:Clear hound
-G:Z:TERM_WHITE
+G:Z:TERM_SNOW_WHITE
 I:110:6d6:30:30:0
 W:15:1:0:40
 T:16:58:21:29
@@ -2868,7 +2868,7 @@ D:A completely translucent hound.
 
 N:205:Wererat
 A:Wererat
-G:r:TERM_TAUPE
+G:r:TERM_L_DARK
 I:110:20d8:10:10:10
 W:15:2:27:45
 T:13:27:29:18
@@ -2885,7 +2885,7 @@ D: creature, relishing in filth and disease.
 
 N:206:Light hound
 A:Light hound
-G:Z:TERM_SLATE
+G:Z:TERM_ORANGE
 I:110:6d6:30:30:0
 W:15:1:0:45
 T:16:64:21:27
@@ -2901,7 +2901,7 @@ D: distance.
 
 N:207:Dark hound
 A:Dark hound
-G:Z:TERM_VIOLET
+G:Z:TERM_L_DARK
 I:110:6d6:30:30:0
 W:15:1:0:45
 T:16:66:21:28
@@ -2917,7 +2917,7 @@ D: its form.
 
 N:208:Half-orc
 A:Half-orc
-G:o:TERM_WHITE
+G:o:TERM_SLATE
 I:110:16d10:20:40:20
 W:15:2:0:50
 T:18:27:27:0
@@ -2932,7 +2932,7 @@ D: is generally believed to be responsible for this abomination.
 
 N:209:Clay golem
 A:Clay golem
-G:g:TERM_LIGHT_GRAY
+G:g:TERM_L_UMBER
 I:110:14d8:12:30:10
 W:15:2:0:60
 T:18:1:24:19
@@ -2946,7 +2946,7 @@ D:It is a massive animated statue made out of hardened clay.
 
 N:210:Giant tarantula
 A:Gt Tarantula
-G:S:TERM_GREEN
+G:S:TERM_ORANGE
 I:120:10d15:8:32:80
 W:15:3:0:70
 T:15:51:20:6
@@ -2959,7 +2959,7 @@ D:A giant spider with hairy black and red legs.
 
 N:211:Griffon
 A:Griffon
-G:H:TERM_ORANGE
+G:H:TERM_UMBER
 I:110:30d8:12:15:10
 W:15:1:0:70
 T:17:14:17:15
@@ -2971,7 +2971,7 @@ D:It is half lion, half eagle.  It flies menacingly towards you.
 
 N:212:Black ogre
 A:Black ogre
-G:O:TERM_BLUE
+G:O:TERM_L_DARK
 I:110:20d9:20:33:30
 W:15:2:0:75
 T:13:15:18:17
@@ -2984,7 +2984,7 @@ D:A massive orc-like figure with black skin and powerful arms.
 
 N:213:Guardian naga
 A:GuardianNaga
-G:n:TERM_GREEN
+G:n:TERM_L_BLUE
 I:110:24d11:20:65:120
 W:15:2:0:80
 T:16:16:26:20
@@ -2998,7 +2998,7 @@ D:A giant snake-like figure with a woman's torso.
 
 N:214:Hummerhorn
 A:Hummerhorn
-G:I:TERM_L_UMBER
+G:I:TERM_YELLOW
 I:120:2d2:8:14:10
 W:16:4:0:2
 T:15:48:16:25
@@ -3010,7 +3010,7 @@ D:A giant buzzing wasp, its stinger drips venom.
 
 N:215:Giant green dragon fly
 A:GtGreenDrFly
-G:F:TERM_BLUE
+G:F:TERM_GREEN
 I:110:5d8:12:20:50
 W:16:2:0:15
 T:17:57:16:24
@@ -3024,7 +3024,7 @@ D:A vast, foul-smelling dragonfly.
 
 N:216:Crebain
 A:Crebain
-G:B:TERM_RED
+G:B:TERM_TAUPE
 I:120:3d5:40:12:0
 W:16:4:15:20
 T:19:36:68:20
@@ -3040,7 +3040,7 @@ D: and now they seek to alert other evil creatures to your presence.
 
 N:217:Creeping opal gems
 A:CreepingOpal
-G:$:TERM_GREEN
+G:$:TERM_LIGHT_GRAY
 I:110:20d10:5:50:10
 W:16:3:0:45
 T:5:95:71:5
@@ -3073,7 +3073,7 @@ D:The chaotic evil master's favourite pet.
 
 N:219:Grizzly bear
 A:Grizzly bear
-G:q:TERM_WHITE
+G:q:TERM_L_UMBER
 I:110:12d12:10:35:10
 W:16:2:0:55
 T:19:32:63:3
@@ -3087,7 +3087,7 @@ D:A huge, beastly bear, more savage than most of its kind.
 
 N:220:Uruk
 A:Uruk
-G:o:TERM_VIOLET
+G:o:TERM_L_BLUE
 I:110:8d10:20:50:20
 W:16:1:0:60
 T:18:29:27:2
@@ -3103,7 +3103,7 @@ D: little.
 
 N:221:Umber hulk
 A:Umber hulk
-G:X:TERM_L_BROWN
+G:X:TERM_L_UMBER
 I:110:20d10:20:50:10
 W:16:1:0:75
 T:18:33:20:30
@@ -3139,7 +3139,7 @@ D: engulfed, and a few corpses as well.
 
 N:223:Ulfast, Son of Ulfang
 A:Ulfast
-G:p:TERM_BLUE
+G:p:TERM_L_BROWN
 I:110:34d10:20:40:40
 W:16:3:0:200
 T:21:10:28:12
@@ -3155,7 +3155,7 @@ D:A short and swarthy Easterling.
 
 N:224:Imp
 A:Imp
-G:u:TERM_YELLOW
+G:u:TERM_GREEN
 I:110:6d8:20:30:20
 W:17:2:50:55
 T:13:42:17:27
@@ -3172,7 +3172,7 @@ D:The lawful evil master's favourite pet.
 
 N:225:Water spirit
 A:Water spirit
-G:E:TERM_ORANGE_PEEL
+G:E:TERM_BLUE
 I:120:9d8:12:28:40
 W:17:2:0:58
 T:15:22:16:4
@@ -3186,7 +3186,7 @@ D:A whirlpool of sentient liquid.
 
 N:226:Giant red scorpion
 A:GtRedScorpn
-G:S:TERM_SNOW_WHITE
+G:S:TERM_RED
 I:110:11d8:12:44:20
 W:17:1:0:62
 T:18:72:20:12
@@ -3198,7 +3198,7 @@ D:It is fast and poisonous.
 
 N:227:Earth spirit
 A:Earth spirit
-G:E:TERM_BLUE
+G:E:TERM_UMBER
 I:120:13d8:10:40:50
 W:17:2:0:64
 T:15:23:16:5
@@ -3212,7 +3212,7 @@ D:A whirling form of sentient rock.
 
 N:228:Forest troll
 A:Forest troll
-G:T:TERM_TAUPE
+G:T:TERM_GREEN
 I:110:20d10:20:50:40
 W:17:1:0:70
 T:18:46:20:14
@@ -3226,7 +3226,7 @@ D:He is green skinned and ugly.
 
 N:229:2-headed hydra
 A:2HeadedHydra
-G:M:TERM_GREEN
+G:M:TERM_UMBER
 I:110:100d3:20:60:20
 W:17:2:17:80
 T:16:33:19:24
@@ -3241,7 +3241,7 @@ D:A strange reptilian hybrid with two heads, guarding its hoard.
 
 N:230:Nár, the Dwarf
 A:Nár
-G:h:TERM_BLUE
+G:h:TERM_YELLOW
 I:110:45d10:25:70:25
 W:17:2:63:250
 T:21:11:25:4
@@ -3262,7 +3262,7 @@ D: convenient target to vent his anger.
 
 N:231:Giant black dragon fly
 A:GtBlackDrFly
-G:F:TERM_YELLOW
+G:F:TERM_SLATE
 I:120:3d8:12:20:50
 W:18:2:0:15
 T:17:58:16:26
@@ -3276,7 +3276,7 @@ D:The size of a large bird, this fly drips caustic acid.
 
 N:232:Blink dog
 A:Blink dog
-G:C:TERM_LIGHT_GRAY
+G:C:TERM_L_BLUE
 I:120:8d8:20:20:10
 W:18:2:45:45
 T:16:47:15:4
@@ -3290,7 +3290,7 @@ D: and fade in front of your very eyes.
 
 N:233:Potion mimic
 A:Potion mimic
-G:!:TERM_UMBER
+G:!:TERM_WHITE
 I:110:10d10:25:30:0
 W:18:3:51:60
 T:5:100:72:0
@@ -3307,7 +3307,7 @@ D: to lure unsuspecting adventurers within reach of its venomous claws.
 
 N:234:Fire hound
 A:Fire hound
-G:Z:TERM_UMBER
+G:Z:TERM_RED
 I:110:10d6:30:30:0
 W:18:1:0:70
 T:16:61:21:30
@@ -3324,7 +3324,7 @@ D: feel a furnace heat radiating from the creature.
 
 N:235:Cold hound
 A:Cold hound
-G:Z:TERM_YELLOW
+G:Z:TERM_WHITE
 I:110:10d6:30:30:0
 W:18:1:0:70
 T:16:68:21:31
@@ -3342,7 +3342,7 @@ D: in the air.
 
 N:236:Energy hound
 A:Energy hound
-G:Z:TERM_L_RED
+G:Z:TERM_BLUE
 I:110:10d6:30:30:0
 W:18:1:0:70
 T:16:75:22:0
@@ -3359,7 +3359,7 @@ D: sting your fingers as energy builds up in the air around you.
 
 N:237:Fire spirit
 A:Fire spirit
-G:E:TERM_L_DARK
+G:E:TERM_RED
 I:120:10d9:16:30:20
 W:18:2:0:75
 T:15:24:16:6
@@ -3373,7 +3373,7 @@ D:A whirlwind of sentient flame.
 
 N:238:Shambling mound
 A:ShamblingMnd
-G:,:TERM_SKY_BLUE
+G:,:TERM_GREEN
 I:110:20d6:20:16:40
 W:18:2:21:75
 T:14:95:14:12
@@ -3390,7 +3390,7 @@ D: stench, waking all it nears.
 
 N:239:Orc captain
 A:Orc captain
-G:o:TERM_L_UMBER
+G:o:TERM_ORANGE
 I:110:20d10:20:59:20
 W:18:3:0:80
 T:18:28:27:1
@@ -3406,7 +3406,7 @@ D:An armoured orc with an air of authority.
 
 N:240:Evil eye
 A:Evil eye
-G:e:TERM_RED
+G:e:TERM_GREEN
 I:110:15d8:2:6:10
 W:18:3:56:80
 T:16:9:48:11
@@ -3422,7 +3422,7 @@ D: unable to do anything except approach it in horrified fascination.
 
 N:241:Neekerbreeker
 A:Nkerbreeker
-G:I:TERM_RED
+G:I:TERM_L_DARK
 I:120:3d6:8:18:10
 W:19:4:15:4
 T:15:41:62:6
@@ -3455,7 +3455,7 @@ D: noise pervades the air.
 
 N:243:Creeping sapphire gems
 A:CreepngSapph
-G:$:TERM_RED
+G:$:TERM_BLUE
 I:115:20d13:5:50:10
 W:19:3:0:50
 T:5:96:71:6
@@ -3470,7 +3470,7 @@ D: tiny legs.
 
 N:244:Red mold
 A:Red mold
-G:m:TERM_RASPBERRY
+G:m:TERM_RED
 I:110:17d8:2:16:70
 W:19:1:0:64
 T:14:68:26:14
@@ -3483,7 +3483,7 @@ D: flame.
 
 N:245:Stone golem
 A:Stone golem
-G:g:TERM_L_RED
+G:g:TERM_LIGHT_GRAY
 I:100:28d8:12:75:10
 W:19:2:0:100
 T:18:2:24:20
@@ -3497,7 +3497,7 @@ D:It is a massive animated statue.
 
 N:246:Shagrat, the Orc Captain
 A:Shagrat
-G:o:TERM_L_RED
+G:o:TERM_LIME_GREEN
 I:115:40d10:20:60:20
 W:19:2:0:400
 T:21:12:27:3
@@ -3531,7 +3531,7 @@ D: Minas Morgul.
 
 N:248:Water vortex
 A:Water vortex
-G:v:TERM_LIGHT_GRAY
+G:v:TERM_SLATE
 I:110:9d9:100:30:0
 W:20:1:0:25
 T:18:37:29:31
@@ -3546,7 +3546,7 @@ D:A caustic spinning whirlpool of water.
 
 N:249:Ranger
 A:Ranger
-G:p:TERM_GREEN
+G:p:TERM_LIGHT_GRAY
 I:110:15d11:20:40:40
 W:20:1:45:55
 T:4:44:28:3
@@ -3563,7 +3563,7 @@ D: with minor spellcasting skills, and animals come to do his bidding.
 
 N:250:Paladin
 A:Paladin
-G:p:TERM_L_DARK
+G:p:TERM_SNOW_WHITE
 I:110:15d11:20:40:40
 W:20:1:28:55
 T:4:39:13:28
@@ -3580,7 +3580,7 @@ D: enemy.
 
 N:251:Phase spider
 A:Phase spider
-G:S:TERM_L_BROWN
+G:S:TERM_L_BLUE
 I:120:6d8:15:25:80
 W:20:2:52:60
 T:15:50:20:9
@@ -3597,7 +3597,7 @@ D: half-seen in the corner of one eye.
 
 N:252:Sabre-tooth tiger
 A:Sabre-toothT
-G:f:TERM_L_GREEN
+G:f:TERM_YELLOW
 I:120:20d14:40:50:0
 W:20:2:0:120
 T:16:55:24:15
@@ -3612,7 +3612,7 @@ D: lacerate even the strongest armour.
 
 N:253:Quylthulg
 A:Quylthulg
-G:Q:TERM_L_DARK
+G:Q:TERM_YELLOW
 I:110:6d8:10:1:0
 W:20:1:78:125
 T:19:0:18:31
@@ -3626,7 +3626,7 @@ D:It is a strange pulsing mound of flesh.
 
 N:254:Werewolf
 A:Werewolf
-G:C:TERM_YELLOW
+G:C:TERM_TAUPE
 I:110:20d22:15:30:70
 W:20:1:0:150
 T:15:85:15:5
@@ -3640,7 +3640,7 @@ D:It is a huge wolf with eyes that glow with manly intelligence.
 
 N:255:Earth hound
 A:Earth hound
-G:Z:TERM_L_RED
+G:Z:TERM_UMBER
 I:110:15d8:30:30:0
 W:20:1:0:200
 T:16:74:22:1
@@ -3657,7 +3657,7 @@ D: clearly presents.  Your flesh tingles as it approaches.
 
 N:256:Air hound
 A:Air hound
-G:Z:TERM_L_UMBER
+G:Z:TERM_GREEN
 I:110:15d8:30:30:0
 W:20:1:0:200
 T:16:63:22:2
@@ -3675,7 +3675,7 @@ D: seemingly walking on air.  Noxious gases sting your throat.
 
 N:257:Water hound
 A:Water hound
-G:Z:TERM_VIOLET
+G:Z:TERM_SLATE
 I:110:15d8:30:30:0
 W:20:1:0:200
 T:16:71:22:3
@@ -3693,7 +3693,7 @@ D: acrid smell of acid rises from the dog's pelt.
 
 N:258:Chimaera
 A:Chimaera
-G:H:TERM_UMBER
+G:H:TERM_RED
 I:110:20d15:12:15:10
 W:20:2:0:200
 T:19:29:17:16
@@ -3710,7 +3710,7 @@ D: all three beasts.
 
 N:259:Dark elven lord
 A:DrkElvenLord
-G:h:TERM_UMBER
+G:h:TERM_SLATE
 I:120:18d15:20:40:30
 W:20:2:51:500
 T:13:7:25:5
@@ -3726,7 +3726,7 @@ D:A dark elven figure in armour and radiating evil power.
 
 N:260:Bolg, Son of Azog
 A:Bolg
-G:o:TERM_L_UMBER
+G:o:TERM_VIOLET
 I:120:50d10:20:50:20
 W:20:4:0:800
 T:21:14:27:5
@@ -3745,7 +3745,7 @@ D: and fast, but fortunately blessed with orcish brains.
 
 N:261:Blue dragon bat
 A:BlueDragBat
-G:b:TERM_SLATE
+G:b:TERM_BLUE
 I:130:4d4:12:26:50
 W:21:1:0:10
 T:16:3:22:26
@@ -3759,7 +3759,7 @@ D:It is a glowing blue bat with a sharp tail.
 
 N:262:Fire vortex
 A:Fire vortex
-G:v:TERM_L_BLUE
+G:v:TERM_RED
 I:110:9d9:100:30:0
 W:21:1:0:25
 T:25:86:29:30
@@ -3774,7 +3774,7 @@ D:A whirling maelstrom of fire.
 
 N:263:Cold vortex
 A:Cold vortex
-G:v:TERM_YELLOW
+G:v:TERM_WHITE
 I:110:9d9:100:30:0
 W:21:1:0:25
 T:18:38:30:0
@@ -3789,7 +3789,7 @@ D:A twisting whirlpool of frost.
 
 N:264:Mummified orc
 A:MummifiedOrc
-G:z:TERM_SLATE
+G:z:TERM_WHITE
 I:110:15d8:20:28:75
 W:21:1:0:56
 T:17:48:18:13
@@ -3804,7 +3804,7 @@ D:It is an orcish figure covered in wrappings.
 
 N:265:Scroll mimic
 A:Scroll mimic
-G:?:TERM_RED
+G:?:TERM_WHITE
 I:110:10d14:30:40:0
 W:21:3:56:70
 T:5:101:72:1
@@ -3823,7 +3823,7 @@ D: unsuspecting adventurers within reach of its venomous claws.
 
 N:266:Energy vortex
 A:EnergyVortex
-G:v:TERM_WHITE
+G:v:TERM_BLUE
 I:110:9d9:100:30:0
 W:21:1:56:100
 T:18:39:30:1
@@ -3838,7 +3838,7 @@ D:A shimmering tornado of air, sparks crackle along its length.
 
 N:267:Sasquatch
 A:Sasquatch
-G:Y:TERM_TAUPE
+G:Y:TERM_GREEN
 I:120:20d19:15:40:10
 W:21:3:0:180
 T:14:40:21:26
@@ -3852,7 +3852,7 @@ D:A tall shaggy, furry humanoid, it could call the yeti brother.
 
 N:268:3-headed hydra
 A:3HeadedHydra
-G:M:TERM_L_GREEN
+G:M:TERM_ORANGE
 I:115:100d5:20:65:20
 W:21:2:18:350
 T:16:34:19:25
@@ -3868,7 +3868,7 @@ D:A strange reptilian hybrid with three heads, guarding its hoard.
 
 N:269:Lugdush, the Uruk
 A:Lugdush
-G:o:TERM_LIGHT_GRAY
+G:o:TERM_NAVY_BLUE
 I:115:64d10:20:90:20
 W:21:4:0:550
 T:21:15:27:7
@@ -3884,7 +3884,7 @@ D:A large and powerful orc, captain of one of Saruman's orcish regiments.
 
 N:270:Giant yellow scorpion
 A:Gt YllwScorp
-G:S:TERM_WHITE
+G:S:TERM_YELLOW
 I:110:12d8:12:38:20
 W:22:1:0:60
 T:18:73:20:10
@@ -3896,7 +3896,7 @@ D:It is a giant scorpion with a sharp stinger.
 
 N:271:Killer stag beetle
 A:KlrStagBtle
-G:K:TERM_LIGHT_GRAY
+G:K:TERM_GREEN
 I:110:15d8:12:55:30
 W:22:1:0:80
 T:19:18:18:1
@@ -3908,7 +3908,7 @@ D:It is a giant beetle with vicious claws.
 
 N:272:Iron golem
 A:Iron golem
-G:g:TERM_L_DARK
+G:g:TERM_SLATE
 I:110:80d12:12:80:10
 W:22:2:50:160
 T:18:3:24:21
@@ -3923,7 +3923,7 @@ D:It is a massive metal statue that moves steadily towards you.
 
 N:273:Ice ogre
 A:Ice ogre
-G:O:TERM_ORANGE
+G:O:TERM_WHITE
 I:110:40d10:25:40:0
 W:22:1:0:200
 T:13:96:18:18
@@ -3938,7 +3938,7 @@ D:He is a white ogre with powerfully clawed hands.
 
 N:274:Wyvern
 A:Wyvern
-G:d:TERM_L_GREEN
+G:d:TERM_LIME_GREEN
 I:120:5d80:20:66:60
 W:22:2:0:250
 T:12:72:32:23
@@ -3952,7 +3952,7 @@ D:A fast-moving and deadly draconian animal.  Beware its poisonous sting!
 
 N:275:Uglúk, the Uruk
 A:Uglúk
-G:o:TERM_TAUPE
+G:o:TERM_BLUE
 I:115:72d10:20:95:20
 W:22:3:0:600
 T:21:16:27:6
@@ -3970,7 +3970,7 @@ D: horde.
 
 N:276:Black ooze
 A:Black ooze
-G:j:TERM_UMBER
+G:j:TERM_TAUPE
 I:90:6d8:10:6:1
 W:23:1:0:7
 T:15:2:25:31
@@ -3985,7 +3985,7 @@ D:It is a strangely moving puddle.
 
 N:277:Giant bronze dragon fly
 A:GtBronzDrFly
-G:F:TERM_WHITE
+G:F:TERM_L_UMBER
 I:120:3d8:12:20:50
 W:23:2:0:15
 T:17:60:16:28
@@ -3999,7 +3999,7 @@ D:This vast gleaming bronze fly has wings which beat mesmerically fast.
 
 N:278:Giant silver ant
 A:GtSilverAnt
-G:a:TERM_YELLOW
+G:a:TERM_SILVER
 I:110:9d8:10:38:40
 W:23:1:0:45
 T:17:2:48:7
@@ -4010,7 +4010,7 @@ D:A giant silver ant with a caustic bite.
 
 N:279:Creeping ruby gems
 A:CreepingRuby
-G:$:TERM_SLATE
+G:$:TERM_RED
 I:115:20d17:5:50:10
 W:23:3:0:55
 T:5:97:71:7
@@ -4026,7 +4026,7 @@ D: tiny legs.
 
 N:280:Hardened warrior
 A:HardenedWarr
-G:p:TERM_YELLOW
+G:p:TERM_L_UMBER
 I:110:15d11:20:40:40
 W:23:1:0:60
 T:4:19:28:13
@@ -4041,7 +4041,7 @@ D:A scarred warrior who moves with confidence.
 
 N:281:Red dragon bat
 A:RedDragonBat
-G:b:TERM_BLUE
+G:b:TERM_RED
 I:130:4d8:12:28:50
 W:23:1:0:60
 T:16:4:22:27
@@ -4066,7 +4066,7 @@ D:It is looking for prey.
 
 N:283:Master rogue
 A:Master rogue
-G:p:TERM_L_DARK
+G:p:TERM_BLUE
 I:115:15d9:20:30:40
 W:23:2:56:110
 T:4:20:28:14
@@ -4082,7 +4082,7 @@ D:A thief of great power and shifty speed.
 
 N:284:Azog, King of the Uruk-hai
 A:Azog
-G:o:TERM_LIGHT_GRAY
+G:o:TERM_PURPLE
 I:120:90d10:20:80:20
 W:23:5:0:1000
 T:21:17:27:8
@@ -4100,7 +4100,7 @@ D: bigger than his head.
 
 N:285:Giant firefly
 A:GiantFirefly
-G:I:TERM_ORANGE
+G:I:TERM_RED
 I:120:3d2:8:18:10
 W:24:4:0:1
 T:15:46:48:13
@@ -4113,7 +4113,7 @@ D: can barely see through them.
 
 N:286:Vampire bat
 A:Vampire bat
-G:b:TERM_RED_LAVA
+G:b:TERM_L_DARK
 I:120:9d10:12:40:50
 W:24:2:0:50
 T:16:0:22:28
@@ -4127,7 +4127,7 @@ D:A blood-sucking bat that flies at your neck hungrily.
 
 N:287:Banshee
 A:Banshee
-G:G:TERM_GREEN
+G:G:TERM_BLUE
 I:120:8d10:20:24:10
 W:24:2:60:60
 T:20:1:17:1
@@ -4143,7 +4143,7 @@ D:It is a ghostly woman's form that wails mournfully.
 
 N:288:Mummified human
 A:Mummy Human
-G:z:TERM_RASPBERRY
+G:z:TERM_WHITE
 I:110:17d9:20:34:60
 W:24:1:0:70
 T:17:49:18:14
@@ -4157,7 +4157,7 @@ D:It is a human form encased in mouldy wrappings.
 
 N:289:Forest wight
 A:Forest wight
-G:W:TERM_LIGHT_GRAY
+G:W:TERM_GREEN
 I:110:12d10:20:30:30
 W:24:1:21:140
 T:20:9:21:3
@@ -4174,7 +4174,7 @@ D:It is a ghostly apparition with a humanoid form.
 
 N:290:Werebear
 A:Werebear
-G:q:TERM_TAUPE
+G:q:TERM_L_DARK
 I:110:25d25:20:50:20
 W:24:2:0:200
 T:19:33:49:22
@@ -4191,7 +4191,7 @@ D: of the bear makes for a dangerous enemy.
 
 N:291:Sangahyando of Umbar
 A:Sangahyando
-G:p:TERM_PINK
+G:p:TERM_L_BROWN
 I:110:80d10:25:80:25
 W:24:2:71:400
 T:21:20:28:15
@@ -4210,7 +4210,7 @@ D:A Black Númenórean with a blacker heart.
 
 N:292:Angamaitë of Umbar
 A:Angamaitë
-G:p:TERM_BLUE
+G:p:TERM_L_UMBER
 I:110:80d10:25:80:25
 W:24:2:71:400
 T:21:21:28:16
@@ -4229,7 +4229,7 @@ D:A Black Númenórean who hates the men of the west.
 
 N:293:4-headed hydra
 A:4HeadedHydra
-G:M:TERM_L_UMBER
+G:M:TERM_YELLOW
 I:115:100d6:20:70:20
 W:24:2:21:450
 T:16:35:19:26
@@ -4246,7 +4246,7 @@ D:A strange reptilian hybrid with four heads, guarding its hoard.
 
 N:294:Ibun, Son of Mîm
 A:Ibun
-G:h:TERM_WHITE
+G:h:TERM_ORANGE_PEEL
 I:115:82d10:20:80:10
 W:24:2:63:600
 T:21:18:25:6
@@ -4265,7 +4265,7 @@ D: little being, full of mischief.
 
 N:295:Khim, Son of Mîm
 A:Khim
-G:h:TERM_VIOLET
+G:h:TERM_ORANGE_PEEL
 I:115:82d10:20:80:10
 W:24:2:63:600
 T:21:19:25:7
@@ -4284,7 +4284,7 @@ D: little being, full of mischief.
 
 N:296:Giant brown tick
 A:GtBrownTick
-G:S:TERM_WHITE
+G:S:TERM_UMBER
 I:110:18d8:12:50:20
 W:25:2:0:47
 T:15:43:69:27
@@ -4296,7 +4296,7 @@ D:It is moving slowly towards you.
 
 N:297:Carrion crawler
 A:CarrionCrwlr
-G:c:TERM_RED
+G:c:TERM_ORANGE
 I:110:20d12:15:40:10
 W:25:2:0:60
 T:17:39:23:4
@@ -4309,7 +4309,7 @@ D: its head.
 
 N:298:Stone troll
 A:Stone troll
-G:T:TERM_VIOLET
+G:T:TERM_LIGHT_GRAY
 I:110:23d10:20:40:50
 W:25:1:0:85
 T:18:47:20:15
@@ -4323,7 +4323,7 @@ D:He is a giant troll with scabrous black skin.
 
 N:299:Killer red beetle
 A:KlrRedBeetle
-G:K:TERM_VIOLET
+G:K:TERM_RED
 I:110:20d8:14:50:30
 W:25:1:0:90
 T:19:20:18:3
@@ -4334,7 +4334,7 @@ D:It is a giant beetle with poisonous mandibles.
 
 N:300:Hill giant
 A:Hill giant
-G:P:TERM_TAUPE
+G:P:TERM_L_UMBER
 I:110:30d15:20:45:50
 W:25:1:0:150
 T:18:10:18:22
@@ -4348,7 +4348,7 @@ D:A ten foot tall humanoid with powerful muscles.
 
 N:301:Wereworm
 A:Wereworm
-G:w:TERM_RED
+G:w:TERM_TAUPE
 I:110:100d11:15:70:20
 W:25:3:0:300
 T:17:23:30:15
@@ -4363,7 +4363,7 @@ D: foul monster that breeds on death.
 
 N:302:Dark elven druid
 A:DarkElfDruid
-G:h:TERM_WHITE
+G:h:TERM_L_GREEN
 I:120:20d20:15:75:10
 W:25:3:63:500
 T:13:8:25:8
@@ -4381,7 +4381,7 @@ D:A powerful dark elf, with mighty nature-controlling enchantments.
 
 N:303:Púkelman
 A:Púkelman
-G:g:TERM_VIOLET
+G:g:TERM_TAUPE
 I:110:80d12:12:80:10
 W:25:3:56:600
 T:18:4:24:22
@@ -4398,7 +4398,7 @@ D: strides towards you with deadly intent.
 
 N:304:White wraith
 A:White wraith
-G:W:TERM_L_GREEN
+G:W:TERM_WHITE
 I:110:15d8:20:40:10
 W:26:1:26:20
 T:20:76:21:4
@@ -4415,7 +4415,7 @@ D:It is a tangible but ghostly form made of white fog.
 
 N:305:Disenchanter bat
 A:DisenchanBat
-G:b:TERM_L_DARK
+G:b:TERM_VIOLET
 I:130:6d8:12:28:50
 W:26:4:0:75
 T:25:80:48:27
@@ -4428,7 +4428,7 @@ D:A giant bat which feeds on raw magical energy.
 
 N:306:Giant grey ant
 A:GiantGreyAnt
-G:a:TERM_LIGHT_GRAY
+G:a:TERM_SLATE
 I:110:19d8:10:40:40
 W:26:1:0:90
 T:17:4:22:21
@@ -4439,7 +4439,7 @@ D:It is an ant encased in shaggy grey fur.
 
 N:307:Giant fire tick
 A:GtFireTick
-G:S:TERM_GREEN
+G:S:TERM_L_RED
 I:110:16d8:14:54:20
 W:26:1:0:90
 T:15:47:29:29
@@ -4451,7 +4451,7 @@ D:It is smoking and burning with great heat.
 
 N:308:Ghoul
 A:Ghoul
-G:z:TERM_UMBER
+G:z:TERM_L_UMBER
 I:110:15d10:30:30:20
 W:26:2:50:95
 T:20:63:59:12
@@ -4468,7 +4468,7 @@ D:Flesh is falling off in chunks from this decaying abomination.
 
 N:309:Displacer beast
 A:DisplacerBst
-G:f:TERM_SLATE
+G:f:TERM_L_DARK
 I:110:25d10:35:100:20
 W:26:2:0:100
 T:16:57:24:16
@@ -4483,7 +4483,7 @@ D: shoulders.
 
 N:310:Cave ogre
 A:Cave ogre
-G:O:TERM_GREEN
+G:O:TERM_UMBER
 I:110:30d9:20:33:30
 W:26:2:0:100
 T:13:16:18:18
@@ -4496,7 +4496,7 @@ D:A giant orc-like figure with an awesomely muscled frame.
 
 N:311:Creeping diamond gems
 A:Creepngdiamd
-G:$:TERM_GREEN
+G:$:TERM_WHITE
 I:120:20d25:5:150:10
 W:29:3:0:110
 T:5:98:71:8
@@ -4513,7 +4513,7 @@ D: tiny legs.
 
 N:312:Troll priest
 A:Troll priest
-G:T:TERM_PURPLE
+G:T:TERM_L_GREEN
 I:110:30d10:20:50:30
 W:26:1:35:120
 T:18:48:20:16
@@ -4530,7 +4530,7 @@ D:A troll who is so bright he knows how to read.
 
 N:313:Wolf chieftain
 A:WolfChieftan
-G:C:TERM_TAUPE
+G:C:TERM_L_DARK
 I:120:22d22:20:20:5
 W:26:5:15:120
 T:15:86:62:14
@@ -4549,7 +4549,7 @@ D: and whose howls strike fear into even the boldest heart.
 
 N:314:Half ogre
 A:Half ogre
-G:O:TERM_L_BLUE
+G:O:TERM_L_BROWN
 I:110:25d14:20:50:50
 W:26:1:0:250
 T:13:97:18:18
@@ -4563,7 +4563,7 @@ D:A large, ugly half-human looking for a fight.
 
 N:315:Ulwarth, Son of Ulfang
 A:Ulwarth
-G:p:TERM_VIOLET
+G:p:TERM_L_UMBER
 I:110:85d10:20:40:40
 W:26:4:0:500
 T:21:22:28:17
@@ -4578,7 +4578,7 @@ D:A short and swarthy Easterling.
 
 N:316:Creeping adamantite coins
 A:CreepngAdamt
-G:$:TERM_RED
+G:$:TERM_L_GREEN
 I:125:25d25:5:75:10
 W:30:3:0:130
 T:5:93:71:10
@@ -4595,7 +4595,7 @@ D: toward you on lots of tiny legs.
 
 N:317:Killer fire beetle
 A:KlrFireBeetl
-G:K:TERM_YELLOW
+G:K:TERM_L_RED
 I:110:22d8:14:45:30
 W:27:1:0:95
 T:19:21:18:4
@@ -4608,7 +4608,7 @@ D:It is a giant beetle wreathed in flames.
 
 N:318:Shimmering mold
 A:ShimerngMold
-G:m:TERM_LIGHT_GRAY
+G:m:TERM_BLUE
 I:110:32d8:2:24:70
 W:27:1:43:140
 T:14:75:34:19
@@ -4625,7 +4625,7 @@ D: with sparks.
 
 N:319:Algroth
 A:Algroth
-G:T:TERM_SNOW_WHITE
+G:T:TERM_ORANGE
 I:110:21d12:20:60:40
 W:27:1:0:150
 T:18:49:20:17
@@ -4639,7 +4639,7 @@ D:A powerful troll form.  Venom drips from its needlelike claws.
 
 N:320:Vampire
 A:Vampire
-G:V:TERM_PURPLE
+G:V:TERM_LIGHT_GRAY
 I:115:25d12:20:45:10
 W:27:1:78:185
 T:20:50:20:31
@@ -4660,7 +4660,7 @@ D: front teeth.
 
 N:321:Vibration hound
 A:VibrationHnd
-G:Z:TERM_L_DARK
+G:Z:TERM_YELLOW
 I:110:25d10:30:30:0
 W:27:2:0:250
 T:16:59:22:4
@@ -4678,7 +4678,7 @@ D: follow.  You can feel the earth resonating beneath your feet.
 
 N:322:Nexus hound
 A:Nexus hound
-G:Z:TERM_L_GREEN
+G:Z:TERM_VIOLET
 I:110:25d10:30:30:0
 W:27:2:0:250
 T:16:69:15:6
@@ -4713,7 +4713,7 @@ D:A hideous ogre wrapped in black sorcerous robes.
 
 N:324:Ogre shaman
 A:Ogre shaman
-G:O:TERM_GOLD
+G:O:TERM_L_GREEN
 I:110:25d12:20:55:30
 W:27:2:63:300
 T:13:18:18:21
@@ -4730,7 +4730,7 @@ D:It is an ogre wrapped in furs and covered in grotesque body paints.
 
 N:325:Gorgimaera
 A:Gorgimaera
-G:H:TERM_SLATE
+G:H:TERM_ORANGE
 I:110:25d20:12:55:10
 W:27:2:0:400
 T:19:30:17:17
@@ -4748,7 +4748,7 @@ D: attached to a lion's body.
 
 N:326:Colbran
 A:Colbran
-G:g:TERM_GREEN
+G:g:TERM_YELLOW
 I:120:80d12:12:80:10
 W:27:2:56:900
 T:18:5:24:23
@@ -4766,7 +4766,7 @@ D: about you.
 
 N:327:Mîm, Betrayer of Túrin
 A:Mîm
-G:h:TERM_LIGHT_GRAY
+G:h:TERM_ORANGE_PEEL
 I:120:11d100:20:80:20
 W:27:4:78:1100
 T:21:23:25:9
@@ -4787,7 +4787,7 @@ D: been hunted nearly to extinction by the High Elves.
 
 N:328:Spirit naga
 A:Spirit naga
-G:n:TERM_LIGHT_GRAY
+G:n:TERM_WHITE
 I:110:30d15:20:75:120
 W:28:2:56:60
 T:16:17:26:21
@@ -4806,7 +4806,7 @@ D: the most powerful of its kind.
 
 N:329:Bat of Gorgoroth
 A:BatGorgoroth
-G:b:TERM_BLUE
+G:b:TERM_GREEN
 I:120:20d10:20:30:30
 W:28:3:21:100
 T:25:81:70:20
@@ -4823,7 +4823,7 @@ D: creature seeks livelier prey.
 
 N:330:Mage
 A:Mage
-G:p:TERM_SLATE
+G:p:TERM_RED
 I:110:15d8:20:40:10
 W:28:1:84:150
 T:4:22:28:20
@@ -4839,7 +4839,7 @@ D:A mage of some power - you can tell by the size of his hat.
 
 N:331:Spectator
 A:Spectator
-G:e:TERM_PURPLE
+G:e:TERM_L_BLUE
 I:110:15d13:30:1:5
 W:28:2:63:150
 T:16:12:32:5
@@ -4857,7 +4857,7 @@ D: protruding from the top of its body.
 
 N:332:Frost giant
 A:Frost giant
-G:P:TERM_ORANGE
+G:P:TERM_WHITE
 I:110:32d15:20:50:50
 W:28:1:0:180
 T:18:11:18:23
@@ -4890,7 +4890,7 @@ D: mind.
 
 N:334:Ice troll
 A:Ice troll
-G:T:TERM_UMBER
+G:T:TERM_WHITE
 I:110:24d10:20:56:50
 W:28:1:0:200
 T:18:50:20:18
@@ -4906,7 +4906,7 @@ D:He is a white troll with powerfully clawed hands.
 
 N:335:Two headed ogre
 A:2HeadedOgre
-G:O:TERM_VIOLET
+G:O:TERM_YELLOW
 I:110:21d9:20:33:30
 W:28:1:0:200
 T:13:98:18:18
@@ -4921,7 +4921,7 @@ D:A large, hideous giant with two heads.
 
 N:336:Black knight
 A:Black knight
-G:p:TERM_L_BLUE
+G:p:TERM_SLATE
 I:120:30d10:20:70:10
 W:28:1:50:240
 T:4:21:28:18
@@ -4938,7 +4938,7 @@ D: menacingly.
 
 N:337:Basilisk
 A:Basilisk
-G:R:TERM_PINK
+G:R:TERM_SLATE
 I:120:20d30:15:90:30
 W:28:3:0:300
 T:17:8:19:28
@@ -4956,7 +4956,7 @@ D: deeply at you and your soul starts to wilt!
 
 N:338:Uldor the Accursed
 A:Uldor
-G:p:TERM_TAUPE
+G:p:TERM_L_UMBER
 I:110:10d100:20:70:40
 W:28:4:78:600
 T:21:25:28:19
@@ -4976,7 +4976,7 @@ D: of the Battle of Unnumbered Tears in Morgoth's favour.
 
 N:339:Draebor, the Imp
 A:Draebor
-G:u:TERM_ORANGE
+G:u:TERM_VIOLET
 I:120:52d10:20:50:20
 W:28:5:91:750
 T:21:26:17:28
@@ -4997,7 +4997,7 @@ D:An intensely irritating git of a monster.
 
 N:340:Beorn, the Shape-Changer
 A:Beorn
-G:q:TERM_SILVER
+G:q:TERM_TAUPE
 I:120:20d70:25:60:25
 W:28:3:0:1000
 T:13:73:33:18
@@ -5017,7 +5017,7 @@ D: as he is now.
 
 N:341:Ring mimic
 A:Ring mimic
-G:=:TERM_GOLD
+G:=:TERM_WHITE
 I:120:10d35:30:60:100
 W:29:3:78:200
 T:5:102:72:3
@@ -5036,7 +5036,7 @@ D: unsuspecting adventurers within reach of its venomous claws.
 
 N:342:Purple worm
 A:Purple worm
-G:w:TERM_L_BROWN
+G:w:TERM_VIOLET
 I:110:65d8:14:65:30
 W:29:3:0:400
 T:17:24:30:16
@@ -5050,7 +5050,7 @@ D: acid and poison.
 
 N:343:Catoblepas
 A:Catoblepas
-G:q:TERM_RED
+G:q:TERM_GREEN
 I:110:30d10:15:55:40
 W:29:2:0:400
 T:19:27:29:11
@@ -5065,7 +5065,7 @@ D: looks likes the creation of some deranged alchemist.
 
 N:344:Young blue dragon
 A:YoungBlueDr
-G:d:TERM_GREEN
+G:d:TERM_BLUE
 I:110:27d10:20:50:70
 W:29:1:17:500
 T:12:8:23:13
@@ -5082,7 +5082,7 @@ D: deep blue in hue.  Sparks crackle along its length.
 
 N:345:Young white dragon
 A:YoungWhiteDr
-G:d:TERM_JUNGLE_GREEN
+G:d:TERM_WHITE
 I:110:27d10:20:50:70
 W:29:1:17:500
 T:12:10:23:14
@@ -5118,7 +5118,7 @@ D: deep green in hue.  Foul gas seeps through its scales.
 
 N:347:Young bronze dragon
 A:YoungBronzDr
-G:d:TERM_L_GREEN
+G:d:TERM_L_UMBER
 I:110:27d10:20:50:70
 W:29:1:17:500
 T:12:14:23:16
@@ -5136,7 +5136,7 @@ D: confuse you.
 
 N:348:5-headed hydra
 A:5HeadedHydra
-G:M:TERM_UMBER
+G:M:TERM_WHITE
 I:115:100d8:20:80:20
 W:29:2:44:650
 T:16:36:19:27
@@ -5153,7 +5153,7 @@ D:A strange reptilian hybrid with five heads.
 
 N:349:Giant blue ant
 A:Gt Blue Ant
-G:a:TERM_L_BLUE
+G:a:TERM_BLUE
 I:110:8d8:10:50:60
 W:30:2:0:80
 T:17:5:22:20
@@ -5164,7 +5164,7 @@ D:It is a giant ant that crackles with energy.
 
 N:350:Giant army ant
 A:GiantArmyAnt
-G:a:TERM_GREEN
+G:a:TERM_ORANGE
 I:120:19d6:10:40:40
 W:30:3:0:90
 T:25:78:22:21
@@ -5177,7 +5177,7 @@ D: hordes of them march.
 
 N:351:Ghast
 A:Ghast
-G:z:TERM_GREEN
+G:z:TERM_UMBER
 I:120:30d10:30:50:20
 W:30:3:50:130
 T:20:64:63:28
@@ -5196,7 +5196,7 @@ D: of them. It smells foul, and its bite carries a rotting disease.
 
 N:352:Grave wight
 A:Grave wight
-G:W:TERM_L_UMBER
+G:W:TERM_BLUE
 I:110:12d15:20:50:30
 W:30:1:26:150
 T:20:8:21:5
@@ -5213,7 +5213,7 @@ D:It is a ghostly form with eyes that haunt you.
 
 N:353:Killer slicer beetle
 A:KlrSlicerBtl
-G:K:TERM_VIOLET
+G:K:TERM_YELLOW
 I:110:25d10:14:60:30
 W:30:2:0:200
 T:19:22:18:5
@@ -5226,7 +5226,7 @@ D: carapace.
 
 N:354:Fire giant
 A:Fire giant
-G:P:TERM_ORANGE
+G:P:TERM_RED
 I:110:34d16:20:60:50
 W:30:1:0:220
 T:18:12:18:24
@@ -5241,7 +5241,7 @@ D:A glowing fourteen foot tall giant.  Flames drip from its red skin.
 
 N:355:Skeleton troll
 A:SkeltonTroll
-G:s:TERM_L_BLUE
+G:s:TERM_WHITE
 I:110:20d10:20:55:20
 W:30:1:0:225
 T:20:42:29:22
@@ -5256,7 +5256,7 @@ D:It is a troll skeleton animated by dark dweomers.
 
 N:356:Manticore
 A:Manticore
-G:H:TERM_TAUPE
+G:H:TERM_YELLOW
 I:120:25d10:12:15:10
 W:30:2:0:300
 T:19:31:17:18
@@ -5273,7 +5273,7 @@ D: vicious spikes.
 
 N:357:Ogre chieftain
 A:OgreChieftn
-G:O:TERM_SLATE
+G:O:TERM_BLUE
 I:120:30d15:20:55:30
 W:30:5:0:600
 T:13:23:48:30
@@ -5290,7 +5290,7 @@ D: rudely aside.
 
 N:358:Death watch beetle
 A:DeathWatchBt
-G:K:TERM_ORANGE
+G:K:TERM_L_DARK
 I:110:25d12:16:60:30
 W:31:3:0:220
 T:19:23:18:6
@@ -5302,7 +5302,7 @@ D:It is a giant beetle that produces a chilling sound.
 
 N:359:Ghost
 A:Ghost
-G:G:TERM_BLUE
+G:G:TERM_WHITE
 I:120:13d8:20:30:10
 W:31:1:56:350
 T:20:24:17:2
@@ -5321,7 +5321,7 @@ D:You don't believe in it.  But it believes in you...
 
 N:360:Mithril golem
 A:MithrilGolem
-G:g:TERM_GOLD
+G:g:TERM_L_BLUE
 I:110:80d15:12:100:10
 W:31:4:0:500
 T:18:6:24:24
@@ -5337,7 +5337,7 @@ D:It is a massive statue of purest mithril.  It looks expensive!
 
 N:361:Young red dragon
 A:YoungRedDrag
-G:d:TERM_LIME_GREEN
+G:d:TERM_RED
 I:110:30d10:20:60:70
 W:31:1:21:600
 T:12:13:23:29
@@ -5372,7 +5372,7 @@ D: darkest black hue.  Acid drips from its body.
 
 N:363:Young gold dragon
 A:YoungGoldDrg
-G:d:TERM_BLUE
+G:d:TERM_GOLD
 I:110:30d10:20:60:70
 W:31:1:21:700
 T:12:9:23:25
@@ -5389,7 +5389,7 @@ D: tarnished gold hue, and light is reflected from its form.
 
 N:364:Creeping garnet gems
 A:CreepngGarnt
-G:$:TERM_RED
+G:$:TERM_RED_LAVA
 I:100:15d8:5:33:10
 W:8:3:0:26
 T:5:94:71:4
@@ -5403,7 +5403,7 @@ D:It appears to be a pile of garnets, until it reaches out to attack you.
 
 N:365:Nexus quylthulg
 A:NexusQylthlg
-G:Q:TERM_ORANGE
+G:Q:TERM_VIOLET
 I:110:10d12:10:1:0
 W:32:1:78:150
 T:19:1:19:0
@@ -5417,7 +5417,7 @@ D:It is a very unstable, strange pulsing mound of flesh.
 
 N:366:Doombat
 A:Doombat
-G:b:TERM_JUNGLE_GREEN
+G:b:TERM_L_RED
 I:120:24d14:16:75:30
 W:32:2:0:250
 T:25:82:65:0
@@ -5432,7 +5432,7 @@ D: by flickering bright red flames.
 
 N:367:Ninja
 A:Ninja
-G:p:TERM_SLATE
+G:p:TERM_YELLOW
 I:120:13d12:20:60:10
 W:32:2:0:300
 T:4:23:28:22
@@ -5448,7 +5448,7 @@ D:A humanoid clothed in black who moves with blinding speed.
 
 N:368:Young chromatic dragon
 A:YoungChromDr
-G:d:TERM_ORANGE
+G:d:TERM_VIOLET
 I:110:32d10:20:60:70
 W:32:1:21:900
 T:12:15:23:24
@@ -5469,7 +5469,7 @@ D: shimmering and magical colours cover it.
 
 N:369:Lokkak, the Ogre Chieftain
 A:Lokkak
-G:O:TERM_SLATE
+G:O:TERM_VIOLET
 I:120:15d100:20:100:20
 W:32:2:0:1500
 T:21:24:18:20
@@ -5485,7 +5485,7 @@ D: the leader of a large band of violent ogres.
 
 N:370:Barrow wight
 A:Barrow wight
-G:W:TERM_SNOW_WHITE
+G:W:TERM_VIOLET
 I:110:15d10:20:40:10
 W:33:3:28:150
 T:20:10:21:6
@@ -5502,7 +5502,7 @@ D:It is a ghostly nightmare of a entity.
 
 N:371:Stone giant
 A:Stone giant
-G:P:TERM_GREEN
+G:P:TERM_LIGHT_GRAY
 I:110:35d18:20:75:50
 W:33:1:0:250
 T:18:13:18:25
@@ -5517,7 +5517,7 @@ D:It is eighteen feet tall and looking at you.
 
 N:372:Skeleton ettin
 A:SkeletonEttn
-G:s:TERM_NAVY_BLUE
+G:s:TERM_WHITE
 I:110:45d10:20:50:20
 W:33:1:0:325
 T:20:55:29:23
@@ -5533,7 +5533,7 @@ D:It is the animated form of a massive two-headed troll.
 
 N:373:Water elemental
 A:WaterElemtl
-G:E:TERM_VIOLET
+G:E:TERM_BLUE
 I:110:25d8:12:40:50
 W:33:2:63:325
 T:15:26:16:8
@@ -5551,7 +5551,7 @@ D:It is a towering tempest of water.
 
 N:374:Cave troll
 A:Cave troll
-G:T:TERM_L_DARK
+G:T:TERM_UMBER
 I:110:24d12:20:50:50
 W:33:1:0:350
 T:18:51:20:19
@@ -5566,7 +5566,7 @@ D:He is a vicious monster, feared for his ferocity.
 
 N:375:Shade
 A:Shade
-G:G:TERM_LIME_GREEN
+G:G:TERM_L_DARK
 I:120:14d20:20:30:10
 W:33:3:71:350
 T:20:21:17:3
@@ -5585,7 +5585,7 @@ D: creature with a deadly touch.
 
 N:376:Fire elemental
 A:FireElementl
-G:E:TERM_L_UMBER
+G:E:TERM_RED
 I:110:30d8:12:50:50
 W:33:2:35:350
 T:15:27:16:7
@@ -5602,7 +5602,7 @@ D:It is a towering inferno of flames.
 
 N:377:Mystic
 A:Mystic
-G:p:TERM_UMBER
+G:p:TERM_ORANGE
 I:120:35d10:30:50:5
 W:33:3:71:450
 T:4:24:28:23
@@ -5622,7 +5622,7 @@ D: any pain.
 
 N:378:Shadow drake
 A:Shadow drake
-G:d:TERM_LIME_GREEN
+G:d:TERM_L_GREEN
 I:110:30d10:20:70:70
 W:33:3:35:1100
 T:12:40:23:17
@@ -5642,7 +5642,7 @@ D: that chills the soul rather than the body.
 
 N:379:Ethereal drake
 A:EtherlDrake
-G:d:TERM_SNOW_WHITE
+G:d:TERM_ORANGE_PEEL
 I:110:40d10:20:70:70
 W:33:3:43:1200
 T:12:59:23:21
@@ -5661,7 +5661,7 @@ D: ethereal drake's eyes glare with white hatred from the shadows.
 
 N:380:Crystal drake
 A:CrystalDrake
-G:d:TERM_L_BROWN
+G:d:TERM_UMBER
 I:110:45d10:20:70:70
 W:33:3:50:1350
 T:12:44:24:0
@@ -5679,7 +5679,7 @@ D: dazzling your eyes with spectrums of colour.
 
 N:381:Chaos drake
 A:Chaos drake
-G:d:TERM_RED
+G:d:TERM_VIOLET
 I:110:50d10:20:70:70
 W:33:3:43:1400
 T:12:41:23:18
@@ -5698,7 +5698,7 @@ D: fair, as its form shimmers and changes in front of your eyes.
 
 N:382:Law drake
 A:Law drake
-G:d:TERM_ORANGE
+G:d:TERM_L_BLUE
 I:110:50d10:20:70:70
 W:33:3:43:1400
 T:12:60:23:19
@@ -5716,7 +5716,7 @@ D: disturb it.
 
 N:383:Balance drake
 A:BalanceDrake
-G:d:TERM_WHITE
+G:d:TERM_VIOLET
 I:110:60d10:20:70:70
 W:33:3:43:1600
 T:12:61:23:20
@@ -5735,7 +5735,7 @@ D: Balance, and despises your feeble efforts to destroy evil.
 
 N:384:Carrion crawler
 A:CarrionCrwlr
-G:c:TERM_SLATE
+G:c:TERM_ORANGE
 I:110:20d12:15:40:10
 W:34:2:0:100
 T:17:40:23:5
@@ -5749,7 +5749,7 @@ D: its head.
 
 N:385:Giant grey scorpion
 A:GiantGreyScr
-G:S:TERM_GREEN
+G:S:TERM_SLATE
 I:120:18d20:12:50:40
 W:34:4:0:275
 T:18:74:20:12
@@ -5761,7 +5761,7 @@ D:It is a giant grey scorpion.  It looks poisonous.
 
 N:386:Spectre
 A:Spectre
-G:G:TERM_EARTH_YELLOW
+G:G:TERM_L_UMBER
 I:120:14d20:20:30:10
 W:34:3:71:350
 T:20:7:17:4
@@ -5780,7 +5780,7 @@ D: pure evil deep within your body.
 
 N:387:Master thief
 A:Master thief
-G:p:TERM_L_RED
+G:p:TERM_SKY_BLUE
 I:130:18d10:20:30:40
 W:34:2:28:350
 T:4:25:28:24
@@ -5815,7 +5815,7 @@ D:It is a towering form composed of rock with fists of awesome power.
 
 N:389:Air elemental
 A:AirElemental
-G:E:TERM_ORANGE
+G:E:TERM_L_BLUE
 I:120:30d5:12:50:50
 W:34:2:35:390
 T:15:35:16:11
@@ -5833,7 +5833,7 @@ D:It is a towering tornado of winds.
 
 N:390:Half-troll
 A:Half-troll
-G:T:TERM_VIOLET
+G:T:TERM_L_UMBER
 I:110:25d14:20:50:50
 W:34:2:0:400
 T:18:52:20:20
@@ -5848,7 +5848,7 @@ D:A huge, ugly, half-human in search of plunder.
 
 N:391:Lich
 A:Lich
-G:L:TERM_SLATE
+G:L:TERM_ORANGE
 I:110:30d10:20:60:60
 W:34:2:63:1000
 T:20:16:18:8
@@ -5869,7 +5869,7 @@ D:It is a skeletal form dressed in robes.  It radiates vastly evil power.
 
 N:392:Ulfang the Black
 A:Ulfang
-G:p:TERM_TAUPE
+G:p:TERM_L_UMBER
 I:120:10d100:20:90:40
 W:34:5:43:1200
 T:21:31:28:25
@@ -5889,7 +5889,7 @@ D: secretly in the pay of Morgoth.
 
 N:393:Eog golem
 A:Eog golem
-G:g:TERM_JUNGLE_GREEN
+G:g:TERM_UMBER
 I:100:100d20:12:125:10
 W:34:4:0:1200
 T:18:7:24:25
@@ -5907,7 +5907,7 @@ D: powerful now.
 
 N:394:Mature white dragon
 A:MatWhiteDrag
-G:d:TERM_WHITE
+G:d:TERM_SNOW_WHITE
 I:115:40d10:20:70:70
 W:34:1:21:1200
 T:12:18:23:23
@@ -5924,7 +5924,7 @@ D:A large dragon, scales gleaming bright white.
 
 N:395:Mature blue dragon
 A:MatBlueDragn
-G:d:TERM_YELLOW
+G:d:TERM_NAVY_BLUE
 I:115:40d10:20:70:70
 W:34:1:21:1200
 T:12:16:23:26
@@ -5941,7 +5941,7 @@ D:A large dragon, scales tinted deep blue.
 
 N:396:Mature green dragon
 A:MatGreenDrag
-G:d:TERM_SLATE_GRAY
+G:d:TERM_LIME_GREEN
 I:115:40d10:20:70:70
 W:34:1:21:1200
 T:12:19:23:27
@@ -5958,7 +5958,7 @@ D:A large dragon, scales tinted deep green.
 
 N:397:Mature bronze dragon
 A:MatBronzDrag
-G:d:TERM_L_GREEN
+G:d:TERM_L_BROWN
 I:115:40d10:20:70:70
 W:34:1:21:1200
 T:12:22:23:28
@@ -5975,7 +5975,7 @@ D:A large dragon with scales of rich bronze.
 
 N:398:Bert the Stone Troll
 A:BerttheTroll
-G:T:TERM_RED
+G:T:TERM_SLATE
 I:120:11d100:20:70:50
 W:34:7:15:2000
 T:21:28:20:21
@@ -5994,7 +5994,7 @@ D: called Bill and Tom.
 
 N:399:Bill the Stone Troll
 A:BilltheTroll
-G:T:TERM_L_DARK
+G:T:TERM_SLATE
 I:120:11d100:20:70:50
 W:34:7:15:2000
 T:21:29:20:22
@@ -6013,7 +6013,7 @@ D: called Bert and Tom.
 
 N:400:Tom the Stone Troll
 A:TomtheTroll
-G:T:TERM_YELLOW
+G:T:TERM_SLATE
 I:120:11d100:20:70:50
 W:34:7:15:2000
 T:21:30:20:23
@@ -6032,7 +6032,7 @@ D: called Bert and Bill.
 
 N:401:Acidic cytoplasm
 A:Acidcytoplas
-G:j:TERM_L_BLUE
+G:j:TERM_SLATE
 I:120:40d10:12:18:1
 W:35:5:0:180
 T:15:4:26:0
@@ -6049,7 +6049,7 @@ D:A disgusting animated blob of destruction.  Flee its gruesome hunger!
 
 N:402:Chest mimic
 A:Chest mimic
-G:~:TERM_VIOLET
+G:~:TERM_SLATE
 I:110:15d40:30:40:0
 W:35:4:43:250
 T:5:103:73:1
@@ -6071,7 +6071,7 @@ D: then slams shut on the adventurer's hand.
 
 N:403:Invisible stalker
 A:InvisStalker
-G:E:TERM_BLUE
+G:E:TERM_YELLOW
 I:130:19d12:20:46:20
 W:35:3:0:300
 T:15:40:16:9
@@ -6086,7 +6086,7 @@ D:It is impossible to define its form but its violence is legendary.
 
 N:404:Giant fire ant
 A:GiantFireAnt
-G:a:TERM_RED
+G:a:TERM_L_RED
 I:110:20d10:14:49:40
 W:35:1:0:350
 T:17:6:22:22
@@ -6099,7 +6099,7 @@ D:A giant ant covered in shaggy fur.  Its powerful jaws glow with heat.
 
 N:405:Gravity hound
 A:GravityHound
-G:Z:TERM_SILVER
+G:Z:TERM_LIGHT_GRAY
 I:110:35d10:30:30:0
 W:35:2:0:400
 T:16:73:22:6
@@ -6119,7 +6119,7 @@ D: the monsters.
 
 N:406:Water troll
 A:Water troll
-G:T:TERM_L_GREEN
+G:T:TERM_L_BLUE
 I:110:36d10:20:50:50
 W:35:1:0:420
 T:18:53:20:24
@@ -6135,7 +6135,7 @@ D:He is a troll that reeks of brine.
 
 N:407:Dagashi
 A:Dagashi
-G:p:TERM_WHITE
+G:p:TERM_PINK
 I:120:13d25:20:70:10
 W:35:4:0:500
 T:4:26:28:26
@@ -6152,7 +6152,7 @@ D:A human warrior, moving with lightning speed.
 
 N:408:Inertia hound
 A:InertiaHound
-G:Z:TERM_YELLOW
+G:Z:TERM_LIGHT_GRAY
 I:110:35d10:30:30:0
 W:35:2:0:500
 T:16:65:22:7
@@ -6171,7 +6171,7 @@ D: at it.
 
 N:409:Impact hound
 A:Impact hound
-G:Z:TERM_RED
+G:Z:TERM_L_BROWN
 I:110:35d10:30:30:0
 W:35:2:0:500
 T:16:60:22:8
@@ -6190,7 +6190,7 @@ D: struck by a powerful blow as it stalks towards you.
 
 N:410:Hellhound
 A:Hellhound
-G:C:TERM_SLATE
+G:C:TERM_RED
 I:120:40d10:25:80:30
 W:35:3:0:600
 T:16:43:15:6
@@ -6206,7 +6206,7 @@ D:It is a giant dog that glows with heat.  Flames pour from its nostrils.
 
 N:411:Dread
 A:Dread
-G:G:TERM_UMBER
+G:G:TERM_ORANGE
 I:120:25d20:20:30:10
 W:35:2:50:600
 T:20:0:17:5
@@ -6226,7 +6226,7 @@ D: as the universe itself struggles to banish it.
 
 N:412:Silent watcher
 A:SilentWatchr
-G:g:TERM_L_BROWN
+G:g:TERM_RED
 I:110:80d25:42:80:10
 W:35:3:91:800
 T:14:98:32:26
@@ -6246,7 +6246,7 @@ D: with a malevolent light.
 
 N:413:Mûmak
 A:Mûmak
-G:q:TERM_L_BROWN
+G:q:TERM_SLATE
 I:110:90d10:20:55:100
 W:35:3:0:2100
 T:17:61:29:12
@@ -6259,7 +6259,7 @@ D:A massive elephantine form with eyes twisted by madness.
 
 N:414:Vorpal bunny
 A:Vorpal bunny
-G:r:TERM_SLATE_GRAY
+G:r:TERM_L_UMBER
 I:120:5d10:8:18:10
 W:36:2:0:35
 T:13:99:29:17
@@ -6272,7 +6272,7 @@ D: eyes.  Nothing that looks so innocent has ever been so dangerous.
 
 N:415:Xorn
 A:Xorn
-G:X:TERM_BLUE
+G:X:TERM_UMBER
 I:110:16d10:20:80:10
 W:36:2:0:100
 T:18:34:21:23
@@ -6289,7 +6289,7 @@ D: it has four huge arms protruding from its enormous torso.
 
 N:416:Grey wraith
 A:Grey wraith
-G:W:TERM_L_GREEN
+G:W:TERM_SLATE
 I:110:19d10:20:50:10
 W:36:1:43:200
 T:20:12:21:7
@@ -6308,7 +6308,7 @@ D: feels deathly cold.
 
 N:417:Ooze elemental
 A:OozeElementl
-G:E:TERM_PURPLE
+G:E:TERM_GREEN
 I:110:13d10:10:80:90
 W:36:3:35:300
 T:15:31:16:12
@@ -6326,7 +6326,7 @@ D:It is a towering mass of filth, an eyesore of ooze.
 
 N:418:Smoke elemental
 A:SmokeElement
-G:E:TERM_PURPLE
+G:E:TERM_L_RED
 I:120:15d10:10:80:90
 W:36:3:35:375
 T:15:39:16:13
@@ -6342,7 +6342,7 @@ D:It is a towering blackened form, crackling with heat.
 
 N:419:Shadow
 A:Shadow
-G:G:TERM_PURPLE
+G:G:TERM_TAUPE
 I:120:10d20:30:30:20
 W:36:3:35:400
 T:20:6:17:6
@@ -6362,7 +6362,7 @@ D: suck the energy from your soul to feed its power.
 
 N:420:Phantom
 A:Phantom
-G:G:TERM_RED_LAVA
+G:G:TERM_VIOLET
 I:120:20d25:30:30:20
 W:36:3:35:400
 T:20:20:17:7
@@ -6379,7 +6379,7 @@ D: being saps your very soul.
 
 N:421:Olog
 A:Olog
-G:T:TERM_GREEN
+G:T:TERM_YELLOW
 I:115:42d10:20:50:50
 W:36:1:0:450
 T:18:54:20:25
@@ -6394,7 +6394,7 @@ D:It is a massive intelligent troll with needle-sharp fangs.
 
 N:422:Trapper
 A:Trapper
-G:.:TERM_RED
+G:.:TERM_WHITE
 I:120:60d10:30:75:10
 W:36:3:0:480
 T:0:0:14:14
@@ -6426,7 +6426,7 @@ D:It is a twenty foot tall giant wreathed in clouds.
 
 N:424:Gauth
 A:Gauth
-G:e:TERM_L_UMBER
+G:e:TERM_L_DARK
 I:110:15d20:20:50:20
 W:36:2:63:600
 T:16:8:69:13
@@ -6444,7 +6444,7 @@ D: on magic.
 
 N:425:Necromancer
 A:Necromancer
-G:p:TERM_PURPLE
+G:p:TERM_L_RED
 I:110:28d10:20:50:10
 W:36:2:63:630
 T:4:27:28:27
@@ -6462,7 +6462,7 @@ D:A gaunt figure, clothed in black robes.
 
 N:426:Demonologist
 A:Demonologist
-G:p:TERM_SLATE
+G:p:TERM_L_RED
 I:115:28d10:20:50:10
 W:36:2:63:650
 T:4:28:28:29
@@ -6480,7 +6480,7 @@ D:A figure twisted by evil standing in robes of deepest crimson.
 
 N:427:Master vampire
 A:MastrVampire
-G:V:TERM_L_RED
+G:V:TERM_GREEN
 I:115:34d10:20:60:10
 W:36:1:60:750
 T:20:51:21:0
@@ -6500,7 +6500,7 @@ D: chilling frame.
 
 N:428:Bodak
 A:Bodak
-G:u:TERM_VIOLET
+G:u:TERM_RED
 I:110:35d10:10:68:90
 W:36:2:50:750
 T:13:43:17:29
@@ -6517,7 +6517,7 @@ D:It is a humanoid form composed of flames and hatred.
 
 N:429:Greater mummy
 A:GreaterMummy
-G:z:TERM_TAUPE
+G:z:TERM_YELLOW
 I:115:34d10:30:68:255
 W:36:5:84:800
 T:17:52:65:4
@@ -6539,7 +6539,7 @@ D:Once a powerful ruler, now an even more powerful undead menace.
 
 N:430:Colossus
 A:Colossus
-G:g:TERM_SLATE
+G:g:TERM_L_GREEN
 I:100:30d100:12:150:10
 W:36:4:0:850
 T:18:8:24:26
@@ -6557,7 +6557,7 @@ D: earth-shattering power.
 
 N:431:Lorgan, Chief of the Easterlings
 A:Lorgan
-G:p:TERM_SLATE
+G:p:TERM_VIOLET
 I:120:18d100:25:100:10
 W:36:2:78:1200
 T:21:33:28:28
@@ -6577,7 +6577,7 @@ D: control.
 
 N:432:Mature red dragon
 A:MatRedDragon
-G:d:TERM_L_DARK
+G:d:TERM_RED_LAVA
 I:115:50d10:20:80:70
 W:36:1:35:1400
 T:12:21:23:30
@@ -6594,7 +6594,7 @@ D:A large dragon, scales tinted deep red.
 
 N:433:Mature black dragon
 A:MatBlackDrgn
-G:d:TERM_RED
+G:d:TERM_SLATE_GRAY
 I:115:50d10:20:80:70
 W:36:1:35:1500
 T:12:20:24:1
@@ -6630,7 +6630,7 @@ D: floor.
 
 N:435:Mummified troll
 A:Mummy troll
-G:z:TERM_LIGHT_GRAY
+G:z:TERM_WHITE
 I:110:19d10:20:50:50
 W:37:1:0:420
 T:17:50:18:15
@@ -6646,7 +6646,7 @@ D: massive fists.
 
 N:436:Ice elemental
 A:IceElemental
-G:E:TERM_BLUE
+G:E:TERM_WHITE
 I:110:35d10:10:60:90
 W:37:3:35:650
 T:18:64:16:14
@@ -6664,7 +6664,7 @@ D:It is a towering glacier of ice.
 
 N:437:Shardstorm
 A:Shardstorm
-G:v:TERM_ORANGE
+G:v:TERM_UMBER
 I:120:32d10:40:12:0
 W:37:1:0:700
 T:18:36:48:31
@@ -6679,7 +6679,7 @@ D: perilous magics.
 
 N:438:Nexus vortex
 A:Nexus vortex
-G:v:TERM_L_GREEN
+G:v:TERM_VIOLET
 I:120:32d10:100:40:0
 W:37:1:0:800
 T:18:40:29:30
@@ -6711,7 +6711,7 @@ D:A whirlpool of intense flame, charring the stones at your feet.
 
 N:440:Eldrak
 A:Eldrak
-G:T:TERM_L_UMBER
+G:T:TERM_RED
 I:115:75d10:20:80:50
 W:37:3:0:800
 T:18:55:20:27
@@ -6739,7 +6739,7 @@ D:It is a giant beetle, whose carapace shimmers with vibrant energies.
 
 N:442:Magma elemental
 A:MagmaElement
-G:E:TERM_SLATE
+G:E:TERM_ORANGE
 I:110:35d10:10:70:90
 W:37:3:35:950
 T:15:33:16:16
@@ -6757,7 +6757,7 @@ D:It is a towering glowing form of molten hate.
 
 N:443:Alatar the Blue
 A:AlatarTBlue
-G:A:TERM_WHITE
+G:A:TERM_BLUE
 I:125:48d100:40:100:10
 W:65:1:150:34000
 T:25:71:14:18
@@ -6789,7 +6789,7 @@ D: he is named after.
 
 N:444:Mature gold dragon
 A:MatGoldDragn
-G:d:TERM_RED_LAVA
+G:d:TERM_GOLD
 I:115:50d10:20:80:70
 W:37:1:35:1500
 T:12:17:23:31
@@ -6806,7 +6806,7 @@ D:A large dragon with scales of gleaming gold.
 
 N:445:Inertia drake
 A:InertiaDrake
-G:d:TERM_WHITE
+G:d:TERM_LIGHT_GRAY
 I:110:45d10:30:70:70
 W:37:2:39:1500
 T:12:58:23:18
@@ -6823,7 +6823,7 @@ D: with deadly menace.
 
 N:446:Maglor, Son of F["e]anor
 A:Maglor
-G:h:TERM_UMBER
+G:h:TERM_ORANGE
 I:115:60d15:30:68:255
 W:37:2:78:2000
 T:25:68:25:6
@@ -6846,7 +6846,7 @@ D: desire to recover the three Silmarils.
 
 N:447:The Queen Ant
 A:The QueenAnt
-G:a:TERM_L_DARK
+G:a:TERM_VIOLET
 I:120:15d100:30:100:10
 W:37:2:150:2000
 T:21:34:22:23
@@ -6864,7 +6864,7 @@ D:She's upset because you hurt her children.
 
 N:448:Aranea
 A:Aranea
-G:S:TERM_L_GREEN
+G:S:TERM_RASPBERRY
 I:110:30d10:20:45:50
 W:38:3:43:250
 T:25:83:48:0
@@ -6882,7 +6882,7 @@ D:An intelligent arachnid whose hairy legs weave spells in the air.
 
 N:449:Staff mimic
 A:Staff mimic
-G:_:TERM_WHITE
+G:_:TERM_SLATE
 I:110:17d40:30:40:0
 W:38:4:43:260
 T:5:104:72:4
@@ -6905,7 +6905,7 @@ D: adventurer's hand.
 
 N:450:Will o' the wisp
 A:WilloTheWisp
-G:E:TERM_YELLOW
+G:E:TERM_LIGHT_GRAY
 I:130:20d10:30:150:0
 W:38:4:35:500
 T:15:25:16:15
@@ -6925,7 +6925,7 @@ D: and watch its strange dancing motion.
 
 N:451:Time vortex
 A:Time vortex
-G:v:TERM_ORANGE
+G:v:TERM_PINK
 I:130:32d10:100:40:0
 W:38:4:0:700
 T:18:42:30:4
@@ -6940,7 +6940,7 @@ D:You haven't seen it yet.
 
 N:452:Shimmering vortex
 A:ShimmrVortex
-G:v:TERM_VIOLET
+G:v:TERM_ORANGE
 I:140:32d10:100:40:0
 W:38:4:21:700
 T:18:43:30:5
@@ -6958,7 +6958,7 @@ D: like a beacon, waking monsters from their slumber.
 
 N:453:Erinyes
 A:Erinyes
-G:U:TERM_L_BLUE
+G:U:TERM_UMBER
 I:110:24d10:20:50:80
 W:38:2:56:1000
 T:13:30:30:26
@@ -6975,7 +6975,7 @@ D: show her true colours.
 
 N:454:Ettin
 A:Ettin
-G:T:TERM_YELLOW
+G:T:TERM_BLUE
 I:115:15d100:20:100:30
 W:38:3:0:1000
 T:18:56:20:28
@@ -6992,7 +6992,7 @@ D: intelligent than one...
 
 N:455:Death knight
 A:Death knight
-G:p:TERM_RASPBERRY
+G:p:TERM_L_DARK
 I:120:60d10:20:100:10
 W:38:1:63:1100
 T:4:29:28:30
@@ -7012,7 +7012,7 @@ D: like lances of fire.
 
 N:456:Castamir the Usurper
 A:Castamir
-G:p:TERM_L_UMBER
+G:p:TERM_PURPLE
 I:120:88d10:20:90:40
 W:38:5:78:1600
 T:21:35:28:31
@@ -7032,7 +7032,7 @@ D: and evil.
 
 N:457:Emperor wight
 A:EmperorWight
-G:W:TERM_SLATE
+G:W:TERM_RED
 I:120:38d10:20:40:10
 W:38:2:63:1600
 T:20:11:21:8
@@ -7052,7 +7052,7 @@ D: being approaches.
 
 N:458:Black wraith
 A:Black wraith
-G:W:TERM_SLATE
+G:W:TERM_L_DARK
 I:120:50d10:20:55:10
 W:38:2:63:1700
 T:20:13:21:9
@@ -7093,7 +7093,7 @@ D:A large dragon, scales shimmering many colours.
 
 N:460:Thunder drake
 A:ThunderDrake
-G:d:TERM_L_BLUE
+G:d:TERM_YELLOW
 I:110:40d10:30:100:70
 W:39:1:39:1500
 T:12:57:23:26
@@ -7110,7 +7110,7 @@ D: can follow.
 
 N:461:Nether wraith
 A:NetherWraith
-G:W:TERM_YELLOW
+G:W:TERM_L_GREEN
 I:120:48d10:20:55:10
 W:39:2:71:1600
 T:20:7:21:10
@@ -7131,7 +7131,7 @@ D: nears you, a coldness saps your soul.
 
 N:462:6-headed hydra
 A:6HeadedHydra
-G:M:TERM_BLUE
+G:M:TERM_L_GREEN
 I:120:100d10:20:90:20
 W:39:2:35:1800
 T:16:37:19:29
@@ -7170,7 +7170,7 @@ D: desire for the three Silmarils.
 
 N:464:Night mare
 A:Night mare
-G:q:TERM_SLATE
+G:q:TERM_L_GREEN
 I:120:15d100:30:85:0
 W:39:3:0:2900
 T:19:28:29:13
@@ -7187,7 +7187,7 @@ D: little more than a hatred of all that lives.
 
 N:465:Disenchanter worm mass
 A:DisenchnWorm
-G:w:TERM_ORANGE
+G:w:TERM_PURPLE
 I:100:10d8:7:5:10
 W:40:3:0:10
 T:17:64:30:17
@@ -7200,7 +7200,7 @@ D: around its disgusting form.
 
 N:466:Wand mimic
 A:Wand mimic
-G:-:TERM_SLATE_GRAY
+G:-:TERM_SLATE
 I:110:20d30:30:40:0
 W:40:4:56:300
 T:5:105:72:5
@@ -7222,7 +7222,7 @@ D: room.
 
 N:467:Spirit troll
 A:Spirit troll
-G:G:TERM_BLUE
+G:G:TERM_L_GREEN
 I:110:10d100:20:90:5
 W:40:3:0:900
 T:18:57:20:29
@@ -7238,7 +7238,7 @@ D:A weird ghostly troll-like being from the ethereal plane.
 
 N:468:Storm giant
 A:Storm giant
-G:P:TERM_PINK
+G:P:TERM_L_BLUE
 I:120:40d20:20:60:40
 W:40:1:78:1000
 T:18:15:18:27
@@ -7255,7 +7255,7 @@ D:It is a twenty-five foot tall giant wreathed in lightning.
 
 N:469:Giant roc
 A:Giant roc
-G:B:TERM_L_BLUE
+G:B:TERM_L_BROWN
 I:110:80d13:20:70:10
 W:40:3:0:1000
 T:17:12:14:26
@@ -7270,7 +7270,7 @@ D: corridors.
 
 N:470:Death quasit
 A:Death quasit
-G:u:TERM_L_BLUE
+G:u:TERM_L_DARK
 I:130:44d10:20:80:0
 W:40:3:50:1000
 T:13:44:17:30
@@ -7290,7 +7290,7 @@ D: destruction.
 
 N:471:Xaren
 A:Xaren
-G:X:TERM_ORANGE
+G:X:TERM_SLATE
 I:120:32d10:20:80:10
 W:40:1:0:1200
 T:18:35:21:24
@@ -7307,7 +7307,7 @@ D: ores.
 
 N:472:Patriarch
 A:Patriarch
-G:p:TERM_BLUE
+G:p:TERM_LIME_GREEN
 I:120:52d10:20:60:10
 W:40:2:119:1800
 T:4:33:29:4
@@ -7327,7 +7327,7 @@ D: your pitiful frame.
 
 N:473:Ancient blue dragon
 A:AncBlueDragn
-G:D:TERM_UMBER
+G:D:TERM_BLUE
 I:120:72d10:20:90:80
 W:40:1:39:2000
 T:12:24:15:11
@@ -7346,7 +7346,7 @@ D:A huge draconic form.  Lightning crackles along its length.
 
 N:474:Ancient bronze dragon
 A:AncBronzDrag
-G:D:TERM_LIGHT_GRAY
+G:D:TERM_L_UMBER
 I:120:72d10:20:90:80
 W:40:1:39:2000
 T:12:30:15:12
@@ -7364,7 +7364,7 @@ D:A huge draconic form enveloped in a cascade of colour.
 
 N:475:Ancient white dragon
 A:AncWhiteDrag
-G:D:TERM_GREEN
+G:D:TERM_WHITE
 I:120:72d10:20:90:80
 W:40:1:39:2000
 T:12:26:15:13
@@ -7383,7 +7383,7 @@ D:A huge draconic form.  Frost covers it from head to tail.
 
 N:476:Ancient green dragon
 A:AncGreenDrag
-G:D:TERM_YELLOW
+G:D:TERM_GREEN
 I:120:72d10:20:90:80
 W:40:1:39:2000
 T:12:27:15:14
@@ -7401,7 +7401,7 @@ D:A huge draconic form enveloped in clouds of poisonous vapour.
 
 N:477:Vrock
 A:Vrock
-G:U:TERM_SNOW_WHITE
+G:U:TERM_SLATE
 I:110:40d10:20:50:80
 W:40:2:43:2000
 T:13:31:30:27
@@ -7418,7 +7418,7 @@ D:It is a demon with a long neck and raking claws.
 
 N:478:Enchantress
 A:Enchantress
-G:p:TERM_L_GREEN
+G:p:TERM_RASPBERRY
 I:130:52d10:20:60:10
 W:40:4:106:2100
 T:4:30:29:0
@@ -7436,7 +7436,7 @@ D: whom she rarely fights without.
 
 N:479:Minotaur
 A:Minotaur
-G:H:TERM_ORANGE
+G:H:TERM_SLATE
 I:130:100d10:13:25:10
 W:40:2:0:2100
 T:13:21:17:19
@@ -7452,7 +7452,7 @@ D:It is a cross between a human and a bull.
 
 N:480:Sorcerer
 A:Sorcerer
-G:p:TERM_RED_LAVA
+G:p:TERM_RASPBERRY
 I:130:52d10:20:60:10
 W:40:2:106:2150
 T:4:32:29:2
@@ -7472,7 +7472,7 @@ D: his hands are ablur with spell casting.
 
 N:481:7-headed hydra
 A:7HeadedHydra
-G:M:TERM_YELLOW
+G:M:TERM_RED
 I:120:100d12:20:95:20
 W:40:2:35:3000
 T:16:38:19:30
@@ -7506,7 +7506,7 @@ D: chieftain of its tribe. It fears nothing.
 
 N:483:Medusa, the Gorgon
 A:Medusa
-G:n:TERM_UMBER
+G:n:TERM_VIOLET
 I:120:24d100:30:100:5
 W:40:3:106:9000
 T:21:40:26:22
@@ -7528,7 +7528,7 @@ D: dripping from her ghastly mouth.
 
 N:484:Uvatha the Horseman
 A:Uvatha
-G:W:TERM_VIOLET
+G:W:TERM_TAUPE
 I:120:18d100:90:60:10
 W:40:3:63:10000
 T:21:39:21:11
@@ -7569,7 +7569,7 @@ D: camouflage, so you will need magically enhanced seeing to spot him.
 
 N:486:Ancient black dragon
 A:AncBlackDrag
-G:D:TERM_L_UMBER
+G:D:TERM_SLATE
 I:120:10d100:20:90:80
 W:41:1:35:2500
 T:12:28:15:15
@@ -7588,7 +7588,7 @@ D:A huge draconic form.  Pools of acid melt the floor around it.
 
 N:487:Ancient red dragon
 A:AncRedDragon
-G:D:TERM_GREEN
+G:D:TERM_RED
 I:120:10d100:20:90:80
 W:41:1:39:2500
 T:12:29:15:17
@@ -7608,7 +7608,7 @@ D: extreme heat surrounding it makes you gasp for breath.
 
 N:488:Ancient gold dragon
 A:AncGoldDragn
-G:D:TERM_L_RED
+G:D:TERM_GOLD
 I:120:10d100:20:90:80
 W:41:1:39:2500
 T:12:25:15:18
@@ -7627,7 +7627,7 @@ D: deafens you.
 
 N:489:Hezrou
 A:Hezrou
-G:U:TERM_VIOLET
+G:U:TERM_GREEN
 I:110:52d10:20:40:80
 W:41:3:56:2500
 T:13:32:30:28
@@ -7643,7 +7643,7 @@ D:It is a demon of lizard form with cruel-looking jaws.
 
 N:490:Dark elven sorcerer
 A:DarkElfSorcr
-G:h:TERM_VIOLET
+G:h:TERM_L_RED
 I:130:80d10:20:70:10
 W:41:2:119:3000
 T:13:9:25:10
@@ -7663,7 +7663,7 @@ D: from his slender frame.
 
 N:491:Kavlax the Many-Headed
 A:Kavlax
-G:M:TERM_GOLD
+G:M:TERM_PURPLE
 I:125:13d100:20:85:30
 W:41:3:0:5000
 T:21:38:24:3
@@ -7688,7 +7688,7 @@ D: they look for prey, but each with its own deadly breath weapon.
 
 N:492:Beholder
 A:Beholder
-G:e:TERM_LIGHT_GRAY
+G:e:TERM_L_UMBER
 I:120:16d100:30:80:10
 W:41:3:43:6000
 T:16:10:24:8
@@ -7708,7 +7708,7 @@ D: stalks, and a huge mouth filled with sharp teeth.
 
 N:493:Gorlim, Betrayer of Barahir
 A:Gorlim
-G:p:TERM_WHITE
+G:p:TERM_SLATE_GRAY
 I:120:16d100:20:120:40
 W:41:3:78:7000
 T:21:43:29:3
@@ -7731,7 +7731,7 @@ D: side of his "bargain" was not kept.
 
 N:494:Master lich
 A:Master lich
-G:L:TERM_YELLOW
+G:L:TERM_RED
 I:120:18d100:20:80:50
 W:41:2:91:10000
 T:20:15:18:9
@@ -7753,7 +7753,7 @@ D: bony fingers.
 
 N:495:Dread
 A:Dread
-G:G:TERM_GREEN
+G:G:TERM_ORANGE
 I:120:25d20:20:30:10
 W:42:1:50:600
 T:20:5:17:8
@@ -7773,7 +7773,7 @@ D: as the universe itself struggles to banish it.
 
 N:496:Vampire lord
 A:Vampire lord
-G:V:TERM_VIOLET
+G:V:TERM_BLUE
 I:120:16d100:20:70:10
 W:42:1:78:1800
 T:20:52:21:1
@@ -7793,7 +7793,7 @@ D:A foul wind chills your bones as this ghastly figure approaches.
 
 N:497:Power drake
 A:Power drake
-G:d:TERM_UMBER
+G:d:TERM_VIOLET
 I:120:65d10:30:100:70
 W:42:1:56:2500
 T:12:56:23:18
@@ -7818,7 +7818,7 @@ D:An extremely dangerous drake.
 
 N:498:Rogrog the Black Troll
 A:Rogrog
-G:T:TERM_ORANGE
+G:T:TERM_L_DARK
 I:120:20d100:20:70:50
 W:42:3:0:5000
 T:21:32:20:26
@@ -7838,7 +7838,7 @@ D: speed.
 
 N:499:Chromatic hound
 A:ChromatHound
-G:Z:TERM_L_UMBER
+G:Z:TERM_VIOLET
 I:110:40d10:25:40:0
 W:43:5:0:500
 T:16:77:34:3
@@ -7857,7 +7857,7 @@ D:Shimmering in rainbow hues, this hound is beautiful and deadly.
 
 N:500:Mûmak
 A:Mûmak
-G:q:TERM_RED
+G:q:TERM_SLATE
 I:110:90d10:20:55:100
 W:43:2:0:2100
 T:17:63:29:14
@@ -7870,7 +7870,7 @@ D:A massive elephantine form with eyes twisted by madness.
 
 N:501:Pallando the Blue
 A:PallandoBlue
-G:A:TERM_VIOLET
+G:A:TERM_BLUE
 I:120:40d100:40:100:10
 W:55:2:135:32000
 T:25:72:14:20
@@ -7904,7 +7904,7 @@ D: Cloack of Aman he wore.
 
 N:502:Glabrezu
 A:Glabrezu
-G:U:TERM_BLUE
+G:U:TERM_L_UMBER
 I:110:70d10:20:40:80
 W:43:2:56:3000
 T:13:33:30:29
@@ -7920,7 +7920,7 @@ D:It is demon with arms and pincers, its form a true mockery of life.
 
 N:503:Vargo, Tyrant of Fire
 A:Vargo
-G:E:TERM_PURPLE
+G:E:TERM_RED_LAVA
 I:120:24d100:12:50:50
 W:43:3:78:4000
 T:21:36:16:17
@@ -7940,7 +7940,7 @@ D:A towering fire elemental, Vargo burns everything beyond recognition.
 
 N:504:Waldern, King of Water
 A:Waldern
-G:E:TERM_SLATE_GRAY
+G:E:TERM_NAVY_BLUE
 I:120:25d100:12:80:50
 W:43:3:91:4250
 T:21:37:16:18
@@ -7962,7 +7962,7 @@ D: Wave after wave drowns your frail body.
 
 N:505:Quaker, Master of Earth
 A:Quaker
-G:E:TERM_UMBER
+G:E:TERM_L_BROWN
 I:115:28d100:10:97:90
 W:43:3:78:4500
 T:21:46:16:19
@@ -7982,7 +7982,7 @@ D: are reduced to rubble as Quaker advances.
 
 N:506:Ariel, Queen of Air
 A:Ariel
-G:E:TERM_UMBER
+G:E:TERM_SKY_BLUE
 I:130:27d100:12:50:50
 W:43:3:84:7000
 T:21:47:16:20
@@ -8002,7 +8002,7 @@ D: her extreme speed.
 
 N:507:Adunaphel the Quiet
 A:Adunaphel
-G:W:TERM_SLATE
+G:W:TERM_TAUPE
 I:120:21d100:90:60:10
 W:43:3:84:13000
 T:21:41:21:12
@@ -8025,7 +8025,7 @@ D: the power of the rings.
 
 N:508:Ancient chromatic dragon
 A:AncChromDrag
-G:D:TERM_YELLOW
+G:D:TERM_VIOLET
 I:120:21d100:25:100:80
 W:43:1:50:13000
 T:12:31:15:20
@@ -8048,7 +8048,7 @@ D: live to see another.
 
 N:509:8-headed hydra
 A:8HeadedHydra
-G:M:TERM_ORANGE
+G:M:TERM_L_RED
 I:120:100d19:20:100:20
 W:44:2:63:5000
 T:16:39:19:31
@@ -8067,7 +8067,7 @@ D:A strange reptilian hybrid with eight heads.
 
 N:510:Dreadmaster
 A:Dreadmaster
-G:G:TERM_L_BROWN
+G:G:TERM_PINK
 I:120:15d100:20:100:10
 W:44:2:91:9000
 T:20:3:17:9
@@ -8089,7 +8089,7 @@ D: unearthly limbs, of purest black, crush rock and flesh with ease.
 
 N:511:Rod mimic
 A:Rod mimic
-G:-:TERM_TAUPE
+G:-:TERM_SLATE_GRAY
 I:110:15d50:30:40:0
 W:45:4:71:450
 T:5:106:72:6
@@ -8112,7 +8112,7 @@ D: adventurer's hand.
 
 N:512:Cyclops
 A:Cyclops
-G:P:TERM_L_GREEN
+G:P:TERM_UMBER
 I:120:60d20:20:120:20
 W:45:2:0:1500
 T:25:88:64:23
@@ -8128,7 +8128,7 @@ D:A gigantic ugly humanoid with but one eye and very thick skin.
 
 N:513:Rotting quylthulg
 A:RottingQlthg
-G:Q:TERM_PURPLE
+G:Q:TERM_UMBER
 I:120:48d10:20:1:0
 W:45:1:91:3000
 T:19:2:19:1
@@ -8142,7 +8142,7 @@ D:It is a pulsing flesh mound that reeks of death and putrefaction.
 
 N:514:Demonic quylthulg
 A:Demonic Q
-G:Q:TERM_L_UMBER
+G:Q:TERM_RED
 I:120:48d10:20:1:0
 W:45:1:106:3000
 T:19:3:19:2
@@ -8157,7 +8157,7 @@ D: world itself seems to cry out against it.
 
 N:515:Draconic quylthulg
 A:Draconic Q
-G:Q:TERM_L_BLUE
+G:Q:TERM_GREEN
 I:120:48d10:20:1:0
 W:45:1:119:3000
 T:19:4:19:3
@@ -8172,7 +8172,7 @@ D: magical bacteria that make it pulse in a foul and degrading way.
 
 N:516:Nalfeshnee
 A:Nalfeshnee
-G:U:TERM_L_DARK
+G:U:TERM_RED
 I:110:90d10:20:50:80
 W:45:2:63:5000
 T:13:34:30:30
@@ -8190,7 +8190,7 @@ D: down its length.
 
 N:517:Radagast the Brown
 A:Radagast
-G:A:TERM_TAUPE
+G:A:TERM_L_BROWN
 I:115:30d100:60:100:10
 W:45:4:120:30000
 T:25:70:14:21
@@ -8222,7 +8222,7 @@ D: named after.
 
 N:518:Undead beholder
 A:UndeadBholdr
-G:e:TERM_VIOLET
+G:e:TERM_UMBER
 I:120:27d100:30:100:10
 W:45:3:99:8000
 T:16:11:24:9
@@ -8245,7 +8245,7 @@ D: as it drains your vitality for its evil enchantments.
 
 N:519:Great crystal drake
 A:GrtCrystalDr
-G:D:TERM_WHITE
+G:D:TERM_UMBER
 I:120:21d100:25:100:80
 W:45:2:43:10000
 T:12:34:15:19
@@ -8265,7 +8265,7 @@ D: in the light.
 
 N:520:Ethereal dragon
 A:EtheralDragn
-G:D:TERM_L_UMBER
+G:D:TERM_ORANGE
 I:120:21d100:25:100:80
 W:45:2:56:10000
 T:12:70:15:21
@@ -8286,7 +8286,7 @@ D: cloaks itself in unearthly shadows.
 
 N:521:Greater basilisk
 A:GrtrBasilisk
-G:R:TERM_LIGHT_GRAY
+G:R:TERM_L_DARK
 I:120:20d100:25:100:15
 W:45:2:0:10000
 T:17:9:66:3
@@ -8304,7 +8304,7 @@ D:A large basilisk, whose shape resembles that of a great wyrm.
 
 N:522:Akhorahil the Blind
 A:Akhorahil
-G:W:TERM_YELLOW
+G:W:TERM_TAUPE
 I:120:24d100:90:70:10
 W:45:3:84:15000
 T:21:42:21:13
@@ -8328,7 +8328,7 @@ D: than any ordinary man ever could.
 
 N:523:Berserker
 A:Berserker
-G:p:TERM_YELLOW
+G:p:TERM_UMBER
 I:120:60d25:20:80:10
 W:46:2:35:2500
 T:4:43:63:18
@@ -8348,7 +8348,7 @@ D: pain.  He tramples weaker creatures underfoot
 
 N:524:Drolem
 A:Drolem
-G:g:TERM_L_DARK
+G:g:TERM_GREEN
 I:115:25d100:25:130:30
 W:46:3:56:12000
 T:18:81:24:27
@@ -8370,7 +8370,7 @@ D: all it meets.
 
 N:525:Scatha the Worm
 A:ScathaThWorm
-G:D:TERM_PURPLE
+G:D:TERM_LIGHT_GRAY
 I:125:25d100:30:130:70
 W:46:2:78:15000
 T:21:48:24:27
@@ -8393,7 +8393,7 @@ D: shower of ice into the air.
 
 N:526:Death mold
 A:Death mold
-G:m:TERM_UMBER
+G:m:TERM_L_DARK
 I:140:100d20:200:60:0
 W:47:1:0:1500
 T:14:74:26:16
@@ -8411,7 +8411,7 @@ D: nimbus of pure evil surrounds it.  Luckily for you, it can't move.
 
 N:527:Marilith
 A:Marilith
-G:U:TERM_VIOLET
+G:U:TERM_YELLOW
 I:120:20d70:20:75:80
 W:47:2:155:6000
 T:13:35:30:31
@@ -8430,7 +8430,7 @@ D: weapons.
 
 N:528:9-headed hydra
 A:9HeadedHydra
-G:M:TERM_RED
+G:M:TERM_BLUE
 I:120:100d22:25:100:25
 W:47:2:75:8000
 T:16:40:19:29
@@ -8449,7 +8449,7 @@ D: charges.
 
 N:529:Death drake
 A:Death drake
-G:D:TERM_L_RED
+G:D:TERM_L_GREEN
 I:120:21d100:25:100:80
 W:47:2:43:10000
 T:12:43:15:16
@@ -8470,7 +8470,7 @@ D: true form but you sense its evil.
 
 N:530:Itangast the Fire Drake
 A:Itangast
-G:D:TERM_WHITE
+G:D:TERM_RASPBERRY
 I:125:25d100:30:120:70
 W:47:2:84:18000
 T:21:51:15:25
@@ -8491,7 +8491,7 @@ D: of smoke curl up from his nostrils as he regards you with disdain.
 
 N:531:Elder aranea
 A:Elder aranea
-G:S:TERM_VIOLET
+G:S:TERM_RED_LAVA
 I:120:60d20:20:65:50
 W:48:5:63:2800
 T:15:55:48:1
@@ -8512,7 +8512,7 @@ D: haunted the dread valley of Nan Dungortheb long ago.
 
 N:532:Winged Horror
 A:WingedHorror
-G:B:TERM_RED
+G:B:TERM_L_DARK
 I:120:25d80:30:80:5
 W:48:3:0:4000
 T:18:78:68:5
@@ -8555,7 +8555,7 @@ D: that wiped out his family, and he never recovered.
 
 N:534:Smaug the Golden
 A:Smaug TGoldn
-G:D:TERM_VIOLET
+G:D:TERM_GOLD
 I:125:28d100:30:130:70
 W:48:2:84:19000
 T:21:95:15:23
@@ -8579,7 +8579,7 @@ D: Third Age.
 
 N:535:Lesser Balrog
 A:LesserBalrog
-G:U:TERM_L_UMBER
+G:U:TERM_RASPBERRY
 I:120:20d100:20:50:80
 W:49:2:99:10000
 T:13:58:31:0
@@ -8599,7 +8599,7 @@ D:It is a massive humanoid demon wreathed in flames.
 
 N:536:Eöl, the Dark Elf
 A:Eöl
-G:h:TERM_L_DARK
+G:h:TERM_TAUPE
 I:130:80d30:20:100:60
 W:49:2:91:27000
 T:21:86:50:10
@@ -8624,7 +8624,7 @@ D: Aredhel of Gondolin.
 
 N:537:Master mystic
 A:MasterMystic
-G:p:TERM_WHITE
+G:p:TERM_ORANGE
 I:130:11d100:30:60:5
 W:50:3:84:6000
 T:4:34:29:5
@@ -8663,7 +8663,7 @@ D:A strange reptilian hybrid with ten heads dripping acid.
 
 N:539:The Balrog of Moria
 A:BalrogOMoria
-G:U:TERM_L_BLUE
+G:U:TERM_PURPLE
 I:130:30d100:20:100:80
 W:50:3:155:25000
 T:21:53:31:1
@@ -8686,7 +8686,7 @@ D: sword, his fury blisters your skin and melts your flesh!
 
 N:540:Nether hound
 A:Nether hound
-G:Z:TERM_L_DARK
+G:Z:TERM_L_GREEN
 I:120:60d15:30:100:0
 W:51:2:0:4000
 T:16:67:22:9
@@ -8704,7 +8704,7 @@ D: of darkness in the shape of a large dog.
 
 N:541:Plasma hound
 A:Plasma hound
-G:Z:TERM_VIOLET
+G:Z:TERM_L_RED
 I:120:60d15:30:100:0
 W:51:2:0:4000
 T:16:70:22:11
@@ -8724,7 +8724,7 @@ D: as you sense trouble.
 
 N:542:Time hound
 A:Time hound
-G:Z:TERM_PURPLE
+G:Z:TERM_PINK
 I:125:60d15:30:100:0
 W:51:2:0:5000
 T:16:76:22:10
@@ -8743,7 +8743,7 @@ D: should give up and go to bed.
 
 N:543:Harowen the Black Hand
 A:Harowen
-G:p:TERM_SLATE
+G:p:TERM_TAUPE
 I:135:25d100:40:90:0
 W:51:3:73:20000
 T:21:55:29:6
@@ -8762,7 +8762,7 @@ D: and moves with blinding speed.  Check your pockets!
 
 N:544:Ji Indur Dawndeath
 A:JiIDawndeath
-G:W:TERM_SLATE
+G:W:TERM_TAUPE
 I:120:32d100:90:70:10
 W:52:3:106:22000
 T:21:45:21:15
@@ -8785,7 +8785,7 @@ D: Sauron's power.
 
 N:545:Chaos vortex
 A:Chaos vortex
-G:v:TERM_RED
+G:v:TERM_VIOLET
 I:120:30d20:100:80:0
 W:53:3:0:3000
 T:18:44:30:6
@@ -8803,7 +8803,7 @@ D:Void, nothingness, spinning destructively.
 
 N:546:Storm of Unmagic
 A:StormOUnmagc
-G:v:TERM_RASPBERRY
+G:v:TERM_PURPLE
 I:120:30d20:50:40:0
 W:53:3:0:3000
 T:18:45:49:24
@@ -8820,7 +8820,7 @@ D: rips the enchantments from everything it touches.
 
 N:547:11-headed hydra
 A:11HeadedHydr
-G:M:TERM_L_UMBER
+G:M:TERM_SKY_BLUE
 I:125:100d30:25:110:20
 W:53:2:85:11000
 T:16:78:19:25
@@ -8839,7 +8839,7 @@ D:A strange reptilian hybrid with eleven heads.
 
 N:548:Elder vampire
 A:ElderVampire
-G:V:TERM_BLUE
+G:V:TERM_RED
 I:125:30d100:20:90:10
 W:54:3:78:4500
 T:20:53:33:31
@@ -8862,7 +8862,7 @@ D: enslaved to its aid.
 
 N:549:Demilich
 A:Demilich
-G:L:TERM_L_BLUE
+G:L:TERM_L_UMBER
 I:120:32d100:20:100:50
 W:54:2:91:13500
 T:20:18:66:31
@@ -8883,7 +8883,7 @@ D:A lich who is partially immaterial, on its way to a new, ethereal form.
 
 N:550:The Phoenix
 A:The Phoenix
-G:B:TERM_VIOLET
+G:B:TERM_RED
 I:125:36d100:60:130:0
 W:54:3:119:30000
 T:21:58:14:27
@@ -8905,7 +8905,7 @@ D: skin and melts your armour.
 
 N:551:Barbazu
 A:Barbazu
-G:U:TERM_YELLOW
+G:U:TERM_L_GREEN
 I:120:80d10:25:60:80
 W:55:4:50:3000
 T:15:67:50:29
@@ -8925,7 +8925,7 @@ D: the hells, capable of a terrifying berserk fury.
 
 N:552:Ossë, Herald of Ulmo
 A:Ossë
-G:A:TERM_ORANGE
+G:A:TERM_WHITE
 I:130:63d100:40:160:10
 W:83:3:155:37500
 T:25:73:14:22
@@ -8955,7 +8955,7 @@ D: storms pray to Ossë for mercy.
 
 N:553:12-headed hydra
 A:12HeadedHydr
-G:M:TERM_L_UMBER
+G:M:TERM_LIME_GREEN
 I:130:100d35:30:115:20
 W:55:2:90:13000
 T:16:79:19:26
@@ -8975,7 +8975,7 @@ D:A strange reptilian hybrid with twelve heads.
 
 N:554:Shelob, Spider of Darkness
 A:Shelob
-G:S:TERM_VIOLET
+G:S:TERM_TAUPE
 I:120:35d100:30:120:80
 W:55:3:141:27000
 T:21:27:20:11
@@ -8998,7 +8998,7 @@ D: foraging for food to feed her voracious appetite.
 
 N:555:Ar-Pharazôn the Golden
 A:Ar-Pharazôn
-G:p:TERM_RED
+G:p:TERM_GOLD
 I:130:40d100:30:45:255
 W:55:1:134:27500
 T:21:88:33:27
@@ -9019,7 +9019,7 @@ D: themselves, and condemned Númenór to oblivion.
 
 N:556:Lesser titan
 A:Lesser titan
-G:P:TERM_L_BROWN
+G:P:TERM_YELLOW
 I:120:24d100:30:80:15
 W:56:3:147:6000
 T:18:16:18:28
@@ -9038,7 +9038,7 @@ D: power and hate.
 
 N:557:Dwar, Dog Lord of Waw
 A:Dwar,DogLord
-G:W:TERM_L_BLUE
+G:W:TERM_TAUPE
 I:120:40d100:90:90:10
 W:56:3:106:25000
 T:21:49:21:15
@@ -9061,7 +9061,7 @@ D: them at will.  He howls maniacally as he reaches out to destroy you.
 
 N:558:Hand druj
 A:Hand druj
-G:s:TERM_WHITE
+G:s:TERM_YELLOW
 I:125:60d10:20:110:10
 W:57:2:78:13000
 T:18:30:29:24
@@ -9078,7 +9078,7 @@ D: fingers.
 
 N:559:Grand master mystic
 A:GrdMstrMystc
-G:p:TERM_BLUE
+G:p:TERM_ORANGE_PEEL
 I:130:22d100:30:80:5
 W:57:3:99:15000
 T:4:35:29:7
@@ -9100,7 +9100,7 @@ D: creatures with disdainful ease.
 
 N:560:Eye druj
 A:Eye druj
-G:s:TERM_L_DARK
+G:s:TERM_RED
 I:125:10d100:20:90:10
 W:58:2:95:15000
 T:18:31:29:25
@@ -9116,7 +9116,7 @@ D: assuming it harmless.
 
 N:561:Dracolich
 A:Dracolich
-G:D:TERM_WHITE
+G:D:TERM_LIME_GREEN
 I:120:35d100:25:120:80
 W:58:2:63:18000
 T:12:48:15:24
@@ -9138,7 +9138,7 @@ D: its prey to satisfy its hunger.
 
 N:562:Baphomet the Minotaur Lord
 A:Baphomet
-G:H:TERM_BLUE
+G:H:TERM_PURPLE
 I:130:47d100:30:120:30
 W:58:4:99:24000
 T:21:54:17:21
@@ -9159,7 +9159,7 @@ D: curses all that defy him.
 
 N:563:Ethereal hound
 A:EtheralHound
-G:Z:TERM_GREEN
+G:Z:TERM_LIME_GREEN
 I:120:60d15:30:100:0
 W:59:3:0:6000
 T:16:72:22:12
@@ -9177,7 +9177,7 @@ D: hints at internal organs best left to the imagination.
 
 N:564:Dracolisk
 A:Dracolisk
-G:D:TERM_L_DARK
+G:D:TERM_L_RED
 I:120:35d100:25:120:80
 W:59:2:78:14000
 T:12:52:16:20
@@ -9199,7 +9199,7 @@ D: stands.
 
 N:565:Fundin Bluecloak
 A:FundinBluclk
-G:h:TERM_L_BLUE
+G:h:TERM_SKY_BLUE
 I:130:50d100:25:195:10
 W:59:2:141:20000
 T:21:61:25:11
@@ -9223,7 +9223,7 @@ D: adventurer.
 
 N:566:Skull druj
 A:Skull druj
-G:s:TERM_TAUPE
+G:s:TERM_ORANGE
 I:125:14d100:20:120:10
 W:59:2:78:21000
 T:18:32:29:26
@@ -9240,7 +9240,7 @@ D: merely blast you with mighty magic as it speaks the words of power.
 
 N:567:Aether vortex
 A:AetherVortex
-G:v:TERM_WHITE
+G:v:TERM_VIOLET
 I:130:40d20:100:40:0
 W:60:4:0:4000
 T:25:87:30:7
@@ -9264,7 +9264,7 @@ D:An awesome vortex of pure magic, power radiates from its frame.
 
 N:568:13-headed hydra
 A:13HeadedHydr
-G:M:TERM_WHITE
+G:M:TERM_LIGHT_GRAY
 I:130:100d40:35:120:20
 W:60:2:95:15000
 T:16:80:19:29
@@ -9284,7 +9284,7 @@ D:A strange reptilian hybrid with thirteen heads.
 
 N:569:Saruman of Many Colours
 A:Saruman
-G:A:TERM_TAUPE
+G:A:TERM_VIOLET
 I:130:55d100:100:100:0
 W:75:1:175:36000
 T:21:66:29:8
@@ -9311,7 +9311,7 @@ D: become a mighty Sorcerer-King of the world.
 
 N:570:Bile Demon
 A:Bile Demon
-G:U:TERM_RED
+G:U:TERM_L_RED
 I:125:28d100:40:90:80
 W:61:2:50:11000
 T:13:57:49:31
@@ -9332,7 +9332,7 @@ D: smell - you have ever experienced.
 
 N:571:Nightwing
 A:Nightwing
-G:W:TERM_L_DARK
+G:W:TERM_L_BROWN
 I:120:60d60:20:120:10
 W:61:3:84:13000
 T:25:89:15:30
@@ -9356,7 +9356,7 @@ D: of this mighty being.
 
 N:572:Arien, Maia of the Sun
 A:Arien
-G:A:TERM_BLUE
+G:A:TERM_L_RED
 I:130:67d100:40:160:10
 W:88:3:170:40000
 T:25:74:14:23
@@ -9382,7 +9382,7 @@ D: is second only to Sauron in power among the Maiar.
 
 N:573:Dreadlord
 A:Dreadlord
-G:G:TERM_VIOLET
+G:G:TERM_RED
 I:120:30d100:20:150:10
 W:62:2:91:20000
 T:20:4:17:10
@@ -9406,7 +9406,7 @@ D: stealing of souls and the stench of death.  Flee its hunger!
 
 N:574:Great Swamp Wyrm
 A:GrtSwampWyrm
-G:D:TERM_WHITE
+G:D:TERM_JUNGLE_GREEN
 I:125:35d100:30:150:80
 W:62:2:39:20000
 T:12:36:15:26
@@ -9428,7 +9428,7 @@ D: your breath as you fight it, it sees no reason to do likewise.
 
 N:575:Evil Iggy
 A:Evil Iggy
-G:p:TERM_SNOW_WHITE
+G:p:TERM_PURPLE
 I:130:65d100:40:180:10
 W:62:3:134:35000
 T:21:93:29:6
@@ -9453,7 +9453,7 @@ D: they reminisce about battling this nuisance.
 
 N:576:Great Storm Wyrm
 A:GrtStormWyrm
-G:D:TERM_BLUE
+G:D:TERM_NAVY_BLUE
 I:125:35d100:30:150:80
 W:63:2:56:20000
 T:12:33:15:27
@@ -9476,7 +9476,7 @@ D: creature's great muscles.  It regards you with contempt.
 
 N:577:Great Ice Wyrm
 A:GreatIceWyrm
-G:D:TERM_L_DARK
+G:D:TERM_SNOW_WHITE
 I:125:35d100:30:150:80
 W:63:2:56:20000
 T:12:73:15:28
@@ -9499,7 +9499,7 @@ D: feel its wrath!
 
 N:578:Great Wyrm of Perplexity
 A:GrtWyrmPerpl
-G:D:TERM_ORANGE_PEEL
+G:D:TERM_L_BROWN
 I:125:35d100:30:150:80
 W:63:2:39:20000
 T:12:37:49:12
@@ -9520,7 +9520,7 @@ D: keep your mind on the job of fighting for your life.
 
 N:579:Chaos hound
 A:Chaos hound
-G:Z:TERM_BLUE
+G:Z:TERM_VIOLET
 I:120:60d30:30:100:0
 W:64:2:0:8000
 T:16:62:22:13
@@ -9539,7 +9539,7 @@ D: kamikaze relish for combat.  You suspect all may not be as it seems.
 
 N:580:Archlich
 A:Archlich
-G:L:TERM_WHITE
+G:L:TERM_L_BLUE
 I:125:40d100:20:120:50
 W:64:2:113:20000
 T:20:14:67:9
@@ -9562,7 +9562,7 @@ D: immaterial state.
 
 N:581:Hoarmurath of Dir
 A:Hoarmurath
-G:W:TERM_GREEN
+G:W:TERM_TAUPE
 I:120:45d100:90:100:10
 W:64:3:119:30000
 T:21:56:21:18
@@ -9585,7 +9585,7 @@ D: lost for an unlife of everlasting torment.
 
 N:582:Azathoth, Master of Darkness
 A:Azathoth
-G:j:TERM_L_DARK
+G:j:TERM_VIOLET
 I:130:60d100:40:170:10
 W:64:3:155:40000
 T:25:101:31:3
@@ -9612,7 +9612,7 @@ D: take your soul.
 
 N:583:Osyluth
 A:Osyluth
-G:U:TERM_BLUE
+G:U:TERM_PINK
 I:130:26d100:20:75:80
 W:65:2:50:13000
 T:14:60:50:14
@@ -9634,7 +9634,7 @@ D: foul smell of decay and rot.  They are despised even in the hells.
 
 N:584:14-headed hydra
 A:14HeadedHydr
-G:M:TERM_LIGHT_GRAY
+G:M:TERM_VIOLET
 I:135:100d45:35:130:20
 W:65:2:100:17000
 T:16:81:19:29
@@ -9682,7 +9682,7 @@ D: awesome spells.
 
 N:586:Greater titan
 A:GreaterTitan
-G:P:TERM_L_DARK
+G:P:TERM_ORANGE
 I:125:38d100:30:125:15
 W:66:3:119:20500
 T:18:17:18:29
@@ -9702,7 +9702,7 @@ D: inspired by your defiance.
 
 N:587:The Cat Lord
 A:The Cat Lord
-G:f:TERM_TAUPE
+G:f:TERM_VIOLET
 I:130:48d100:100:200:0
 W:66:3:106:30000
 T:21:67:24:17
@@ -9722,7 +9722,7 @@ D: stealth.
 
 N:588:Great Hell Wyrm
 A:GrtHellWyrm
-G:D:TERM_RED
+G:D:TERM_RED_LAVA
 I:125:38d100:30:150:80
 W:67:2:56:21000
 T:12:32:15:29
@@ -9745,7 +9745,7 @@ D: and you truly realize how insignificant you are.
 
 N:589:Great Bile Wyrm
 A:GrtBileWyrm
-G:D:TERM_L_UMBER
+G:D:TERM_SLATE_GRAY
 I:125:35d100:30:150:80
 W:67:2:39:21000
 T:12:35:15:31
@@ -9767,7 +9767,7 @@ D: eating away the very stones of the dungeon - what could it do to you?
 
 N:590:Thuringwethil, the Vampire Messenger
 A:Thuringwethl
-G:V:TERM_WHITE
+G:V:TERM_PURPLE
 I:130:50d100:20:145:10
 W:67:4:176:23000
 T:21:60:21:2
@@ -9792,7 +9792,7 @@ D: her wings and eyes give away her true form.
 
 N:591:Great Wyrm of Thunder
 A:GrtWyrmThund
-G:D:TERM_UMBER
+G:D:TERM_EARTH_YELLOW
 I:125:35d100:30:150:80
 W:67:2:39:23000
 T:12:62:49:13
@@ -9813,7 +9813,7 @@ D: think clearly enough to defend yourself adequately.
 
 N:592:Great Crystal Wyrm
 A:GrtCrystWyrm
-G:D:TERM_BLUE
+G:D:TERM_L_BROWN
 I:125:35d100:30:150:70
 W:67:2:39:23000
 T:12:64:15:19
@@ -9834,7 +9834,7 @@ D: moves in the light.
 
 N:593:Great Wyrm of Inertia
 A:GrtWyrmInert
-G:D:TERM_L_UMBER
+G:D:TERM_LIGHT_GRAY
 I:125:35d100:30:150:80
 W:67:2:39:24000
 T:12:65:15:31
@@ -9854,7 +9854,7 @@ D: at you with deadly menace.
 
 N:594:Beholder hive-mother
 A:BehHiveMothr
-G:e:TERM_YELLOW
+G:e:TERM_BLUE
 I:120:35d100:30:80:10
 W:67:3:119:25000
 T:21:71:67:12
@@ -9875,7 +9875,7 @@ D: her aid whenever she wishes.
 
 N:595:Bone golem
 A:Bone golem
-G:g:TERM_VIOLET
+G:g:TERM_L_DARK
 I:120:35d100:20:170:50
 W:68:3:78:23000
 T:18:82:49:18
@@ -9895,7 +9895,7 @@ D: previous victims.
 
 N:596:Jabberwock
 A:Jabberwock
-G:H:TERM_L_BLUE
+G:H:TERM_VIOLET
 I:130:32d100:35:125:255
 W:68:3:0:24000
 T:19:25:17:31
@@ -9913,7 +9913,7 @@ D: catch! Run and run quickly, for death incarnate chases behind you!
 
 N:597:Tselakus, the Dreadlord
 A:Tselakus
-G:G:TERM_VIOLET
+G:G:TERM_RED_LAVA
 I:130:65d100:20:150:10
 W:68:2:162:35000
 T:21:68:17:11
@@ -9940,7 +9940,7 @@ D: soul!
 
 N:598:Gelugon
 A:Gelugon
-G:U:TERM_L_BROWN
+G:U:TERM_WHITE
 I:130:35d100:20:100:80
 W:69:3:78:14000
 T:19:39:50:11
@@ -9964,7 +9964,7 @@ D: razor-sharp spikes.
 
 N:599:Nightcrawler
 A:Nightcrawler
-G:W:TERM_L_GREEN
+G:W:TERM_L_DARK
 I:120:80d60:20:160:10
 W:69:3:91:18000
 T:25:90:21:20
@@ -9987,7 +9987,7 @@ D: terrible chill runs down your spine as you face it.
 
 N:600:Polyphemus, the Blind Cyclops
 A:Polyphemus
-G:P:TERM_SLATE_GRAY
+G:P:TERM_GREEN
 I:130:53d100:40:140:40
 W:69:3:113:29000
 T:13:81:70:18
@@ -10010,7 +10010,7 @@ D: disability.
 
 N:601:Greater demonic quylthulg
 A:GrDemonic Q
-G:Q:TERM_RED
+G:Q:TERM_L_RED
 I:120:15d100:20:1:0
 W:70:2:134:10500
 T:19:5:19:7
@@ -10024,7 +10024,7 @@ D:A massive pulsating mound of flesh, glowing with a hellish light.
 
 N:602:Great Aether Wyrm
 A:GrtAethrWyrm
-G:D:TERM_RED
+G:D:TERM_VIOLET
 I:125:35d100:40:160:80
 W:70:2:39:22000
 T:12:68:15:21
@@ -10054,7 +10054,7 @@ D: and shapes, though the dominant form is that of a great dragon.
 
 N:603:Great Time Wyrm
 A:GrtTimeWyrm
-G:D:TERM_GREEN
+G:D:TERM_PINK
 I:125:37d100:30:170:80
 W:70:2:39:27000
 T:12:63:15:31
@@ -10074,7 +10074,7 @@ D: sure if it is there.
 
 N:604:Glaurung, Father of the Dragons
 A:Glaurung
-G:D:TERM_GREEN
+G:D:TERM_RASPBERRY
 I:130:75d100:30:140:70
 W:70:3:169:50000
 T:21:52:15:25
@@ -10101,7 +10101,7 @@ D: wishes.  He is the definition of dragonfire.
 
 N:605:Greater draconic quylthulg
 A:GrDraconic Q
-G:Q:TERM_L_UMBER
+G:Q:TERM_L_GREEN
 I:120:15d100:20:1:0
 W:71:2:134:10500
 T:19:6:19:5
@@ -10116,7 +10116,7 @@ D: multi-hued light.
 
 N:606:Great Ethereal Wyrm
 A:GrtEthrlWyrm
-G:D:TERM_PURPLE
+G:D:TERM_ORANGE_PEEL
 I:125:45d100:40:175:80
 W:71:2:50:22000
 T:12:66:15:21
@@ -10138,7 +10138,7 @@ D: eyes glare with white hatred from the shadows.
 
 N:607:Greater rotting quylthulg
 A:GrRotting Q
-G:Q:TERM_L_GREEN
+G:Q:TERM_L_UMBER
 I:120:15d100:20:1:0
 W:72:2:134:10500
 T:19:7:19:6
@@ -10153,7 +10153,7 @@ D: it throbs and writhes.
 
 N:608:Horned Reaper
 A:HornedReaper
-G:U:TERM_WHITE
+G:U:TERM_L_BLUE
 I:130:38d100:40:120:80
 W:72:3:78:22000
 T:14:27:50:1
@@ -10176,7 +10176,7 @@ D: between it and you - even the minions it has just summoned.
 
 N:609:Khamûl, the Black Easterling
 A:Khamûl
-G:W:TERM_RED_LAVA
+G:W:TERM_TAUPE
 I:125:50d100:90:100:10
 W:72:3:141:36000
 T:21:57:21:19
@@ -10199,7 +10199,7 @@ D: in combat awesome and his form twisted by evil cunning.
 
 N:610:Nightwalker
 A:Nightwalker
-G:W:TERM_L_BROWN
+G:W:TERM_L_DARK
 I:130:50d65:20:175:10
 W:73:3:91:25000
 T:20:17:21:21
@@ -10223,7 +10223,7 @@ D: in awe of this mighty being.
 
 N:611:Omarax, the Eye Tyrant
 A:Omarax
-G:e:TERM_L_RED
+G:e:TERM_PURPLE
 I:130:65d100:30:80:10
 W:73:3:147:35000
 T:21:92:24:10
@@ -10247,7 +10247,7 @@ D: sickening.
 
 N:612:Aether hound
 A:AetherHound
-G:Z:TERM_SLATE
+G:Z:TERM_VIOLET
 I:120:60d40:30:100:0
 W:74:3:0:8000
 T:25:91:22:14
@@ -10275,7 +10275,7 @@ D: very uncertain all of a sudden.
 
 N:613:Black reaver
 A:Black reaver
-G:L:TERM_BLUE
+G:L:TERM_L_DARK
 I:125:45d100:20:170:50
 W:74:3:119:27000
 T:25:92:18:10
@@ -10297,7 +10297,7 @@ D: even the very rock of the dungeon cannot prevent it reaching you.
 
 N:614:Bronze golem
 A:Bronze golem
-G:g:TERM_UMBER
+G:g:TERM_ORANGE
 I:120:40d100:20:170:50
 W:75:3:78:26000
 T:18:83:49:19
@@ -10318,7 +10318,7 @@ D: with great heat.
 
 N:615:Great Wyrm of Law
 A:GrtWyrmOfLaw
-G:D:TERM_YELLOW
+G:D:TERM_L_BLUE
 I:125:45d100:40:170:100
 W:75:2:91:29000
 T:12:46:16:0
@@ -10340,7 +10340,7 @@ D: as mere insects to be crushed underfoot.
 
 N:616:Master quylthulg
 A:Master Q
-G:Q:TERM_BLUE
+G:Q:TERM_L_BLUE
 I:120:30d100:30:1:0
 W:76:2:147:12000
 T:21:74:19:4
@@ -10356,7 +10356,7 @@ D: monster.
 
 N:617:Diamond golem
 A:DiamondGolem
-G:g:TERM_VIOLET
+G:g:TERM_WHITE
 I:125:41d100:20:275:50
 W:76:2:95:28000
 T:18:84:49:19
@@ -10377,7 +10377,7 @@ D:A gigantic animated diamond statue of demonic shape.
 
 N:618:Atlas, the Titan
 A:AtlasThTitan
-G:P:TERM_GREEN
+G:P:TERM_SLATE
 I:125:60d100:30:160:15
 W:76:3:0:37000
 T:4:38:70:28
@@ -10399,7 +10399,7 @@ D: named after him.
 
 N:619:The Lernaean Hydra
 A:LernaeanHydr
-G:M:TERM_L_DARK
+G:M:TERM_PURPLE
 I:135:70d90:50:150:20
 W:77:2:126:22000
 T:21:59:20:0
@@ -10426,7 +10426,7 @@ D: form.  And it grows new heads as fast as you chop them off.
 
 N:620:Pit Fiend
 A:Pit Fiend
-G:U:TERM_SKY_BLUE
+G:U:TERM_ORANGE
 I:130:40d100:30:120:75
 W:77:3:78:27000
 T:19:38:50:31
@@ -10451,7 +10451,7 @@ D: the commanders of vast demon armies.
 
 N:621:Feagwath, the Undead Sorcerer
 A:Feagwath
-G:L:TERM_L_DARK
+G:L:TERM_YELLOW
 I:130:50d100:20:100:50
 W:77:2:162:30000
 T:21:70:18:12
@@ -10475,7 +10475,7 @@ D: clearly risen from the dead to continue his foul plots and schemes.
 
 N:622:Hellhound
 A:Hellhound
-G:C:TERM_L_UMBER
+G:C:TERM_RED
 I:125:60d15:25:80:30
 W:78:2:15:600
 T:16:43:15:7
@@ -10492,7 +10492,7 @@ D:It is a giant dog that glows with heat.  Flames pour from its nostrils.
 
 N:623:Great Wyrm of Chaos
 A:GrtWyrmChaos
-G:D:TERM_L_BROWN
+G:D:TERM_VIOLET
 I:125:50d100:40:170:100
 W:78:2:91:29000
 T:12:47:15:31
@@ -10516,7 +10516,7 @@ D: around it.
 
 N:624:Qlzqqlzuup, the Emperor Quylthulg
 A:Qlzqqlzuup
-G:Q:TERM_UMBER
+G:Q:TERM_PURPLE
 I:130:50d100:30:1:0
 W:79:3:190:20000
 T:21:75:19:8
@@ -10535,7 +10535,7 @@ D: only it must bring help to protect itself.
 
 N:625:Greater Balrog
 A:GreatrBalrog
-G:U:TERM_ORANGE
+G:U:TERM_VIOLET
 I:130:50d100:40:140:80
 W:79:3:91:25000
 T:13:54:50:30
@@ -10560,7 +10560,7 @@ D: to destroy you.
 
 N:626:Great Chromatic Wyrm
 A:GrtChromWyrm
-G:D:TERM_RED
+G:D:TERM_VIOLET
 I:125:50d100:40:170:100
 W:79:2:91:29500
 T:12:74:16:2
@@ -10584,7 +10584,7 @@ D:A gigantic dragon whose scales shimmer in myriad hues.
 
 N:627:Great Wyrm of Balance
 A:GrtWyrmBalnc
-G:D:TERM_L_DARK
+G:D:TERM_VIOLET
 I:125:50d100:40:170:100
 W:79:2:91:30500
 T:12:67:16:1
@@ -10609,7 +10609,7 @@ D: actions.  It will destroy you.
 
 N:628:Ungoliant, the Unlight
 A:Ungoliant
-G:S:TERM_L_DARK
+G:S:TERM_TAUPE
 I:140:175d100:100:150:80
 W:95:3:225:70000
 T:21:72:20:13
@@ -10636,7 +10636,7 @@ D: eat herself to avoid starvation.
 
 N:629:The Witch-King of Angmar
 A:WitchKingAng
-G:W:TERM_L_BLUE
+G:W:TERM_TAUPE
 I:130:60d100:90:120:10
 W:80:3:162:55000
 T:21:76:21:22
@@ -10662,7 +10662,7 @@ D: that he is fated never to die by the hand of mortal man.
 
 N:630:Maeglin, the Traitor of Gondolin
 A:Maeglin
-G:h:TERM_RED
+G:h:TERM_TAUPE
 I:130:60d100:70:120:20
 W:81:2:190:35000
 T:21:87:33:28
@@ -10685,7 +10685,7 @@ D: himself, and some of Morgoth's greatest servants answer to his call.
 
 N:631:Pazuzu, Lord of Air
 A:Pazuzu
-G:U:TERM_L_UMBER
+G:U:TERM_BLUE
 I:140:55d100:40:125:10
 W:82:2:162:30000
 T:21:77:14:28
@@ -10706,7 +10706,7 @@ D: inhumanely at you as he decides your fate.
 
 N:632:Great Wyrm of Power
 A:GrtWyrmPower
-G:D:TERM_ORANGE_PEEL
+G:D:TERM_VIOLET
 I:130:60d100:40:200:80
 W:82:2:119:32000
 T:12:69:16:1
@@ -10736,7 +10736,7 @@ D: it can breathe.
 
 N:633:Draugluin, Sire of All Werewolves
 A:Draugluin
-G:C:TERM_UMBER
+G:C:TERM_L_BROWN
 I:130:70d100:80:90:90
 W:83:2:119:40000
 T:21:81:15:8
@@ -10757,7 +10757,7 @@ D: kind.
 
 N:634:Cantoras, the Skeletal Lord
 A:Cantoras
-G:s:TERM_SILVER
+G:s:TERM_VIOLET
 I:140:75d100:20:120:80
 W:84:2:162:45000
 T:21:78:29:27
@@ -10782,7 +10782,7 @@ D: underworld.  Flee his wrath!
 
 N:635:Ancalagon the Black
 A:Ancalagon
-G:D:TERM_WHITE
+G:D:TERM_L_DARK
 I:135:100d100:40:170:70
 W:85:3:190:45000
 T:21:64:15:30
@@ -10809,7 +10809,7 @@ D: time.
 
 N:636:The Tarrasque
 A:TheTarrasque
-G:R:TERM_ORANGE
+G:R:TERM_VIOLET
 I:130:85d100:50:185:20
 W:86:2:0:35000
 T:21:79:20:1
@@ -10831,7 +10831,7 @@ D: is unmatched!
 
 N:637:Kronos, Lord of the Titans
 A:Kronos
-G:P:TERM_ORANGE
+G:P:TERM_VIOLET
 I:125:70d100:30:150:15
 W:87:3:162:42000
 T:4:40:70:29
@@ -10854,7 +10854,7 @@ D: the nether hells to seek revenge on the world.
 
 N:638:Lungorthin, the Balrog of White Fire
 A:Lungorthin
-G:U:TERM_L_BLUE
+G:U:TERM_PURPLE
 I:130:50d100:20:125:80
 W:68:2:146:37000
 T:21:80:31:2
@@ -10877,7 +10877,7 @@ D: scorched by the heat of his body.
 
 N:639:Huan, Wolfhound of the Valar
 A:Huan
-G:C:TERM_GREEN
+G:C:TERM_LIGHT_GRAY
 I:130:80d100:50:160:10
 W:90:1:0:35000
 T:21:94:50:3
@@ -10900,7 +10900,7 @@ D: his nemesis - Carcharoth, the terrible wolf of Angband.
 
 N:640:Carcharoth, the Jaws of Thirst
 A:Carcharoth
-G:C:TERM_UMBER
+G:C:TERM_RED_LAVA
 I:130:80d100:50:160:10
 W:90:1:90:35000
 T:21:84:15:9
@@ -10947,7 +10947,7 @@ D: This ancient shadow of death wilts every living thing it passes.
 
 N:642:Gothmog, the High Captain of Balrogs
 A:Gothmog
-G:U:TERM_LIME_GREEN
+G:U:TERM_PURPLE
 I:130:80d100:100:140:0
 W:95:1:190:43000
 T:21:85:31:3
@@ -11008,7 +11008,7 @@ D: rarely fights without them.
 
 N:644:Morgoth, Lord of Darkness
 A:Morgoth
-G:A:TERM_ORANGE
+G:A:TERM_L_DARK
 I:140:200d100:100:150:0
 W:100:1:400:60000
 T:21:91:18:30
@@ -11045,7 +11045,7 @@ D: defiance as he strides towards you to crush you to a pulp!
 
 N:645:Skeleton
 A:PG Skeleton
-G:s:TERM_PURPLE
+G:s:TERM_WHITE
 I:110:10d10:20:40:0
 W:6:1:35:75
 T:20:65:29:21
@@ -11061,7 +11061,7 @@ D:An animated skeleton, creaking as it advances.
 
 N:646:Zombie
 A:PGZombie
-G:z:TERM_LIGHT_GRAY
+G:z:TERM_SLATE_GRAY
 I:110:20d10:20:25:0
 W:12:1:53:150
 T:20:66:30:25
@@ -11079,7 +11079,7 @@ D: chunks as it shambles forward.
 
 N:647:Spirit
 A:PG Spirit
-G:G:TERM_L_BROWN
+G:G:TERM_SNOW_WHITE
 I:115:20d20:20:55:0
 W:18:1:67:240
 T:20:67:17:0
@@ -11098,7 +11098,7 @@ D:A ghostly apparition that shrieks horribly.
 
 N:648:Mummy
 A:PG Mummy
-G:z:TERM_PINK
+G:z:TERM_SLATE_GRAY
 I:115:15d50:20:35:0
 W:24:1:67:800
 T:20:68:65:4
@@ -11119,7 +11119,7 @@ D: its head.
 
 N:649:Wight
 A:PG Wight
-G:W:TERM_ORANGE
+G:W:TERM_SLATE_GRAY
 I:115:15d65:20:45:0
 W:30:1:80:1000
 T:20:69:21:5
@@ -11140,7 +11140,7 @@ D: out towards you, your panicked soul cowers away.
 
 N:650:Ghost
 A:PG Ghost
-G:G:TERM_RED
+G:G:TERM_LIGHT_GRAY
 I:115:15d80:20:45:0
 W:36:1:83:1250
 T:20:70:17:2
@@ -11161,7 +11161,7 @@ D: illuminates nothing.
 
 N:651:Vampire
 A:PG Vampire
-G:V:TERM_LIGHT_GRAY
+G:V:TERM_VIOLET
 I:120:15d90:20:55:0
 W:42:1:92:6000
 T:20:71:20:31
@@ -11183,7 +11183,7 @@ D: teeth.
 
 N:652:Phantom
 A:PG Phantom
-G:G:TERM_NAVY_BLUE
+G:G:TERM_VIOLET
 I:120:20d90:30:45:20
 W:46:1:101:15000
 T:20:72:17:7
@@ -11204,7 +11204,7 @@ D: your very soul.
 
 N:653:Lich
 A:PG Lich
-G:L:TERM_SLATE
+G:L:TERM_ORANGE_PEEL
 I:125:32d95:20:75:0
 W:56:1:109:25000
 T:20:73:18:8
@@ -11248,7 +11248,7 @@ D: dreadful chill invades your bones.
 
 N:655:Deathlord
 A:PG Deathlord
-G:W:TERM_EARTH_YELLOW
+G:W:TERM_LIGHT_GRAY
 I:125:55d100:20:110:0
 W:74:1:155:34000
 T:20:75:17:10
@@ -11270,7 +11270,7 @@ D: the undead comes to claim your soul.
 
 N:656:Spawn of Ungoliant
 A:SpawnOUngoli
-G:S:TERM_SLATE_GRAY
+G:S:TERM_TAUPE
 I:125:35d100:30:120:80
 W:65:3:141:27000
 T:25:66:20:11
@@ -11293,7 +11293,7 @@ D: you.
 
 N:657:Descendant of Ungoliant
 A:DescentoUngo
-G:S:TERM_RED
+G:S:TERM_TAUPE
 I:120:15d100:30:120:80
 W:45:3:141:27000
 T:25:67:20:13
@@ -11316,7 +11316,7 @@ D: retained a dark form much like Ungoliant's and her spawns'.
 
 N:658:Lesser Servant of Manwë
 A:LServntManwë
-G:A:TERM_L_UMBER
+G:A:TERM_YELLOW
 I:110:65d10:30:60:155
 W:43:4:95:1600
 T:25:36:71:11
@@ -11337,7 +11337,7 @@ D: nature.
 
 N:659:Lesser Servant of Varda
 A:LServntVarda
-G:A:TERM_NAVY_BLUE
+G:A:TERM_RED
 I:110:65d10:30:60:155
 W:43:4:95:1600
 T:25:37:71:12
@@ -11358,7 +11358,7 @@ D: Queen of the Valar.
 
 N:660:Lesser Servant of Ulmo
 A:LServntUlmo
-G:A:TERM_SNOW_WHITE
+G:A:TERM_L_BLUE
 I:110:65d10:30:60:155
 W:43:4:95:1600
 T:25:38:71:13
@@ -11377,7 +11377,7 @@ D:A Maia that serves Ulmo, the Vala of water and the Lord of the seas.
 
 N:661:Lesser Servant of Morgoth
 A:LSrvntMrgoth
-G:A:TERM_ORANGE
+G:A:TERM_TAUPE
 I:110:55d10:30:60:155
 W:40:4:90:1600
 T:25:39:71:14
@@ -11397,7 +11397,7 @@ D:A Maia, corrupted by Morgoth from the service of another Vala.
 
 N:662:Lesser Servant of Aulë
 A:LServntAulë
-G:A:TERM_SKY_BLUE
+G:A:TERM_L_UMBER
 I:110:55d10:30:60:155
 W:40:4:90:1600
 T:25:40:71:15
@@ -11417,7 +11417,7 @@ D: earth.
 
 N:663:Lesser Servant of Oromë
 A:LServntOromë
-G:A:TERM_L_UMBER
+G:A:TERM_SLATE
 I:110:55d10:30:60:155
 W:40:4:90:1600
 T:25:41:71:16
@@ -11435,7 +11435,7 @@ D:A Maia that serves Oromë, the Huntsman of the Valar.
 
 N:664:Lesser Servant of Mandos
 A:LSrvntMandos
-G:A:TERM_L_BLUE
+G:A:TERM_GREEN
 I:115:55d10:30:60:155
 W:40:4:90:1600
 T:25:42:71:17
@@ -11453,7 +11453,7 @@ D:A Maia that serves Mandos, the Judge of the Valar and the dead.
 
 N:665:Lesser Servant of Yavanna
 A:LSrvntYavnna
-G:A:TERM_LIME_GREEN
+G:A:TERM_L_GREEN
 I:110:45d10:30:60:155
 W:37:4:85:1600
 T:25:43:71:18
@@ -11471,7 +11471,7 @@ D:A Maia that serves Yavanna, wife of Aule and the Vala of living earth.
 
 N:666:Lesser Servant of Irmo
 A:LServntIrmo
-G:A:TERM_L_UMBER
+G:A:TERM_ORANGE
 I:110:45d10:30:60:155
 W:37:4:85:1600
 T:25:44:71:19
@@ -11508,7 +11508,7 @@ D:A Maia that serves Tulkas, the Champion of the Valar.
 
 N:668:Servant of Manwë
 A:ServantManwë
-G:A:TERM_TAUPE
+G:A:TERM_YELLOW
 I:120:200d10:30:68:255
 W:55:8:120:7500
 T:25:46:72:11
@@ -11531,7 +11531,7 @@ D: to assault their enemies.
 
 N:669:Servant of Varda
 A:ServantVarda
-G:A:TERM_ORANGE_PEEL
+G:A:TERM_RED
 I:120:200d10:30:68:255
 W:55:8:120:7500
 T:25:47:72:12
@@ -11554,7 +11554,7 @@ D: to Arda and thus, so do her servants.
 
 N:670:Servant of Ulmo
 A:ServantUlmo
-G:A:TERM_YELLOW
+G:A:TERM_L_BLUE
 I:120:200d10:30:68:255
 W:55:8:120:5500
 T:25:48:72:13
@@ -11576,7 +11576,7 @@ D: forms and are also known among the Ainur for their skill as singers.
 
 N:671:Servant of Morgoth
 A:SrvntMorgoth
-G:A:TERM_GOLD
+G:A:TERM_TAUPE
 I:120:170d10:30:68:255
 W:52:8:115:5500
 T:25:49:72:14
@@ -11599,7 +11599,7 @@ D: more subtle ways and appearances.
 
 N:672:Servant of Aulë
 A:ServantAulë
-G:A:TERM_L_GREEN
+G:A:TERM_L_UMBER
 I:120:170d10:30:68:255
 W:52:8:115:5500
 T:25:50:72:15
@@ -11621,7 +11621,7 @@ D: creation unspoiled by greed and are skilled in various crafts.
 
 N:673:Servant of Oromë
 A:ServantOromë
-G:A:TERM_YELLOW
+G:A:TERM_SLATE
 I:120:170d10:30:68:255
 W:52:8:115:5500
 T:25:51:72:16
@@ -11643,7 +11643,7 @@ D: and wide in Arda.
 
 N:674:Servant of Mandos
 A:SrvantMandos
-G:A:TERM_LIME_GREEN
+G:A:TERM_GREEN
 I:120:170d10:30:68:255
 W:52:8:115:5500
 T:25:52:72:17
@@ -11665,7 +11665,7 @@ D: has judged, whether good or evil.
 
 N:675:Servant of Yavanna
 A:SrvntYavanna
-G:A:TERM_RED
+G:A:TERM_L_GREEN
 I:120:140d10:30:68:255
 W:50:8:110:5500
 T:25:53:72:18
@@ -11687,7 +11687,7 @@ D: thus her servants command them as she does.
 
 N:676:Servant of Irmo
 A:ServantIrmo
-G:A:TERM_WHITE
+G:A:TERM_ORANGE
 I:120:140d10:30:68:255
 W:50:8:110:5500
 T:25:54:72:19
@@ -11709,7 +11709,7 @@ D: his servants revel in the twilight.
 
 N:677:Servant of Tulkas
 A:SrvantTulkas
-G:A:TERM_TAUPE
+G:A:TERM_BLUE
 I:120:220d10:30:68:255
 W:50:8:110:5500
 T:25:55:72:20
@@ -11731,7 +11731,7 @@ D: laughs ever, even in the face of Morgoth's wrath.
 
 N:678:Greater Servant of Manwë
 A:GServntManwë
-G:A:TERM_SLATE
+G:A:TERM_YELLOW
 I:130:104d10:30:140:255
 W:73:8:150:7500
 T:25:56:73:11
@@ -11758,7 +11758,7 @@ D: mana.
 
 N:679:Greater Servant of Varda
 A:GServntVarda
-G:A:TERM_WHITE
+G:A:TERM_RED
 I:130:104d10:30:140:255
 W:73:8:150:7500
 T:25:57:73:12
@@ -11785,7 +11785,7 @@ D: savage atttacks.
 
 N:680:Greater Servant of Ulmo
 A:GServantUlmo
-G:A:TERM_UMBER
+G:A:TERM_L_BLUE
 I:130:104d10:30:140:255
 W:73:8:150:5500
 T:25:58:73:13
@@ -11811,7 +11811,7 @@ D: powerful attacks to complement their control of Water.
 
 N:681:Greater Servant of Morgoth
 A:GSrvntMrgoth
-G:A:TERM_L_RED
+G:A:TERM_TAUPE
 I:130:74d10:30:140:255
 W:70:8:140:5500
 T:25:59:73:14
@@ -11840,7 +11840,7 @@ D: and fear.
 
 N:682:Greater Servant of Aul["e]
 A:GServntAule
-G:A:TERM_TAUPE
+G:A:TERM_L_UMBER
 I:130:74d10:30:140:255
 W:70:8:140:5500
 T:25:60:73:15
@@ -11866,7 +11866,7 @@ D: brutal attacks.
 
 N:683:Greater Servant of Oromë
 A:GSrvantOromë
-G:A:TERM_L_UMBER
+G:A:TERM_SLATE
 I:130:74d10:30:140:255
 W:70:8:140:5500
 T:25:61:73:16
@@ -11891,7 +11891,7 @@ D: the Hunt and track prey at their sides.
 
 N:684:Greater Servant of Mandos
 A:GSrvntMandos
-G:A:TERM_VIOLET
+G:A:TERM_GREEN
 I:130:74d10:30:140:255
 W:70:8:140:5500
 T:25:62:73:17
@@ -11943,7 +11943,7 @@ D: has to offer.
 
 N:686:Greater Servant of Irmo
 A:GServntIrmo
-G:A:TERM_WHITE
+G:A:TERM_ORANGE
 I:130:44d10:30:140:255
 W:67:8:130:5500
 T:25:64:73:19
@@ -11968,7 +11968,7 @@ D: force their way into your mind from the spells of Irmo's finest.
 
 N:687:Greater Servant of Tulkas
 A:GSrvntTulkas
-G:A:TERM_L_DARK
+G:A:TERM_BLUE
 I:130:144d10:30:140:255
 W:67:8:130:5500
 T:25:65:73:20
@@ -11994,7 +11994,7 @@ D: with spells while pummeling them with mighty blows.
 
 N:688:Creeping emerald gems
 A:CreepEmerald
-G:$:TERM_WHITE
+G:$:TERM_GREEN
 I:120:20d20:5:80:10
 W:26:3:0:100
 T:5:99:71:9
@@ -12010,7 +12010,7 @@ D:It appears to be a pile of emeralds, until it begins to attack you.
 
 N:689:Mushroom mimic
 A:MushrmMimic
-G:,:TERM_ORANGE
+G:,:TERM_LIME_GREEN
 I:110:8d8:5:15:10
 W:14:3:35:20
 T:5:109:72:10
@@ -12026,7 +12026,7 @@ D: unsuspecting adventurers within reach of its sickly claws.
 
 N:690:Armor mimic
 A:Armor mimic
-G:):TERM_GREEN
+G:):TERM_JUNGLE_GREEN
 I:110:15d15:5:120:10
 W:25:3:50:130
 T:5:110:72:7
@@ -12046,7 +12046,7 @@ D: a surprise attack.
 
 N:691:Sword mimic
 A:Sword mimic
-G:|:TERM_L_GREEN
+G:|:TERM_LIGHT_GRAY
 I:140:15d15:5:45:10
 W:20:3:0:200
 T:5:111:72:9
@@ -12066,7 +12066,7 @@ D: jumps into the air and begins hacking away at them.
 
 N:692:Amulet Mimic
 A:Amulet Mimic
-G:":TERM_WHITE
+G:":TERM_VIOLET
 I:125:40d40:5:55:10
 W:50:3:75:5000
 T:5:107:73:0
@@ -12088,7 +12088,7 @@ D: at them.
 
 N:693:Dungeon spellbook mimic
 A:SpellbkMimic
-G:?:TERM_UMBER
+G:?:TERM_NAVY_BLUE
 I:125:50d50:5:65:10
 W:60:3:100:10000
 T:5:108:72:2
@@ -12113,7 +12113,7 @@ D: starts casting deadly spells at them.
 
 N:694:Dragon armor mimic
 A:DragArmMimic
-G:[:TERM_L_BROWN
+G:[:TERM_PURPLE
 I:130:50d100:5:175:10
 W:70:3:80:18000
 T:5:112:72:8
