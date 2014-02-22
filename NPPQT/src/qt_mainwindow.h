@@ -25,9 +25,10 @@ class MainWindow : public QMainWindow
 
 
 public:
+    MainWindowPrivate *priv;
+
     MainWindow();
 
-    bool panel_contains(s16b y, s16b x);
     void write_colored_text(QChar letter, QColor color, s16b y, s16b x);
     void display_square(s16b y, s16b x);
     void screen_wipe();
@@ -67,9 +68,13 @@ private slots:
     void set_onscreen_dungeon_boundries();
     void set_map();
 
+    // Graphics
+    void set_dvg();
+    void set_ascii();
+    void set_pseudo_ascii();
+
 
 private:
-    MainWindowPrivate *priv;
 
     // The editable part of the main window.
     QGraphicsView *graphics_view;
@@ -126,6 +131,9 @@ private:
     //Command for the settings menu
     QAction *options_act;
     QAction *bigtile_act;
+    QAction *ascii_mode_act;
+    QAction *dvg_mode_act;
+    QAction *pseudo_ascii_act;
     QAction *fontselect_act;
 
 

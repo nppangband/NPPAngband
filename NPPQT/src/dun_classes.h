@@ -19,6 +19,13 @@ enum
     OBJ_SYMBOL_PILE,
 };
 
+#define UI_TRANSPARENT_MONSTER 0x00000001
+#define UI_TRANSPARENT_EFFECT  0x00000002
+#define UI_LIGHT_DIM           0x00000004
+#define UI_LIGHT_BRIGHT        0x00000008
+#define UI_LIGHT_TORCH         0x00000010
+#define UI_COSMIC_TORCH         0x00000020
+
 class dungeon_type
 {
 public:
@@ -45,9 +52,21 @@ public:
     QColor monster_color;
     QChar  monster_char;
 
+    // Tiles for the 4 layers
+    QString dun_tile;
+    QString object_tile;
+    QString effect_tile;
+    QString monster_tile;
+
+    u32b ui_flags;
+
     bool has_object();
     bool has_effect();
     bool has_monster();
+
+    bool has_visible_object();
+    bool has_visible_effect();
+    bool has_visible_monster();
 
     // All variables above should be included in this method.
     void dungeon_square_wipe();

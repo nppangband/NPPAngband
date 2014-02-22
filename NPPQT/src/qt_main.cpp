@@ -14,7 +14,6 @@ int main(int argc, char *argv[])
 
     app.setApplicationName("NPP Games");
 
-
     MainWindow *main_window = new MainWindow;
     main_window->show();
     return app.exec();

@@ -6997,7 +6997,7 @@ bool project(int who, int rad, int y0, int x0, int y1, int x1, int dam, int typ,
             if (!blind && !(flg & (PROJECT_HIDE)))
             {
                 /* Only do visuals if the player can "see" the projection */
-                if (main_window->panel_contains(y, x) && player_has_los_bold(y, x) &&
+                if (panel_contains(y, x) && player_has_los_bold(y, x) &&
                     (path_gx[i] < PATH_G_NONE))
                 {
                     u16b p;

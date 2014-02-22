@@ -81,18 +81,24 @@ dungeon_type::dungeon_type()
  */
 void dungeon_type::dungeon_square_wipe()
 {
-    feat = effect_idx = monster_idx = 0;
-    effect_idx = cave_info = 0;
+    feat = effect_idx = monster_idx = object_idx = 0;
+    cave_info = 0;
     special_lighting = obj_special_symbol = 0;
+    ui_flags = 0;
     dtrap = FALSE;
-    dun_color.setRgb(0,0,0,0);
-    dun_char = '\0';
-    object_color.setRgb(0,0,0,0);
-    object_char = '\0';
-    effect_color.setRgb(0,0,0,0);
-    effect_char = '\0';
-    monster_color.setRgb(0,0,0,0);
-    monster_char = '\0';
+    dun_color = Qt::black;
+    dun_char = ' ';
+    object_color = Qt::black;
+    object_char = ' ';
+    effect_color = Qt::black;
+    effect_char = ' ';
+    monster_color = Qt::black;
+    monster_char = ' ';
+
+    monster_tile.clear();
+    object_tile.clear();
+    dun_tile.clear();
+    effect_tile.clear();
 }
 
 
@@ -185,4 +191,28 @@ void reset_dungeon_info()
             dungeon_info[y][x].dungeon_square_wipe();
         }
     }
+}
+
+bool dungeon_type::has_visible_object()
+{
+    if (object_char != ' ') return true;
+    if (object_color != QColor("black")) return true;
+    if (use_graphics && (object_tile.length() > 0)) return true;
+    return false;
+}
+
+bool dungeon_type::has_visible_effect()
+{
+    if (effect_char != ' ') return true;
+    if (effect_color != QColor("black")) return true;
+    if (use_graphics && (effect_tile.length() > 0)) return true;
+    return false;
+}
+
+bool dungeon_type::has_visible_monster()
+{
+    if (monster_char != ' ') return true;
+    if (monster_color != QColor("black")) return true;
+    if (use_graphics && (monster_tile.length() > 0)) return true;
+    return false;
 }

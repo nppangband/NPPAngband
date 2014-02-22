@@ -566,8 +566,8 @@ static void calc_torch(void)
             if (o_ptr->is_artifact())
             {
                 p_ptr->state.cur_light += 3;
-                continue;
-            }
+                continue;                
+            }            
 
             /* Lanterns (with fuel) provide more lite */
             if ((o_ptr->sval == SV_LIGHT_LANTERN) && (o_ptr->timeout > 0))
@@ -612,8 +612,7 @@ static void calc_torch(void)
 
 
     /* Player is glowing */
-    if (p_ptr->state.light) p_ptr->state.cur_light++;
-
+    if (p_ptr->state.light) p_ptr->state.cur_light++;    
 
     /* Notice changes in the "lite radius" */
 

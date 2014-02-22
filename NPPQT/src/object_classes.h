@@ -212,6 +212,8 @@ public:
     QColor d_color;		/* Default feature color */
     QChar d_char;		/* Default object character */
 
+    QString tile_id;
+
     QString autoinscribe;  //Default inscription for this object
 
     // Tile mapping
@@ -347,6 +349,7 @@ public:
     byte tile_32x32_x;
     byte tile_8x8_y;
     byte tile_8x8_x;
+    QString tile_id;
 };
 
 

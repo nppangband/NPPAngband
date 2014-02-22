@@ -153,6 +153,13 @@ void pop_up_message_box(QString message, QMessageBox::Icon the_icon)
     msg_box.exec();
 }
 
+void popup1(QString message, int id)
+{
+    static QList<int> keys;
+    if (keys.contains(id)) return;
+    keys.append(id);
+    pop_up_message_box(message);
+}
 
 // Post a question to the player and wait for a yes/no response.
 // return TRUE/FALSE;
