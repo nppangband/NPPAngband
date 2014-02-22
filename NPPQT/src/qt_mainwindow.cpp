@@ -1,6 +1,7 @@
 #include <QtWidgets>
 #include <QHash>
 #include <QTextStream>
+#include <QGraphicsItem>
 
 #include "src/npp.h"
 #include "src/qt_mainwindow.h"
@@ -11,14 +12,27 @@
 
 static MainWindow *main_window = 0;
 
+class MainWindowPrivate;
+
+class DungeonGrid: public QGraphicsItem
+{
+public:
+    DungeonGrid(int _x, int _y, MainWindowPrivate *_parent);
+
+    QRectF boundingRect() const;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+    MainWindowPrivate *parent;
+    int x, y;
+};
+
 class MainWindowPrivate
 {
 public:
+    DungeonGrid *grids[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
+
     QGraphicsScene *scene;
     QGraphicsView *view;
-    QGraphicsSimpleTextItem *items[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
-    QGraphicsPixmapItem *items_g[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
-    QGraphicsPixmapItem *b_items_g[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
     int font_hgt, font_wid;
     int tile_hgt, tile_wid;
     int cell_hgt, cell_wid;
@@ -30,10 +44,9 @@ public:
     QHash<QString, QPixmap> tiles;
     QPixmap tile_map;
 
-    void init_scene(QGraphicsScene *_scene, QGraphicsView *_view);
-    void wipe();
+    MainWindowPrivate();
+    void init_scene(QGraphicsScene *_scene, QGraphicsView *_view, QFont _font);
     void redraw();
-    void redraw_cell(int y, int x);
     bool panel_contains(int y, int x);
     void set_font(QFont _font);
     void set_graphic_mode(int mode);
@@ -46,6 +59,137 @@ public:
     QPixmap gray_pix(QPixmap src);
     QPixmap pseudo_ascii(QChar chr, QColor color);
 };
+
+MainWindowPrivate::MainWindowPrivate()
+{
+    view = 0;
+    scene = 0;
+}
+
+DungeonGrid::DungeonGrid(int _x, int _y, MainWindowPrivate *_parent)
+{
+    x = _x;
+    y = _y;
+    parent = _parent;
+}
+
+QRectF DungeonGrid::boundingRect() const
+{
+    return QRectF(0, 0, parent->cell_wid, parent->cell_hgt);
+}
+
+void DungeonGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    painter->fillRect(QRectF(0, 0, parent->cell_wid, parent->cell_hgt), Qt::black);
+
+    if (!character_dungeon) return;
+
+    dungeon_type *d_ptr = &dungeon_info[y][x];
+    QChar square_char = d_ptr->dun_char;
+    QColor square_color = d_ptr->dun_color;
+    bool empty = true;
+    u32b flags = 0;
+    QString key2;
+    qreal opacity = 1;
+    bool do_shadow = false;
+
+    flags = (d_ptr->ui_flags & (UI_LIGHT_BRIGHT | UI_LIGHT_DIM | UI_LIGHT_TORCH | UI_COSMIC_TORCH));
+
+    // Draw visible monsters
+    if (d_ptr->has_visible_monster())
+    {
+        square_char = d_ptr->monster_char;
+        square_color = d_ptr->monster_color;
+
+        empty = false;
+
+        if (!parent->do_pseudo_ascii) key2 = d_ptr->monster_tile;
+        else do_shadow = true;
+
+        flags |= (d_ptr->ui_flags & UI_TRANSPARENT_MONSTER);
+        opacity = 0.7;
+    }
+    // Draw effects
+    else if (d_ptr->has_visible_effect())
+    {
+        square_char = d_ptr->effect_char;
+        square_color = d_ptr->effect_color;
+
+        empty = false;
+
+        key2 = d_ptr->effect_tile;
+
+        flags |= (d_ptr->ui_flags & UI_TRANSPARENT_EFFECT);
+        opacity = 0.7;
+    }
+    // Draw objects
+    else if (d_ptr->has_visible_object())
+    {
+        square_char = d_ptr->object_char;
+        square_color = d_ptr->object_color;
+
+        empty = false;
+
+        key2 = d_ptr->object_tile;
+    }
+
+    bool done_bg = false;
+    bool done_fg = false;
+
+    if (use_graphics) {
+        // Draw background tile
+        QString key1 = d_ptr->dun_tile;
+
+        if (key1.length() > 0) {
+            parent->rebuild_tile(key1);
+            QPixmap pix = parent->tiles[key1];
+
+            if (flags & UI_LIGHT_TORCH) {
+                QColor color = QColor("yellow").darker(150);
+                if (flags & UI_COSMIC_TORCH) color = QColor("cyan").darker(150);
+                pix = parent->colorize_pix(pix, color);
+            }
+            else if (flags & UI_LIGHT_BRIGHT) {
+                pix = parent->darken_pix(pix);
+            }
+            else if (flags & UI_LIGHT_DIM) {
+                pix = parent->gray_pix(pix);
+            }
+
+            painter->drawPixmap(pix.rect(), pix, pix.rect());
+            done_bg = true;
+
+            // Draw foreground tile
+            if (key2.length() > 0) {
+               parent->rebuild_tile(key2);
+               QPixmap pix = parent->tiles.value(key2);
+               if (flags & (UI_TRANSPARENT_EFFECT | UI_TRANSPARENT_MONSTER)) {
+                   painter->setOpacity(opacity);
+               }
+               painter->drawPixmap(pix.rect(), pix, pix.rect());
+               painter->setOpacity(1);
+               done_fg = true;
+            }
+
+            if (do_shadow) {
+                QPixmap pix = parent->pseudo_ascii(square_char, square_color);
+                painter->drawPixmap(pix.rect(), pix, pix.rect());
+                done_fg = true;
+            }
+        }
+    }
+
+    if (!done_fg && (!empty || !done_bg)) {
+        QPen pen = painter->pen();
+        QFont font = painter->font();
+        painter->setFont(parent->font);
+        painter->setPen(square_color);
+        painter->drawText(QRectF(0, 0, parent->cell_wid, parent->cell_hgt),
+                          Qt::AlignCenter, QString(square_char));
+        painter->setPen(pen); // restore pen
+        painter->setFont(font); // restore font
+    }
+}
 
 QPixmap MainWindowPrivate::gray_pix(QPixmap src)
 {
@@ -72,7 +216,6 @@ QPixmap MainWindowPrivate::colorize_pix(QPixmap src, QColor color)
 
 QPixmap MainWindowPrivate::darken_pix(QPixmap src)
 {
-
     QImage img = src.toImage();
     QPainter p(&img);
     p.setCompositionMode(QPainter::CompositionMode_HardLight);
@@ -94,15 +237,6 @@ QPixmap MainWindowPrivate::lighten_pix(QPixmap src)
 void MainWindowPrivate::destroy_tiles()
 {
     tiles.clear();
-
-    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
-        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            //items_g[y][x]->setPixmap(blank_pix);
-            items_g[y][x]->setVisible(false);
-            //b_items_g[y][x]->setPixmap(blank_pix);
-            b_items_g[y][x]->setVisible(false);
-        }
-    }
 }
 
 void MainWindowPrivate::calculate_cell_size()
@@ -115,16 +249,7 @@ void MainWindowPrivate::calculate_cell_size()
 
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            // Center text on cell
-            int off_x = (cell_wid - font_wid) / 2;
-            if (off_x < 0) off_x = 0;
-            int off_y = (cell_hgt - font_hgt) / 2;
-            if (off_y < 0) off_y = 0;
-            items[y][x]->setPos(x * cell_wid + off_x, y * cell_hgt + off_y);
-
-            // Tile position. They are scaled so no offset
-            items_g[y][x]->setPos(x * cell_wid, y * cell_hgt);
-            b_items_g[y][x]->setPos(x * cell_wid, y * cell_hgt);
+            grids[y][x]->setPos(x * cell_wid, y * cell_hgt);
         }
     }
 }
@@ -147,9 +272,6 @@ void MainWindowPrivate::set_graphic_mode(int mode)
     }
 
     if (fname.length() > 0) {
-        QTime t1;
-        t1.start();
-
         fname.prepend(NPP_DIR_GRAF);
         QPixmap pix = QPixmap(fname);
         if (pix.isNull()) {
@@ -161,9 +283,7 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         calculate_cell_size();
         destroy_tiles();
         tile_map = pix;
-        if (character_dungeon) init_graphics();
-
-        //pop_up_message_box(QString("Loading davig gervais tiles: %1 milli").arg(QString::number(t1.elapsed())));
+        init_graphics();
     }
     // Go to text mode
     else {
@@ -172,7 +292,7 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         calculate_cell_size();
         destroy_tiles();
         tile_map = blank_pix;
-        clear_graphics();
+        clear_graphics();   
     }
 
     use_graphics = mode;    
@@ -206,23 +326,22 @@ void MainWindowPrivate::set_font(QFont _font)
 
     calculate_cell_size();
 
-    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
-        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            items[y][x]->setFont(font);
-        }
-    }
-
     destroy_tiles();
 }
 
-void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view)
+void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view,
+                                   QFont _font)
 {
     scene = _scene;
     view = _view;
 
     do_pseudo_ascii = false;
 
-    font_hgt = font_wid = 0;
+    font = _font;
+    QFontMetrics metrics(font);
+
+    font_hgt = metrics.height();
+    font_wid = metrics.width('M');
     tile_hgt = tile_wid = 0;
     cell_hgt = cell_wid = 0;
 
@@ -234,34 +353,8 @@ void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view)
 
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            items[y][x] = scene->addSimpleText(QString(" "));
-            items[y][x]->setZValue(200);
-            items[y][x]->setVisible(false);
-
-            items_g[y][x] = scene->addPixmap(blank_pix);
-            items_g[y][x]->setZValue(100);
-            items_g[y][x]->setVisible(false);
-
-            b_items_g[y][x] = scene->addPixmap(blank_pix);
-            b_items_g[y][x]->setZValue(50);
-            b_items_g[y][x]->setVisible(false);
-        }
-    }
-}
-
-void MainWindowPrivate::wipe()
-{
-    for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
-        for (int x = 0; x < MAX_DUNGEON_WID; x++) {
-            /*
-            items[y][x]->setText(QString(" "));            
-            items_g[y][x]->setPixmap(blank_pix);
-            b_items_g[y][x]->setPixmap(blank_pix);
-            */
-
-            items[y][x]->setVisible(false);
-            items_g[y][x]->setVisible(false);
-            b_items_g[y][x]->setVisible(false);
+            grids[y][x] = new DungeonGrid(x, y, this);
+            scene->addItem(grids[y][x]);
         }
     }
 
@@ -270,14 +363,11 @@ void MainWindowPrivate::wipe()
 
 void MainWindowPrivate::redraw()
 {    
-    QTime t1;
-
-    t1.start();
-
-    wipe();
-
     // Important. No dungeon yet
-    if (!character_dungeon) return;
+    if (!character_dungeon) {
+        if (view) view->update();
+        return;
+    }
 
     // TODO REMOVE THIS
     wiz_light();
@@ -353,123 +443,6 @@ QPixmap MainWindowPrivate::pseudo_ascii(QChar chr, QColor color)
     return QPixmap::fromImage(img);
 }
 
-void MainWindowPrivate::redraw_cell(int y, int x)
-{
-    if (!character_dungeon) return;
-
-    dungeon_type *d_ptr = &dungeon_info[y][x];
-    QChar square_char = d_ptr->dun_char;
-    QColor square_color = d_ptr->dun_color;
-    bool empty = true;
-    u32b flags = 0;
-    QString key2;
-    qreal opacity = 1;
-    bool do_shadow = false;
-
-    flags = (d_ptr->ui_flags & (UI_LIGHT_BRIGHT | UI_LIGHT_DIM | UI_LIGHT_TORCH | UI_COSMIC_TORCH));
-
-    // Draw visible monsters
-    if (d_ptr->has_visible_monster())
-    {
-        square_char = d_ptr->monster_char;
-        square_color = d_ptr->monster_color;
-
-        empty = false;
-
-        if (!do_pseudo_ascii) key2 = d_ptr->monster_tile;
-        else do_shadow = true;
-
-        flags |= (d_ptr->ui_flags & UI_TRANSPARENT_MONSTER);
-        opacity = 0.5;
-    }
-    // Draw effects
-    else if (d_ptr->has_visible_effect())
-    {
-        square_char = d_ptr->effect_char;
-        square_color = d_ptr->effect_color;
-
-        empty = false;
-
-        key2 = d_ptr->effect_tile;
-
-        flags |= (d_ptr->ui_flags & UI_TRANSPARENT_EFFECT);
-        opacity = 0.7;
-    }
-    // Draw objects
-    else if (d_ptr->has_visible_object())
-    {
-        square_char = d_ptr->object_char;
-        square_color = d_ptr->object_color;
-
-        empty = false;
-
-        key2 = d_ptr->object_tile;
-    }
-
-    if (use_graphics) {
-        bool done_bg = false;
-        bool done_fg = false;        
-
-        // Draw background tile
-        QString key1 = d_ptr->dun_tile;
-        if (key1.length() > 0) {
-            rebuild_tile(key1);
-            QPixmap pix = tiles[key1];
-            if (flags & UI_LIGHT_TORCH) {
-                QColor color = QColor("yellow").darker(150);
-                if (flags & UI_COSMIC_TORCH) color = QColor("cyan").darker(150);
-                pix = colorize_pix(pix, color);
-            }
-            else if (flags & UI_LIGHT_BRIGHT) {
-                pix = darken_pix(pix);
-            }
-            else if (flags & UI_LIGHT_DIM) {
-                pix = gray_pix(pix);
-            }
-            b_items_g[y][x]->setPixmap(pix);
-            done_bg = true;
-        }
-        b_items_g[y][x]->setVisible(done_bg);
-
-        items_g[y][x]->setOpacity(1);
-        // Draw foreground tile
-        if (key2.length() > 0) {
-           rebuild_tile(key2);
-           items_g[y][x]->setPixmap(tiles[key2]);
-           if (flags & (UI_TRANSPARENT_EFFECT | UI_TRANSPARENT_MONSTER)) {
-               items_g[y][x]->setOpacity(opacity);
-           }
-           done_fg = true;
-        }
-        items_g[y][x]->setVisible(done_fg);
-
-        if (do_shadow) {
-            QPixmap pix = pseudo_ascii(square_char, square_color);
-            items_g[y][x]->setPixmap(pix);
-            items_g[y][x]->setVisible(true);
-            done_fg = true;
-        }
-
-        // Draw ascii?
-        if (!done_fg && (!empty || !done_bg)) {
-            items[y][x]->setVisible(true);
-            items[y][x]->setText(QString(square_char));
-            items[y][x]->setBrush(QBrush(square_color));
-        }
-        else {
-            items[y][x]->setVisible(false);
-        }
-    }
-    else {
-        items[y][x]->setVisible(true);
-        items[y][x]->setText(QString(square_char));
-        items[y][x]->setBrush(QBrush(square_color));
-
-        items_g[y][x]->setVisible(false);
-        b_items_g[y][x]->setVisible(false);
-    }    
-}
-
 // The main function - intitalize the main window and set the menus.
 MainWindow::MainWindow()
 {
@@ -494,9 +467,8 @@ MainWindow::MainWindow()
     create_signals();
     (void)statusBar();
 
-    priv->init_scene(dungeon_scene, graphics_view);
     read_settings();
-    priv->set_font(cur_font);    
+    priv->init_scene(dungeon_scene, graphics_view, cur_font);
     priv->set_graphic_mode(use_graphics);
 
     setWindowFilePath(QString());
@@ -597,7 +569,7 @@ void MainWindow::save_and_close()
 
     set_current_savefile("");
 
-    character_loaded = false;
+    character_loaded = character_dungeon = character_generated = character_icky = false;
 
     update_file_menu_game_inactive();
 
@@ -605,7 +577,7 @@ void MainWindow::save_and_close()
     cleanup_npp_games();
 
     priv->destroy_tiles();
-    priv->wipe();    
+    priv->redraw();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -1155,7 +1127,9 @@ void ui_center(int y, int x)
 
 void ui_redraw_grid(int y, int x)
 {
-    main_window->priv->redraw_cell(y, x);
+    DungeonGrid *g_ptr = main_window->priv->grids[y][x];
+    g_ptr->setVisible(true);
+    g_ptr->update(g_ptr->boundingRect());
 }
 
 void ui_redraw_all()
