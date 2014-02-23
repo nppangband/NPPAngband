@@ -22,6 +22,7 @@ public:
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    QPainterPath shape() const;
 
     void cellSizeChanged();
 
@@ -38,6 +39,7 @@ public:
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    QPainterPath shape() const;
 
     DungeonCursor(MainWindowPrivate *_parent);
     void moveTo(int y, int x);
@@ -82,6 +84,20 @@ public:
     void update_cursor();
     void force_redraw();
 };
+
+QPainterPath DungeonGrid::shape() const
+{
+    QPainterPath p;
+    p.addRect(boundingRect());
+    return p;
+}
+
+QPainterPath DungeonCursor::shape() const
+{
+    QPainterPath p;
+    p.addRect(boundingRect());
+    return p;
+}
 
 void MainWindowPrivate::force_redraw()
 {
@@ -247,7 +263,7 @@ void DungeonGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         QString key1 = d_ptr->dun_tile;
 
         if (key1.length() > 0) {
-            parent->rebuild_tile(key1);
+            parent->rebuild_tile(key1); // Grab tile from the cache
             QPixmap pix = parent->tiles[key1];
 
             if (flags & UI_LIGHT_TORCH) {
@@ -267,7 +283,7 @@ void DungeonGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
             // Draw foreground tile
             if (key2.length() > 0) {
-               parent->rebuild_tile(key2);
+               parent->rebuild_tile(key2); // Grab tile from the cache
                QPixmap pix = parent->tiles.value(key2);
                if (flags & (UI_TRANSPARENT_EFFECT | UI_TRANSPARENT_MONSTER)) {
                    painter->setOpacity(opacity);
@@ -285,6 +301,7 @@ void DungeonGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         }
     }
 
+    // Go ascii?
     if (!done_fg && (!empty || !done_bg)) {
         painter->setFont(parent->font);
         painter->setPen(square_color);
