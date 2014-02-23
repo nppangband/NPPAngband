@@ -80,11 +80,17 @@ public:
     QPixmap gray_pix(QPixmap src);
     QPixmap pseudo_ascii(QChar chr, QColor color);
     void update_cursor();
+    void force_redraw();
 };
+
+void MainWindowPrivate::force_redraw()
+{
+    view->viewport()->update();
+}
 
 void DungeonCursor::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    event->ignore();
+    event->ignore(); // Pass event to the grid
 }
 
 void DungeonGrid::cellSizeChanged()
@@ -103,7 +109,15 @@ void DungeonGrid::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     parent->cursor->setVisible(true);
     parent->cursor->moveTo(y, x);
-    parent->view->viewport()->update(); // Hack -- Force full redraw, to eliminate bug in QT
+    parent->force_redraw(); // Hack -- Force full redraw, to eliminate bug in QT
+
+    dungeon_type *d_ptr = &dungeon_info[y][x];
+    if (d_ptr->monster_idx > 0) {
+        int r_idx = mon_list[d_ptr->monster_idx].r_idx;
+        pop_up_message_box(r_info[r_idx].r_name_full);
+    }
+
+    QGraphicsItem::mousePressEvent(event);
 }
 
 void MainWindowPrivate::update_cursor()
@@ -466,14 +480,14 @@ void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view,
 
     scene->addItem(cursor);
 
-    view->update();
+    force_redraw();
 }
 
 void MainWindowPrivate::redraw()
 {    
     // Important. No dungeon yet
     if (!character_dungeon) {
-        if (view) view->update();
+        if (view) force_redraw();
         return;
     }
 
@@ -491,7 +505,7 @@ void MainWindowPrivate::redraw()
 
     //ui_center(p_ptr->py, p_ptr->px);
     update_cursor();
-    view->viewport()->update(); // Hack -- Force full redraw
+    force_redraw(); // Hack -- Force full redraw
 }
 
 bool MainWindowPrivate::panel_contains(int y, int x)
