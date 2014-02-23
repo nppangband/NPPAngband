@@ -57,6 +57,8 @@ private slots:
     void options_dialog();
     void fontselect_dialog();
 
+    void slot_find_player();
+    void slot_redraw();
 
     // Functions to make sure the available menu commands are appropriate to the situation.
     //  For example, make the save game command unanavailable when no savefile is open.

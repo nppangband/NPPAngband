@@ -85,6 +85,19 @@ public:
     void force_redraw();
 };
 
+void MainWindow::slot_find_player()
+{
+    if (!character_dungeon) return;
+
+    ui_center(p_ptr->py, p_ptr->px);
+    priv->update_cursor();
+}
+
+void MainWindow::slot_redraw()
+{
+    priv->redraw();
+}
+
 QPainterPath DungeonGrid::shape() const
 {
     QPainterPath p;
@@ -597,7 +610,24 @@ MainWindow::MainWindow()
     graphics_view = new QGraphicsView(dungeon_scene);
     //graphics_view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
-    setCentralWidget(graphics_view);
+    QWidget *central = new QWidget;
+    setCentralWidget(central);
+
+    QVBoxLayout *lay1 = new QVBoxLayout;
+    central->setLayout(lay1);
+
+    lay1->addWidget(graphics_view);
+
+    QHBoxLayout *lay2 = new QHBoxLayout;
+    lay1->addLayout(lay2);
+
+    QPushButton *b1 = new QPushButton("Find player");
+    lay2->addWidget(b1);
+    connect(b1, SIGNAL(clicked()), this, SLOT(slot_find_player()));
+
+    QPushButton *b2 = new QPushButton("Redraw");
+    lay2->addWidget(b2);
+    connect(b2, SIGNAL(clicked()), this, SLOT(slot_redraw()));
 
     create_actions();
     update_file_menu_game_inactive();
