@@ -37,9 +37,9 @@ public:
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
     DungeonCursor(MainWindowPrivate *_parent);
-    void setEnabled(bool enabled);
     void moveTo(int y, int x);
 
     void cellSizeChanged();
@@ -80,8 +80,12 @@ public:
     QPixmap gray_pix(QPixmap src);
     QPixmap pseudo_ascii(QChar chr, QColor color);
     void update_cursor();
-    QPointF to_dungeon(int real_y, int real_x);
 };
+
+void DungeonCursor::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    event->ignore();
+}
 
 void DungeonGrid::cellSizeChanged()
 {
@@ -93,21 +97,12 @@ void DungeonCursor::cellSizeChanged()
     prepareGeometryChange();
 }
 
-QPointF MainWindowPrivate::to_dungeon(int real_y, int real_x)
-{
-    int x = 0, y = 0;
-    if (cell_wid > 0) x = real_x / cell_wid;
-    if (cell_hgt > 0) y = real_y / cell_hgt;
-    return QPointF(x, y);
-}
-
 void DungeonGrid::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!character_dungeon) return;
 
-    QPointF p = parent->to_dungeon(event->scenePos().y(), event->scenePos().x());
     parent->cursor->setVisible(true);
-    parent->cursor->moveTo(p.y(), p.x());
+    parent->cursor->moveTo(y, x);
     parent->view->viewport()->update(); // Hack -- Force full redraw, to eliminate bug in QT
 }
 
@@ -231,6 +226,8 @@ void DungeonGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     bool done_bg = false;
     bool done_fg = false;
 
+    painter->save();
+
     if (use_graphics) {
         // Draw background tile
         QString key1 = d_ptr->dun_tile;
@@ -275,15 +272,26 @@ void DungeonGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     }
 
     if (!done_fg && (!empty || !done_bg)) {
-        QPen pen = painter->pen();
-        QFont font = painter->font();
         painter->setFont(parent->font);
         painter->setPen(square_color);
         painter->drawText(QRectF(0, 0, parent->cell_wid, parent->cell_hgt),
                           Qt::AlignCenter, QString(square_char));
-        painter->setPen(pen); // restore pen
-        painter->setFont(font); // restore font
     }
+
+    // Draw a mark for visible artifacts
+    if (d_ptr->has_visible_artifact()) {
+        int s = 6;
+        QPointF points[] = {
+            QPointF(parent->cell_wid - s, parent->cell_hgt),
+            QPointF(parent->cell_wid, parent->cell_hgt),
+            QPointF(parent->cell_wid, parent->cell_hgt - s)
+        };
+        painter->setBrush(QColor("violet"));
+        painter->setPen(Qt::NoPen);
+        painter->drawPolygon(points, 3);
+    }
+
+    painter->restore();
 }
 
 QPixmap MainWindowPrivate::gray_pix(QPixmap src)

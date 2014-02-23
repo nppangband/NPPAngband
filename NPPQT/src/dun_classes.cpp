@@ -18,6 +18,23 @@
 
 #include "src/npp.h"
 
+bool dungeon_type::has_visible_artifact()
+{
+    if (!(cave_info & CAVE_SEEN)) return false;
+
+    object_type *o_ptr;
+
+    for (int o_idx = object_idx; o_idx > 0; o_idx = o_ptr->next_o_idx) {
+        o_ptr = &o_list[o_idx];
+
+        if (!o_ptr->marked || !o_ptr->is_artifact()) continue;
+
+        if (o_ptr->is_known() || o_ptr->is_known_artifact()) return true;
+    }
+
+    return false;
+}
+
 //Verify if the dungeon square has an object on it
 bool dungeon_type::has_object()
 {
