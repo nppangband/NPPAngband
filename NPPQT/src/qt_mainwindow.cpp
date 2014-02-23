@@ -21,6 +21,9 @@ public:
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
+    void cellSizeChanged();
 
     MainWindowPrivate *parent;
     int x, y;
@@ -38,6 +41,8 @@ public:
     DungeonCursor(MainWindowPrivate *_parent);
     void setEnabled(bool enabled);
     void moveTo(int y, int x);
+
+    void cellSizeChanged();
 };
 
 class MainWindowPrivate
@@ -75,7 +80,36 @@ public:
     QPixmap gray_pix(QPixmap src);
     QPixmap pseudo_ascii(QChar chr, QColor color);
     void update_cursor();
+    QPointF to_dungeon(int real_y, int real_x);
 };
+
+void DungeonGrid::cellSizeChanged()
+{
+    prepareGeometryChange();
+}
+
+void DungeonCursor::cellSizeChanged()
+{
+    prepareGeometryChange();
+}
+
+QPointF MainWindowPrivate::to_dungeon(int real_y, int real_x)
+{
+    int x = 0, y = 0;
+    if (cell_wid > 0) x = real_x / cell_wid;
+    if (cell_hgt > 0) y = real_y / cell_hgt;
+    return QPointF(x, y);
+}
+
+void DungeonGrid::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (!character_dungeon) return;
+
+    QPointF p = parent->to_dungeon(event->scenePos().y(), event->scenePos().x());
+    parent->cursor->setVisible(true);
+    parent->cursor->moveTo(p.y(), p.x());
+    parent->view->viewport()->update(); // Hack -- Force full redraw, to eliminate bug in QT
+}
 
 void MainWindowPrivate::update_cursor()
 {
@@ -92,16 +126,15 @@ DungeonCursor::DungeonCursor(MainWindowPrivate *_parent)
 
 QRectF DungeonCursor::boundingRect() const
 {
-    return QRectF(0, 0, parent->cell_wid, parent->cell_wid);
+    return QRectF(0, 0, parent->cell_wid, parent->cell_hgt);
 }
 
 void DungeonCursor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     if (!character_dungeon) return;
 
-    QPen _pen = painter->pen();
-    QPen p_cursor(QColor("yellow"));
-    painter->setPen(p_cursor);
+    painter->save();
+    painter->setPen(QColor("yellow"));
     painter->drawRect(0, 0, parent->cell_wid - 1, parent->cell_hgt - 1);
     if ((parent->cell_wid > 16) && (parent->cell_hgt > 16)){
         int z = 3;
@@ -110,7 +143,7 @@ void DungeonCursor::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
         painter->drawRect(0, parent->cell_hgt - z - 1, z, z);
         painter->drawRect(parent->cell_wid - z - 1, parent->cell_hgt - z - 1, z, z);
     }
-    painter->setPen(_pen);
+    painter->restore();
 }
 
 void DungeonCursor::moveTo(int _y, int _x)
@@ -169,7 +202,7 @@ void DungeonGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         else do_shadow = true;
 
         flags |= (d_ptr->ui_flags & UI_TRANSPARENT_MONSTER);
-        opacity = 0.7;
+        opacity = 0.5;
     }
     // Draw effects
     else if (d_ptr->has_visible_effect())
@@ -311,9 +344,12 @@ void MainWindowPrivate::calculate_cell_size()
 
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
+            grids[y][x]->cellSizeChanged();
             grids[y][x]->setPos(x * cell_wid, y * cell_hgt);
         }
     }
+
+    cursor->cellSizeChanged();
 }
 
 void MainWindowPrivate::set_graphic_mode(int mode)
@@ -445,8 +481,9 @@ void MainWindowPrivate::redraw()
         }
     }
 
-    ui_center(p_ptr->py, p_ptr->px);
+    //ui_center(p_ptr->py, p_ptr->px);
     update_cursor();
+    view->viewport()->update(); // Hack -- Force full redraw
 }
 
 bool MainWindowPrivate::panel_contains(int y, int x)
@@ -519,6 +556,7 @@ MainWindow::MainWindow()
 
     dungeon_scene = new QGraphicsScene;
     graphics_view = new QGraphicsView(dungeon_scene);
+    //graphics_view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
     setCentralWidget(graphics_view);
 
