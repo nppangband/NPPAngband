@@ -386,8 +386,7 @@ void MainWindowPrivate::redraw()
 
 bool MainWindowPrivate::panel_contains(int y, int x)
 {
-    QRect rect = view->geometry();
-    QPolygonF pol = view->mapToScene(rect);
+    QPolygonF pol = view->mapToScene(view->viewport()->geometry());
     // We test top-left and bottom-right corners of the cell
     QPointF point1(x * cell_wid, y * cell_hgt);
     QPointF point2(x * cell_wid + cell_wid, y * cell_hgt + cell_hgt);

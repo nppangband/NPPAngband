@@ -55,13 +55,27 @@ extern void monster_race_track(int r_idx);
 extern void feature_kind_track(int f_idx);
 extern void disturb(int stop_search, int unused_flag);
 
+// cmd3.cpp
+extern bool make_monster_trap(void);
+extern void py_set_trap(int y, int x);
+extern bool py_modify_trap(int y, int x);
+
 // cmd4.cpp
 extern void do_cmd_feeling(void);
 extern void create_notes_file(void);
 extern void delete_notes_file(void);
 
 // cmd_spell.cpp
+extern s16b spell_chance(int spell);
 extern bool spell_okay(int spell, bool known);
+extern int get_spell_menu(const object_type *o_ptr, int mode_dummy);
+extern bool player_can_cast(void);
+extern bool player_can_study(void);
+extern bool player_can_use_book(const object_type *o_ptr, bool cast);
+extern void do_cmd_study_spell(int code, cmd_arg args[]);
+extern void do_cmd_study_book(int code, cmd_arg args[]);
+extern void do_cmd_cast(int code, cmd_arg args[]);
+extern void spell_learn(int spell);
 extern s16b get_spell_from_list(s16b book, s16b spell);
 extern int get_spell_index(int sval, int index);
 
@@ -264,6 +278,7 @@ extern bool item_tester_hook_recharge(object_type *o_ptr);
 extern bool item_tester_hook_randart(object_type *o_ptr);
 extern bool item_tester_hook_flammable_book(object_type *o_ptr);
 extern bool item_tester_hook_activate(object_type *o_ptr);
+extern bool obj_can_browse(object_type *o_ptr);
 
 /* object-make.cpp */
 extern s16b get_obj_num(int level);
@@ -286,6 +301,9 @@ extern void steal_object_from_monster(int y, int x);
 extern void acquirement(int y1, int x1, int num, bool great);
 extern void create_food(void);
 
+// object_use.cpp
+extern bool find_object_in_use(int *item);
+extern void do_cmd_use(int code, cmd_arg args[]);
 
 //obj_util.cpp
 extern void object_flags(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3, u32b *native);
@@ -373,6 +391,7 @@ extern void object_tried(object_type *o_ptr);
 extern void object_history(object_type *o_ptr, byte origin, s16b r_idx);
 extern void stack_histories(object_type *o_ptr, const object_type *j_ptr);
 extern int quiver_space_per_unit(object_type *o_ptr);
+
 
 /* player_attack.cpp */
 extern bool test_hit(int chance, int ac, int vis);
@@ -610,6 +629,8 @@ extern QString get_spell_type_from_feature(int f_idx, int *gf_type);
 extern bool is_player_immune(int gf_type);
 extern void identify_object(object_type *o_ptr, bool star_ident);
 extern int do_ident_item(int item, object_type *o_ptr);
+extern bool curse_armor(void);
+extern bool curse_weapon(void);
 extern bool brand_object(object_type *o_ptr, byte brand_type, bool do_enchant);
 extern bool brand_weapon(bool enchant);
 extern bool brand_ammo(bool enchant);

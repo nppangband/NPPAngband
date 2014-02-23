@@ -3532,6 +3532,135 @@ bool set_recall(void)
 }
 
 
+/*
+ * Curse the players armor
+ */
+bool curse_armor(void)
+{
+    object_type *o_ptr;
+
+    QString o_name;
+
+
+    /* Curse the body armor */
+    o_ptr = &inventory[INVEN_BODY];
+
+    /* Nothing to curse */
+    if (!o_ptr->k_idx) return (FALSE);
+
+
+    /* Describe */
+    o_name = object_desc(o_ptr, ODESC_BASE);
+
+    /* Attempt a saving throw for artifacts */
+    if (o_ptr->is_artifact() && one_in_(2))
+    {
+        /* Cool */
+        message(QString("A terrible black aura tries to surround your armor, but your %1 resists the effects!") .arg(o_name));
+    }
+
+    /* not artifact or failed save... */
+    else
+    {
+        /* Oops */
+        message(QString("A terrible black aura blasts your %1!") .arg(o_name));
+
+        /* Blast the armor */
+        o_ptr->art_num = 0;
+        o_ptr->ego_num = EGO_BLASTED;
+        o_ptr->to_a = 0 - randint(5) - randint(5);
+        o_ptr->to_h = 0;
+        o_ptr->to_d = 0;
+        o_ptr->ac = 0;
+        o_ptr->dd = 0;
+        o_ptr->ds = 0;
+
+        /* Curse it */
+        o_ptr->ident |= (IDENT_CURSED);
+
+        /* Break it */
+        o_ptr->ident |= (IDENT_BROKEN);
+
+        /* Recalculate bonuses and mana*/
+        p_ptr->update |= (PU_BONUS | PU_NATIVE | PU_MANA);
+
+        /* Redraw stuff */
+        p_ptr->redraw |= (PR_INVEN | PR_EQUIP);
+
+    }
+
+    return (TRUE);
+}
+
+
+/*
+ * Curse the players weapon
+ */
+bool curse_weapon(void)
+{
+    object_type *o_ptr;
+
+    QString o_name;
+
+    /* Curse the weapon */
+    o_ptr = &inventory[INVEN_WIELD];
+
+    /* Handle swap weapons */
+    if (!o_ptr->is_weapon())
+    {
+        o_ptr = &inventory[INVEN_SWAP_WEAPON];
+
+        if (!o_ptr->is_weapon()) return (FALSE);
+    }
+
+    /* Nothing to curse */
+    if (!o_ptr->k_idx) return (FALSE);
+
+
+    /* Describe */
+    o_name = object_desc(o_ptr, ODESC_BASE);
+
+    /* Attempt a saving throw */
+    if (o_ptr->is_artifact() && one_in_(2))
+    {
+        /* Cool */
+        message(QString("A terrible black aura tries to surround your weapon, but your %1 resists the effects!") .arg(o_name));
+    }
+
+    /* not artifact or failed save... */
+    else
+    {
+        /* Oops */
+        message(QString("A terrible black aura blasts your %1!") .arg(o_name));
+
+        /* Shatter the weapon */
+        o_ptr->art_num = 0;
+        o_ptr->ego_num = EGO_SHATTERED;
+        o_ptr->to_h = 0 - randint(5) - randint(5);
+        o_ptr->to_d = 0 - randint(5) - randint(5);
+        o_ptr->to_a = 0;
+        o_ptr->ac = 0;
+        o_ptr->dd = 0;
+        o_ptr->ds = 0;
+
+        /* Curse it */
+        o_ptr->ident |= (IDENT_CURSED);
+
+        /* Break it */
+        o_ptr->ident |= (IDENT_BROKEN);
+
+        /* Recalculate bonuses and mana*/
+        p_ptr->update |= (PU_BONUS | PU_NATIVE | PU_MANA);
+
+        /* Redraw stuff */
+        p_ptr->redraw |= (PR_INVEN | PR_EQUIP);
+
+    }
+
+    /* Notice */
+    return (TRUE);
+}
+
 
 /*
  * Brand weapons (or ammo)

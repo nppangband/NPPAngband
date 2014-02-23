@@ -474,6 +474,17 @@ bool object_type::has_inscription()
     return (!inscription.isEmpty());
 }
 
+/*
+ * Determine if an object has charges
+ */
+bool object_type::has_charges()
+{
+    if (!is_wand() && !is_staff()) return (FALSE);
+
+    if (pval <= 0) return (FALSE);
+
+    return (TRUE);
+}
 
 /*
  * Return a "feeling" (or NULL) about an item.  Method 1 (Heavy).
@@ -594,9 +605,10 @@ void object_kind::object_kind_wipe()
     d_char = QChar(' ');
     autoinscribe.clear();
     flavor = squelch = 0;
-    aware = tried = everseen;
-
+    aware = tried = everseen = 0;
+    tile_32x32_y = tile_32x32_x = tile_8x8_y = tile_8x8_x = 0;
     tile_id.clear();
+
 }
 
 artifact_type::artifact_type()
@@ -636,6 +648,7 @@ void flavor_type::flavor_wipe()
     tval = sval = color_num = 0;
     d_color = QColor("black");
     d_char = QChar(' ');
+    tile_32x32_y = tile_32x32_x = tile_8x8_y = tile_8x8_x = 0;
     tile_id.clear();
 }
 

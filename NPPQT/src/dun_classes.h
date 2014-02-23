@@ -159,6 +159,12 @@ public:
     byte x_timeout_set; 	/*base time between effect instances */
     byte x_timeout_rand; /*is the random time between effects */
 
+    // Tile mapping
+    byte tile_32x32_y;
+    byte tile_32x32_x;
+    byte tile_8x8_y;
+    byte tile_8x8_x;
+
     /* Fields used only by terrain. */
     u16b dam_non_native;		/*damage to non-native creatures existing in grid */
     byte native_energy_move;	/*energy to move through for native creatures */

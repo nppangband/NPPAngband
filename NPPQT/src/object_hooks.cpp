@@ -294,3 +294,10 @@ bool item_tester_hook_activate(object_type *o_ptr)
     return (FALSE);
 }
 
+/*
+ * Determine if an object can be browsed (spellbook)
+ */
+bool obj_can_browse(object_type *o_ptr)
+{
+    return (o_ptr->can_browse());
+}

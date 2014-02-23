@@ -87,6 +87,7 @@ void monster_type::monster_wipe()
     smart = 0;
     target_x = target_y = 0;
     min_range = best_range = mana = using_flow;
+
 }
 
 /*
@@ -161,6 +162,7 @@ void monster_race::monster_race_wipe()
     d_char = '\0';
     max_num = cur_num = 0;
     tile_id.clear();
+    tile_32x32_y = tile_32x32_x = tile_8x8_y = tile_8x8_x = 0;
 }
 
 

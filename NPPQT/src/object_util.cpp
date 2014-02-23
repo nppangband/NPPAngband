@@ -5136,3 +5136,4 @@ void stack_histories(object_type *o_ptr, const object_type *j_ptr)
         }
     }
 }
+

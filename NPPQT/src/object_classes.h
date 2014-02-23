@@ -153,6 +153,7 @@ class object_type
     bool can_takeoff();
     bool can_wear();
     bool has_inscription();
+    bool has_charges();
     void uncurse();
     byte object_color();
 
@@ -215,6 +216,12 @@ public:
     QString tile_id;
 
     QString autoinscribe;  //Default inscription for this object
+
+    // Tile mapping
+    byte tile_32x32_y;
+    byte tile_32x32_x;
+    byte tile_8x8_y;
+    byte tile_8x8_x;
 
     u16b flavor;		/* Special object flavor (or zero) */
 
@@ -337,6 +344,12 @@ public:
     byte color_num;     //The number of any default color.  CUSTOM_COLOR for all others.
     QColor d_color;		/* Default flavor color */
     QChar d_char;    /* Default flavor character */
+
+    // Tile mapping
+    byte tile_32x32_y;
+    byte tile_32x32_x;
+    byte tile_8x8_y;
+    byte tile_8x8_x;
     QString tile_id;
 };
 
