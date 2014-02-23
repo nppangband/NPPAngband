@@ -29,20 +29,11 @@ public:
 
     MainWindow();
 
-    void write_colored_text(QChar letter, QColor color, s16b y, s16b x);
-    void display_square(s16b y, s16b x);
-    void screen_wipe();
-    void screen_redraw();
-
-
 protected:
     void closeEvent(QCloseEvent *event);
-    void resizeEvent(QResizeEvent *event);
 
 
 private slots:
-
-
 
     // Functions called from signals from the top menu.
 
@@ -66,11 +57,6 @@ private slots:
     //  For example, make the save game command unanavailable when no savefile is open.
     void update_file_menu_game_active();
     void update_file_menu_game_inactive();
-
-
-    // Set up the games mapping
-    void set_onscreen_dungeon_boundries();
-    void set_map();
 
     // Graphics
     void set_dvg();
@@ -147,23 +133,9 @@ private:
     QAction *separator_act;
 
     // information about the main window
-    qreal window_height; // in pixels
-    qreal window_width;  // in pixels
     QFontDatabase font_database;
     QFont cur_font;
-    s16b square_height;
-    s16b square_width;
-    s16b screen_num_rows;
-    s16b screen_num_columns;
-    s16b first_x;
-    s16b first_y;
-    s16b last_x;
-    s16b last_y;
     bool use_bigtile;
-
-
-
-
 };
 
 #endif

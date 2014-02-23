@@ -811,8 +811,6 @@ void MainWindow::fontselect_dialog()
 
     if (selected)
     {
-        //  Figure out - this sets the fonnt for everything setFont(cur_font);
-        set_map();
         priv->set_font(cur_font);
         priv->redraw();
     }
@@ -954,7 +952,6 @@ void MainWindow::create_actions()
     bigtile_act->setCheckable(true);
     bigtile_act->setChecked(use_bigtile);
     bigtile_act->setStatusTip(tr("Doubles the width of each dungeon square."));
-    connect(bigtile_act, SIGNAL(changed()), this, SLOT(set_map()));
 
     fontselect_act = new QAction(tr("Fonts"), this);
     fontselect_act->setStatusTip(tr("Change the window font or font size."));
@@ -1037,6 +1034,7 @@ void MainWindow::create_menus()
 void MainWindow::create_toolbars()
 {
     file_toolbar = addToolBar(tr("&File"));
+    file_toolbar->setObjectName(QString("file_toolbar"));
 
     file_toolbar->addAction(new_game_nppangband);
     file_toolbar->addAction(new_game_nppmoria);
@@ -1224,85 +1222,6 @@ QString MainWindow::stripped_name(const QString &full_file_name)
     return QFileInfo(full_file_name).fileName();
 }
 
-
-// Overloaded function to ensure that set_map is called every time the window is re-sized
-void MainWindow::resizeEvent (QResizeEvent *event)
-{
-    (void) event;
-    set_map();
-}
-
-// Write a single colored character on a designated square
-void MainWindow::write_colored_text(QChar letter, QColor color, s16b y, s16b x)
-{
-    QPainter painter(this);
-
-    // Paranoia
-    if (!panel_contains(y, x)) return;
-
-    // Get the coordinates
-    s16b pixel_y = (y - first_y) * square_height;
-    s16b pixel_x = (y - first_x) * square_width;
-
-    painter.setPen(color);
-    painter.drawText(QPoint(pixel_x, pixel_y), letter);
-}
-
-// Write a single colored character on a designated square
-void MainWindow::display_square(s16b y, s16b x)
-{
-    dungeon_type *d_ptr = &dungeon_info[y][x];
-    QChar square_char = d_ptr->dun_char;
-    QColor square_color = d_ptr->dun_color;
-    if (d_ptr->has_monster())
-    {
-        square_char = d_ptr->monster_char;
-        square_color = d_ptr->monster_color;
-    }
-    else if (d_ptr->has_effect())
-    {
-        square_char = d_ptr->effect_char;
-        square_color = d_ptr->effect_color;
-    }
-    else if (d_ptr->has_object())
-    {
-        square_char = d_ptr->object_char;
-        square_color = d_ptr->object_color;
-    }
-    write_colored_text(square_char, square_color, y, x);
-}
-
-void MainWindow::screen_wipe()
-{
-    QPainter painter(this);
-    QColor dark;
-    QRect window_size;
-
-    window_size.setTopLeft(QPoint(0,0));
-    window_size.setBottomRight(QPoint(graphics_view->geometry().width(), graphics_view->geometry().height()));
-    dark.setRgb(0,0,0,255);
-    painter.fillRect(window_size, dark);
-}
-
-// Complete screen redraw
-void MainWindow::screen_redraw()
-{
-    screen_wipe();
-
-    for (int y = 0; y < last_y; y++)
-    {
-        s32b screen_y = y + first_y;
-
-        for (int x =0; x < last_x; x++)
-        {
-            s32b screen_x = x + first_x;
-
-            light_spot(screen_y, screen_x);
-            display_square(screen_y, screen_x);
-        }
-    }
-}
-
 // determine of a dungeon square is onscreen at present
 bool panel_contains(int y, int x)
 {
@@ -1331,85 +1250,4 @@ void ui_redraw_grid(int y, int x)
 void ui_redraw_all()
 {
     main_window->priv->redraw();
-}
-
-// Try to center the onscreen map around the player.
-// should be followed by a total screen redraw
-void MainWindow::set_onscreen_dungeon_boundries()
-{
-    /*
-     * First find the upper left boundries
-     */
-    first_y = p_ptr->py - (window_height / 2);
-    if (first_y < 0) first_y = 0;
-    first_x = p_ptr->px - (window_width / 2);
-    if (first_x < 0) first_x = 0;
-
-    // Now find the lower right boundries
-    last_y = first_y + window_height;
-    last_x = first_x + window_width;
-
-    // Verify the top and bottom boundries of the dungeon.
-    if (last_y > p_ptr->cur_map_hgt)
-    {
-        last_y = p_ptr->cur_map_hgt - 1;
-        first_y = last_y - p_ptr->cur_map_hgt;
-
-        //Maybe the screen is higher than the dungeon
-        if (first_y < 0)
-        {
-            first_y = 0;
-        }
-    }
-
-    // Verify the top and bottom boundries of the dungeon.
-    if (last_y >= p_ptr->cur_map_hgt)
-    {
-        last_y = p_ptr->cur_map_hgt - 1;
-        first_y = last_y - p_ptr->cur_map_hgt;
-
-        //Maybe the screen is higher than the dungeon
-        if (first_y < 0)
-        {
-            first_y = 0;
-        }
-    }
-
-    // Verify the left and right boundries of the dungeon.
-    if (last_x >= p_ptr->cur_map_wid)
-    {
-        last_x = p_ptr->cur_map_wid - 1;
-        first_x = last_x - p_ptr->cur_map_wid;
-
-        //Maybe the screen is wider than the dungeon
-        if (first_x < 0)
-        {
-            first_x = 0;
-        }
-    }
-}
-
-/*
- *Set up the dungeon map according to the curren screen size
- * Should be called every time the map or font is re-sized.
- * or any other action that affects the main widget's size or dimensions.
- */
-void MainWindow::set_map()
-{
-    QFontMetrics font_metrics(cur_font);
-
-    if (bigtile_act->isChecked()) use_bigtile = TRUE;
-    else use_bigtile = FALSE;
-
-    window_height = graphics_view->geometry().height(); // in pixels
-    window_width = graphics_view->geometry().width();  // in pixels
-
-    square_height = font_metrics.height(); // in pixels
-    square_width = font_metrics.width('X');   // in pixels
-
-    screen_num_rows = window_height / square_height;
-    screen_num_columns = window_width / square_width;
-
-    // TODO factor in bigscreen.
-    //bool use_bigtile;
 }
