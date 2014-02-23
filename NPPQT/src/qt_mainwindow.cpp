@@ -85,6 +85,16 @@ public:
     void force_redraw();
 };
 
+void MainWindow::slot_zoom_out()
+{
+    graphics_view->scale(0.5, 0.5);
+}
+
+void MainWindow::slot_zoom_in()
+{
+    graphics_view->scale(1.5, 1.5);
+}
+
 void MainWindow::slot_find_player()
 {
     if (!character_dungeon) return;
@@ -633,6 +643,15 @@ MainWindow::MainWindow()
     QPushButton *b2 = new QPushButton("Redraw");
     lay2->addWidget(b2);
     connect(b2, SIGNAL(clicked()), this, SLOT(slot_redraw()));
+/*
+    QPushButton *b3 = new QPushButton("Zoom out");
+    lay2->addWidget(b3);
+    connect(b3, SIGNAL(clicked()), this, SLOT(slot_zoom_out()));
+
+    QPushButton *b4 = new QPushButton("Zoom in");
+    lay2->addWidget(b4);
+    connect(b4, SIGNAL(clicked()), this, SLOT(slot_zoom_in()));
+*/
 
     create_actions();
     update_file_menu_game_inactive();

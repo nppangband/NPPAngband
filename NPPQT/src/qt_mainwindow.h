@@ -59,6 +59,8 @@ private slots:
 
     void slot_find_player();
     void slot_redraw();
+    void slot_zoom_out();
+    void slot_zoom_in();
 
     // Functions to make sure the available menu commands are appropriate to the situation.
     //  For example, make the save game command unanavailable when no savefile is open.
