@@ -26,6 +26,20 @@ public:
     int x, y;
 };
 
+class DungeonCursor: public QGraphicsItem
+{
+public:
+    MainWindowPrivate *parent;
+    int x, y;
+
+    QRectF boundingRect() const;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+    DungeonCursor(MainWindowPrivate *_parent);
+    void setEnabled(bool enabled);
+    void moveTo(int y, int x);
+};
+
 class MainWindowPrivate
 {
 public:
@@ -44,6 +58,8 @@ public:
     QHash<QString, QPixmap> tiles;
     QPixmap tile_map;
 
+    DungeonCursor *cursor;
+
     MainWindowPrivate();
     void init_scene(QGraphicsScene *_scene, QGraphicsView *_view, QFont _font);
     void redraw();
@@ -58,12 +74,57 @@ public:
     QPixmap colorize_pix(QPixmap src, QColor color);
     QPixmap gray_pix(QPixmap src);
     QPixmap pseudo_ascii(QChar chr, QColor color);
+    void update_cursor();
 };
+
+void MainWindowPrivate::update_cursor()
+{
+    cursor->moveTo(p_ptr->py, p_ptr->px);
+    cursor->setVisible(hilight_player);
+}
+
+DungeonCursor::DungeonCursor(MainWindowPrivate *_parent)
+{
+    parent = _parent;
+    x = y = 0;
+    setZValue(100);
+}
+
+QRectF DungeonCursor::boundingRect() const
+{
+    return QRectF(0, 0, parent->cell_wid, parent->cell_wid);
+}
+
+void DungeonCursor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    if (!character_dungeon) return;
+
+    QPen _pen = painter->pen();
+    QPen p_cursor(QColor("yellow"));
+    painter->setPen(p_cursor);
+    painter->drawRect(0, 0, parent->cell_wid - 1, parent->cell_hgt - 1);
+    if ((parent->cell_wid > 16) && (parent->cell_hgt > 16)){
+        int z = 3;
+        painter->drawRect(0, 0, z, z);
+        painter->drawRect(parent->cell_wid - z - 1, 0, z, z);
+        painter->drawRect(0, parent->cell_hgt - z - 1, z, z);
+        painter->drawRect(parent->cell_wid - z - 1, parent->cell_hgt - z - 1, z, z);
+    }
+    painter->setPen(_pen);
+}
+
+void DungeonCursor::moveTo(int _y, int _x)
+{
+    x = _x;
+    y = _y;
+    setPos(x * parent->cell_wid, y * parent->cell_hgt);
+}
 
 MainWindowPrivate::MainWindowPrivate()
 {
     view = 0;
     scene = 0;
+    cursor = new DungeonCursor(this);
 }
 
 DungeonGrid::DungeonGrid(int _x, int _y, MainWindowPrivate *_parent)
@@ -71,6 +132,7 @@ DungeonGrid::DungeonGrid(int _x, int _y, MainWindowPrivate *_parent)
     x = _x;
     y = _y;
     parent = _parent;
+    setZValue(0);
 }
 
 QRectF DungeonGrid::boundingRect() const
@@ -358,6 +420,8 @@ void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view,
         }
     }
 
+    scene->addItem(cursor);
+
     view->update();
 }
 
@@ -382,6 +446,7 @@ void MainWindowPrivate::redraw()
     }
 
     ui_center(p_ptr->py, p_ptr->px);
+    update_cursor();
 }
 
 bool MainWindowPrivate::panel_contains(int y, int x)
