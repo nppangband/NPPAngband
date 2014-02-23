@@ -136,9 +136,12 @@ void DungeonGrid::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!character_dungeon) return;
 
+    int old_x = parent->cursor->x;
+    int old_y = parent->cursor->y;
+    parent->grids[old_y][old_x]->update();
     parent->cursor->setVisible(true);
     parent->cursor->moveTo(y, x);
-    parent->force_redraw(); // Hack -- Force full redraw, to eliminate bug in QT
+    //parent->force_redraw(); // Hack -- Force full redraw, to eliminate bug in QT
 
     dungeon_type *d_ptr = &dungeon_info[y][x];
     if (d_ptr->monster_idx > 0) {
@@ -160,6 +163,7 @@ DungeonCursor::DungeonCursor(MainWindowPrivate *_parent)
     parent = _parent;
     x = y = 0;
     setZValue(100);
+    setVisible(false);
 }
 
 QRectF DungeonCursor::boundingRect() const
@@ -170,6 +174,8 @@ QRectF DungeonCursor::boundingRect() const
 void DungeonCursor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     if (!character_dungeon) return;
+
+    if (!in_bounds(y, x)) return;
 
     painter->save();
     painter->setPen(QColor("yellow"));
@@ -196,6 +202,7 @@ MainWindowPrivate::MainWindowPrivate()
     view = 0;
     scene = 0;
     cursor = new DungeonCursor(this);
+    do_pseudo_ascii = false;
 }
 
 DungeonGrid::DungeonGrid(int _x, int _y, MainWindowPrivate *_parent)
@@ -213,9 +220,11 @@ QRectF DungeonGrid::boundingRect() const
 
 void DungeonGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->fillRect(QRectF(0, 0, parent->cell_wid, parent->cell_hgt), Qt::black);
-
     if (!character_dungeon) return;
+
+    if (!in_bounds(y, x)) return;
+
+    painter->fillRect(QRectF(0, 0, parent->cell_wid, parent->cell_hgt), Qt::black);
 
     dungeon_type *d_ptr = &dungeon_info[y][x];
     QChar square_char = d_ptr->dun_char;
@@ -485,8 +494,6 @@ void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view,
     scene = _scene;
     view = _view;
 
-    do_pseudo_ascii = false;
-
     font = _font;
     QFontMetrics metrics(font);
 
@@ -509,8 +516,6 @@ void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view,
     }
 
     scene->addItem(cursor);
-
-    force_redraw();
 }
 
 void MainWindowPrivate::redraw()
@@ -747,6 +752,7 @@ void MainWindow::save_and_close()
     // close game
     cleanup_npp_games();
 
+    priv->cursor->setVisible(false);
     priv->destroy_tiles();
     priv->redraw();
 }
