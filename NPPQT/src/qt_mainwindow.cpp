@@ -9,6 +9,7 @@
 #include "src/optionsdialog.h"
 #include "src/birthdialog.h"
 #include "src/dungeonbox.h"
+#include "src/animationproxy.h"
 
 static MainWindow *main_window = 0;
 
@@ -31,7 +32,7 @@ public:
 };
 
 class DungeonCursor: public QGraphicsItem
-{
+{    
 public:
     MainWindowPrivate *parent;
     int x, y;
@@ -84,6 +85,38 @@ public:
     void update_cursor();
     void force_redraw();
 };
+
+void MainWindow::slot_finish_bolt()
+{
+    QPropertyAnimation *anim = dynamic_cast<QPropertyAnimation *>(QObject::sender());
+    AnimationProxy *ap = dynamic_cast<AnimationProxy *>(anim->targetObject());
+    dungeon_scene->removeItem(ap->client);
+    delete ap->client;
+    delete ap;
+    delete anim;
+}
+
+void MainWindow::animate_bolt()
+{
+    if (!character_dungeon) return;
+
+    ui_center(p_ptr->py, p_ptr->px);
+    DungeonCursor *cu = new DungeonCursor(priv);
+    AnimationProxy *ap = new AnimationProxy(cu);
+    priv->scene->addItem(cu);
+    cu->setVisible(true);
+    QPropertyAnimation *anim = new QPropertyAnimation(ap, "pos");
+    anim->setStartValue(QPointF(p_ptr->px * priv->cell_wid, p_ptr->py * priv->cell_hgt));
+    anim->setEndValue(QPointF((p_ptr->px - 10) * priv->cell_wid, p_ptr->py * priv->cell_hgt));
+    anim->setDuration(500);
+    connect(anim, SIGNAL(finished()), this, SLOT(slot_finish_bolt()));
+    anim->start();
+}
+
+void MainWindow::slot_something()
+{
+    animate_bolt();
+}
 
 void MainWindow::slot_zoom_out()
 {
@@ -651,6 +684,10 @@ MainWindow::MainWindow()
     QPushButton *b4 = new QPushButton("Zoom in");
     lay2->addWidget(b4);
     connect(b4, SIGNAL(clicked()), this, SLOT(slot_zoom_in()));
+
+    QPushButton *b5 = new QPushButton("Test something");
+    lay2->addWidget(b5);
+    connect(b5, SIGNAL(clicked()), this, SLOT(slot_something()));
 
     create_actions();
     update_file_menu_game_inactive();

@@ -52,6 +52,8 @@ private slots:
     void slot_redraw();
     void slot_zoom_out();
     void slot_zoom_in();
+    void slot_something();
+    void slot_finish_bolt();
 
     // Functions to make sure the available menu commands are appropriate to the situation.
     //  For example, make the save game command unanavailable when no savefile is open.
@@ -76,7 +78,6 @@ private:
 
     void debug_dungeon();
 
-
     // Functions that initialize the file menu of the main window.
     void create_actions();
     void create_menus();
@@ -91,6 +92,7 @@ private:
     void read_settings();
     void write_settings();
 
+    void animate_bolt();
 
     //Functions and variables that handle opening and saving files, as well as maintain the
     //  5 most recent savefile list.
