@@ -10,6 +10,7 @@
 #include "src/birthdialog.h"
 #include "src/dungeonbox.h"
 #include "src/animationproxy.h"
+#include "emitter.h"
 
 static MainWindow *main_window = 0;
 
@@ -108,14 +109,23 @@ void MainWindow::animate_bolt()
     QPropertyAnimation *anim = new QPropertyAnimation(ap, "pos");
     anim->setStartValue(QPointF(p_ptr->px * priv->cell_wid, p_ptr->py * priv->cell_hgt));
     anim->setEndValue(QPointF((p_ptr->px - 10) * priv->cell_wid, p_ptr->py * priv->cell_hgt));
-    anim->setDuration(500);
+    anim->setDuration(5000);
     connect(anim, SIGNAL(finished()), this, SLOT(slot_finish_bolt()));
     anim->start();
 }
 
+QSize ui_grid_size()
+{
+    return QSize(main_window->priv->cell_wid, main_window->priv->cell_hgt);
+}
+
 void MainWindow::slot_something()
 {
-    animate_bolt();
+    //animate_bolt();
+
+    BallEmitter *em = new BallEmitter(p_ptr->py, p_ptr->px, 2);
+    dungeon_scene->addItem(em);
+    em->start();
 }
 
 void MainWindow::slot_zoom_out()

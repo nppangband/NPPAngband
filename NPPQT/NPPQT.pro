@@ -71,7 +71,8 @@ SOURCES +=  src/qt_main.cpp\
             src/utilities.cpp \
             src/dungeonbox.cpp \
     src/prefs.cpp \
-    src/animationproxy.cpp
+    src/animationproxy.cpp \
+    src/emitter.cpp
 
 
 
@@ -104,7 +105,8 @@ HEADERS  += src/qt_mainwindow.h\
             src/player_classes.h \
             src/birthdialog.h \
             src/dungeonbox.h \
-    src/animationproxy.h
+    src/animationproxy.h \
+    src/emitter.h
 
 
 RESOURCES += \
