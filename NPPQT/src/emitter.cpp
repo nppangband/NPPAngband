@@ -25,6 +25,7 @@ static QPointF fromAngle(qreal angle, qreal magnitude)
 Particle::Particle()
 {
     active = true;
+    type = 0;
 }
 
 Emitter::Emitter(QObject *parent) :
@@ -55,9 +56,12 @@ BallEmitter::BallEmitter(int y, int x, int newRadius)
     size = size_temp.height();
     size *= (newRadius * 2 + 1);
     radius = newRadius;
-    setPos((x - newRadius) * size_temp.width(), (y - newRadius) * size_temp.height());
+    int w = size_temp.width();
+    int h = size_temp.height();
+    setPos(x * w + w / 2 - size / 2,
+           y * h + h / 2 - size / 2);
     setZValue(300);
-    position = QPointF((newRadius + 0.5) * size_temp.width(), (newRadius + 0.5) * size_temp.height());
+    position = QPointF(size / 2, size / 2);
     velocity = QPointF(0, 6);
 }
 
@@ -83,9 +87,10 @@ void Emitter::finish()
 
 void BallEmitter::do_step()
 {
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 25; i++) {
         qreal angle = rand_int(360) * 2 * PI / 360;
         Particle *p = new Particle;
+        p->type = rand_int(3);
         p->velocity = fromAngle(angle, magnitude(velocity));
         p->position = position;
         particles.append(p);
@@ -109,19 +114,26 @@ void BallEmitter::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 {
     painter->save();
 
-    painter->setClipRect(boundingRect());
+    //painter->setClipRect(boundingRect());
 
     for (int i = 0; i < particles.size(); i++) {
         Particle *p = particles.at(i);
         if (!p->active) continue;
-        int s = 40;
-        int x = p->position.x() - s / 2;
-        int y = p->position.y() - s / 2;
-        qreal opacity = 1;
-        qreal m = magnitude(p->position - position);
-        if (m > (size / 2 * 0.5)) opacity = 0.5;
-        painter->setOpacity(opacity);
-        painter->drawPixmap(x, y, s, s, *ball_pix);
+        QColor col("white");
+        if (p->type == 0) {
+            int s = 40;
+            int x = p->position.x() - s / 2;
+            int y = p->position.y() - s / 2;
+            qreal opacity = 1;
+            qreal m = magnitude(p->position - position);
+            if (m > (size / 2 * 0.5)) opacity = 0.5;
+            painter->setOpacity(opacity);
+            painter->drawPixmap(x, y, s, s, *ball_pix);
+        }
+        else {
+            painter->setOpacity(1);
+            painter->fillRect(QRectF(p->position.x(), p->position.y(), 1, 1), col);
+        }
     }
 
     painter->restore();
@@ -129,6 +141,5 @@ void BallEmitter::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
 QRectF BallEmitter::boundingRect() const
 {    
-    QSize size_temp = ui_grid_size();
-    return QRectF(0, 0, size_temp.width() * (radius * 2 + 1), size_temp.height() * (radius * 2 + 1));
+    return QRectF(0, 0, size, size);
 }

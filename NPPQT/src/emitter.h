@@ -15,6 +15,7 @@ public:
     bool active;
     QPointF position;
     QPointF velocity;
+    int type;
 };
 
 class Emitter : public QObject
