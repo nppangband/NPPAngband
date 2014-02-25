@@ -33,7 +33,7 @@ Emitter::Emitter(QObject *parent) :
 {
     step = 0;
     max_steps = 100;
-    pause = 25;
+    pause = 75;
     next = 0;
 
     connect(&timer, SIGNAL(timeout()), this, SLOT(timeout()));
@@ -43,6 +43,8 @@ void Emitter::start()
 {
     timer.start(pause);
 }
+
+static int BALL_TILE_SIZE = 40;
 
 BallEmitter::BallEmitter(int y, int x, int newRadius)
 {
@@ -58,10 +60,11 @@ BallEmitter::BallEmitter(int y, int x, int newRadius)
     radius = newRadius;
     int w = size_temp.width();
     int h = size_temp.height();
-    setPos(x * w + w / 2 - size / 2,
-           y * h + h / 2 - size / 2);
+    int size2 = size + BALL_TILE_SIZE;
+    setPos(x * w + w / 2 - size2 / 2,
+           y * h + h / 2 - size2 / 2);
     setZValue(300);
-    position = QPointF(size / 2, size / 2);
+    position = QPointF(size2 / 2, size2 / 2);
     velocity = QPointF(0, 6);
 }
 
@@ -87,7 +90,9 @@ void Emitter::finish()
 
 void BallEmitter::do_step()
 {
-    for (int i = 0; i < 25; i++) {
+    ++step;
+
+    for (int i = 0; (i < 25) && (step < 10); i++) {
         qreal angle = rand_int(360) * 2 * PI / 360;
         Particle *p = new Particle;
         p->type = rand_int(3);
@@ -121,12 +126,12 @@ void BallEmitter::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         if (!p->active) continue;
         QColor col("white");
         if (p->type == 0) {
-            int s = 40;
+            int s = BALL_TILE_SIZE;
             int x = p->position.x() - s / 2;
             int y = p->position.y() - s / 2;
             qreal opacity = 1;
             qreal m = magnitude(p->position - position);
-            if (m > (size / 2 * 0.5)) opacity = 0.5;
+            if (m > (size / 2 * 0.4)) opacity = 0.5;
             painter->setOpacity(opacity);
             painter->drawPixmap(x, y, s, s, *ball_pix);
         }
@@ -141,5 +146,5 @@ void BallEmitter::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
 QRectF BallEmitter::boundingRect() const
 {    
-    return QRectF(0, 0, size, size);
+    return QRectF(0, 0, size + BALL_TILE_SIZE, size + BALL_TILE_SIZE);
 }
