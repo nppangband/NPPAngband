@@ -33,6 +33,7 @@ public:
     explicit Emitter(QObject *parent = 0);
     void start();
     virtual void do_step() {}
+    void finish();
 
     virtual ~Emitter();
 signals:
@@ -48,6 +49,7 @@ class BallEmitter: public Emitter, public QGraphicsItem
     Q_INTERFACES(QGraphicsItem)
 public:
     qreal radius;
+    int size;
 
     BallEmitter(int y, int x, int _radius);
 

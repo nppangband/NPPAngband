@@ -88,7 +88,9 @@ public:
 
 void MainWindow::slot_finish_bolt()
 {
-
+    QGraphicsItem *item = dynamic_cast<QGraphicsItem *>(QObject::sender());
+    dungeon_scene->removeItem(item);
+    delete item;
 }
 
 QSize ui_grid_size()
@@ -97,10 +99,9 @@ QSize ui_grid_size()
 }
 
 void MainWindow::slot_something()
-{
-    //animate_bolt();
-
+{    
     BallEmitter *em = new BallEmitter(p_ptr->py, p_ptr->px, 2);
+    connect(em, SIGNAL(finished()), this, SLOT(slot_finish_bolt()));
     dungeon_scene->addItem(em);
     em->start();
 }
