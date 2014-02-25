@@ -9,7 +9,6 @@
 #include "src/optionsdialog.h"
 #include "src/birthdialog.h"
 #include "src/dungeonbox.h"
-#include "src/animationproxy.h"
 #include "emitter.h"
 
 static MainWindow *main_window = 0;
@@ -89,29 +88,7 @@ public:
 
 void MainWindow::slot_finish_bolt()
 {
-    QPropertyAnimation *anim = dynamic_cast<QPropertyAnimation *>(QObject::sender());
-    AnimationProxy *ap = dynamic_cast<AnimationProxy *>(anim->targetObject());
-    dungeon_scene->removeItem(ap->client);
-    delete ap->client;
-    delete ap;
-    delete anim;
-}
 
-void MainWindow::animate_bolt()
-{
-    if (!character_dungeon) return;
-
-    ui_center(p_ptr->py, p_ptr->px);
-    DungeonCursor *cu = new DungeonCursor(priv);
-    AnimationProxy *ap = new AnimationProxy(cu);
-    priv->scene->addItem(cu);
-    cu->setVisible(true);
-    QPropertyAnimation *anim = new QPropertyAnimation(ap, "pos");
-    anim->setStartValue(QPointF(p_ptr->px * priv->cell_wid, p_ptr->py * priv->cell_hgt));
-    anim->setEndValue(QPointF((p_ptr->px - 10) * priv->cell_wid, p_ptr->py * priv->cell_hgt));
-    anim->setDuration(5000);
-    connect(anim, SIGNAL(finished()), this, SLOT(slot_finish_bolt()));
-    anim->start();
 }
 
 QSize ui_grid_size()

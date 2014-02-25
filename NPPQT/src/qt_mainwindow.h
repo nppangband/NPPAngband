@@ -90,9 +90,7 @@ private:
 
     // Remember the game settings
     void read_settings();
-    void write_settings();
-
-    void animate_bolt();
+    void write_settings();    
 
     //Functions and variables that handle opening and saving files, as well as maintain the
     //  5 most recent savefile list.
