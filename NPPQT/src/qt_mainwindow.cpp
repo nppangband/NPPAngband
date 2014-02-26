@@ -98,19 +98,41 @@ QSize ui_grid_size()
     return QSize(main_window->priv->cell_wid, main_window->priv->cell_hgt);
 }
 
+QPixmap rotate_pix(QPixmap src, qreal angle)
+{
+    QImage img(src.width(), src.height(), QImage::Format_ARGB32);
+    for (int x = 0; x < src.width(); x++) {
+        for (int y = 0; y < src.height(); y++) {
+            img.setPixel(x, y, QColor(0, 0, 0, 0).rgba());
+        }
+    }
+    QPainter p(&img);
+    QTransform tra;
+    tra.translate(src.width() / 2, src.height() / 2);
+    tra.rotate(angle);
+    tra.translate(-src.width() / 2, -src.height() / 2);
+    p.setTransform(tra);
+    p.drawPixmap(QPointF(0, 0), src);
+    return QPixmap::fromImage(img);
+}
+
 void MainWindow::slot_something()
 {
     QPointF p(p_ptr->px, p_ptr->py);
-    QPointF p2(p_ptr->px + 5, p_ptr->py + 4);
-
-    BoltAnimation *bolt = new BoltAnimation(p, p2);
-    dungeon_scene->addItem(bolt);
+    QPointF p2(p_ptr->px + rand_int(10) - 5, p_ptr->py + rand_int(10) - 5);
 
     BallAnimation *ball = new BallAnimation(p2, 2);
     dungeon_scene->addItem(ball);
-    bolt->next = ball;
 
-    bolt->start();
+    if (p != p2) {
+        BoltAnimation *bolt = new BoltAnimation(p, p2);
+        dungeon_scene->addItem(bolt);
+        bolt->next = ball;
+        bolt->start();
+    }
+    else {
+        ball->start();
+    }
 }
 
 void MainWindow::slot_zoom_out()
@@ -347,7 +369,7 @@ void DungeonGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
                QPixmap pix = parent->tiles.value(key2);
                if (flags & (UI_TRANSPARENT_EFFECT | UI_TRANSPARENT_MONSTER)) {
                    painter->setOpacity(opacity);
-               }
+               }               
                painter->drawPixmap(pix.rect(), pix, pix.rect());
                painter->setOpacity(1);
                done_fg = true;

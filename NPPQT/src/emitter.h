@@ -18,7 +18,7 @@ public:
 
     virtual ~NPPAnimation();
 
-    void start();
+    virtual void start();
 };
 
 class BoltAnimation: public NPPAnimation, public QGraphicsItem
@@ -27,12 +27,16 @@ class BoltAnimation: public NPPAnimation, public QGraphicsItem
     Q_INTERFACES(QGraphicsItem)
     Q_PROPERTY(QPointF pos READ pos WRITE setPos)
 public:
+    int current_angle;
+
     BoltAnimation(QPointF from, QPointF to);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QRectF boundingRect() const;
 
     virtual ~BoltAnimation();
+
+    void start();
 };
 
 class BallParticle

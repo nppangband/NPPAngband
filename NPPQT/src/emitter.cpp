@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 
 static QPixmap *ball_pix = 0;
+static QPixmap *bolt_pix = 0;
 
 static void load_ball_pix()
 {
@@ -12,6 +13,15 @@ static void load_ball_pix()
         QString path(NPP_DIR_GRAF);
         path.append("ball1.png");
         ball_pix = new QPixmap(path);
+    }
+}
+
+static void load_bolt_pix()
+{
+    if (!bolt_pix) {
+        QString path(NPP_DIR_GRAF);
+        path.append("bolt1.png");
+        bolt_pix = new QPixmap(path);
     }
 }
 
@@ -56,13 +66,15 @@ void NPPAnimation::start()
     if (anim) anim->start();
 }
 
-static int BOLT_SIZE = 40;
+static int BOLT_SIZE = 20;
 
 BoltAnimation::BoltAnimation(QPointF from, QPointF to)
 {
+    current_angle = 0;
+    setVisible(false);
     setZValue(300);
     anim = new QPropertyAnimation(this, "pos");
-    anim->setDuration(500);
+    anim->setDuration(1000);
     anim->setStartValue(getCenter(from.y(), from.x()) - QPointF(BOLT_SIZE / 2, BOLT_SIZE / 2));
     anim->setEndValue(getCenter(to.y(), to.x()) - QPointF(BOLT_SIZE / 2, BOLT_SIZE / 2));
     connect(anim, SIGNAL(finished()), this, SLOT(deleteLater()));
@@ -72,9 +84,13 @@ void BoltAnimation::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 {
     painter->save();
 
-    load_ball_pix();
+    load_bolt_pix();
 
-    painter->drawPixmap(boundingRect(), *ball_pix, boundingRect());
+    current_angle += 20;
+    current_angle %= 360;
+
+    QPixmap pix = rotate_pix(*bolt_pix, current_angle);
+    painter->drawPixmap(boundingRect(), pix, boundingRect());
 
     painter->restore();
 }
@@ -82,6 +98,12 @@ void BoltAnimation::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 QRectF BoltAnimation::boundingRect() const
 {
     return QRectF(0, 0, BOLT_SIZE, BOLT_SIZE);
+}
+
+void BoltAnimation::start()
+{
+    setVisible(true);
+    NPPAnimation::start();
 }
 
 BoltAnimation::~BoltAnimation()
@@ -94,6 +116,7 @@ static int BALL_TILE_SIZE = 40;
 BallAnimation::BallAnimation(QPointF where, int newRadius)
 {
     setZValue(300);
+    setVisible(false);
 
     load_ball_pix();
 
@@ -128,6 +151,8 @@ void BallAnimation::setLength(qreal newLength)
     length = newLength;
 
     if (length < previousLength + 4) return;
+
+    setVisible(true);
 
     qreal delta = length - previousLength;
 
