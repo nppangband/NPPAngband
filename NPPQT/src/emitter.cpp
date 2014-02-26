@@ -2,8 +2,18 @@
 #include "npp.h"
 #include <QPainter>
 #include <QtCore/qmath.h>
+#include <QGraphicsScene>
 
 static QPixmap *ball_pix = 0;
+
+static void load_ball_pix()
+{
+    if (!ball_pix) {
+        QString path(NPP_DIR_GRAF);
+        path.append("ball1.png");
+        ball_pix = new QPixmap(path);
+    }
+}
 
 static double PI = 3.141592653589793238463;
 
@@ -22,129 +32,163 @@ static QPointF fromAngle(qreal angle, qreal magnitude)
     return QPointF(magnitude * qCos(angle), magnitude * qSin(angle));
 }
 
-Particle::Particle()
+static QPointF getCenter(int y, int x)
 {
-    active = true;
-    type = 0;
+    QSize dim = ui_grid_size();
+    return QPointF(x * dim.width() + dim.width() / 2,
+                   y * dim.height() + dim.height() / 2);
 }
 
-Emitter::Emitter(QObject *parent) :
-    QObject(parent)
+NPPAnimation::NPPAnimation()
 {
-    step = 0;
-    max_steps = 100;
-    pause = 75;
+    anim = 0;
     next = 0;
-
-    connect(&timer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
 
-void Emitter::start()
+NPPAnimation::~NPPAnimation()
 {
-    timer.start(pause);
+    if (next) next->start();
+    if (anim) delete anim;
+}
+
+void NPPAnimation::start()
+{
+    if (anim) anim->start();
+}
+
+static int BOLT_SIZE = 40;
+
+BoltAnimation::BoltAnimation(QPointF from, QPointF to)
+{
+    setZValue(300);
+    anim = new QPropertyAnimation(this, "pos");
+    anim->setDuration(500);
+    anim->setStartValue(getCenter(from.y(), from.x()) - QPointF(BOLT_SIZE / 2, BOLT_SIZE / 2));
+    anim->setEndValue(getCenter(to.y(), to.x()) - QPointF(BOLT_SIZE / 2, BOLT_SIZE / 2));
+    connect(anim, SIGNAL(finished()), this, SLOT(deleteLater()));
+}
+
+void BoltAnimation::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    painter->save();
+
+    load_ball_pix();
+
+    painter->drawPixmap(boundingRect(), *ball_pix, boundingRect());
+
+    painter->restore();
+}
+
+QRectF BoltAnimation::boundingRect() const
+{
+    return QRectF(0, 0, BOLT_SIZE, BOLT_SIZE);
+}
+
+BoltAnimation::~BoltAnimation()
+{
+    if (scene()) scene()->removeItem(this);
 }
 
 static int BALL_TILE_SIZE = 40;
 
-BallEmitter::BallEmitter(int y, int x, int newRadius)
+BallAnimation::BallAnimation(QPointF where, int newRadius)
 {
-    if (ball_pix == 0) {
-        QString fname = NPP_DIR_GRAF;
-        fname.append("ball1.png");
-        ball_pix = new QPixmap(fname);
-    }
+    setZValue(300);
+
+    load_ball_pix();
 
     QSize size_temp = ui_grid_size();
     size = size_temp.height();
     size *= (newRadius * 2 + 1);
-    radius = newRadius;
-    int w = size_temp.width();
-    int h = size_temp.height();
+
+    length = previousLength = 0;
+
     int size2 = size + BALL_TILE_SIZE;
-    setPos(x * w + w / 2 - size2 / 2,
-           y * h + h / 2 - size2 / 2);
-    setZValue(300);
+
+    where = getCenter(where.y(), where.x());
+
+    setPos(where.x() - size2 / 2, where.y() - size2 / 2);
+
     position = QPointF(size2 / 2, size2 / 2);
-    velocity = QPointF(0, 6);
+
+    anim = new QPropertyAnimation(this, "length");
+    anim->setDuration(1000);
+    anim->setStartValue(0);
+    anim->setEndValue(size / 2.0);
+    connect(anim, SIGNAL(finished()), this, SLOT(deleteLater()));
 }
 
-void Emitter::timeout()
+qreal BallAnimation::getLength()
 {
-    do_step();
+    return length;
 }
 
-Emitter::~Emitter()
+void BallAnimation::setLength(qreal newLength)
 {
-    for (int i = 0; i < particles.size(); i++) {
-        delete particles.at(i);
-    }
-    particles.clear();    
-}
+    length = newLength;
 
-void Emitter::finish()
-{
-    timer.stop();
-    if (next) next->start();
-    emit finished();
-}
+    if (length < previousLength + 4) return;
 
-void BallEmitter::do_step()
-{
-    ++step;
+    qreal delta = length - previousLength;
 
-    for (int i = 0; (i < 25) && (step < 10); i++) {
+    previousLength = length;
+
+    for (int i = 0; (i < 25); i++) {
         qreal angle = rand_int(360) * 2 * PI / 360;
-        Particle *p = new Particle;
+        BallParticle *p = new BallParticle;
         p->type = rand_int(3);
-        p->velocity = fromAngle(angle, magnitude(velocity));
-        p->position = position;
+        p->angle = angle;
+        p->currentLength = 0;
         particles.append(p);
     }
 
     for (int i = 0; i < particles.size(); i++) {
-        Particle *p = particles.at(i);
-        if (!p->active) continue;
-        p->position += p->velocity;
-        if (magnitude(p->position - position) > (size * 0.5)) {
-            p->active = false;
-            finish();
-            return;
-        }
+        BallParticle *p = particles.at(i);
+        p->currentLength += delta;
     }
 
     update();
 }
 
-void BallEmitter::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+BallAnimation::~BallAnimation()
+{
+    for (int i = 0; i < particles.size(); i++) {
+        delete particles.at(i);
+    }
+    particles.clear();
+
+    if (scene()) scene()->removeItem(this);
+}
+
+void BallAnimation::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     painter->save();
 
     //painter->setClipRect(boundingRect());
 
     for (int i = 0; i < particles.size(); i++) {
-        Particle *p = particles.at(i);
-        if (!p->active) continue;
+        BallParticle *p = particles.at(i);
         QColor col("white");
+        QPointF where = position + fromAngle(p->angle, p->currentLength);
         if (p->type == 0) {
-            int s = BALL_TILE_SIZE;
-            int x = p->position.x() - s / 2;
-            int y = p->position.y() - s / 2;
             qreal opacity = 1;
-            qreal m = magnitude(p->position - position);
-            if (m > (size / 2 * 0.4)) opacity = 0.5;
+            if (p->currentLength > size / 4.0) opacity = 0.5;
             painter->setOpacity(opacity);
-            painter->drawPixmap(x, y, s, s, *ball_pix);
+            painter->drawPixmap(where.x() - BALL_TILE_SIZE / 2,
+                                where.y() - BALL_TILE_SIZE / 2,
+                                BALL_TILE_SIZE, BALL_TILE_SIZE, *ball_pix);
         }
         else {
             painter->setOpacity(1);
-            painter->fillRect(QRectF(p->position.x(), p->position.y(), 1, 1), col);
+            painter->fillRect(QRectF(where.x(), where.y(), 1, 1), col);
         }
     }
 
     painter->restore();
 }
 
-QRectF BallEmitter::boundingRect() const
-{    
+QRectF BallAnimation::boundingRect() const
+{
     return QRectF(0, 0, size + BALL_TILE_SIZE, size + BALL_TILE_SIZE);
 }
+

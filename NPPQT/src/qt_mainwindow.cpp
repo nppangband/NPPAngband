@@ -99,11 +99,18 @@ QSize ui_grid_size()
 }
 
 void MainWindow::slot_something()
-{    
-    BallEmitter *em = new BallEmitter(p_ptr->py, p_ptr->px, 2);
-    connect(em, SIGNAL(finished()), this, SLOT(slot_finish_bolt()));
-    dungeon_scene->addItem(em);
-    em->start();
+{
+    QPointF p(p_ptr->px, p_ptr->py);
+    QPointF p2(p_ptr->px + 5, p_ptr->py + 4);
+
+    BoltAnimation *bolt = new BoltAnimation(p, p2);
+    dungeon_scene->addItem(bolt);
+
+    BallAnimation *ball = new BallAnimation(p2, 2);
+    dungeon_scene->addItem(ball);
+    bolt->next = ball;
+
+    bolt->start();
 }
 
 void MainWindow::slot_zoom_out()

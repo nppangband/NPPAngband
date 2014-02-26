@@ -5,59 +5,64 @@
 #include <QPointF>
 #include <QList>
 #include <QGraphicsItem>
-#include <QTimer>
+#include <QPropertyAnimation>
 
-class Particle
-{
-public:
-    Particle();
-
-    bool active;
-    QPointF position;
-    QPointF velocity;
-    int type;
-};
-
-class Emitter : public QObject
+class NPPAnimation: public QObject
 {
     Q_OBJECT
 public:
-    int step;
-    int max_steps;
-    int pause;
-    QPointF position;
-    QPointF velocity;
-    QList<Particle *> particles;
-    Emitter *next;
-    QTimer timer;
+    NPPAnimation();
 
-    explicit Emitter(QObject *parent = 0);
+    QPropertyAnimation *anim;
+    NPPAnimation *next;
+
+    virtual ~NPPAnimation();
+
     void start();
-    virtual void do_step() {}
-    void finish();
-
-    virtual ~Emitter();
-signals:
-    void finished();
-
-public slots:
-    void timeout();
 };
 
-class BallEmitter: public Emitter, public QGraphicsItem
+class BoltAnimation: public NPPAnimation, public QGraphicsItem
 {
     Q_OBJECT
     Q_INTERFACES(QGraphicsItem)
+    Q_PROPERTY(QPointF pos READ pos WRITE setPos)
 public:
-    qreal radius;
-    int size;
-
-    BallEmitter(int y, int x, int _radius);
+    BoltAnimation(QPointF from, QPointF to);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QRectF boundingRect() const;
 
-    void do_step();
+    virtual ~BoltAnimation();
+};
+
+class BallParticle
+{
+public:
+    qreal angle;
+    qreal currentLength;
+    int type;
+};
+
+class BallAnimation: public NPPAnimation, public QGraphicsItem
+{
+    Q_OBJECT
+    Q_INTERFACES(QGraphicsItem)
+    Q_PROPERTY(qreal length READ getLength WRITE setLength)
+public:
+    QList<BallParticle *> particles;
+    QPointF position;
+    qreal length;
+    qreal previousLength;
+    qreal size;
+
+    BallAnimation(QPointF where, int newRadius);
+    qreal getLength();
+    void setLength(qreal newLength);
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    QRectF boundingRect() const;
+
+    virtual ~BallAnimation();
 };
 
 #endif // EMITTER_H
