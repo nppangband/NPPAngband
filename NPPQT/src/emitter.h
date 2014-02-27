@@ -69,4 +69,29 @@ public:
     virtual ~BallAnimation();
 };
 
+class ArcAnimation: public NPPAnimation, public QGraphicsItem
+{
+    Q_OBJECT
+    Q_INTERFACES(QGraphicsItem)
+    Q_PROPERTY(qreal length READ getLength WRITE setLength)
+public:
+    QList<BallParticle *> particles;
+    QPointF position;
+    qreal length;
+    qreal previousLength;
+    int degrees;
+    QRectF brect;
+    qreal centerAngle;
+    qreal maxLength;
+
+    ArcAnimation(QPointF from, QPointF to, int newDegrees);
+    qreal getLength();
+    void setLength(qreal newLength);
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    QRectF boundingRect() const;
+
+    virtual ~ArcAnimation();
+};
+
 #endif // EMITTER_H
