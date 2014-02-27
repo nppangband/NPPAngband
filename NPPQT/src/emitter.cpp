@@ -241,10 +241,16 @@ ArcAnimation::ArcAnimation(QPointF from, QPointF to, int newDegrees)
     int y1 = MIN(to.y(), from.y());
     int x2 = MAX(from.x(), to.x());
     int y2 = MAX(to.y(), from.y());
-    brect = QRectF(0, 0, (x2 - x1 + 1) * cell_size.width(),
-                         (y2 - y1 + 1) * cell_size.height());
+
     QPointF pp(cell_size.width(), cell_size.height());
     QPointF p1(x1, y1);
+    QPointF p2(x2, y2);
+
+    p1 += QPointF(-10, -10);
+    p2 += QPointF(10, 10);
+
+    brect = QRectF(0, 0, (p2.x() - p1.x() + 1) * cell_size.width(),
+                         (p2.y() - p1.y() + 1) * cell_size.height());
 
     setPos(mulp(p1, pp));
 
@@ -260,7 +266,9 @@ ArcAnimation::ArcAnimation(QPointF from, QPointF to, int newDegrees)
     anim = new QPropertyAnimation(this, "length");
     anim->setStartValue(0);
     anim->setEndValue(maxLength);
-    anim->setDuration(1000);
+    int duration = 1000;
+    if (maxLength > 500) duration = 2000;
+    anim->setDuration(duration);
     connect(anim, SIGNAL(finished()), this, SLOT(deleteLater()));
 
     setZValue(300);
@@ -276,7 +284,7 @@ void ArcAnimation::setLength(qreal newLength)
 {
     length = newLength;
 
-    if (length < previousLength + 8) return;
+    if (length < previousLength + 6) return;
 
     setVisible(true);
 
@@ -284,14 +292,20 @@ void ArcAnimation::setLength(qreal newLength)
 
     previousLength = length;
 
-    BallParticle *p = new BallParticle;
-    p->angle = centerAngle;
-    p->currentLength = 0;
-    p->type = 0;
-    particles.append(p);
+    int n = (maxLength < 250) ? 5: 20;
+
+    for (int i = 0; i < n; i++) {
+        BallParticle *p = new BallParticle;
+        qreal angle = rand_int(degrees) - degrees / 2.0;
+        angle = angle * PI / 180;
+        p->angle = centerAngle + angle;
+        p->currentLength = 4;
+        p->type = rand_int(7);
+        particles.append(p);
+    }
 
     for (int i = 0; i < particles.size(); i++) {
-        p = particles.at(i);
+        BallParticle *p = particles.at(i);
 
         p->currentLength += delta;
     }
@@ -310,17 +324,20 @@ void ArcAnimation::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     for (int i = 0; i < particles.size(); i++) {
         BallParticle *p = particles.at(i);
 
-        QPointF pp = position + fromAngle(p->angle, p->currentLength) -
-                (QPointF(BALL_TILE_SIZE, BALL_TILE_SIZE) * 0.5);
+        QPointF pp = position + fromAngle(p->angle, p->currentLength);
         qreal opacity = 1;
-        if (p->currentLength > maxLength * 0.4) opacity = 0.7;
-        if (p->currentLength > maxLength * 0.7) opacity = 0.4;
+        opacity = 1 - p->currentLength / maxLength;
+        if (opacity < 0.4) opacity = 0.4;
         painter->setOpacity(opacity);
+
         QPixmap pix = *ball_pix;
-        if (one_in_(4)) {
-            pix = pix.scaled(BALL_TILE_SIZE / 2, BALL_TILE_SIZE / 2);
-            pp += QPointF(BALL_TILE_SIZE / 4, BALL_TILE_SIZE / 4);
+        qreal perc = 1;
+        if (p->type == 0) {
+            perc = 0.5;
         }
+        pix = pix.scaled(pix.width() * perc, pix.height() * perc);
+        pp -= QPointF(pix.width() / 2, pix.height() / 2);
+
         painter->drawPixmap(pp, pix);
     }
 

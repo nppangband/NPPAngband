@@ -120,7 +120,7 @@ void MainWindow::slot_something()
 {
     QPointF p(p_ptr->px, p_ptr->py);
     QPointF p2(p_ptr->px + rand_int(10) - 5, p_ptr->py + rand_int(10) - 5);
-    p2 = QPointF(p_ptr->px - 5, p_ptr->py + 3);
+    p2 = QPointF(p_ptr->px - 20, p_ptr->py + 3);
 
     /*
     BallAnimation *ball = new BallAnimation(p2, 2);
