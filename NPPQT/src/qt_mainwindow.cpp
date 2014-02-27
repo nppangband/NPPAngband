@@ -119,8 +119,7 @@ QPixmap rotate_pix(QPixmap src, qreal angle)
 void MainWindow::slot_something()
 {
     QPointF p(p_ptr->px, p_ptr->py);
-    QPointF p2(p_ptr->px + rand_int(10) - 5, p_ptr->py + rand_int(10) - 5);
-    p2 = QPointF(p_ptr->px - 20, p_ptr->py + 3);
+    QPointF p2(p_ptr->px + rand_int(40) - 20, p_ptr->py + rand_int(40) - 20);
 
     /*
     BallAnimation *ball = new BallAnimation(p2, 2);
