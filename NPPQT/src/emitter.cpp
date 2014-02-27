@@ -267,7 +267,7 @@ ArcAnimation::ArcAnimation(QPointF from, QPointF to, int newDegrees)
     anim->setStartValue(0);
     anim->setEndValue(maxLength);
     int duration = 1000;
-    if (maxLength > 500) duration = 2000;
+    if (maxLength > 400) duration = 2000;
     anim->setDuration(duration);
     connect(anim, SIGNAL(finished()), this, SLOT(deleteLater()));
 
@@ -284,7 +284,7 @@ void ArcAnimation::setLength(qreal newLength)
 {
     length = newLength;
 
-    if (length < previousLength + 6) return;
+    if (length < previousLength + 4) return;
 
     setVisible(true);
 
@@ -292,7 +292,7 @@ void ArcAnimation::setLength(qreal newLength)
 
     previousLength = length;
 
-    int n = (maxLength < 250) ? 5: 20;
+    int n = (maxLength < 400) ? 5: 20;
 
     for (int i = 0; i < n; i++) {
         BallParticle *p = new BallParticle;
