@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <QImage>
 #include <QFontDatabase>
+#include <QKeyEvent>
 #include <src/defines.h>
 
 #define MAX_RECENT_SAVEFILES    5

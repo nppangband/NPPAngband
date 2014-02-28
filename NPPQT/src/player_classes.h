@@ -330,6 +330,11 @@ public:
     byte prace;			/* Race index */
     byte pclass;		/* Class index */
 
+    byte tile_32x32_y;
+    byte tile_32x32_x;
+    byte tile_8x8_y;
+    byte tile_8x8_x;
+
     byte hitdie;		/* Hit dice (sides) */
     byte expfact;		/* Experience factor */
 
@@ -395,7 +400,7 @@ public:
     u16b noscore;			/* Cheating flags */
 
     bool is_dead;			/* Player is dead */
-
+    bool player_turn;      /* It is the player's turn to move */
     bool wizard;			/* Player is in wizard mode */
 
 
@@ -405,7 +410,7 @@ public:
 
     bool noun_verb;			/* Player is using the object verb-noun menu */
 
-    bool leaving;			/* True if player is leaving */
+    bool leaving_level;		/* True if player is leaving the current level*/
 
     bool autosave;          /* True if autosave is pending */
 
@@ -437,8 +442,6 @@ public:
     s16b object_kind_idx;	/* Object kind trackee */
 
     s16b feature_kind_idx;	/* Feature kind tracker*/
-
-    byte p_energy_use;		/* Energy use this turn */
 
     s16b resting;			/* Resting counter */
     s16b running;			/* Running counter */

@@ -1227,7 +1227,7 @@ void take_hit(int dam, QString kb_str)
         p_ptr->is_dead = TRUE;
 
         /* Leaving */
-        p_ptr->leaving = TRUE;
+        p_ptr->leaving_level = TRUE;
 
         /* Write a note */
         if (adult_take_notes)

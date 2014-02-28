@@ -29,7 +29,7 @@
 void dungeon_change_level(int dlev)
 {
     /* Handle lost greater vaults */
-    if (g_vault_name[0] != '\0')
+    if (!g_vault_name.isEmpty())
     {
         if (adult_take_notes)
         {
@@ -37,6 +37,8 @@ void dungeon_change_level(int dlev)
             note.append(g_vault_name);
 
             write_note(note, p_ptr->depth);
+
+            g_vault_name.clear();
         }
     }
 
@@ -44,7 +46,7 @@ void dungeon_change_level(int dlev)
     p_ptr->depth = dlev;
 
     /* Leaving */
-    p_ptr->leaving = TRUE;
+    p_ptr->leaving_level = TRUE;
 
     /* Save the game when we arrive on the new level. */
     p_ptr->autosave = TRUE;
@@ -188,6 +190,9 @@ void launch_game()
     }
     */
 
-    p_ptr->update = (PU_TORCH | PU_UPDATE_VIEW | PU_FORGET_VIEW);
+    /* Update stuff */
+    p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_NATIVE);
+    p_ptr->update |= (PU_TORCH);
+    p_ptr->update |= (PU_TORCH | PU_UPDATE_VIEW | PU_FORGET_VIEW  | PU_DISTANCE);
     update_stuff();
 }

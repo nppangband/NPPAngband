@@ -4153,4 +4153,46 @@ int parse_flavor_info(QString line_info)
     return (0);
 }
 
+/*
+ * Find the player_graf info
+ * Should only be called after the player's gender, class, and race have been chosen.
+ * If this fails, we just use the human warrior tile.  No need to quit the game.
+ */
+int parse_player_graf_info(QString line_info)
+{
+
+
+    /* Skip comments and blank lines */
+    if (line_info.isNull() || line_info.isEmpty() || line_info[0] == '#') return (0);
+
+    /* Verify correct "colon" format */
+    if (line_info[1] != ':') return (PARSE_ERROR_GENERIC);
+
+    // Get the commmand and remove the command prefix (ex. N:)
+    QChar command = line_info.at(0);
+    line_info.remove(0,2);
+
+    // Process 'T' for Tile Mapping
+    if (command == 'T')
+    {
+        int l_class =0 , l_race = 0, tile_32x32_y = 0, tile_32x32_x = 0, tile_8x8_y = 0, tile_8x8_x= 0;
+
+        process_6_ints(line_info, &l_race, & l_class, &tile_32x32_y, &tile_32x32_x, &tile_8x8_y, &tile_8x8_x);
+
+        // Make sure we have the right race and class
+        if (l_race != p_ptr->prace) return (0);
+        if (l_class != p_ptr->pclass) return (0);
+
+        p_ptr->tile_32x32_y = (byte)tile_32x32_y;
+        p_ptr->tile_32x32_x = (byte)tile_32x32_x;
+        p_ptr->tile_8x8_y = (byte)tile_8x8_y;
+        p_ptr->tile_8x8_x = (byte)tile_8x8_x;
+    }
+
+
+    /* Success */
+    return (0);
+}
+
+
 

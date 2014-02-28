@@ -776,7 +776,7 @@ void py_pickup(bool pickup)
  * Note that this routine handles monsters in the destination grid,
  * and also handles attempting to move into walls/doors/rubble/etc.
  */
-s16b move_player(int dir, int jumping)
+void move_player(int dir, int jumping)
 {
 	int py = p_ptr->py;
 	int px = p_ptr->px;
@@ -918,7 +918,6 @@ s16b move_player(int dir, int jumping)
 	/* Some terrain prevents flying. */
     else if (!(feat_ff2_match(dungeon_info[y][x].feat, FF2_CAN_FLY)) && (p_ptr->timed[TMD_FLYING]))
 	{
-		char out_val[80];
         int feat = dungeon_info[y][x].feat;
 
 		/* Discover unknown terrain */
@@ -970,7 +969,7 @@ s16b move_player(int dir, int jumping)
 				p_ptr->running && old_dtrap && !new_dtrap)
 		{
 			disturb(0, 0);
-			return (used_energy);
+            return;
 		}
 
 		/* Move player */
@@ -1031,9 +1030,6 @@ s16b move_player(int dir, int jumping)
 
 			/* Hack -- Enter store */
 			p_ptr->command_new = '_';
-
-			/* Free turn XXX XXX XXX */
-			p_ptr->p_energy_use = 0;
 		}
 
 		/* Hit a trap */
@@ -1079,6 +1075,7 @@ s16b move_player(int dir, int jumping)
 
 	}
 
-	return (used_energy);
+    // Process any used energy.
+    if (used_energy) process_player_energy(used_energy);
 }
 

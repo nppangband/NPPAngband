@@ -212,7 +212,7 @@ bool make_attack_normal(monster_type *m_ptr)
         if (!method) break;
 
         /* Handle "leaving" */
-        if (p_ptr->leaving) break;
+        if (p_ptr->leaving_level) break;
 
         /* Extract visibility (before blink) */
         if (m_ptr->ml) visible = TRUE;

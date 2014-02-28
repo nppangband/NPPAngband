@@ -299,7 +299,7 @@ void do_cmd_study_spell(int code, cmd_arg args[])
             {
                 /* Spell is in an available book, and player is capable. */
                 spell_learn(spell);
-                p_ptr->p_energy_use = BASE_ENERGY_MOVE;
+                process_player_energy(BASE_ENERGY_MOVE);
             }
             else
             {
@@ -395,7 +395,7 @@ void do_cmd_study_book(int code, cmd_arg args[])
         k_ptr->tried = TRUE;
 
         spell_learn(spell);
-        p_ptr->p_energy_use = BASE_ENERGY_MOVE;
+        process_player_energy(BASE_ENERGY_MOVE);
     }
 }
 
@@ -461,8 +461,7 @@ void do_cmd_cast(int code, cmd_arg args[])
         }
     }
 
-    /* Take a turn */
-    p_ptr->p_energy_use = BASE_ENERGY_MOVE;
+
 
     /* Sufficient mana */
     if (s_ptr->smana <= p_ptr->csp)
@@ -501,6 +500,9 @@ void do_cmd_cast(int code, cmd_arg args[])
 
     /* Redraw mana */
     p_ptr->redraw |= (PR_MANA);
+
+    /* Take a turn */
+    process_player_energy(BASE_ENERGY_MOVE);
 }
 
 

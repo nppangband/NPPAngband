@@ -1510,7 +1510,6 @@ void calc_bonuses(object_type calc_inven[], player_state *new_state, bool id_onl
 
     /*** Apply modifier bonuses ***/
 
-
     /*** Modify skills ***/
 
     if (game_mode == GAME_NPPMORIA)
@@ -1998,6 +1997,7 @@ void update_stuff(void)
     if (!p_ptr->update) return;
 
     if (p_ptr->update & (PU_TORCH))	calc_torch();
+
     if (p_ptr->update & (PU_BONUS))
     {
         calc_bonuses(inventory, &p_ptr->state, FALSE);
@@ -2152,6 +2152,7 @@ static const struct flag_event_trigger redraw_events[] =
 void redraw_stuff(void)
 {
     size_t i;
+
 
     /* Redraw stuff */
     if (!p_ptr->redraw) return;

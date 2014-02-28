@@ -504,7 +504,7 @@ byte similar_color(byte color)
  *
  * If a monster does not breath anything, it can be any color.
  */
-byte multi_hued_attr(monster_race *r_ptr)
+byte multi_hued_color(monster_race *r_ptr)
 {
     byte allowed_attrs[15];
 
@@ -1221,7 +1221,7 @@ static void map_monster (s16b y, s16b x)
             else if (r_ptr->flags1 & (RF1_ATTR_MULTI))
             {
                 /* Multi-hued attr */
-                dun_ptr->monster_color = add_preset_color(multi_hued_attr(r_ptr));
+                dun_ptr->monster_color = add_preset_color(multi_hued_color(r_ptr));
             }
 
             /* Normal attr, Clear char, monster */
