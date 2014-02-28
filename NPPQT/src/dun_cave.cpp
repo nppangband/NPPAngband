@@ -1293,7 +1293,7 @@ static void map_monster (s16b y, s16b x)
             dun_ptr->monster_color = r_ptr->d_color;
         }
 
-        dun_ptr->monster_tile = r_ptr->tile_id;
+        dun_ptr->monster_tile = p_ptr->tile_id;
 
         /* Get the "player" char */
         dun_ptr->monster_char = r_ptr->d_char;

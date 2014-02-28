@@ -335,6 +335,8 @@ public:
     byte tile_8x8_y;
     byte tile_8x8_x;
 
+    QString tile_id;
+
     byte hitdie;		/* Hit dice (sides) */
     byte expfact;		/* Experience factor */
 

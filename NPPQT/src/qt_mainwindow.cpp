@@ -310,7 +310,7 @@ void DungeonGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
     flags = (d_ptr->ui_flags & (UI_LIGHT_BRIGHT | UI_LIGHT_DIM | UI_LIGHT_TORCH | UI_COSMIC_TORCH));
 
-    // Draw visible monsters
+    // Draw visible monsters    
     if (d_ptr->has_visible_monster())
     {
         square_char = d_ptr->monster_char;

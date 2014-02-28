@@ -1626,20 +1626,58 @@ void clear_graphics()
             d_ptr->effect_tile.clear();
         }
     }
+
+    p_ptr->tile_id.clear();
 }
 
 void init_graphics()
 {
     if (!character_dungeon) return;
 
-    clear_graphics();
+    clear_graphics();    
 
-    QString fname("graf-dvg.prf");
-    if (game_mode == GAME_NPPMORIA) {
-        fname.clear();
-        fname.append("m_graf-dvg.prf");
+    for (int i = 0; i < z_info->f_max; i++) {
+        if (use_graphics == GRAPHICS_DAVID_GERVAIS) {
+            f_info[i].tile_id = QString("%1x%2").arg(f_info[i].tile_32x32_y).arg(f_info[i].tile_32x32_x);
+        }
+        else {
+            f_info[i].tile_id = QString("%1x%2").arg(f_info[i].tile_8x8_y).arg(f_info[i].tile_8x8_x);
+        }
     }
 
-    process_pref_file(fname);
-}
+    for (int i = 0; i < z_info->r_max; i++) {
+        if (use_graphics == GRAPHICS_DAVID_GERVAIS) {
+            r_info[i].tile_id = QString("%1x%2").arg(r_info[i].tile_32x32_y).arg(r_info[i].tile_32x32_x);
+        }
+        else {
+            r_info[i].tile_id = QString("%1x%2").arg(r_info[i].tile_8x8_y).arg(r_info[i].tile_8x8_x);
+        }
+    }
 
+    for (int i = 0; i < z_info->k_max; i++) {
+        if (use_graphics == GRAPHICS_DAVID_GERVAIS) {
+            k_info[i].tile_id = QString("%1x%2").arg(k_info[i].tile_32x32_y).arg(k_info[i].tile_32x32_x);
+        }
+        else {
+            k_info[i].tile_id = QString("%1x%2").arg(k_info[i].tile_8x8_y).arg(k_info[i].tile_8x8_x);
+        }
+    }
+
+    for (int i = 0; i < z_info->flavor_max; i++) {
+        if (use_graphics == GRAPHICS_DAVID_GERVAIS) {
+            flavor_info[i].tile_id = QString("%1x%2").arg(flavor_info[i].tile_32x32_y).arg(flavor_info[i].tile_32x32_x);
+        }
+        else {
+            flavor_info[i].tile_id = QString("%1x%2").arg(flavor_info[i].tile_8x8_y).arg(flavor_info[i].tile_8x8_x);
+        }
+    }
+
+    init_player_graf_info();
+
+    if (use_graphics == GRAPHICS_DAVID_GERVAIS) {
+        p_ptr->tile_id = QString("%1x%2").arg(p_ptr->tile_32x32_y).arg(p_ptr->tile_32x32_x);
+    }
+    else {
+        p_ptr->tile_id = QString("%1x%2").arg(p_ptr->tile_8x8_y).arg(p_ptr->tile_8x8_x);
+    }
+}
