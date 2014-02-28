@@ -32,6 +32,7 @@ public:
 
 protected:
     void closeEvent(QCloseEvent *event);
+    void keyPressEvent(QKeyEvent* which_key);
 
 
 private slots:
