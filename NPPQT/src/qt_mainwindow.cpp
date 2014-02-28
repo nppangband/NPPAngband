@@ -699,6 +699,7 @@ MainWindow::MainWindow()
 
     dungeon_scene = new QGraphicsScene;
     graphics_view = new QGraphicsView(dungeon_scene);
+    graphics_view->installEventFilter(this);
     //graphics_view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
     QWidget *central = new QWidget;
@@ -855,6 +856,17 @@ void MainWindow::save_and_close()
     priv->redraw();
 }
 
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        this->keyPressEvent(dynamic_cast<QKeyEvent *>(event));
+        return true;
+    }
+
+    return QObject::eventFilter(obj, event);
+}
+
 void MainWindow::keyPressEvent(QKeyEvent* which_key)
 {
     // Move down
@@ -862,24 +874,28 @@ void MainWindow::keyPressEvent(QKeyEvent* which_key)
     {
         // Move down
         case Qt::Key_2:
+        case Qt::Key_Down:
         {
             move_player(2, FALSE);
             return;
         }
         // Move up
         case Qt::Key_8:
+        case Qt::Key_Up:
         {
             move_player(8, FALSE);
             return;
         }
         // Move left
         case Qt::Key_4:
+        case Qt::Key_Left:
         {
             move_player(4, FALSE);
             return;
         }
         // Move right
         case Qt::Key_6:
+        case Qt::Key_Right:
         {
             move_player(6, FALSE);
             return;
