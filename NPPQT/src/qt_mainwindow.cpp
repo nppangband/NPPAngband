@@ -699,6 +699,7 @@ MainWindow::MainWindow()
 
     dungeon_scene = new QGraphicsScene;
     graphics_view = new QGraphicsView(dungeon_scene);
+    graphics_view->installEventFilter(this);
     //graphics_view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
     QWidget *central = new QWidget;
@@ -853,6 +854,17 @@ void MainWindow::save_and_close()
     priv->cursor->setVisible(false);
     priv->destroy_tiles();
     priv->redraw();
+}
+
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        this->keyPressEvent(dynamic_cast<QKeyEvent *>(event));
+        return true;
+    }
+
+    return QObject::eventFilter(obj, event);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* which_key)
