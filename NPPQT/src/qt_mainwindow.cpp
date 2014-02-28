@@ -862,24 +862,28 @@ void MainWindow::keyPressEvent(QKeyEvent* which_key)
     {
         // Move down
         case Qt::Key_2:
+        case Qt::Key_Down:
         {
             move_player(2, FALSE);
             return;
         }
         // Move up
         case Qt::Key_8:
+        case Qt::Key_Up:
         {
             move_player(8, FALSE);
             return;
         }
         // Move left
         case Qt::Key_4:
+        case Qt::Key_Left:
         {
             move_player(4, FALSE);
             return;
         }
         // Move right
         case Qt::Key_6:
+        case Qt::Key_Right:
         {
             move_player(6, FALSE);
             return;
