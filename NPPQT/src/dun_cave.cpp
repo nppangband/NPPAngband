@@ -1191,8 +1191,7 @@ static void map_monster (s16b y, s16b x)
         monster_type *m_ptr = &mon_list[dun_ptr->monster_idx];
 
         /* Visible monster*/        
-        // TODO remove the "true"
-        if (true || m_ptr->ml)
+        if (m_ptr->ml)
         {
             monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -1300,6 +1299,8 @@ static void map_monster (s16b y, s16b x)
     }
 }
 
+
+
 void map_info(s16b y, s16b x)
 {
     dungeon_info[y][x].ui_flags = 0;
@@ -1312,6 +1313,113 @@ void map_info(s16b y, s16b x)
     map_effects (y, x);
 
     map_monster (y, x);
+}
+
+
+/*
+ * Memorize interesting viewable object/features in the given grid
+ *
+ * This function should only be called on "legal" grids.
+ *
+ * This function will memorize the object and/or feature in the given grid,
+ * if they are (1) see-able and (2) interesting.  Note that all objects are
+ * interesting, all terrain features except floors (and invisible traps) are
+ * interesting, and floors (and invisible traps) are interesting sometimes
+ * (depending on various options involving the illumination of floor grids).
+ *
+ * The automatic memorization of all objects and non-floor terrain features
+ * as soon as they are displayed allows incredible amounts of optimization
+ * in various places, especially "map_info()" and this function itself.
+ *
+ * Note that the memorization of objects is completely separate from the
+ * memorization of terrain features, preventing annoying floor memorization
+  * when a detected object is picked up from a dark floor, and object
+ * memorization when an object is dropped into a floor grid which is
+ * memorized but out-of-sight.
+ *
+ * This function should be called every time the "memorization" of a grid
+ * (or the object in a grid) is called into question, such as when an object
+ * is created in a grid, when a terrain feature "changes" from "floor" to
+ * "non-floor", and when any grid becomes "see-able" for any reason.
+ *
+ * This function is called primarily from the "update_view()" function, for
+ * each grid which becomes newly "see-able".
+ */
+void note_spot(int y, int x)
+{
+    feature_type *f_ptr = &f_info[dungeon_info[y][x].feat];
+
+    object_type *o_ptr;
+
+    /* Get cave info */
+    u16b info = dungeon_info[y][x].cave_info;
+
+    /* Require "seen" flag */
+    if (!(info & (CAVE_SEEN))) return;
+
+    /* Hack -- memorize objects */
+    for (o_ptr = get_first_object(y, x); o_ptr; o_ptr = get_next_object(o_ptr))
+    {
+        /* Memorize objects */
+        o_ptr->marked = TRUE;
+    }
+
+    /* Hack -- memorize grids */
+    if (!(info & (CAVE_MARK)))
+    {
+        /* Memorize some "boring" grids */
+        if (!_feat_ff1_match(f_ptr, FF1_REMEMBER))
+        {
+            /* Option -- memorize certain floors */
+            if ((view_perma_grids &&
+                (info & (CAVE_GLOW | CAVE_HALO))) ||
+                (view_torch_grids &&
+                _feat_ff2_match(f_ptr, FF2_ATTR_LIGHT)))
+            {
+                /* Memorize */
+                dungeon_info[y][x].cave_info |= (CAVE_MARK);
+            }
+
+            /* Hack -- Emulate the REMEMBER flag for certain effects */
+            else
+            {
+                /* Get the first effect on that grid */
+                int x_idx = dungeon_info[y][x].effect_idx;
+
+                /* Iterate through the effects */
+                while (x_idx)
+                {
+                    /* Get the effect data */
+                    effect_type *x_ptr = &x_list[x_idx];
+
+                    /* Prepare the next effect */
+                    x_idx = x_ptr->next_x_idx;
+
+                    /* Ignore hidden effects */
+                    if (x_ptr->x_flags & (EF1_HIDDEN)) continue;
+
+                    /* We'll remember traps and glyphs for now */
+                    if (!(x_ptr->x_flags & (EF1_TRAP_DUMB |
+                            EF1_TRAP_SMART | EF1_TRAP_PLAYER |
+                            EF1_GLYPH))) continue;
+
+                    /* Remember the grid */
+                    dungeon_info[y][x].cave_info |= (CAVE_MARK);
+
+                    /* Done */
+                    break;
+                }
+            }
+
+        }
+
+        /* Memorize all "interesting" grids */
+        else
+        {
+            /* Memorize */
+            dungeon_info[y][x].cave_info |= (CAVE_MARK);
+        }
+    }
 }
 
 /*
@@ -2525,7 +2633,7 @@ void update_view(void)
             x = GRID_X(g);
 
             /* Note */
-            // TODO note_spot(y, x);
+            note_spot(y, x);
 
             /* Redraw */
             light_spot(y, x);
@@ -3871,7 +3979,7 @@ static void cave_set_feat_aux(int y, int x, u16b feat)
         */
 
         /* Notice */
-        // TODO note_spot(y, x);
+        note_spot(y, x);
 
         /* Redraw */
         light_spot(y, x);
@@ -3963,7 +4071,7 @@ void cave_alter_feat(int y, int x, int action)
         if (character_dungeon)
         {
             /* Notice */
-            // TODO note_spot(y, x);
+            note_spot(y, x);
 
             /* Redraw */
             light_spot(y, x);

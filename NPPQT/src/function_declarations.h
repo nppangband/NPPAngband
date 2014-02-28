@@ -11,6 +11,7 @@
 
 
 // cmd1.cpp
+extern bool put_object_in_inventory(object_type *o_ptr);
 extern void py_pickup_gold(void);
 extern void move_player(int dir, int jumping);
 
@@ -35,6 +36,7 @@ extern byte multi_hued_color(monster_race *r_ptr);
 extern bool feat_supports_lighting(u16b feat);
 extern bool dtrap_edge(int y, int x);
 extern void map_info(s16b y, s16b x);
+extern void note_spot(int y, int x);
 extern void light_spot(int y, int x);
 extern int vinfo_init(void);
 extern void forget_view(void);

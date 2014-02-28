@@ -3788,9 +3788,7 @@ void place_object(int y, int x, bool good, bool great, int droptype)
         if (!make_object(i_ptr, good, great, droptype, FALSE)) continue;
 
         /* Check compatibility with terrain */
-        //TODO dungeon stuff
-        if (FALSE)
-        //if (object_hates_location(y, x, i_ptr))
+        if (object_hates_location(y, x, i_ptr))
         {
             /* Hack -- Preserve artifacts */
             a_info[i_ptr->art_num].a_cur_num = 0;
@@ -4147,7 +4145,7 @@ void create_food(void)
     if (inven_carry_okay(i_ptr))
     {
         // put object in inventory (cmd1)
-        // TODO put_object_in_inventory(i_ptr);
+        put_object_in_inventory(i_ptr);
     }
     else drop_near(i_ptr, -1, p_ptr->py, p_ptr->px);
 }

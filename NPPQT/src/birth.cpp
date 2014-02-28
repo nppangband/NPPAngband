@@ -1,5 +1,26 @@
+/* File: birth.cpp */
+
+/*
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
+ *                    Jeff Greene, Diego Gonzalez
+ *
+ * This work is free software; you can redistribute it and/or modify it
+ * under the terms of either:
+ *
+ * a) the GNU General Public License as published by the Free Software
+ *    Foundation, version 2, or
+ *
+ * b) the "Angband licence":
+ *    This software may be copied and distributed for educational, research,
+ *    and not for profit purposes provided that this copyright and statement
+ *    are included in all such copies.  Other copyrights may also apply.
+ */
+
 #include "npp.h"
 #include "store.h"
+
+#include <QTime>
+#include <QDate>
 
 /*
  * Cost of each "point" of a stat.
@@ -905,49 +926,23 @@ void finish_birth()
         e_info[i].squelch = false;
     }
 
-    // TODO IMPLEMENT THIS
-#if 0
-    /* Make a note file if that option is set */
+    /* Write a note, if that option is on */
     if (adult_take_notes)
     {
+        QDate today = QDate::currentDate();
+        QTime right_now = QTime::currentTime();
+        QString long_day;
+        QString final_monster = "Morgoth, Lord of Darkness";
 
-        /* Variables */
-        char long_day[25];
-        time_t ct = time((time_t*)0);
+        if (game_mode == GAME_NPPMORIA) final_monster = "The Balrog of Moria";
 
-        /* Open the file (notes_file and notes_fname are global) */
-        create_notes_file();
+        /* Get time */
+        long_day = QString("%1 at %2") .arg(today.toString() .arg(right_now.toString()));
 
-        if (!notes_file) quit("Can't create the notes file");
-
-        /* Get date */
-        (void)strftime(long_day, 25, "%m/%d/%Y at %I:%M %p", localtime(&ct));
-
-        /* Add in "character start" information */
-        file_putf(notes_file, "{{full_character_name}} the %s %s\n",
-                                p_name + rp_ptr->name,
-                                c_name + cp_ptr->name);
-        if (game_mode == GAME_NPPMORIA) file_putf(notes_file, "Began the quest to kill The Balrog of Moria on %s\n",long_day);
-        else file_putf(notes_file, "Began the quest to kill Morgoth on %s\n",long_day);
-        file_putf(notes_file, "============================================================\n");
-        file_putf(notes_file, "                   CHAR.  \n");
-        file_putf(notes_file, "|   TURN  | DEPTH |LEVEL| EVENT\n");
-        file_putf(notes_file, "============================================================\n");
-
-        /* Paranoia. Remove the notes from memory */
-        file_flush(notes_file);
+        write_note(QString("%1 the %2 %3 began the quest to kill %4 on %5.")
+                   .arg(op_ptr->full_name) .arg(p_info[p_ptr->prace].pr_name) .arg(c_info[p_ptr->pclass].cl_name)
+                   .arg(final_monster) .arg(long_day), p_ptr->depth);
     }
-
-    /* Note player birth in the message recall */
-    message_add(" ", MSG_GENERIC);
-    message_add("  ", MSG_GENERIC);
-    message_add("====================", MSG_GENERIC);
-    message_add("  ", MSG_GENERIC);
-    message_add(" ", MSG_GENERIC);
-
-    /* Reset message prompt (i.e. no extraneous -more-s) */
-    msg_flag = TRUE;
-#endif
 
     /* Hack -- outfit the player */
     if (!birth_money) player_outfit();
