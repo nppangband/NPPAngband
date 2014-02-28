@@ -887,7 +887,7 @@ static void wr_dungeon(void)
     compact_objects(0);
 
     /* TODO Compact the monsters */
-    //compact_monsters(0);
+    compact_monsters(0);
 
 
     /*** Dump objects ***/

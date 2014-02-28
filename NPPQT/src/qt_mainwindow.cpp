@@ -86,6 +86,13 @@ public:
     void force_redraw();
 };
 
+void ui_player_moved()
+{
+    if (!character_dungeon) return;
+    main_window->priv->update_cursor();
+    ui_ensure(p_ptr->py, p_ptr->px);
+}
+
 void MainWindow::slot_finish_bolt()
 {
     QGraphicsItem *item = dynamic_cast<QGraphicsItem *>(QObject::sender());

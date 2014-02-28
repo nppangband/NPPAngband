@@ -2033,7 +2033,7 @@ void update_stuff(void)
     else if (p_ptr->update & (PU_MONSTERS))	update_monsters(FALSE);
     if (p_ptr->update & (PU_PANEL))
     {
-        // TODO event_signal(EVENT_PLAYERMOVED);
+        ui_player_moved();
     }
     if (p_ptr->update & (PU_FLOW_DOORS | PU_FLOW_NO_DOORS))	update_flows(TRUE);
 
@@ -2186,6 +2186,7 @@ void redraw_stuff(void)
     {
         /* Mark the whole map to be redrawn */
         // TODO event_signal_point(EVENT_MAP, -1, -1);
+        ui_redraw_all();
     }
 
     p_ptr->redraw = 0;

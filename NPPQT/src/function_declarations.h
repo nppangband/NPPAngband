@@ -563,6 +563,7 @@ extern void ui_redraw_grid(int y, int x);
 extern void ui_redraw_all();
 extern void ui_ensure(int y, int x);
 extern void ui_center(int y, int x);
+extern void ui_player_moved();
 extern QSize ui_grid_size();
 extern QPixmap rotate_pix(QPixmap src, qreal angle);
 
