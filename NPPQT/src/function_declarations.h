@@ -5,6 +5,7 @@
 #include <QString>
 #include <QFile>
 #include <QMessageBox>
+#include <QPixmap>
 
 //was externs.h
 
@@ -562,6 +563,8 @@ extern void ui_redraw_grid(int y, int x);
 extern void ui_redraw_all();
 extern void ui_ensure(int y, int x);
 extern void ui_center(int y, int x);
+extern QSize ui_grid_size();
+extern QPixmap rotate_pix(QPixmap src, qreal angle);
 
 /* randart.c */
 extern QString make_random_name(byte min_length, byte max_length);

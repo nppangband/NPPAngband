@@ -30,22 +30,11 @@ public:
 
     MainWindow();
 
-    void write_colored_text(QChar letter, QColor color, s16b y, s16b x);
-    void display_square(s16b y, s16b x);
-    void screen_wipe();
-    void screen_redraw();
-
-    void keyPressEvent(QKeyEvent* which_key);
-
-
 protected:
     void closeEvent(QCloseEvent *event);
-    void resizeEvent(QResizeEvent *event);
 
 
 private slots:
-
-
 
     // Functions called from signals from the top menu.
 
@@ -60,16 +49,17 @@ private slots:
     void options_dialog();
     void fontselect_dialog();
 
+    void slot_find_player();
+    void slot_redraw();
+    void slot_zoom_out();
+    void slot_zoom_in();
+    void slot_something();
+    void slot_finish_bolt();
 
     // Functions to make sure the available menu commands are appropriate to the situation.
     //  For example, make the save game command unanavailable when no savefile is open.
     void update_file_menu_game_active();
     void update_file_menu_game_inactive();
-
-
-    // Set up the games mapping
-    void set_onscreen_dungeon_boundries();
-    void set_map();
 
     // Graphics
     void set_dvg();
@@ -89,7 +79,6 @@ private:
 
     void debug_dungeon();
 
-
     // Functions that initialize the file menu of the main window.
     void create_actions();
     void create_menus();
@@ -102,8 +91,7 @@ private:
 
     // Remember the game settings
     void read_settings();
-    void write_settings();
-
+    void write_settings();    
 
     //Functions and variables that handle opening and saving files, as well as maintain the
     //  5 most recent savefile list.
@@ -146,23 +134,9 @@ private:
     QAction *separator_act;
 
     // information about the main window
-    qreal window_height; // in pixels
-    qreal window_width;  // in pixels
     QFontDatabase font_database;
     QFont cur_font;
-    s16b square_height;
-    s16b square_width;
-    s16b screen_num_rows;
-    s16b screen_num_columns;
-    s16b first_x;
-    s16b first_y;
-    s16b last_x;
-    s16b last_y;
     bool use_bigtile;
-
-
-
-
 };
 
 #endif
