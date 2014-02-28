@@ -64,6 +64,7 @@ private slots:
 
     // Graphics
     void set_dvg();
+    void set_old_tiles();
     void set_ascii();
     void set_pseudo_ascii();
 
@@ -125,6 +126,7 @@ private:
     QAction *bigtile_act;
     QAction *ascii_mode_act;
     QAction *dvg_mode_act;
+    QAction *old_tiles_act;
     QAction *pseudo_ascii_act;
     QAction *fontselect_act;
 

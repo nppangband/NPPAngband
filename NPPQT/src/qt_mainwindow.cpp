@@ -497,6 +497,11 @@ void MainWindowPrivate::set_graphic_mode(int mode)
         wid = 32;
         fname.append("32x32.png");
         break;    
+    case GRAPHICS_ORIGINAL:
+        hgt = 8;
+        wid = 8;
+        fname.append("8x8.png");
+        break;
     default:
         hgt = 0;
         wid = 0;
@@ -510,8 +515,17 @@ void MainWindowPrivate::set_graphic_mode(int mode)
             pop_up_message_box(QString("Can't load tiles"));
             return;
         }
+        use_graphics = mode;
         tile_hgt = hgt;
         tile_wid = wid;
+        if (mode == GRAPHICS_ORIGINAL) {
+            /*
+            font.setPointSize(8);
+            QFontMetrics metrics(font);
+            font_hgt = metrics.height();
+            font_wid = metrics.width('M');
+            */
+        }
         calculate_cell_size();
         destroy_tiles();
         tile_map = pix;
@@ -519,15 +533,14 @@ void MainWindowPrivate::set_graphic_mode(int mode)
     }
     // Go to text mode
     else {
+        use_graphics = mode;
         tile_hgt = hgt;
         tile_wid = wid;
         calculate_cell_size();
         destroy_tiles();
         tile_map = blank_pix;
-        clear_graphics();   
-    }
-
-    use_graphics = mode;    
+        clear_graphics();           
+    }    
 }
 
 // Tile creation on demmand
@@ -1073,6 +1086,10 @@ void MainWindow::create_actions()
     dvg_mode_act->setStatusTip(tr("Set the graphics to David Gervais tiles mode."));
     connect(dvg_mode_act, SIGNAL(triggered()), this, SLOT(set_dvg()));
 
+    old_tiles_act = new QAction(tr("Old tiles"), this);
+    old_tiles_act->setStatusTip(tr("Set the graphics to old tiles mode."));
+    connect(old_tiles_act, SIGNAL(triggered()), this, SLOT(set_old_tiles()));
+
     pseudo_ascii_act = new QAction(tr("Pseudo-Ascii monsters"), this);
     pseudo_ascii_act->setCheckable(true);
     pseudo_ascii_act->setChecked(false);
@@ -1099,8 +1116,13 @@ void MainWindow::create_actions()
 
 void MainWindow::set_dvg()
 {
-    //popup1("hola");
     main_window->priv->set_graphic_mode(GRAPHICS_DAVID_GERVAIS);
+    ui_redraw_all();
+}
+
+void MainWindow::set_old_tiles()
+{
+    main_window->priv->set_graphic_mode(GRAPHICS_ORIGINAL);
     ui_redraw_all();
 }
 
@@ -1152,6 +1174,7 @@ void MainWindow::create_menus()
     settings->addAction(fontselect_act);
     settings->addAction(ascii_mode_act);
     settings->addAction(dvg_mode_act);
+    settings->addAction(old_tiles_act);
     settings->addAction(pseudo_ascii_act);
     settings->addAction(bigtile_act);
 
