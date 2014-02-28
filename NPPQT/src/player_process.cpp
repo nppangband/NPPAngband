@@ -161,11 +161,6 @@ static void process_player_aux(void)
  */
 void process_player(void)
 {
-    int i;
-
-    int py = p_ptr->py;
-    int px = p_ptr->px;
-
     /* One more player turn */
     p_ptr->p_turn++;
 
@@ -234,274 +229,121 @@ void process_player(void)
         (p_ptr->resting && !(turn & 0x7F)))
     {
         /* Do not wait */
-        // TODO inkey stuff
+        // TODO add the command
     }
 
     /*** Handle actual user input ***/
 
-    /* Repeat until energy is reduced */
-    do
+
+    /* Notice stuff (if needed) */
+    if (p_ptr->notice) notice_stuff();
+
+    /* Update stuff (if needed) */
+    if (p_ptr->update) update_stuff();
+
+    /* Redraw stuff (if needed) */
+    if (p_ptr->redraw) redraw_stuff();
+
+    /* Hack -- Pack Overflow */
+    pack_overflow();
+
+    /* Hack -- reset to inventory display */
+    if (!p_ptr->command_new) p_ptr->command_wrk = USE_INVEN;
+
+    /* Paralyzed or Knocked Out */
+    if ((p_ptr->timed[TMD_PARALYZED]) || (p_ptr->timed[TMD_STUN] >= 100))
     {
-        /* Notice stuff (if needed) */
-        if (p_ptr->notice) notice_stuff();
-
-        /* Update stuff (if needed) */
-        if (p_ptr->update) update_stuff();
-
-        /* Redraw stuff (if needed) */
-        if (p_ptr->redraw) redraw_stuff();
-
-        /* Hack -- Pack Overflow */
-        pack_overflow();
-
-        /* Hack -- reset to inventory display */
-        if (!p_ptr->command_new) p_ptr->command_wrk = USE_INVEN;
-
-        /* Assume free turn */
-        p_ptr->p_energy_use = 0;
-
-        /* Paralyzed or Knocked Out */
-        if ((p_ptr->timed[TMD_PARALYZED]) || (p_ptr->timed[TMD_STUN] >= 100))
-        {
-            /* Take a turn */
-            p_ptr->p_energy_use = BASE_ENERGY_MOVE;
-        }
-
-        /* Resting */
-        else if (p_ptr->resting)
-        {
-            /* Timed rest */
-            if (p_ptr->resting > 0)
-            {
-                /* Reduce rest count */
-                p_ptr->resting--;
-
-                /* Redraw the state */
-                p_ptr->redraw |= (PR_STATE);
-            }
-
-            /* Take a turn */
-            p_ptr->p_energy_use = BASE_ENERGY_MOVE;
-        }
-
-        /* Running */
-        else if (p_ptr->running)
-        {
-            /* Take a step */
-            // TODO handle running run_step(0);
-        }
-
-        /* Repeated command */
-        else if (p_ptr->command_rep)
-        {
-
-            /* Process the command */
-            // TODO handle commands process_command(CMD_GAME, TRUE);
-
-            /* Count this execution */
-            if (p_ptr->command_rep)
-            {
-                /* Count this execution */
-                p_ptr->command_rep--;
-
-                /* Redraw the state */
-                p_ptr->redraw |= (PR_STATE);
-
-            }
-        }
-
-
-        /* Normal command */
-        else
-        {
-            /* Check monster recall */
-            process_player_aux();
-
-
-            /* Using the noun-verb menu */
-            if (p_ptr->noun_verb)
-            {
-                // TODO handle using items cmd_use_item();
-                // TODO process commands process_command(CMD_GAME, TRUE);
-            }
-
-            /* Get and process a command */
-            // TODO handle processing commands else process_command(CMD_GAME, FALSE);
-
-            py_pickup_gold();
-        }
-
-        /*** Clean up ***/
-
-        /* hack - check for secret squares */
-        if (dungeon_info[p_ptr->py][p_ptr->px].cave_info & (CAVE_MARKED))
-        {
-            /* increase chance of altered inventory for around 100 turns*/
-            altered_inventory_counter += 1;
-
-            /*unmark the square*/
-            dungeon_info[p_ptr->py][p_ptr->px].cave_info &= ~(CAVE_MARKED);
-        }
-
-        /* Check for greater vault squares */
-        if ((dungeon_info[p_ptr->py][p_ptr->px].cave_info & (CAVE_G_VAULT)) && !g_vault_name.isEmpty())
-        {
-            message(QString("You have entered the %1") .arg(g_vault_name));
-
-            if (adult_take_notes)
-            {
-                QString note = (QString("Entered the %1.") .arg(g_vault_name));
-
-                write_note(note, p_ptr->depth);
-            }
-
-            g_vault_name.clear();
-            p_ptr->redraw |= (PR_QUEST_ST);
-        }
-
-        /* Significant */
-        if (p_ptr->p_energy_use)
-        {
-            effect_type *x_ptr;
-
-            /* Use some energy */
-            p_ptr->p_energy -= p_ptr->p_energy_use;
-
-
-            /* Hack -- constant hallucination */
-            if (p_ptr->timed[TMD_IMAGE])
-            {
-                p_ptr->redraw |= (PR_MAP);
-            }
-
-            /* Hack -- Redraw depth if the temporary quest notification ends */
-            if ((quest_indicator_timer > 0) && (--quest_indicator_timer == 0) &&
-                !(character_icky))
-            {
-                quest_indicator_complete = FALSE;
-                p_ptr->redraw |= (PR_QUEST_ST);
-            }
-
-            /* Shimmer monsters if needed */
-            if (shimmer_monsters)
-            {
-                /* Clear the flag */
-                shimmer_monsters = FALSE;
-
-                /* Shimmer multi-hued monsters */
-                for (i = 1; i < mon_max; i++)
-                {
-                    monster_type *m_ptr;
-                    monster_race *r_ptr;
-
-                    /* Get the monster */
-                    m_ptr = &mon_list[i];
-
-                    /* Skip dead monsters */
-                    if (!m_ptr->r_idx) continue;
-
-                    /* Get the monster race */
-                    r_ptr = &r_info[m_ptr->r_idx];
-
-                    /* Skip non-multi-hued monsters */
-                    if (!(r_ptr->flags1 & (RF1_ATTR_MULTI))) continue;
-
-                    /* Reset the flag */
-                    shimmer_monsters = TRUE;
-
-                    /* Redraw regardless */
-                    light_spot(m_ptr->fy, m_ptr->fx);
-                }
-            }
-
-            /* Traverse effect array */
-            for (x_ptr = x_list; x_ptr < x_list + z_info->x_max; x_ptr++)
-            {
-                /* Ignore invisible effects */
-                if (x_ptr->x_flags & (EF1_HIDDEN)) continue;
-
-                /* Only certain effects are allowed */
-                if ((x_ptr->x_type == EFFECT_TRAP_SMART) ||
-                    (x_ptr->x_type == EFFECT_GLACIER))
-                {
-                    /* Redraw */
-                    light_spot(x_ptr->x_cur_y, x_ptr->x_cur_x);
-                }
-            }
-
-            /* Redraw visual indicator of temporary element brand */
-            if (p_ptr->timed[TMD_SLAY_ELEM]) p_ptr->redraw |= (PR_RESIST);
-
-            /* Repair "mark" flags */
-            if (repair_mflag_mark)
-            {
-                /* Reset the flag */
-                repair_mflag_mark = FALSE;
-
-                /* Process the monsters */
-                for (i = 1; i < mon_max; i++)
-                {
-                    monster_type *m_ptr;
-
-                    /* Get the monster */
-                    m_ptr = &mon_list[i];
-
-                    /* Skip dead monsters */
-                    /* if (!m_ptr->r_idx) continue; */
-
-                    /* Repair "mark" flag */
-                    if (m_ptr->mflag & (MFLAG_MARK))
-                    {
-                        /* Skip "show" monsters */
-                        if (m_ptr->mflag & (MFLAG_SHOW))
-                        {
-                            /* Repair "mark" flag */
-                            repair_mflag_mark = TRUE;
-
-                            /* Skip */
-                            continue;
-                        }
-
-                        /* Forget flag */
-                        m_ptr->mflag &= ~(MFLAG_MARK);
-
-                        /* Update the monster */
-                        update_mon(i, FALSE);
-
-                        /* Hack -- Force redraw of hidden monsters */
-                        if ((m_ptr->mflag & (MFLAG_HIDE)) && m_ptr->ml)
-                        {
-                            /* Redraw */
-                            light_spot(m_ptr->fy, m_ptr->fx);
-                        }
-                    }
-                }
-            }
-        }
-        /* Repair "show" flags */
-        if (repair_mflag_show)
-        {
-            /* Reset the flag */
-            repair_mflag_show = FALSE;
-
-            /* Process the monsters */
-            for (i = 1; i < mon_max; i++)
-            {
-                monster_type *m_ptr;
-
-                /* Get the monster */
-                m_ptr = &mon_list[i];
-
-                /* Skip dead monsters */
-                /* if (!m_ptr->r_idx) continue; */
-
-                /* Clear "show" flag */
-                m_ptr->mflag &= ~(MFLAG_SHOW);
-            }
-        }
-
+        /* Take a turn */
+        process_player_energy(BASE_ENERGY_MOVE);
     }
-    while (!p_ptr->p_energy_use && !p_ptr->leaving);
+
+    /* Resting */
+    else if (p_ptr->resting)
+    {
+        /* Timed rest */
+        if (p_ptr->resting > 0)
+        {
+            /* Reduce rest count */
+            p_ptr->resting--;
+
+            /* Redraw the state */
+            p_ptr->redraw |= (PR_STATE);
+        }
+    }
+
+    /* Running */
+    else if (p_ptr->running)
+    {
+        /* Take a step */
+        // TODO handle running run_step(0);
+    }
+
+    /* Repeated command */
+    else if (p_ptr->command_rep)
+    {
+
+        /* Process the command */
+        // TODO handle commands process_command(CMD_GAME, TRUE);
+
+        /* Count this execution */
+        if (p_ptr->command_rep)
+        {
+            /* Count this execution */
+            p_ptr->command_rep--;
+
+            /* Redraw the state */
+            p_ptr->redraw |= (PR_STATE);
+
+        }
+    }
+
+
+    /* Normal command */
+    else
+    {
+        /* Check monster recall */
+        process_player_aux();
+
+        /* Using the noun-verb menu */
+        if (p_ptr->noun_verb)
+        {
+            // TODO handle using items cmd_use_item();
+            // TODO process commands process_command(CMD_GAME, TRUE);
+        }
+
+        /* Get and process a command */
+        // TODO handle processing commands else process_command(CMD_GAME, FALSE);
+
+        py_pickup_gold();
+    }
+
+    /*** Clean up ***/
+
+    /* hack - check for secret squares */
+    if (dungeon_info[p_ptr->py][p_ptr->px].cave_info & (CAVE_MARKED))
+    {
+        /* increase chance of altered inventory for around 100 turns*/
+        altered_inventory_counter += 1;
+
+        /*unmark the square*/
+        dungeon_info[p_ptr->py][p_ptr->px].cave_info &= ~(CAVE_MARKED);
+    }
+
+    /* Check for greater vault squares */
+    if ((dungeon_info[p_ptr->py][p_ptr->px].cave_info & (CAVE_G_VAULT)) && !g_vault_name.isEmpty())
+    {
+        message(QString("You have entered the %1") .arg(g_vault_name));
+
+        if (adult_take_notes)
+        {
+            QString note = (QString("Entered the %1.") .arg(g_vault_name));
+
+            write_note(note, p_ptr->depth);
+        }
+
+        g_vault_name.clear();
+        p_ptr->redraw |= (PR_QUEST_ST);
+    }
 
     /* Some quests aren't finished by killing monsters */
     if (guild_quest_active())

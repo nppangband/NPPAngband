@@ -601,6 +601,8 @@ void py_attack(int y, int x)
 
     bool was_asleep = FALSE;
 
+    byte energy_use = BASE_ENERGY_MOVE;
+
     /* Get the monster */
     m_ptr = &mon_list[dungeon_info[y][x].monster_idx];
     r_ptr = &r_info[m_ptr->r_idx];
@@ -632,7 +634,6 @@ void py_attack(int y, int x)
     {
         /* Message */
         message(QString("You are too afraid to attack %1!") .arg(m_name));
-        p_ptr->p_energy_use = 0;
         /* Done */
         return;
     }
@@ -652,7 +653,6 @@ void py_attack(int y, int x)
 
                 if (!get_check(QString("Really attack with your %1? ") .arg(o_name)))
                 {
-                    p_ptr->p_energy_use = 0;
                     return;
                 }
                 /* Mark it as OK to use in melee so we don't check every time*/
@@ -778,7 +778,7 @@ void py_attack(int y, int x)
                 /*return energy from unused attacks*/
                 if (num < p_ptr->state.num_blow)
                 {
-                    p_ptr->p_energy_use -= (((p_ptr->state.num_blow - (num)) * BASE_ENERGY_MOVE ) /
+                    energy_use -= (((p_ptr->state.num_blow - (num)) * BASE_ENERGY_MOVE ) /
                             p_ptr->state.num_blow);
                 }
                 break;
@@ -807,6 +807,8 @@ void py_attack(int y, int x)
 
     /* Mega-Hack -- apply earthquake brand */
     if (do_quake) earthquake(p_ptr->py, p_ptr->px, 10, TRUE);
+
+    process_player_energy(energy_use);
 
     return;
 }
@@ -988,9 +990,6 @@ void do_cmd_fire(int code, cmd_arg args[])
 
     /* Base range XXX XXX */
     tdis = 10 + 5 * tmul;
-
-    /* Take a (partial) turn */
-    p_ptr->p_energy_use = (BASE_ENERGY_MOVE / thits);
 
     /* Start at the player */
     y = p_ptr->py;
@@ -1218,6 +1217,8 @@ void do_cmd_fire(int code, cmd_arg args[])
 
     /* Drop (or break) near that location */
     drop_near(i_ptr, j, y, x);
+
+    process_player_energy(BASE_ENERGY_MOVE / thits);
 }
 
 void textui_cmd_fire(void)
@@ -1966,9 +1967,6 @@ void do_cmd_throw(int code, cmd_arg args[])
         chance = (3 * p_ptr->state.skills[SKILL_TO_HIT_THROW] / 2) + (BTH_PLUS_ADJ * i_ptr->to_h);
     }
 
-    /* Take a turn */
-    p_ptr->p_energy_use = BASE_ENERGY_MOVE;
-
     /* Start at the player */
     y = p_ptr->py;
     x = p_ptr->px;
@@ -2201,6 +2199,8 @@ void do_cmd_throw(int code, cmd_arg args[])
 
     /* Drop (or break) near that location */
     drop_near(i_ptr, j, y, x);
+
+    process_player_energy(BASE_ENERGY_MOVE);
 }
 
 void textui_cmd_throw(void)

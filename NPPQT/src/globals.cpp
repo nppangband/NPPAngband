@@ -77,6 +77,7 @@ bool good_item_flag;	/* True if "Artifact" on this level */
 
 bool closing_flag;		/* Dungeon is closing */
 
+
 /*
  * Structure (not array) of size limits
  */

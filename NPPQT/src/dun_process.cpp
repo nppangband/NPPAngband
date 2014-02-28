@@ -806,11 +806,33 @@ static void decrease_timeouts(void)
     return;
 }
 
+/*
+ * Checks if multi-color monsters onscreen.
+ */
+static void do_animation(void)
+{
+    int i;
+
+    for (i = 1; i < mon_max; i++)
+    {
+        monster_type *m_ptr = &mon_list[i];
+        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+        if (!m_ptr->r_idx) continue;
+        if (!m_ptr->ml) continue;
+        if (!(r_ptr->flags1 & (RF1_ATTR_MULTI))) continue;
+
+        m_ptr->m_color = add_preset_color(multi_hued_color(r_ptr));
+
+        p_ptr->redraw |= (PR_MAP | PR_MONLIST);
+    }
+}
+
 
 /*
  * Handle certain things once every 10 game turns
  */
-void process_world(void)
+static void process_world(void)
 {
     int i;
 
@@ -1383,7 +1405,7 @@ void process_world(void)
     }
 
     /* Delayed level feelings */
-    if ((p_ptr->depth) && (!p_ptr->leaving) && (!do_feeling) && (!(turn % 100)))
+    if ((p_ptr->depth) && (!p_ptr->leaving_level) && (!do_feeling) && (!(turn % 100)))
     {
         int chance;
 
@@ -1420,5 +1442,539 @@ void process_world(void)
 
     /* Notice stuff */
     notice_stuff();
+}
+
+static void change_player_level(void)
+{
+    /* Play ambient sound on change of level. */
+    play_ambient_sound();
+
+    int i;
+
+    /* TODO figure out why these lines of code are hereHack -- enforce illegal panel */
+    //Term->offset_y = p_ptr->cur_map_hgt;
+    //Term->offset_x = p_ptr->cur_map_wid;
+
+    /* Not leaving */
+    p_ptr->leaving_level = FALSE;
+
+    /* Reset the "command" vars */
+    p_ptr->command_cmd = 0;
+    p_ptr->command_new = 0;
+    p_ptr->command_rep = 0;
+    p_ptr->command_arg = 0;
+    p_ptr->command_dir = 0;
+
+    /* Cancel the target */
+    target_set_monster(0);
+
+    /* Cancel the health bar */
+    health_track(0);
+
+    /* Reset shimmer flags */
+    shimmer_monsters = TRUE;
+    shimmer_objects = TRUE;
+
+    /* Reset repair flags */
+    repair_mflag_show = TRUE;
+    repair_mflag_mark = TRUE;
+
+    /* Reset terrain damage */
+    p_ptr->cumulative_terrain_damage = 0;
+
+    /* Disturb */
+    disturb(1, 0);
+
+    /* Track maximum player level */
+    if (p_ptr->max_lev < p_ptr->lev)
+    {
+        p_ptr->max_lev = p_ptr->lev;
+    }
+
+    /* Track maximum dungeon level */
+    if (p_ptr->max_depth < p_ptr->depth)
+    {
+        p_ptr->max_depth = p_ptr->depth;
+    }
+
+    /* Track maximum quest level */
+    if ((p_ptr->max_depth > 1) &&
+        (p_ptr->max_depth > p_ptr->quest_depth))
+    {
+        p_ptr->quest_depth = p_ptr->max_depth;
+    }
+
+    /* Track recall dungeon level */
+    if (p_ptr->recall_depth < p_ptr->depth)
+    {
+        p_ptr->recall_depth = p_ptr->depth;
+    }
+
+    /* If autosave is pending, do it now. */
+    if (p_ptr->autosave)
+    {
+        save_player();
+        p_ptr->autosave = FALSE;
+    }
+
+    /* No stairs down from fixed or guardian quests */
+    if (no_down_stairs(p_ptr->depth))
+    {
+        if ((p_ptr->create_stair == FEAT_MORE) ||
+            (p_ptr->create_stair == FEAT_MORE_SHAFT))
+             p_ptr->create_stair = FALSE;
+    }
+
+    /* No stairs from town or if not allowed */
+    if (!p_ptr->depth)
+    {
+        p_ptr->create_stair = FALSE;
+    }
+
+    /* Make a staircase */
+    if (p_ptr->create_stair)
+    {
+        /* Place a staircase */
+        if (cave_valid_bold(p_ptr->py, p_ptr->px))
+        {
+            /* XXX XXX XXX */
+            delete_object(p_ptr->py, p_ptr->px);
+
+            cave_set_feat(p_ptr->py, p_ptr->px, p_ptr->create_stair);
+
+            /* Mark the stairs as known */
+            dungeon_info[p_ptr->py][p_ptr->px].cave_info |= (CAVE_MARK);
+        }
+
+        /* Cancel the stair request */
+        p_ptr->create_stair = FALSE;
+    }
+
+    /* Choose panel */
+    // TODO verify_panel();
+
+    /* Hack -- Increase "xtra" depth */
+    character_xtra++;
+
+    /* Clear */
+   // TODO clear the screen Term_clear();
+
+    /* Update stuff */
+    p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_NATIVE);
+
+    /* Calculate torch radius */
+    p_ptr->update |= (PU_TORCH);
+
+    /* RE-do the flow */
+    p_ptr->update |= (PU_FLOW_DOORS | PU_FLOW_NO_DOORS);
+
+    /* Update stuff */
+    update_stuff();
+
+    /* Fully update the visuals (and monster distances) */
+    p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_DISTANCE);
+
+    /* Redraw dungeon */
+    p_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_MAP);
+
+    /* Redraw "statusy" things */
+    p_ptr->redraw |= (PR_INVEN | PR_EQUIP | PR_MONSTER | PR_MONLIST | PR_ITEMLIST);
+
+    /* Update stuff */
+    update_stuff();
+
+    /* Redraw stuff */
+    redraw_stuff();
+
+    /* Hack -- Decrease "xtra" depth */
+    character_xtra--;
+
+    /* Update stuff */
+    p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_NATIVE);
+
+    /* Combine / Reorder the pack */
+    p_ptr->notice |= (PN_COMBINE | PN_REORDER | PN_SORT_QUIVER);
+
+    /* Noun-verb menu by command only */
+    p_ptr->noun_verb = FALSE;
+
+    /* Notice stuff */
+    notice_stuff();
+
+    /* Update stuff */
+    update_stuff();
+
+    /* Redraw stuff */
+    redraw_stuff();
+
+    /* Handle delayed death */
+    if (p_ptr->is_dead) return;
+
+    /* Check quests */
+    for (i = 0; i < z_info->q_max; i++)
+    {
+        quest_type *q_ptr = &q_info[i];
+
+        /* Already complete */
+        if (is_quest_complete(i)) continue;
+
+        /* No quest */
+        if (!q_ptr->base_level) continue;
+
+        /* Check for quest */
+        if (q_ptr->base_level == p_ptr->depth)
+        {
+            q_info[i].q_flags |= (QFLAG_STARTED);
+
+            p_ptr->redraw = (PR_QUEST_ST);
+            break;
+        }
+    }
+
+    /* Announce (or repeat) the feeling */
+    if (p_ptr->depth && (do_feeling)) do_cmd_feeling();
+
+    /* Announce a player ghost challenge. -LM- */
+    ghost_challenge();
+
+    /*** Process this dungeon level ***/
+
+    /* Reset the monster generation level */
+    monster_level = p_ptr->depth;
+
+    /* Reset the object generation level */
+    object_level = p_ptr->depth;
+
+    /* Notice stuff */
+    if (p_ptr->notice) notice_stuff();
+
+    /* Update stuff */
+    if (p_ptr->update) update_stuff();
+
+    /* Redraw stuff */
+    if (p_ptr->redraw) redraw_stuff();
+
+    /* Cancel the target */
+    target_set_monster(0);
+
+    /* Cancel the health bar */
+    health_track(0);
+
+    /* Forget the view */
+    forget_view();
+
+    /* Handle "quit and save" */
+    if (!p_ptr->playing && !p_ptr->is_dead) return;
+
+    /* Erase the old cave */
+    reset_dungeon_info();
+    count_feat_everseen();
+
+    /* Reset player ghost info */
+    player_ghost_num = -1;
+    ghost_r_idx = 0;
+    player_ghost_name.clear();
+
+    /* Delete any pending monster message */
+    size_mon_msg = 0;
+    size_mon_hist = 0;
+
+    /* Check for quest_failure */
+    if (guild_quest_active())
+    {
+        if (quest_fail_immediately()) quest_fail();
+
+        else if (quest_might_fail_now())
+        {
+            /* Have a chance to fail if the quest is in progress */
+            if (one_in_(10)) quest_fail();
+        }
+    }
+
+    /* Accidental Death */
+    if (p_ptr->playing && p_ptr->is_dead)
+    {
+        /* Mega-Hack -- Allow player to cheat death */
+        if ((p_ptr->wizard || cheat_live) && !get_check("Die? "))
+        {
+            /* Mark social class, reset age, if needed */
+            if (p_ptr->sc) p_ptr->sc = p_ptr->age = 0;
+
+            /* Increase age */
+            p_ptr->age++;
+
+            /* Mark savefile */
+            p_ptr->noscore |= 0x0001;
+
+            /* Message */
+            message(QString("You invoke wizard mode and cheat death."));
+
+            /* Cheat death */
+            p_ptr->is_dead = FALSE;
+
+            /* Restore hit points */
+            p_ptr->chp = p_ptr->mhp;
+            p_ptr->chp_frac = 0;
+
+            /* Restore spell points */
+            p_ptr->csp = p_ptr->msp;
+            p_ptr->csp_frac = 0;
+
+            /* Hack -- Healing */
+            (void)(clear_timed(TMD_BLIND, TRUE));
+            (void)clear_timed(TMD_CONFUSED, TRUE);
+            (void)clear_timed(TMD_POISONED, TRUE);
+            (void)clear_timed(TMD_AFRAID, TRUE);
+            (void)clear_timed(TMD_PARALYZED, TRUE);
+            (void)clear_timed(TMD_IMAGE, TRUE);
+            (void)set_stun(0);
+            (void)set_cut(0);
+
+            /* Hack -- Prevent starvation */
+            (void)set_food(PY_FOOD_MAX - 1);
+
+            /* Hack -- cancel recall */
+            if (p_ptr->word_recall)
+            {
+                /* Message */
+                message(QString("A tension leaves the air around you..."));
+
+                /* Hack -- Prevent recall */
+                p_ptr->word_recall = 0;
+            }
+
+            /* Note cause of death XXX XXX XXX */
+            p_ptr->died_from = QString("Cheating death");
+
+            /* New depth */
+            dungeon_change_level(0);
+
+        }
+    }
+
+    /* Handle "death" */
+    if (p_ptr->is_dead) return;
+
+    /* Make a new level */
+    generate_cave();
+}
+
+
+// Process game turns until it is the player's turn to move again, or the player is dead.
+static void process_game_turns(void)
+{
+    /* Main loop */
+    while (TRUE)
+    {
+        /* Hack -- Compact the monster list occasionally */
+        if (mon_cnt + 32 > z_info->m_max) compact_monsters(64);
+
+        /* Hack -- Compress the monster list occasionally */
+        if (mon_cnt + 32 < mon_max) compact_monsters(0);
+
+        /* Hack -- Compact the object list occasionally */
+        if (o_cnt + 32 > z_info->o_max) compact_objects(64);
+
+        /* Hack -- Compress the object list occasionally */
+        else if (o_cnt + 32 < o_max) compact_objects(0);
+
+        /* Do any necessary animations */
+        do_animation();
+
+        /* Update terrain damage every game turn */
+        if ((!is_player_native(p_ptr->py, p_ptr->px)) && (!p_ptr->timed[TMD_FLYING]))
+        {
+            p_ptr->cumulative_terrain_damage += f_info[dungeon_info[p_ptr->py][p_ptr->px].feat].dam_non_native;
+        }
+
+        /*** Process player & monsters, break when it is the player's turn to move ***/
+        process_entities();
+
+        /* Update stuff */
+        if (p_ptr->update) update_stuff();
+
+        /* Redraw stuff */
+        if (p_ptr->redraw) redraw_stuff();
+
+        /* Handle reasons to break the loop */
+        if (p_ptr->player_turn) return;
+        if (p_ptr->leaving_level) change_player_level();
+        if (p_ptr->is_dead)
+        {
+            // TODO handle player death
+            return;
+        }
+
+        /* Process the world */
+        process_world();
+
+        /* Update stuff */
+        if (p_ptr->update) update_stuff();
+
+        /* Redraw stuff */
+        if (p_ptr->redraw) redraw_stuff();
+
+        /* Handle reasons to break the loop */
+        if (p_ptr->player_turn) return;
+        if (p_ptr->leaving_level) change_player_level();
+        if (p_ptr->is_dead)
+        {
+            // TODO handle player death
+            return;
+        }
+
+        /* Count game turns */
+        turn++;
+
+        //pop_up_message_box(QString("ending game turns turn is %1 p_ptr->energy is %2") .arg(turn) .arg(p_ptr->p_energy));
+    }
+}
+
+/*
+ * This function should be called after every command that uses player energy.
+ * Ideally, it should be the final line of code before the function ends or returns.
+ */
+void process_player_energy(byte energy_used)
+{
+    int i;
+
+    p_ptr->p_energy -= energy_used;
+
+    effect_type *x_ptr;
+
+    /* Hack -- constant hallucination */
+    if (p_ptr->timed[TMD_IMAGE])
+    {
+        p_ptr->redraw |= (PR_MAP);
+    }
+
+    /* Hack -- Redraw depth if the temporary quest notification ends */
+    if ((quest_indicator_timer > 0) && (--quest_indicator_timer == 0) &&
+        !(character_icky))
+    {
+        quest_indicator_complete = FALSE;
+        p_ptr->redraw |= (PR_QUEST_ST);
+    }
+
+    /* Shimmer monsters if needed */
+    if (shimmer_monsters)
+    {
+        /* Clear the flag */
+        shimmer_monsters = FALSE;
+
+        /* Shimmer multi-hued monsters */
+        for (i = 1; i < mon_max; i++)
+        {
+            monster_type *m_ptr;
+            monster_race *r_ptr;
+
+            /* Get the monster */
+            m_ptr = &mon_list[i];
+
+            /* Skip dead monsters */
+            if (!m_ptr->r_idx) continue;
+
+            /* Get the monster race */
+            r_ptr = &r_info[m_ptr->r_idx];
+
+            /* Skip non-multi-hued monsters */
+            if (!(r_ptr->flags1 & (RF1_ATTR_MULTI))) continue;
+
+            /* Reset the flag */
+            shimmer_monsters = TRUE;
+
+            /* Redraw regardless */
+            light_spot(m_ptr->fy, m_ptr->fx);
+        }
+    }
+
+    /* Traverse effect array */
+    for (x_ptr = x_list; x_ptr < x_list + z_info->x_max; x_ptr++)
+    {
+        /* Ignore invisible effects */
+        if (x_ptr->x_flags & (EF1_HIDDEN)) continue;
+
+        /* Only certain effects are allowed */
+        if ((x_ptr->x_type == EFFECT_TRAP_SMART) ||
+            (x_ptr->x_type == EFFECT_GLACIER))
+        {
+            /* Redraw */
+            light_spot(x_ptr->x_cur_y, x_ptr->x_cur_x);
+        }
+    }
+
+    /* Redraw visual indicator of temporary element brand */
+    if (p_ptr->timed[TMD_SLAY_ELEM]) p_ptr->redraw |= (PR_RESIST);
+
+    /* Repair "mark" flags */
+    if (repair_mflag_mark)
+    {
+        /* Reset the flag */
+        repair_mflag_mark = FALSE;
+
+        /* Process the monsters */
+        for (i = 1; i < mon_max; i++)
+        {
+            monster_type *m_ptr;
+
+            /* Get the monster */
+            m_ptr = &mon_list[i];
+
+            /* Skip dead monsters */
+            /* if (!m_ptr->r_idx) continue; */
+
+            /* Repair "mark" flag */
+            if (m_ptr->mflag & (MFLAG_MARK))
+            {
+                /* Skip "show" monsters */
+                if (m_ptr->mflag & (MFLAG_SHOW))
+                {
+                    /* Repair "mark" flag */
+                    repair_mflag_mark = TRUE;
+
+                    /* Skip */
+                    continue;
+                }
+
+                /* Forget flag */
+                m_ptr->mflag &= ~(MFLAG_MARK);
+
+                /* Update the monster */
+                update_mon(i, FALSE);
+
+                /* Hack -- Force redraw of hidden monsters */
+                if ((m_ptr->mflag & (MFLAG_HIDE)) && m_ptr->ml)
+                {
+                    /* Redraw */
+                    light_spot(m_ptr->fy, m_ptr->fx);
+                }
+            }
+        }
+    }
+
+    /* Repair "show" flags */
+    if (repair_mflag_show)
+    {
+        /* Reset the flag */
+        repair_mflag_show = FALSE;
+
+        /* Process the monsters */
+        for (i = 1; i < mon_max; i++)
+        {
+            monster_type *m_ptr;
+
+            /* Get the monster */
+            m_ptr = &mon_list[i];
+
+            /* Skip dead monsters */
+            /* if (!m_ptr->r_idx) continue; */
+
+            /* Clear "show" flag */
+            m_ptr->mflag &= ~(MFLAG_SHOW);
+        }
+    }
+
+    // process game turns until it is the player's turn again, or the player is dead;
+    process_game_turns();
 
 }

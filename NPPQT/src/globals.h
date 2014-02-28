@@ -47,7 +47,6 @@ extern u32b level_flag;
 extern bool good_item_flag;
 extern bool closing_flag;
 
-
 extern QString current_savefile;
 extern QFile notes_file;
 

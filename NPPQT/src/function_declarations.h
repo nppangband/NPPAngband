@@ -11,7 +11,7 @@
 
 // cmd1.cpp
 extern void py_pickup_gold(void);
-extern s16b move_player(int dir, int jumping);
+extern void move_player(int dir, int jumping);
 
 //calcs.cpp
 extern int stat_adj_moria(int stat);
@@ -30,7 +30,7 @@ extern int distance(int y1, int x1, int y2, int x2);
 extern bool generic_los(int y1, int x1, int y2, int x2, u16b flg);
 extern bool no_light(void);
 extern bool cave_valid_bold(int y, int x);
-extern byte multi_hued_attr(monster_race *r_ptr);
+extern byte multi_hued_color(monster_race *r_ptr);
 extern bool feat_supports_lighting(u16b feat);
 extern bool dtrap_edge(int y, int x);
 extern void map_info(s16b y, s16b x);
@@ -164,9 +164,10 @@ extern void set_dungeon_type(u16b dungeon_type);
 
 
 //dun_process.cpp
-extern void process_world(void);
+extern void process_player_energy(byte energy);
 
 /* init2.c */
+extern void init_player_graf_info();
 extern void clear_graphics();
 extern void init_graphics();
 extern void init_npp_games(void);
@@ -209,6 +210,9 @@ extern bool make_move(monster_type *m_ptr, int *ty, int *tx, bool fear, bool *ba
 extern s16b process_move(monster_type *m_ptr, int ty, int tx, bool bash);
 extern bool get_move(monster_type *m_ptr, int *ty, int *tx, bool *fear, bool must_use_target);
 extern int cave_passable_mon(monster_type *m_ptr, int y, int x, bool *bash);
+
+// mon_process.cpp
+extern void process_entities(void);
 
 //mon_ranged_attack.cpp
 extern int get_dam(monster_race *r_ptr, int attack);

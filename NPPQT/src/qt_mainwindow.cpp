@@ -644,6 +644,71 @@ void MainWindow::save_and_close()
     priv->redraw();
 }
 
+void MainWindow::keyPressEvent(QKeyEvent* which_key)
+{
+    // Move down
+    switch (which_key->key())
+    {
+        // Move down
+        case Qt::Key_2:
+        {
+            move_player(2, FALSE);
+            return;
+        }
+        // Move up
+        case Qt::Key_8:
+        {
+            move_player(8, FALSE);
+            return;
+        }
+        // Move left
+        case Qt::Key_4:
+        {
+            move_player(4, FALSE);
+            return;
+        }
+        // Move right
+        case Qt::Key_6:
+        {
+            move_player(6, FALSE);
+            return;
+        }
+        // Move diagonally left and up
+        case Qt::Key_7:
+        {
+            move_player(7, FALSE);
+            return;
+        }
+        // Move diagonally right and up
+        case Qt::Key_9:
+        {
+            move_player(9, FALSE);
+            return;
+        }
+        // Move diagonally left and down
+        case Qt::Key_1:
+        {
+            move_player(1, FALSE);
+            return;
+        }
+        // Move diagonally right and down
+        case Qt::Key_3:
+        {
+            move_player(3, FALSE);
+            return;
+        }
+        default:
+        {
+            //  TODO something useful with unused keypresses
+            QMessageBox* box = new QMessageBox();
+            box->setWindowTitle(QString("Unused Key"));
+            box->setText(QString("You Pressed: ")+ which_key->text());
+            box->show();
+        }
+    }
+}
+
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (!current_savefile.isEmpty() && character_loaded)

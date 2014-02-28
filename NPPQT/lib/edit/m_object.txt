@@ -116,7 +116,7 @@ V:7.1.0
 
 N:0:<pile>
 G:&:TERM_WHITE
-T:7:55:11:11
+T:11:11:7:55
 
 
 ##### The 'Special Artifacts' #####
@@ -156,7 +156,7 @@ G:~:TERM_L_DARK
 I:36:1:0
 W:0:1:20:0
 P:1:0d0:0:0:0
-T:0:35:77:18
+T:0:35:8:20
 A:0/1
 F:BLACK_MARKET
 
@@ -166,7 +166,7 @@ G:(:TERM_BLUE
 I:36:2:0
 W:1:1:20:4
 P:2:0d0:0:0:0
-T:0:36:8:6
+T:0:36:8:21
 A:1/1
 F:GENERAL_STORE | BLACK_MARKET
 
@@ -176,7 +176,7 @@ G:(:TERM_L_UMBER
 I:36:4:0
 W:2:1:80:18
 P:4:0d0:0:0:0
-T:0:40:8:7
+T:0:40:8:22
 A:2/1
 F:ARMORY | BLACK_MARKET
 
@@ -186,7 +186,7 @@ G:(:TERM_L_BROWN
 I:36:5:0
 W:3:1:90:35
 P:5:1d1:0:0:0
-T:0:41:8:8
+T:0:41:77:18
 A:3/1
 F:ARMORY | BLACK_MARKET
 
@@ -196,7 +196,7 @@ G:(:TERM_L_UMBER
 I:36:6:0
 W:5:1:100:55
 P:6:1d1:-1:0:0
-T:0:42:8:0
+T:0:42:8:23
 A:5/1
 F:ARMORY | BLACK_MARKET
 
@@ -206,7 +206,7 @@ G:(:TERM_L_BROWN
 I:36:7:0
 W:7:1:110:100
 P:7:1d2:-1:0:0
-T:0:43:8:22
+T:0:43:77:19
 A:7/1
 F:ARMORY | BLACK_MARKET
 
@@ -216,7 +216,7 @@ G:(:TERM_L_UMBER
 I:36:11:0
 W:14:1:140:330
 P:11:1d1:-1:0:0
-T:0:44:9:25
+T:0:44:78:14
 A:14/1
 F:ARMORY | BLACK_MARKET
 
@@ -226,7 +226,7 @@ G:(:TERM_L_UMBER
 I:36:12:0
 W:12:1:150:230
 P:8:1d3:-2:0:0
-T:0:74:9:21
+T:0:74:77:18
 A:12/1
 F:ARMORY | BLACK_MARKET
 
@@ -236,7 +236,7 @@ G:(:TERM_L_BROWN
 I:36:13:0
 W:10:1:130:160
 P:6:1d2:-1:0:0
-T:0:75:9:22
+T:0:75:8:22
 A:10/1
 F:BLACK_MARKET
 
@@ -246,7 +246,7 @@ G:(:TERM_AUBURN
 I:36:14:0
 W:7:1:150:45
 P:6:0d0:-1:0:0
-T:0:78:9:22
+T:0:78:78:14
 A:7/1
 F:BLACK_MARKET
 
@@ -262,7 +262,7 @@ G:[:TERM_RED
 I:37:1:0
 W:26:1:220:0
 P:14:1d4:-5:0:-8
-T:0:46:9:23
+T:0:46:8:26
 A:26/1
 
 
@@ -271,7 +271,7 @@ G:[:TERM_SLATE
 I:37:3:0
 W:24:1:250:430
 P:13:1d4:-2:0:0
-T:0:45:9:24
+T:0:45:8:24
 A:24/1
 F:ARMORY | BLACK_MARKET
 
@@ -281,7 +281,7 @@ G:[:TERM_SLATE
 I:37:4:0
 W:26:1:220:530
 P:14:1d4:-2:0:0
-T:0:47:9:30
+T:0:47:8:25
 A:26/1
 F:ARMORY | BLACK_MARKET
 
@@ -291,7 +291,7 @@ G:[:TERM_SLATE_GRAY
 I:37:6:0
 W:30:1:270:675
 P:16:1d4:-2:0:0
-T:0:49:9:31
+T:0:49:77:16
 A:30/1
 F:BLACK_MARKET
 
@@ -301,7 +301,7 @@ G:[:TERM_SLATE
 I:37:7:0
 W:28:1:260:630
 P:15:1d4:-2:0:0
-T:0:48:78:14
+T:0:48:77:17
 A:28/1
 F:ARMORY | BLACK_MARKET
 
@@ -311,7 +311,7 @@ G:[:TERM_SLATE_GRAY
 I:37:9:0
 W:36:1:290:775
 P:19:1d4:-3:0:0
-T:0:51:9:26
+T:0:51:77:16
 A:36/1
 F:BLACK_MARKET
 
@@ -321,7 +321,7 @@ G:[:TERM_LIGHT_GRAY
 I:37:12:0
 W:42:1:320:900
 P:22:1d6:-3:0:0
-T:0:52:9:28
+T:0:52:77:20
 A:42/1
 F:BLACK_MARKET
 
@@ -331,7 +331,7 @@ G:[:TERM_LIGHT_GRAY
 I:37:13:0
 W:44:1:340:950
 P:23:1d6:-3:0:0
-T:0:53:8:9
+T:0:53:77:21
 A:44/1
 F:BLACK_MARKET
 
@@ -341,7 +341,7 @@ G:[:TERM_LIGHT_GRAY
 I:37:15:0
 W:48:1:380:1050
 P:25:2d4:-3:0:0
-T:0:54:8:9
+T:0:54:77:26
 A:48/1
 F:BLACK_MARKET
 
@@ -351,7 +351,7 @@ G:[:TERM_LIGHT_GRAY
 I:37:18:0
 W:50:1:380:1200
 P:28:2d4:-3:0:0
-T:0:55:8:11
+T:0:55:77:25
 A:50/1
 F:BLACK_MARKET
 
@@ -361,7 +361,7 @@ G:[:TERM_L_BLUE
 I:37:21:0
 W:34:1:280:720
 P:18:1d4:-2:0:0
-T:0:56:8:12
+T:0:56:8:25
 A:34/1
 F:ARMORY | BLACK_MARKET
 
@@ -371,7 +371,7 @@ G:[:TERM_SLATE_GRAY
 I:37:22:0
 W:38:1:300:825
 P:20:1d4:-3:0:0
-T:0:50:8:13
+T:0:50:77:21
 A:38/1
 F:BLACK_MARKET
 
@@ -390,7 +390,7 @@ G:):TERM_L_UMBER
 I:34:2:0
 W:3:1:50:30
 P:2:1d1:0:0:0
-T:0:30:11:6
+T:0:30:8:15
 A:3/1
 F:ARMORY | BLACK_MARKET
 
@@ -400,7 +400,7 @@ G:):TERM_SLATE
 I:34:3:0
 W:10:1:65:50
 P:3:1d2:0:0:0
-T:0:32:11:5
+T:0:32:8:17
 A:10/1
 F:ARMORY | BLACK_MARKET
 
@@ -410,7 +410,7 @@ G:):TERM_L_UMBER
 I:34:4:0
 W:15:1:100:120
 P:4:1d2:0:0:0
-T:0:31:54:0
+T:0:31:8:16
 A:15/1
 F:BLACK_MARKET
 
@@ -420,7 +420,7 @@ G:):TERM_SLATE_GRAY
 I:34:5:0
 W:30:1:120:200
 P:5:1d3:0:0:0
-T:0:91:54:1
+T:0:91:8:18
 A:30/1
 F:BLACK_MARKET
 
@@ -430,7 +430,7 @@ G:):TERM_L_UMBER
 I:34:6:0
 W:8:1:75:60
 P:3:1d2:0:0:0
-T:0:92:54:2
+T:0:92:8:15
 A:8/1
 F:ARMORY | BLACK_MARKET
 
@@ -440,7 +440,7 @@ G:):TERM_SLATE_GRAY
 I:34:7:0
 W:20:1:90:125
 P:4:1d3:0:0:0
-T:0:95:54:5
+T:0:95:8:17
 A:20/1
 F:BLACK_MARKET
 
@@ -459,7 +459,7 @@ G:|:TERM_L_DARK
 I:23:1:0
 W:0:1:15:0
 P:0:1d1:-2:-2:0
-T:10:1:54:6
+T:10:1:3:13
 A:0/1
 F:SHOW_MODS
 
@@ -469,7 +469,7 @@ G:|:TERM_L_DARK
 I:23:2:0
 W:0:1:75:0
 P:0:1d1:-2:-2:0
-T:10:2:54:7
+T:10:2:3:14
 A:0/1
 F:SHOW_MODS
 
@@ -479,7 +479,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:3:0
 W:0:1:12:10
 P:0:1d4:0:0:0
-T:10:100:54:3
+T:10:100:3:24
 A:0/1
 F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
@@ -489,7 +489,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:4:0
 W:1:1:20:10
 P:0:1d4:0:0:0
-T:10:3:54:4
+T:10:3:3:24
 A:1/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -499,7 +499,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:5:0
 W:2:1:30:25
 P:0:1d5:0:0:0
-T:10:4:54:8
+T:10:4:3:24
 A:2/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -509,7 +509,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:6:0
 W:0:1:15:10
 P:0:1d4:0:0:0
-T:10:101:8:26
+T:10:101:3:24
 A:0/1
 F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
@@ -519,7 +519,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:7:0
 W:4:1:40:42
 P:0:1d6:0:0:0
-T:10:5:2:0
+T:10:5:3:25
 A:4/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -529,7 +529,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:8:0
 W:5:1:75:48
 P:0:1d6:0:0:0
-T:10:6:2:0
+T:10:6:3:25
 A:5/1
 F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
@@ -539,7 +539,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:11:0
 W:5:1:50:50
 P:0:1d7:0:0:0
-T:10:7:2:0
+T:10:7:3:25
 A:5/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -549,7 +549,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:12:0
 W:7:1:110:85
 P:0:1d7:0:0:0
-T:10:10:2:0
+T:10:10:3:25
 A:7/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -559,7 +559,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:13:0
 W:4:1:80:60
 P:0:1d6:0:0:0
-T:10:8:2:0
+T:10:8:3:17
 A:4/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -569,7 +569,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:14:0
 W:2:1:30:35
 P:0:1d5:0:0:0
-T:10:11:2:0
+T:10:11:3:16
 A:2/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -579,7 +579,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:15:0
 W:5:1:100:80
 P:0:1d7:0:0:0
-T:10:59:2:0
+T:10:59:3:17
 A:5/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -589,7 +589,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:16:0
 W:9:1:150:255
 P:0:2d5:0:0:0
-T:10:12:2:0
+T:10:12:3:15
 A:9/1
 F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
@@ -599,7 +599,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:17:0
 W:12:1:130:200
 P:0:1d10:0:0:0
-T:10:13:8:24
+T:10:13:3:26
 A:12/1
 F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
@@ -609,7 +609,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:20:0
 W:18:1:120:400
 P:0:3d4:0:0:0
-T:10:14:2:1
+T:10:14:3:16
 A:18/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -619,7 +619,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:21:0
 W:14:1:140:350
 P:0:3d4:0:0:0
-T:10:101:2:1
+T:10:101:3:22
 A:14/1
 F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
@@ -629,7 +629,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:24:0
 W:7:1:95:150
 P:0:1d9:0:0:0
-T:10:64:2:1
+T:10:64:3:25
 A:7/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -639,7 +639,7 @@ G:|:TERM_LIGHT_GRAY
 I:23:25:0
 W:30:1:200:775
 P:0:3d6:0:0:0
-T:10:100:2:1
+T:10:100:3:21
 A:30/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -649,7 +649,7 @@ G:|:TERM_SILVER
 I:23:26:0
 W:35:1:180:655
 P:0:3d6:0:0:0
-T:10:70:2:1
+T:10:70:3:22
 A:35/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -659,7 +659,7 @@ G:|:TERM_SILVER
 I:23:27:0
 W:45:1:240:1000
 P:0:4d5:0:0:0
-T:10:62:2:1
+T:10:62:3:22
 A:45/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -669,7 +669,7 @@ G:|:TERM_RED
 I:23:28:0
 W:40:1:260:850
 P:0:4d5:0:0:0
-T:10:15:2:0
+T:10:15:3:27
 A:40/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -679,7 +679,7 @@ G:|:TERM_SILVER
 I:23:29:0
 W:45:1:200:675
 P:0:4d4:0:0:0
-T:10:64:2:1
+T:10:64:3:22
 A:45/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -689,7 +689,7 @@ G:|:TERM_SILVER
 I:23:31:0
 W:50:1:280:1500
 P:0:4d6:0:0:0
-T:10:65:2:0
+T:10:65:3:22
 A:50/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -708,7 +708,7 @@ G:/:TERM_SLATE
 I:22:2:0
 W:5:1:50:36
 P:0:1d6:0:0:0
-T:10:28:2:0
+T:10:28:11:17
 A:5/1
 F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
@@ -718,7 +718,7 @@ G:/:TERM_L_DARK
 I:22:3:0
 W:4:1:30:18
 P:0:1d4:0:0:0
-T:10:72:8:25
+T:10:72:88:31
 A:4/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -728,7 +728,7 @@ G:/:TERM_SLATE
 I:22:4:0
 W:8:1:160:200
 P:0:1d8:0:0:0
-T:10:30:2:1
+T:10:30:11:18
 A:8/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -738,7 +738,7 @@ G:/:TERM_L_DARK
 I:22:6:0
 W:10:1:300:230
 P:0:2d8:0:0:0
-T:10:31:2:1
+T:10:31:9:19
 A:10/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -748,7 +748,7 @@ G:/:TERM_SLATE
 I:22:8:0
 W:15:1:160:358
 P:0:2d5:0:0:0
-T:10:34:2:1
+T:10:34:11:19
 A:15/1
 F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
@@ -758,7 +758,7 @@ G:/:TERM_L_BLUE
 I:22:9:0
 W:11:1:120:376
 P:0:2d5:0:0:0
-T:10:32:2:1
+T:10:32:11:28
 A:11/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -768,7 +768,7 @@ G:/:TERM_SLATE
 I:22:10:0
 W:15:1:180:408
 P:0:2d6:0:0:0
-T:10:35:2:1
+T:10:35:11:17
 A:15/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -778,7 +778,7 @@ G:/:TERM_SLATE
 I:22:11:0
 W:17:1:160:304
 P:0:2d6:0:0:0
-T:10:36:2:1
+T:10:36:11:18
 A:17/1
 F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
@@ -788,7 +788,7 @@ G:/:TERM_SLATE
 I:22:13:0
 W:20:1:190:363
 P:0:2d6:0:0:0
-T:10:37:2:1
+T:10:37:11:20
 A:20/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -798,7 +798,7 @@ G:/:TERM_SLATE
 I:22:15:0
 W:22:1:190:430
 P:0:3d4:0:0:0
-T:10:38:2:3
+T:10:38:11:21
 A:22/1
 F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
@@ -808,7 +808,7 @@ G:/:TERM_SLATE
 I:22:16:0
 W:17:1:170:326
 P:0:1d10:0:0:0
-T:10:41:2:2
+T:10:41:9:20
 A:17/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -818,7 +818,7 @@ G:/:TERM_SLATE
 I:22:22:0
 W:30:1:180:500
 P:0:2d8:0:0:0
-T:10:33:2:2
+T:10:33:11:25
 A:30/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -828,7 +828,7 @@ G:/:TERM_L_DARK
 I:22:23:0
 W:13:1:170:334
 P:0:3d4:0:0:0
-T:10:39:77:16
+T:10:39:11:27
 A:13/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -847,7 +847,7 @@ G:\:TERM_L_DARK
 I:21:1:0
 W:3:1:40:14
 P:0:1d4:0:0:0
-T:10:18:2:2
+T:10:18:9:9
 A:3/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -857,7 +857,7 @@ G:\:TERM_L_DARK
 I:21:4:0
 W:0:1:100:10
 P:0:1d3:0:0:0
-T:10:111:2:0
+T:10:111:88:29
 A:0/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -867,7 +867,7 @@ G:\:TERM_L_DARK
 I:21:5:0
 W:6:1:120:130
 P:0:2d4:0:0:0
-T:10:20:2:0
+T:10:20:9:12
 A:6/1
 F:SHOW_MODS | WEAPONSMITH | TEMPLE | BLACK_MARKET
 
@@ -877,7 +877,7 @@ G:\:TERM_L_DARK
 I:21:6:0
 W:20:1:150:200
 P:0:2d4:0:0:0
-T:10:25:6:25
+T:10:25:9:8
 A:20/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -887,7 +887,7 @@ G:\:TERM_L_DARK
 I:21:8:0
 W:5:1:120:225
 P:0:3d3:0:0:0
-T:10:19:6:25
+T:10:19:9:15
 A:5/1
 F:SHOW_MODS | WEAPONSMITH | TEMPLE | BLACK_MARKET
 
@@ -897,7 +897,7 @@ G:\:TERM_L_DARK
 I:21:12:0
 W:10:1:150:396
 P:0:2d6:0:0:0
-T:10:23:6:25
+T:10:23:9:11
 A:10/1
 F:SHOW_MODS | WEAPONSMITH | TEMPLE | BLACK_MARKET
 
@@ -907,7 +907,7 @@ G:\:TERM_L_DARK
 I:21:13:0
 W:12:1:150:353
 P:0:2d6:0:0:0
-T:10:22:6:25
+T:10:22:11:31
 A:12/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -917,7 +917,7 @@ G:\:TERM_L_DARK
 I:21:14:0
 W:45:1:280:590
 P:0:3d6:0:0:0
-T:10:26:6:25
+T:10:26:9:11
 A:45/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -927,7 +927,7 @@ G:\:TERM_L_DARK
 I:21:15:0
 W:15:1:180:502
 P:0:3d4:0:0:0
-T:10:24:6:25
+T:10:24:11:12
 A:15/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -946,7 +946,7 @@ G:\:TERM_SLATE
 I:20:1:1
 W:20:1:50:100
 P:0:1d2:0:0:0
-T:7:31:77:17
+T:7:31:10:24
 A:20/1
 F:TUNNEL | SHOW_MODS | GENERAL_STORE | BLACK_MARKET
 
@@ -956,7 +956,7 @@ G:\:TERM_SLATE_GRAY
 I:20:2:3
 W:50:1:200:1200
 P:0:1d4:0:0:0
-T:7:29:6:25
+T:7:29:77:0
 A:50/1
 F:TUNNEL | SHOW_MODS | BLACK_MARKET
 
@@ -966,7 +966,7 @@ G:\:TERM_SLATE_GRAY
 I:20:4:2
 W:20:1:180:500
 P:0:1d3:0:0:0
-T:7:27:6:25
+T:7:27:10:23
 A:20/1
 F:TUNNEL | SHOW_MODS | GENERAL_STORE | BLACK_MARKET
 
@@ -976,7 +976,7 @@ G:\:TERM_L_DARK
 I:20:7:2
 W:40:1:120:250
 P:0:1d3:0:0:0
-T:7:29:6:25
+T:7:29:77:0
 A:40/1
 F:TUNNEL | SHOW_MODS | BLACK_MARKET
 
@@ -995,7 +995,7 @@ G:]:TERM_L_UMBER
 I:32:1:0
 W:2:1:10:4
 P:1:0d0:0:0:0
-T:0:12:6:25
+T:0:12:8:2
 A:2/1
 F:ARMORY | BLACK_MARKET
 
@@ -1005,7 +1005,7 @@ G:]:TERM_UMBER
 I:32:2:0
 W:4:1:15:12
 P:2:0d0:0:0:0
-T:0:11:6:25
+T:0:11:8:2
 A:4/1
 F:ARMORY | BLACK_MARKET
 
@@ -1015,7 +1015,7 @@ G:]:TERM_SLATE
 I:32:3:0
 W:7:1:20:30
 P:3:1d1:0:0:0
-T:0:13:6:25
+T:0:13:8:3
 A:7/1
 F:ARMORY | BLACK_MARKET
 
@@ -1025,7 +1025,7 @@ G:]:TERM_SILVER
 I:32:5:0
 W:20:1:75:75
 P:5:1d3:0:0:0
-T:0:14:6:25
+T:0:14:8:4
 A:20/1
 F:BLACK_MARKET
 
@@ -1035,7 +1035,7 @@ G:]:TERM_LIGHT_GRAY
 I:32:6:0
 W:40:1:60:200
 P:6:1d3:0:0:0
-T:0:15:6:25
+T:0:15:8:5
 A:40/1
 F:BLACK_MARKET
 
@@ -1051,7 +1051,7 @@ G:]:TERM_SILVER
 I:33:9:0
 W:44:1:20:500
 P:0:1d1:0:0:0
-T:0:17:6:25
+T:0:17:8:6
 A:44/1
 F:BLACK_MARKET
 
@@ -1061,7 +1061,7 @@ G:]:TERM_GOLD
 I:33:11:0
 W:47:1:30:1000
 P:0:1d2:0:0:0
-T:0:18:6:26
+T:0:18:8:7
 A:47/1
 F:BLACK_MARKET
 
@@ -1071,7 +1071,7 @@ G:]:TERM_VIOLET
 I:33:12:0
 W:50:1:40:2000
 P:0:1d3:0:0:0
-T:0:19:77:16
+T:0:19:8:8
 A:50/1
 F:BLACK_MARKET
 
@@ -1090,7 +1090,7 @@ G:(:TERM_GREEN
 I:35:1:0
 W:1:1:10:3
 P:1:0d0:0:0:0
-T:0:3:6:25
+T:0:3:8:0
 A:1/1
 F:GENERAL_STORE | BLACK_MARKET
 
@@ -1109,7 +1109,7 @@ G:}:TERM_UMBER
 I:19:2:1
 W:1:1:5:5
 P:0:0d0:0:0:0
-T:10:47:6:25
+T:10:47:9:25
 A:1/1
 F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
@@ -1119,7 +1119,7 @@ G:}:TERM_L_UMBER
 I:19:12:2
 W:3:1:30:50
 P:0:0d0:0:0:0
-T:10:43:6:26
+T:10:43:9:21
 A:3/1
 F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
@@ -1129,7 +1129,7 @@ G:}:TERM_L_BROWN
 I:19:13:3
 W:10:1:40:120
 P:0:0d0:0:0:0
-T:10:44:6:27
+T:10:44:9:22
 A:10/1
 F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
@@ -1139,7 +1139,7 @@ G:}:TERM_AUBURN
 I:19:14:4
 W:40:1:40:240
 P:0:0d0:0:0:0
-T:10:61:6:26
+T:10:61:9:22
 A:40/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -1149,7 +1149,7 @@ G:}:TERM_SLATE
 I:19:23:5
 W:15:1:110:140
 P:0:0d0:0:0:0
-T:10:45:6:27
+T:10:45:9:23
 A:15/1
 F:SHOW_MODS | WEAPONSMITH | BLACK_MARKET
 
@@ -1159,7 +1159,7 @@ G:}:TERM_SLATE_GRAY
 I:19:24:6
 W:30:1:200:300
 P:0:1d1:0:0:0
-T:10:46:6:25
+T:10:46:9:24
 A:30/1
 F:SHOW_MODS | BLACK_MARKET
 
@@ -1175,7 +1175,7 @@ G:{:TERM_SLATE_GRAY
 I:16:0:0
 W:0:1:4:1
 P:0:1d2:0:0:0
-T:10:53:6:25
+T:10:53:9:30
 A:0/1
 F:SHOW_MODS | GENERAL_STORE | WEAPONSMITH | BLACK_MARKET
 D:It can be shot with a sling. 
@@ -1186,7 +1186,7 @@ G:{:TERM_SLATE
 I:16:1:0
 W:3:1:5:2
 P:0:1d3:0:0:0
-T:10:54:77:20
+T:10:54:9:31
 A:3/1
 F:SHOW_MODS | GENERAL_STORE | WEAPONSMITH | BLACK_MARKET
 D:It can be shot with a sling. 
@@ -1206,7 +1206,7 @@ G:{:TERM_L_UMBER
 I:17:1:0
 W:2:1:2:1
 P:0:1d4:0:0:0
-T:10:49:6:15
+T:10:49:9:26
 A:2/1:15/1
 F:SHOW_MODS | GENERAL_STORE | WEAPONSMITH | BLACK_MARKET
 D:It can be shot with a bow. 
@@ -1223,7 +1223,7 @@ G:{:TERM_SLATE
 I:18:1:0
 W:2:1:3:2
 P:0:1d5:0:0:0
-T:10:51:6:15
+T:10:51:9:28
 A:2/1:25/1
 F:SHOW_MODS | GENERAL_STORE | WEAPONSMITH | BLACK_MARKET
 D:It can be shot with a crossbow. 
@@ -1243,7 +1243,7 @@ G:]:TERM_L_UMBER
 I:30:1:0
 W:1:1:5:4
 P:1:0d0:0:0:0
-T:0:22:6:16
+T:0:22:8:9
 A:1/1
 F:ARMORY | BLACK_MARKET
 
@@ -1253,7 +1253,7 @@ G:]:TERM_L_BROWN
 I:30:2:0
 W:4:1:20:7
 P:2:1d1:0:0:0
-T:0:23:6:15
+T:0:23:8:9
 A:4/1
 F:ARMORY | BLACK_MARKET
 
@@ -1263,7 +1263,7 @@ G:]:TERM_SLATE
 I:30:4:0
 W:6:1:40:12
 P:3:1d1:0:0:0
-T:0:24:6:15
+T:0:24:8:11
 A:6/1
 F:BLACK_MARKET
 
@@ -1282,7 +1282,7 @@ G:]:TERM_L_UMBER
 I:31:1:0
 W:1:1:5:3
 P:1:0d0:0:0:0
-T:0:25:6:15
+T:0:25:8:12
 A:1/1
 F:ARMORY | BLACK_MARKET
 
@@ -1292,7 +1292,7 @@ G:]:TERM_LIGHT_GRAY
 I:31:2:0
 W:12:1:25:35
 P:2:1d1:0:0:0
-T:0:28:6:15
+T:0:28:8:13
 A:12/1
 F:ARMORY | BLACK_MARKET
 
@@ -1308,7 +1308,7 @@ G:~:TERM_UMBER
 I:39:0:4000
 W:1:1:30:2
 P:0:1d1:0:0:0
-T:7:26:6:15
+T:7:26:11:6
 A:1/1
 F:EASY_KNOW | GENERAL_STORE
 D:It is equippable as a light source with a radius of 1 square.  It may
@@ -1321,7 +1321,7 @@ G:~:TERM_L_UMBER
 I:39:1:7500
 W:1:1:50:35
 P:0:1d1:0:0:0
-T:7:25:6:15
+T:7:25:11:5
 A:1/1
 F:GENERAL_STORE | BLACK_MARKET
 D:It is equippable as a light source with a radius of 2 squares.  It may
@@ -1342,7 +1342,7 @@ G:':TERM_DARK
 I:40:0:-5
 W:50:1:3:0
 P:0:0d0:0:0:0
-T:0:0:6:15
+T:5:5:54:0
 A:50/1
 F:STR | INT | WIS | DEX | CON
 F:CHR | SEARCH | HIDE_TYPE | LIGHT_CURSE
@@ -1353,7 +1353,7 @@ G:':TERM_DARK
 I:40:1:0
 W:14:1:3:0
 P:0:0d0:0:0:0
-T:-128:-94:77:21
+T:5:5:54:1
 A:14/1
 F:TELEPORT | EASY_KNOW | LIGHT_CURSE
 
@@ -1363,7 +1363,7 @@ G:':TERM_DARK
 I:40:2:0
 W:16:1:3:20
 P:0:0d0:0:0:0
-T:-128:-94:6:15
+T:5:5:54:2
 A:16/1
 F:EASY_KNOW | BLACK_MARKET
 
@@ -1373,7 +1373,7 @@ G:':TERM_DARK
 I:40:3:0
 W:14:1:3:200
 P:0:0d0:0:0:0
-T:-128:-94:6:17
+T:5:5:54:5
 A:14/1
 F:SLOW_DIGEST | EASY_KNOW | MAGIC_SHOP | BLACK_MARKET
 
@@ -1383,7 +1383,7 @@ G:':TERM_DARK
 I:40:4:0
 W:24:1:3:250
 P:0:0d0:0:0:0
-T:-128:-94:6:15
+T:5:5:54:6
 A:24/1
 F:RES_ACID | IGNORE_ACID | EASY_KNOW | MAGIC_SHOP | BLACK_MARKET
 
@@ -1393,7 +1393,7 @@ G:':TERM_DARK
 I:40:5:0
 W:14:1:3:250
 P:0:0d0:0:0:0
-T:-128:-94:6:15
+T:5:5:54:7
 A:14/1
 F:SEARCH | HIDE_TYPE | BLACK_MARKET
 
@@ -1403,7 +1403,7 @@ G:':TERM_DARK
 I:40:6:0
 W:20:1:3:300
 P:0:0d0:0:0:0
-T:-128:-94:6:15
+T:5:5:54:3
 A:20/1
 F:WIS | SUST_WIS | HIDE_TYPE | BLACK_MARKET
 
@@ -1413,7 +1413,7 @@ G:':TERM_DARK
 I:40:7:0
 W:20:1:3:250
 P:0:0d0:0:0:0
-T:-128:-94:6:15
+T:5:5:54:4
 A:20/1
 F:CHR | SUST_CHR | HIDE_TYPE | MAGIC_SHOP | BLACK_MARKET
 
@@ -1423,7 +1423,7 @@ G:':TERM_DARK
 I:40:8:0
 W:50:1:3:5000
 P:0:0d0:0:0:3
-T:-128:-94:6:16
+T:5:5:54:8
 A:50/1
 F:SEARCH | SEE_INVIS | FREE_ACT | HIDE_TYPE | BLACK_MARKET
 
@@ -1442,7 +1442,7 @@ G:=:TERM_DARK
 I:45:1:0
 W:7:1:2:0
 P:0:0d0:0:0:0
-T:-128:-67:6:15
+T:5:5:2:0
 A:7/1
 F:AGGRAVATE | EASY_KNOW | LIGHT_CURSE
 
@@ -1452,7 +1452,7 @@ G:=:TERM_DARK
 I:45:2:-5
 W:7:1:2:0
 P:0:0d0:0:0:0
-T:-128:-67:6:17
+T:5:5:2:0
 A:7/1
 F:STR | HIDE_TYPE | LIGHT_CURSE
 
@@ -1462,7 +1462,7 @@ G:=:TERM_DARK
 I:45:3:-5
 W:7:1:2:0
 P:0:0d0:0:0:0
-T:-128:-67:6:16
+T:5:5:2:0
 A:7/1
 F:INT | HIDE_TYPE | LIGHT_CURSE
 
@@ -1472,7 +1472,7 @@ G:=:TERM_DARK
 I:45:4:0
 W:7:1:2:0
 P:0:0d0:0:0:0
-T:7:87:77:26
+T:5:5:2:0
 A:7/1
 F:TELEPORT | EASY_KNOW | LIGHT_CURSE
 
@@ -1482,7 +1482,7 @@ G:=:TERM_DARK
 I:45:6:0
 W:7:1:2:200
 P:0:0d0:0:0:0
-T:-128:-67:6:17
+T:5:5:2:0
 A:7/1
 F:SLOW_DIGEST | EASY_KNOW | BLACK_MARKET
 
@@ -1492,7 +1492,7 @@ G:=:TERM_DARK
 I:45:7:0
 W:7:1:2:200
 P:0:0d0:0:0:0
-T:-128:-67:6:16
+T:5:5:2:0
 A:7/1
 F:FEATHER | EASY_KNOW | MAGIC_SHOP | BLACK_MARKET
 
@@ -1502,7 +1502,7 @@ G:=:TERM_DARK
 I:45:8:0
 W:14:1:2:250
 P:0:0d0:0:0:0
-T:-128:-67:6:15
+T:5:5:2:0
 A:14/1
 F:RES_FIRE | IGNORE_FIRE | EASY_KNOW | MAGIC_SHOP | BLACK_MARKET
 
@@ -1512,7 +1512,7 @@ G:=:TERM_DARK
 I:45:9:0
 W:14:1:2:250
 P:0:0d0:0:0:0
-T:-128:-67:6:15
+T:5:5:2:0
 A:14/1
 F:RES_COLD | IGNORE_COLD | EASY_KNOW | MAGIC_SHOP | BLACK_MARKET
 
@@ -1522,7 +1522,7 @@ G:=:TERM_DARK
 I:45:10:1
 W:44:1:2:750
 P:0:0d0:0:0:0
-T:-128:-67:86:3
+T:5:5:2:1
 A:44/1
 F:SUST_STR | EASY_KNOW | BLACK_MARKET
 
@@ -1532,7 +1532,7 @@ G:=:TERM_DARK
 I:45:11:2
 W:44:1:2:600
 P:0:0d0:0:0:0
-T:-128:-67:86:7
+T:5:5:2:1
 A:44/1
 F:SUST_INT | EASY_KNOW | BLACK_MARKET
 
@@ -1542,7 +1542,7 @@ G:=:TERM_DARK
 I:45:12:3
 W:44:1:2:600
 P:0:0d0:0:0:0
-T:-128:-67:86:7
+T:5:5:2:1
 A:44/1
 F:SUST_WIS | EASY_KNOW | BLACK_MARKET
 
@@ -1552,7 +1552,7 @@ G:=:TERM_DARK
 I:45:13:4
 W:44:1:2:750
 P:0:0d0:0:0:0
-T:-128:-67:86:7
+T:5:5:2:1
 A:44/1
 F:SUST_DEX | EASY_KNOW | BLACK_MARKET
 
@@ -1562,7 +1562,7 @@ G:=:TERM_DARK
 I:45:14:5
 W:44:1:2:750
 P:0:0d0:0:0:0
-T:-128:-67:77:25
+T:5:5:2:1
 A:44/1
 F:SUST_CON | EASY_KNOW | BLACK_MARKET
 
@@ -1572,7 +1572,7 @@ G:=:TERM_DARK
 I:45:15:6
 W:44:1:2:500
 P:0:0d0:0:0:0
-T:-128:-67:86:5
+T:5:5:2:1
 A:44/1
 F:SUST_CHR | EASY_KNOW | BLACK_MARKET
 
@@ -1582,7 +1582,7 @@ G:=:TERM_DARK
 I:45:16:0
 W:7:1:2:100
 P:0:0d0:0:0:0
-T:-128:-67:86:5
+T:5:5:2:0
 A:7/1
 F:MAGIC_SHOP | BLACK_MARKET
 D:It increases your armor class. 
@@ -1593,7 +1593,7 @@ G:=:TERM_DARK
 I:45:22:0
 W:40:1:2:500
 P:0:0d0:0:0:0
-T:-128:-67:86:7
+T:5:5:2:1
 A:40/1
 F:SEE_INVIS | EASY_KNOW | BLACK_MARKET
 
@@ -1603,7 +1603,7 @@ G:=:TERM_DARK
 I:45:23:-5
 W:50:1:2:0
 P:0:0d0:0:0:-3
-T:-128:-67:86:4
+T:5:5:2:0
 A:50/1
 F:WIS | SEARCH | TELEPORT | AGGRAVATE | HIDE_TYPE
 F:LIGHT_CURSE
@@ -1614,7 +1614,7 @@ G:=:TERM_DARK
 I:45:23:0
 W:7:1:2:250
 P:0:0d0:0:0:0
-T:-128:-67:86:4
+T:5:5:2:0
 A:7/1
 F:SEARCH | HIDE_TYPE | BLACK_MARKET
 
@@ -1624,7 +1624,7 @@ G:=:TERM_DARK
 I:45:24:0
 W:30:1:2:400
 P:0:0d0:0:0:0
-T:-128:-67:86:4
+T:5:5:2:1
 A:30/1
 F:STR | SUST_STR | HIDE_TYPE | BLACK_MARKET
 
@@ -1634,7 +1634,7 @@ G:=:TERM_DARK
 I:45:25:0
 W:30:1:2:400
 P:0:0d0:0:0:0
-T:-128:-67:86:4
+T:5:5:2:1
 A:30/1
 F:INT | SUST_INT | HIDE_TYPE | BLACK_MARKET
 
@@ -1644,7 +1644,7 @@ G:=:TERM_DARK
 I:45:26:0
 W:30:1:2:400
 P:0:0d0:0:0:0
-T:-128:-67:86:0
+T:5:5:2:1
 A:30/1
 F:DEX | SUST_DEX | HIDE_TYPE | BLACK_MARKET
 
@@ -1654,7 +1654,7 @@ G:=:TERM_DARK
 I:45:27:0
 W:30:1:2:400
 P:0:0d0:0:0:0
-T:-128:-67:86:10
+T:5:5:2:1
 A:30/1
 F:CON | SUST_CON | HIDE_TYPE | BLACK_MARKET
 
@@ -1664,7 +1664,7 @@ G:=:TERM_DARK
 I:45:28:0
 W:20:1:2:100
 P:0:0d0:0:0:0
-T:-128:-67:86:9
+T:5:5:2:1
 A:20/1
 F:BLACK_MARKET
 D:It boosts your to-hit value. 
@@ -1675,7 +1675,7 @@ G:=:TERM_DARK
 I:45:29:0
 W:20:1:2:100
 P:0:0d0:0:0:0
-T:-128:-67:8:25
+T:5:5:2:1
 A:20/1
 F:BLACK_MARKET
 D:It boosts your to-dam value. 
@@ -1686,7 +1686,7 @@ G:=:TERM_DARK
 I:45:30:0
 W:50:1:2:1000
 P:0:0d0:0:0:0
-T:-128:-67:86:9
+T:5:5:2:1
 A:50/1
 F:SHOW_MODS | BLACK_MARKET
 D:It boosts your to-hit and to-dam values. 
@@ -1697,7 +1697,7 @@ G:=:TERM_DARK
 I:45:31:0
 W:50:1:2:3000
 P:0:0d0:0:0:0
-T:-128:-67:86:9
+T:5:5:2:3
 A:50/1
 F:SPEED | HIDE_TYPE | BLACK_MARKET
 
@@ -1707,7 +1707,7 @@ G:=:TERM_DARK
 I:45:40:0
 W:50:1:2:1200
 P:0:0d0:0:0:5
-T:-128:-67:86:9
+T:5:5:2:2
 A:50/1
 F:RES_ACID | IGNORE_ACID | BLACK_MARKET
 
@@ -1717,7 +1717,7 @@ G:=:TERM_DARK
 I:45:41:0
 W:50:1:2:1200
 P:0:0d0:0:0:5
-T:-128:-67:86:9
+T:5:5:2:2
 A:50/1
 F:RES_FIRE | IGNORE_FIRE | BLACK_MARKET
 
@@ -1727,7 +1727,7 @@ G:=:TERM_DARK
 I:45:42:0
 W:50:1:2:1200
 P:0:0d0:0:0:5
-T:-128:-67:86:6
+T:5:5:2:2
 A:50/1
 F:RES_COLD | IGNORE_COLD | BLACK_MARKET
 
@@ -1737,7 +1737,7 @@ G:=:TERM_DARK
 I:45:43:0
 W:7:1:2:20
 P:0:0d0:0:0:0
-T:-128:-67:86:3
+T:5:5:2:0
 A:7/1
 F:HIDE_TYPE | BLACK_MARKET
 
@@ -1747,7 +1747,7 @@ G:=:TERM_DARK
 I:45:21:0
 W:20:0:2:1500
 P:0:0d0:0:0:0
-T:-128:-67:86:3
+T:5:5:2:0
 A:20/1
 F:FREE_ACT | EASY_KNOW | BLACK_MARKET
 
@@ -1763,7 +1763,7 @@ G:_:TERM_DARK
 I:55:0:0
 W:5:1:50:0
 P:0:1d2:0:0:0
-T:-128:-33:86:7
+T:9:25:6:25
 A:5/1:50/1
 D:It darkens all squares within 3 squares of you, plus the entire room
 D: if you are currently in one; and blinds you for 3+1d5 turns, unless
@@ -1775,7 +1775,7 @@ G:_:TERM_DARK
 I:55:1:0
 W:40:1:50:0
 P:0:1d2:0:0:0
-T:-128:-33:86:7
+T:9:25:6:25
 A:40/1
 D:It slows you down (-10 to speed) for 15+1d30 turns; this duration is
 D: cumulative with other temporary slowing enchantments. 
@@ -1786,7 +1786,7 @@ G:_:TERM_DARK
 I:55:2:0
 W:10:1:50:0
 P:0:1d2:0:0:0
-T:-128:-33:86:7
+T:9:25:6:25
 A:10/1
 D:It hastes all monsters within line of sight. 
 
@@ -1796,7 +1796,7 @@ G:_:TERM_DARK
 I:55:3:0
 W:10:1:50:0
 P:0:1d2:0:0:0
-T:-128:-33:77:21
+T:9:25:6:25
 A:10/1:50/1
 D:It summons 1d4 monsters that are generated at the current dungeon
 D: level.  If a monster normally appears in groups, a whole group will
@@ -1809,7 +1809,7 @@ G:_:TERM_DARK
 I:55:4:0
 W:20:1:50:800
 P:0:1d2:0:0:0
-T:-128:-33:86:7
+T:9:25:6:25
 A:20/1
 F:BLACK_MARKET
 D:It teleports you randomly with a maximum range of 100 squares. 
@@ -1820,7 +1820,7 @@ G:_:TERM_DARK
 I:55:5:0
 W:10:0:50:400
 P:0:1d2:0:0:0
-T:-128:-33:86:7
+T:9:25:6:25
 A:10/1
 F:MAGIC_SHOP | BLACK_MARKET
 D:It reveals all powers of one object.  (The spell may be aborted
@@ -1832,7 +1832,7 @@ G:_:TERM_DARK
 I:55:7:0
 W:20:1:50:400
 P:0:1d2:0:0:0
-T:-128:-33:86:2
+T:9:25:6:25
 A:20/1
 F:BLACK_MARKET
 D:It fires a line of light in all eight cardinal directions;
@@ -1845,7 +1845,7 @@ G:_:TERM_DARK
 I:55:8:0
 W:5:1:50:250
 P:0:1d2:0:0:0
-T:-128:-33:86:2
+T:9:25:6:25
 A:5/1
 F:MAGIC_SHOP | BLACK_MARKET
 D:It lights up an area with a radius of 2 squares, plus the entire room
@@ -1858,7 +1858,7 @@ G:_:TERM_DARK
 I:55:10:0
 W:5:1:50:200
 P:0:1d2:0:0:0
-T:-128:-33:86:2
+T:9:25:6:25
 A:5/1
 F:BLACK_MARKET
 D:It detects all treasure in the immediate area. 
@@ -1869,7 +1869,7 @@ G:_:TERM_DARK
 I:55:11:0
 W:5:1:50:200
 P:0:1d2:0:0:0
-T:-128:-33:86:8
+T:9:25:6:25
 A:5/1
 F:BLACK_MARKET
 D:It detects all objects in the immediate area. 
@@ -1880,7 +1880,7 @@ G:_:TERM_DARK
 I:55:12:0
 W:10:1:50:350
 P:0:1d2:0:0:0
-T:-128:-33:86:8
+T:9:25:6:25
 A:10/1
 F:MAGIC_SHOP | BLACK_MARKET
 D:It detects all traps in the immediate area. 
@@ -1891,7 +1891,7 @@ G:_:TERM_DARK
 I:55:13:0
 W:10:1:50:350
 P:0:1d2:0:0:0
-T:-128:-33:86:8
+T:9:25:6:25
 A:10/1
 F:MAGIC_SHOP | BLACK_MARKET
 D:It detects all doors and stairs in the immediate area. 
@@ -1902,7 +1902,7 @@ G:_:TERM_DARK
 I:55:14:0
 W:5:1:50:200
 P:0:1d2:0:0:0
-T:-128:-33:86:7
+T:9:25:6:25
 A:5/1
 F:MAGIC_SHOP | BLACK_MARKET
 D:It detects all invisible monsters in the immediate area. 
@@ -1913,7 +1913,7 @@ G:_:TERM_DARK
 I:55:15:0
 W:20:1:50:350
 P:0:1d2:0:0:0
-T:-128:-33:86:1
+T:9:25:6:25
 A:20/1
 F:BLACK_MARKET
 D:It detects all evil monsters in the immediate area. 
@@ -1924,7 +1924,7 @@ G:_:TERM_DARK
 I:55:16:0
 W:5:1:50:200
 P:0:1d2:0:0:0
-T:-128:-33:86:8
+T:9:25:6:25
 A:5/1
 F:BLACK_MARKET
 D:It cures 1d8 points of damage.
@@ -1935,7 +1935,7 @@ G:_:TERM_DARK
 I:55:17:0
 W:25:1:50:1000
 P:0:1d2:0:0:0
-T:-128:-33:86:1
+T:9:25:6:26
 A:25/1
 F:BLACK_MARKET
 D:It cures all stunning, heals all cut damage, neutralizes poison, and
@@ -1947,7 +1947,7 @@ G:_:TERM_DARK
 I:55:20:0
 W:10:1:50:700
 P:0:1d2:0:0:0
-T:-128:-33:86:1
+T:9:25:6:25
 A:10/1
 F:BLACK_MARKET
 D:It attempts to put all monsters within line of sight to sleep.
@@ -1958,7 +1958,7 @@ G:_:TERM_DARK
 I:55:21:0
 W:10:1:50:800
 P:0:1d2:0:0:0
-T:-128:-33:86:1
+T:9:25:6:25
 A:10/1
 F:BLACK_MARKET
 D:It attempts to slow down all monsters within line of sight.
@@ -1969,7 +1969,7 @@ G:_:TERM_DARK
 I:55:22:0
 W:40:1:50:1000
 P:0:1d2:0:0:0
-T:-128:-33:86:1
+T:9:25:6:26
 A:40/1
 F:BLACK_MARKET
 D:It hastes you (+10 to speed) for 15+1d30 turns (or 5 additional turns
@@ -1982,7 +1982,7 @@ G:_:TERM_DARK
 I:55:24:0
 W:49:1:50:1200
 P:0:1d2:0:0:0
-T:-128:-33:86:1
+T:9:25:6:27
 A:49/1
 F:BLACK_MARKET
 D:It inflicts 60 points of damage on all evil monsters within line of
@@ -1994,7 +1994,7 @@ G:_:TERM_DARK
 I:55:28:0
 W:40:1:50:350
 P:0:1d2:0:0:0
-T:-128:-33:6:5
+T:9:25:6:26
 A:40/1
 F:BLACK_MARKET
 D:It causes an earthquake centered on you that has a 10-square radius;
@@ -2008,7 +2008,7 @@ G:_:TERM_DARK
 I:55:29:0
 W:50:1:50:2500
 P:0:1d2:0:0:0
-T:-128:-33:6:5
+T:9:25:6:27
 A:50/1
 F:BLACK_MARKET
 D:It destroys a circular area centered at you with a radius of 15
@@ -2022,7 +2022,7 @@ G:_:TERM_DARK
 I:55:31:0
 W:46:1:50:750
 P:0:1d2:0:0:0
-T:-128:-33:6:5
+T:9:25:6:25
 A:46/1
 F:BLACK_MARKET
 D:Polymorphs all monsters in line-of-sight.
@@ -2033,7 +2033,7 @@ G:_:TERM_DARK
 I:55:32:0
 W:47:1:50:500
 P:0:1d2:0:0:0
-T:-128:-33:6:5
+T:9:25:6:25
 A:47/1
 F:BLACK_MARKET
 D:Removed curse from all worn equipment.
@@ -2053,7 +2053,7 @@ G:-:TERM_DARK
 I:65:0:0
 W:2:1:10:0
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:15
 A:2/1
 D:It cures a single monster for 4d6 points of damage. 
 
@@ -2063,7 +2063,7 @@ G:-:TERM_DARK
 I:65:1:0
 W:2:1:10:0
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:15
 A:2/1
 D:It hastes a single monster. 
 
@@ -2073,7 +2073,7 @@ G:-:TERM_DARK
 I:65:2:0
 W:15:1:10:0
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:16
 A:15/1
 D:It hastes and fully heals a single monster.  If the monster is next to
 D: an empty space and not a unique, a new monster of the same type will
@@ -2085,7 +2085,7 @@ G:-:TERM_DARK
 I:65:3:0
 W:20:1:10:350
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:15
 A:20/1
 F:BLACK_MARKET
 D:It produces a beam that teleports all monsters caught in it up to 100
@@ -2097,7 +2097,7 @@ G:-:TERM_DARK
 I:65:4:0
 W:20:1:10:500
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:15
 A:20/1
 F:MAGIC_SHOP | BLACK_MARKET
 D:It produces a beam that disarms all traps, unlocks all locked doors
@@ -2109,7 +2109,7 @@ G:-:TERM_DARK
 I:65:5:0
 W:12:1:10:500
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:15
 A:12/1
 F:BLACK_MARKET
 D:It destroys all doors and disarms all traps in a line. 
@@ -2120,7 +2120,7 @@ G:-:TERM_DARK
 I:65:6:0
 W:12:1:10:300
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:15
 A:12/1
 F:BLACK_MARKET
 D:It turns the first section of wall encountered by the beam shot by
@@ -2134,7 +2134,7 @@ G:-:TERM_DARK
 I:65:7:0
 W:2:1:10:200
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:15
 A:2/1
 F:MAGIC_SHOP | BLACK_MARKET
 D:It lights up a line of squares, inflicting 2d8 points of damage on
@@ -2146,7 +2146,7 @@ G:-:TERM_DARK
 I:65:8:0
 W:7:1:10:500
 P:0:1d1:0:0:0
-T:-128:-83:8:15
+T:9:68:6:15
 A:7/1
 F:BLACK_MARKET
 D:It attempts to put a single monster to sleep.
@@ -2157,7 +2157,7 @@ G:-:TERM_DARK
 I:65:9:0
 W:2:1:10:500
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:15
 A:2/1
 F:BLACK_MARKET
 D:It attempts to slow down a single monster.
@@ -2168,7 +2168,7 @@ G:-:TERM_DARK
 I:65:10:0
 W:2:1:10:400
 P:0:1d1:0:0:0
-T:-128:-83:6:6
+T:9:68:6:15
 A:2/1
 F:BLACK_MARKET
 D:It attempts to confuse a single monster.
@@ -2179,7 +2179,7 @@ G:-:TERM_DARK
 I:65:12:0
 W:50:1:10:1200
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:17
 A:50/1
 F:BLACK_MARKET
 D:It inflicts 75 points of damage on a single monster that is not
@@ -2191,7 +2191,7 @@ G:-:TERM_DARK
 I:65:13:0
 W:20:1:10:400
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:15
 A:20/1
 F:BLACK_MARKET
 D:It attempts to polymorph a single monster.  Uniques are unaffected. 
@@ -2202,7 +2202,7 @@ G:-:TERM_DARK
 I:65:14:0
 W:5:1:10:400
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:15
 A:5/1
 F:MAGIC_SHOP | BLACK_MARKET
 D:It shoots a radius-2 poison cloud that inflicts 12 points of damage at
@@ -2214,7 +2214,7 @@ G:-:TERM_DARK
 I:65:15:0
 W:2:1:10:200
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:15
 A:2/1
 F:MAGIC_SHOP | BLACK_MARKET
 D: percentIt fires a magic missile that inflicts 3d4 points of damage,
@@ -2226,7 +2226,7 @@ G:-:TERM_DARK
 I:65:17:0
 W:15:1:10:600
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:15
 A:15/1
 F:MAGIC_SHOP | BLACK_MARKET
 D:It shoots a lightning bolt that inflicts 4d8 points of damage, with a
@@ -2238,7 +2238,7 @@ G:-:TERM_DARK
 I:65:18:0
 W:30:1:10:1000
 P:0:1d1:0:0:0
-T:-128:-83:6:6
+T:9:68:6:16
 A:30/1
 F:BLACK_MARKET
 D:It shoots a fire bolt that inflicts 12d8 points of damage, with a 20
@@ -2250,7 +2250,7 @@ G:-:TERM_DARK
 I:65:19:0
 W:20:1:10:800
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:15
 A:20/1
 F:BLACK_MARKET
 D:It shoots a frost bolt that inflicts 6d8 points of damage, with a 20
@@ -2262,7 +2262,7 @@ G:-:TERM_DARK
 I:65:20:0
 W:48:1:10:1650
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:17
 A:48/1
 F:BLACK_MARKET
 D:It shoots a radius-2 acid ball that inflicts 60 points of damage at
@@ -2274,7 +2274,7 @@ G:-:TERM_DARK
 I:65:21:0
 W:35:1:10:1200
 P:0:1d1:0:0:0
-T:-128:-83:8:20
+T:9:68:6:16
 A:35/1
 F:MAGIC_SHOP | BLACK_MARKET
 D:It shoots a radius-2 lightning ball that inflicts 32 points of damage
@@ -2286,7 +2286,7 @@ G:-:TERM_DARK
 I:65:22:0
 W:50:1:10:1800
 P:0:1d1:0:0:0
-T:-128:-83:8:17
+T:9:68:6:17
 A:50/1
 F:BLACK_MARKET
 D:It shoots a radius-2 fire ball that inflicts 72 points of damage at
@@ -2298,7 +2298,7 @@ G:-:TERM_DARK
 I:65:23:0
 W:40:1:10:1500
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:16
 A:40/1
 F:BLACK_MARKET
 D:It shoots a radius-2 frost ball that inflicts 48 points of damage at
@@ -2310,7 +2310,7 @@ G:-:TERM_DARK
 I:65:24:0
 W:2:1:10:250
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:15
 A:2/1
 F:MAGIC_SHOP | BLACK_MARKET
 D:It has a random effect chosen from the various wand effects.
@@ -2321,7 +2321,7 @@ G:-:TERM_DARK
 I:65:29:0
 W:25:1:10:400
 P:0:1d1:0:0:0
-T:-128:-83:6:5
+T:9:68:6:15
 A:25/1
 F:BLACK_MARKET
 D:Creates a wall tha textends in a straight line in the specified
@@ -2344,7 +2344,7 @@ G:?:TERM_WHITE
 I:70:0:0
 W:1:1:5:0
 P:0:0d0:0:0:0
-T:7:104:6:5
+T:7:104:86:3
 A:1/1
 F:EASY_KNOW
 D:It darkens all squares within 3 squares of you, plus the entire room
@@ -2357,7 +2357,7 @@ G:?:TERM_WHITE
 I:70:1:0
 W:5:1:5:0
 P:0:0d0:0:0:0
-T:7:101:6:5
+T:7:101:86:7
 A:5/1
 F:EASY_KNOW
 D:It awakens all sleeping monsters within 40 squares of you, and hastes
@@ -2369,7 +2369,7 @@ G:?:TERM_WHITE
 I:70:2:0
 W:50:1:5:0
 P:0:0d0:0:0:0
-T:7:102:6:5
+T:7:102:86:7
 A:50/1
 F:EASY_KNOW
 D:It curses the currently equipped body armor, removing all of its
@@ -2382,7 +2382,7 @@ G:?:TERM_WHITE
 I:70:3:0
 W:50:1:5:0
 P:0:0d0:0:0:0
-T:7:107:6:6
+T:7:107:86:7
 A:50/1
 F:EASY_KNOW
 D:It curses the currently wielded melee weapon, removing all of its
@@ -2395,7 +2395,7 @@ G:?:TERM_WHITE
 I:70:4:0
 W:1:1:5:0
 P:0:0d0:0:0:0
-T:7:85:6:7
+T:7:85:86:5
 A:1/1
 F:EASY_KNOW
 D:It summons 1d3 monsters that are generated at the current dungeon
@@ -2409,7 +2409,7 @@ G:?:TERM_WHITE
 I:70:5:0
 W:15:1:5:0
 P:0:0d0:0:0:0
-T:7:95:6:6
+T:7:95:86:5
 A:15/1
 F:EASY_KNOW
 D:It summons 1d3 non-unique undead monsters that are generated at the
@@ -2423,7 +2423,7 @@ G:?:TERM_WHITE
 I:70:7:0
 W:12:1:5:0
 P:0:0d0:0:0:0
-T:7:98:6:6
+T:7:98:86:7
 A:12/1
 F:EASY_KNOW
 D:It creates traps on all empty squares within a 1-square radius of you. 
@@ -2434,7 +2434,7 @@ G:?:TERM_WHITE
 I:70:8:0
 W:1:1:5:15
 P:0:0d0:0:0:0
-T:7:86:8:16
+T:7:86:86:4
 A:1/1
 F:EASY_KNOW | ALCHEMIST | BLACK_MARKET
 D:It teleports you randomly up to 10 squares away. 
@@ -2445,7 +2445,7 @@ G:?:TERM_WHITE
 I:70:9:0
 W:10:1:5:40
 P:0:0d0:0:0:0
-T:7:87:6:6
+T:7:87:86:4
 A:10/1
 F:EASY_KNOW | BLACK_MARKET
 D:It teleports you randomly up to 100 squares away. 
@@ -2456,7 +2456,7 @@ G:?:TERM_WHITE
 I:70:10:0
 W:20:1:5:50
 P:0:0d0:0:0:0
-T:7:88:6:6
+T:7:88:86:4
 A:20/1
 F:EASY_KNOW | BLACK_MARKET
 D:It teleports you 1 level up or down (chosen at random).  The direction
@@ -2469,7 +2469,7 @@ G:?:TERM_WHITE
 I:70:11:0
 W:5:1:5:150
 P:0:0d0:0:0:0
-T:7:96:6:6
+T:7:96:86:4
 A:5/1
 F:EASY_KNOW | TEMPLE | ALCHEMIST | BLACK_MARKET
 D:It invokes the spell of recall, which takes you from the dungeon to
@@ -2483,7 +2483,7 @@ G:?:TERM_WHITE
 I:70:12:0
 W:1:1:5:50
 P:0:0d0:0:0:0
-T:7:78:6:6
+T:7:78:86:0
 A:1/1:5/1:10/1
 F:EASY_KNOW | ALCHEMIST | BLACK_MARKET
 D:It reveals all powers of one object.  (The spell may be aborted
@@ -2495,7 +2495,7 @@ G:?:TERM_WHITE
 I:70:14:0
 W:7:1:5:100
 P:0:0d0:0:0:0
-T:7:113:6:6
+T:7:113:86:10
 A:7/1
 F:EASY_KNOW | TEMPLE | BLACK_MARKET
 D:It removes all ordinary curses from all equipped items.  Heavy or
@@ -2507,7 +2507,7 @@ G:?:TERM_WHITE
 I:70:16:0
 W:12:1:5:125
 P:0:0d0:0:0:0
-T:7:83:6:6
+T:7:83:86:9
 A:12/1
 F:EASY_KNOW | ALCHEMIST | BLACK_MARKET
 D:It attempts to enchant a piece of armor once. 
@@ -2518,7 +2518,7 @@ G:?:TERM_WHITE
 I:70:17:0
 W:12:1:5:125
 P:0:0d0:0:0:0
-T:7:80:6:6
+T:7:80:86:9
 A:12/1
 F:EASY_KNOW | ALCHEMIST | BLACK_MARKET
 D:It attempts to magically enhance a weapon's to-hit bonus once. 
@@ -2529,7 +2529,7 @@ G:?:TERM_WHITE
 I:70:18:0
 W:12:1:5:125
 P:0:0d0:0:0:0
-T:7:81:6:6
+T:7:81:86:9
 A:12/1
 F:EASY_KNOW | ALCHEMIST | BLACK_MARKET
 D:It attempts to magically enhance a weapon's to-dam bonus once. 
@@ -2540,7 +2540,7 @@ G:?:TERM_WHITE
 I:70:20:0
 W:50:1:5:500
 P:0:0d0:0:0:0
-T:7:82:6:6
+T:7:82:86:9
 A:50/1
 F:EASY_KNOW | BLACK_MARKET
 D:It attempts to enchant a piece of armor 2+1d3 times. 
@@ -2551,7 +2551,7 @@ G:?:TERM_WHITE
 I:70:21:0
 W:50:1:5:500
 P:0:0d0:0:0:0
-T:7:108:6:6
+T:7:108:86:9
 A:50/1
 F:EASY_KNOW | BLACK_MARKET
 D:It attempts to magically enhance a weapon's to-dam and to-hit bonuses
@@ -2563,7 +2563,7 @@ G:?:TERM_WHITE
 I:70:22:0
 W:40:1:5:200
 P:0:0d0:0:0:0
-T:7:92:8:18
+T:7:92:86:6
 A:40/1
 F:EASY_KNOW | ALCHEMIST | BLACK_MARKET
 D:It recharges a wand, staff, or rod.  If successful, a wand or staff
@@ -2577,7 +2577,7 @@ G:?:TERM_WHITE
 I:70:24:0
 W:0:1:5:15
 P:0:0d0:0:0:0
-T:7:84:6:7
+T:7:84:86:3
 A:0/1:3/1:7/1
 F:EASY_KNOW | ALCHEMIST | BLACK_MARKET
 D:It lights up an area with a radius of 2 squares, plus the entire room
@@ -2590,7 +2590,7 @@ G:?:TERM_WHITE
 I:70:25:0
 W:5:1:5:40
 P:0:0d0:0:0:0
-T:7:90:6:7
+T:7:90:86:3
 A:5/1
 F:EASY_KNOW | ALCHEMIST | BLACK_MARKET
 D:It maps out a portion of the level centered on you. 
@@ -2601,7 +2601,7 @@ G:?:TERM_WHITE
 I:70:26:0
 W:0:1:5:15
 P:0:0d0:0:0:0
-T:7:112:0:22
+T:7:112:86:7
 A:0/1
 F:EASY_KNOW | ALCHEMIST | BLACK_MARKET
 D:It detects all treasure in the immediate area. 
@@ -2612,7 +2612,7 @@ G:?:TERM_WHITE
 I:70:27:0
 W:0:1:5:15
 P:0:0d0:0:0:0
-T:7:116:0:24
+T:7:116:86:7
 A:0/1
 F:EASY_KNOW | ALCHEMIST | BLACK_MARKET
 D:It detects all objects in the immediate area. 
@@ -2623,7 +2623,7 @@ G:?:TERM_WHITE
 I:70:28:0
 W:5:1:5:35
 P:0:0d0:0:0:0
-T:7:99:0:26
+T:7:99:86:7
 A:5/1:8/1:12/1
 F:EASY_KNOW | BLACK_MARKET
 D:It detects all traps in the immediate area.
@@ -2634,7 +2634,7 @@ G:?:TERM_WHITE
 I:70:29:0
 W:5:1:5:35
 P:0:0d0:0:0:0
-T:7:105:0:23
+T:7:105:86:7
 A:5/1:10/1:15/1
 F:EASY_KNOW | BLACK_MARKET
 D:It detects all stairs and doors in the immediate area. 
@@ -2645,7 +2645,7 @@ G:?:TERM_WHITE
 I:70:30:0
 W:1:1:5:15
 P:0:0d0:0:0:0
-T:7:111:0:25
+T:7:111:86:7
 A:1/1
 F:EASY_KNOW | BLACK_MARKET
 D:It detects all invisible monsters in the immediate area. 
@@ -2656,7 +2656,7 @@ G:?:TERM_WHITE
 I:70:33:0
 W:1:1:5:15
 P:0:0d0:0:0:0
-T:7:94:0:27
+T:7:94:86:2
 A:1/1
 F:EASY_KNOW | TEMPLE | BLACK_MARKET
 D:It blesses you (a bonus of +5 to armor class and +10 to-hit) for
@@ -2668,7 +2668,7 @@ G:?:TERM_WHITE
 I:70:34:0
 W:12:1:5:40
 P:0:0d0:0:0:0
-T:7:93:8:15
+T:7:93:86:2
 A:12/1
 F:EASY_KNOW | BLACK_MARKET
 D:It blesses you (a bonus of +5 to armor class and +10 to-hit) for
@@ -2680,7 +2680,7 @@ G:?:TERM_WHITE
 I:70:35:0
 W:24:1:5:80
 P:0:0d0:0:0:0
-T:7:97:11:1
+T:7:97:86:2
 A:24/1
 F:EASY_KNOW | BLACK_MARKET
 D:It blesses you (a bonus of +5 to armor class and +10 to-hit) for
@@ -2692,7 +2692,7 @@ G:?:TERM_WHITE
 I:70:36:0
 W:5:1:5:30
 P:0:0d0:0:0:0
-T:7:89:11:1
+T:7:89:86:8
 A:5/1
 F:EASY_KNOW | BLACK_MARKET
 D:It enchants you with an aura of confusion that causes your hands to
@@ -2705,7 +2705,7 @@ G:?:TERM_WHITE
 I:70:37:0
 W:30:1:5:100
 P:0:0d0:0:0:0
-T:7:110:11:1
+T:7:110:86:8
 A:30/1
 F:EASY_KNOW | BLACK_MARKET
 D:It grants you the enchantment of protection from evil for a duration
@@ -2717,7 +2717,7 @@ G:?:TERM_WHITE
 I:70:38:0
 W:50:1:5:500
 P:0:0d0:0:0:0
-T:7:91:11:1
+T:7:91:86:8
 A:50/1
 F:EASY_KNOW | BLACK_MARKET
 D:It inscribes a glyph of warding beneath you.  Monsters can't move onto
@@ -2731,7 +2731,7 @@ G:?:TERM_WHITE
 I:70:39:0
 W:12:1:5:50
 P:0:0d0:0:0:0
-T:7:115:11:1
+T:7:115:86:7
 A:12/1
 F:EASY_KNOW | BLACK_MARKET
 D:It destroys all traps and doors within a 1-square radius of you. 
@@ -2742,7 +2742,7 @@ G:?:TERM_WHITE
 I:70:41:0
 W:40:1:5:750
 P:0:0d0:0:0:0
-T:7:119:11:1
+T:7:119:86:1
 A:40/1
 F:EASY_KNOW | BLACK_MARKET
 D:It destroys a circular area centered at you with a radius of 15
@@ -2756,7 +2756,7 @@ G:?:TERM_WHITE
 I:70:42:0
 W:40:1:5:200
 P:0:0d0:0:0:0
-T:7:109:11:1
+T:7:109:86:8
 A:40/1
 F:EASY_KNOW | BLACK_MARKET
 D:It inflicts 60 points of damage on all undead creatures within line of
@@ -2768,7 +2768,7 @@ G:?:TERM_WHITE
 I:70:44:0
 W:35:1:5:750
 P:0:0d0:0:0:0
-T:7:100:11:1
+T:7:100:86:1
 A:35/1
 F:EASY_KNOW | BLACK_MARKET
 D:It removes all monsters represented by a chosen symbol from the level.
@@ -2781,7 +2781,7 @@ G:?:TERM_WHITE
 I:70:45:0
 W:50:1:5:1000
 P:0:0d0:0:0:0
-T:7:106:8:17
+T:7:106:86:1
 A:50/1
 F:EASY_KNOW | BLACK_MARKET
 D:It removes all monsters within 20 squares of you.  Quest monsters and
@@ -2794,7 +2794,7 @@ G:?:TERM_WHITE
 I:70:48:0
 W:5:1:5:10
 P:0:0d0:0:0:0
-T:7:103:11:1
+T:7:103:86:1
 A:5/1
 F:EASY_KNOW | BLACK_MARKET
 D:Creates one ration of food on the floor near the player.
@@ -2805,7 +2805,7 @@ G:?:TERM_WHITE
 I:70:49:0
 W:12:1:5:100
 P:0:0d0:0:0:0
-T:7:114:11:1
+T:7:114:86:1
 A:12/1
 F:EASY_KNOW | BLACK_MARKET
 D:Creates a barrier of doors around the player.
@@ -2816,7 +2816,7 @@ G:?:TERM_WHITE
 I:70:50:0
 W:5:1:5:35
 P:0:0d0:0:0:0
-T:7:117:11:1
+T:7:117:86:1
 A:5/1
 F:EASY_KNOW | BLACK_MARKET
 D:Attempts to sleep all adjacent monsters.
@@ -2836,7 +2836,7 @@ G:!:TERM_DARK
 I:75:0:200
 W:0:1:4:0
 P:0:1d1:0:0:0
-T:-128:-95:11:1
+T:6:5:6:5
 A:0/1
 F:EASY_KNOW
 D:It has no effect apart from providing nourishment (for about 100 turns
@@ -2848,7 +2848,7 @@ G:!:TERM_DARK
 I:75:1:250
 W:0:1:4:1
 P:0:1d1:0:0:0
-T:-128:-95:11:1
+T:6:5:6:5
 A:0/1
 F:EASY_KNOW
 D:It has no effect apart from providing nourishment (for about 125 turns
@@ -2860,7 +2860,7 @@ G:!:TERM_DARK
 I:75:2:400
 W:0:1:4:2
 P:0:1d1:0:0:0
-T:-1:-95:11:1
+T:6:5:6:5
 A:0/1
 F:EASY_KNOW
 D:It has no effect apart from providing nourishment (for about 200 turns
@@ -2872,7 +2872,7 @@ G:!:TERM_DARK
 I:75:4:50
 W:1:1:4:0
 P:0:1d1:0:0:0
-T:-128:-95:11:1
+T:6:5:6:5
 A:1/1
 F:EASY_KNOW
 D:It slows you down (-10 to speed) for 15+1d25 turns; this duration is
@@ -2885,7 +2885,7 @@ G:!:TERM_DARK
 I:75:5:0
 W:0:1:4:0
 P:0:1d1:0:0:0
-T:-128:-95:11:1
+T:6:5:6:5
 A:0/1
 F:EASY_KNOW
 D:It induces vomiting, which will result in severe hunger but will also
@@ -2898,7 +2898,7 @@ G:!:TERM_DARK
 I:75:6:0
 W:3:1:4:0
 P:0:1d1:0:0:0
-T:-128:-95:11:1
+T:6:5:6:5
 A:3/1
 F:EASY_KNOW
 D:It poisons you (adding 9+1d15 points to the poison counter), unless
@@ -2910,7 +2910,7 @@ G:!:TERM_DARK
 I:75:7:0
 W:0:1:4:0
 P:0:1d1:0:0:0
-T:-128:-95:11:2
+T:6:5:6:5
 A:0/1
 F:EASY_KNOW
 D:It induces blindness for 99+1d100 turns, unless you have resistance to
@@ -2922,7 +2922,7 @@ G:!:TERM_DARK
 I:75:9:50
 W:0:1:4:0
 P:0:1d1:0:0:0
-T:-128:-95:10:31
+T:6:5:6:5
 A:0/1
 F:EASY_KNOW
 D:It induces confusion for 14+1d20 turns, unless you have resistance to
@@ -2935,7 +2935,7 @@ G:!:TERM_DARK
 I:75:11:100
 W:0:1:4:0
 P:0:1d1:0:0:0
-T:-128:-95:11:0
+T:6:5:6:5
 A:0/1
 F:EASY_KNOW
 D:It induces paralyzation for 3+1d4 turns, unless you have free action. 
@@ -2948,7 +2948,7 @@ G:!:TERM_DARK
 I:75:13:0
 W:10:1:4:0
 P:0:1d1:0:0:0
-T:-128:-95:10:26
+T:6:5:6:5
 A:10/1
 F:EASY_KNOW
 D:It drains 25 percent of your experience total, unless you have hold
@@ -2960,7 +2960,7 @@ G:!:TERM_DARK
 I:75:16:0
 W:3:1:4:0
 P:0:1d1:0:0:0
-T:-128:-95:11:4
+T:6:5:6:5
 A:3/1
 F:EASY_KNOW
 D:It reduces strength (unless you have sustain strength). 
@@ -2971,7 +2971,7 @@ G:!:TERM_DARK
 I:75:17:0
 W:25:1:4:0
 P:0:1d1:0:0:0
-T:-128:-95:11:2
+T:6:5:6:5
 A:25/1
 F:EASY_KNOW
 D:It reduces intelligence (unless you have sustain intelligence). 
@@ -2982,7 +2982,7 @@ G:!:TERM_DARK
 I:75:18:0
 W:25:1:4:0
 P:0:1d1:0:0:0
-T:-128:-95:11:2
+T:6:5:6:5
 A:25/1
 F:EASY_KNOW
 D:It reduces wisdom (unless you have sustain wisdom). 
@@ -2993,7 +2993,7 @@ G:!:TERM_DARK
 I:75:21:0
 W:25:1:4:0
 P:0:1d1:0:0:0
-T:-128:-95:10:0
+T:6:5:6:6
 A:25/1
 F:EASY_KNOW
 D:It reduces charisma (unless you have sustain charisma). 
@@ -3004,7 +3004,7 @@ G:!:TERM_DARK
 I:75:24:0
 W:3:1:4:20
 P:0:1d1:0:0:0
-T:-128:-95:10:22
+T:6:5:6:5
 A:3/1
 F:EASY_KNOW | BLACK_MARKET
 D:It extends the radius of your infravision by 50 feet for 100+1d100
@@ -3016,7 +3016,7 @@ G:!:TERM_DARK
 I:75:25:0
 W:3:1:4:50
 P:0:1d1:0:0:0
-T:-128:-95:10:22
+T:6:5:6:5
 A:3/1
 F:EASY_KNOW | BLACK_MARKET
 D:It enables you to see invisible creatures for 12+1d12 turns. 
@@ -3027,7 +3027,7 @@ G:!:TERM_DARK
 I:75:26:0
 W:1:1:4:25
 P:0:1d1:0:0:0
-T:-128:-95:0:9
+T:6:5:6:5
 A:1/1
 F:EASY_KNOW | ALCHEMIST | BLACK_MARKET
 D:It halves the severity of any current poisoning. 
@@ -3038,7 +3038,7 @@ G:!:TERM_DARK
 I:75:27:0
 W:5:1:4:75
 P:0:1d1:0:0:0
-T:-128:-95:0:10
+T:6:5:6:5
 A:5/1
 F:EASY_KNOW | TEMPLE | BLACK_MARKET
 D:It neutralizes poison. 
@@ -3049,7 +3049,7 @@ G:!:TERM_DARK
 I:75:28:0
 W:1:1:4:10
 P:0:1d1:0:0:0
-T:-128:-95:0:11
+T:6:5:6:5
 A:1/1
 F:EASY_KNOW | TEMPLE | BLACK_MARKET
 D:It removes fear. 
@@ -3060,7 +3060,7 @@ G:!:TERM_DARK
 I:75:29:0
 W:1:1:4:75
 P:0:1d1:0:0:0
-T:-128:-95:0:12
+T:6:5:6:6
 A:1/1
 F:EASY_KNOW | BLACK_MARKET
 D:It hastes you (+10 to speed) for 15+1d25 turns (or 5 additional turns
@@ -3073,7 +3073,7 @@ G:!:TERM_DARK
 I:75:30:0
 W:1:1:4:30
 P:0:1d1:0:0:0
-T:-128:-95:0:12
+T:6:5:6:5
 A:1/1
 F:EASY_KNOW | BLACK_MARKET
 D:It grants you temporary resistance to fire for 10+1d10 turns. 
@@ -3087,7 +3087,7 @@ G:!:TERM_DARK
 I:75:31:0
 W:1:1:4:30
 P:0:1d1:0:0:0
-T:-128:-95:0:12
+T:6:5:6:5
 A:1/1
 F:EASY_KNOW | BLACK_MARKET
 D:It grants you temporary resistance to cold for 10+1d10 turns. 
@@ -3101,7 +3101,7 @@ G:!:TERM_DARK
 I:75:32:0
 W:1:1:4:35
 P:0:1d1:0:0:0
-T:-128:-95:3:13
+T:6:5:6:5
 A:1/1
 F:EASY_KNOW | TEMPLE | BLACK_MARKET
 D:It cures 10 points of damage, removes fear and grants you heroism
@@ -3113,7 +3113,7 @@ G:!:TERM_DARK
 I:75:33:0
 W:3:1:4:100
 P:0:1d1:0:0:0
-T:-128:-95:0:15
+T:6:5:6:5
 A:3/1
 F:EASY_KNOW | BLACK_MARKET
 D:It cures 30 points of damage, removes fear and grants you berserk
@@ -3126,7 +3126,7 @@ G:!:TERM_DARK
 I:75:34:50
 W:0:1:4:15
 P:0:1d1:0:0:0
-T:-128:-95:0:15
+T:6:5:6:5
 A:0/1:1/1:2/1
 F:EASY_KNOW | TEMPLE | BLACK_MARKET
 D:It cures 2d7 points of damage, heals 10 points worth of cuts, and
@@ -3139,7 +3139,7 @@ G:!:TERM_DARK
 I:75:35:100
 W:3:1:4:40
 P:0:1d1:0:0:0
-T:-128:-95:0:13
+T:6:5:6:5
 A:3/1
 F:EASY_KNOW | TEMPLE | BLACK_MARKET
 D:It cures 4d7 points of damage, heals half of all cut damage plus
@@ -3152,7 +3152,7 @@ G:!:TERM_DARK
 I:75:36:100
 W:5:1:4:100
 P:0:1d1:0:0:0
-T:-128:-95:0:13
+T:6:5:6:5
 A:5/1
 F:EASY_KNOW | TEMPLE | BLACK_MARKET
 D:It cures 6d7 points of damage, cures all stunning, heals all cut
@@ -3165,7 +3165,7 @@ G:!:TERM_DARK
 I:75:37:200
 W:12:1:4:200
 P:0:1d1:0:0:0
-T:-128:-95:0:13
+T:6:5:6:5
 A:12/1
 F:EASY_KNOW | BLACK_MARKET
 D:It cures 1000 points of damage, cures all stunning, heals all cut
@@ -3178,7 +3178,7 @@ G:!:TERM_DARK
 I:75:40:0
 W:25:1:4:350
 P:0:1d1:0:0:0
-T:-128:-95:0:16
+T:6:5:6:6
 A:25/1
 F:EASY_KNOW | BLACK_MARKET
 D:It restores mana points to maximum if they are currently below
@@ -3190,7 +3190,7 @@ G:!:TERM_DARK
 I:75:41:0
 W:40:1:4:400
 P:0:1d1:0:0:0
-T:-128:-95:0:17
+T:6:5:6:7
 A:40/1
 F:EASY_KNOW | TEMPLE | BLACK_MARKET
 D:It restores experience to maximum if it is currently below maximum. 
@@ -3201,7 +3201,7 @@ G:!:TERM_DARK
 I:75:42:0
 W:40:1:4:300
 P:0:1d1:0:0:0
-T:-128:-95:0:18
+T:6:5:6:6
 A:40/1
 F:EASY_KNOW | ALCHEMIST | BLACK_MARKET
 D:It restores strength to maximum if it is currently below maximum. 
@@ -3212,7 +3212,7 @@ G:!:TERM_DARK
 I:75:43:0
 W:40:1:4:300
 P:0:1d1:0:0:0
-T:-128:-95:0:19
+T:6:5:6:6
 A:40/1
 F:EASY_KNOW | ALCHEMIST | BLACK_MARKET
 D:It restores intelligence to maximum if it is currently below maximum. 
@@ -3223,7 +3223,7 @@ G:!:TERM_DARK
 I:75:44:0
 W:40:1:4:300
 P:0:1d1:0:0:0
-T:-128:-95:0:20
+T:6:5:6:6
 A:40/1
 F:EASY_KNOW | TEMPLE | ALCHEMIST | BLACK_MARKET
 D:It restores wisdom to maximum if it is currently below maximum. 
@@ -3234,7 +3234,7 @@ G:!:TERM_DARK
 I:75:45:0
 W:40:1:4:300
 P:0:1d1:0:0:0
-T:-128:-95:3:14
+T:6:5:6:6
 A:40/1
 F:EASY_KNOW | ALCHEMIST | BLACK_MARKET
 D:It restores dexterity to maximum if it is currently below maximum. 
@@ -3245,7 +3245,7 @@ G:!:TERM_DARK
 I:75:46:0
 W:40:1:4:300
 P:0:1d1:0:0:0
-T:-128:-95:0:14
+T:6:5:6:6
 A:40/1
 F:EASY_KNOW | ALCHEMIST | BLACK_MARKET
 D:It restores constution to maximum if it is currently below maximum. 
@@ -3256,7 +3256,7 @@ G:!:TERM_DARK
 I:75:47:0
 W:40:1:4:300
 P:0:1d1:0:0:0
-T:-128:-95:10:3
+T:6:5:6:6
 A:40/1
 F:EASY_KNOW | ALCHEMIST | BLACK_MARKET
 D:It restores charisma to maximum if it is currently below maximum. 
@@ -3267,7 +3267,7 @@ G:!:TERM_DARK
 I:75:48:50
 W:25:1:4:300
 P:0:1d1:0:0:0
-T:-128:-95:10:3
+T:6:5:6:6
 A:25/1
 F:EASY_KNOW | BLACK_MARKET
 D:It first acts as a Potion of Restore Strength, then permanently
@@ -3279,7 +3279,7 @@ G:!:TERM_DARK
 I:75:49:0
 W:25:1:4:300
 P:0:1d1:0:0:0
-T:-128:-95:10:3
+T:6:5:6:6
 A:25/1
 F:EASY_KNOW | BLACK_MARKET
 D:It first acts as a Potion of Restore Intelligence, then permanently
@@ -3291,7 +3291,7 @@ G:!:TERM_DARK
 I:75:50:0
 W:25:1:4:300
 P:0:1d1:0:0:0
-T:-128:-95:10:3
+T:6:5:6:6
 A:25/1
 F:EASY_KNOW | BLACK_MARKET
 D:It first acts as a Potion of Restore Wisdom, then permanently
@@ -3303,7 +3303,7 @@ G:!:TERM_DARK
 I:75:51:0
 W:25:1:4:300
 P:0:1d1:0:0:0
-T:-128:-95:10:12
+T:6:5:6:6
 A:25/1
 F:EASY_KNOW | BLACK_MARKET
 D:It first acts as a Potion of Restore Dexterity, then permanently
@@ -3315,7 +3315,7 @@ G:!:TERM_DARK
 I:75:52:50
 W:25:1:4:300
 P:0:1d1:0:0:0
-T:-128:-95:3:24
+T:6:5:6:6
 A:25/1
 F:EASY_KNOW | BLACK_MARKET
 D:It first acts as a Potion of Restore Constitution, then permanently
@@ -3327,7 +3327,7 @@ G:!:TERM_DARK
 I:75:53:0
 W:25:1:4:300
 P:0:1d1:0:0:0
-T:-128:-95:10:12
+T:6:5:6:6
 A:25/1
 F:EASY_KNOW | BLACK_MARKET
 D:It first acts as a Potion of Restore Charisma, then permanently
@@ -3339,7 +3339,7 @@ G:!:TERM_DARK
 I:75:54:0
 W:40:1:4:1000
 P:0:1d1:0:0:0
-T:-128:-95:10:12
+T:6:5:6:7
 A:40/1
 F:EASY_KNOW | BLACK_MARKET
 D:Makes you invincible to damage for 10 +1d10 turns, or 5 additional
@@ -3351,7 +3351,7 @@ G:!:TERM_DARK
 I:75:59:0
 W:50:1:4:2500
 P:0:1d1:0:0:0
-T:-128:-95:10:12
+T:6:5:6:7
 A:50/1
 F:EASY_KNOW | BLACK_MARKET
 D:It grants either 100000 experience points or half the current
@@ -3372,7 +3372,7 @@ G:~:TERM_L_UMBER
 I:7:1:0
 W:7:1:250:20
 P:0:2d3:0:0:0
-T:7:0:11:7
+T:7:0:0:22
 A:7/4
 
 
@@ -3381,7 +3381,7 @@ G:~:TERM_SLATE
 I:7:2:0
 W:25:1:500:100
 P:0:2d4:0:0:0
-T:7:2:11:7
+T:7:2:0:24
 A:25/4
 
 
@@ -3390,7 +3390,7 @@ G:~:TERM_SLATE_GRAY
 I:7:3:0
 W:45:1:500:200
 P:0:2d4:0:0:0
-T:7:4:11:11
+T:7:4:0:26
 A:45/4
 
 
@@ -3399,7 +3399,7 @@ G:~:TERM_L_UMBER
 I:7:5:0
 W:15:1:500:60
 P:0:2d5:0:0:0
-T:7:1:11:7
+T:7:1:0:23
 A:15/16
 
 
@@ -3408,7 +3408,7 @@ G:~:TERM_SLATE
 I:7:6:0
 W:35:1:1000:150
 P:0:2d6:0:0:0
-T:7:3:11:7
+T:7:3:0:25
 A:35/16
 
 
@@ -3417,7 +3417,7 @@ G:~:TERM_SLATE_GRAY
 I:7:7:0
 W:50:1:1000:250
 P:0:2d6:0:0:0
-T:7:5:8:21
+T:7:5:0:27
 A:50/16
 
 
@@ -3435,7 +3435,7 @@ G:,:TERM_DARK
 I:80:0:250
 W:7:1:1:0
 P:0:0d0:0:0:0
-T:-128:-84:3:24
+T:11:1:11:1
 A:7/1:15/1
 F:EASY_KNOW
 D:It poisons you (adding 10+1d10 points to the poison counter. 
@@ -3448,7 +3448,7 @@ G:,:TERM_DARK
 I:80:1:250
 W:9:1:1:0
 P:0:0d0:0:0:0
-T:-128:-84:11:7
+T:11:1:11:1
 A:9/1
 F:EASY_KNOW
 D:It causes blindness that lasts for 200+1d200 turns, unless you have
@@ -3461,7 +3461,7 @@ G:,:TERM_DARK
 I:80:2:500
 W:9:1:1:0
 P:0:0d0:0:0:0
-T:-128:-84:11:7
+T:11:1:11:1
 A:9/1
 F:EASY_KNOW
 D:It induces fear that lasts for 9+1d10 turns, unless you have
@@ -3474,7 +3474,7 @@ G:,:TERM_DARK
 I:80:3:250
 W:7:1:1:0
 P:0:0d0:0:0:0
-T:-128:-84:11:11
+T:11:1:11:1
 A:7/1
 F:EASY_KNOW
 D:It induces confusion that lasts for 10+1d10 turns, unless you have
@@ -3487,7 +3487,7 @@ G:,:TERM_DARK
 I:80:4:250
 W:13:1:1:0
 P:0:0d0:0:0:0
-T:-128:-84:10:25
+T:11:1:11:1
 A:13/1:18/1
 F:EASY_KNOW
 D:It causes you to hallucinate for 250+1d250 turns, unless you have
@@ -3500,7 +3500,7 @@ G:,:TERM_DARK
 I:80:6:250
 W:7:1:1:0
 P:0:0d0:0:0:0
-T:-128:-84:11:8
+T:11:1:11:1
 A:7/1
 F:EASY_KNOW
 D:It inflicts 6d6 points of damage, and also reduces strength unless you
@@ -3513,7 +3513,7 @@ G:,:TERM_DARK
 I:80:11:250
 W:15:1:1:50
 P:0:10d10:0:0:0
-T:-128:-84:11:9
+T:11:1:11:1
 A:15/1:28/1
 F:EASY_KNOW | BLACK_MARKET
 D:It inflicts 10d10 points of damage, and also reduces strength unless
@@ -3527,7 +3527,7 @@ G:,:TERM_DARK
 I:80:12:250
 W:8:1:1:60
 P:0:0d0:0:0:0
-T:-128:-84:3:24
+T:11:1:11:1
 A:8/1:19/1
 F:EASY_KNOW | BLACK_MARKET
 D:It neutralizes poison.  Mushrooms provide nourishment for about 250
@@ -3539,7 +3539,7 @@ G:,:TERM_DARK
 I:80:13:250
 W:10:1:1:50
 P:0:0d0:0:0:0
-T:-128:-84:3:24
+T:11:1:11:1
 A:10/1
 F:EASY_KNOW | BLACK_MARKET
 D:It cures blindness.  Mushrooms provide nourishment for about 250 turns
@@ -3551,7 +3551,7 @@ G:,:TERM_DARK
 I:80:14:250
 W:12:1:1:25
 P:0:0d0:0:0:0
-T:-128:-84:3:25
+T:11:1:11:1
 A:12/1
 F:EASY_KNOW | BLACK_MARKET
 D:It removes your fear.  Mushrooms provide nourishment for about 250
@@ -3563,7 +3563,7 @@ G:,:TERM_DARK
 I:80:15:250
 W:6:1:1:50
 P:0:0d0:0:0:0
-T:-128:-84:3:25
+T:11:1:11:1
 A:6/1
 F:EASY_KNOW | BLACK_MARKET
 D:It cures confusion.  Mushrooms provide nourishment for about 250 turns
@@ -3575,7 +3575,7 @@ G:,:TERM_DARK
 I:80:18:250
 W:20:1:1:350
 P:0:0d0:0:0:0
-T:-128:-84:3:25
+T:11:1:11:1
 A:20/1
 F:EASY_KNOW | BLACK_MARKET
 D:It restores constitution to maximum if it is currently below maximum. 
@@ -3588,7 +3588,7 @@ G:,:TERM_DARK
 I:80:20:500
 W:6:1:1:5
 P:0:0d0:0:0:0
-T:-128:-84:3:25
+T:11:1:11:1
 A:6/1
 F:EASY_KNOW
 D:It cures 1d6 points of damage.  Mushrooms provide nourishment for
@@ -3600,7 +3600,7 @@ G:,:TERM_DARK
 I:80:21:250
 W:7:1:1:20
 P:0:0d0:0:0:0
-T:-128:-84:3:17
+T:11:1:11:1
 A:7/1
 F:EASY_KNOW | BLACK_MARKET
 D:It cures 2d6 points of damage.  Mushrooms provide nourishment for
@@ -3612,7 +3612,7 @@ G:,:TERM_DARK
 I:80:22:250
 W:10:1:1:30
 P:0:0d0:0:0:0
-T:-128:-84:3:16
+T:11:1:11:1
 A:10/1
 F:EASY_KNOW | BLACK_MARKET
 D:It cures 3d6 points of damage.  Mushrooms provide nourishment for
@@ -3624,7 +3624,7 @@ G:,:TERM_DARK
 I:80:23:250
 W:30:1:1:1000
 P:0:0d0:0:0:0
-T:-128:-84:3:17
+T:11:1:11:1
 A:30/1
 F:EASY_KNOW | BLACK_MARKET
 D:It cures 3d6 points of damage.  Mushrooms provide nourishment for
@@ -3636,7 +3636,7 @@ G:,:TERM_DARK
 I:80:23:250
 W:16:1:2:75
 P:0:0d0:0:0:0
-T:-128:-84:8:22
+T:11:1:11:1
 A:16/1
 F:EASY_KNOW | BLACK_MARKET
 D:It cures 3d12 points of damage.  Mushrooms provide nourishment for
@@ -3648,7 +3648,7 @@ G:,:TERM_L_UMBER
 I:80:35:5000
 W:0:1:10:3
 P:0:0d0:0:0:0
-T:2:4:3:15
+T:2:4:11:2
 A:0/1:5/1:10/1
 F:EASY_KNOW | GENERAL_STORE
 D:It provides nourishment for about 5000 turns under normal conditions.
@@ -3659,7 +3659,7 @@ G:,:TERM_GREEN
 I:80:36:3000
 W:1:1:5:2
 P:0:0d0:0:0:0
-T:2:5:3:26
+T:2:5:10:31
 A:1/1
 F:EASY_KNOW
 D:It provides nourishment for about 3000 turns under normal conditions.
@@ -3670,7 +3670,7 @@ G:,:TERM_L_BLUE
 I:80:37:7500
 W:6:1:3:25
 P:0:0d0:0:0:0
-T:2:6:3:16
+T:2:6:11:0
 A:6/1:12/1:20/1
 F:EASY_KNOW | BLACK_MARKET
 D:It cures 4d8 points of damage and neutralizes poison.  It provides
@@ -3688,7 +3688,7 @@ G:!:TERM_YELLOW
 I:77:0:7500
 W:1:1:10:3
 P:0:2d6:0:0:0
-T:7:23:3:22
+T:7:23:10:26
 A:1/1
 F:EASY_KNOW | GENERAL_STORE
 D:It can be used to fuel a brass lantern with 7500 turns of light, up to
@@ -3711,7 +3711,7 @@ G:~:TERM_LIGHT_GRAY
 I:5:0:0
 W:1:1:10:1
 P:0:1d1:0:0:0
-T:7:24:3:25
+T:7:24:11:4
 A:1/1
 F:EASY_KNOW | GENERAL_STORE
 D:These can be placed in doors to make them harder to open.  Multiple
@@ -3725,7 +3725,7 @@ G:,:TERM_YELLOW
 I:80:38:500
 W:0:1:5:1
 P:0:0d0:0:0:0
-T:2:2:3:21
+T:2:2:11:2
 A:0/1
 F:STORE_ONLY | EASY_KNOW | GENERAL_STORE
 D:It provides nourishment for about 500 turns under normal conditions.
@@ -3736,7 +3736,7 @@ G:,:TERM_AUBURN
 I:80:39:1750
 W:0:1:5:2
 P:0:0d0:0:0:0
-T:2:3:3:22
+T:2:3:11:2
 A:0/1
 F:STORE_ONLY | EASY_KNOW | GENERAL_STORE
 D:It provides nourishment for about 1750 turns under normal conditions.
@@ -3747,7 +3747,7 @@ G:!:TERM_AUBURN
 I:80:40:500
 W:0:1:3:1
 P:0:0d0:0:0:0
-T:2:0:3:22
+T:2:0:10:0
 A:0/1
 F:STORE_ONLY | EASY_KNOW | GENERAL_STORE
 D:It provides nourishment for about 500 turns under normal conditions.
@@ -3758,7 +3758,7 @@ G:!:TERM_L_RED
 I:80:41:400
 W:0:1:1:2
 P:0:0d0:0:0:0
-T:2:1:3:27
+T:2:1:10:22
 A:0/1
 F:STORE_ONLY | EASY_KNOW | GENERAL_STORE
 D:It provides nourishment for about 400 turns under normal conditions.
@@ -3769,7 +3769,7 @@ G:!:TERM_AUBURN
 I:80:42:1500
 W:0:0:1:1
 P:0:1d1:0:0:0
-T:2:1:3:22
+T:2:1:10:22
 A:0/1
 F:STORE_ONLY | EASY_KNOW
 D:It provides nourishment for about 1500 turns under normal conditions.
@@ -3786,7 +3786,7 @@ G:$:TERM_COPPER
 I:100:1:0
 W:1:1:0:3
 P:0:0d0:0:0:0
-T:7:7:77:18
+T:7:7:0:9
 
 
 N:365:copper
@@ -3794,7 +3794,7 @@ G:$:TERM_COPPER
 I:100:2:0
 W:1:1:0:4
 P:0:0d0:0:0:0
-T:7:7:3:22
+T:7:7:0:10
 
 
 N:366:copper
@@ -3802,7 +3802,7 @@ G:$:TERM_COPPER
 I:100:3:0
 W:1:1:0:5
 P:0:0d0:0:0:0
-T:7:7:11:17
+T:7:7:0:11
 
 
 N:367:silver
@@ -3810,7 +3810,7 @@ G:$:TERM_SILVER
 I:100:4:0
 W:1:1:0:6
 P:0:0d0:0:0:0
-T:7:8:88:31
+T:7:8:0:12
 
 
 N:368:silver
@@ -3818,7 +3818,7 @@ G:$:TERM_SILVER
 I:100:5:0
 W:1:1:0:7
 P:0:0d0:0:0:0
-T:7:8:11:18
+T:7:8:0:12
 
 
 N:369:silver
@@ -3826,7 +3826,7 @@ G:$:TERM_SILVER
 I:100:6:0
 W:1:1:0:8
 P:0:0d0:0:0:0
-T:7:8:9:19
+T:7:8:0:12
 
 
 N:370:garnets
@@ -3834,7 +3834,7 @@ G:$:TERM_RED_LAVA
 I:100:7:0
 W:1:1:0:9
 P:0:0d0:0:0:0
-T:7:12:11:19
+T:7:12:0:15
 
 
 N:371:garnets
@@ -3842,7 +3842,7 @@ G:$:TERM_RED_LAVA
 I:100:8:0
 W:1:1:0:10
 P:0:0d0:0:0:0
-T:7:12:11:28
+T:7:12:0:15
 
 
 N:372:gold
@@ -3850,7 +3850,7 @@ G:$:TERM_GOLD
 I:100:9:0
 W:1:1:0:12
 P:0:0d0:0:0:0
-T:7:9:11:17
+T:7:9:0:13
 
 
 N:373:gold
@@ -3858,7 +3858,7 @@ G:$:TERM_GOLD
 I:100:10:0
 W:1:1:0:14
 P:0:0d0:0:0:0
-T:7:9:8:23
+T:7:9:0:13
 
 
 N:374:gold
@@ -3866,7 +3866,7 @@ G:$:TERM_GOLD
 I:100:11:0
 W:1:1:0:16
 P:0:0d0:0:0:0
-T:7:9:11:18
+T:7:9:0:13
 
 
 N:375:opals
@@ -3874,7 +3874,7 @@ G:$:TERM_LIGHT_GRAY
 I:100:12:0
 W:1:1:0:18
 P:0:0d0:0:0:0
-T:7:13:11:20
+T:7:13:0:16
 
 
 N:376:sapphires
@@ -3882,7 +3882,7 @@ G:$:TERM_BLUE
 I:100:13:0
 W:1:1:0:20
 P:0:0d0:0:0:0
-T:7:14:11:21
+T:7:14:0:17
 
 
 N:377:rubies
@@ -3890,7 +3890,7 @@ G:$:TERM_RED
 I:100:14:0
 W:1:1:0:28
 P:0:0d0:0:0:0
-T:7:15:9:20
+T:7:15:0:18
 
 
 N:378:diamonds
@@ -3898,7 +3898,7 @@ G:$:TERM_WHITE
 I:100:15:0
 W:1:1:0:32
 P:0:0d0:0:0:0
-T:7:16:11:25
+T:7:16:0:19
 
 
 N:379:emeralds
@@ -3906,7 +3906,7 @@ G:$:TERM_GREEN
 I:100:16:0
 W:1:1:0:40
 P:0:0d0:0:0:0
-T:7:17:11:27
+T:7:17:0:20
 
 
 N:380:mithril
@@ -3914,7 +3914,7 @@ G:$:TERM_L_BLUE
 I:100:17:0
 W:1:1:0:80
 P:0:0d0:0:0:0
-T:7:10:9:9
+T:7:10:0:14
 
 
 # XXX Record381 is unused XXX #
@@ -3931,7 +3931,7 @@ G:?:TERM_L_RED
 I:90:0:0
 W:40:1:30:25
 P:0:1d1:0:0:0
-T:6:0:88:29
+T:6:0:10:3
 A:40/1
 F:EASY_KNOW | MAGIC_SHOP | BLACK_MARKET | BOOKSHOP
 
@@ -3941,7 +3941,7 @@ G:?:TERM_L_RED
 I:90:1:0
 W:40:1:30:100
 P:0:1d1:0:0:0
-T:6:1:77:19
+T:6:1:10:3
 A:40/1
 F:EASY_KNOW | MAGIC_SHOP | BLACK_MARKET | BOOKSHOP
 
@@ -3951,7 +3951,7 @@ G:?:TERM_L_RED
 I:90:2:0
 W:40:1:30:400
 P:0:1d1:0:0:0
-T:6:2:9:12
+T:6:2:10:3
 A:40/1
 F:EASY_KNOW | MAGIC_SHOP | BLACK_MARKET | BOOKSHOP
 
@@ -3961,7 +3961,7 @@ G:?:TERM_L_RED
 I:90:3:0
 W:40:1:30:800
 P:0:1d1:0:0:0
-T:6:3:9:8
+T:6:3:10:3
 A:40/1
 F:EASY_KNOW | MAGIC_SHOP | BLACK_MARKET | BOOKSHOP
 
@@ -3977,7 +3977,7 @@ G:?:TERM_L_BLUE
 I:91:0:0
 W:40:1:30:25
 P:0:1d1:0:0:0
-T:6:9:9:15
+T:6:9:10:12
 A:40/1
 F:EASY_KNOW | TEMPLE | BLACK_MARKET | BOOKSHOP
 
@@ -3987,7 +3987,7 @@ G:?:TERM_L_BLUE
 I:91:1:0
 W:40:1:30:100
 P:0:1d1:0:0:0
-T:6:10:9:11
+T:6:10:10:12
 A:40/1
 F:EASY_KNOW | TEMPLE | BLACK_MARKET | BOOKSHOP
 
@@ -3997,7 +3997,7 @@ G:?:TERM_L_BLUE
 I:91:2:0
 W:40:1:30:400
 P:0:1d1:0:0:0
-T:6:11:11:31
+T:6:11:10:12
 A:40/1
 F:EASY_KNOW | TEMPLE | BLACK_MARKET | BOOKSHOP
 
@@ -4007,7 +4007,7 @@ G:?:TERM_L_BLUE
 I:91:3:0
 W:40:1:30:800
 P:0:1d1:0:0:0
-T:6:12:9:11
+T:6:12:10:12
 A:40/1
 F:EASY_KNOW | TEMPLE | BLACK_MARKET | BOOKSHOP
 
@@ -4023,7 +4023,7 @@ G:s:TERM_WHITE
 I:1:0:0
 W:1:1:10:0
 P:0:1d1:0:0:0
-T:7:50:11:12
+T:7:50:11:7
 A:1/1
 F:EASY_KNOW
 
@@ -4033,7 +4033,7 @@ G:s:TERM_WHITE
 I:1:1:0
 W:1:1:25:0
 P:0:1d1:0:0:0
-T:7:51:10:24
+T:7:51:11:7
 A:1/1
 F:EASY_KNOW
 
@@ -4043,7 +4043,7 @@ G:s:TERM_WHITE
 I:1:2:0
 W:0:1:2:0
 P:0:1d1:0:0:0
-T:7:45:78:14
+T:7:45:11:11
 A:0/1
 F:EASY_KNOW
 
@@ -4053,7 +4053,7 @@ G:s:TERM_WHITE
 I:1:7:0
 W:1:1:60:0
 P:0:1d1:0:0:0
-T:7:45:77:0
+T:7:45:11:7
 A:1/1
 F:EASY_KNOW
 
@@ -4063,7 +4063,7 @@ G:s:TERM_WHITE
 I:1:8:0
 W:1:1:50:0
 P:0:1d1:0:0:0
-T:7:47:10:23
+T:7:47:11:7
 A:1/1
 F:EASY_KNOW
 
@@ -4073,7 +4073,7 @@ G:s:TERM_WHITE
 I:1:9:0
 W:1:1:40:0
 P:0:1d1:0:0:0
-T:7:46:77:0
+T:7:46:11:7
 A:1/1
 F:EASY_KNOW
 
@@ -4083,7 +4083,7 @@ G:s:TERM_WHITE
 I:1:10:0
 W:1:1:25:0
 P:0:1d1:0:0:0
-T:7:48:8:2
+T:7:48:11:7
 A:1/1
 F:EASY_KNOW
 
@@ -4093,7 +4093,7 @@ G:s:TERM_WHITE
 I:1:11:0
 W:0:1:3:0
 P:0:1d1:0:0:0
-T:7:44:8:2
+T:7:44:11:11
 A:0/1
 F:EASY_KNOW
 
@@ -4112,7 +4112,7 @@ G:!:TERM_WHITE
 I:3:4:0
 W:0:1:2:0
 P:0:1d1:0:0:0
-T:7:22:8:3
+T:7:22:10:25
 A:0/1
 F:EASY_KNOW
 
@@ -4122,7 +4122,7 @@ G:~:TERM_VIOLET
 I:3:5:0
 W:0:1:5:0
 P:0:1d1:0:0:0
-T:7:35:8:4
+T:7:35:11:8
 A:0/1
 F:EASY_KNOW
 
@@ -4132,7 +4132,7 @@ G:~:TERM_AUBURN
 I:3:13:0
 W:0:1:3:0
 P:0:1d1:0:0:0
-T:7:43:8:5
+T:7:43:11:9
 A:0/1
 F:EASY_KNOW
 

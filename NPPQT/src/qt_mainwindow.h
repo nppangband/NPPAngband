@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <QImage>
 #include <QFontDatabase>
+#include <QKeyEvent>
 #include <src/defines.h>
 
 #define MAX_RECENT_SAVEFILES    5
@@ -33,6 +34,8 @@ public:
     void display_square(s16b y, s16b x);
     void screen_wipe();
     void screen_redraw();
+
+    void keyPressEvent(QKeyEvent* which_key);
 
 
 protected:

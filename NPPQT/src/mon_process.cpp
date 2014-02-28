@@ -1149,8 +1149,10 @@ void process_entities(void)
     /* Clear the moment array */
     move_moment_num = 0;
 
+    p_ptr->player_turn = FALSE;
+
     /* Give the character some energy (unless leaving) */
-    if (!p_ptr->leaving)
+    if (!p_ptr->leaving_level)
     {
         byte energy_gain = calc_energy_gain(p_ptr->state.p_speed);
 
@@ -1227,7 +1229,7 @@ void process_entities(void)
         if (idx > 0)
         {
             /* Character is dead or leaving the current level */
-            if (p_ptr->leaving) continue;
+            if (p_ptr->leaving_level) continue;
 
             /* Get the monster race */
             m_ptr = &mon_list[idx];
@@ -1257,12 +1259,11 @@ void process_entities(void)
         /* This is the character */
         else if (idx < 0)
         {
-            /* Can the character move? */
-            while (p_ptr->p_energy >= ENERGY_TO_MOVE && !p_ptr->leaving)
-            {
-                /* Let the character take a turn */
-                process_player();
-            }
+
+            /* Let the character take a turn */
+            process_player();
+            p_ptr->player_turn = TRUE;
+            return;
         }
     }
 }

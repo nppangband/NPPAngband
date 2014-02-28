@@ -4518,8 +4518,7 @@ void do_cmd_store(int code, cmd_arg args[])
     }
 
 
-    /* Take a turn */
-    p_ptr->p_energy_use = BASE_ENERGY_MOVE;
+
 
     /* Hack -- Cancel automatic command */
     p_ptr->command_new = 0;
@@ -4532,5 +4531,7 @@ void do_cmd_store(int code, cmd_arg args[])
 
     /* Redraw map */
     p_ptr->redraw |= (PR_MAP);
+
+    process_player_energy(BASE_ENERGY_MOVE);
 
 }

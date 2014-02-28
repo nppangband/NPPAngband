@@ -556,6 +556,33 @@ static int init_flavor_info(void)
     return (err);
 }
 
+/*
+ * Initialize the "flavor_info" array
+ */
+void init_player_graf_info(void)
+{
+    int err;
+
+    QString file_name;
+
+    // Currently works for both NPPAngband and NPPMoria
+    file_name = "p_tiles";
+
+    parse_which_info = parse_player_graf_info;
+
+    err = read_edit_file(file_name);
+
+    // If something went wrong, just use the default tiles for the human race
+    if (err)
+    {
+        monster_race *r_ptr = &r_info[0];
+        p_ptr->tile_32x32_y =   r_ptr->tile_32x32_y;
+        p_ptr->tile_32x32_x =   r_ptr->tile_32x32_x;
+        p_ptr->tile_8x8_y =     r_ptr->tile_8x8_y;
+        p_ptr->tile_8x8_x =     r_ptr->tile_8x8_x;
+    }
+}
+
 
 
 /*
@@ -1121,7 +1148,7 @@ void init_npp_games(void)
 
     init_rng();
 
-    character_dungeon = character_generated = character_loaded = character_icky = false;
+    character_dungeon = character_generated = character_loaded = character_icky = FALSE;
 
     QLabel status_update;
     status_update.setText (QString("Starting game"));

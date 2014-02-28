@@ -1699,8 +1699,6 @@ static bool aim_wand(object_type *o_ptr, bool *ident, int dir)
         if (!get_aim_dir(&dir, is_disarm)) return (FALSE);
     }
 
-    /* Take a turn */
-    p_ptr->p_energy_use = BASE_ENERGY_MOVE;
 
     /* Not identified yet */
     *ident = FALSE;
@@ -2011,9 +2009,6 @@ static bool zap_rod(object_type *o_ptr, bool *ident, int dir)
 {
     bool used_charge = TRUE;
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
-
-    /* Take a turn */
-    p_ptr->p_energy_use = BASE_ENERGY_MOVE;
 
     /* Not identified yet */
     *ident = FALSE;
@@ -3283,18 +3278,18 @@ void do_cmd_use(int code, cmd_arg args[])
     /* If the item is a null pointer or has been wiped, be done now */
     if (!o_ptr || o_ptr->k_idx <= 1) return;
 
-    /* Use the turn */
-    p_ptr->p_energy_use = BASE_ENERGY_MOVE;
-
     /* Mark as tried and redisplay */
     p_ptr->notice |= (PN_COMBINE | PN_REORDER | PN_SORT_QUIVER);
     p_ptr->redraw |= (PR_INVEN | PR_EQUIP | PR_OBJECT | PR_ITEMLIST);
 
     /* If there are no more of the item left, then we're done. */
-    if (!o_ptr->number) return;
+    if (!o_ptr->number)
+    {
+       // deliberately do nothing
+    }
 
     /* Chargeables act differently to single-used items when not used up */
-    if (used && (use == USE_CHARGE))
+    else if (used && (use == USE_CHARGE))
     {
 
         /* Use a single charge */
@@ -3339,4 +3334,7 @@ void do_cmd_use(int code, cmd_arg args[])
         /* Delete the "moved" objects from their original position */
         delete_object(py, px);
     }
+
+    /* Take a turn */
+    process_player_energy(BASE_ENERGY_MOVE);
 }

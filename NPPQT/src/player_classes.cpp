@@ -98,6 +98,7 @@ void player_type::player_type_wipe()
     flow_center_y = flow_center_x = 0;
     update_center_y = update_center_x = 0;
     psex = prace = pclass = 0;
+    tile_32x32_y = tile_32x32_x = tile_8x8_y = tile_8x8_x = 0;
     hitdie = expfact = 0;
     age = ht = wt = sc = au = 0;
     q_fame = deferred_rewards = quest_depth = max_depth = depth = recall_depth = 0;
@@ -113,13 +114,13 @@ void player_type::player_type_wipe()
     died_from.clear();
     history.clear();
     total_winner = panic_save = noscore = 0;
-    is_dead = wizard = FALSE;
-    playing = noun_verb = leaving = autosave = FALSE;
+    is_dead = player_turn = wizard = FALSE;
+    playing = noun_verb = leaving_level = autosave = FALSE;
     create_stair = cur_map_hgt = cur_map_wid = FALSE;
     total_weight = inven_cnt = equip_cnt = pack_size_reduce = quiver_remainder = quiver_slots = 0;
     target_set = target_who = target_row = target_col = health_who = monster_race_idx = 0;
     object_idx = object_kind_idx = feature_kind_idx = 0;
-    p_energy_use = resting = running = 0;
+    resting = running = 0;
     running_withpathfind = FALSE;
     run_cur_dir = run_old_dir = 0;
     run_unused = run_open_area = run_break_right = run_break_left = FALSE;

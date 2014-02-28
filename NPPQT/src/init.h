@@ -83,6 +83,7 @@ extern int parse_q_info(QString buf);
 extern int parse_n_info(QString buf);
 extern int parse_flavor_info(QString buf);
 extern int parse_s_info(QString buf);
+extern int parse_player_graf_info(QString buf);
 extern void quit_npp_games(QString message);
 
 

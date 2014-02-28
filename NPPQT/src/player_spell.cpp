@@ -3634,12 +3634,11 @@ QString do_priest_prayer(int mode, int spell, int dir)
                     message(QString("The world changes!"));
 
                     /* Leaving */
-                    p_ptr->leaving = TRUE;
+                    p_ptr->leaving_level = TRUE;
                     p_ptr->autosave = TRUE;
                 }
 
             }
-
 
             break;
         }
