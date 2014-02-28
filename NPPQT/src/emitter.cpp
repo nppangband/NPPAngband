@@ -267,7 +267,8 @@ ArcAnimation::ArcAnimation(QPointF from, QPointF to, int newDegrees)
     anim->setStartValue(0);
     anim->setEndValue(maxLength);
     int duration = 1000;
-    if (maxLength > 400) duration = 2000;
+    if (maxLength > 300) duration = 2000;
+    if (maxLength > 500) duration = 3000;
     anim->setDuration(duration);
     connect(anim, SIGNAL(finished()), this, SLOT(deleteLater()));
 
@@ -292,7 +293,9 @@ void ArcAnimation::setLength(qreal newLength)
 
     previousLength = length;
 
-    int n = (maxLength < 400) ? 5: 20;
+    int n = 5;
+    if (maxLength > 300) n = 10;
+    if (maxLength > 450) n = 20;
 
     for (int i = 0; i < n; i++) {
         BallParticle *p = new BallParticle;
@@ -327,13 +330,13 @@ void ArcAnimation::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         QPointF pp = position + fromAngle(p->angle, p->currentLength);
         qreal opacity = 1;
         opacity = 1 - p->currentLength / maxLength;
-        if (opacity < 0.4) opacity = 0.4;
+        if (opacity < 0.5) opacity = 0.5;
         painter->setOpacity(opacity);
 
         QPixmap pix = *ball_pix;
         qreal perc = 1;
-        if (p->type == 0) {
-            perc = 0.5;
+        if (p->type <= 1) {
+            //perc = 0.5;
         }
         pix = pix.scaled(pix.width() * perc, pix.height() * perc);
         pp -= QPointF(pix.width() / 2, pix.height() / 2);
