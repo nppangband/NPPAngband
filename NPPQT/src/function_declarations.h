@@ -568,6 +568,7 @@ extern void ui_center(int y, int x);
 extern void ui_player_moved();
 extern QSize ui_grid_size();
 extern QPixmap rotate_pix(QPixmap src, qreal angle);
+extern QPoint ui_get_target(u32b flags);
 
 /* randart.c */
 extern QString make_random_name(byte min_length, byte max_length);
