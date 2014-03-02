@@ -13,12 +13,10 @@
 
 static MainWindow *main_window = 0;
 
-class MainWindowPrivate;
-
 class DungeonGrid: public QGraphicsItem
 {
 public:
-    DungeonGrid(int _x, int _y, MainWindowPrivate *_parent);
+    DungeonGrid(int _x, int _y, MainWindow *_parent);
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -27,14 +25,14 @@ public:
 
     void cellSizeChanged();
 
-    MainWindowPrivate *parent;
+    MainWindow *parent;
     int c_x, c_y;
 };
 
 class DungeonCursor: public QGraphicsItem
 {    
 public:
-    MainWindowPrivate *parent;
+    MainWindow *parent;
     int c_x, c_y;
 
     QRectF boundingRect() const;
@@ -42,54 +40,16 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     QPainterPath shape() const;
 
-    DungeonCursor(MainWindowPrivate *_parent);
+    DungeonCursor(MainWindow *_parent);
     void moveTo(int y, int x);
 
     void cellSizeChanged();
 };
 
-class MainWindowPrivate
-{
-public:
-    DungeonGrid *grids[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
-
-    QGraphicsScene *scene;
-    QGraphicsView *view;
-    int font_hgt, font_wid;
-    int tile_hgt, tile_wid;
-    int cell_hgt, cell_wid;
-    QFont font;
-    bool do_pseudo_ascii;
-
-    QPixmap blank_pix;
-    // The key must me strings of the form "[row]x[col]"
-    QHash<QString, QPixmap> tiles;
-    QPixmap tile_map;
-
-    DungeonCursor *cursor;
-
-    MainWindowPrivate();
-    void init_scene(QGraphicsScene *_scene, QGraphicsView *_view, QFont _font);
-    void redraw();
-    bool panel_contains(int y, int x);
-    void set_font(QFont _font);
-    void set_graphic_mode(int mode);
-    void destroy_tiles();
-    void rebuild_tile(QString key);
-    void calculate_cell_size();
-    QPixmap darken_pix(QPixmap src);
-    QPixmap lighten_pix(QPixmap src);
-    QPixmap colorize_pix(QPixmap src, QColor color);
-    QPixmap gray_pix(QPixmap src);
-    QPixmap pseudo_ascii(QChar chr, QColor color);
-    void update_cursor();
-    void force_redraw();
-};
-
 void ui_player_moved()
 {
     if (!character_dungeon) return;
-    main_window->priv->update_cursor();
+    main_window->update_cursor();
     ui_ensure(p_ptr->py, p_ptr->px);
 }
 
@@ -102,7 +62,7 @@ void MainWindow::slot_finish_bolt()
 
 QSize ui_grid_size()
 {
-    return QSize(main_window->priv->cell_wid, main_window->priv->cell_hgt);
+    return QSize(main_window->cell_wid, main_window->cell_hgt);
 }
 
 QPixmap rotate_pix(QPixmap src, qreal angle)
@@ -168,12 +128,12 @@ void MainWindow::slot_find_player()
     if (!character_dungeon) return;
 
     ui_center(p_ptr->py, p_ptr->px);
-    priv->update_cursor();
+    update_cursor();
 }
 
 void MainWindow::slot_redraw()
 {
-    priv->redraw();
+    redraw();
 }
 
 QPainterPath DungeonGrid::shape() const
@@ -190,9 +150,9 @@ QPainterPath DungeonCursor::shape() const
     return p;
 }
 
-void MainWindowPrivate::force_redraw()
+void MainWindow::force_redraw()
 {
-    view->viewport()->update();
+    graphics_view->viewport()->update();
 }
 
 void DungeonCursor::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -220,9 +180,9 @@ void DungeonGrid::mousePressEvent(QGraphicsSceneMouseEvent *event)
     parent->cursor->setVisible(true);
     parent->cursor->moveTo(c_y, c_x);
 
-    if (main_window->ui_mode == UI_MODE_TARGETTING) {
-        main_window->target = QPoint(c_x, c_y);
-        main_window->ev_loop.quit();
+    if (parent->ui_mode == UI_MODE_TARGETTING) {
+        parent->target = QPoint(c_x, c_y);
+        parent->ev_loop.quit();
     }
     else {
         dungeon_type *d_ptr = &dungeon_info[c_y][c_x];
@@ -235,13 +195,13 @@ void DungeonGrid::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mousePressEvent(event);
 }
 
-void MainWindowPrivate::update_cursor()
+void MainWindow::update_cursor()
 {
     cursor->moveTo(p_ptr->py, p_ptr->px);
     cursor->setVisible(hilight_player);
 }
 
-DungeonCursor::DungeonCursor(MainWindowPrivate *_parent)
+DungeonCursor::DungeonCursor(MainWindow *_parent)
 {
     parent = _parent;
     c_x = c_y = 0;
@@ -285,15 +245,7 @@ void DungeonCursor::moveTo(int _y, int _x)
     setPos(c_x * parent->cell_wid, c_y * parent->cell_hgt);
 }
 
-MainWindowPrivate::MainWindowPrivate()
-{
-    view = 0;
-    scene = 0;
-    cursor = new DungeonCursor(this);
-    do_pseudo_ascii = false;
-}
-
-DungeonGrid::DungeonGrid(int _x, int _y, MainWindowPrivate *_parent)
+DungeonGrid::DungeonGrid(int _x, int _y, MainWindow *_parent)
 {
     c_x = _x;
     c_y = _y;
@@ -379,13 +331,13 @@ void DungeonGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
             if (flags & UI_LIGHT_TORCH) {
                 QColor color = QColor("yellow").darker(150);
                 if (flags & UI_COSMIC_TORCH) color = QColor("cyan").darker(150);
-                pix = parent->colorize_pix(pix, color);
+                pix = colorize_pix(pix, color);
             }
             else if (flags & UI_LIGHT_BRIGHT) {
-                pix = parent->darken_pix(pix);
+                pix = darken_pix(pix);
             }
             else if (flags & UI_LIGHT_DIM) {
-                pix = parent->gray_pix(pix);
+                pix = gray_pix(pix);
             }
 
             painter->drawPixmap(pix.rect(), pix, pix.rect());
@@ -404,7 +356,8 @@ void DungeonGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
             }
 
             if (do_shadow) {
-                QPixmap pix = parent->pseudo_ascii(square_char, square_color);
+                QPixmap pix = pseudo_ascii(square_char, square_color, parent->cur_font,
+                                           QSizeF(parent->cell_wid, parent->cell_hgt));
                 painter->drawPixmap(pix.rect(), pix, pix.rect());
                 done_fg = true;
             }
@@ -413,7 +366,7 @@ void DungeonGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
     // Go ascii?
     if (!done_fg && (!empty || !done_bg)) {
-        painter->setFont(parent->font);
+        painter->setFont(parent->cur_font);
         painter->setPen(square_color);
         painter->drawText(QRectF(0, 0, parent->cell_wid, parent->cell_hgt),
                           Qt::AlignCenter, QString(square_char));
@@ -435,7 +388,7 @@ void DungeonGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->restore();
 }
 
-QPixmap MainWindowPrivate::gray_pix(QPixmap src)
+QPixmap gray_pix(QPixmap src)
 {
     QImage img = src.toImage();
     for (int x = 0; x < img.width(); x++) {
@@ -448,7 +401,7 @@ QPixmap MainWindowPrivate::gray_pix(QPixmap src)
     return QPixmap::fromImage(img);
 }
 
-QPixmap MainWindowPrivate::colorize_pix(QPixmap src, QColor color)
+QPixmap colorize_pix(QPixmap src, QColor color)
 {
     QImage img = src.toImage();
     QPainter p(&img);
@@ -458,7 +411,7 @@ QPixmap MainWindowPrivate::colorize_pix(QPixmap src, QColor color)
     return pix;
 }
 
-QPixmap MainWindowPrivate::darken_pix(QPixmap src)
+QPixmap darken_pix(QPixmap src)
 {
     QImage img = src.toImage();
     QPainter p(&img);
@@ -468,7 +421,7 @@ QPixmap MainWindowPrivate::darken_pix(QPixmap src)
     return pix;    
 }
 
-QPixmap MainWindowPrivate::lighten_pix(QPixmap src)
+QPixmap lighten_pix(QPixmap src)
 {
     QImage img = src.toImage();
     QPainter p(&img);
@@ -478,12 +431,12 @@ QPixmap MainWindowPrivate::lighten_pix(QPixmap src)
     return pix;
 }
 
-void MainWindowPrivate::destroy_tiles()
+void MainWindow::destroy_tiles()
 {
     tiles.clear();
 }
 
-void MainWindowPrivate::calculate_cell_size()
+void MainWindow::calculate_cell_size()
 {
     cell_hgt = font_hgt;
     if (tile_hgt > cell_hgt) cell_hgt = tile_hgt;
@@ -501,7 +454,7 @@ void MainWindowPrivate::calculate_cell_size()
     cursor->cellSizeChanged();
 }
 
-void MainWindowPrivate::set_graphic_mode(int mode)
+void MainWindow::set_graphic_mode(int mode)
 {
     int hgt, wid;
     QString fname;
@@ -559,7 +512,7 @@ void MainWindowPrivate::set_graphic_mode(int mode)
 }
 
 // Tile creation on demmand
-void MainWindowPrivate::rebuild_tile(QString key)
+void MainWindow::rebuild_tile(QString key)
 {
     // Already created
     if (tiles.contains(key)) return;
@@ -577,10 +530,10 @@ void MainWindowPrivate::rebuild_tile(QString key)
     tiles.insert(key, pix);
 }
 
-void MainWindowPrivate::set_font(QFont _font)
+void MainWindow::set_font(QFont newFont)
 {
-    font = _font;
-    QFontMetrics metrics(font);
+    cur_font = newFont;
+    QFontMetrics metrics(cur_font);
     font_hgt = metrics.height();
     font_wid = metrics.width('M');
 
@@ -589,14 +542,9 @@ void MainWindowPrivate::set_font(QFont _font)
     destroy_tiles();
 }
 
-void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view,
-                                   QFont _font)
+void MainWindow::init_scene()
 {
-    scene = _scene;
-    view = _view;
-
-    font = _font;
-    QFontMetrics metrics(font);
+    QFontMetrics metrics(cur_font);
 
     font_hgt = metrics.height();
     font_wid = metrics.width('M');
@@ -604,7 +552,7 @@ void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view,
     cell_hgt = cell_wid = 0;
 
     QBrush brush(QColor("black"));
-    scene->setBackgroundBrush(brush);
+    dungeon_scene->setBackgroundBrush(brush);
 
     blank_pix = QPixmap(1, 1);
     blank_pix.fill(QColor("black"));
@@ -612,18 +560,18 @@ void MainWindowPrivate::init_scene(QGraphicsScene *_scene, QGraphicsView *_view,
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
             grids[y][x] = new DungeonGrid(x, y, this);
-            scene->addItem(grids[y][x]);
+            dungeon_scene->addItem(grids[y][x]);
         }
     }
 
-    scene->addItem(cursor);
+    dungeon_scene->addItem(cursor);
 }
 
-void MainWindowPrivate::redraw()
+void MainWindow::redraw()
 {    
     // Important. No dungeon yet
     if (!character_dungeon) {
-        if (view) force_redraw();
+        if (graphics_view) force_redraw();
         return;
     }
 
@@ -631,7 +579,7 @@ void MainWindowPrivate::redraw()
     wiz_light();
 
     // Adjust scrollbars
-    view->setSceneRect(0, 0, p_ptr->cur_map_wid * cell_wid, p_ptr->cur_map_hgt * cell_hgt);
+    graphics_view->setSceneRect(0, 0, p_ptr->cur_map_wid * cell_wid, p_ptr->cur_map_hgt * cell_hgt);
 
     for (int y = 0; y < p_ptr->cur_map_hgt; y++) {
         for (int x = 0; x < p_ptr->cur_map_wid; x++) {
@@ -644,21 +592,21 @@ void MainWindowPrivate::redraw()
     force_redraw(); // Hack -- Force full redraw
 }
 
-bool MainWindowPrivate::panel_contains(int y, int x)
+bool MainWindow::panel_contains(int y, int x)
 {
-    QPolygonF pol = view->mapToScene(view->viewport()->geometry());
+    QPolygonF pol = graphics_view->mapToScene(graphics_view->viewport()->geometry());
     // We test top-left and bottom-right corners of the cell
     QPointF point1(x * cell_wid, y * cell_hgt);
     QPointF point2(x * cell_wid + cell_wid, y * cell_hgt + cell_hgt);
     return pol.containsPoint(point1, Qt::OddEvenFill) && pol.containsPoint(point2, Qt::OddEvenFill);
 }
 
-QPixmap MainWindowPrivate::pseudo_ascii(QChar chr, QColor color)
+QPixmap pseudo_ascii(QChar chr, QColor color, QFont font, QSizeF size)
 {
-    QImage img(cell_wid, cell_hgt, QImage::Format_ARGB32);
+    QImage img(size.width(), size.height(), QImage::Format_ARGB32);
     // Fill with transparent color
-    for (int x = 0; x < cell_wid; x++) {
-        for (int y = 0; y < cell_hgt; y++) {
+    for (int x = 0; x < size.width(); x++) {
+        for (int y = 0; y < size.height(); y++) {
             img.setPixel(x, y, QColor(0, 0, 0, 0).rgba());
         }
     }
@@ -671,8 +619,8 @@ QPixmap MainWindowPrivate::pseudo_ascii(QChar chr, QColor color)
 
     // Mark colored grids
     bool marks[img.width()][img.height()];
-    for (int x = 0; x < cell_wid; x++) {
-        for (int y = 0; y < cell_hgt; y++) {
+    for (int x = 0; x < size.width(); x++) {
+        for (int y = 0; y < size.height(); y++) {
             QRgb pixel = img.pixel(x, y);
             if (qAlpha(pixel) > 0) {
                 marks[x][y] = true;
@@ -684,8 +632,8 @@ QPixmap MainWindowPrivate::pseudo_ascii(QChar chr, QColor color)
     }
 
     // Surround with black. Note that all concerning grids are burned, even marked ones
-    for (int x = 0; x < cell_wid; x++) {
-        for (int y = 0; y < cell_hgt; y++) {
+    for (int x = 0; x < size.width(); x++) {
+        for (int y = 0; y < size.height(); y++) {
             if (!marks[x][y]) continue;
             for (int y1 = y - 1; y1 <= y + 1; y1++) {
                 for (int x1 = x - 1; x1 <= x + 1; x1++) {
@@ -713,7 +661,8 @@ MainWindow::MainWindow()
     target = QPoint(-1, -1);
     ui_mode = UI_MODE_DEFAULT;
 
-    priv = new MainWindowPrivate;
+    cursor = new DungeonCursor(this);
+    do_pseudo_ascii = false;
 
     dungeon_scene = new QGraphicsScene;
     graphics_view = new QGraphicsView(dungeon_scene);
@@ -761,13 +710,11 @@ MainWindow::MainWindow()
     (void)statusBar();
 
     read_settings();
-    priv->init_scene(dungeon_scene, graphics_view, cur_font);
-    priv->set_graphic_mode(use_graphics);
+    init_scene();
+    set_graphic_mode(use_graphics);
 
     setWindowFilePath(QString());
 }
-
-
 
 void MainWindow::setup_nppangband()
 {
@@ -869,9 +816,9 @@ void MainWindow::save_and_close()
     // close game
     cleanup_npp_games();
 
-    priv->cursor->setVisible(false);
-    priv->destroy_tiles();
-    priv->redraw();
+    cursor->setVisible(false);
+    destroy_tiles();
+    redraw();
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
@@ -998,8 +945,8 @@ void MainWindow::fontselect_dialog()
 
     if (selected)
     {
-        priv->set_font(cur_font);
-        priv->redraw();
+        set_font(cur_font);
+        redraw();
     }
 }
 
@@ -1159,25 +1106,25 @@ void MainWindow::create_actions()
 
 void MainWindow::set_dvg()
 {
-    main_window->priv->set_graphic_mode(GRAPHICS_DAVID_GERVAIS);
+    set_graphic_mode(GRAPHICS_DAVID_GERVAIS);
     ui_redraw_all();
 }
 
 void MainWindow::set_old_tiles()
 {
-    main_window->priv->set_graphic_mode(GRAPHICS_ORIGINAL);
+    set_graphic_mode(GRAPHICS_ORIGINAL);
     ui_redraw_all();
 }
 
 void MainWindow::set_ascii()
 {
-    main_window->priv->set_graphic_mode(0);
+    set_graphic_mode(0);
     ui_redraw_all();
 }
 
 void MainWindow::set_pseudo_ascii()
 {
-    main_window->priv->do_pseudo_ascii = pseudo_ascii_act->isChecked();
+    do_pseudo_ascii = pseudo_ascii_act->isChecked();
     ui_redraw_all();
 }
 
@@ -1198,9 +1145,9 @@ QPoint MainWindow::get_target(u32b flags)
     if (!character_dungeon) return target;
 
     target = QPoint(p_ptr->px, p_ptr->py);
-    priv->cursor->moveTo(target.y(), target.x());
-    priv->cursor->setVisible(true);
-    priv->cursor->update();
+    cursor->moveTo(target.y(), target.x());
+    cursor->setVisible(true);
+    cursor->update();
 
     ui_mode = UI_MODE_TARGETTING;
 
@@ -1210,7 +1157,7 @@ QPoint MainWindow::get_target(u32b flags)
 
     ui_mode = UI_MODE_DEFAULT;
 
-    priv->update_cursor();
+    update_cursor();
 
     return target;
 }
@@ -1218,7 +1165,6 @@ QPoint MainWindow::get_target(u32b flags)
 //Actually add the QActions intialized in create_actions to the menu
 void MainWindow::create_menus()
 {
-
     //File section of top menu.
     file_menu = menuBar()->addMenu(tr("&File"));
     file_menu->addAction(new_game_nppangband);
@@ -1319,8 +1265,8 @@ void MainWindow::read_settings()
     recent_savefiles = settings.value("recentFiles").toStringList();
     bool bigtile_setting = settings.value("set_bigtile", TRUE).toBool();
     bigtile_act->setChecked((bigtile_setting));
-    priv->do_pseudo_ascii = settings.value("pseudo_ascii", false).toBool();
-    pseudo_ascii_act->setChecked(priv->do_pseudo_ascii);
+    do_pseudo_ascii = settings.value("pseudo_ascii", false).toBool();
+    pseudo_ascii_act->setChecked(do_pseudo_ascii);
     use_graphics = settings.value("use_graphics", 0).toInt();
 
     QString load_font = settings.value("current_font", cur_font ).toString();
@@ -1339,7 +1285,7 @@ void MainWindow::write_settings()
     settings.setValue("set_bigtile", bigtile_act->isChecked());
     settings.setValue("current_font", cur_font.toString());
     settings.setValue("window_state", saveState());
-    settings.setValue("pseudo_ascii", priv->do_pseudo_ascii);
+    settings.setValue("pseudo_ascii", do_pseudo_ascii);
     settings.setValue("use_graphics", use_graphics);
 }
 
@@ -1371,7 +1317,7 @@ void MainWindow::load_file(const QString &file_name)
             else {
                 update_file_menu_game_active();
                 launch_game();                
-                priv->redraw();
+                redraw();
             }
         }
     }
@@ -1391,7 +1337,7 @@ void MainWindow::launch_birth(bool quick_start)
         update_file_menu_game_active();
         launch_game();
         save_character();        
-        priv->redraw();
+        redraw();
     } else {
         cleanup_npp_games();
         character_loaded = false;
@@ -1463,29 +1409,29 @@ QString MainWindow::stripped_name(const QString &full_file_name)
 // determine of a dungeon square is onscreen at present
 bool panel_contains(int y, int x)
 {
-    return main_window->priv->panel_contains(y, x);
+    return main_window->panel_contains(y, x);
 }
 
 void ui_ensure(int y, int x)
 {
-    MainWindowPrivate *priv = main_window->priv;
-    main_window->priv->view->ensureVisible(QRectF(x * priv->cell_wid, y * priv->cell_hgt, priv->cell_wid, priv->cell_hgt));
+    main_window->graphics_view->ensureVisible(QRectF(x * main_window->cell_wid,
+                                                     y * main_window->cell_hgt,
+                                                     main_window->cell_wid, main_window->cell_hgt));
 }
 
 void ui_center(int y, int x)
 {
-    MainWindowPrivate *priv = main_window->priv;
-    main_window->priv->view->centerOn(x * priv->cell_wid, y * priv->cell_hgt);
+    main_window->graphics_view->centerOn(x * main_window->cell_wid, y * main_window->cell_hgt);
 }
 
 void ui_redraw_grid(int y, int x)
 {
-    DungeonGrid *g_ptr = main_window->priv->grids[y][x];
+    DungeonGrid *g_ptr = main_window->grids[y][x];
     g_ptr->setVisible(true);
     g_ptr->update(g_ptr->boundingRect());
 }
 
 void ui_redraw_all()
 {
-    main_window->priv->redraw();
+    main_window->redraw();
 }

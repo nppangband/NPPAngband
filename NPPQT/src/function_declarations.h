@@ -573,6 +573,10 @@ extern void ui_player_moved();
 extern QSize ui_grid_size();
 extern QPixmap rotate_pix(QPixmap src, qreal angle);
 extern QPoint ui_get_target(u32b flags);
+extern QPixmap pseudo_ascii(QChar chr, QColor color, QFont font, QSizeF size);
+extern QPixmap darken_pix(QPixmap src);
+extern QPixmap colorize_pix(QPixmap src, QColor color);
+extern QPixmap gray_pix(QPixmap src);
 
 /* randart.c */
 extern QString make_random_name(byte min_length, byte max_length);

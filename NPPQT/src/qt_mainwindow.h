@@ -21,6 +21,8 @@ class QAction;
 class QMenu;
 class QGraphicsView;
 class QGraphicsScene;
+class DungeonGrid;
+class DungeonCursor;
 
 class MainWindowPrivate;
 
@@ -28,18 +30,43 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-
-
 public:
+    // The editable part of the main window.
+    QGraphicsView *graphics_view;
+    QGraphicsScene *dungeon_scene;
+
     int ui_mode;
     QPoint target;
     QEventLoop ev_loop;
 
-    MainWindowPrivate *priv;
+    DungeonGrid *grids[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
+
+    QFont cur_font;
+    int font_hgt, font_wid;
+    int tile_hgt, tile_wid;
+    int cell_hgt, cell_wid;
+    bool do_pseudo_ascii;
+
+    QPixmap blank_pix;
+    // The key must me strings of the form "[row]x[col]"
+    QHash<QString, QPixmap> tiles;
+    QPixmap tile_map;
+
+    DungeonCursor *cursor;
 
     MainWindow();
 
     QPoint get_target(u32b flags);
+    void init_scene();
+    void set_font(QFont newFont);
+    void calculate_cell_size();
+    void destroy_tiles();
+    void set_graphic_mode(int mode);
+    void redraw();
+    void update_cursor();
+    void force_redraw();
+    bool panel_contains(int y, int x);
+    void rebuild_tile(QString key);
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -82,10 +109,6 @@ private slots:
 
 
 private:
-
-    // The editable part of the main window.
-    QGraphicsView *graphics_view;
-    QGraphicsScene *dungeon_scene;
 
     void setup_nppangband();
     void setup_nppmoria();
@@ -150,7 +173,6 @@ private:
 
     // information about the main window
     QFontDatabase font_database;
-    QFont cur_font;
     bool use_bigtile;
 
     QActionGroup *multipliers;
