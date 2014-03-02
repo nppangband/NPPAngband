@@ -443,6 +443,12 @@ void MainWindow::calculate_cell_size()
     cell_wid = font_wid;
     if (tile_wid > cell_wid) cell_wid = tile_wid;
 
+    QList<QString> parts = current_multiplier.split(":");
+    if (parts.size() == 2) {
+        cell_wid *= parts.at(1).toInt();
+        cell_hgt *= parts.at(0).toInt();
+    }
+
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
             grids[y][x]->cellSizeChanged();
@@ -662,6 +668,8 @@ MainWindow::MainWindow()
 
     cursor = new DungeonCursor(this);
     do_pseudo_ascii = false;
+
+    current_multiplier = "1:1";
 
     dungeon_scene = new QGraphicsScene;
     graphics_view = new QGraphicsView(dungeon_scene);
@@ -1145,6 +1153,16 @@ QPoint MainWindow::get_target(u32b flags)
     return target;
 }
 
+void MainWindow::slot_multiplier_clicked(QAction *action)
+{
+    if (action) current_multiplier = action->objectName();
+    if (character_dungeon) {
+        calculate_cell_size();
+        destroy_tiles();
+        redraw();
+    }
+}
+
 //Actually add the QActions intialized in create_actions to the menu
 void MainWindow::create_menus()
 {
@@ -1180,7 +1198,18 @@ void MainWindow::create_menus()
     multipliers = new QActionGroup(this);
     QString items[] = {
       QString("1:1"),
+      QString("2:1"),
       QString("2:2"),
+      QString("3:1"),
+      QString("3:3"),
+      QString("4:2"),
+      QString("4:4"),
+      QString("6:3"),
+      QString("6:6"),
+      QString("8:4"),
+      QString("8:8"),
+      QString("16:8"),
+      QString("16:16"),
       QString("")
     };
     for (int i = 0; !items[i].isEmpty(); i++) {
@@ -1190,6 +1219,7 @@ void MainWindow::create_menus()
         multipliers->addAction(act);
         if (i == 0) act->setChecked(true);
     }
+    connect(multipliers, SIGNAL(triggered(QAction*)), this, SLOT(slot_multiplier_clicked(QAction*)));
 
     // Help section of top menu.
     help_menu = menuBar()->addMenu(tr("&Help"));
@@ -1251,6 +1281,9 @@ void MainWindow::read_settings()
     do_pseudo_ascii = settings.value("pseudo_ascii", false).toBool();
     pseudo_ascii_act->setChecked(do_pseudo_ascii);
     use_graphics = settings.value("use_graphics", 0).toInt();
+    current_multiplier = settings.value("tile_multiplier", "1:1").toString();
+    QAction *act = this->findChild<QAction *>(current_multiplier);
+    if (act) act->setChecked(true);
 
     QString load_font = settings.value("current_font", cur_font ).toString();
     cur_font.fromString(load_font);    
@@ -1270,6 +1303,7 @@ void MainWindow::write_settings()
     settings.setValue("window_state", saveState());
     settings.setValue("pseudo_ascii", do_pseudo_ascii);
     settings.setValue("use_graphics", use_graphics);
+    settings.setValue("tile_multiplier", current_multiplier);
 }
 
 

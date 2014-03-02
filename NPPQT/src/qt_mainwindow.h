@@ -45,6 +45,7 @@ public:
     int font_hgt, font_wid;
     int tile_hgt, tile_wid;
     int cell_hgt, cell_wid;
+    QString current_multiplier;
     bool do_pseudo_ascii;
 
     QPixmap blank_pix;
@@ -96,6 +97,8 @@ private slots:
     void slot_zoom_in();
     void slot_something();
     void slot_finish_bolt();
+
+    void slot_multiplier_clicked(QAction *);
 
     // Functions to make sure the available menu commands are appropriate to the situation.
     //  For example, make the save game command unanavailable when no savefile is open.
