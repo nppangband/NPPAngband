@@ -419,8 +419,7 @@ void do_cmd_pickup_from_pile(bool pickup, bool msg)
         q = "Pick up which object? (ESC to cancel):";
         s = "There are no objects to pick up!";
 
-        //if (!get_item(&item, q, s, (USE_FLOOR)))
-        if (true)
+        if (!get_item(&item, q, s, (USE_FLOOR)))
 		{
 			/*player chose escape*/
 			break;
