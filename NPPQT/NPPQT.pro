@@ -109,6 +109,7 @@ HEADERS  += src/qt_mainwindow.h\
             src/object_select.h
 
 
+
 RESOURCES += \
     NPP_Resources.qrc
 
