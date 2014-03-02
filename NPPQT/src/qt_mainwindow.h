@@ -21,6 +21,8 @@ class QAction;
 class QMenu;
 class QGraphicsView;
 class QGraphicsScene;
+class DungeonGrid;
+class DungeonCursor;
 
 class MainWindowPrivate;
 
@@ -35,11 +37,34 @@ public:
     QPoint target;
     QEventLoop ev_loop;
 
+    DungeonGrid *grids[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
+
+    int font_hgt, font_wid;
+    int tile_hgt, tile_wid;
+    int cell_hgt, cell_wid;
+    bool do_pseudo_ascii;
+
+    QPixmap blank_pix;
+    // The key must me strings of the form "[row]x[col]"
+    QHash<QString, QPixmap> tiles;
+    QPixmap tile_map;
+
+    DungeonCursor *cursor;
+
     MainWindowPrivate *priv;
 
     MainWindow();
 
     QPoint get_target(u32b flags);
+    void init_scene();
+    void set_font(QFont newFont);
+    void calculate_cell_size();
+    void destroy_tiles();
+    void set_graphic_mode(int mode);
+    void redraw();
+    void update_cursor();
+    void force_redraw();
+    bool panel_contains(int y, int x);
 
 protected:
     void closeEvent(QCloseEvent *event);
