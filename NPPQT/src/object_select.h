@@ -4,56 +4,8 @@
 #include <QtWidgets>
 #include "src/npp.h"
 
+
 class QTabWidget;
-
-
-class floor_tab : public QWidget
-{
-    Q_OBJECT
-
-public:
-    floor_tab();
-    bool count_floor_items(int mode, int sq_y, int sq_x);
-
-private:
-    QVector<int> floor_items;
-};
-
-class inven_tab : public QWidget
-{
-    Q_OBJECT
-
-public:
-    inven_tab();
-    bool count_inven_items(int mode);
-
-private:
-    QVector<int> inven_items;
-};
-
-class equip_tab : public QWidget
-{
-    Q_OBJECT
-
-public:
-    equip_tab();
-    bool count_equip_items(int mode);
-
-private:
-    QVector<int> equip_items;
-};
-
-class quiver_tab : public QWidget
-{
-    Q_OBJECT
-
-public:
-    quiver_tab();
-    bool count_quiver_items(int mode);
-
-private:
-    QVector<int> quiver_items;
-};
 
 
 class ObjectSelectDialog : public QDialog
@@ -61,11 +13,38 @@ class ObjectSelectDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ObjectSelectDialog(QString prompt, bool allow_floor, bool allow_inven, bool allow_equip, bool allow_quiver, QWidget *parent = 0);
+    explicit ObjectSelectDialog(int *item, QString prompt, int mode, bool *oops, int sq_y, int sq_x);
 
 private:
-    QTabWidget *equip_tabs;
+    QTabWidget *equip_tabs; 
     QDialogButtonBox *buttons;
+    QWidget *floor_tab;
+    QWidget *inven_tab;
+    QWidget *equip_tab;
+    QWidget *quiver_tab;
+
+    // Functions to build the actual tabs
+    void build_floor_tab();
+    void build_inven_tab();
+    void build_equip_tab();
+    void build_quiver_tab();
+
+    //Functions to track the list of possible items
+    void floor_items_count(int mode, int sq_y, int sq_x);
+    void inven_items_count(int mode);
+    void equip_items_count(int mode);
+    void quiver_items_count(int mode);
+
+    //Vectors to store the index numbers of the actual objects
+    QVector<int> floor_items;
+    QVector<int> inven_items;
+    QVector<int> equip_items;
+    QVector<int> quiver_items;
+
+    bool allow_floor;
+    bool allow_inven;
+    bool allow_equip;
+    bool allow_quiver;
 };
 
 

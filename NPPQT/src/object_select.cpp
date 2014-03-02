@@ -21,14 +21,14 @@
 
 #include "src/object_select.h"
 
-bool floor_tab::count_floor_items(int mode, int sq_y, int sq_x)
+void ObjectSelectDialog::floor_items_count(int mode, int sq_y, int sq_x)
 {
     int this_o_idx, next_o_idx;
 
     // assume we aren't using the floor
-    bool allow_floor = FALSE;
+    allow_floor = FALSE;
 
-    if (!(mode & (USE_FLOOR))) return (FALSE);
+    if (!(mode & (USE_FLOOR))) return;
 
     // Wipe the vector
     floor_items.clear();
@@ -50,14 +50,12 @@ bool floor_tab::count_floor_items(int mode, int sq_y, int sq_x)
         floor_items.append(this_o_idx);
         allow_floor = TRUE;
     }
-
-    return (allow_floor);
 }
 
 // Make the tab for the widget
-floor_tab::floor_tab()
+void ObjectSelectDialog::build_floor_tab()
 {
-    QVBoxLayout *floor_view = new QVBoxLayout;
+    QVBoxLayout *layout = new QVBoxLayout;
 
     // Make a button for each tab.
     for (int i = 0; i < floor_items.size(); i++)
@@ -70,23 +68,25 @@ floor_tab::floor_tab()
 
         // TODO add a signal.
 
-        floor_view->addWidget(this_button);
+        layout->addWidget(this_button);
     }
-    setLayout(floor_view);
+    floor_tab->setLayout(layout);
+
+    return;
 
 }
 
-bool inven_tab::count_inven_items(int mode)
+void ObjectSelectDialog::inven_items_count(int mode)
 {
-    // assume we aren't using the floor
-    bool allow_inven = FALSE;
+    // assume we aren't using the inventory
+    allow_inven = FALSE;
 
-    if (!(mode & (USE_INVEN))) return (FALSE);
+    if (!(mode & (USE_INVEN))) return;
 
     // Wipe the vector
     inven_items.clear();
 
-    /* Scan all objects in the grid */
+    /* Scan all objects in the inventory */
     for (int i = 0; i < (INVEN_WIELD - 1); i++)
     {
 
@@ -97,13 +97,11 @@ bool inven_tab::count_inven_items(int mode)
         inven_items.append(i);
         allow_inven = TRUE;
     }
-
-    return (allow_inven);
 }
 
-inven_tab::inven_tab()
+void ObjectSelectDialog::build_inven_tab()
 {
-    QVBoxLayout *equip_view = new QVBoxLayout;
+    QVBoxLayout *layout = new QVBoxLayout;
 
     // Make a button for each tab.
     for (int i = 0; i < inven_items.size(); i++)
@@ -116,25 +114,24 @@ inven_tab::inven_tab()
 
         // TODO add a signal.
 
-        equip_view->addWidget(this_button);
+        layout->addWidget(this_button);
     }
-    setLayout(equip_view);
+    inven_tab->setLayout(layout);
 }
 
-bool equip_tab::count_equip_items(int mode)
+void ObjectSelectDialog::equip_items_count(int mode)
 {
-    // assume we aren't using the floor
-    bool allow_equip = FALSE;
+    // assume we aren't using any equipment
+    allow_equip = FALSE;
 
     // Wipe the vector
     equip_items.clear();
 
-    if (!(mode & (USE_EQUIP))) return (FALSE);
+    if (!(mode & (USE_EQUIP))) return;
 
-    /* Scan all objects in the grid */
+    /* Scan all pieces of equipment */
     for (int i = INVEN_WIELD; i < QUIVER_START; i++)
     {
-
         /* Verify item tester */
         if (!get_item_okay(i)) continue;
 
@@ -142,13 +139,11 @@ bool equip_tab::count_equip_items(int mode)
         equip_items.append(i);
         allow_equip = TRUE;
     }
-
-    return (allow_equip);
 }
 
-equip_tab::equip_tab()
+void ObjectSelectDialog::build_equip_tab()
 {
-    QVBoxLayout *equip_view = new QVBoxLayout;
+    QVBoxLayout *layout = new QVBoxLayout;
 
     // Make a button for each tab.
     for (int i = 0; i < equip_items.size(); i++)
@@ -161,22 +156,22 @@ equip_tab::equip_tab()
 
         // TODO add a signal.
 
-        equip_view->addWidget(this_button);
+        layout->addWidget(this_button);
     }
-    setLayout(equip_view);
+    equip_tab->setLayout(layout);
 }
 
-bool quiver_tab::count_quiver_items(int mode)
+void ObjectSelectDialog::quiver_items_count(int mode)
 {
     // assume we aren't using the quiver
-    bool allow_quiver = FALSE;
+    allow_quiver = FALSE;
 
     // Wipe the vector
     quiver_items.clear();
 
-    if (!(mode & (USE_QUIVER))) return (FALSE);
+    if (!(mode & (USE_QUIVER))) return;
 
-    /* Scan all objects in the grid */
+    /* Scan all objects in the quiver */
     for (int i = INVEN_WIELD; i < QUIVER_START; i++)
     {
 
@@ -188,12 +183,12 @@ bool quiver_tab::count_quiver_items(int mode)
         allow_quiver = TRUE;
     }
 
-    return (allow_quiver);
+    return;
 }
 
-quiver_tab::quiver_tab()
+void ObjectSelectDialog::build_quiver_tab()
 {
-    QVBoxLayout *quiver_view = new QVBoxLayout;
+    QVBoxLayout *layout = new QVBoxLayout;
 
     // Make a button for each tab.
     for (int i = 0; i < quiver_items.size(); i++)
@@ -206,22 +201,62 @@ quiver_tab::quiver_tab()
 
         // TODO add a signal.
 
-        quiver_view->addWidget(this_button);
+        layout->addWidget(this_button);
     }
-    setLayout(quiver_view);
+    quiver_tab->setLayout(layout);
 }
 
 
 
-ObjectSelectDialog::ObjectSelectDialog(QString prompt, bool allow_floor, bool allow_inven, bool allow_equip, bool allow_quiver, QWidget *parent) : QDialog(parent)
+ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool *oops, int sq_y, int sq_x)
 {
     equip_tabs = new QTabWidget;
+    floor_tab = new QWidget;
+    inven_tab = new QWidget;
+    equip_tab = new QWidget;
+    quiver_tab = new QWidget;
 
-    // Add the tabs as necessary
-    if (allow_floor) equip_tabs->addTab(new floor_tab(), "Floor Items");
-    //if (allow_inven) equip_tabs->addTab(new inven_tab(), "Inventory");
-    //if (allow_equip) equip_tabs->addTab(new equip_tab(), "Equipment");
-    //if (allow_quiver) equip_tabs->addTab(new quiver_tab(), "Quiver");
+    // First, find the eligible objects
+    floor_items_count(mode, sq_y, sq_x);
+    inven_items_count(mode);
+    equip_items_count(mode);
+    quiver_items_count(mode);
+
+    // Handle no available objects.
+    if (!allow_floor && !allow_inven && !allow_equip && !allow_quiver)
+    {
+        /* Cancel p_ptr->command_see */
+        p_ptr->command_see = FALSE;
+
+        /* Report failure */
+        *oops = TRUE;
+
+        /* TODO return FALSE Done here */
+        return;
+    }
+
+    // Build, then add the tabs as necessary
+    if (allow_floor)
+    {
+        build_floor_tab();
+        equip_tabs->addTab(floor_tab, "&Floor Items");
+
+    }
+    if (allow_inven)
+    {
+        build_inven_tab();
+        equip_tabs->addTab(inven_tab, "&Inventory");
+    }
+    if (allow_equip)
+    {
+        build_equip_tab();
+        equip_tabs->addTab(equip_tab, "&Equipment");
+    }
+    if (allow_quiver)
+    {
+        build_quiver_tab();
+        equip_tabs->addTab(quiver_tab, "&Quiver");
+    }
 
     buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
@@ -259,68 +294,7 @@ static bool get_item_allow(int item, bool is_harmless)
     return (TRUE);
 }
 
-/**
- * Display list items to choose from
- */
-bool item_menu(int *cp, QString pmt, int mode, bool *oops, int sq_y, int sq_x)
-{
-    // SAVE For my infomenu_iter menu_f = {get_item_tag, NULL, get_item_display, get_item_action };
-    bool done;
 
-    int j;
-
-    bool allow_floor = count_floor_items(mode, sq_y, sq_x);
-    bool allow_equip = count_equip_items(mode);
-    bool allow_inven = count_inven_items(mode);
-    bool allow_quiver = count_quiver_items(mode);
-
-    /* Require at least one legal choice */
-    if (!allow_inven && !allow_equip && !allow_floor && !allow_quiver)
-    {
-        /* Cancel p_ptr->command_see */
-        p_ptr->command_see = FALSE;
-
-        /* Report failure */
-        *oops = TRUE;
-
-        /* Done here */
-        return FALSE;
-    }
-
-    /* Hack -- Start on quiver if shooting or throwing */
-    if ((mode & (QUIVER_FIRST)) && allow_quiver)
-    {
-        p_ptr->command_wrk = (USE_EQUIP);
-    }
-    /* Hack -- Start on equipment if requested */
-    else if ((mode == (USE_EQUIP)) && allow_equip)
-    {
-        p_ptr->command_wrk = (USE_EQUIP);
-    }
-
-    /* Use inventory if allowed. */
-    else if (allow_inven)
-    {
-        p_ptr->command_wrk = (USE_INVEN);
-    }
-
-    /* Use equipment if allowed */
-    else if (allow_equip)
-    {
-        p_ptr->command_wrk = (USE_EQUIP);
-    }
-
-    /* Use floor if allowed */
-    else if (allow_floor)
-    {
-        p_ptr->command_wrk = (USE_FLOOR);
-    }
-    /* Hack -- Use (empty) inventory if no other choices available. */
-    else
-    {
-        p_ptr->command_wrk = (USE_INVEN);
-    }
-}
 
 
 /**
