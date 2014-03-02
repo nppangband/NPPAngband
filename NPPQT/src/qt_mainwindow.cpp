@@ -663,6 +663,8 @@ MainWindow::MainWindow()
     cursor = new DungeonCursor(this);
     do_pseudo_ascii = false;
 
+    current_multiplier = "1:1";
+
     dungeon_scene = new QGraphicsScene;
     graphics_view = new QGraphicsView(dungeon_scene);
     graphics_view->installEventFilter(this);
@@ -734,24 +736,6 @@ void MainWindow::setup_nppmoria()
 }
 
 //  Support functions for the file menu.
-
-void MainWindow::debug_dungeon()
-{
-    QDialog *dlg = new QDialog(this);
-
-    dlg->setLayout(new QVBoxLayout());   
-
-    wiz_light();
-
-    pop_up_message_box(QString("Player: (%1,%2)").arg(p_ptr->py).arg(p_ptr->px));
-
-    //dlg->resize(QSize(1024, 500));
-
-    dlg->setWindowState(Qt::WindowMaximized);
-
-    dlg->exec();
-    delete dlg;
-}
 
 // Prepare to play a game of NPPAngband.
 void MainWindow::start_game_nppangband()
@@ -825,20 +809,28 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
     return QObject::eventFilter(obj, event);
 }
 
+void MainWindow::process_targetting_key(int key)
+{
+    switch (key) {
+    case Qt::Key_Escape:
+        pop_up_message_box("Cancelling targetting");
+        target = QPoint(-1, -1);
+        ev_loop.quit();
+        break;
+    }
+}
+
 void MainWindow::keyPressEvent(QKeyEvent* which_key)
 {
-    // Move down
+    // Go to special key handling
+    if (ui_mode == UI_MODE_TARGETTING) {
+        process_targetting_key(which_key->key());
+        return;
+    }
+
+    // Normal mode
     switch (which_key->key())
     {
-        case Qt::Key_Escape:
-        {
-            if (ui_mode == UI_MODE_TARGETTING) {
-                pop_up_message_box("Cancelling targetting");
-                target = QPoint(-1, -1);
-                ev_loop.quit();
-            }
-            break;
-        }
         // Move down
         case Qt::Key_2:
         case Qt::Key_Down:
@@ -934,11 +926,11 @@ void MainWindow::options_dialog()
 void MainWindow::fontselect_dialog()
 {
     bool selected;
-    cur_font = QFontDialog::getFont( &selected, cur_font, this );
+    QFont font = QFontDialog::getFont( &selected, cur_font, this );
 
     if (selected)
     {
-        set_font(cur_font);
+        set_font(font);
         redraw();
     }
 }
@@ -1201,7 +1193,18 @@ void MainWindow::create_menus()
     multipliers = new QActionGroup(this);
     QString items[] = {
       QString("1:1"),
+      QString("2:1"),
       QString("2:2"),
+      QString("3:1"),
+      QString("3:3"),
+      QString("4:2"),
+      QString("4:4"),
+      QString("6:3"),
+      QString("6:6"),
+      QString("8:4"),
+      QString("8:8"),
+      QString("16:8"),
+      QString("16:16"),
       QString("")
     };
     for (int i = 0; !items[i].isEmpty(); i++) {
@@ -1211,6 +1214,7 @@ void MainWindow::create_menus()
         multipliers->addAction(act);
         if (i == 0) act->setChecked(true);
     }
+    connect(multipliers, SIGNAL(triggered(QAction*)), this, SLOT(slot_multiplier_clicked(QAction*)));
 
     // Help section of top menu.
     help_menu = menuBar()->addMenu(tr("&Help"));
@@ -1297,6 +1301,7 @@ void MainWindow::write_settings()
     settings.setValue("window_state", saveState());
     settings.setValue("pseudo_ascii", do_pseudo_ascii);
     settings.setValue("use_graphics", use_graphics);
+    settings.setValue("tile_multiplier", current_multiplier);
 }
 
 
@@ -1326,7 +1331,8 @@ void MainWindow::load_file(const QString &file_name)
             }
             else {
                 update_file_menu_game_active();
-                launch_game();                
+                launch_game();
+                ui_player_moved();
                 redraw();
             }
         }
@@ -1346,7 +1352,8 @@ void MainWindow::launch_birth(bool quick_start)
     if (dlg->run()) {                
         update_file_menu_game_active();
         launch_game();
-        save_character();        
+        save_character();
+        ui_player_moved();
         redraw();
     } else {
         cleanup_npp_games();
