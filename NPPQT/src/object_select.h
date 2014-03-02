@@ -21,7 +21,7 @@ class ObjectSelectDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ObjectSelectDialog(int *item, QString prompt, int mode, bool *oops, int sq_y, int sq_x);
+    explicit ObjectSelectDialog(int *item, QString prompt, int mode, bool *success, int sq_y, int sq_x);
 
 private:
     QTabWidget *object_tabs;
@@ -56,11 +56,18 @@ private:
     bool allow_equip;
     bool allow_quiver;
 
+    //Record an item selection
+    void record_selection(QPushButton* this_pushbutton);
+    void record_cancellation();
+    int  get_selected_object();
+
     // Variables for keeping track of which item is selected
     QVector<byte> tab_order;
     byte which_tab;
     byte selected_tab;
     int selected_item;
+    bool cancelled;
+
 };
 
 
