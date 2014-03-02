@@ -30,15 +30,18 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-
-
 public:
+    // The editable part of the main window.
+    QGraphicsView *graphics_view;
+    QGraphicsScene *dungeon_scene;
+
     int ui_mode;
     QPoint target;
     QEventLoop ev_loop;
 
     DungeonGrid *grids[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
 
+    QFont cur_font;
     int font_hgt, font_wid;
     int tile_hgt, tile_wid;
     int cell_hgt, cell_wid;
@@ -50,8 +53,6 @@ public:
     QPixmap tile_map;
 
     DungeonCursor *cursor;
-
-    MainWindowPrivate *priv;
 
     MainWindow();
 
@@ -65,6 +66,7 @@ public:
     void update_cursor();
     void force_redraw();
     bool panel_contains(int y, int x);
+    void rebuild_tile(QString key);
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -107,10 +109,6 @@ private slots:
 
 
 private:
-
-    // The editable part of the main window.
-    QGraphicsView *graphics_view;
-    QGraphicsScene *dungeon_scene;
 
     void setup_nppangband();
     void setup_nppmoria();
@@ -175,7 +173,6 @@ private:
 
     // information about the main window
     QFontDatabase font_database;
-    QFont cur_font;
     bool use_bigtile;
 
     QActionGroup *multipliers;
