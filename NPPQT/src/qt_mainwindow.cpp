@@ -1155,6 +1155,17 @@ QPoint MainWindow::get_target(u32b flags)
     return target;
 }
 
+void MainWindow::slot_multiplier_clicked(QAction *action)
+{
+    if (action) current_multiplier = action->objectName();
+    QList<QString> parts = current_multiplier.split(":");
+    if (parts.size() == 2) {
+        int x = parts.at(1).toInt();
+        int y = parts.at(0).toInt();
+        graphics_view->setTransform(QTransform::fromScale(x, y));
+    }
+}
+
 //Actually add the QActions intialized in create_actions to the menu
 void MainWindow::create_menus()
 {
@@ -1261,6 +1272,12 @@ void MainWindow::read_settings()
     do_pseudo_ascii = settings.value("pseudo_ascii", false).toBool();
     pseudo_ascii_act->setChecked(do_pseudo_ascii);
     use_graphics = settings.value("use_graphics", 0).toInt();
+    current_multiplier = settings.value("tile_multiplier", "1:1").toString();
+    QAction *act = this->findChild<QAction *>(current_multiplier);
+    if (act) {
+        act->setChecked(true);
+        slot_multiplier_clicked(act);
+    }
 
     QString load_font = settings.value("current_font", cur_font ).toString();
     cur_font.fromString(load_font);    
