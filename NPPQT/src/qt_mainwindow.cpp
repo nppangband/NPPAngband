@@ -1299,7 +1299,8 @@ void MainWindow::load_file(const QString &file_name)
             }
             else {
                 update_file_menu_game_active();
-                launch_game();                
+                launch_game();
+                ui_player_moved();
                 redraw();
             }
         }
@@ -1319,7 +1320,8 @@ void MainWindow::launch_birth(bool quick_start)
     if (dlg->run()) {                
         update_file_menu_game_active();
         launch_game();
-        save_character();        
+        save_character();
+        ui_player_moved();
         redraw();
     } else {
         cleanup_npp_games();
