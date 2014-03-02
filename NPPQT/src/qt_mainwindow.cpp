@@ -8,7 +8,6 @@
 #include "src/init.h"
 #include "src/optionsdialog.h"
 #include "src/birthdialog.h"
-#include "src/dungeonbox.h"
 #include "emitter.h"
 
 static MainWindow *main_window = 0;
@@ -444,6 +443,12 @@ void MainWindow::calculate_cell_size()
     cell_wid = font_wid;
     if (tile_wid > cell_wid) cell_wid = tile_wid;
 
+    QList<QString> parts = current_multiplier.split(":");
+    if (parts.size() == 2) {
+        cell_wid *= parts.at(1).toInt();
+        cell_hgt *= parts.at(0).toInt();
+    }
+
     for (int y = 0; y < MAX_DUNGEON_HGT; y++) {
         for (int x = 0; x < MAX_DUNGEON_WID; x++) {
             grids[y][x]->cellSizeChanged();
@@ -664,6 +669,8 @@ MainWindow::MainWindow()
     cursor = new DungeonCursor(this);
     do_pseudo_ascii = false;
 
+    current_multiplier = "1:1";
+
     dungeon_scene = new QGraphicsScene;
     graphics_view = new QGraphicsView(dungeon_scene);
     graphics_view->installEventFilter(this);
@@ -735,30 +742,6 @@ void MainWindow::setup_nppmoria()
 }
 
 //  Support functions for the file menu.
-
-void MainWindow::debug_dungeon()
-{
-    QDialog *dlg = new QDialog(this);
-
-    DungeonBox *textbox = new DungeonBox;
-
-    dlg->setLayout(new QVBoxLayout());
-
-    dlg->layout()->addWidget(textbox);    
-
-    wiz_light();
-
-    pop_up_message_box(QString("Player: (%1,%2)").arg(p_ptr->py).arg(p_ptr->px));
-
-    textbox->redraw();
-
-    //dlg->resize(QSize(1024, 500));
-
-    dlg->setWindowState(Qt::WindowMaximized);
-
-    dlg->exec();
-    delete dlg;
-}
 
 // Prepare to play a game of NPPAngband.
 void MainWindow::start_game_nppangband()
@@ -832,20 +815,28 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
     return QObject::eventFilter(obj, event);
 }
 
+void MainWindow::process_targetting_key(int key)
+{
+    switch (key) {
+    case Qt::Key_Escape:
+        pop_up_message_box("Cancelling targetting");
+        target = QPoint(-1, -1);
+        ev_loop.quit();
+        break;
+    }
+}
+
 void MainWindow::keyPressEvent(QKeyEvent* which_key)
 {
-    // Move down
+    // Go to special key handling
+    if (ui_mode == UI_MODE_TARGETTING) {
+        process_targetting_key(which_key->key());
+        return;
+    }
+
+    // Normal mode
     switch (which_key->key())
     {
-        case Qt::Key_Escape:
-        {
-            if (ui_mode == UI_MODE_TARGETTING) {
-                pop_up_message_box("Cancelling targetting");
-                target = QPoint(-1, -1);
-                ev_loop.quit();
-            }
-            break;
-        }
         // Move down
         case Qt::Key_2:
         case Qt::Key_Down:
@@ -941,11 +932,11 @@ void MainWindow::options_dialog()
 void MainWindow::fontselect_dialog()
 {
     bool selected;
-    cur_font = QFontDialog::getFont( &selected, cur_font, this );
+    QFont font = QFontDialog::getFont( &selected, cur_font, this );
 
     if (selected)
     {
-        set_font(cur_font);
+        set_font(font);
         redraw();
     }
 }
@@ -1162,6 +1153,16 @@ QPoint MainWindow::get_target(u32b flags)
     return target;
 }
 
+void MainWindow::slot_multiplier_clicked(QAction *action)
+{
+    if (action) current_multiplier = action->objectName();
+    if (character_dungeon) {
+        calculate_cell_size();
+        destroy_tiles();
+        redraw();
+    }
+}
+
 //Actually add the QActions intialized in create_actions to the menu
 void MainWindow::create_menus()
 {
@@ -1197,7 +1198,18 @@ void MainWindow::create_menus()
     multipliers = new QActionGroup(this);
     QString items[] = {
       QString("1:1"),
+      QString("2:1"),
       QString("2:2"),
+      QString("3:1"),
+      QString("3:3"),
+      QString("4:2"),
+      QString("4:4"),
+      QString("6:3"),
+      QString("6:6"),
+      QString("8:4"),
+      QString("8:8"),
+      QString("16:8"),
+      QString("16:16"),
       QString("")
     };
     for (int i = 0; !items[i].isEmpty(); i++) {
@@ -1207,6 +1219,7 @@ void MainWindow::create_menus()
         multipliers->addAction(act);
         if (i == 0) act->setChecked(true);
     }
+    connect(multipliers, SIGNAL(triggered(QAction*)), this, SLOT(slot_multiplier_clicked(QAction*)));
 
     // Help section of top menu.
     help_menu = menuBar()->addMenu(tr("&Help"));
@@ -1268,6 +1281,9 @@ void MainWindow::read_settings()
     do_pseudo_ascii = settings.value("pseudo_ascii", false).toBool();
     pseudo_ascii_act->setChecked(do_pseudo_ascii);
     use_graphics = settings.value("use_graphics", 0).toInt();
+    current_multiplier = settings.value("tile_multiplier", "1:1").toString();
+    QAction *act = this->findChild<QAction *>(current_multiplier);
+    if (act) act->setChecked(true);
 
     QString load_font = settings.value("current_font", cur_font ).toString();
     cur_font.fromString(load_font);    
@@ -1287,6 +1303,7 @@ void MainWindow::write_settings()
     settings.setValue("window_state", saveState());
     settings.setValue("pseudo_ascii", do_pseudo_ascii);
     settings.setValue("use_graphics", use_graphics);
+    settings.setValue("tile_multiplier", current_multiplier);
 }
 
 
@@ -1316,7 +1333,8 @@ void MainWindow::load_file(const QString &file_name)
             }
             else {
                 update_file_menu_game_active();
-                launch_game();                
+                launch_game();
+                ui_player_moved();
                 redraw();
             }
         }
@@ -1336,7 +1354,8 @@ void MainWindow::launch_birth(bool quick_start)
     if (dlg->run()) {                
         update_file_menu_game_active();
         launch_game();
-        save_character();        
+        save_character();
+        ui_player_moved();
         redraw();
     } else {
         cleanup_npp_games();

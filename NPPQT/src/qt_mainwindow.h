@@ -45,6 +45,7 @@ public:
     int font_hgt, font_wid;
     int tile_hgt, tile_wid;
     int cell_hgt, cell_wid;
+    QString current_multiplier;
     bool do_pseudo_ascii;
 
     QPixmap blank_pix;
@@ -67,6 +68,7 @@ public:
     void force_redraw();
     bool panel_contains(int y, int x);
     void rebuild_tile(QString key);
+    void process_targetting_key(int key);
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -96,6 +98,8 @@ private slots:
     void slot_something();
     void slot_finish_bolt();
 
+    void slot_multiplier_clicked(QAction *);
+
     // Functions to make sure the available menu commands are appropriate to the situation.
     //  For example, make the save game command unanavailable when no savefile is open.
     void update_file_menu_game_active();
@@ -113,8 +117,6 @@ private:
     void setup_nppangband();
     void setup_nppmoria();
     void launch_birth(bool quick_start = false);
-
-    void debug_dungeon();
 
     // Functions that initialize the file menu of the main window.
     void create_actions();

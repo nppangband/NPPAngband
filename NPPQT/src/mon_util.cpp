@@ -4489,7 +4489,7 @@ void flush_monster_messages(void)
             else
             {
                 /* Just add a slight flavor */
-                buf = QString("the %s") .arg(race_name);
+                buf = QString("the %1").arg(race_name);
             }
 
         }

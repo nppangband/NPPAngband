@@ -69,7 +69,6 @@ SOURCES +=  src/qt_main.cpp\
             src/target.cpp \
             src/timed.cpp \
             src/utilities.cpp \
-            src/dungeonbox.cpp \
     src/prefs.cpp \
     src/emitter.cpp \
     src/object_select.cpp
@@ -104,7 +103,6 @@ HEADERS  += src/qt_mainwindow.h\
             src/mon_classes.h \
             src/player_classes.h \
             src/birthdialog.h \
-            src/dungeonbox.h \
             src/emitter.h \
             src/object_select.h
 
