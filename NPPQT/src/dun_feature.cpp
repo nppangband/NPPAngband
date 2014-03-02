@@ -679,7 +679,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             x_ptr->x_flags &= ~(EF1_HIDDEN);
 
             /* Memorize */
-            // TODO note_spot(y, x);
+            note_spot(y, x);
 
             /* Redraw */
             light_spot(y, x);
@@ -3164,6 +3164,57 @@ void process_dynamic_terrain(void)
     }
 }
 
+/*
+ * Return a random index of the given array based on the weights contained in it
+ * Each index can have a different weight and bigger values are more probable
+ * to be picked
+ * Return -1 on error
+ */
+static int pick_random_item(int chance_values[], int max)
+{
+    int total_chance = 0;
+    int rand_chance;
+    int i;
+
+    /* Paranoia */
+    if (max < 1) return (-1);
+
+    /* Get the sum of the chances */
+    for (i = 0; i < max; i++)
+    {
+        /* Paranoia */
+        if (chance_values[i] < 0) chance_values[i] = 0;
+
+        /* Update the total */
+        total_chance += chance_values[i];
+    }
+
+    /* Paranoia */
+    if (total_chance == 0) return (0);
+
+    /* Get a random chance value */
+    rand_chance = rand_int(total_chance);
+
+    /* Reset the counter */
+    total_chance = 0;
+
+    /* Get the respective index of that chance */
+    for (i = 0; i < max; i++)
+    {
+        /* Update the total chance again */
+        total_chance += chance_values[i];
+
+        /* The random chance is contained in this entry */
+        if (rand_chance < total_chance) break;
+    }
+
+    /* Paranoia */
+    if (i >= max) i = max - 1;
+
+    /* Return the index */
+    return (i);
+}
+
 
 #define MAX_RACES 10
 
@@ -3275,7 +3326,7 @@ s16b select_powerful_race(void)
     }
 
     /* Pick a monster race */
-    r_idx = 1; //TODO races[pick_random_item(rarities, n)];
+    r_idx = races[pick_random_item(rarities, n)];
 
     /* Done */
     return (r_idx);

@@ -2280,8 +2280,7 @@ static bool activate_object(object_type *o_ptr, int dir)
     }
 
     /* Activate the artifact */
-    // TODO message(MSG_ACT_ARTIFACT, 0, "You activate it...");
-    message(QString("You activate it..."));
+    color_message(QString("You activate it..."), MSG_ACT_ARTIFACT);
 
     /* Artifacts, except for special artifacts with dragon scale mail*/
     if ((o_ptr->art_num) && (o_ptr->art_num < z_info->art_norm_max))

@@ -2204,7 +2204,7 @@ s16b floor_carry(int y, int x, object_type *j_ptr)
         rearrange_stack(y, x);
 
         /* Notice */
-        // TODO note_spot(y, x);
+        note_spot(y, x);
 
         /* Redraw */
         light_spot(y, x);

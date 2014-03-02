@@ -2343,7 +2343,7 @@ static bool temp_light(int y, int x)
             dungeon_info[y][x].cave_info |= (CAVE_SEEN);
 
             /* Remember? */
-            // TODO // TODO note_spot(y,x);
+            note_spot(y,x);
 
             /* Temporarily seen */
             dungeon_info[y][x].cave_info &= ~(CAVE_SEEN);
@@ -3047,7 +3047,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
                 dungeon_info[y][x].cave_info &= ~(CAVE_MARK);
 
                 /* Redraw the grid */
-                // TODO note_spot(y, x);
+                note_spot(y, x);
 
                 light_spot(y, x);
             }
@@ -3119,7 +3119,7 @@ static bool project_f(int who, int y, int x, int dist, int dam, int typ, int flg
                     dungeon_info[y][x].cave_info &= ~(CAVE_MARK);
 
                     /* Redraw the grid */
-                    // TODO note_spot(y, x);
+                    note_spot(y, x);
 
                     light_spot(y, x);
                 }

@@ -73,7 +73,7 @@ void search(void)
 						x_ptr->x_flags &= ~(EF1_HIDDEN);
 
 						/* Show the trap */
-                        //note_spot(y, x);
+                        note_spot(y, x);
 
 						light_spot(y, x);
 
@@ -186,7 +186,7 @@ static bool put_object_in_quiver(object_type *o_ptr)
     QString o_name;
 	int slot;
 
-    // TODO u16b msgt = MSG_GENERIC;
+    u16b msgt = MSG_GENERIC;
 
 	/*hack - don't pickup &nothings*/
 	if (!o_ptr->k_idx) return (FALSE);
@@ -215,8 +215,7 @@ static bool put_object_in_quiver(object_type *o_ptr)
     o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
 	/* Message */
-    // TODO msg_c_format(msgt, "You have readied %s (%c) in your quiver.", o_name, index_to_label(slot));
-    message(QString("You have readied %1 (%2) in your quiver.").arg(o_name).arg(index_to_label(slot)));
+    color_message(QString("You have readied %1 (%2) in your quiver.").arg(o_name).arg(index_to_label(slot)), msgt);
 
 	/* Cursed! */
     if (o_ptr->is_cursed())
@@ -259,7 +258,7 @@ bool put_object_in_inventory(object_type *o_ptr)
 {
     QString o_name;
 
-    // TODO u16b msgt = MSG_GENERIC;
+    u16b msgt = MSG_GENERIC;
 
 	int slot = inven_carry(o_ptr);
 
@@ -283,8 +282,7 @@ bool put_object_in_inventory(object_type *o_ptr)
     o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
 	/* Message */
-    // TODO msg_c_format(msgt, "You have %s (%c).", o_name, index_to_label(slot));
-    message(QString("You have %1 (%2).").arg(o_name).arg(index_to_label(slot)));
+    color_message(QString("You have %1 (%2).").arg(o_name).arg(index_to_label(slot)), msgt);
 
 	/* No longer marked "in use */
 	o_ptr->obj_in_use = FALSE;
@@ -493,7 +491,7 @@ void py_pickup_gold(void)
         o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
 		/* Message */
-        // TODO message_format(sound_msg, 0, "You have found %s.", o_name);
+        sound(sound_msg);
         message(QString("You have found %1.").arg(o_name));
 
 		/* Collect the gold */
@@ -743,16 +741,16 @@ void py_pickup(bool pickup)
 	/* Only one object */
 	if (objects_left == 1)
 	{
-        // TODO u16b msgt = MSG_GENERIC;
+        u16b msgt = MSG_GENERIC;
 
 		/* Get the object */
         o_ptr = &o_list[dungeon_info[py][px].object_idx];
 
         o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
-        if (p_ptr->timed[TMD_BLIND]) message(QString("You are aware of %1.").arg(o_name));
+        if (p_ptr->timed[TMD_BLIND]) color_message(QString("You are aware of %1.").arg(o_name), msgt);
 
-        else message(QString("You see %1.").arg(o_name));
+        else color_message(QString("You see %1.").arg(o_name), msgt);
 	}
 
 	/* Multiple objects */
