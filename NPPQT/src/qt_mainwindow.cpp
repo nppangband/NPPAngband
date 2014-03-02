@@ -897,10 +897,10 @@ void MainWindow::keyPressEvent(QKeyEvent* which_key)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (!current_savefile.isEmpty() && character_loaded)
+    if (!current_savefile.isEmpty() && character_dungeon)
     {
-        //save_character();
-        //pop_up_message_box("Game saved");
+        save_character();
+        pop_up_message_box("Game saved");
     }
     write_settings();
     event->accept();
