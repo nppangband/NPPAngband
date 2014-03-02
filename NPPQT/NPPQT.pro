@@ -28,6 +28,7 @@ SOURCES +=  src/qt_main.cpp\
             src/dun_feature.cpp \
             src/dun_process.cpp \
             src/dun_util.cpp \
+            src/emitter.cpp \
             src/globals.cpp \
             src/init_edit_files.cpp\
             src/init_game.cpp\
@@ -45,6 +46,7 @@ SOURCES +=  src/qt_main.cpp\
             src/object_desc.cpp \
             src/object_hooks.cpp \
             src/object_make.cpp \
+            src/object_select.cpp \
             src/object_use.cpp \
             src/object_util.cpp \
             src/optionsdialog.cpp \
@@ -53,6 +55,7 @@ SOURCES +=  src/qt_main.cpp\
             src/player_process.cpp \
             src/player_spell.cpp \
             src/player_util.cpp \
+            src/prefs.cpp \
             src/project.cpp \
             src/project_util.cpp \
             src/quest.cpp \
@@ -68,13 +71,7 @@ SOURCES +=  src/qt_main.cpp\
             src/tables.cpp \
             src/target.cpp \
             src/timed.cpp \
-            src/utilities.cpp \
-    src/prefs.cpp \
-    src/emitter.cpp \
-    src/object_select.cpp
-
-
-
+            src/utilities.cpp
 
 
 

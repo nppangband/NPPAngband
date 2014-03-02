@@ -21,6 +21,23 @@
 
 #include "src/object_select.h"
 
+// Record the selection of object, close the dialog box.
+void ObjectSelectDialog::record_selection(QPushButton* this_pushbutton)
+{
+    selected_tab = this_pushbutton->property("which_tab").toInt();
+    selected_item = this_pushbutton->property("which_item").toInt();
+
+    object_tabs->hide();
+}
+
+// Record the selection of object, close the dialog box.
+void ObjectSelectDialog::record_cancellation()
+{
+    cancelled = TRUE;
+
+    object_tabs->hide();
+}
+
 void ObjectSelectDialog::floor_items_count(int mode, int sq_y, int sq_x)
 {
     int this_o_idx, next_o_idx;
@@ -67,7 +84,7 @@ void ObjectSelectDialog::build_floor_tab()
         this_button->setProperty("which_tab", which_tab);
         this_button->setProperty("which_item", floor_items[i]);
 
-        // TODO add a signal.
+        connect(this_button, SIGNAL(clicked()), this, SLOT(record_selection(this_button)));
 
         layout->addWidget(this_button);
     }
@@ -265,8 +282,23 @@ byte ObjectSelectDialog::find_starting_tab(int mode)
     return (0);
 }
 
+// Return the index off the actual object selected.
+int ObjectSelectDialog::get_selected_object()
+{
+    byte tab = tab_order[selected_tab];
 
-ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool *oops, int sq_y, int sq_x)
+    if (tab == TAB_FLOOR) return (0 - floor_items[selected_item]);
+    if (tab == TAB_INVEN) return (inven_items[selected_item]);
+    if (tab == TAB_EQUIP) return (equip_items[selected_item]);
+    if (tab == TAB_QUIVER) return (quiver_items[selected_item]);
+
+    // This should never happen.  Paranoia
+    cancelled = TRUE;
+    return (0);
+}
+
+
+ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool *success, int sq_y, int sq_x)
 {
     object_tabs = new QTabWidget;
     floor_tab = new QWidget;
@@ -277,6 +309,7 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
     // Start with a clean slate
     tab_order.clear();
     which_tab = 0;
+    cancelled = FALSE;
 
     // First, find the eligible objects
     floor_items_count(mode, sq_y, sq_x);
@@ -291,7 +324,7 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
         p_ptr->command_see = FALSE;
 
         /* Report failure */
-        *oops = TRUE;
+        *success = FALSE;
 
         /* TODO return FALSE Done here */
         return;
@@ -328,19 +361,35 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
     }
 
     buttons = new QDialogButtonBox(QDialogButtonBox::Cancel);
+    connect(buttons, SIGNAL(clicked(QAbstractButton*)), this, SLOT(record_cancellation()));
 
     // Figure out which tab should appear first.
     object_tabs->setTabEnabled(find_starting_tab(mode), TRUE);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(object_tabs);
-    mainLayout->addWidget(buttons);
-    setLayout(mainLayout);
-
+    QVBoxLayout *main_layout = new QVBoxLayout;
+    main_layout->addWidget(object_tabs);
+    main_layout->addWidget(buttons);
+    setLayout(main_layout);
     setWindowTitle(prompt);
 
+    // Show dialog until object is selected.
+    object_tabs->show();
 
+    //Handle cancellation
+    if (cancelled)
+    {
+        *success = FALSE;
+    }
+    else
+    {
+        *item = get_selected_object();
 
+        // Paranoia
+        if (cancelled) *success = FALSE;
+        else *success = TRUE;
+    }
+
+    delete main_layout;
 }
 
 
@@ -427,23 +476,20 @@ static bool get_item_allow(int item, bool is_harmless)
  */
 bool get_item(int *cp, QString pmt, QString str, int mode)
 {
-    bool item;
-
-    bool oops = FALSE;
+    bool success = FALSE;
 
     /* No item selected */
-    item = FALSE;
     *cp = 0;
 
     /* Go to menu */
-    item = 1; // TODO item_menu(cp, pmt, mode, &oops, p_ptr->py, p_ptr->px);
+    ObjectSelectDialog(cp, pmt, mode, &success, p_ptr->py, p_ptr->px);
 
     /* Check validity */
-    if (item)
+    if (success)
     {
         if (!get_item_allow(*cp, FALSE))
         {
-            item = FALSE;
+            success = FALSE;
         }
     }
 
@@ -463,10 +509,10 @@ bool get_item(int *cp, QString pmt, QString str, int mode)
     p_ptr->redraw |= (PR_INVEN | PR_EQUIP);
 
     /* Warning if needed */
-    if (oops && !str.isEmpty()) message(str);
+    if (!success && !str.isEmpty()) message(str);
 
     /* Result */
-    return (item);
+    return (success);
 }
 
 /*
@@ -476,26 +522,23 @@ bool get_item(int *cp, QString pmt, QString str, int mode)
 */
 bool get_item_beside(int *cp, QString pmt, QString str, int sq_y, int sq_x)
 {
-    bool item;
-
-    bool oops = FALSE;
+    bool success = FALSE;
 
     /* No item selected */
-    item = FALSE;
     *cp = 0;
 
     /* Paranoia */
-    if (!in_bounds_fully(sq_y, sq_x)) oops = TRUE;
+    if (!in_bounds_fully(sq_y, sq_x)) success = FALSE;
 
     /* Go to menu */
-    else item = 1; //TODO item_menu(cp, pmt, (USE_FLOOR), &oops, sq_y, sq_x);
+    ObjectSelectDialog(cp, pmt, (USE_FLOOR), &success, sq_y, sq_x);
 
     /* Check validity */
-    if (item)
+    if (success)
     {
         if (!get_item_allow(*cp, TRUE))
         {
-            item = FALSE;
+            success = FALSE;
         }
     }
 
@@ -512,8 +555,8 @@ bool get_item_beside(int *cp, QString pmt, QString str, int sq_y, int sq_x)
     item_tester_hook = NULL;
 
     /* Warning if needed */
-    if (oops && !str.isEmpty()) message(str);
+    if (!success && !str.isEmpty()) message(str);
 
     /* Result */
-    return (item);
+    return (success);
 }
