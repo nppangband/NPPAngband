@@ -8,7 +8,6 @@
 #include "src/init.h"
 #include "src/optionsdialog.h"
 #include "src/birthdialog.h"
-#include "src/dungeonbox.h"
 #include "emitter.h"
 
 static MainWindow *main_window = 0;
@@ -736,30 +735,6 @@ void MainWindow::setup_nppmoria()
 
 //  Support functions for the file menu.
 
-void MainWindow::debug_dungeon()
-{
-    QDialog *dlg = new QDialog(this);
-
-    DungeonBox *textbox = new DungeonBox;
-
-    dlg->setLayout(new QVBoxLayout());
-
-    dlg->layout()->addWidget(textbox);    
-
-    wiz_light();
-
-    pop_up_message_box(QString("Player: (%1,%2)").arg(p_ptr->py).arg(p_ptr->px));
-
-    textbox->redraw();
-
-    //dlg->resize(QSize(1024, 500));
-
-    dlg->setWindowState(Qt::WindowMaximized);
-
-    dlg->exec();
-    delete dlg;
-}
-
 // Prepare to play a game of NPPAngband.
 void MainWindow::start_game_nppangband()
 {
@@ -832,20 +807,28 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
     return QObject::eventFilter(obj, event);
 }
 
+void MainWindow::process_targetting_key(int key)
+{
+    switch (key) {
+    case Qt::Key_Escape:
+        pop_up_message_box("Cancelling targetting");
+        target = QPoint(-1, -1);
+        ev_loop.quit();
+        break;
+    }
+}
+
 void MainWindow::keyPressEvent(QKeyEvent* which_key)
 {
-    // Move down
+    // Go to special key handling
+    if (ui_mode == UI_MODE_TARGETTING) {
+        process_targetting_key(which_key->key());
+        return;
+    }
+
+    // Normal mode
     switch (which_key->key())
     {
-        case Qt::Key_Escape:
-        {
-            if (ui_mode == UI_MODE_TARGETTING) {
-                pop_up_message_box("Cancelling targetting");
-                target = QPoint(-1, -1);
-                ev_loop.quit();
-            }
-            break;
-        }
         // Move down
         case Qt::Key_2:
         case Qt::Key_Down:
@@ -941,11 +924,11 @@ void MainWindow::options_dialog()
 void MainWindow::fontselect_dialog()
 {
     bool selected;
-    cur_font = QFontDialog::getFont( &selected, cur_font, this );
+    QFont font = QFontDialog::getFont( &selected, cur_font, this );
 
     if (selected)
     {
-        set_font(cur_font);
+        set_font(font);
         redraw();
     }
 }

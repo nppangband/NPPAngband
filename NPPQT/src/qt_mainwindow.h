@@ -67,6 +67,7 @@ public:
     void force_redraw();
     bool panel_contains(int y, int x);
     void rebuild_tile(QString key);
+    void process_targetting_key(int key);
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -113,8 +114,6 @@ private:
     void setup_nppangband();
     void setup_nppmoria();
     void launch_birth(bool quick_start = false);
-
-    void debug_dungeon();
 
     // Functions that initialize the file menu of the main window.
     void create_actions();
