@@ -36,7 +36,6 @@ void ObjectSelectDialog::floor_items_count(int mode, int sq_y, int sq_x)
     /* Scan all objects in the grid */
     for (this_o_idx = dungeon_info[sq_y][sq_x].object_idx; this_o_idx; this_o_idx = next_o_idx)
     {
-
         /* Get the object */
         object_type *o_ptr = &o_list[this_o_idx];
 
@@ -57,7 +56,7 @@ void ObjectSelectDialog::build_floor_tab()
 {
     QVBoxLayout *layout = new QVBoxLayout;
 
-    // Make a button for each tab.
+    // Make a button for each object.
     for (int i = 0; i < floor_items.size(); i++)
     {
         QChar which_char = letter_to_number(i);
@@ -65,6 +64,8 @@ void ObjectSelectDialog::build_floor_tab()
         QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
         QString button_name = (QString("%1) %2") .arg(which_char) .arg(o_name));
         QPushButton *this_button = new QPushButton(button_name);
+        this_button->setProperty("which_tab", which_tab);
+        this_button->setProperty("which_item", floor_items[i]);
 
         // TODO add a signal.
 
@@ -103,7 +104,7 @@ void ObjectSelectDialog::build_inven_tab()
 {
     QVBoxLayout *layout = new QVBoxLayout;
 
-    // Make a button for each tab.
+    // Make a button for each object.
     for (int i = 0; i < inven_items.size(); i++)
     {
         QChar which_char = letter_to_number(i);
@@ -111,6 +112,8 @@ void ObjectSelectDialog::build_inven_tab()
         QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
         QString button_name = (QString("%1) %2") .arg(which_char) .arg(o_name));
         QPushButton *this_button = new QPushButton(button_name);
+        this_button->setProperty("which_tab", which_tab);
+        this_button->setProperty("which_item", inven_items[i]);
 
         // TODO add a signal.
 
@@ -145,7 +148,7 @@ void ObjectSelectDialog::build_equip_tab()
 {
     QVBoxLayout *layout = new QVBoxLayout;
 
-    // Make a button for each tab.
+    // Make a button for each object.
     for (int i = 0; i < equip_items.size(); i++)
     {
         QChar which_char = letter_to_number(i);
@@ -153,6 +156,8 @@ void ObjectSelectDialog::build_equip_tab()
         QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
         QString button_name = (QString("%1) %2") .arg(which_char) .arg(o_name));
         QPushButton *this_button = new QPushButton(button_name);
+        this_button->setProperty("which_tab", which_tab);
+        this_button->setProperty("which_item", equip_items[i]);
 
         // TODO add a signal.
 
@@ -190,7 +195,7 @@ void ObjectSelectDialog::build_quiver_tab()
 {
     QVBoxLayout *layout = new QVBoxLayout;
 
-    // Make a button for each tab.
+    // Make a button for each object.
     for (int i = 0; i < quiver_items.size(); i++)
     {
         QChar which_char = letter_to_number(i);
@@ -198,6 +203,8 @@ void ObjectSelectDialog::build_quiver_tab()
         QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
         QString button_name = (QString("%1) %2") .arg(which_char) .arg(o_name));
         QPushButton *this_button = new QPushButton(button_name);
+        this_button->setProperty("which_tab", which_tab);
+        this_button->setProperty("which_item", quiver_items[i]);
 
         // TODO add a signal.
 
@@ -206,15 +213,70 @@ void ObjectSelectDialog::build_quiver_tab()
     quiver_tab->setLayout(layout);
 }
 
+// determine which tab to start with
+byte ObjectSelectDialog::find_starting_tab(int mode)
+{
+    byte starting_tab = 0;
+
+    // First figure out which starting tab we want.
+
+    /* Hack -- Start on quiver if shooting or throwing */
+    if ((mode & (QUIVER_FIRST)) && allow_quiver)
+    {
+        starting_tab = TAB_QUIVER;
+    }
+    /* Hack -- Start on equipment if requested */
+    else if ((mode == (USE_EQUIP)) && allow_equip)
+    {
+        starting_tab = TAB_EQUIP;
+    }
+
+    /* Use inventory if allowed. */
+    else if (allow_inven)
+    {
+        starting_tab = TAB_INVEN;
+    }
+
+    /* Use equipment if allowed */
+    else if (allow_equip)
+    {
+        starting_tab = TAB_EQUIP;
+    }
+
+    /* Use floor if allowed */
+    else if (allow_floor)
+    {
+        starting_tab = TAB_FLOOR;
+    }
+    /* Hack -- Use (empty) inventory if no other choices available. */
+    else
+    {
+        starting_tab = TAB_INVEN;
+    }
+
+    // Now find out which tab that is in the dialog box.
+    for (int i = 0; i < tab_order.size(); i++)
+    {
+        // Found it.
+        if (tab_order[i] == starting_tab) return (i);
+    }
+
+    // Oops.
+    return (0);
+}
 
 
 ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool *oops, int sq_y, int sq_x)
 {
-    equip_tabs = new QTabWidget;
+    object_tabs = new QTabWidget;
     floor_tab = new QWidget;
     inven_tab = new QWidget;
     equip_tab = new QWidget;
     quiver_tab = new QWidget;
+
+    // Start with a clean slate
+    tab_order.clear();
+    which_tab = 0;
 
     // First, find the eligible objects
     floor_items_count(mode, sq_y, sq_x);
@@ -239,36 +301,45 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
     if (allow_floor)
     {
         build_floor_tab();
-        equip_tabs->addTab(floor_tab, "&Floor Items");
-
+        object_tabs->addTab(floor_tab, "&Floor Items");
+        tab_order.append(TAB_FLOOR);
+        which_tab++;
     }
     if (allow_inven)
     {
         build_inven_tab();
-        equip_tabs->addTab(inven_tab, "&Inventory");
+        object_tabs->addTab(inven_tab, "&Inventory");
+        tab_order.append(TAB_INVEN);
+        which_tab++;
     }
     if (allow_equip)
     {
         build_equip_tab();
-        equip_tabs->addTab(equip_tab, "&Equipment");
+        object_tabs->addTab(equip_tab, "&Equipment");
+        tab_order.append(TAB_EQUIP);
+        which_tab++;
     }
     if (allow_quiver)
     {
         build_quiver_tab();
-        equip_tabs->addTab(quiver_tab, "&Quiver");
+        object_tabs->addTab(quiver_tab, "&Quiver");
+        tab_order.append(TAB_QUIVER);
+        which_tab++;
     }
 
-    buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    buttons = new QDialogButtonBox(QDialogButtonBox::Cancel);
 
-    connect(buttons, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttons, SIGNAL(rejected()), this, SLOT(reject()));
+    // Figure out which tab should appear first.
+    object_tabs->setTabEnabled(find_starting_tab(mode), TRUE);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(equip_tabs);
+    mainLayout->addWidget(object_tabs);
     mainLayout->addWidget(buttons);
     setLayout(mainLayout);
 
     setWindowTitle(prompt);
+
+
 
 }
 

@@ -4,6 +4,14 @@
 #include <QtWidgets>
 #include "src/npp.h"
 
+// The numbered order of the tabs
+enum
+{
+    TAB_FLOOR = 0,
+    TAB_INVEN,
+    TAB_EQUIP,
+    TAB_QUIVER
+};
 
 class QTabWidget;
 
@@ -16,7 +24,7 @@ public:
     explicit ObjectSelectDialog(int *item, QString prompt, int mode, bool *oops, int sq_y, int sq_x);
 
 private:
-    QTabWidget *equip_tabs; 
+    QTabWidget *object_tabs;
     QDialogButtonBox *buttons;
     QWidget *floor_tab;
     QWidget *inven_tab;
@@ -28,6 +36,8 @@ private:
     void build_inven_tab();
     void build_equip_tab();
     void build_quiver_tab();
+
+    byte find_starting_tab(int mode);
 
     //Functions to track the list of possible items
     void floor_items_count(int mode, int sq_y, int sq_x);
@@ -45,6 +55,12 @@ private:
     bool allow_inven;
     bool allow_equip;
     bool allow_quiver;
+
+    // Variables for keeping track of which item is selected
+    QVector<byte> tab_order;
+    byte which_tab;
+    byte selected_tab;
+    int selected_item;
 };
 
 
