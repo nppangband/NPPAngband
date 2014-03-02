@@ -675,7 +675,7 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Get an item */
             q = "Enchant which item? ";
             s = "You have nothing to enchant.";
-            //TODO if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_QUIVER))) return (FALSE);
+            if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_QUIVER))) return (FALSE);
 
             /*Got the item*/
             o_ptr = &inventory[item];
@@ -777,7 +777,7 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Get an item */
             q = "Brand which item? ";
             s = "You have nothing to Brand.";
-            // TODO if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_QUIVER))) return (FALSE);
+            if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_QUIVER))) return (FALSE);
 
             /*Got the item*/
             o_ptr = &inventory[item];
@@ -847,7 +847,7 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Get an item */
             q = "Recharge which item? ";
             s = "You have nothing to recharge.";
-            // TODO if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return (FALSE);
+            if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return (FALSE);
 
             /*Got the item*/
             o_ptr = &inventory[item];
@@ -1082,7 +1082,7 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Get an item */
             q = (QString("Choose an item to be made into an artifact, %1.") .arg(title));
             s = (QString("You have no eligible item, %1.") .arg(title));
-            // TODO if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return (FALSE);
+            if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return (FALSE);
 
             /*Got the item*/
             o_ptr = &inventory[item];
@@ -1158,7 +1158,7 @@ static bool store_service_aux(int store_num, s16b choice)
             /* Get an item */
             q = (QString("Choose an item to be made into an artifact, %1. ") .arg(title));
             s = (QString("You have no eligible item, %1. ") .arg(title));
-            // TODO if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return (FALSE);
+            if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return (FALSE);
 
             /*Got the item*/
             o_ptr = &inventory[item];
@@ -1374,7 +1374,7 @@ static bool store_service_aux(int store_num, s16b choice)
             q = "Fireproof which book? ";
             if (cp_ptr->spell_book == TV_PRAYER_BOOK) s = "You have no flammable prayer books!";
             else s = "You have no flammable spell books!";
-            // TODO if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return (FALSE);
+            if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return (FALSE);
 
             /*Got the item*/
             o_ptr = &inventory[item];
@@ -4230,7 +4230,7 @@ static bool store_sell(void)
     /* Get an item */
     p_ptr->command_wrk = USE_INVEN;
     p_ptr->command_cmd = 'd';
-    if (0) // TODO (!get_item(&item, prompt, reject, get_mode))
+    if (!get_item(&item, prompt, reject, get_mode))
     {
         return (FALSE);
     }
