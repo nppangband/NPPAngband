@@ -1310,7 +1310,7 @@ static bool read_scroll(object_type *o_ptr, bool *ident)
             /* Only accept legal items. */
             item_tester_hook = item_tester_hook_randart;
 
-            // TODO if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) break;
+            if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) break;
 
             /* Got the item */
             o_ptr = &inventory[item];

@@ -70,7 +70,8 @@ SOURCES +=  src/qt_main.cpp\
             src/timed.cpp \
             src/utilities.cpp \
     src/prefs.cpp \
-    src/emitter.cpp
+    src/emitter.cpp \
+    src/object_select.cpp
 
 
 
@@ -102,7 +103,8 @@ HEADERS  += src/qt_mainwindow.h\
             src/mon_classes.h \
             src/player_classes.h \
             src/birthdialog.h \
-    src/emitter.h
+            src/emitter.h \
+            src/object_select.h
 
 
 RESOURCES += \

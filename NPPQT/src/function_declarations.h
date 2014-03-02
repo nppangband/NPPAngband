@@ -308,6 +308,10 @@ extern void steal_object_from_monster(int y, int x);
 extern void acquirement(int y1, int x1, int num, bool great);
 extern void create_food(void);
 
+// object_select.cpp
+extern bool get_item(int *cp, QString pmt, QString str, int mode);
+extern bool get_item_beside(int *cp, QString pmt, QString str, int sq_y, int sq_x);
+
 // object_use.cpp
 extern bool find_object_in_use(int *item);
 extern void do_cmd_use(int code, cmd_arg args[]);
