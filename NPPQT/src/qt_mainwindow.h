@@ -8,7 +8,12 @@
 #include <QImage>
 #include <QFontDatabase>
 #include <QKeyEvent>
+#include <QActionGroup>
+#include <QEventLoop>
 #include <src/defines.h>
+
+#define UI_MODE_DEFAULT 0
+#define UI_MODE_TARGETTING 1
 
 #define MAX_RECENT_SAVEFILES    5
 
@@ -26,13 +31,20 @@ class MainWindow : public QMainWindow
 
 
 public:
+    int ui_mode;
+    QPoint target;
+    QEventLoop ev_loop;
+
     MainWindowPrivate *priv;
 
     MainWindow();
 
+    QPoint get_target(u32b flags);
+
 protected:
     void closeEvent(QCloseEvent *event);
     void keyPressEvent(QKeyEvent* which_key);
+    bool eventFilter(QObject *obj, QEvent *event);
 
 
 private slots:
@@ -140,6 +152,8 @@ private:
     QFontDatabase font_database;
     QFont cur_font;
     bool use_bigtile;
+
+    QActionGroup *multipliers;
 };
 
 #endif

@@ -28,14 +28,14 @@ public:
     void cellSizeChanged();
 
     MainWindowPrivate *parent;
-    int x, y;
+    int c_x, c_y;
 };
 
 class DungeonCursor: public QGraphicsItem
 {    
 public:
     MainWindowPrivate *parent;
-    int x, y;
+    int c_x, c_y;
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -125,9 +125,14 @@ QPixmap rotate_pix(QPixmap src, qreal angle)
 
 void MainWindow::slot_something()
 {
+    QPoint t = ui_get_target(0);
+    if (t.x() == -1 || t.y() == -1) return;
+    //pop_up_message_box(_num(t.x()));
+
     QPointF p(p_ptr->px, p_ptr->py);
-    QPointF p2(p_ptr->px + rand_int(40) - 20, p_ptr->py + rand_int(40) - 20);
+    //QPointF p2(p_ptr->px + rand_int(40) - 20, p_ptr->py + rand_int(40) - 20);
     //QPointF p2(p_ptr->px - 20, p_ptr->py);
+    QPointF p2(t);
 
     /*
     BallAnimation *ball = new BallAnimation(p2, 2);
@@ -209,17 +214,22 @@ void DungeonGrid::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!character_dungeon) return;
 
-    int old_x = parent->cursor->x;
-    int old_y = parent->cursor->y;
+    int old_x = parent->cursor->c_x;
+    int old_y = parent->cursor->c_y;
     parent->grids[old_y][old_x]->update();
     parent->cursor->setVisible(true);
-    parent->cursor->moveTo(y, x);
-    //parent->force_redraw(); // Hack -- Force full redraw, to eliminate bug in QT
+    parent->cursor->moveTo(c_y, c_x);
 
-    dungeon_type *d_ptr = &dungeon_info[y][x];
-    if (d_ptr->monster_idx > 0) {
-        int r_idx = mon_list[d_ptr->monster_idx].r_idx;
-        pop_up_message_box(r_info[r_idx].r_name_full);
+    if (main_window->ui_mode == UI_MODE_TARGETTING) {
+        main_window->target = QPoint(c_x, c_y);
+        main_window->ev_loop.quit();
+    }
+    else {
+        dungeon_type *d_ptr = &dungeon_info[c_y][c_x];
+        if (d_ptr->monster_idx > 0) {
+            int r_idx = mon_list[d_ptr->monster_idx].r_idx;
+            pop_up_message_box(r_info[r_idx].r_name_full);
+        }
     }
 
     QGraphicsItem::mousePressEvent(event);
@@ -234,7 +244,7 @@ void MainWindowPrivate::update_cursor()
 DungeonCursor::DungeonCursor(MainWindowPrivate *_parent)
 {
     parent = _parent;
-    x = y = 0;
+    c_x = c_y = 0;
     setZValue(100);
     setVisible(false);
 }
@@ -248,10 +258,15 @@ void DungeonCursor::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 {
     if (!character_dungeon) return;
 
-    if (!in_bounds(y, x)) return;
+    if (!in_bounds(c_y, c_x)) return;
 
     painter->save();
-    painter->setPen(QColor("yellow"));
+    if (main_window->ui_mode == UI_MODE_DEFAULT) {
+        painter->setPen(QColor("yellow"));
+    }
+    else {
+        painter->setPen(QColor("red"));
+    }
     painter->drawRect(0, 0, parent->cell_wid - 1, parent->cell_hgt - 1);
     if ((parent->cell_wid > 16) && (parent->cell_hgt > 16)){
         int z = 3;
@@ -265,9 +280,9 @@ void DungeonCursor::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 
 void DungeonCursor::moveTo(int _y, int _x)
 {
-    x = _x;
-    y = _y;
-    setPos(x * parent->cell_wid, y * parent->cell_hgt);
+    c_x = _x;
+    c_y = _y;
+    setPos(c_x * parent->cell_wid, c_y * parent->cell_hgt);
 }
 
 MainWindowPrivate::MainWindowPrivate()
@@ -280,8 +295,8 @@ MainWindowPrivate::MainWindowPrivate()
 
 DungeonGrid::DungeonGrid(int _x, int _y, MainWindowPrivate *_parent)
 {
-    x = _x;
-    y = _y;
+    c_x = _x;
+    c_y = _y;
     parent = _parent;
     setZValue(0);
 }
@@ -295,11 +310,11 @@ void DungeonGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 {
     if (!character_dungeon) return;
 
-    if (!in_bounds(y, x)) return;
+    if (!in_bounds(c_y, c_x)) return;
 
     painter->fillRect(QRectF(0, 0, parent->cell_wid, parent->cell_hgt), Qt::black);
 
-    dungeon_type *d_ptr = &dungeon_info[y][x];
+    dungeon_type *d_ptr = &dungeon_info[c_y][c_x];
     QChar square_char = d_ptr->dun_char;
     QColor square_color = d_ptr->dun_color;
     bool empty = true;
@@ -695,10 +710,14 @@ MainWindow::MainWindow()
 
     setAttribute(Qt::WA_DeleteOnClose);
 
+    target = QPoint(-1, -1);
+    ui_mode = UI_MODE_DEFAULT;
+
     priv = new MainWindowPrivate;
 
     dungeon_scene = new QGraphicsScene;
     graphics_view = new QGraphicsView(dungeon_scene);
+    graphics_view->installEventFilter(this);
     //graphics_view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
     QWidget *central = new QWidget;
@@ -855,31 +874,55 @@ void MainWindow::save_and_close()
     priv->redraw();
 }
 
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        this->keyPressEvent(dynamic_cast<QKeyEvent *>(event));
+        return true;
+    }
+
+    return QObject::eventFilter(obj, event);
+}
+
 void MainWindow::keyPressEvent(QKeyEvent* which_key)
 {
     // Move down
     switch (which_key->key())
     {
+        case Qt::Key_Escape:
+        {
+            if (ui_mode == UI_MODE_TARGETTING) {
+                pop_up_message_box("Cancelling targetting");
+                target = QPoint(-1, -1);
+                ev_loop.quit();
+            }
+            break;
+        }
         // Move down
         case Qt::Key_2:
+        case Qt::Key_Down:
         {
             move_player(2, FALSE);
             return;
         }
         // Move up
         case Qt::Key_8:
+        case Qt::Key_Up:
         {
             move_player(8, FALSE);
             return;
         }
         // Move left
         case Qt::Key_4:
+        case Qt::Key_Left:
         {
             move_player(4, FALSE);
             return;
         }
         // Move right
         case Qt::Key_6:
+        case Qt::Key_Right:
         {
             move_player(6, FALSE);
             return;
@@ -1144,6 +1187,33 @@ void MainWindow::create_signals()
     // currently empty
 }
 
+QPoint ui_get_target(u32b flags)
+{
+    return main_window->get_target(flags);
+}
+
+QPoint MainWindow::get_target(u32b flags)
+{
+    target = QPoint(-1, -1);
+    if (!character_dungeon) return target;
+
+    target = QPoint(p_ptr->px, p_ptr->py);
+    priv->cursor->moveTo(target.y(), target.x());
+    priv->cursor->setVisible(true);
+    priv->cursor->update();
+
+    ui_mode = UI_MODE_TARGETTING;
+
+    pop_up_message_box("Entering Targetting mode. Click over a grid or press ESCAPE");
+
+    ev_loop.exec();
+
+    ui_mode = UI_MODE_DEFAULT;
+
+    priv->update_cursor();
+
+    return target;
+}
 
 //Actually add the QActions intialized in create_actions to the menu
 void MainWindow::create_menus()
@@ -1176,7 +1246,21 @@ void MainWindow::create_menus()
     settings->addAction(dvg_mode_act);
     settings->addAction(old_tiles_act);
     settings->addAction(pseudo_ascii_act);
-    settings->addAction(bigtile_act);
+
+    QMenu *submenu = settings->addMenu(tr("Tile multiplier"));
+    multipliers = new QActionGroup(this);
+    QString items[] = {
+      QString("1:1"),
+      QString("2:2"),
+      QString("")
+    };
+    for (int i = 0; !items[i].isEmpty(); i++) {
+        QAction *act = submenu->addAction(items[i]);
+        act->setObjectName(items[i]);
+        act->setCheckable(true);
+        multipliers->addAction(act);
+        if (i == 0) act->setChecked(true);
+    }
 
     // Help section of top menu.
     help_menu = menuBar()->addMenu(tr("&Help"));
