@@ -593,7 +593,8 @@ extern QPixmap pseudo_ascii(QChar chr, QColor color, QFont font, QSizeF size);
 extern QPixmap darken_pix(QPixmap src);
 extern QPixmap colorize_pix(QPixmap src, QColor color);
 extern QPixmap gray_pix(QPixmap src);
-UserInput ui_get_input();
+extern UserInput ui_get_input();
+extern void ui_show_cursor(int y, int x);
 
 /* randart.c */
 extern QString make_random_name(byte min_length, byte max_length);
@@ -799,12 +800,12 @@ extern const slays_structure brands_info_nppmoria[4];
 extern const mon_susceptibility_struct mon_suscept[4];
 extern const colors_preset preset_colors[MAX_COLORS];
 
-/* target.c */
+/* target.cpp */
 extern bool target_able(int m_idx);
 extern bool target_okay(void);
 extern void target_set_monster(int m_idx);
 extern void target_set_location(int y, int x);
-extern int target_dir(QChar ch);
+extern int target_dir(UserInput input);
 extern bool get_aim_dir(int *dp, bool target_trap);
 extern bool target_set_closest(int mode);
 

@@ -39,6 +39,7 @@ class UserInput
 public:
     int mode;
     int key;
+    QString text;
     int x, y;
 };
 
