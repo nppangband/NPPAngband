@@ -31,21 +31,7 @@ typedef struct brands_structure brands_structure;
 typedef struct mon_susceptibility_struct mon_susceptibility_struct;
 
 
-class cmd_arg
-{
-public:
-    QString string;
 
-    int choice;
-    int item;
-    int number;
-    int direction;
-
-    struct
-    {
-        int x, y;
-    } point;
-} ;
 
 /*
  * Information about maximal indices of certain arrays

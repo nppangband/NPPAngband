@@ -373,7 +373,7 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
     setWindowTitle(prompt);
 
     // Show dialog until object is selected.
-    object_tabs->show();
+    this->exec();
 
     //Handle cancellation
     if (cancelled)
@@ -389,7 +389,7 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
         else *success = TRUE;
     }
 
-    delete main_layout;
+    this->deleteLater();
 }
 
 

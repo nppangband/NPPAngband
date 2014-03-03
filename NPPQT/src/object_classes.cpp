@@ -474,6 +474,8 @@ bool object_type::has_inscription()
     return (!inscription.isEmpty());
 }
 
+
+
 /*
  * Determine if an object has charges
  */
@@ -652,3 +654,8 @@ void flavor_type::flavor_wipe()
     tile_id.clear();
 }
 
+void cmd_arg::wipe()
+{
+    choice = item = number = direction = slot = 0;
+    verify = FALSE;
+} ;

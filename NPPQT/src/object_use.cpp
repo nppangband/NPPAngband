@@ -23,7 +23,7 @@
 /*
  * Determine if the player can read scrolls.
  */
-static bool player_can_read(void)
+bool player_can_read(void)
 {
     if (p_ptr->timed[TMD_BLIND])
     {

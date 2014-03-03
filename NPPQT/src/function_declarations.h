@@ -59,6 +59,8 @@ extern void feature_kind_track(int f_idx);
 extern void disturb(int stop_search, int unused_flag);
 
 // cmd3.cpp
+extern void wield_in_quiver(object_type *o_ptr, int slot);
+extern void wield_item(object_type *o_ptr, int item, int slot);
 extern bool make_monster_trap(void);
 extern void py_set_trap(int y, int x);
 extern bool py_modify_trap(int y, int x);
@@ -67,6 +69,17 @@ extern bool py_modify_trap(int y, int x);
 extern void do_cmd_feeling(void);
 extern void create_notes_file(void);
 extern void delete_notes_file(void);
+
+//cmd_objects
+extern cmd_arg obj_uninscribe(object_type *o_ptr, cmd_arg args);
+extern void do_cmd_uninscribe(void);
+extern void do_cmd_inscribe(void);
+extern cmd_arg obj_examine(object_type *o_ptr, cmd_arg args);
+extern void do_cmd_takeoff(void);
+extern void do_cmd_wield(void);
+extern void do_cmd_drop(void);
+extern void do_cmd_swap_weapon(void);
+extern cmd_arg obj_cast(object_type *o_ptr, cmd_arg args);
 
 // cmd_spell.cpp
 extern s16b spell_chance(int spell);
@@ -313,6 +326,7 @@ extern bool get_item(int *cp, QString pmt, QString str, int mode);
 extern bool get_item_beside(int *cp, QString pmt, QString str, int sq_y, int sq_x);
 
 // object_use.cpp
+extern bool player_can_read(void);
 extern bool find_object_in_use(int *item);
 extern void do_cmd_use(int code, cmd_arg args[]);
 
@@ -402,6 +416,7 @@ extern void object_tried(object_type *o_ptr);
 extern void object_history(object_type *o_ptr, byte origin, s16b r_idx);
 extern void stack_histories(object_type *o_ptr, const object_type *j_ptr);
 extern int quiver_space_per_unit(object_type *o_ptr);
+extern bool obj_can_wear(object_type *o_ptr);
 
 
 /* player_attack.cpp */
@@ -685,7 +700,6 @@ extern bool call_huorns(void);
 //squelch.cpp
 extern QString get_autoinscription(s16b kindIdx);
 extern void apply_autoinscription(object_type *o_ptr);
-extern int add_autoinscription(s16b kind, QString inscription);
 extern void autoinscribe_ground(void);
 extern void autoinscribe_pack(void);
 extern QString squelch_to_label(int squelch);
@@ -813,6 +827,7 @@ extern QString capitilize_first(QString line);
 extern void pop_up_message_box(QString message, QMessageBox::Icon the_icon = QMessageBox::Information);
 extern bool get_check(QString question);
 extern QString get_string(QString question);
+extern s16b get_quantity(QString prompt, int max);
 extern QColor add_preset_color(int which_color);
 extern void message(QString msg);
 extern void color_message(QString msg, int which_color);

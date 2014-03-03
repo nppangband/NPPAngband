@@ -733,25 +733,7 @@ void MainWindow::setup_nppmoria()
     init_npp_games();
 }
 
-//  Support functions for the file menu.
 
-void MainWindow::debug_dungeon()
-{
-    QDialog *dlg = new QDialog(this);
-
-    dlg->setLayout(new QVBoxLayout());   
-
-    wiz_light();
-
-    pop_up_message_box(QString("Player: (%1,%2)").arg(p_ptr->py).arg(p_ptr->px));
-
-    //dlg->resize(QSize(1024, 500));
-
-    dlg->setWindowState(Qt::WindowMaximized);
-
-    dlg->exec();
-    delete dlg;
-}
 
 // Prepare to play a game of NPPAngband.
 void MainWindow::start_game_nppangband()
@@ -827,6 +809,8 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 void MainWindow::keyPressEvent(QKeyEvent* which_key)
 {
+    QString keystring = which_key->text();
+
     // Move down
     switch (which_key->key())
     {
@@ -891,13 +875,20 @@ void MainWindow::keyPressEvent(QKeyEvent* which_key)
             move_player(3, FALSE);
             return;
         }
+
         default:
         {
-            //  TODO something useful with unused keypresses
-            QMessageBox* box = new QMessageBox();
-            box->setWindowTitle(QString("Unused Key"));
-            box->setText(QString("You Pressed: ")+ which_key->text());
-            box->show();
+            // handle lowercase keystrokes
+            if (keystring.operator ==("t")) do_cmd_takeoff();
+            else if (keystring.operator ==("w")) do_cmd_wield();
+            else
+            {
+                //  TODO something useful with unused keypresses
+                QMessageBox* box = new QMessageBox();
+                box->setWindowTitle(QString("Unused Key %1"));
+                box->setText(QString("You Pressed: ")+ which_key->text());
+                box->show();
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 #include "src/npp.h"
 #include "src/qt_mainwindow.h"
-#include <QMessageBox>
-#include <QInputDialog>
+#include <QtWidgets>
+
 
 QString _num(int n)
 {
@@ -188,6 +188,53 @@ QString get_string(QString question)
     return (text);
 }
 
+/*
+ * Request a "quantity" from the user
+ *
+ * Allow "p_ptr->command_arg" to specify a quantity
+ */
+s16b get_quantity(QString prompt, int max)
+{
+
+    bool ok;
+
+    int amt = 1;
+
+    /* Use "command_arg" */
+    if (p_ptr->command_arg)
+    {
+        /* Extract a number */
+        amt = p_ptr->command_arg;
+
+        /* Clear "command_arg" */
+        p_ptr->command_arg = 0;
+
+        /* Enforce the maximum */
+        if (amt > max) amt = max;
+
+        /* Enforce the minimum */
+        if (amt < 0) amt = 0;
+
+        return (amt);
+    }
+
+    /* Build a prompt if needed */
+    if (prompt.isEmpty())
+    {
+
+        /* Build a prompt */
+        prompt = (QString("Quantity (0-%d) hit ") .arg(max));
+    }
+
+
+    // Input dialog (this, title, prompt, initial value, min, max, step, ok, flags)
+    amt = QInputDialog::getInt(0, "Please enter a number", prompt, amt, 1, max, 1, &ok, 0);
+
+    if (!ok) return (0);
+
+    /* Return the result */
+    return (amt);
+}
 
 
 QColor add_preset_color(int which_color)

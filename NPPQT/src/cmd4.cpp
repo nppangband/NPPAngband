@@ -16,7 +16,7 @@
  *    are included in all such copies.  Other copyrights may also apply.
  */
 
-#include "npp.h"
+#include "src/npp.h"
 #include <QFile>
 
 

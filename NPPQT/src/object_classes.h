@@ -151,7 +151,6 @@ class object_type
     bool can_study();
     bool can_cast();
     bool can_takeoff();
-    bool can_wear();
     bool has_inscription();
     bool has_charges();
     void uncurse();
@@ -353,6 +352,21 @@ public:
     QString tile_id;
 };
 
+
+class cmd_arg
+{
+public:
+    QString string;
+
+    int choice;
+    int item;
+    int number;
+    int direction;
+    int slot;
+    bool verify;
+
+    void wipe();
+} ;
 
 
 #endif // OBJECT_TYPE_CLASS_H

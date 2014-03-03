@@ -1464,36 +1464,6 @@
         (flavor_info[k_info[T].flavor].d_char) : \
         (k_info[T].d_char))
 
-/*
- * Find out if we have to show the prompts for auto(un)inscribe object kinds
- * based on an instance object inscription.
- * We show them if:
- *    The player enabled this feature
- *    The object is aware (to not reveal flavors) and
- *    The object isn't an special artifact template and
- *    The object isn't an identified artifact and
- *    The object isn't ammo.
- */
-#define ACCESS_AUTOINSCRIPTIONS(o_ptr) \
-(expand_inscribe && \
-object_aware_p(o_ptr) && \
-!(k_info[(o_ptr)->k_idx].k_flags3 & TR3_INSTA_ART) && \
-!(artifact_p(o_ptr) && object_known_p(o_ptr)) && \
-!ammo_p(o_ptr))
-
-
-
-
-
-#define artifact_known(T) \
-    (T-is_artifact() && ( object_known_p(T) || \
-                        (T)->discount == INSCRIP_TERRIBLE || \
-                        (T)->discount == INSCRIP_INDESTRUCTIBLE || \
-                        (T)->discount == INSCRIP_SPECIAL ))
-
-
-
-
 
 
 /* Object origins */

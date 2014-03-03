@@ -5137,3 +5137,12 @@ void stack_histories(object_type *o_ptr, const object_type *j_ptr)
     }
 }
 
+/*
+ * Can only put on wieldable items
+ */
+bool obj_can_wear(object_type *o_ptr)
+{
+    s16b x = wield_slot(o_ptr);
+
+    return ((x >= INVEN_WIELD) && x < QUIVER_END);
+}
