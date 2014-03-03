@@ -564,6 +564,8 @@ extern void process_greater_vault_quest(void);
 extern void process_guild_quests(void);
 
 // qt_mainwindow.cpp
+extern QString rect_to_string(QRect rect);
+extern QRect visible_dungeon();
 extern bool panel_contains(int y, int x);
 extern void ui_redraw_grid(int y, int x);
 extern void ui_redraw_all();
@@ -572,11 +574,11 @@ extern void ui_center(int y, int x);
 extern void ui_player_moved();
 extern QSize ui_grid_size();
 extern QPixmap rotate_pix(QPixmap src, qreal angle);
-extern QPoint ui_get_target(u32b flags);
 extern QPixmap pseudo_ascii(QChar chr, QColor color, QFont font, QSizeF size);
 extern QPixmap darken_pix(QPixmap src);
 extern QPixmap colorize_pix(QPixmap src, QColor color);
 extern QPixmap gray_pix(QPixmap src);
+UserInput ui_get_input();
 
 /* randart.c */
 extern QString make_random_name(byte min_length, byte max_length);

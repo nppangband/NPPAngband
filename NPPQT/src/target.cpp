@@ -1,4 +1,3 @@
-
 /*
  * File: target.c
  * Purpose: Targeting code
@@ -19,6 +18,24 @@
 
 #include "src/npp.h"
 
+
+/*
+ * Determine if a trap makes a reasonable target
+ */
+static bool target_able_trap(int y, int x)
+{
+    /* Must be on line of fire */
+    if (!player_can_fire_bold(y, x)) return (FALSE);
+
+    /* Only player traps allowed. Ignore monster traps and glyphs */
+    if (!cave_player_trap_bold(y, x)) return (FALSE);
+
+    /* Ignore hidden traps */
+    if (x_list[dungeon_info[y][x].effect_idx].x_flags & (EF1_HIDDEN)) return (FALSE);
+
+    /* Known player traps are okay */
+    return (TRUE);
+}
 
 /*
  * Determine is a monster makes a reasonable target
@@ -69,6 +86,143 @@ bool target_able(int m_idx)
 
     /* Assume okay */
     return (TRUE);
+}
+
+/*
+ * Sorting hook -- comp function -- by "distance to player"
+ *
+ * We use "u" and "v" to point to arrays of "x" and "y" positions,
+ * and sort the arrays by double-distance to the player.
+ */
+static bool ang_sort_comp_distance(const void *u, const void *v, int a, int b)
+{
+    int py = p_ptr->py;
+    int px = p_ptr->px;
+
+    byte *x = (byte*)(u);
+    byte *y = (byte*)(v);
+
+    int da, db, kx, ky;
+
+    /* Absolute distance components */
+    kx = x[a]; kx -= px; kx = ABS(kx);
+    ky = y[a]; ky -= py; ky = ABS(ky);
+
+    /* Approximate Double Distance to the first point */
+    da = ((kx > ky) ? (kx + kx + ky) : (ky + ky + kx));
+
+    /* Absolute distance components */
+    kx = x[b]; kx -= px; kx = ABS(kx);
+    ky = y[b]; ky -= py; ky = ABS(ky);
+
+    /* Approximate Double Distance to the first point */
+    db = ((kx > ky) ? (kx + kx + ky) : (ky + ky + kx));
+
+    /* Compare the distances */
+    return (da <= db);
+}
+
+
+/*
+ * Sorting hook -- swap function -- by "distance to player"
+ *
+ * We use "u" and "v" to point to arrays of "x" and "y" positions,
+ * and sort the arrays by distance to the player.
+ */
+static void ang_sort_swap_distance(void *u, void *v, int a, int b)
+{
+    byte *x = (byte*)(u);
+    byte *y = (byte*)(v);
+
+    byte temp;
+
+    /* Swap "x" */
+    temp = x[a];
+    x[a] = x[b];
+    x[b] = temp;
+
+    /* Swap "y" */
+    temp = y[a];
+    y[a] = y[b];
+    y[b] = temp;
+}
+
+/*
+ * Prepare the "temp" array for "target_interactive_set"
+ *
+ * Return the number of target_able monsters in the set.
+ */
+static void target_set_interactive_prepare(int mode)
+{
+    int y, x;
+
+    bool expand_look = (mode & (TARGET_LOOK)) ? TRUE : FALSE;
+
+    /* Reset "temp" array */
+    clear_temp_array();
+
+    QRect vis = visible_dungeon();
+
+    /* Scan the current panel */
+    for (y = vis.y(); y < vis.y() + vis.height(); y++)
+    {
+        for (x = vis.x(); x < vis.x() + vis.width(); x++)
+        {
+            bool do_continue = FALSE;
+
+            /* Check overflow */
+            if (temp_n >= TEMP_MAX) continue;
+
+            /* Check bounds */
+            if (!in_bounds_fully(y, x)) continue;
+
+            /* Require line of sight, unless "look" is "expanded" */
+            if (!player_has_los_bold(y, x) && (!expand_look)) continue;
+
+            /* Require "interesting" contents */
+            //if (!target_set_interactive_accept(y, x)) continue;
+
+            /* Special mode */
+            if (mode & (TARGET_KILL))
+            {
+                /* Must contain a monster */
+                if (!(dungeon_info[y][x].monster_idx > 0)) do_continue = TRUE;
+
+                /* Must be a targettable monster */
+                if (!target_able(dungeon_info[y][x].monster_idx)) do_continue = TRUE;
+            }
+
+            /* Don't continue on the trap exception, or if probing. */
+            if ((mode & (TARGET_TRAP)) && target_able_trap(y, x)) do_continue = FALSE;
+            else if (mode & (TARGET_PROBE)) do_continue = FALSE;
+
+            if (do_continue) continue;
+
+            /*
+             * Hack - don't go over redundant elemental terrain \
+             * (since we have large lakes and pools of the same terrain)
+             */
+            if ((p_ptr->target_row > 0) || (p_ptr->target_col > 0))
+            {
+                if (dungeon_info[p_ptr->target_row][p_ptr->target_col].feat == dungeon_info[y][x].feat)
+                {
+                    if (cave_ff3_match(y, x, TERRAIN_MASK)) continue;
+                }
+            }
+
+            /* Save the location */
+            temp_x[temp_n] = x;
+            temp_y[temp_n] = y;
+            temp_n++;
+        }
+    }
+
+    /* Set the sort hooks */
+    ang_sort_comp = ang_sort_comp_distance;
+    ang_sort_swap = ang_sort_swap_distance;
+
+    /* Sort the positions */
+    ang_sort(temp_x, temp_y, temp_n);
 }
 
 /*
@@ -262,13 +416,20 @@ bool get_aim_dir(int *dp, bool target_trap)
             p = "Direction ('5' for target, '*' or <click> to re-target, Escape to cancel)? ";
 
         /* Get a command (or Cancel) */
-        // TODO if (!get_com_ex(p, &ke)) break;
+        UserInput input = ui_get_input();
 
-        //TODO
+        // Paranoia
+        if (input.mode == INPUT_MODE_NONE) break;
+
+        if (input.key == Qt::Key_Escape) {
+            pop_up_message_box("Goint out from targetting");
+            break;
+        }
+
         int ke = 0;
 
         /* Analyze */
-        switch (ke)  // TODO
+        switch (input.key)  // TODO
         {
             /* Mouse aiming */
             case 0: // TODO
@@ -289,7 +450,7 @@ bool get_aim_dir(int *dp, bool target_trap)
             }
 
             /* Set to closest target */
-            case 'c':
+            case Qt::Key_C:
             {
                 if (target_set_closest(TARGET_KILL)) dir = 5;
                 break;
@@ -335,7 +496,6 @@ bool get_aim_dir(int *dp, bool target_trap)
         if (!dir) pop_up_message_box("Illegal aim direction!");
     }
 
-
     /* No direction */
     if (!dir) return (FALSE);
 
@@ -375,12 +535,7 @@ bool target_set_closest(int mode)
     target_set_monster(0);
 
     /* Get ready to do targetting */
-    // TODO target_set_interactive_prepare(mode);
-
-    /* Find the first monster in the queue */
-    y = temp_y[0];
-    x = temp_x[0];
-    m_idx = dungeon_info[y][x].monster_idx;
+    target_set_interactive_prepare(mode);
 
     /* If nothing was prepared, then return */
     if (temp_n < 1)
@@ -388,6 +543,11 @@ bool target_set_closest(int mode)
         message(QString("No Available Target."));
         return FALSE;
     }
+
+    /* Find the first monster in the queue */
+    y = temp_y[0];
+    x = temp_x[0];
+    m_idx = dungeon_info[y][x].monster_idx;
 
     /* Target the monster, if possible */
     if ((m_idx <= 0) || !target_able(m_idx))

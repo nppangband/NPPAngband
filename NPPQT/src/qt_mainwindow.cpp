@@ -12,6 +12,44 @@
 
 static MainWindow *main_window = 0;
 
+QString rect_to_string(QRect rect)
+{
+    return QString("%1:%2 (%3x%4)").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());
+}
+
+QRect visible_dungeon()
+{
+    QGraphicsView *view = main_window->graphics_view;
+    QRectF rect1 = view->mapToScene(view->viewport()->geometry()).boundingRect();
+    QRect rect2((int)rect1.x() / main_window->cell_wid,
+                (int)rect1.y() / main_window->cell_hgt,
+                (int)rect1.width() / main_window->cell_wid,
+                (int)rect1.height() / main_window->cell_hgt);
+    QRect rect3(0, 0, p_ptr->cur_map_wid, p_ptr->cur_map_hgt);
+    rect2 = rect2.intersected(rect3);
+    return rect2;
+}
+
+UserInput ui_get_input()
+{
+    main_window->ui_mode = UI_MODE_INPUT;
+
+    main_window->input.mode = INPUT_MODE_NONE;
+
+    main_window->ev_loop.exec();
+
+    main_window->ui_mode = UI_MODE_DEFAULT;
+
+    if (main_window->input.mode == INPUT_MODE_KEY) {
+        main_window->input.x = main_window->input.y = -1;
+    }
+    else {
+        main_window->input.key = 0;
+    }
+
+    return main_window->input;
+}
+
 class DungeonGrid: public QGraphicsItem
 {
 public:
@@ -84,14 +122,14 @@ QPixmap rotate_pix(QPixmap src, qreal angle)
 
 void MainWindow::slot_something()
 {
-    QPoint t = ui_get_target(0);
-    if (t.x() == -1 || t.y() == -1) return;
-    //pop_up_message_box(_num(t.x()));
+    int dir;
+    if (!get_aim_dir(&dir, false) || dir != 5) return;
 
     QPointF p(p_ptr->px, p_ptr->py);
     //QPointF p2(p_ptr->px + rand_int(40) - 20, p_ptr->py + rand_int(40) - 20);
     //QPointF p2(p_ptr->px - 20, p_ptr->py);
-    QPointF p2(t);
+
+    QPointF p2(p_ptr->target_row, p_ptr->target_col);
 
     /*
     BallAnimation *ball = new BallAnimation(p2, 2);
@@ -179,8 +217,10 @@ void DungeonGrid::mousePressEvent(QGraphicsSceneMouseEvent *event)
     parent->cursor->setVisible(true);
     parent->cursor->moveTo(c_y, c_x);
 
-    if (parent->ui_mode == UI_MODE_TARGETTING) {
-        parent->target = QPoint(c_x, c_y);
+    if (parent->ui_mode == UI_MODE_INPUT) {
+        parent->input.x = c_x;
+        parent->input.y = c_y;
+        parent->input.mode = INPUT_MODE_MOUSE;
         parent->ev_loop.quit();
     }
     else {
@@ -657,7 +697,6 @@ MainWindow::MainWindow()
 
     setAttribute(Qt::WA_DeleteOnClose);
 
-    target = QPoint(-1, -1);
     ui_mode = UI_MODE_DEFAULT;
 
     cursor = new DungeonCursor(this);
@@ -809,22 +848,13 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
     return QObject::eventFilter(obj, event);
 }
 
-void MainWindow::process_targetting_key(int key)
-{
-    switch (key) {
-    case Qt::Key_Escape:
-        pop_up_message_box("Cancelling targetting");
-        target = QPoint(-1, -1);
-        ev_loop.quit();
-        break;
-    }
-}
-
 void MainWindow::keyPressEvent(QKeyEvent* which_key)
 {
     // Go to special key handling
-    if (ui_mode == UI_MODE_TARGETTING) {
-        process_targetting_key(which_key->key());
+    if (ui_mode == UI_MODE_INPUT) {
+        input.key = which_key->key();
+        input.mode = INPUT_MODE_KEY;
+        ev_loop.quit();
         return;
     }
 
@@ -1117,34 +1147,6 @@ void MainWindow::set_pseudo_ascii()
 void MainWindow::create_signals()
 {
     // currently empty
-}
-
-QPoint ui_get_target(u32b flags)
-{
-    return main_window->get_target(flags);
-}
-
-QPoint MainWindow::get_target(u32b flags)
-{
-    target = QPoint(-1, -1);
-    if (!character_dungeon) return target;
-
-    target = QPoint(p_ptr->px, p_ptr->py);
-    cursor->moveTo(target.y(), target.x());
-    cursor->setVisible(true);
-    cursor->update();
-
-    ui_mode = UI_MODE_TARGETTING;
-
-    pop_up_message_box("Entering Targetting mode. Click over a grid or press ESCAPE");
-
-    ev_loop.exec();
-
-    ui_mode = UI_MODE_DEFAULT;
-
-    update_cursor();
-
-    return target;
 }
 
 void MainWindow::slot_multiplier_clicked(QAction *action)

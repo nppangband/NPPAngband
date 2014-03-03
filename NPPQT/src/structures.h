@@ -30,6 +30,18 @@ typedef struct slays_structure slays_structure;
 typedef struct brands_structure brands_structure;
 typedef struct mon_susceptibility_struct mon_susceptibility_struct;
 
+#define INPUT_MODE_NONE 0
+#define INPUT_MODE_KEY 1
+#define INPUT_MODE_MOUSE 2
+
+class UserInput
+{
+public:
+    int mode;
+    int key;
+    int x, y;
+};
+
 
 class cmd_arg
 {

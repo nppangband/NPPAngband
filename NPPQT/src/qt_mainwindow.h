@@ -10,10 +10,11 @@
 #include <QKeyEvent>
 #include <QActionGroup>
 #include <QEventLoop>
-#include <src/defines.h>
+#include "defines.h"
+#include "structures.h"
 
 #define UI_MODE_DEFAULT 0
-#define UI_MODE_TARGETTING 1
+#define UI_MODE_INPUT 1
 
 #define MAX_RECENT_SAVEFILES    5
 
@@ -36,7 +37,7 @@ public:
     QGraphicsScene *dungeon_scene;
 
     int ui_mode;
-    QPoint target;
+    UserInput input;
     QEventLoop ev_loop;
 
     DungeonGrid *grids[MAX_DUNGEON_HGT][MAX_DUNGEON_WID];
@@ -68,7 +69,6 @@ public:
     void force_redraw();
     bool panel_contains(int y, int x);
     void rebuild_tile(QString key);
-    void process_targetting_key(int key);
 
 protected:
     void closeEvent(QCloseEvent *event);
