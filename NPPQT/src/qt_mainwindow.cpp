@@ -12,6 +12,44 @@
 
 static MainWindow *main_window = 0;
 
+QString rect_to_string(QRect rect)
+{
+    return QString("%1:%2 (%3x%4)").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());
+}
+
+QRect visible_dungeon()
+{
+    QGraphicsView *view = main_window->graphics_view;
+    QRectF rect1 = view->mapToScene(view->viewport()->geometry()).boundingRect();
+    QRect rect2((int)rect1.x() / main_window->cell_wid,
+                (int)rect1.y() / main_window->cell_hgt,
+                (int)rect1.width() / main_window->cell_wid,
+                (int)rect1.height() / main_window->cell_hgt);
+    QRect rect3(0, 0, p_ptr->cur_map_wid, p_ptr->cur_map_hgt);
+    rect2 = rect2.intersected(rect3);
+    return rect2;
+}
+
+UserInput ui_get_input()
+{
+    main_window->ui_mode = UI_MODE_INPUT;
+
+    main_window->input.mode = INPUT_MODE_NONE;
+
+    main_window->ev_loop.exec();
+
+    main_window->ui_mode = UI_MODE_DEFAULT;
+
+    if (main_window->input.mode == INPUT_MODE_KEY) {
+        main_window->input.x = main_window->input.y = -1;
+    }
+    else {
+        main_window->input.key = 0;
+    }
+
+    return main_window->input;
+}
+
 class DungeonGrid: public QGraphicsItem
 {
 public:
@@ -84,14 +122,14 @@ QPixmap rotate_pix(QPixmap src, qreal angle)
 
 void MainWindow::slot_something()
 {
-    QPoint t = ui_get_target(0);
-    if (t.x() == -1 || t.y() == -1) return;
-    //pop_up_message_box(_num(t.x()));
+    int dir;
+    if (!get_aim_dir(&dir, false) || dir != 5) return;
 
     QPointF p(p_ptr->px, p_ptr->py);
     //QPointF p2(p_ptr->px + rand_int(40) - 20, p_ptr->py + rand_int(40) - 20);
     //QPointF p2(p_ptr->px - 20, p_ptr->py);
-    QPointF p2(t);
+
+    QPointF p2(p_ptr->target_row, p_ptr->target_col);
 
     /*
     BallAnimation *ball = new BallAnimation(p2, 2);
@@ -179,8 +217,10 @@ void DungeonGrid::mousePressEvent(QGraphicsSceneMouseEvent *event)
     parent->cursor->setVisible(true);
     parent->cursor->moveTo(c_y, c_x);
 
-    if (parent->ui_mode == UI_MODE_TARGETTING) {
-        parent->target = QPoint(c_x, c_y);
+    if (parent->ui_mode == UI_MODE_INPUT) {
+        parent->input.x = c_x;
+        parent->input.y = c_y;
+        parent->input.mode = INPUT_MODE_MOUSE;
         parent->ev_loop.quit();
     }
     else {
@@ -657,11 +697,12 @@ MainWindow::MainWindow()
 
     setAttribute(Qt::WA_DeleteOnClose);
 
-    target = QPoint(-1, -1);
     ui_mode = UI_MODE_DEFAULT;
 
     cursor = new DungeonCursor(this);
     do_pseudo_ascii = false;
+
+    current_multiplier = "1:1";
 
     dungeon_scene = new QGraphicsScene;
     graphics_view = new QGraphicsView(dungeon_scene);
@@ -732,7 +773,6 @@ void MainWindow::setup_nppmoria()
 
     init_npp_games();
 }
-
 
 
 // Prepare to play a game of NPPAngband.
@@ -809,20 +849,30 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 void MainWindow::keyPressEvent(QKeyEvent* which_key)
 {
+
     QString keystring = which_key->text();
 
-    // Move down
+    // Go to special key handling
+    if (ui_mode == UI_MODE_INPUT) {
+        input.key = which_key->key();
+        input.mode = INPUT_MODE_KEY;
+        ev_loop.quit();
+        return;
+    }
+
+    // Normal mode
     switch (which_key->key())
     {
         case Qt::Key_Escape:
         {
             if (ui_mode == UI_MODE_TARGETTING) {
-                pop_up_message_box("Cancelling targetting");
-                target = QPoint(-1, -1);
-                ev_loop.quit();
+            pop_up_message_box("Cancelling targetting");
+            target = QPoint(-1, -1);
+            ev_loop.quit();
             }
             break;
         }
+
         // Move down
         case Qt::Key_2:
         case Qt::Key_Down:
@@ -896,10 +946,10 @@ void MainWindow::keyPressEvent(QKeyEvent* which_key)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (!current_savefile.isEmpty() && character_loaded)
+    if (!current_savefile.isEmpty() && character_dungeon)
     {
-        //save_character();
-        //pop_up_message_box("Game saved");
+        save_character();
+        pop_up_message_box("Game saved");
     }
     write_settings();
     event->accept();
@@ -925,11 +975,11 @@ void MainWindow::options_dialog()
 void MainWindow::fontselect_dialog()
 {
     bool selected;
-    cur_font = QFontDialog::getFont( &selected, cur_font, this );
+    QFont font = QFontDialog::getFont( &selected, cur_font, this );
 
     if (selected)
     {
-        set_font(cur_font);
+        set_font(font);
         redraw();
     }
 }
@@ -1118,34 +1168,6 @@ void MainWindow::create_signals()
     // currently empty
 }
 
-QPoint ui_get_target(u32b flags)
-{
-    return main_window->get_target(flags);
-}
-
-QPoint MainWindow::get_target(u32b flags)
-{
-    target = QPoint(-1, -1);
-    if (!character_dungeon) return target;
-
-    target = QPoint(p_ptr->px, p_ptr->py);
-    cursor->moveTo(target.y(), target.x());
-    cursor->setVisible(true);
-    cursor->update();
-
-    ui_mode = UI_MODE_TARGETTING;
-
-    pop_up_message_box("Entering Targetting mode. Click over a grid or press ESCAPE");
-
-    ev_loop.exec();
-
-    ui_mode = UI_MODE_DEFAULT;
-
-    update_cursor();
-
-    return target;
-}
-
 void MainWindow::slot_multiplier_clicked(QAction *action)
 {
     if (action) current_multiplier = action->objectName();
@@ -1192,7 +1214,18 @@ void MainWindow::create_menus()
     multipliers = new QActionGroup(this);
     QString items[] = {
       QString("1:1"),
+      QString("2:1"),
       QString("2:2"),
+      QString("3:1"),
+      QString("3:3"),
+      QString("4:2"),
+      QString("4:4"),
+      QString("6:3"),
+      QString("6:6"),
+      QString("8:4"),
+      QString("8:8"),
+      QString("16:8"),
+      QString("16:16"),
       QString("")
     };
     for (int i = 0; !items[i].isEmpty(); i++) {
@@ -1202,6 +1235,7 @@ void MainWindow::create_menus()
         multipliers->addAction(act);
         if (i == 0) act->setChecked(true);
     }
+    connect(multipliers, SIGNAL(triggered(QAction*)), this, SLOT(slot_multiplier_clicked(QAction*)));
 
     // Help section of top menu.
     help_menu = menuBar()->addMenu(tr("&Help"));
@@ -1288,6 +1322,7 @@ void MainWindow::write_settings()
     settings.setValue("window_state", saveState());
     settings.setValue("pseudo_ascii", do_pseudo_ascii);
     settings.setValue("use_graphics", use_graphics);
+    settings.setValue("tile_multiplier", current_multiplier);
 }
 
 
@@ -1317,7 +1352,8 @@ void MainWindow::load_file(const QString &file_name)
             }
             else {
                 update_file_menu_game_active();
-                launch_game();                
+                launch_game();
+                ui_player_moved();
                 redraw();
             }
         }
@@ -1337,7 +1373,8 @@ void MainWindow::launch_birth(bool quick_start)
     if (dlg->run()) {                
         update_file_menu_game_active();
         launch_game();
-        save_character();        
+        save_character();
+        ui_player_moved();
         redraw();
     } else {
         cleanup_npp_games();
