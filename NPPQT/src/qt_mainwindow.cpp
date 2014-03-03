@@ -863,16 +863,6 @@ void MainWindow::keyPressEvent(QKeyEvent* which_key)
     // Normal mode
     switch (which_key->key())
     {
-        case Qt::Key_Escape:
-        {
-            if (ui_mode == UI_MODE_TARGETTING) {
-            pop_up_message_box("Cancelling targetting");
-            target = QPoint(-1, -1);
-            ev_loop.quit();
-            }
-            break;
-        }
-
         // Move down
         case Qt::Key_2:
         case Qt::Key_Down:
