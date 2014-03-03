@@ -480,15 +480,13 @@ bool target_set_interactive(int mode, int x, int y)
             ui_ensure(y, x);
 
             /* Find the path. */
-#if 0
             path_n = project_path(path_g, path_gx, MAX_RANGE, py, px, &yy, &xx, PROJECT_THRU);
 
             /* Draw the path in "target" mode. If there is one */
-            if ((mode & (TARGET_KILL)) && (cave_info[y][x] & (CAVE_FIRE)))
+            if ((mode & (TARGET_KILL)) && (dungeon_info[y][x].cave_info & (CAVE_FIRE)))
             {
-                path_drawn = draw_path(path_n, path_g, path_char, path_attr, py, px, y, x);
+                path_drawn = ui_draw_path(path_n, path_g, py, px, y, x);
             }
-#endif
 
             ui_show_cursor(y, x);
 
@@ -498,7 +496,7 @@ bool target_set_interactive(int mode, int x, int y)
             UserInput input = ui_get_input();
 
             /* Remove the path */
-            //if (path_drawn) load_path(path_n, path_g, path_char, path_attr);
+            if (path_drawn) ui_destroy_path();
 
             /* Cancel tracking */
             /* health_track(0); */
@@ -709,29 +707,29 @@ bool target_set_interactive(int mode, int x, int y)
             {
                 strcpy(info, "q,t,f.p,+,-,<dir>");
             }
+#endif
 
             /* Find the path. */
             path_n = project_path(path_g, path_gx, MAX_RANGE, py, px, &yy, &xx, PROJECT_THRU);
 
             /* Draw the path in "target" mode. If there is one */
-            if ((mode & (TARGET_KILL)) && (cave_info[y][x] & (CAVE_FIRE)))
+            if ((mode & (TARGET_KILL)) && (dungeon_info[y][x].cave_info & (CAVE_FIRE)))
             {
                 /* Save target info */
-                path_drawn = draw_path(path_n, path_g, path_char, path_attr, py, px, y, x);
+                path_drawn = ui_draw_path(path_n, path_g, py, px, y, x);
             }
 
-            event_signal(EVENT_MOUSEBUTTONS);
+            //event_signal(EVENT_MOUSEBUTTONS);
 
             /* Describe and Prompt (enable "TARGET_LOOK") */
-            query = target_set_interactive_aux(y, x, (mode | TARGET_LOOK), info, list_floor_objects);
-
-            /* Remove the path */
-            if (path_drawn)  load_path(path_n, path_g, path_char, path_attr);
-#endif
+            //query = target_set_interactive_aux(y, x, (mode | TARGET_LOOK), info, list_floor_objects);
 
             ui_show_cursor(y, x);
 
             UserInput input = ui_get_input();
+
+            /* Remove the path */
+            if (path_drawn) ui_destroy_path();
 
             /* Cancel tracking */
             /* health_track(0); */

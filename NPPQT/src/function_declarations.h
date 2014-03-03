@@ -594,6 +594,8 @@ extern QPixmap darken_pix(QPixmap src);
 extern QPixmap colorize_pix(QPixmap src, QColor color);
 extern QPixmap gray_pix(QPixmap src);
 extern UserInput ui_get_input();
+extern bool ui_draw_path(u16b path_n, u16b *path_g, int y1, int x1, int cur_tar_y, int cur_tar_x);
+extern void ui_destroy_path();
 extern void ui_show_cursor(int y, int x);
 
 /* randart.c */
