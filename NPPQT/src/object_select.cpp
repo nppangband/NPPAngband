@@ -21,22 +21,6 @@
 
 #include "src/object_select.h"
 
-// Record the selection of object, close the dialog box.
-void ObjectSelectDialog::record_selection(QPushButton* this_pushbutton)
-{
-    selected_tab = this_pushbutton->property("which_tab").toInt();
-    selected_item = this_pushbutton->property("which_item").toInt();
-
-    object_tabs->hide();
-}
-
-// Record the selection of object, close the dialog box.
-void ObjectSelectDialog::record_cancellation()
-{
-    cancelled = TRUE;
-
-    object_tabs->hide();
-}
 
 void ObjectSelectDialog::floor_items_count(int mode, int sq_y, int sq_x)
 {
@@ -76,18 +60,31 @@ void ObjectSelectDialog::build_floor_tab()
     // Make a button for each object.
     for (int i = 0; i < floor_items.size(); i++)
     {
-        QChar which_char = letter_to_number(i);
+        // Make the label.
+        QChar which_char = number_to_letter(i);
         object_type *o_ptr = &o_list[floor_items[i]];
         QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
         QString button_name = (QString("%1) %2") .arg(which_char) .arg(o_name));
-        QPushButton *this_button = new QPushButton(button_name);
-        this_button->setProperty("which_tab", which_tab);
-        this_button->setProperty("which_item", floor_items[i]);
 
-        connect(this_button, SIGNAL(clicked()), this, SLOT(record_selection(this_button)));
+        // Make the button.
+        QString text_num = QString::number(num_buttons);
+        QPushButton *button = new QPushButton(text_num);
+        button->setText(button_name);
 
-        layout->addWidget(this_button);
+        // Let the button tell us the number button that was clicked
+        connect(button, SIGNAL(clicked), button_values, SLOT(map()));
+        button_values->setMapping(button, num_buttons);
+        connect(button, SIGNAL(clicked), this, SLOT(close()));
+
+        // Add this to the layout.
+        layout->addWidget(button);
+
+        num_buttons++;
     }
+
+
+
+    // Add the final layout to the tab.
     floor_tab->setLayout(layout);
 
     return;
@@ -124,17 +121,25 @@ void ObjectSelectDialog::build_inven_tab()
     // Make a button for each object.
     for (int i = 0; i < inven_items.size(); i++)
     {
-        QChar which_char = letter_to_number(i);
+        QChar which_char = number_to_letter(i);
         object_type *o_ptr = &inventory[inven_items[i]];
         QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
         QString button_name = (QString("%1) %2") .arg(which_char) .arg(o_name));
-        QPushButton *this_button = new QPushButton(button_name);
-        this_button->setProperty("which_tab", which_tab);
-        this_button->setProperty("which_item", inven_items[i]);
 
-        // TODO add a signal.
+        // Make the button.
+        QString text_num = QString::number(num_buttons);
+        QPushButton *button = new QPushButton(text_num);
+        button->setText(button_name);
 
-        layout->addWidget(this_button);
+        // Let the button tell us the number button that was clicked
+        connect(button, SIGNAL(clicked), button_values, SLOT(map()));
+        button_values->setMapping(button, num_buttons);
+        connect(button, SIGNAL(clicked), this, SLOT(close()));
+
+        // Add this to the layout.
+        layout->addWidget(button);
+
+        num_buttons++;
     }
     inven_tab->setLayout(layout);
 }
@@ -168,17 +173,25 @@ void ObjectSelectDialog::build_equip_tab()
     // Make a button for each object.
     for (int i = 0; i < equip_items.size(); i++)
     {
-        QChar which_char = letter_to_number(i);
+        QChar which_char = number_to_letter(i);
         object_type *o_ptr = &inventory[equip_items[i]];
         QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
         QString button_name = (QString("%1) %2") .arg(which_char) .arg(o_name));
-        QPushButton *this_button = new QPushButton(button_name);
-        this_button->setProperty("which_tab", which_tab);
-        this_button->setProperty("which_item", equip_items[i]);
 
-        // TODO add a signal.
+        // Make the button.
+        QString text_num = QString::number(num_buttons);
+        QPushButton *button = new QPushButton(text_num);
+        button->setText(button_name);
 
-        layout->addWidget(this_button);
+        // Let the button tell us the number button that was clicked
+        connect(button, SIGNAL(clicked), button_values, SLOT(map()));
+        button_values->setMapping(button, num_buttons);
+        connect(button, SIGNAL(clicked), this, SLOT(close()));
+
+        // Add this to the layout.
+        layout->addWidget(button);
+
+        num_buttons++;
     }
     equip_tab->setLayout(layout);
 }
@@ -194,7 +207,7 @@ void ObjectSelectDialog::quiver_items_count(int mode)
     if (!(mode & (USE_QUIVER))) return;
 
     /* Scan all objects in the quiver */
-    for (int i = INVEN_WIELD; i < QUIVER_START; i++)
+    for (int i = QUIVER_START; i < QUIVER_END; i++)
     {
 
         /* Verify item tester */
@@ -215,17 +228,25 @@ void ObjectSelectDialog::build_quiver_tab()
     // Make a button for each object.
     for (int i = 0; i < quiver_items.size(); i++)
     {
-        QChar which_char = letter_to_number(i);
+        QChar which_char = number_to_letter(i);
         object_type *o_ptr = &inventory[quiver_items[i]];
         QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
         QString button_name = (QString("%1) %2") .arg(which_char) .arg(o_name));
-        QPushButton *this_button = new QPushButton(button_name);
-        this_button->setProperty("which_tab", which_tab);
-        this_button->setProperty("which_item", quiver_items[i]);
 
-        // TODO add a signal.
+        // Make the button.
+        QString text_num = QString::number(num_buttons);
+        QPushButton *button = new QPushButton(text_num);
+        button->setText(button_name);
 
-        layout->addWidget(this_button);
+        // Let the button tell us the number button that was clicked
+        connect(button, SIGNAL(clicked), button_values, SLOT(map()));
+        button_values->setMapping(button, num_buttons);
+        connect(button, SIGNAL(clicked), this, SLOT(close()));
+
+        // Add this to the layout.
+        layout->addWidget(button);
+
+        num_buttons++;
     }
     quiver_tab->setLayout(layout);
 }
@@ -285,15 +306,44 @@ byte ObjectSelectDialog::find_starting_tab(int mode)
 // Return the index off the actual object selected.
 int ObjectSelectDialog::get_selected_object()
 {
-    byte tab = tab_order[selected_tab];
+    int num_tracker = selected_button;
+    object_found = TRUE;
 
-    if (tab == TAB_FLOOR) return (0 - floor_items[selected_item]);
-    if (tab == TAB_INVEN) return (inven_items[selected_item]);
-    if (tab == TAB_EQUIP) return (equip_items[selected_item]);
-    if (tab == TAB_QUIVER) return (quiver_items[selected_item]);
+    /*
+     * Go through each array and figure out which button was selected.
+     * based on the order in which the buttons were created.
+     */
 
+    // Floor first
+    if (num_tracker < floor_items.size())
+    {
+        // Floor items are returned as negative items.
+        return (0 - floor_items[num_tracker]);
+    }
+    else num_tracker -= floor_items.size();
+
+    // Inventory next
+    if (num_tracker < inven_items.size())
+    {
+        return (inven_items[num_tracker]);
+    }
+    else num_tracker -= inven_items.size();
+
+    // Now try equipment
+    if (num_tracker < equip_items.size())
+    {
+        return (equip_items[num_tracker]);
+    }
+    else num_tracker -= equip_items.size();
+
+    // must be the quiver
+    if (num_tracker < quiver_items.size())
+    {
+        return (quiver_items[num_tracker]);
+    }
+
+    object_found = FALSE;
     // This should never happen.  Paranoia
-    cancelled = TRUE;
     return (0);
 }
 
@@ -306,10 +356,11 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
     equip_tab = new QWidget;
     quiver_tab = new QWidget;
 
+    button_values = new QSignalMapper(this);
+
     // Start with a clean slate
     tab_order.clear();
-    which_tab = 0;
-    cancelled = FALSE;
+    num_buttons = 0;
 
     // First, find the eligible objects
     floor_items_count(mode, sq_y, sq_x);
@@ -336,32 +387,31 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
         build_floor_tab();
         object_tabs->addTab(floor_tab, "&Floor Items");
         tab_order.append(TAB_FLOOR);
-        which_tab++;
     }
     if (allow_inven)
     {
         build_inven_tab();
         object_tabs->addTab(inven_tab, "&Inventory");
         tab_order.append(TAB_INVEN);
-        which_tab++;
     }
     if (allow_equip)
     {
         build_equip_tab();
         object_tabs->addTab(equip_tab, "&Equipment");
         tab_order.append(TAB_EQUIP);
-        which_tab++;
     }
     if (allow_quiver)
     {
         build_quiver_tab();
         object_tabs->addTab(quiver_tab, "&Quiver");
         tab_order.append(TAB_QUIVER);
-        which_tab++;
     }
 
+    // Make sure game emits the number of the button presssed.
+    connect(button_values, SIGNAL(mapped(int)), this, SIGNAL(clicked(int)));
+
     buttons = new QDialogButtonBox(QDialogButtonBox::Cancel);
-    connect(buttons, SIGNAL(clicked(QAbstractButton*)), this, SLOT(record_cancellation()));
+    connect(buttons, SIGNAL(clicked(QAbstractButton*)), this, SLOT(reject()));
 
     // Figure out which tab should appear first.
     object_tabs->setTabEnabled(find_starting_tab(mode), TRUE);
@@ -373,23 +423,17 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
     setWindowTitle(prompt);
 
     // Show dialog until object is selected.
-    this->exec();
+    if (!this->exec()) *success = FALSE;
 
-    //Handle cancellation
-    if (cancelled)
-    {
-        *success = FALSE;
-    }
     else
     {
         *item = get_selected_object();
 
-        // Paranoia
-        if (cancelled) *success = FALSE;
-        else *success = TRUE;
+        *success = object_found;
+        *success = TRUE;
     }
 
-    this->deleteLater();
+    delete(this);
 }
 
 

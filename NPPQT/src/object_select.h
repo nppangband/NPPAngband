@@ -23,6 +23,9 @@ class ObjectSelectDialog : public QDialog
 public:
     explicit ObjectSelectDialog(int *item, QString prompt, int mode, bool *success, int sq_y, int sq_x);
 
+signals:
+    void clicked(const QString &text);
+
 private:
     QTabWidget *object_tabs;
     QDialogButtonBox *buttons;
@@ -30,6 +33,9 @@ private:
     QWidget *inven_tab;
     QWidget *equip_tab;
     QWidget *quiver_tab;
+
+    // Keeps track of which button goes with which object.
+    QSignalMapper *button_values;
 
     // Functions to build the actual tabs
     void build_floor_tab();
@@ -57,16 +63,13 @@ private:
     bool allow_quiver;
 
     //Record an item selection
-    void record_selection(QPushButton* this_pushbutton);
-    void record_cancellation();
     int  get_selected_object();
 
     // Variables for keeping track of which item is selected
     QVector<byte> tab_order;
-    byte which_tab;
-    byte selected_tab;
-    int selected_item;
-    bool cancelled;
+    int selected_button;
+    int num_buttons;
+    bool object_found;
 
 };
 
