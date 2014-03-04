@@ -21,6 +21,15 @@
 
 #include "src/object_select.h"
 
+// Receives the number of the button pressed.
+void ObjectSelectDialog::button_press(QString num_string)
+{
+    selected_button = num_string.toInt();
+
+    pop_up_message_box(QString("selected button is %1") .arg(selected_button));
+}
+
+
 
 void ObjectSelectDialog::floor_items_count(int mode, int sq_y, int sq_x)
 {
@@ -73,8 +82,8 @@ void ObjectSelectDialog::build_floor_tab()
 
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked), button_values, SLOT(map()));
-        button_values->setMapping(button, num_buttons);
-        connect(button, SIGNAL(clicked), this, SLOT(close()));
+        button_values->setMapping(button, text_num);
+        connect(button, SIGNAL(clicked(QString)), this, SLOT(button_press(QString)));
 
         // Add this to the layout.
         layout->addWidget(button);
@@ -133,8 +142,8 @@ void ObjectSelectDialog::build_inven_tab()
 
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked), button_values, SLOT(map()));
-        button_values->setMapping(button, num_buttons);
-        connect(button, SIGNAL(clicked), this, SLOT(close()));
+        button_values->setMapping(button, text_num);
+        connect(button, SIGNAL(clicked(QString)), this, SLOT(button_press(QString)));
 
         // Add this to the layout.
         layout->addWidget(button);
@@ -185,8 +194,8 @@ void ObjectSelectDialog::build_equip_tab()
 
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked), button_values, SLOT(map()));
-        button_values->setMapping(button, num_buttons);
-        connect(button, SIGNAL(clicked), this, SLOT(close()));
+        button_values->setMapping(button, text_num);
+        connect(button, SIGNAL(clicked(QString)), this, SLOT(button_press(QString)));
 
         // Add this to the layout.
         layout->addWidget(button);
@@ -240,8 +249,8 @@ void ObjectSelectDialog::build_quiver_tab()
 
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked), button_values, SLOT(map()));
-        button_values->setMapping(button, num_buttons);
-        connect(button, SIGNAL(clicked), this, SLOT(close()));
+        button_values->setMapping(button, text_num);
+        connect(button, SIGNAL(clicked(QString)), this, SLOT(button_press(QString)));
 
         // Add this to the layout.
         layout->addWidget(button);
@@ -407,9 +416,6 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
         tab_order.append(TAB_QUIVER);
     }
 
-    // Make sure game emits the number of the button presssed.
-    connect(button_values, SIGNAL(mapped(int)), this, SIGNAL(clicked(int)));
-
     buttons = new QDialogButtonBox(QDialogButtonBox::Cancel);
     connect(buttons, SIGNAL(clicked(QAbstractButton*)), this, SLOT(reject()));
 
@@ -423,9 +429,11 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
     setWindowTitle(prompt);
 
     // Show dialog until object is selected.
-    if (!this->exec()) *success = FALSE;
+    this->exec();
 
-    else
+    *success = object_found;
+
+    //else
     {
         *item = get_selected_object();
 

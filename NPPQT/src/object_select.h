@@ -24,9 +24,12 @@ public:
     explicit ObjectSelectDialog(int *item, QString prompt, int mode, bool *success, int sq_y, int sq_x);
 
 signals:
-    void clicked(const QString &text);
+    void clicked(QString);
 
 private:
+    // Receives the number of the button pressed.
+    void button_press(QString num_string);
+
     QTabWidget *object_tabs;
     QDialogButtonBox *buttons;
     QWidget *floor_tab;
@@ -35,7 +38,8 @@ private:
     QWidget *quiver_tab;
 
     // Keeps track of which button goes with which object.
-    QSignalMapper *button_values;
+    // Is sent by a signal to the button_press function
+    QSignalMapper* button_values;
 
     // Functions to build the actual tabs
     void build_floor_tab();
