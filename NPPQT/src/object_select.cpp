@@ -424,7 +424,7 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
 
     QVBoxLayout *main_layout = new QVBoxLayout;
     main_layout->addWidget(object_tabs);
-    main_layout->addWidget(buttons);
+    //main_layout->addWidget(buttons);
     setLayout(main_layout);
     setWindowTitle(prompt);
 
