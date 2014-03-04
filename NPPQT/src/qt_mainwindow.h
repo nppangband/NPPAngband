@@ -22,7 +22,7 @@ class QAction;
 class QMenu;
 class QGraphicsView;
 class QGraphicsScene;
-class QGraphicsRectItem;
+class QGraphicsItem;
 class DungeonGrid;
 class DungeonCursor;
 
@@ -55,7 +55,7 @@ public:
     QHash<QString, QPixmap> tiles;
     QPixmap tile_map;
 
-    QList<QGraphicsRectItem *> path_items;
+    QList<QGraphicsItem *> path_items;
 
     DungeonCursor *cursor;
 

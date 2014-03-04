@@ -498,6 +498,8 @@ bool target_set_interactive(int mode, int x, int y)
             /* Remove the path */
             if (path_drawn) ui_destroy_path();
 
+            ui_show_cursor(-1, -1);
+
             /* Cancel tracking */
             /* health_track(0); */
 
@@ -730,6 +732,8 @@ bool target_set_interactive(int mode, int x, int y)
 
             /* Remove the path */
             if (path_drawn) ui_destroy_path();
+
+            ui_show_cursor(-1, -1);
 
             /* Cancel tracking */
             /* health_track(0); */
@@ -1185,8 +1189,6 @@ bool get_aim_dir(int *dp, bool target_trap)
         /* Error */
         if (!dir) pop_up_message_box("Illegal aim direction!");
     }
-
-    ui_show_cursor(-1, -1);
 
     /* No direction */
     if (!dir) return (FALSE);
