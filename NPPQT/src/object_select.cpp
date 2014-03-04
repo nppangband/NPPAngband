@@ -27,6 +27,8 @@ void ObjectSelectDialog::button_press(QString num_string)
     selected_button = num_string.toInt();
 
     pop_up_message_box(QString("selected button is %1") .arg(selected_button));
+
+    this->accept();
 }
 
 
@@ -83,15 +85,12 @@ void ObjectSelectDialog::build_floor_tab()
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
-        connect(button, SIGNAL(mapped(QString)), this, SLOT(clicked(QString)));
 
         // Add this to the layout.
         layout->addWidget(button);
 
         num_buttons++;
     }
-
-
 
     // Add the final layout to the tab.
     floor_tab->setLayout(layout);
@@ -143,7 +142,6 @@ void ObjectSelectDialog::build_inven_tab()
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
-        connect(button, SIGNAL(mapped(QString)), this, SLOT(clicked(QString)));
 
         // Add this to the layout.
         layout->addWidget(button);
@@ -195,7 +193,6 @@ void ObjectSelectDialog::build_equip_tab()
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
-        connect(button, SIGNAL(mapped(QString)), this, SLOT(clicked(QString)));
 
         // Add this to the layout.
         layout->addWidget(button);
@@ -250,7 +247,6 @@ void ObjectSelectDialog::build_quiver_tab()
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
-        connect(button, SIGNAL(mapped(QString)), this, SLOT(clicked(QString)));
 
         // Add this to the layout.
         layout->addWidget(button);
@@ -356,6 +352,10 @@ int ObjectSelectDialog::get_selected_object()
     return (0);
 }
 
+void ObjectSelectDialog::on_dialog_buttons_pressed(QAbstractButton *)
+{
+    this->reject();
+}
 
 ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool *success, int sq_y, int sq_x)
 {
@@ -366,6 +366,7 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
     quiver_tab = new QWidget;
 
     button_values = new QSignalMapper(this);
+    connect(button_values, SIGNAL(mapped(QString)), this, SLOT(button_press(QString)));
 
     // Start with a clean slate
     tab_order.clear();
@@ -417,7 +418,8 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
     }
 
     buttons = new QDialogButtonBox(QDialogButtonBox::Cancel);
-    connect(buttons, SIGNAL(clicked(QAbstractButton*)), this, SLOT(reject()));
+    connect(buttons, SIGNAL(clicked(QAbstractButton*)), this,
+            SLOT(on_dialog_buttons_pressed(QAbstractButton*)));
 
     // Figure out which tab should appear first.
     object_tabs->setTabEnabled(find_starting_tab(mode), TRUE);

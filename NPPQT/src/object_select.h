@@ -23,13 +23,12 @@ class ObjectSelectDialog : public QDialog
 public:
     explicit ObjectSelectDialog(int *item, QString prompt, int mode, bool *success, int sq_y, int sq_x);
 
-signals:
-    void clicked(QString &text);
-    void mapped (QString &text);
-
-private:
+private slots:
     // Receives the number of the button pressed.
     void button_press(QString num_string);
+    void on_dialog_buttons_pressed(QAbstractButton *);
+
+private:
 
     QTabWidget *object_tabs;
     QDialogButtonBox *buttons;

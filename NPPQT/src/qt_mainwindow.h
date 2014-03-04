@@ -72,6 +72,7 @@ public:
     void force_redraw();
     bool panel_contains(int y, int x);
     void rebuild_tile(QString key);
+    bool running_command();
 
 protected:
     void closeEvent(QCloseEvent *event);

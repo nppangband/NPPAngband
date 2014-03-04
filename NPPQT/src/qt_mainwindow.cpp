@@ -877,6 +877,7 @@ void MainWindow::save_character_as()
 
 void MainWindow::save_and_close()
 {
+    if (running_command()) return;
 
     save_character();
 
@@ -1003,9 +1004,22 @@ void MainWindow::keyPressEvent(QKeyEvent* which_key)
     }
 }
 
+bool MainWindow::running_command()
+{
+    if (ev_loop.isRunning()) {
+        pop_up_message_box("You must finish or cancel the current command first to do this");
+        return true;
+    }
+    return false;
+}
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    if (running_command()) {
+        event->ignore();
+        return;
+    }
+
     if (!current_savefile.isEmpty() && character_dungeon)
     {
         save_character();
