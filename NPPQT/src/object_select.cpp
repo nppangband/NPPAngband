@@ -81,7 +81,7 @@ void ObjectSelectDialog::build_floor_tab()
         button->setText(button_name);
 
         // Let the button tell us the number button that was clicked
-        connect(button, SIGNAL(clicked), button_values, SLOT(map()));
+        connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
         connect(button, SIGNAL(clicked(QString)), this, SLOT(button_press(QString)));
 
@@ -141,7 +141,7 @@ void ObjectSelectDialog::build_inven_tab()
         button->setText(button_name);
 
         // Let the button tell us the number button that was clicked
-        connect(button, SIGNAL(clicked), button_values, SLOT(map()));
+        connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
         connect(button, SIGNAL(clicked(QString)), this, SLOT(button_press(QString)));
 
@@ -193,7 +193,7 @@ void ObjectSelectDialog::build_equip_tab()
         button->setText(button_name);
 
         // Let the button tell us the number button that was clicked
-        connect(button, SIGNAL(clicked), button_values, SLOT(map()));
+        connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
         connect(button, SIGNAL(clicked(QString)), this, SLOT(button_press(QString)));
 
@@ -248,7 +248,7 @@ void ObjectSelectDialog::build_quiver_tab()
         button->setText(button_name);
 
         // Let the button tell us the number button that was clicked
-        connect(button, SIGNAL(clicked), button_values, SLOT(map()));
+        connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
         connect(button, SIGNAL(clicked(QString)), this, SLOT(button_press(QString)));
 
@@ -427,9 +427,6 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
     main_layout->addWidget(buttons);
     setLayout(main_layout);
     setWindowTitle(prompt);
-
-    // Show dialog until object is selected.
-    this->exec();
 
     if (!this->exec()) *success = FALSE;
     else
