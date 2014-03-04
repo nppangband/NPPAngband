@@ -2,6 +2,7 @@
 #include <QHash>
 #include <QTextStream>
 #include <QGraphicsItem>
+#include <QGraphicsRectItem>
 
 #include "src/npp.h"
 #include "src/qt_mainwindow.h"
@@ -11,6 +12,43 @@
 #include "emitter.h"
 
 static MainWindow *main_window = 0;
+
+bool ui_draw_path(u16b path_n, u16b *path_g, int y1, int x1, int cur_tar_y, int cur_tar_x)
+{
+    if (path_n < 1) return false;
+
+    for (int i = 0; i < path_n; i++) {
+        int y = GRID_Y(path_g[i]);
+        int x = GRID_X(path_g[i]);
+
+        QColor col("yellow");
+        if (y == cur_tar_y && x == cur_tar_x) {
+            col = QColor("red");
+        }
+
+        QGraphicsRectItem *item = main_window->dungeon_scene->addRect(
+                    x * main_window->cell_wid, y * main_window->cell_hgt,
+                    main_window->cell_wid, main_window->cell_hgt, Qt::NoPen, col);
+
+        item->setOpacity(0.5);
+        item->setZValue(90);
+
+        main_window->path_items.append(item);
+    }
+
+    return true;
+}
+
+void ui_destroy_path()
+{
+    for (int i = 0; i < main_window->path_items.size(); i++) {
+        QGraphicsItem *item = main_window->path_items.at(i);
+        main_window->dungeon_scene->removeItem(item);
+        delete item;
+    }
+    main_window->path_items.clear();
+    main_window->force_redraw();
+}
 
 QString rect_to_string(QRect rect)
 {
@@ -45,6 +83,7 @@ UserInput ui_get_input()
     }
     else {
         main_window->input.key = 0;
+        main_window->input.text.clear();
     }
 
     return main_window->input;
@@ -123,13 +162,18 @@ QPixmap rotate_pix(QPixmap src, qreal angle)
 void MainWindow::slot_something()
 {
     int dir;
-    if (!get_aim_dir(&dir, false) || dir != 5) return;
+    p_ptr->command_dir = 0;
+    graphics_view->setFocus();
+    if (!get_aim_dir(&dir, false) || dir == 0) return;
 
     QPointF p(p_ptr->px, p_ptr->py);
     //QPointF p2(p_ptr->px + rand_int(40) - 20, p_ptr->py + rand_int(40) - 20);
     //QPointF p2(p_ptr->px - 20, p_ptr->py);
 
-    QPointF p2(p_ptr->target_row, p_ptr->target_col);
+    QPointF p2(p_ptr->target_col, p_ptr->target_row);
+    if (dir != 5) {
+        p2 = QPointF(p_ptr->px + ddx[dir] * 5, p_ptr->py + ddy[dir] * 5);
+    }
 
     /*
     BallAnimation *ball = new BallAnimation(p2, 2);
@@ -260,12 +304,7 @@ void DungeonCursor::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     if (!in_bounds(c_y, c_x)) return;
 
     painter->save();
-    if (main_window->ui_mode == UI_MODE_DEFAULT) {
-        painter->setPen(QColor("yellow"));
-    }
-    else {
-        painter->setPen(QColor("red"));
-    }
+    painter->setPen(QColor("yellow"));
     painter->drawRect(0, 0, parent->cell_wid - 1, parent->cell_hgt - 1);
     if ((parent->cell_wid > 16) && (parent->cell_hgt > 16)){
         int z = 3;
@@ -836,6 +875,17 @@ void MainWindow::save_and_close()
     redraw();
 }
 
+void ui_show_cursor(int y, int x)
+{
+    if (y < 0 || x < 0) {
+        main_window->update_cursor();
+    }
+    else {
+        main_window->cursor->moveTo(y, x);
+        main_window->cursor->setVisible(true);
+    }
+}
+
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::KeyPress)
@@ -855,6 +905,7 @@ void MainWindow::keyPressEvent(QKeyEvent* which_key)
     // Go to special key handling
     if (ui_mode == UI_MODE_INPUT) {
         input.key = which_key->key();
+        input.text = keystring;
         input.mode = INPUT_MODE_KEY;
         ev_loop.quit();
         return;

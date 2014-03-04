@@ -22,6 +22,7 @@ class QAction;
 class QMenu;
 class QGraphicsView;
 class QGraphicsScene;
+class QGraphicsRectItem;
 class DungeonGrid;
 class DungeonCursor;
 
@@ -53,6 +54,8 @@ public:
     // The key must me strings of the form "[row]x[col]"
     QHash<QString, QPixmap> tiles;
     QPixmap tile_map;
+
+    QList<QGraphicsRectItem *> path_items;
 
     DungeonCursor *cursor;
 
