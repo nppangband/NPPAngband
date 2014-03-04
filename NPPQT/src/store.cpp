@@ -3204,7 +3204,7 @@ static void store_display_entry(int oid, bool cursor, int row, int col, int widt
     {
         x = price_services(this_store, services_offered[entry_num]);
 
-        if (x) out_val = (QString("%d") .arg(x));
+        if (x) out_val = (QString("%1") .arg(x));
         else out_val = ("     Free");
     }
     else if (entry_type == ENTRY_QUEST)
@@ -3946,7 +3946,7 @@ static bool store_purchase(int oid)
     }
     else
     {
-        o_name = (QString("%s how many%s? (max %d) ") .arg((this_store == STORE_HOME) ? "Take" : "Buy")
+        o_name = (QString("%1 how many%2? (max %3) ") .arg((this_store == STORE_HOME) ? "Take" : "Buy")
                   .arg(num ? (QString(" (you have %1)") .arg(num)) : "")  .arg(max_amount));
 
         /* Get a quantity */
@@ -4279,7 +4279,7 @@ static bool store_sell(void)
         u32b price = price_item(i_ptr, TRUE) * amt;
 
         /* Show price */
-        // TODO prt(format("Price: %d", price), 1, 0);
+        // TODO prt(format("Price: %1", price), 1, 0);
 
         /* Confirm sale */
         if (!get_check(QString("Sell %1? (y/n)") .arg(o_name)))

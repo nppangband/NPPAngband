@@ -2639,7 +2639,7 @@ void inven_item_charges(int item)
     if (!o_ptr->is_known()) return;
 
     /* Print a message */
-    message(QString("You have %d charge%s remaining.") .arg(o_ptr->pval) .arg((o_ptr->pval != 1) ? "s" : ""));
+    message(QString("You have %1 charge%2 remaining.") .arg(o_ptr->pval) .arg((o_ptr->pval != 1) ? "s" : ""));
 }
 
 
@@ -3309,7 +3309,7 @@ void floor_item_describe(int item)
     o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
     /* Print a message */
-    message(QString("You see %s.") .arg(o_name));
+    message(QString("You see %1.") .arg(o_name));
 }
 
 

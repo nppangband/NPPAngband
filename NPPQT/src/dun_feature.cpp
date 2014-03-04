@@ -401,7 +401,7 @@ u16b fire_trap_smart(int f_idx, int y, int x, byte mode)
 
         /* Print the message*/
         if (did_message) message(QString("It %1") .arg(f_ptr->f_text));
-        else message(QString("The %s %1") .arg(feat_name) .arg(f_ptr->f_text));
+        else message(QString("The %1 %2") .arg(feat_name) .arg(f_ptr->f_text));
 
         /*Count in the feature lore the number of times set off*/
         if (f_l_ptr->f_l_power < MAX_UCHAR)
@@ -1019,7 +1019,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             if (mode == MODE_DESCRIBE)
             {
                 desc = (QString("  This trap fires a small dart that can cause you to be slowed for %1 + %2d turns,") .arg(duration) .arg(duration));
-                desc.append (QString(" and cause %dd%d damage.") .arg(dice) .arg(sides));
+                desc.append (QString(" and cause %1d%2 damage.") .arg(dice) .arg(sides));
                 return;
             }
             if (mode == MODE_ACTION)
@@ -1111,7 +1111,7 @@ void hit_trap(int f_idx, int y, int x, byte mode)
             if (mode == MODE_DESCRIBE)
             {
                 desc = ("  This trap fires a small dart that can drain your constitution,");
-                desc.append (QString(" and cause %dd%d damage.") .arg(dice) .arg(sides));
+                desc.append (QString(" and cause %1d%2 damage.") .arg(dice) .arg(sides));
                 return;
             }
             if (mode == MODE_ACTION)
@@ -3396,7 +3396,7 @@ QString format_monster_inscription(s16b r_idx)
         /* Format */
         if (one_in_(2)) inscr = (QString("Sssshhhh! %1 is asleep!") .arg(name));
 
-        else inscr = (QString("Hurry! before %s wakes up!") .arg(name));
+        else inscr = (QString("Hurry! before %1 wakes up!") .arg(name));
 
     }
     /* Special message for dragons */
@@ -3862,7 +3862,7 @@ void debug_all_level_flags(u32b all_flags)
             QString buf = describe_one_level_flag(flag);
 
             /* Message */
-            message(QString("The %s flag is present.") .arg(buf));
+            message(QString("The %1 flag is present.") .arg(buf));
         }
     }
 }

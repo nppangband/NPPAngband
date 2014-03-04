@@ -1730,7 +1730,7 @@ static void vinfo_init_aux(vinfo_hack *hack, int y, int x, long m)
             /* Paranoia */
             if (hack->num_slopes >= VINFO_MAX_SLOPES)
             {
-                quit_npp_games(QString("Too many LOS slopes (%d1)!") .arg(VINFO_MAX_SLOPES));
+                quit_npp_games(QString("Too many LOS slopes (%1)!") .arg(VINFO_MAX_SLOPES));
             }
 
             /* Save the slope, increment count */
@@ -1830,7 +1830,7 @@ int vinfo_init(void)
     /* Enforce maximal efficiency (grids) */
     if (num_grids < VINFO_MAX_GRIDS)
     {
-        quit_npp_games(QString("Too few grids (%d < %d)!") .arg(num_grids) .arg(VINFO_MAX_GRIDS));
+        quit_npp_games(QString("Too few grids (%1 < %2)!") .arg(num_grids) .arg(VINFO_MAX_GRIDS));
     }
 
     /* Enforce maximal efficiency (line of sight slopes) */

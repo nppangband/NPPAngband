@@ -3088,7 +3088,7 @@ void quest_status_update(void)
     {
         if (remaining > 1)
         {
-            note = (QString("There are %d creatures remaining ") .arg(remaining));
+            note = (QString("There are %1 creatures remaining ") .arg(remaining));
         }
         else note = ("There is one creature remaining ");
         if (q_ptr->q_type ==  QUEST_ARENA_LEVEL) note.append("to kill in the arena.");

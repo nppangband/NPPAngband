@@ -83,7 +83,7 @@ void ObjectSelectDialog::build_floor_tab()
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
-        connect(button, SIGNAL(clicked(QString)), this, SLOT(button_press(QString)));
+        connect(button, SIGNAL(mapped(QString)), this, SLOT(clicked(QString)));
 
         // Add this to the layout.
         layout->addWidget(button);
@@ -143,7 +143,7 @@ void ObjectSelectDialog::build_inven_tab()
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
-        connect(button, SIGNAL(clicked(QString)), this, SLOT(button_press(QString)));
+        connect(button, SIGNAL(mapped(QString)), this, SLOT(clicked(QString)));
 
         // Add this to the layout.
         layout->addWidget(button);
@@ -195,7 +195,7 @@ void ObjectSelectDialog::build_equip_tab()
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
-        connect(button, SIGNAL(clicked(QString)), this, SLOT(button_press(QString)));
+        connect(button, SIGNAL(mapped(QString)), this, SLOT(clicked(QString)));
 
         // Add this to the layout.
         layout->addWidget(button);
@@ -250,7 +250,7 @@ void ObjectSelectDialog::build_quiver_tab()
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
-        connect(button, SIGNAL(clicked(QString)), this, SLOT(button_press(QString)));
+        connect(button, SIGNAL(mapped(QString)), this, SLOT(clicked(QString)));
 
         // Add this to the layout.
         layout->addWidget(button);

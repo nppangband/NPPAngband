@@ -521,10 +521,10 @@ static QString obj_desc_combat(object_type *o_ptr,  QString buf, bool spoil)
                  o_ptr->tval == TV_HARD_ARMOR ||
                  o_ptr->tval == TV_DRAG_ARMOR ||
                  o_ptr->tval == TV_DRAG_SHIELD))
-                buf.append(QString(" (%+1)") .arg(o_ptr->to_h));
+                buf.append(QString(" (+%1)") .arg(o_ptr->to_h));
 
             /* Otherwise, always use the full tuple */
-            else buf.append(QString(" (%+1,%+2)") .arg(o_ptr->to_h) .arg(o_ptr->to_d));
+            else buf.append(QString(" (+%1,+%2)") .arg(o_ptr->to_h) .arg(o_ptr->to_d));
         }
     }
 
@@ -533,7 +533,7 @@ static QString obj_desc_combat(object_type *o_ptr,  QString buf, bool spoil)
     if (spoil || object_known_p(o_ptr))
     {
         if (obj_desc_show_armor(o_ptr))
-            buf.append(QString(" [%1,%+2]") .arg(o_ptr->ac) .arg(o_ptr->to_a));
+            buf.append(QString(" [+%1,+%2]") .arg(o_ptr->ac) .arg(o_ptr->to_a));
         else if (o_ptr->to_a)
                     buf.append(QString(" [%+1]") .arg(o_ptr->to_a));
     }
@@ -629,7 +629,7 @@ static QString obj_desc_charges(object_type *o_ptr, QString buf)
                     if (power > o_ptr->number) power = o_ptr->number;
 
                     /* Display prettily */
-                    buf.append(QString(" (%d charging)") .arg(power));
+                    buf.append(QString(" (%1 charging)") .arg(power));
                 }
 
 
@@ -684,7 +684,7 @@ static QString obj_desc_inscrip(object_type *o_ptr, QString buf)
     }
     else if (o_ptr->discount > 0)
     {
-        QString addon = (QString("%d pct off") .arg(o_ptr->discount));
+        QString addon = (QString("%1 pct off") .arg(o_ptr->discount));
 
         u[n++] = addon;
     }

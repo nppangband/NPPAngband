@@ -630,7 +630,7 @@ bool apply_disenchant(int mode)
     if (o_ptr->is_artifact() && (rand_int(100) < 60))
     {
         /* Message */
-        message(QString("Your %1 (%2) resist%s %3!")
+        message(QString("Your %1 (%2) resist%3 %4!")
                    .arg(o_name)
                     .arg(index_to_label(t))
                    .arg(((o_ptr->number != 1) ? "" : "s"), ((!mode) ? "disenchantment" : "damage")));

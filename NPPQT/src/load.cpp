@@ -989,7 +989,7 @@ static int rd_extra(void)
     /* Verify player class */
     if (p_ptr->pclass >= z_info->c_max)
     {
-        pop_up_message_box(QString("Invalid player class (%d).")  .arg(p_ptr->pclass));
+        pop_up_message_box(QString("Invalid player class (%1).")  .arg(p_ptr->pclass));
         return (-1);
     }
 

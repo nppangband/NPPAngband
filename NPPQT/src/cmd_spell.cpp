@@ -528,7 +528,7 @@ void spell_learn(int spell)
     p_ptr->spell_order[i] = spell;
 
     /* Mention the result */
-    //message_format(MSG_STUDY, 0, "You have learned the %s of %s.", p, get_spell_name(cp_ptr->spell_book, spell));
+    //message_format(MSG_STUDY, 0, "You have learned the %1 of %2.", p, get_spell_name(cp_ptr->spell_book, spell));
     message(QString("You have learned the %1 of %2.") .arg(p) .arg(get_spell_name(cp_ptr->spell_book, spell)));
 
     /* One less spell available */

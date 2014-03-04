@@ -7262,7 +7262,7 @@ static void build_nature(void)
                 {
                     QString edge = feature_desc(f_info[feat].f_edge, FALSE, FALSE);
 
-                    message(QString("Building %s%s surrounded by %1.") .arg(big ? "big ": "") .arg(name) .arg(edge));
+                    message(QString("Building %1%2 surrounded by %3.") .arg(big ? "big ": "") .arg(name) .arg(edge));
                 }
                 else
                 {

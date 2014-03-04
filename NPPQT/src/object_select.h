@@ -24,7 +24,8 @@ public:
     explicit ObjectSelectDialog(int *item, QString prompt, int mode, bool *success, int sq_y, int sq_x);
 
 signals:
-    void clicked(QString);
+    void clicked(QString &text);
+    void mapped (QString &text);
 
 private:
     // Receives the number of the button pressed.

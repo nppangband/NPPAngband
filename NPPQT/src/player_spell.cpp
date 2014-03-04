@@ -1212,7 +1212,7 @@ QString do_mage_spell(int mode, int spell, int dir)
             dur1 = 10;
 
             if (name) return ("Flight");
-            if (desc) return (QString("Causes the player to fly for %d turns, or %d more turns if already flying.") .arg(dur) .arg(dur1));
+            if (desc) return (QString("Causes the player to fly for %1 turns, or %2 more turns if already flying.") .arg(dur) .arg(dur1));
             if (desc_short)
             {
                 if (!p_ptr->timed[TMD_FLYING]) return (QString("%1 turns") .arg(dur));
@@ -1273,7 +1273,7 @@ QString do_mage_spell(int mode, int spell, int dir)
             dur = 20;
 
             if (name) return ("Haste Self");
-            if (desc) return (QString("Temporarily hasten yourself for %1+1d%2 turns, or %d more turns if already hasted.")
+            if (desc) return (QString("Temporarily hasten yourself for %1+1d%2 turns, or %3 more turns if already hasted.")
                                         .arg(plev) .arg(dur) .arg(dur1));
             if (desc_short)
             {
@@ -1709,7 +1709,7 @@ QString do_druid_incantation(int mode, int spell, int dir)
 
             if (name) return ("Bark Skin");
             if (desc) return (QString("Temporarily increases armour class by 50 for %1 turns.") .arg(dur));
-            if (desc_short) return (QString("dur %d turns.") .arg(dur));
+            if (desc_short) return (QString("dur %1 turns.") .arg(dur));
             if (cast)
             {
                 (void)inc_timed(TMD_SHIELD, dur, TRUE);
@@ -1862,7 +1862,7 @@ QString do_druid_incantation(int mode, int spell, int dir)
 
             if (name) return ("Extinguish");
             if (desc) return (QString("Attempts to extinguish any fires in a %1 radius.") .arg(rad));
-            if (desc_short) return (QString("rad %d") .arg(rad));
+            if (desc_short) return (QString("rad %1") .arg(rad));
             if (cast)
             {
                 u32b flg = PROJECT_BOOM | PROJECT_WALL | PROJECT_GRID | PROJECT_EFCT;
@@ -1929,8 +1929,8 @@ QString do_druid_incantation(int mode, int spell, int dir)
             rad = 3;
 
             if (name) return ("Clear Air");
-            if (desc) return (QString("Clears the air of visible effects within a %d radius.") .arg(rad));
-            if (desc_short) return (QString("rad %d") .arg(rad));
+            if (desc) return (QString("Clears the air of visible effects within a %1 radius.") .arg(rad));
+            if (desc_short) return (QString("rad %1") .arg(rad));
             if (cast)
             {
                 u32b flg = PROJECT_BOOM | PROJECT_WALL | PROJECT_EFCT;
@@ -1969,8 +1969,8 @@ QString do_druid_incantation(int mode, int spell, int dir)
             rad = 10;
 
             if (name) return ("Earthquake");
-            if (desc) return (QString("Creates a radius %d earthquake centered on the player.") .arg(rad));
-            if (desc_short) return (QString("rad %d") .arg(rad));
+            if (desc) return (QString("Creates a radius %1 earthquake centered on the player.") .arg(rad));
+            if (desc_short) return (QString("rad %1") .arg(rad));
             if (cast)
             {
                 earthquake(py, px, rad, FALSE);
@@ -1991,8 +1991,8 @@ QString do_druid_incantation(int mode, int spell, int dir)
             dam1 = (dam * f_info[FEAT_LIFE_DRAIN].x_damage) / 100;
 
             if (name) return ("Life draining bursts");
-            if (desc) return (QString("Creates a radius %d orb of time released life draining bursts that causes %d hp damage.") .arg(rad) .arg(dam1));
-            if (desc_short) return (QString("rad %d dam %d") .arg(rad) .arg(dam1));
+            if (desc) return (QString("Creates a radius %1 orb of time released life draining bursts that causes %2 hp damage.") .arg(rad) .arg(dam1));
+            if (desc_short) return (QString("rad %1 dam %2") .arg(rad) .arg(dam1));
             if (cast)
             {
                 fire_effect_orb(GF_LIFE_DRAIN, dir, dam, rad);
@@ -2457,7 +2457,7 @@ QString do_druid_incantation(int mode, int spell, int dir)
             dur1 = 10;
 
             if (name) return ("Lava Nativity");
-            if (desc) return (QString("Temporary nativity to lava for %d turns, or %d more turns if already temporarily native to lava.")
+            if (desc) return (QString("Temporary nativity to lava for %1 turns, or %2 more turns if already temporarily native to lava.")
                                             .arg(dur) .arg(dur1));
             if (desc_short)
             {

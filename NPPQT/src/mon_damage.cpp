@@ -1286,7 +1286,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, QString note, int who)
         {
             if ((who == SOURCE_PLAYER) || (who == SOURCE_TRAP))
             {
-                message(QString("You have destroyed %s.") .arg(m_name));
+                message(QString("You have destroyed %1.") .arg(m_name));
             }
             else message(QString("%^s has been destroyed") .arg(m_name));
         }

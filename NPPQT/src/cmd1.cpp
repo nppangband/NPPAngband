@@ -758,7 +758,7 @@ void py_pickup(bool pickup)
         if (p_ptr->timed[TMD_BLIND]) message(QString("You are aware of a pile of %1 objects.").arg(objects_left));
 
 		/* Message */
-        else message(QString("You see a pile of %d objects.").arg(objects_left));
+        else message(QString("You see a pile of %1 objects.").arg(objects_left));
 	}
 
 	/* Done */

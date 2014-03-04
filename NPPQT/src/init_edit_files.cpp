@@ -2429,7 +2429,7 @@ static int grab_one_activation(artifact_type *a_ptr, QString what)
         }
     }
 
-    pop_up_message_box(QString(QObject::tr("Unknown artifact activation '%s'")) .arg(what));
+    pop_up_message_box(QString(QObject::tr("Unknown artifact activation '%1'")) .arg(what));
 
     /* Error */
     return (PARSE_ERROR_GENERIC);

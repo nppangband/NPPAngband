@@ -2926,7 +2926,7 @@ static bool place_monster_one(int y, int x, int r_idx, byte mp_flags)
     else if (r_ptr->flags1 & (RF1_UNIQUE))
     {
         /* Unique monsters induce message */
-        if (cheat_hear) message(QString("Unique (%s1).") . arg(name));
+        if (cheat_hear) message(QString("Unique (%1).") . arg(name));
     }
 
     /* Success */

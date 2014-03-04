@@ -223,7 +223,7 @@ s16b get_quantity(QString prompt, int max)
     {
 
         /* Build a prompt */
-        prompt = (QString("Quantity (0-%d) hit ") .arg(max));
+        prompt = (QString("Quantity (0-%1) hit ") .arg(max));
     }
 
 

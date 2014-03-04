@@ -861,7 +861,7 @@ static int process_pref_file_aux(QString name)
         /* Print error message */
         /* ToDo: Add better error messages */
         /*
-        msg_format("Error %d in line %d of file '%s'.", err, line, name);
+        msg_format("Error %1 in line %2 of file '%3'.", err, line, name);
         msg_format("Parsing '%s'", old);
         message_flush();
         */

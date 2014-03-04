@@ -651,7 +651,7 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
                 if (mode == MODE_DESCRIBE)
                 {
                     message(QString("  This monster trap will set off an explosion of poison gas that will affect"));
-                    message(QString(" any creature within %d squares that is in line of sight of the blast.") .arg(rad));
+                    message(QString(" any creature within %1 squares that is in line of sight of the blast.") .arg(rad));
                     break;
                 }
 
@@ -674,7 +674,7 @@ void apply_monster_trap(int f_idx, int y, int x, byte mode)
                 if (mode == MODE_DESCRIBE)
                 {
                     message(QString("  This monster trap will set off an explosion of electricity that will affect"));
-                    message(QString(" any creature within %d squares that is in line of sight of the blast.") .arg(rad));
+                    message(QString(" any creature within %1 squares that is in line of sight of the blast.") .arg(rad));
                     break;
                 }
 

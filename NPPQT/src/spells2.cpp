@@ -115,7 +115,7 @@ bool warding_glyph(void)
 
         name = feature_desc(dungeon_info[py][px].feat, FALSE, TRUE);
 
-        message(QString("The %s resists the spell.") .arg(name));
+        message(QString("The %1 resists the spell.") .arg(name));
 
         /* Failure */
         return (FALSE);
@@ -4455,7 +4455,7 @@ bool master_elements(int dam, int dir)
     /* Message */
     message(QString("You cast a ball of %1!") .arg(name));
 
-    /*msg_format("dam: %d.", dam);*/
+    /*msg_format("dam: %1.", dam);*/
 
     /* Cast the spell. Do not create effects (smoke, sparks, etc.) */
     fire_ball_special(info->gf_type, dir, dam, 5, PROJECT_NO_EFCT, 30);
