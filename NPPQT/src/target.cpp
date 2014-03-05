@@ -409,6 +409,8 @@ bool target_set_interactive(int mode, int x, int y)
     bool temp_animate_flicker = animate_flicker;
     animate_flicker = FALSE;
 
+    color_message("Going into interactive mode", TERM_SKY_BLUE);
+
     /* If we haven't been given an initial location, start on the
        player. */
     if (x == -1 || y == -1)
@@ -512,6 +514,7 @@ bool target_set_interactive(int mode, int x, int y)
                 case Qt::Key_Escape:
                 case Qt::Key_Q:
                 {
+                    color_message("Going out from interactive mode", TERM_SKY_BLUE);
                     done = TRUE;
                     break;
                 }
@@ -747,6 +750,7 @@ bool target_set_interactive(int mode, int x, int y)
                 case Qt::Key_Escape:
                 case Qt::Key_Q:
                 {
+                    color_message("Going out from interactive mode", TERM_SKY_BLUE);
                     done = TRUE;
                     break;
                 }
@@ -1155,7 +1159,7 @@ bool get_aim_dir(int *dp, bool target_trap)
         if (input.mode == INPUT_MODE_NONE) break;
 
         if (input.key == Qt::Key_Escape) {
-            pop_up_message_box("Goint out from targetting");
+            color_message("Goint out from targetting", TERM_VIOLET);
             break;
         }
 
@@ -1187,7 +1191,7 @@ bool get_aim_dir(int *dp, bool target_trap)
         }
 
         /* Error */
-        if (!dir) pop_up_message_box("Illegal aim direction!");
+        if (!dir) color_message("Illegal aim direction!", TERM_ORANGE);
     }
 
     /* No direction */

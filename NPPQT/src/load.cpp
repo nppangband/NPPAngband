@@ -1538,7 +1538,7 @@ static void rd_messages(void)
         rd_byte(&green);
         rd_byte(&blue);
 
-        msg_ptr->msg_color.setRgb(red, blue, green, 255);
+        msg_ptr->msg_color.setRgb(red, green, blue, 255);
 
         rd_s32b(&msg_turn);
         msg_ptr->message_turn = msg_turn;
