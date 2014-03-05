@@ -579,6 +579,7 @@ extern void process_greater_vault_quest(void);
 extern void process_guild_quests(void);
 
 // qt_mainwindow.cpp
+extern void ui_show_message(int idx);
 extern QString rect_to_string(QRect rect);
 extern QRect visible_dungeon();
 extern bool panel_contains(int y, int x);

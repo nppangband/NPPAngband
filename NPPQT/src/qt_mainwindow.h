@@ -25,6 +25,7 @@ class QGraphicsScene;
 class QGraphicsItem;
 class DungeonGrid;
 class DungeonCursor;
+class QTextEdit;
 
 class MainWindowPrivate;
 
@@ -59,8 +60,11 @@ public:
 
     DungeonCursor *cursor;
 
+    QTextEdit *message_area;
+
     MainWindow();
 
+    void load_messages();
     QPoint get_target(u32b flags);
     void init_scene();
     void set_font(QFont newFont);

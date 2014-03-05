@@ -270,6 +270,8 @@ static void add_message_to_vector(QString msg, QColor which_color)
 
     // Add the message at the beginning of the list
     message_list.prepend(message_body);
+
+    ui_show_message(0);
 }
 
 /*

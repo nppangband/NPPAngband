@@ -180,6 +180,8 @@ QPixmap rotate_pix(QPixmap src, qreal angle)
 
 void MainWindow::slot_something()
 {
+    color_message("Going to targetting mode", TERM_YELLOW);
+
     int dir;
     p_ptr->command_dir = 0;
     graphics_view->setFocus();
@@ -773,6 +775,12 @@ MainWindow::MainWindow()
     QVBoxLayout *lay1 = new QVBoxLayout;
     central->setLayout(lay1);
 
+    message_area = new QTextEdit;
+    message_area->setReadOnly(true);
+    message_area->setMaximumHeight(80);
+    message_area->setStyleSheet("background-color: black;");
+    lay1->addWidget(message_area);
+
     lay1->addWidget(graphics_view);
 
     QHBoxLayout *lay2 = new QHBoxLayout;
@@ -875,6 +883,34 @@ void MainWindow::save_character_as()
     save_file(fileName);
 }
 
+void MainWindow::load_messages()
+{
+    message_area->clear();
+    for (int i = message_list.size() - 1; i >= 0; i--) {
+        message_area->setTextColor(message_list[i].msg_color);
+        message_area->insertPlainText(QString("%1: %2\n")
+                                      .arg(message_list[i].message_turn)
+                                      .arg(message_list[i].message));
+    }
+    message_area->moveCursor(QTextCursor::End);
+}
+
+void ui_show_message(int idx)
+{
+    // Clear contents if too many lines
+    if (main_window->message_area->document()->blockCount() > 1000) {
+        main_window->load_messages();
+    }
+    else if (idx >= 0 && idx < message_list.size()) {
+        main_window->message_area->moveCursor(QTextCursor::End);
+        main_window->message_area->setTextColor(message_list[idx].msg_color);
+        main_window->message_area->insertPlainText(QString("%1: %2\n")
+                                      .arg(message_list[idx].message_turn)
+                                      .arg(message_list[idx].message));
+        main_window->message_area->moveCursor(QTextCursor::End);
+    }
+}
+
 void MainWindow::save_and_close()
 {
     if (running_command()) return;
@@ -889,6 +925,8 @@ void MainWindow::save_and_close()
 
     // close game
     cleanup_npp_games();
+
+    message_area->clear();
 
     cursor->setVisible(false);
     destroy_tiles();
@@ -1419,6 +1457,8 @@ void MainWindow::load_file(const QString &file_name)
         {
             //update_file_menu_game_active();
             statusBar()->showMessage(tr("File loaded"), 2000);
+
+            load_messages();
 
             if (!character_loaded) {
                 save_prev_character();
