@@ -1339,7 +1339,7 @@ static bool read_scroll(object_type *o_ptr, bool *ident)
                 object_history(o_ptr, ORIGIN_ACQUIRE, 0);
 
                 /* Let the player know what they just got */
-                // TODO object_info_screen(o_ptr);
+                object_info_screen(o_ptr);
 
             }
             else message(QString("The Artifact creation failed"));

@@ -46,6 +46,7 @@ SOURCES +=  src/qt_main.cpp\
             src/object_classes.cpp \
             src/object_desc.cpp \
             src/object_hooks.cpp \
+            src/object_info.cpp \
             src/object_make.cpp \
             src/object_select.cpp \
             src/object_use.cpp \
@@ -73,6 +74,7 @@ SOURCES +=  src/qt_main.cpp\
             src/target.cpp \
             src/timed.cpp \
             src/utilities.cpp
+
 
 
 

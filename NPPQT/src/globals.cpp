@@ -369,6 +369,7 @@ bool (*get_obj_num_hook)(int k_idx);
  */
 bool (*get_feat_num_hook)(int f_idx);
 
+void (*object_info_out_flags)(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3, u32b *native);
 
 /*
  * Current "comp" function for ang_sort()

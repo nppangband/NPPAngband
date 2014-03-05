@@ -2345,7 +2345,7 @@ bool identify_fully(void)
     else
     {
         /* Describe it fully */
-        // TODO object_info_screen(o_ptr);
+        object_info_screen(o_ptr);
     }
 
     /* Check for easy mental feature (artifacts) */

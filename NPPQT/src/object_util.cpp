@@ -4411,28 +4411,6 @@ static int compare_items(object_type *o1, object_type *o2)
 }
 
 
-/**
- * Helper to draw the Object Recall subwindow; this actually does the work.
- */
-static void display_object_recall(object_type *o_ptr)
-{
-    //TODO object recall
-    /* Redirect output to the screen */
-   // text_out_hook = text_out_to_screen;
-
-    //clear_from(0);
-    //Term_gotoxy(0, 0);
-
-    /* Set hooks for character dump */
-    //object_info_out_flags = object_flags_known;
-
-    //screen_out_head(o_ptr);
-
-    //text_out("\n\n   ");
-
-    //object_info_out(o_ptr, TRUE);
-}
-
 
 /**
  * This draws the Object Recall subwindow when displaying a particular object
@@ -4440,10 +4418,11 @@ static void display_object_recall(object_type *o_ptr)
  */
 void display_object_idx_recall(s16b item)
 {
+    object_info_out_flags = object_flags_known;
 
     object_type *o_ptr = object_from_item_idx(item);
 
-    display_object_recall(o_ptr);
+    object_info_screen(o_ptr);
 }
 
 
@@ -4464,7 +4443,7 @@ void display_object_kind_recall(s16b k_idx)
     if (k_info[k_idx].aware) o_ptr->ident |= (IDENT_STORE);
 
     /* draw it */
-    display_object_recall(o_ptr);
+    object_info_screen(o_ptr);
 }
 
 

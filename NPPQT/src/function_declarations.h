@@ -300,6 +300,13 @@ extern bool item_tester_hook_flammable_book(object_type *o_ptr);
 extern bool item_tester_hook_activate(object_type *o_ptr);
 extern bool obj_can_browse(object_type *o_ptr);
 
+// object_info.cpp
+extern QString screen_out_head(object_type *o_ptr);
+extern QString object_info_out(object_type *o_ptr, bool extra_info);
+extern void object_info_screen(object_type *o_ptr);
+extern QString format_object_history(object_type *o_ptr);
+extern bool history_interesting(object_type *o_ptr);
+
 /* object-make.cpp */
 extern s16b get_obj_num(int level);
 extern void object_prep(object_type *o_ptr, int k_idx);
