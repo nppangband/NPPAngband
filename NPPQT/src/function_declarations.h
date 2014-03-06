@@ -75,6 +75,7 @@ extern cmd_arg obj_uninscribe(object_type *o_ptr, cmd_arg args);
 extern void do_cmd_uninscribe(void);
 extern void do_cmd_inscribe(void);
 extern cmd_arg obj_examine(object_type *o_ptr, cmd_arg args);
+extern void do_cmd_observe(void);
 extern void do_cmd_takeoff(void);
 extern void do_cmd_wield(void);
 extern void do_cmd_drop(void);

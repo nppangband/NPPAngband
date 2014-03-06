@@ -3181,12 +3181,12 @@ static void scramble_artifact(int a_idx)
 
     if (!one_in_(3))
     {
-        a_ptr->a_name = (QString("'%^s'") .arg (buf));
+        a_ptr->a_name = (QString("'%^1'") .arg (buf));
 
     }
     else
     {
-        a_ptr->a_name = (QString("of %^s") .arg (buf));
+        a_ptr->a_name = (QString("of %^1") .arg (buf));
     }
 
     /* Evaluate the original artifact to determine the power level. */
@@ -3686,11 +3686,11 @@ bool make_one_randart(object_type *o_ptr, int art_power, bool tailored)
 
         if (!one_in_(3))
         {
-            tmp = (QString("'%^s'") .arg(buf));
+            tmp = (QString("'%^1'") .arg(buf));
         }
         else
         {
-            tmp = (QString("of %^s") .arg(buf));
+            tmp = (QString("of %^1") .arg(buf));
         }
     }
 
@@ -3873,8 +3873,8 @@ void make_quest_artifact(int lev)
     first.toUpper();
     buf[0] = first;
 
-    if (!one_in_(3)) a_ptr->a_name = (QString("'%^s'") .arg(buf));
-    else a_ptr->a_name = (QString("of %^s") .arg(buf));
+    if (!one_in_(3)) a_ptr->a_name = (QString("'%^1'") .arg(buf));
+    else a_ptr->a_name = (QString("of %^1") .arg(buf));
 
 
     return;

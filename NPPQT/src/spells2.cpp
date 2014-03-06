@@ -691,8 +691,8 @@ bool do_inc_stat(int stat)
     if (inc_stat(stat))
     {
         /* Message */
-        if (game_mode == GAME_NPPMORIA) message(QString("%s") .arg(moria_desc_stat_inc_pos[stat]));
-        else message(QString("You feel very %s!") .arg(desc_stat_pos[stat]));
+        if (game_mode == GAME_NPPMORIA) message(QString("%1") .arg(moria_desc_stat_inc_pos[stat]));
+        else message(QString("You feel very %1!") .arg(desc_stat_pos[stat]));
 
         /* Notice */
         return (TRUE);
@@ -4414,7 +4414,6 @@ bool master_elements(int dam, int dir)
         /* Boost chance? */
         if (flags & info->level_flags)
         {
-            /*msg_format("More chance for %s.", info->name);*/
             info->prob2 = 3 * info->prob1 / 2;
         }
         /* Or just copy the default chance value */

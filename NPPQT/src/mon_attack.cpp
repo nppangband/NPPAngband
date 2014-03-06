@@ -1623,7 +1623,7 @@ bool make_attack_normal(monster_type *m_ptr)
                     disturb(1, 0);
 
                     /* Message */
-                    message(QString("%^s misses you.")  .arg(m_name));
+                    message(QString("%^1 misses you.")  .arg(m_name));
                 }
 
                 break;

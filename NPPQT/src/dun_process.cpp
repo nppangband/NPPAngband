@@ -1889,8 +1889,12 @@ void process_player_energy(byte energy_used)
     }
 
     /* Traverse effect array */
-    for (x_ptr = x_list; x_ptr < x_list + z_info->x_max; x_ptr++)
+    for (i = 1; i < x_max; i++)
     {
+        effect_type *x_ptr = &x_list[i];
+
+        if (!x_ptr->x_type) continue;
+
         /* Ignore invisible effects */
         if (x_ptr->x_flags & (EF1_HIDDEN)) continue;
 

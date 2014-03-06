@@ -383,17 +383,17 @@ static QString describe_weapon(object_type *o_ptr, u32b f1, bool extra_info)
     if (object_state.num_blow == 1) output.append("   It gives you one attack per turn.  ");
     else output.append(QString("   It gives you %1 attacks per turn.  ") .arg(object_state.num_blow));
 
-    output.append("\n");
+    output.append("<br>");
 
     if (object_state.heavy_wield)
     {
-        output.append(QString("<font color = red>   You have trouble wielding such a heavy weapon.\n\n</font>"));
+        output.append(QString("<font color = red>   You have trouble wielding such a heavy weapon.<br><br></font>"));
     }
 
     /* Message */
     if (object_state.icky_wield)
     {
-        output.append(QString("<font color = red>   You do not feel comfortable with this weapon.\n\n</font>"));
+        output.append(QString("<font color = red>   You do not feel comfortable with this weapon.<br><br></font>"));
     }
 
     if (!extra_info) return (output);
@@ -413,7 +413,7 @@ static QString describe_weapon(object_type *o_ptr, u32b f1, bool extra_info)
     crit_hit_percent = critical_hit_chance(o_ptr, object_state, FALSE) / (CRIT_HIT_CHANCE / 100);
     average = (dd * ds) / 2 + plus;
 
-    output.append("\n");
+    output.append("<br>");
 
     if (plus < 0)
     {
@@ -422,10 +422,10 @@ static QString describe_weapon(object_type *o_ptr, u32b f1, bool extra_info)
     }
 
     /* Now calculate and print out average damage */
-    output.append(QString("   This weapon does %1d%2%3%4 damage (%5 avg) per attack, with a critical hit chance of %6 percent.\n")
+    output.append(QString("   This weapon does %1d%2%3%4 damage (%5 avg) per attack, with a critical hit chance of %6 percent.<br>")
                           .arg(dd)  .arg(ds) .arg(plus_minus) .arg(plus) .arg(average) .arg(crit_hit_percent));
 
-    output.append("\n");
+    output.append("<br>");
 
     if (game_mode == GAME_NPPMORIA) counter = N_ELEMENTS(slays_info_nppmoria);
     else counter = N_ELEMENTS(slays_info_nppangband);
@@ -444,7 +444,7 @@ static QString describe_weapon(object_type *o_ptr, u32b f1, bool extra_info)
 
             average = (new_dd * ds) / 2 + plus;
 
-            output.append(QString("   This weapon does %1d%2%3%4 damage (%5 avg) against %6 each hit.\n")
+            output.append(QString("   This weapon does %1d%2%3%4 damage (%5 avg) against %6 each hit.<br>")
                           .arg(dd)  .arg(ds) .arg(plus_minus) .arg(plus) .arg(average) .arg(si->slay_race));
         }
     }
@@ -466,7 +466,7 @@ static QString describe_weapon(object_type *o_ptr, u32b f1, bool extra_info)
 
                 average = (new_dd * ds) / 2 + plus;
 
-                output.append(QString("   This weapon does %1d%2%3%4 damage (%5 avg) against creatures who %6 each hit.\n")
+                output.append(QString("   This weapon does %1d%2%3%4 damage (%5 avg) against creatures who %6 each hit.<br>")
                               .arg(dd)  .arg(ds) .arg(plus_minus) .arg(plus) .arg(average) .arg(si->slay_race));
             }
         }
@@ -489,7 +489,7 @@ static QString describe_weapon(object_type *o_ptr, u32b f1, bool extra_info)
 
             average = (new_dd * ds) / 2 + plus;
 
-            output.append(QString("   This weapon does %1d%2%3%4 damage (%5 avg) against creatures who do not %6.\n")
+            output.append(QString("   This weapon does %1d%2%3%4 damage (%5 avg) against creatures who do not %6.<br>")
                           .arg(dd)  .arg(ds) .arg(plus_minus) .arg(plus) .arg(average) .arg(bi->brand_resist));
         }
     }
@@ -502,7 +502,7 @@ static QString describe_weapon(object_type *o_ptr, u32b f1, bool extra_info)
         {
             average = (dd * ds) / 2;
 
-            output.append(QString("   This weapon does an additional %1d%2 (%3 avg) damage against creatures who are susceptible to %4.\n")
+            output.append(QString("   This weapon does an additional %1d%2 (%3 avg) damage against creatures who are susceptible to %4.<br>")
                           .arg(dd)  .arg(ds) .arg(average)  .arg(ms->brand_susceptibility));
         }
     }
@@ -550,7 +550,7 @@ static QString describe_weapon(object_type *o_ptr, u32b f1, bool extra_info)
             if ((new_blows > old_blows) &&
                 ((str_plus < str_done) || (str_done == -1)))
             {
-                output.append(QString("   With +%1 str and +%2 dex you would get %3 attacks per turn.\n")
+                output.append(QString("   With +%1 str and +%2 dex you would get %3 attacks per turn.<br>")
                         .arg(str_plus) .arg(dex_plus) .arg(new_blows));
                 str_done = str_plus;
                 break;
@@ -615,14 +615,14 @@ static QString describe_bow_slot(object_type *o_ptr, u32b f3, bool extra_info)
     /*print out the number of attacks*/
     if (object_state.num_fire > 1)
     {
-        if (object_state.num_fire == 2) output.append(QString("\n   You can fire this %1 twice as quickly as an ordinary %2.\n") .arg(launcher) .arg(launcher));
+        if (object_state.num_fire == 2) output.append(QString("<br>   You can fire this %1 twice as quickly as an ordinary %2.<br>") .arg(launcher) .arg(launcher));
 
-        else output.append(QString("\n   You can fire this %1 %2 times more quickly than an ordinary %3.\n") .arg(launcher) .arg(object_state.num_fire) .arg(launcher));
+        else output.append(QString("<br>   You can fire this %1 %2 times more quickly than an ordinary %3.<br>") .arg(launcher) .arg(object_state.num_fire) .arg(launcher));
     }
 
     if (object_state.heavy_shoot)
     {
-        output.append(QString("<font color = red>   \n   You have trouble aiming such a heavy %s.\n</font>") .arg(launcher));
+        output.append(QString("<font color = red>   <br>   You have trouble aiming such a heavy %1.<br></font>") .arg(launcher));
     }
 
     if (!extra_info) return (output);
@@ -639,7 +639,7 @@ static QString describe_bow_slot(object_type *o_ptr, u32b f3, bool extra_info)
     plus *= mult;
     crit_hit_percent = critical_shot_chance(o_ptr, object_state, FALSE, TRUE, f3) / (CRIT_HIT_CHANCE / 100);
 
-    output.append("\n");
+    output.append("<br>");
 
     if (plus < 0)
     {
@@ -650,10 +650,10 @@ static QString describe_bow_slot(object_type *o_ptr, u32b f3, bool extra_info)
     average = (dd * ds) / 2 + plus;
 
     /* Now calculate and print out average damage */
-    output.append(QString("   Firing %1 from this %2 does %3d%4%5%6 damage (%7 avg), with a critical hit chance of %8 percent.\n")
+    output.append(QString("   Firing %1 from this %2 does %3d%4%5%6 damage (%7 avg), with a critical hit chance of %8 percent.<br>")
                    .arg(j_name) .arg(launcher) .arg(dd) .arg(ds) .arg(plus_minus) .arg(plus) .arg(average) .arg(crit_hit_percent));
 
-    output.append("\n");
+    output.append("<br>");
 
     return (output);
 }
@@ -720,7 +720,7 @@ static QString describe_ammo(object_type *o_ptr, u32b f1, u32b f3, bool extra_in
 
     if (!extra_info) return (output);
 
-    output.append("\n");
+    output.append("<br>");
 
     mult = object_state.ammo_mult;
 
@@ -744,7 +744,7 @@ static QString describe_ammo(object_type *o_ptr, u32b f1, u32b f3, bool extra_in
     plus *= mult;
     crit_hit_percent = critical_shot_chance(o_ptr, object_state, FALSE, TRUE, f3) / (CRIT_HIT_CHANCE / 100);
 
-    output.append("\n");
+    output.append("<br>");
 
     if (plus < 0)
     {
@@ -755,10 +755,10 @@ static QString describe_ammo(object_type *o_ptr, u32b f1, u32b f3, bool extra_in
     average = (dd * ds) / 2 + plus;
 
     /* Now calculate and print out average damage */
-    output.append(QString("   Firing this ammunition from %1 does %2d%3%4%5 damage (%6 avg), with a critical hit chance of %7 percent.\n")
+    output.append(QString("   Firing this ammunition from %1 does %2d%3%4%5 damage (%6 avg), with a critical hit chance of %7 percent.<br>")
                   .arg(j_name) .arg(dd) .arg(ds) .arg(plus_minus) .arg(plus) .arg(average) .arg(crit_hit_percent));
 
-    output.append("\n");
+    output.append("<br>");
 
     counter = N_ELEMENTS(slays_info_nppangband);
     if (game_mode == GAME_NPPMORIA) counter = N_ELEMENTS(slays_info_nppmoria);
@@ -776,7 +776,7 @@ static QString describe_ammo(object_type *o_ptr, u32b f1, u32b f3, bool extra_in
 
             average = (new_dd * ds) / 2 + plus;
 
-            output.append(QString("   This ammunition does %1d%2%3%4 damage (%5 avg) against %6 each hit.\n")
+            output.append(QString("   This ammunition does %1d%2%3%4 damage (%5 avg) against %6 each hit.<br>")
                           .arg(dd) .arg(ds) .arg(plus_minus) .arg(plus) .arg(average) .arg(si->slay_race));
         }
     }
@@ -798,7 +798,7 @@ static QString describe_ammo(object_type *o_ptr, u32b f1, u32b f3, bool extra_in
 
                 average = (new_dd * ds) / 2 + plus;
 
-                output.append(QString("   This ammunition does %1d%2%3%4 damage (%5 avg) against creatures who %6 each hit.\n")
+                output.append(QString("   This ammunition does %1d%2%3%4 damage (%5 avg) against creatures who %6 each hit.<br>")
                               .arg(dd) .arg(ds) .arg(plus_minus) .arg(plus) .arg(average) .arg(si->slay_race));
             }
         }
@@ -822,7 +822,7 @@ static QString describe_ammo(object_type *o_ptr, u32b f1, u32b f3, bool extra_in
 
             average = (new_dd * ds) / 2 + plus;
 
-            output.append(QString("   This ammunition does %1d%2%3%4 damage (%5 avg) against creatures who do not %6.\n")
+            output.append(QString("   This ammunition does %1d%2%3%4 damage (%5 avg) against creatures who do not %6.<br>")
                           .arg(dd) .arg(ds) .arg(plus_minus) .arg(plus) .arg(average) .arg(bi->brand_resist));
         }
     }
@@ -835,7 +835,7 @@ static QString describe_ammo(object_type *o_ptr, u32b f1, u32b f3, bool extra_in
         {
             average = (dd * ds) / 2;
 
-            output.append(QString("   This ammunition does an additional %1d%2 damage (%3 avg) against creatures who are susceptible to %4.\n")
+            output.append(QString("   This ammunition does an additional %1d%2 damage (%3 avg) against creatures who are susceptible to %4.<br>")
                           .arg(dd) .arg(ds) .arg(average) .arg(ms->brand_susceptibility));
         }
     }
@@ -875,7 +875,7 @@ static QString describe_throwing_weapon(object_type *o_ptr, u32b f1, u32b f3, bo
     /* Get the player state */
     calc_bonuses(object_inven, &object_state, TRUE);
 
-    output.append("\n");
+    output.append("<br>");
 
     if (!extra_info) return (output);
 
@@ -899,7 +899,7 @@ static QString describe_throwing_weapon(object_type *o_ptr, u32b f1, u32b f3, bo
 
     crit_hit_percent = critical_shot_chance(o_ptr, object_state, TRUE, TRUE, f3) / (CRIT_HIT_CHANCE / 100);
 
-    output.append("\n");
+    output.append("<br>");
 
     if (plus < 0)
     {
@@ -910,10 +910,10 @@ static QString describe_throwing_weapon(object_type *o_ptr, u32b f1, u32b f3, bo
     average = (dd * ds) / 2 + plus;
 
     /* Now calculate and print out average damage */
-    output.append(QString("   Throwing this weapon does %1d%2%3%4 damage (%5 avg), with a critical hit chance of %6 percent.\n")
+    output.append(QString("   Throwing this weapon does %1d%2%3%4 damage (%5 avg), with a critical hit chance of %6 percent.<br>")
                     .arg(dd) .arg(ds) .arg(plus_minus) .arg(plus) .arg(average) .arg(crit_hit_percent));
 
-    output.append("\n");
+    output.append("<br>");
 
     if (game_mode == GAME_NPPMORIA) counter = N_ELEMENTS(slays_info_nppmoria);
     else counter = N_ELEMENTS(slays_info_nppangband);
@@ -932,7 +932,7 @@ static QString describe_throwing_weapon(object_type *o_ptr, u32b f1, u32b f3, bo
 
             average = (new_dd * ds) / 2 + plus;
 
-            output.append(QString("   Throwing this weapon does %1d%2%3%4 damage (%5 avg) against %6 each hit.\n")
+            output.append(QString("   Throwing this weapon does %1d%2%3%4 damage (%5 avg) against %6 each hit.<br>")
                           .arg(dd) .arg(ds) .arg(plus_minus) .arg(plus) .arg(average) .arg(si->slay_race));
         }
     }
@@ -954,7 +954,7 @@ static QString describe_throwing_weapon(object_type *o_ptr, u32b f1, u32b f3, bo
 
                 average = (new_dd * ds) / 2 + plus;
 
-                output.append(QString("   Throwing this weapon does %1d%2%3%4 damage (%5 avg) against creatures who %6 each hit.\n")
+                output.append(QString("   Throwing this weapon does %1d%2%3%4 damage (%5 avg) against creatures who %6 each hit.<br>")
                               .arg(dd) .arg(ds) .arg(plus_minus) .arg(plus) .arg(average) .arg(si->slay_race));
             }
         }
@@ -978,7 +978,7 @@ static QString describe_throwing_weapon(object_type *o_ptr, u32b f1, u32b f3, bo
 
             average = (new_dd * ds) / 2 + plus;
 
-            output.append(QString("   Throwing this weapon does %1d%2%3%4 damage (%5 avg) against creatures who do not %6.\n")
+            output.append(QString("   Throwing this weapon does %1d%2%3%4 damage (%5 avg) against creatures who do not %6.<br>")
                             .arg(dd) .arg(ds) .arg(plus_minus) .arg(plus) .arg(average) .arg(bi->brand_resist));
         }
     }
@@ -991,7 +991,7 @@ static QString describe_throwing_weapon(object_type *o_ptr, u32b f1, u32b f3, bo
         {
             average = (dd * ds) / 2;
 
-            output.append(QString("   Throwing this weapon does an additional %1d%2 damage (%3 avg) against creatures who are susceptible to %4.\n")
+            output.append(QString("   Throwing this weapon does an additional %1d%2 damage (%3 avg) against creatures who are susceptible to %4.<br>")
                             .arg(dd) .arg(ds) .arg(average) .arg(ms->brand_susceptibility));
         }
     }
@@ -1516,7 +1516,7 @@ QString object_info_out(object_type *o_ptr,  bool extra_info)
     if (object_known_p(o_ptr) && (!(o_ptr->ident & IDENT_MENTAL)) &&
         (o_ptr->has_hidden_powers() || o_ptr->is_artifact()))
     {
-        output.append("\nIt might have hidden powers.");
+        output.append("<br>It might have hidden powers.");
     }
 
     /* We are done. */
@@ -1536,16 +1536,17 @@ QString screen_out_head(object_type *o_ptr)
 
     /* Description */
     o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_SINGULAR | ODESC_FULL);
+    o_name = capitilize_first(o_name);
 
     /* Print, in colour */
-    output.append(QString("<font color=yellow>%^s</font>") .arg(o_name));
+    output.append(QString("<font color=blue>%1</font>") .arg(o_name));
 
     /* Display the known artifact description */
     if (!adult_rand_artifacts &&
         o_ptr->is_known_artifact() && !a_info[o_ptr->art_num].a_text.isEmpty())
 
     {
-        output.append("\n\n   ");
+        output.append("<br><br>   ");
         output.append(a_info[o_ptr->art_num].a_text);
     }
     /* Display the known object description */
@@ -1553,14 +1554,14 @@ QString screen_out_head(object_type *o_ptr)
     {
         if (!k_info[o_ptr->k_idx].k_text.isEmpty())
         {
-            output.append("\n\n   ");
+            output.append("<br><br>   ");
             output.append(k_info[o_ptr->k_idx].k_text);
         }
 
         /* Display an additional ego-item description */
         if (o_ptr->is_ego_item() && o_ptr->is_known() && !e_info[o_ptr->ego_num].e_text.isEmpty())
         {
-            output.append("\n\n   ");
+            output.append("<br><br>   ");
             output.append(e_info[o_ptr->ego_num].e_text);
         }
     }
@@ -1579,18 +1580,18 @@ void object_info_screen(object_type *o_ptr)
 
     object_info_out_flags = object_flags_known;
 
-    output.append("\n\n   ");
+    output.append("<br><br>   ");
 
     /* Dump the info */
     output.append(object_info_out(o_ptr, TRUE));
 
     if (!o_ptr->is_known())
     {
-        output.append("\n\n   This item has not been identified.");
+        output.append("<br><br>   This item has not been identified.");
     }
     else if (output.isEmpty() && (o_ptr->tval != cp_ptr->spell_book))
     {
-        output.append("\n\n   This item does not seem to possess any special abilities.");
+        output.append("<br><br>   This item does not seem to possess any special abilities.");
     }
 
     if (o_ptr->tval != cp_ptr->spell_book)
@@ -1603,22 +1604,25 @@ void object_info_screen(object_type *o_ptr)
 
         if (!buf.isEmpty())
         {
-            buf.append("\n\n   ");
-            output.append(QString("<font color=yellow>%^s</font>") .arg(buf));
+            buf.append("<br><br>   ");
+
+            buf = capitilize_first(buf);
+
+            output.append(QString("<font color=yellow>%1</font>") .arg(buf));
         }
 
         int weight = o_ptr->weight * o_ptr->number;
-        float weight_rounded = weight/10;
+        qreal weight_rounded = weight/10;
 
 
         if (o_ptr->number > 1)
         {
-            output.append(QString("<font color=yellow>\n\n   They weigh %1 lb.</font>") .arg(weight_rounded));
+            output.append(QString("<font color=yellow><br><br>   They weigh %1 lb.</font>") .arg(weight_rounded));
         }
-        else output.append(QString("<font color=yellow>\n\n   It weighs %1 lb.</font>") .arg(weight_rounded));
+        else output.append(QString("<font color=yellow><br><br>   It weighs %1 lb.</font>") .arg(weight_rounded));
 
         /* Print resale value */
-        output.append("\n\n   ");
+        output.append("<br><br>   ");
         price = object_value(o_ptr);
         if (price > 0)
         {
@@ -1637,7 +1641,7 @@ void object_info_screen(object_type *o_ptr)
             else 					output.append(QString("<font color=yellow>It has no value.</font>"));
         }
 
-        output.append(QString("<font color=cyan>\n\n[Press any key to continue]\n</font>"));
+        output.append(QString("<font color=cyan><br><br>[Press any key to continue]<br></font>"));
 
         /* Finally, display it */
         QMessageBox::information(0, o_name, output, QMessageBox::Ok);

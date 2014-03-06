@@ -26,8 +26,6 @@ void ObjectSelectDialog::button_press(QString num_string)
 {
     selected_button = num_string.toInt();
 
-    pop_up_message_box(QString("selected button is %1") .arg(selected_button));
-
     this->accept();
 }
 

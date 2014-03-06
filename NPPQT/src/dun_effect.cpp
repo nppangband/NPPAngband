@@ -781,10 +781,10 @@ void wipe_x_list(void)
         x_ptr->effect_wipe();
     }
 
-    /* Reset "o_max" */
+    /* Reset "x_max" */
     x_max = 1;
 
-    /* Reset "o_cnt" */
+    /* Reset "x_cnt" */
     x_cnt = 0;
 }
 
@@ -1359,7 +1359,7 @@ void process_effects(void)
     notice_stuff();
 
     /* Process all effects */
-    for (i = 0; i < z_info->x_max; i++)
+    for (i = 0; i < x_max; i++)
     {
 
         /*Some effects don't get processed*/

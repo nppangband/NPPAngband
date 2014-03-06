@@ -41,6 +41,8 @@ cmd_arg obj_examine(object_type *o_ptr, cmd_arg args)
     (void)o_ptr;
     track_object(args.item);
 
+    object_info_screen(o_ptr);
+
     args.verify = TRUE;
     return (args);
 }
@@ -460,7 +462,7 @@ static cmd_arg do_item(item_act act)
 
     /* Execute the item command */
     if (item_actions[act].action != NULL)
-        item_actions[act].action(o_ptr, args);
+        args = item_actions[act].action(o_ptr, args);
     else if (item_actions[act].needs_aim && obj_needs_aim(o_ptr))
     {
         bool trap_related = trap_related_object(o_ptr);
@@ -599,9 +601,14 @@ void do_cmd_inscribe(void)
 }
 
 
+//Inspect an item
+void do_cmd_observe(void)
+{
+    // Paranoia
+    if (!p_ptr->playing) return;
 
-
-
+    do_item(ACTION_EXAMINE);
+}
 
 /*** Taking off/putting on ***/
 
@@ -611,6 +618,9 @@ void do_cmd_inscribe(void)
  */
 void do_cmd_takeoff(void)
 {
+    // Paranoia
+    if (!p_ptr->playing) return;
+
     cmd_arg args = do_item(ACTION_TAKEOFF);
 
     // Command cancelled
@@ -639,6 +649,9 @@ void do_cmd_takeoff(void)
  */
 void do_cmd_wield()
 {
+    // Paranoia
+    if (!p_ptr->playing) return;
+
     cmd_arg args = do_item(ACTION_WIELD);
 
     object_type *equip_o_ptr;

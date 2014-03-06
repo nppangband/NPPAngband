@@ -1024,6 +1024,11 @@ void MainWindow::keyPressEvent(QKeyEvent* which_key)
             move_player(3, FALSE);
             return;
         }
+        case Qt::Key_I:
+        {
+            do_cmd_observe();
+            return;
+        }
 
         default:
         {
@@ -1033,10 +1038,10 @@ void MainWindow::keyPressEvent(QKeyEvent* which_key)
             else
             {
                 //  TODO something useful with unused keypresses
-                QMessageBox* box = new QMessageBox();
-                box->setWindowTitle(QString("Unused Key %1"));
-                box->setText(QString("You Pressed: ")+ which_key->text());
-                box->show();
+                //QMessageBox* box = new QMessageBox();
+                //box->setWindowTitle(QString("Unused Key %1"));
+                //box->setText(QString("You Pressed: ")+ which_key->text());
+                //box->show();
             }
         }
     }

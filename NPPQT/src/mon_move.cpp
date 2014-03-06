@@ -2917,7 +2917,7 @@ bool make_move(monster_type *m_ptr, int *ty, int *tx, bool fear, bool *bash)
                             m_name = monster_desc(m_ptr, 0);
 
                             /* Dump a message if they weren't just scared */
-                            if (!(m_ptr->mflag & (MFLAG_JUST_SCARED))) message(QString("%^s turns to fight!")  .arg(m_name));
+                            if (!(m_ptr->mflag & (MFLAG_JUST_SCARED))) message(QString("%^1 turns to fight!")  .arg(m_name));
 
                             /* Hack -- lose some time  XXX XXX */
                             return (FALSE);

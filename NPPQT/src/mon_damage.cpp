@@ -1288,7 +1288,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, QString note, int who)
             {
                 message(QString("You have destroyed %1.") .arg(m_name));
             }
-            else message(QString("%^s has been destroyed") .arg(m_name));
+            else message(QString("%^1 has been destroyed") .arg(m_name));
         }
 
         /* Death by Physical attack -- living monster */
