@@ -27,7 +27,7 @@ void ego_item_type::ego_item_wipe()
     e_name.clear();
     e_text.clear();
 
-    cost = e_flags1 = e_flags2 = e_flags3 = 0;
+    cost = e_flags1 = e_flags2 = e_flags3 = e_native = 0;
     level = rarity = rating = 0;
 
     for (int i = 0; i < EGO_TVALS_MAX; i++) {
@@ -597,7 +597,7 @@ void object_kind::object_kind_wipe()
     tval = sval = pval = 0;
     to_h = to_d = to_a = 0;
     ac = dd = ds = weight = cost = 0;
-    k_flags1 = k_flags2 = k_flags3 = 0;
+    k_flags1 = k_flags2 = k_flags3 = k_native = k_store = 0;
     effect = 0;
     C_WIPE(locale, 4, byte);
     C_WIPE(chance, 4, byte);

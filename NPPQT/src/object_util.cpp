@@ -1969,7 +1969,7 @@ bool object_similar(object_type *o_ptr, object_type *j_ptr)
     }
 
     /* Hack -- Require compatible inscriptions */
-    if (o_ptr->inscription == j_ptr->inscription)
+    if (o_ptr->inscription != j_ptr->inscription)
     {
         /* Normally require matching inscriptions */
         if (!stack_force_notes) return (FALSE);

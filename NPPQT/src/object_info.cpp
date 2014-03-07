@@ -1599,16 +1599,19 @@ void object_info_screen(object_type *o_ptr)
         QString buf;
         int price;
 
+        buf.clear();
+        buf.append("<br>   ");
+
         /* Show object history if possible */
-        buf = format_object_history(o_ptr);
+        buf.append(format_object_history(o_ptr));
 
         if (!buf.isEmpty())
         {
-            buf.append("<br><br>   ");
+            buf.append("<br>   ");
 
             buf = capitilize_first(buf);
 
-            output.append(QString("<font color=yellow>%1</font>") .arg(buf));
+            output.append(QString("<font color=blue>%1</font>") .arg(buf));
         }
 
         int weight = o_ptr->weight * o_ptr->number;
@@ -1617,9 +1620,9 @@ void object_info_screen(object_type *o_ptr)
 
         if (o_ptr->number > 1)
         {
-            output.append(QString("<font color=yellow><br><br>   They weigh %1 lb.</font>") .arg(weight_rounded));
+            output.append(QString("<br><br>   They weigh %1 lb.") .arg(weight_rounded));
         }
-        else output.append(QString("<font color=yellow><br><br>   It weighs %1 lb.</font>") .arg(weight_rounded));
+        else output.append(QString("<br><br>   It weighs %1 lb.") .arg(weight_rounded));
 
         /* Print resale value */
         output.append("<br><br>   ");
@@ -1628,20 +1631,20 @@ void object_info_screen(object_type *o_ptr)
         {
             if (o_ptr->number > 1)
             {
-                output.append(QString("<font color=yellow>They would fetch %1 gold apiece in an average shop.</font>") .arg(price));
+                output.append(QString("They would fetch %1 gold apiece in an average shop.") .arg(price));
             }
             else
             {
-                output.append(QString("<font color=yellow>It would fetch %1 gold in an average shop.</font>") .arg(price));
+                output.append(QString("It would fetch %1 gold in an average shop.") .arg(price));
             }
         }
         else
         {
-            if (o_ptr->number > 1)	output.append(QString("<font color=yellow>They have no value.</font>"));
-            else 					output.append(QString("<font color=yellow>It has no value.</font>"));
+            if (o_ptr->number > 1)	output.append(QString("They have no value."));
+            else 					output.append(QString("It has no value."));
         }
 
-        output.append(QString("<font color=cyan><br><br>[Press any key to continue]<br></font>"));
+        output.append(QString("<font color=black><br><br>[Press OK to continue]<br></font>"));
 
         /* Finally, display it */
         QMessageBox::information(0, o_name, output, QMessageBox::Ok);
@@ -1688,6 +1691,7 @@ QString format_object_history(object_type *o_ptr)
         case ORIGIN_NONE: case ORIGIN_MIXED:
         {
             /* Don't display anything */
+            output.clear();
             return (output);
         }
         case ORIGIN_BIRTH:

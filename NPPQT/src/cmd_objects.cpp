@@ -612,9 +612,33 @@ void do_cmd_observe(void)
 
 /*** Taking off/putting on ***/
 
+//Actually take off the item.
+
+bool command_takeoff(cmd_arg args)
+{
+    // Command cancelled
+    if(!args.verify) return (FALSE);
+
+    if (!item_is_available(args.item, NULL, USE_EQUIP | USE_QUIVER))
+    {
+        message(QString("You are not wielding that item."));
+        return (FALSE);
+    }
+
+    if (!obj_can_takeoff(object_from_item_idx(args.item)))
+    {
+        message(QString("You cannot take off that item."));
+        return (FALSE);
+    }
+
+    (void)inven_takeoff(args.item, 255);
+    pack_overflow();
+    process_player_energy(BASE_ENERGY_MOVE / 2);
+    return (TRUE);
+}
 
 /*
- * Take off an item
+ * Take off an item (keyboard command)
  */
 void do_cmd_takeoff(void)
 {
@@ -623,49 +647,24 @@ void do_cmd_takeoff(void)
 
     cmd_arg args = do_item(ACTION_TAKEOFF);
 
-    // Command cancelled
-    if(!args.verify) return;
-
-    if (!item_is_available(args.item, NULL, USE_EQUIP | USE_QUIVER))
-    {
-        message(QString("You are not wielding that item."));
-        return;
-    }
-
-    if (!obj_can_takeoff(object_from_item_idx(args.item)))
-    {
-        message(QString("You cannot take off that item."));
-        return;
-    }
-
-    (void)inven_takeoff(args.item, 255);
-    pack_overflow();
-    process_player_energy(BASE_ENERGY_MOVE / 2);
+    (void)command_takeoff(args);
 }
 
-
-/*
- * Wield or wear an item
- */
-void do_cmd_wield()
+// Handle wielding the item.
+bool command_wield(cmd_arg args)
 {
-    // Paranoia
-    if (!p_ptr->playing) return;
-
-    cmd_arg args = do_item(ACTION_WIELD);
-
     object_type *equip_o_ptr;
     QString o_name;
 
     // Command cancelled
-    if(!args.verify) return;
+    if(!args.verify) return (FALSE);
 
     object_type *o_ptr = object_from_item_idx(args.item);
 
     if (!item_is_available(args.item, NULL, USE_INVEN | USE_FLOOR))
     {
         message(QString("You do not have that item to wield."));
-        return;
+        return (FALSE);
     }
 
     /* Check the slot */
@@ -674,14 +673,14 @@ void do_cmd_wield()
         o_name = object_desc(o_ptr,  ODESC_PREFIX | ODESC_FULL);
 
         message(QString("You cannot wield that item there."));
-        return;
+        return (FALSE);
     }
 
     /*Hack - don't allow quest items to be worn*/
     if(o_ptr->ident & (IDENT_QUEST))
     {
         message(QString("You cannot wield quest items."));
-        return;
+        return (FALSE);
     }
 
     /* Hack - Throwing weapons can be wielded in the quiver too. */
@@ -698,7 +697,7 @@ void do_cmd_wield()
     {
         wield_item(o_ptr, args.item, args.slot);
         process_player_energy(BASE_ENERGY_MOVE);
-        return;
+        return (TRUE);
     }
 
     /* If the slot is in the quiver and objects can be combined */
@@ -707,7 +706,7 @@ void do_cmd_wield()
     {
         wield_item(o_ptr, args.item, args.slot);
         process_player_energy(BASE_ENERGY_MOVE);
-        return;
+        return (TRUE);
     }
 
     /* Prevent wielding into a cursed slot */
@@ -715,7 +714,7 @@ void do_cmd_wield()
     {
         o_name = object_desc(equip_o_ptr,  ODESC_BASE);
         message(QString("The %1 you are %2 appears to be cursed.") .arg(o_name) .arg(describe_use(args.slot)));
-        return;
+        return(FALSE);
     }
 
     /* "!t" checks for taking off */
@@ -725,11 +724,26 @@ void do_cmd_wield()
         o_name = object_desc(equip_o_ptr,  ODESC_PREFIX | ODESC_FULL);
 
         /* Forget it */
-        if (!get_check(QString("Really take off %1? ") .arg(o_name))) return;
+        if (!get_check(QString("Really take off %1? ") .arg(o_name))) return(FALSE);
     }
 
     wield_item(o_ptr, args.item, args.slot);
     process_player_energy(BASE_ENERGY_MOVE);
+    return (TRUE);
+}
+
+
+/*
+ * Wield or wear an item - (keyboard command)
+ */
+void do_cmd_wield()
+{
+    // Paranoia
+    if (!p_ptr->playing) return;
+
+    cmd_arg args = do_item(ACTION_WIELD);
+
+    (void)command_wield(args);
 }
 
 
