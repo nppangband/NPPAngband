@@ -119,6 +119,8 @@ static QString describe_stats(object_type *o_ptr, u32b f1)
     /* Output end */
     output.append(QString(" by %1.  ") .arg(pval));
 
+    output.append("<br>");
+
     return (output);
 }
 
@@ -157,6 +159,8 @@ static QString describe_secondary(object_type *o_ptr, u32b f1)
 
     /* Output end */
     output.append(QString(" by %1.  ") .arg(pval));
+
+    output.append("<br>");
 
     /* We found something */
     return (output);
@@ -228,6 +232,8 @@ static QString describe_slay(object_type *o_ptr, u32b f1)
         output.append(".  ");
     }
 
+    if (slcnt || excnt) output.append("<br>");
+
     /* We are done here */
     return (output);
 }
@@ -256,6 +262,8 @@ static QString describe_brand(object_type *o_ptr, u32b f1)
 
     /* Describe brands */
     output.append(output_desc_list("It is branded with ", descs, cnt));
+
+    if (cnt) output.append("<br>");
 
     /* We are done here */
     return (output);
@@ -287,6 +295,8 @@ static QString describe_immune(object_type *o_ptr, u32b f2)
 
     /* Describe immunities */
     output.append(output_desc_list("It provides immunity to ", descs, cnt));
+
+    if (cnt) output.append("<br>");
 
     /* We are done here */
     return (output);
@@ -333,6 +343,8 @@ static QString describe_resist(const object_type *o_ptr, u32b f2, u32b f3)
 
     /* Describe resistances */
     output.append(output_desc_list("It provides resistance to ", vp, vn));
+
+    if (vn) output.append("<br>");
 
     /* We are done here */
     return (output);
@@ -387,13 +399,13 @@ static QString describe_weapon(object_type *o_ptr, u32b f1, bool extra_info)
 
     if (object_state.heavy_wield)
     {
-        output.append(QString("<font color = red>   You have trouble wielding such a heavy weapon.<br><br></font>"));
+        output.append(QString("<font color = red>   You have trouble wielding such a heavy weapon.<br></font>"));
     }
 
     /* Message */
     if (object_state.icky_wield)
     {
-        output.append(QString("<font color = red>   You do not feel comfortable with this weapon.<br><br></font>"));
+        output.append(QString("<font color = red>   You do not feel comfortable with this weapon.<br></font>"));
     }
 
     if (!extra_info) return (output);
@@ -429,7 +441,6 @@ static QString describe_weapon(object_type *o_ptr, u32b f1, bool extra_info)
 
     if (game_mode == GAME_NPPMORIA) counter = N_ELEMENTS(slays_info_nppmoria);
     else counter = N_ELEMENTS(slays_info_nppangband);
-
 
     /* Go through each brand and specify the applicable brand multiplier */
     for (i = 0; i < counter; i++)
@@ -1027,6 +1038,8 @@ static QString describe_ignores(object_type *o_ptr, u32b f3)
     else
         output.append(output_desc_list("It cannot be harmed by ", list, - n));
 
+    output.append("<br>");
+
     return (output);
 }
 
@@ -1058,6 +1071,8 @@ static QString describe_sustains(object_type *o_ptr, u32b f2)
         output.append("It sustains all your stats.  ");
     else
         output.append(output_desc_list("It sustains your ", list, n));
+
+    if (n)output.append("<br>");
 
     /* We are done here */
     return (output);
@@ -1142,7 +1157,6 @@ static QString describe_misc_magic(object_type *o_ptr, u32b f3)
         /* Output end */
         output.append(".  ");
     }
-
 
     /* Return output */
     return (output);
@@ -1405,6 +1419,8 @@ static QString describe_item_activation(object_type *o_ptr)
             break;
         }
     }
+
+
     return (output);
 }
 
@@ -1434,6 +1450,8 @@ static QString describe_nativity(object_type *o_ptr, u32b fn)
 
     /* Describe nativities */
     output.append(output_desc_list("It makes you native to terrains made of ", vp, vn));
+
+    if(vn) output.append("<br>");
 
     /* We are done here */
     return (output);
@@ -1473,6 +1491,8 @@ static QString describe_activation(object_type *o_ptr, u32b f3)
             /*print it out*/
             output.append(act_desc);
         }
+
+            output.append("<br>");
     }
 
     /* No activation */
@@ -1539,7 +1559,7 @@ QString screen_out_head(object_type *o_ptr)
     o_name = capitilize_first(o_name);
 
     /* Print, in colour */
-    output.append(QString("<font color=blue>%1</font>") .arg(o_name));
+    output.append(QString("<b><big>%1</big></b>") .arg(o_name));
 
     /* Display the known artifact description */
     if (!adult_rand_artifacts &&
@@ -1580,18 +1600,16 @@ void object_info_screen(object_type *o_ptr)
 
     object_info_out_flags = object_flags_known;
 
-    output.append("<br><br>   ");
-
     /* Dump the info */
     output.append(object_info_out(o_ptr, TRUE));
 
     if (!o_ptr->is_known())
     {
-        output.append("<br><br>   This item has not been identified.");
+        output.append("<br>   This item has not been identified.");
     }
     else if (output.isEmpty() && (o_ptr->tval != cp_ptr->spell_book))
     {
-        output.append("<br><br>   This item does not seem to possess any special abilities.");
+        output.append("<br>   This item does not seem to possess any special abilities.");
     }
 
     if (o_ptr->tval != cp_ptr->spell_book)
@@ -1600,7 +1618,6 @@ void object_info_screen(object_type *o_ptr)
         int price;
 
         buf.clear();
-        buf.append("<br>   ");
 
         /* Show object history if possible */
         buf.append(format_object_history(o_ptr));
@@ -1620,31 +1637,31 @@ void object_info_screen(object_type *o_ptr)
 
         if (o_ptr->number > 1)
         {
-            output.append(QString("<br><br>   They weigh %1 lb.") .arg(weight_rounded));
+            output.append(QString("<br>   They weigh %1 lb.<br>") .arg(weight_rounded));
         }
-        else output.append(QString("<br><br>   It weighs %1 lb.") .arg(weight_rounded));
+        else output.append(QString("<br>   It weighs %1 lb.<br>") .arg(weight_rounded));
 
         /* Print resale value */
-        output.append("<br><br>   ");
+        output.append("<br>  ");
         price = object_value(o_ptr);
         if (price > 0)
         {
             if (o_ptr->number > 1)
             {
-                output.append(QString("They would fetch %1 gold apiece in an average shop.") .arg(price));
+                output.append(QString("They would fetch %1 gold apiece in an average shop.<br>") .arg(price));
             }
             else
             {
-                output.append(QString("It would fetch %1 gold in an average shop.") .arg(price));
+                output.append(QString("It would fetch %1 gold in an average shop.<br>") .arg(price));
             }
         }
         else
         {
-            if (o_ptr->number > 1)	output.append(QString("They have no value."));
-            else 					output.append(QString("It has no value."));
+            if (o_ptr->number > 1)	output.append(QString("They have no value.<br>"));
+            else 					output.append(QString("It has no value.<br>"));
         }
 
-        output.append(QString("<font color=black><br><br>[Press OK to continue]<br></font>"));
+        output.append(QString("<b><br>[Press OK to continue]<br></b>"));
 
         /* Finally, display it */
         QMessageBox::information(0, o_name, output, QMessageBox::Ok);
@@ -1779,6 +1796,8 @@ QString format_object_history(object_type *o_ptr)
             break;
         }
     }
+
+    output.prepend("<br>");
 
     return (output);
 }

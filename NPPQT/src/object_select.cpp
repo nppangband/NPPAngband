@@ -79,6 +79,8 @@ void ObjectSelectDialog::build_floor_tab()
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
+        button->setStyleSheet("Text-align:left");
+        button->setShortcut('a');
 
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
@@ -127,7 +129,7 @@ void ObjectSelectDialog::build_inven_tab()
     // Make a button for each object.
     for (int i = 0; i < inven_items.size(); i++)
     {
-        QChar which_char = number_to_letter(i);
+        QChar which_char = number_to_letter(inven_items[i]);
         object_type *o_ptr = &inventory[inven_items[i]];
         QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
         QString button_name = (QString("%1) %2") .arg(which_char) .arg(o_name));
@@ -136,6 +138,7 @@ void ObjectSelectDialog::build_inven_tab()
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
+        button->setStyleSheet("Text-align:left");
 
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
@@ -178,7 +181,7 @@ void ObjectSelectDialog::build_equip_tab()
     // Make a button for each object.
     for (int i = 0; i < equip_items.size(); i++)
     {
-        QChar which_char = number_to_letter(i);
+        QChar which_char = number_to_letter(equip_items[i]-INVEN_WIELD);
         object_type *o_ptr = &inventory[equip_items[i]];
         QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
         QString button_name = (QString("%1) %2") .arg(which_char) .arg(o_name));
@@ -187,6 +190,7 @@ void ObjectSelectDialog::build_equip_tab()
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
+        button->setStyleSheet("Text-align:left");
 
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
@@ -232,7 +236,7 @@ void ObjectSelectDialog::build_quiver_tab()
     // Make a button for each object.
     for (int i = 0; i < quiver_items.size(); i++)
     {
-        QChar which_char = number_to_letter(i);
+        QChar which_char = number_to_letter(quiver_items[i]-QUIVER_START);
         object_type *o_ptr = &inventory[quiver_items[i]];
         QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
         QString button_name = (QString("%1) %2") .arg(which_char) .arg(o_name));
@@ -241,6 +245,7 @@ void ObjectSelectDialog::build_quiver_tab()
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
+        button->setStyleSheet("Text-align:left");
 
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
