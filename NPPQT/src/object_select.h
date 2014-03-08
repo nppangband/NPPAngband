@@ -51,11 +51,15 @@ private:
 
     byte find_starting_tab(int mode);
 
+    void track_longest_object_name(object_type *o_ptr);
+    QString format_button_name(QChar char_index, object_type *o_ptr);
+
     //Functions to track the list of possible items
     void floor_items_count(int mode, int sq_y, int sq_x);
     void inven_items_count(int mode);
     void equip_items_count(int mode);
     void quiver_items_count(int mode);
+
 
     //Vectors to store the index numbers of the actual objects
     QVector<int> floor_items;
@@ -76,6 +80,7 @@ private:
     int selected_button;
     int num_buttons;
     bool object_found;
+    int max_object_desc_length;
 
 };
 

@@ -29,6 +29,24 @@ void ObjectSelectDialog::button_press(QString num_string)
     this->accept();
 }
 
+void ObjectSelectDialog::track_longest_object_name(object_type *o_ptr)
+{
+    QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
+    if (o_name.length() <= max_object_desc_length) return;
+    max_object_desc_length = o_name.length();
+}
+
+QString ObjectSelectDialog::format_button_name(QChar char_index, object_type *o_ptr)
+{
+    QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
+    int name_len = o_name.length();
+
+    while (o_name.length() < max_object_desc_length)o_name.append(" ");
+    o_name.append(format_object_weight(o_ptr));
+    QString final_name = (QString("%1) %2") .arg(char_index) .arg(o_name));
+
+    return (final_name);
+}
 
 
 void ObjectSelectDialog::floor_items_count(int mode, int sq_y, int sq_x)
@@ -58,6 +76,8 @@ void ObjectSelectDialog::floor_items_count(int mode, int sq_y, int sq_x)
         /* Accept this item */
         floor_items.append(this_o_idx);
         allow_floor = TRUE;
+
+        track_longest_object_name(o_ptr);
     }
 }
 
@@ -72,15 +92,13 @@ void ObjectSelectDialog::build_floor_tab()
         // Make the label.
         QChar which_char = number_to_letter(i);
         object_type *o_ptr = &o_list[floor_items[i]];
-        QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
-        QString button_name = (QString("%1) %2") .arg(which_char) .arg(o_name));
 
         // Make the button.
+        QString button_name = format_button_name(which_char, o_ptr);
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
         button->setStyleSheet("Text-align:left");
-        button->setShortcut(QKeySequence(which_char));
 
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
@@ -124,6 +142,11 @@ void ObjectSelectDialog::inven_items_count(int mode)
         /* Accept this item */
         inven_items.append(i);
         allow_inven = TRUE;
+
+        /* Get the object */
+        object_type *o_ptr = &inventory[i];
+
+        track_longest_object_name(o_ptr);
     }
 }
 
@@ -136,15 +159,13 @@ void ObjectSelectDialog::build_inven_tab()
     {
         QChar which_char = number_to_letter(inven_items[i]);
         object_type *o_ptr = &inventory[inven_items[i]];
-        QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
-        QString button_name = (QString("%1) %2") .arg(which_char) .arg(o_name));
 
         // Make the button.
+        QString button_name = format_button_name(which_char, o_ptr);
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
         button->setStyleSheet("Text-align:left");
-        button->setShortcut(QKeySequence(which_char));
 
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
@@ -182,6 +203,11 @@ void ObjectSelectDialog::equip_items_count(int mode)
         /* Accept this item */
         equip_items.append(i);
         allow_equip = TRUE;
+
+        /* Get the object */
+        object_type *o_ptr = &inventory[i];
+
+        track_longest_object_name(o_ptr);
     }
 }
 
@@ -194,10 +220,9 @@ void ObjectSelectDialog::build_equip_tab()
     {
         QChar which_char = number_to_letter(equip_items[i]-INVEN_WIELD);
         object_type *o_ptr = &inventory[equip_items[i]];
-        QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
-        QString button_name = (QString("%1) %2") .arg(which_char) .arg(o_name));
 
         // Make the button.
+        QString button_name = format_button_name(which_char, o_ptr);
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
@@ -240,6 +265,11 @@ void ObjectSelectDialog::quiver_items_count(int mode)
         /* Accept this item */
         quiver_items.append(i);
         allow_quiver = TRUE;
+
+        /* Get the object */
+        object_type *o_ptr = &inventory[i];
+
+        track_longest_object_name(o_ptr);
     }
 
     return;
@@ -254,10 +284,9 @@ void ObjectSelectDialog::build_quiver_tab()
     {
         QChar which_char = number_to_letter(quiver_items[i]-QUIVER_START);
         object_type *o_ptr = &inventory[quiver_items[i]];
-        QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
-        QString button_name = (QString("%1) %2") .arg(which_char) .arg(o_name));
 
         // Make the button.
+        QString button_name = format_button_name(which_char, o_ptr);
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
@@ -274,6 +303,8 @@ void ObjectSelectDialog::build_quiver_tab()
 
         // Add this to the layout.
         layout->addWidget(button);
+
+        num_buttons++;
 
         num_buttons++;
     }
@@ -398,6 +429,7 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
     // Start with a clean slate
     tab_order.clear();
     num_buttons = 0;
+    max_object_desc_length = 0;
 
     // First, find the eligible objects
     floor_items_count(mode, sq_y, sq_x);
@@ -417,6 +449,9 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
         /* TODO return FALSE Done here */
         return;
     }
+
+    // formatting detail
+    max_object_desc_length += 2;
 
     // Build, then add the tabs as necessary
     if (allow_floor)

@@ -318,7 +318,21 @@ void cmd_disable_repeat(void)
     repeat_prev_allowed = FALSE;
 }
 
+/*
+ * Return object weight in a "XX.X" format.
+ * The output is automatically formatted to be 6 characters long.
+ */
+QString format_object_weight(object_type *o_ptr)
+{
+    int object_weight = o_ptr->weight * o_ptr->number;
 
+    QString formatted_weight = (QString("%1.%2") .arg(object_weight/10) .arg(object_weight % 10));
+
+    while (formatted_weight.length() < 6) formatted_weight.prepend(" ");
+    formatted_weight.append(" lbs");
+
+    return (formatted_weight);
+}
 
 /*
  * Angband sorting algorithm -- quick sort in place

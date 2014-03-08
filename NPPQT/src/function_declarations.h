@@ -848,6 +848,7 @@ extern void color_message(QString msg, int which_color);
 extern void custom_color_message(QString msg, byte red, byte green, byte blue);
 extern void cmd_enable_repeat(void);
 extern void cmd_disable_repeat(void);
+extern QString format_object_weight(object_type *o_ptr);
 extern void write_note(QString note, s16b depth);
 extern QString get_player_title(void);
 
