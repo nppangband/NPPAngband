@@ -80,11 +80,16 @@ void ObjectSelectDialog::build_floor_tab()
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
         button->setStyleSheet("Text-align:left");
-        button->setShortcut('a');
+        button->setShortcut(QKeySequence(which_char));
 
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
+
+        // Add a shortkey based on the label
+        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
+        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
+        button_values->setMapping(this_shortcut, text_num);
 
         // Add this to the layout.
         layout->addWidget(button);
@@ -139,10 +144,16 @@ void ObjectSelectDialog::build_inven_tab()
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
         button->setStyleSheet("Text-align:left");
+        button->setShortcut(QKeySequence(which_char));
 
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
+
+        // Add a shortkey based on the label
+        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
+        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
+        button_values->setMapping(this_shortcut, text_num);
 
         // Add this to the layout.
         layout->addWidget(button);
@@ -195,6 +206,11 @@ void ObjectSelectDialog::build_equip_tab()
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
+
+        // Add a shortkey based on the label
+        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
+        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
+        button_values->setMapping(this_shortcut, text_num);
 
         // Add this to the layout.
         layout->addWidget(button);
@@ -250,6 +266,11 @@ void ObjectSelectDialog::build_quiver_tab()
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
+
+        // Add a shortkey based on the label
+        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
+        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
+        button_values->setMapping(this_shortcut, text_num);
 
         // Add this to the layout.
         layout->addWidget(button);
@@ -360,13 +381,16 @@ void ObjectSelectDialog::on_dialog_buttons_pressed(QAbstractButton *)
     this->reject();
 }
 
-ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool *success, int sq_y, int sq_x)
+ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool *success, bool *cancelled, int sq_y, int sq_x)
 {
     object_tabs = new QTabWidget;
     floor_tab = new QWidget;
     inven_tab = new QWidget;
     equip_tab = new QWidget;
     quiver_tab = new QWidget;
+
+    main_prompt = new QLabel(QString("<b><big>%1</big></b>") .arg(prompt));
+    main_prompt->setAlignment(Qt::AlignCenter);
 
     button_values = new QSignalMapper(this);
     connect(button_values, SIGNAL(mapped(QString)), this, SLOT(button_press(QString)));
@@ -428,16 +452,20 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
     object_tabs->setTabEnabled(find_starting_tab(mode), TRUE);
 
     QVBoxLayout *main_layout = new QVBoxLayout;
+    main_layout->addWidget(main_prompt);
     main_layout->addWidget(object_tabs);
     main_layout->addWidget(buttons);
     setLayout(main_layout);
-    setWindowTitle(prompt);
+    setWindowTitle(tr("Object Selection Menu"));
 
-    if (!this->exec()) *success = FALSE;
+    if (!this->exec())
+    {
+        *cancelled = TRUE;
+        *success = FALSE;
+    }
     else
     {
         *item = get_selected_object();
-
         *success = object_found;
     }
 }
@@ -527,12 +555,13 @@ static bool get_item_allow(int item, bool is_harmless)
 bool get_item(int *cp, QString pmt, QString str, int mode)
 {
     bool success = FALSE;
+    bool cancelled = FALSE;
 
     /* No item selected */
     *cp = 0;
 
     /* Go to menu */
-    ObjectSelectDialog(cp, pmt, mode, &success, p_ptr->py, p_ptr->px);
+    ObjectSelectDialog(cp, pmt, mode, &success, &cancelled, p_ptr->py, p_ptr->px);
 
     /* Check validity */
     if (success)
@@ -573,6 +602,7 @@ bool get_item(int *cp, QString pmt, QString str, int mode)
 bool get_item_beside(int *cp, QString pmt, QString str, int sq_y, int sq_x)
 {
     bool success = FALSE;
+    bool cancelled = FALSE;
 
     /* No item selected */
     *cp = 0;
@@ -581,7 +611,7 @@ bool get_item_beside(int *cp, QString pmt, QString str, int sq_y, int sq_x)
     if (!in_bounds_fully(sq_y, sq_x)) success = FALSE;
 
     /* Go to menu */
-    ObjectSelectDialog(cp, pmt, (USE_FLOOR), &success, sq_y, sq_x);
+    ObjectSelectDialog(cp, pmt, (USE_FLOOR), &success, &cancelled, sq_y, sq_x);
 
     /* Check validity */
     if (success)

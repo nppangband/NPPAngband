@@ -16,12 +16,13 @@ enum
 class QTabWidget;
 
 
+
 class ObjectSelectDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit ObjectSelectDialog(int *item, QString prompt, int mode, bool *success, int sq_y, int sq_x);
+    explicit ObjectSelectDialog(int *item, QString prompt, int mode, bool *success, bool *cancelled, int sq_y, int sq_x);
 
 private slots:
     // Receives the number of the button pressed.
@@ -36,6 +37,7 @@ private:
     QWidget *inven_tab;
     QWidget *equip_tab;
     QWidget *quiver_tab;
+    QLabel *main_prompt;
 
     // Keeps track of which button goes with which object.
     // Is sent by a signal to the button_press function
