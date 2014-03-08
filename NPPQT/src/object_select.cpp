@@ -195,7 +195,12 @@ void ObjectSelectDialog::build_inven_tab()
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
-        button->setStyleSheet("Text-align:left");
+
+        QString style("text-align: left; background-color: black;");
+        object_kind *k_ptr = k_info + o_ptr->k_idx;
+        style.append(QString(" color: %1;").arg(k_ptr->d_color.name()));
+
+        button->setStyleSheet(style);
 
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
