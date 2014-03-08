@@ -29,6 +29,24 @@ void ObjectSelectDialog::button_press(QString num_string)
     this->accept();
 }
 
+// Receives the number of the button pressed.
+void ObjectSelectDialog::help_press(QString num_string)
+{
+    int help_obj_value = num_string.toInt();
+
+    int object_num = get_selected_object(help_obj_value);
+
+    object_type *o_ptr;
+
+    /* Inventory or floor */
+    if (object_num >= 0)
+        o_ptr = &inventory[object_num];
+    else
+        o_ptr = &o_list[0 - object_num];
+
+    object_info_screen(o_ptr);
+}
+
 void ObjectSelectDialog::track_longest_object_name(object_type *o_ptr)
 {
     QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
@@ -39,7 +57,6 @@ void ObjectSelectDialog::track_longest_object_name(object_type *o_ptr)
 QString ObjectSelectDialog::format_button_name(QChar char_index, object_type *o_ptr)
 {
     QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
-    int name_len = o_name.length();
 
     while (o_name.length() < max_object_desc_length)o_name.append(" ");
     o_name.append(format_object_weight(o_ptr));
@@ -93,7 +110,7 @@ void ObjectSelectDialog::build_floor_tab()
         QChar which_char = number_to_letter(i);
         object_type *o_ptr = &o_list[floor_items[i]];
 
-        // Make the button.
+        // Make the button for the object.
         QString button_name = format_button_name(which_char, o_ptr);
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
@@ -109,10 +126,23 @@ void ObjectSelectDialog::build_floor_tab()
         connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
         button_values->setMapping(this_shortcut, text_num);
 
-        // Add this to the layout.
-        layout->addWidget(button);
+        // Add a help button to put up a description of the object.
+        QPushButton *help_button = new QPushButton(text_num);
+        help_button->setIcon(QIcon(":/icons/lib/icons/help.png"));
+        help_button->setText(QString(""));
+        connect(help_button, SIGNAL(clicked()), help_values, SLOT(map()));
+        help_values->setMapping(help_button, text_num);
 
+        // Add both buttons to the horizontal layout.
+        QHBoxLayout *obj_layout = new QHBoxLayout;
+        obj_layout->addWidget(button);
+        obj_layout->addWidget(help_button);
+
+        // Keep track of the number of buttons.
         num_buttons++;
+
+        // Add that to the vertical layout.
+        layout->addLayout(obj_layout);
     }
 
     // Add the final layout to the tab.
@@ -154,13 +184,13 @@ void ObjectSelectDialog::build_inven_tab()
 {
     QVBoxLayout *layout = new QVBoxLayout;
 
-    // Make a button for each object.
+    // Make a button and help button for each object.
     for (int i = 0; i < inven_items.size(); i++)
     {
         QChar which_char = number_to_letter(inven_items[i]);
         object_type *o_ptr = &inventory[inven_items[i]];
 
-        // Make the button.
+        // Make the button for the object.
         QString button_name = format_button_name(which_char, o_ptr);
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
@@ -176,10 +206,23 @@ void ObjectSelectDialog::build_inven_tab()
         connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
         button_values->setMapping(this_shortcut, text_num);
 
-        // Add this to the layout.
-        layout->addWidget(button);
+        // Add a help button to put up a description of the object.
+        QPushButton *help_button = new QPushButton(text_num);
+        help_button->setIcon(QIcon(":/icons/lib/icons/help.png"));
+        help_button->setText(QString(""));
+        connect(help_button, SIGNAL(clicked()), help_values, SLOT(map()));
+        help_values->setMapping(help_button, text_num);
 
+        // Add both buttons to the horizontal layout.
+        QHBoxLayout *obj_layout = new QHBoxLayout;
+        obj_layout->addWidget(button);
+        obj_layout->addWidget(help_button);
+
+        // Keep track of the number of buttons.
         num_buttons++;
+
+        // Add that to the vertical layout.
+        layout->addLayout(obj_layout);
     }
     inven_tab->setLayout(layout);
 }
@@ -221,7 +264,7 @@ void ObjectSelectDialog::build_equip_tab()
         QChar which_char = number_to_letter(equip_items[i]-INVEN_WIELD);
         object_type *o_ptr = &inventory[equip_items[i]];
 
-        // Make the button.
+        // Make the button for the object.
         QString button_name = format_button_name(which_char, o_ptr);
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
@@ -237,10 +280,23 @@ void ObjectSelectDialog::build_equip_tab()
         connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
         button_values->setMapping(this_shortcut, text_num);
 
-        // Add this to the layout.
-        layout->addWidget(button);
+        // Add a help button to put up a description of the object.
+        QPushButton *help_button = new QPushButton(text_num);
+        help_button->setIcon(QIcon(":/icons/lib/icons/help.png"));
+        help_button->setText(QString(""));
+        connect(help_button, SIGNAL(clicked()), help_values, SLOT(map()));
+        help_values->setMapping(help_button, text_num);
 
+        // Add both buttons to the horizontal layout.
+        QHBoxLayout *obj_layout = new QHBoxLayout;
+        obj_layout->addWidget(button);
+        obj_layout->addWidget(help_button);
+
+        // Keep track of the number of buttons.
         num_buttons++;
+
+        // Add that to the vertical layout.
+        layout->addLayout(obj_layout);
     }
     equip_tab->setLayout(layout);
 }
@@ -285,7 +341,7 @@ void ObjectSelectDialog::build_quiver_tab()
         QChar which_char = number_to_letter(quiver_items[i]-QUIVER_START);
         object_type *o_ptr = &inventory[quiver_items[i]];
 
-        // Make the button.
+        // Make the button for the object.
         QString button_name = format_button_name(which_char, o_ptr);
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
@@ -301,12 +357,23 @@ void ObjectSelectDialog::build_quiver_tab()
         connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
         button_values->setMapping(this_shortcut, text_num);
 
-        // Add this to the layout.
-        layout->addWidget(button);
+        // Add a help button to put up a description of the object.
+        QPushButton *help_button = new QPushButton(text_num);
+        help_button->setIcon(QIcon(":/icons/lib/icons/help.png"));
+        help_button->setText(QString(""));
+        connect(help_button, SIGNAL(clicked()), help_values, SLOT(map()));
+        help_values->setMapping(help_button, text_num);
 
+        // Add both buttons to the horizontal layout.
+        QHBoxLayout *obj_layout = new QHBoxLayout;
+        obj_layout->addWidget(button);
+        obj_layout->addWidget(help_button);
+
+        // Keep track of the number of buttons.
         num_buttons++;
 
-        num_buttons++;
+        // Add that to the vertical layout.
+        layout->addLayout(obj_layout);
     }
     quiver_tab->setLayout(layout);
 }
@@ -364,9 +431,8 @@ byte ObjectSelectDialog::find_starting_tab(int mode)
 }
 
 // Return the index off the actual object selected.
-int ObjectSelectDialog::get_selected_object()
+int ObjectSelectDialog::get_selected_object(int num_tracker)
 {
-    int num_tracker = selected_button;
     object_found = TRUE;
 
     /*
@@ -424,7 +490,9 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
     main_prompt->setAlignment(Qt::AlignCenter);
 
     button_values = new QSignalMapper(this);
+    help_values = new QSignalMapper(this);
     connect(button_values, SIGNAL(mapped(QString)), this, SLOT(button_press(QString)));
+    connect(help_values, SIGNAL(mapped(QString)), this, SLOT(help_press(QString)));
 
     // Start with a clean slate
     tab_order.clear();
@@ -500,7 +568,7 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
     }
     else
     {
-        *item = get_selected_object();
+        *item = get_selected_object(selected_button);
         *success = object_found;
     }
 }

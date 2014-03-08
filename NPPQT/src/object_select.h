@@ -27,6 +27,7 @@ public:
 private slots:
     // Receives the number of the button pressed.
     void button_press(QString num_string);
+    void help_press(QString num_string);
     void on_dialog_buttons_pressed(QAbstractButton *);
 
 private:
@@ -42,6 +43,7 @@ private:
     // Keeps track of which button goes with which object.
     // Is sent by a signal to the button_press function
     QSignalMapper* button_values;
+    QSignalMapper* help_values;
 
     // Functions to build the actual tabs
     void build_floor_tab();
@@ -73,7 +75,7 @@ private:
     bool allow_quiver;
 
     //Record an item selection
-    int  get_selected_object();
+    int  get_selected_object(int num_tracker);
 
     // Variables for keeping track of which item is selected
     QVector<byte> tab_order;

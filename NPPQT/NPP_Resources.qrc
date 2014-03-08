@@ -8,5 +8,6 @@
         <file>lib/icons/save.png</file>
         <file>lib/icons/save_as.png</file>
         <file>lib/icons/options.png</file>
+        <file>lib/icons/help.png</file>
     </qresource>
 </RCC>
