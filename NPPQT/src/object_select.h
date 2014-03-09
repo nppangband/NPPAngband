@@ -77,6 +77,8 @@ private:
     //Record an item selection
     int  get_selected_object(int num_tracker);
 
+    void keyPressEvent(QKeyEvent *);
+
     // Variables for keeping track of which item is selected
     QVector<byte> tab_order;
     int selected_button;

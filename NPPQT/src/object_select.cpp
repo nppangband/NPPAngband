@@ -29,6 +29,23 @@ void ObjectSelectDialog::button_press(QString num_string)
     this->accept();
 }
 
+void ObjectSelectDialog::keyPressEvent(QKeyEvent *event)
+{
+    QString text = event->text();
+    if (text.length() == 1 && text.at(0).isLetter()) {
+        text.append(") "); // Example: "a) "
+        QWidget *tab = this->object_tabs->currentWidget(); // Search in the current tab
+        QList<QPushButton *> buttons = tab->findChildren<QPushButton *>();
+        for (int i = 0; i < buttons.size(); i++) {
+            if (buttons.at(i)->text().startsWith(text)) {
+                event->accept();
+                buttons.at(i)->click();
+                break;
+            }
+        }
+    }
+}
+
 // Receives the number of the button pressed.
 void ObjectSelectDialog::help_press(QString num_string)
 {
@@ -134,10 +151,12 @@ void ObjectSelectDialog::build_floor_tab()
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
 
+        /*
         // Add a shortkey based on the label
         QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
         connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
         button_values->setMapping(this_shortcut, text_num);
+        */
 
         // Add a weight button
         QLabel *weight_label = new QLabel(format_object_weight(o_ptr));
@@ -218,16 +237,21 @@ void ObjectSelectDialog::build_inven_tab()
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
-        button->setStyleSheet("Text-align:left");
+
+        QString style("text-align: left; background-color: black;");
+        object_kind *k_ptr = k_info + o_ptr->k_idx;
+        style.append(QString(" color: %1;").arg(k_ptr->d_color.name()));
+
+        button->setStyleSheet(style);
 
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
 
         // Add a shortkey based on the label
-        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
-        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
-        button_values->setMapping(this_shortcut, text_num);
+//        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
+//        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
+//        button_values->setMapping(this_shortcut, text_num);
 
         // Add a weight button
         QLabel *weight_label = new QLabel(format_object_weight(o_ptr));
@@ -314,9 +338,9 @@ void ObjectSelectDialog::build_equip_tab()
         button_values->setMapping(button, text_num);
 
         // Add a shortkey based on the label
-        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
-        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
-        button_values->setMapping(this_shortcut, text_num);
+//        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
+//        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
+//        button_values->setMapping(this_shortcut, text_num);
 
         // Add a weight button
         QLabel *weight_label = new QLabel(format_object_weight(o_ptr));
@@ -406,9 +430,9 @@ void ObjectSelectDialog::build_quiver_tab()
         button_values->setMapping(button, text_num);
 
         // Add a shortkey based on the label
-        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
-        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
-        button_values->setMapping(this_shortcut, text_num);
+//        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
+//        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
+//        button_values->setMapping(this_shortcut, text_num);
 
         // Add a weight button
         QLabel *weight_label = new QLabel(format_object_weight(o_ptr));
