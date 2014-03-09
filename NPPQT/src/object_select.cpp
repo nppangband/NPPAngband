@@ -100,9 +100,7 @@ void ObjectSelectDialog::floor_items_count(int mode, int sq_y, int sq_x)
 // Make the tab for the widget
 void ObjectSelectDialog::build_floor_tab()
 {
-    QVBoxLayout *object_layout = new QVBoxLayout;
-    QVBoxLayout *weight_layout = new QVBoxLayout;
-    QVBoxLayout *help_layout = new QVBoxLayout;
+    QGridLayout *object_layout = new QGridLayout;
 
     // Give each one titles
     QLabel *object_header = new QLabel("Floor Items");
@@ -113,9 +111,9 @@ void ObjectSelectDialog::build_floor_tab()
     help_header->setAlignment(Qt::AlignCenter);
 
     // Add the headers
-    object_layout->addWidget(object_header);
-    weight_layout->addWidget(weight_header);
-    help_layout->addWidget(help_header);
+    object_layout->addWidget(object_header, 0, 0);
+    object_layout->addWidget(weight_header, 0, 1);
+    object_layout->addWidget(help_header, 0, 2);
 
 
     // Make a button for each object.
@@ -153,20 +151,15 @@ void ObjectSelectDialog::build_floor_tab()
         help_values->setMapping(help_button, text_num);
 
         // Add both buttons to the appropriate layout.
-        object_layout->addWidget(button);
-        weight_layout->addWidget(weight_label);
-        help_layout->addWidget(help_button);
+        object_layout->addWidget(button, (i+1), 0);
+        object_layout->addWidget(weight_label, (i+1), 1);
+        object_layout->addWidget(help_button, (i+1), 2);
 
         // Keep track of the number of buttons.
         num_buttons++;
     }
-    // Add the three rows of buttons next to each other horizontally
-    QHBoxLayout *full_layout = new QHBoxLayout;
-    full_layout->addLayout(object_layout);
-    full_layout->addLayout(weight_layout);
-    full_layout->addLayout(help_layout);
 
-    floor_tab->setLayout(full_layout);
+    floor_tab->setLayout(object_layout);
 }
 
 void ObjectSelectDialog::inven_items_count(int mode)
@@ -199,9 +192,7 @@ void ObjectSelectDialog::inven_items_count(int mode)
 
 void ObjectSelectDialog::build_inven_tab()
 {
-    QVBoxLayout *object_layout = new QVBoxLayout;
-    QVBoxLayout *weight_layout = new QVBoxLayout;
-    QVBoxLayout *help_layout = new QVBoxLayout;
+    QGridLayout *object_layout = new QGridLayout;
 
     // Give each one titles
     QLabel *object_header = new QLabel("Inventory Items");
@@ -212,9 +203,9 @@ void ObjectSelectDialog::build_inven_tab()
     help_header->setAlignment(Qt::AlignCenter);
 
     // Add the headers
-    object_layout->addWidget(object_header);
-    weight_layout->addWidget(weight_header);
-    help_layout->addWidget(help_header);
+    object_layout->addWidget(object_header, 0, 0);
+    object_layout->addWidget(weight_header, 0, 1);
+    object_layout->addWidget(help_header, 0, 2);
 
     // Make a button, a weight label, and a help button for each object.
     for (int i = 0; i < inven_items.size(); i++)
@@ -250,20 +241,15 @@ void ObjectSelectDialog::build_inven_tab()
         help_values->setMapping(help_button, text_num);
 
         // Add both buttons to the appropriate layout.
-        object_layout->addWidget(button);
-        weight_layout->addWidget(weight_label);
-        help_layout->addWidget(help_button);
+        object_layout->addWidget(button, (i+1), 0);
+        object_layout->addWidget(weight_label, (i+1), 1);
+        object_layout->addWidget(help_button, (i+1), 2);
 
         // Keep track of the number of buttons.
         num_buttons++;
     }
-    // Add the three rows of buttons next to each other horizontally
-    QHBoxLayout *full_layout = new QHBoxLayout;
-    full_layout->addLayout(object_layout);
-    full_layout->addLayout(weight_layout);
-    full_layout->addLayout(help_layout);
 
-    inven_tab->setLayout(full_layout);
+    inven_tab->setLayout(object_layout);
 }
 
 void ObjectSelectDialog::equip_items_count(int mode)
@@ -295,9 +281,7 @@ void ObjectSelectDialog::equip_items_count(int mode)
 
 void ObjectSelectDialog::build_equip_tab()
 {
-    QVBoxLayout *object_layout = new QVBoxLayout;
-    QVBoxLayout *weight_layout = new QVBoxLayout;
-    QVBoxLayout *help_layout = new QVBoxLayout;
+    QGridLayout *object_layout = new QGridLayout;
 
     // Give each one titles
     QLabel *object_header = new QLabel("Equipment Items");
@@ -308,9 +292,9 @@ void ObjectSelectDialog::build_equip_tab()
     help_header->setAlignment(Qt::AlignCenter);
 
     // Add the headers
-    object_layout->addWidget(object_header);
-    weight_layout->addWidget(weight_header);
-    help_layout->addWidget(help_header);
+    object_layout->addWidget(object_header, 0, 0);
+    object_layout->addWidget(weight_header, 0, 1);
+    object_layout->addWidget(help_header, 0, 2);
 
     // Make a button for each object.
     for (int i = 0; i < equip_items.size(); i++)
@@ -346,20 +330,15 @@ void ObjectSelectDialog::build_equip_tab()
         help_values->setMapping(help_button, text_num);
 
         // Add both buttons to the appropriate layout.
-        object_layout->addWidget(button);
-        weight_layout->addWidget(weight_label);
-        help_layout->addWidget(help_button);
+        object_layout->addWidget(button, (i+1), 0);
+        object_layout->addWidget(weight_label, (i+1), 1);
+        object_layout->addWidget(help_button, (i+1), 2);
 
         // Keep track of the number of buttons.
         num_buttons++;
     }
-    // Add the three rows of buttons next to each other horizontally
-    QHBoxLayout *full_layout = new QHBoxLayout;
-    full_layout->addLayout(object_layout);
-    full_layout->addLayout(weight_layout);
-    full_layout->addLayout(help_layout);
 
-    equip_tab->setLayout(full_layout);
+    equip_tab->setLayout(object_layout);
 }
 
 void ObjectSelectDialog::quiver_items_count(int mode)
@@ -394,9 +373,7 @@ void ObjectSelectDialog::quiver_items_count(int mode)
 
 void ObjectSelectDialog::build_quiver_tab()
 {
-    QVBoxLayout *object_layout = new QVBoxLayout;
-    QVBoxLayout *weight_layout = new QVBoxLayout;
-    QVBoxLayout *help_layout = new QVBoxLayout;
+    QGridLayout *object_layout = new QGridLayout;
 
     // Give each one titles
     QLabel *object_header = new QLabel("Quiver Items");
@@ -407,9 +384,9 @@ void ObjectSelectDialog::build_quiver_tab()
     help_header->setAlignment(Qt::AlignCenter);
 
     // Add the headers
-    object_layout->addWidget(object_header);
-    weight_layout->addWidget(weight_header);
-    help_layout->addWidget(help_header);
+    object_layout->addWidget(object_header, 0, 0);
+    object_layout->addWidget(weight_header, 0, 1);
+    object_layout->addWidget(help_header, 0, 2);
 
     // Make a button for each object.
     for (int i = 0; i < quiver_items.size(); i++)
@@ -445,20 +422,15 @@ void ObjectSelectDialog::build_quiver_tab()
         help_values->setMapping(help_button, text_num);
 
         // Add both buttons to the appropriate layout.
-        object_layout->addWidget(button);
-        weight_layout->addWidget(weight_label);
-        help_layout->addWidget(help_button);
+        object_layout->addWidget(button, (i+1), 0);
+        object_layout->addWidget(weight_label, (i+1), 1);
+        object_layout->addWidget(help_button, (i+1), 2);
 
         // Keep track of the number of buttons.
         num_buttons++;
     }
-    // Add the three rows of buttons next to each other horizontally
-    QHBoxLayout *full_layout = new QHBoxLayout;
-    full_layout->addLayout(object_layout);
-    full_layout->addLayout(weight_layout);
-    full_layout->addLayout(help_layout);
 
-    quiver_tab->setLayout(full_layout);
+    quiver_tab->setLayout(object_layout);
 }
 
 
@@ -639,8 +611,6 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
     object_tabs->setTabEnabled(find_starting_tab(mode), TRUE);
 
     QVBoxLayout *main_layout = new QVBoxLayout;
-
-
 
     main_layout->addWidget(main_prompt);
     main_layout->addWidget(object_tabs);
