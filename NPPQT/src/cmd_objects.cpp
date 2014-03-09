@@ -526,6 +526,7 @@ void command_inscribe(cmd_arg args)
 {
     object_type *o_ptr = object_from_item_idx(args.item);
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
+    bool check_autoinscribe = FALSE;
 
     QString o_name;
     QString new_inscription;
@@ -541,31 +542,36 @@ void command_inscribe(cmd_arg args)
     // Nothing inscribed
     if (new_inscription.isEmpty()) return;
 
-    /* Get a new inscription */
-    QString tmp_val;
-    QString o_name2;
+    if (!o_ptr->is_artifact() && operator!=(k_ptr->autoinscribe, new_inscription)) check_autoinscribe = TRUE;
 
-    /*make a fake object so we can give a proper message*/
-    object_type *i_ptr;
-    object_type object_type_body;
+    if (check_autoinscribe)
+    {
+        /* Get a new inscription */
+        QString tmp_val;
+        QString o_name2;
 
-    /* Get local object */
-    i_ptr = &object_type_body;
+        /*make a fake object so we can give a proper message*/
+        object_type *i_ptr;
+        object_type object_type_body;
 
-    /* Wipe the object */
-    i_ptr->object_wipe();
+        /* Get local object */
+        i_ptr = &object_type_body;
 
-    /* Create the object */
-    object_prep(i_ptr, o_ptr->k_idx);
+        /* Wipe the object */
+        i_ptr->object_wipe();
 
-    /*now describe with correct amount*/
-    o_name2 = object_desc(i_ptr, ODESC_FULL | ODESC_PLURAL);
+        /* Create the object */
+        object_prep(i_ptr, o_ptr->k_idx);
 
-    /* Prompt */
-    tmp_val = (QString("Automatically inscribe all %1 with %2?") .arg(o_name2) .arg(new_inscription));
+        /*now describe with correct amount*/
+        o_name2 = object_desc(i_ptr, ODESC_FULL | ODESC_PLURAL);
 
-    /* Auto-Inscribe if they want that */
-    if (get_check(tmp_val)) k_ptr->autoinscribe = new_inscription;
+        /* Prompt */
+        tmp_val = (QString("Automatically inscribe all %1 with %2?") .arg(o_name2) .arg(new_inscription));
+
+        /* Auto-Inscribe if they want that */
+        if (get_check(tmp_val)) k_ptr->autoinscribe = new_inscription;
+    }
 
     /* Save the inscription */
     o_ptr->inscription = new_inscription;
