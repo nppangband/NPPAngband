@@ -29,19 +29,26 @@ void ObjectSelectDialog::button_press(QString num_string)
     this->accept();
 }
 
-void ObjectSelectDialog::keyPressEvent(QKeyEvent *event)
+// See if the user selected a button bia a keypress.
+void ObjectSelectDialog::keyPressEvent(QKeyEvent* which_key)
 {
-    QString text = event->text();
-    if (text.length() == 1 && text.at(0).isLetter()) {
-        text.append(") "); // Example: "a) "
-        QWidget *tab = this->object_tabs->currentWidget(); // Search in the current tab
-        QList<QPushButton *> buttons = tab->findChildren<QPushButton *>();
-        for (int i = 0; i < buttons.size(); i++) {
-            if (buttons.at(i)->text().startsWith(text)) {
-                event->accept();
-                buttons.at(i)->click();
-                break;
-            }
+
+    QChar key_pressed = which_key->key();
+
+    //  Make sure we are dealing with a letter
+    if (!key_pressed.isLetter()) return;
+
+    // Make it lowercase
+    key_pressed = key_pressed.toLower();
+
+    QWidget *tab = this->object_tabs->currentWidget(); // Search in the current tab
+    QList<QPushButton *> buttons = tab->findChildren<QPushButton *>();
+    for (int i = 0; i < buttons.size(); i++)
+    {
+        if (buttons.at(i)->text().startsWith(key_pressed))
+        {
+            buttons.at(i)->click();
+            break;
         }
     }
 }
@@ -151,13 +158,6 @@ void ObjectSelectDialog::build_floor_tab()
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
 
-        /*
-        // Add a shortkey based on the label
-        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
-        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
-        button_values->setMapping(this_shortcut, text_num);
-        */
-
         // Add a weight button
         QLabel *weight_label = new QLabel(format_object_weight(o_ptr));
         weight_label->setAlignment(Qt::AlignRight);
@@ -237,21 +237,11 @@ void ObjectSelectDialog::build_inven_tab()
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
-
-        QString style("text-align: left; background-color: black;");
-        object_kind *k_ptr = k_info + o_ptr->k_idx;
-        style.append(QString(" color: %1;").arg(k_ptr->d_color.name()));
-
-        button->setStyleSheet(style);
+        button->setStyleSheet("Text-align:left");
 
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
-
-        // Add a shortkey based on the label
-//        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
-//        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
-//        button_values->setMapping(this_shortcut, text_num);
 
         // Add a weight button
         QLabel *weight_label = new QLabel(format_object_weight(o_ptr));
@@ -772,7 +762,7 @@ bool get_item(int *cp, QString pmt, QString str, int mode)
     p_ptr->redraw |= (PR_INVEN | PR_EQUIP);
 
     /* Warning if needed */
-    if (!success && !str.isEmpty()) message(str);
+    if (!success && !cancelled && !str.isEmpty()) message(str);
 
     /* Result */
     return (success);

@@ -89,7 +89,7 @@ QString likert(int x, int y, byte *attr)
 int letter_to_number (QChar let)
 {
    // Make sure we are dealing with lowercase letters.
-    let.toLower();
+    let = let.toLower();
     if (!let.isLower()) return 0;
 
     for (int i = 0; i < 26; i++)
@@ -121,8 +121,8 @@ QChar number_to_letter (int num)
 bool is_a_vowel(QChar single_letter)
 {
     // Make sure we are dealing with lowercase letters.
-     single_letter.toLower();
-     if (!single_letter.isLower()) return FALSE;
+    single_letter = single_letter.toLower();
+    if (!single_letter.isLower()) return FALSE;
 
     if (single_letter == 'a') return TRUE;
     if (single_letter == 'e') return TRUE;
@@ -329,7 +329,8 @@ QString format_object_weight(object_type *o_ptr)
     QString formatted_weight = (QString("%1.%2") .arg(object_weight/10) .arg(object_weight % 10));
 
     while (formatted_weight.length() < 6) formatted_weight.prepend(" ");
-    formatted_weight.append(" lbs");
+    if (object_weight == 10) formatted_weight.append(" lb ");
+    else formatted_weight.append(" lbs");
 
     return (formatted_weight);
 }
