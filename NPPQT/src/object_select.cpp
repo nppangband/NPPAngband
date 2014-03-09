@@ -32,14 +32,23 @@ void ObjectSelectDialog::button_press(QString num_string)
 // See if the user selected a button bia a keypress.
 void ObjectSelectDialog::keyPressEvent(QKeyEvent* which_key)
 {
+    // Handle escape key
+    if (which_key->key() == Qt::Key_Escape) {
+        this->close();
+        return;
+    }
 
-    QChar key_pressed = which_key->key();
+    QString key_pressed = which_key->text();
 
     //  Make sure we are dealing with a letter
-    if (!key_pressed.isLetter()) return;
+    if (key_pressed.length() != 1 || !key_pressed.at(0).isLetter()) return;
 
     // Make it lowercase
     key_pressed = key_pressed.toLower();
+
+    // Make sure we are dealing with the item name buttons and not the info buttons
+    // or future other buttons
+    key_pressed.append(") ");
 
     QWidget *tab = this->object_tabs->currentWidget(); // Search in the current tab
     QList<QPushButton *> buttons = tab->findChildren<QPushButton *>();
