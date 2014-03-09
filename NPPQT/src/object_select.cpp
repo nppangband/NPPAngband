@@ -29,6 +29,23 @@ void ObjectSelectDialog::button_press(QString num_string)
     this->accept();
 }
 
+void ObjectSelectDialog::keyPressEvent(QKeyEvent *event)
+{
+    QString text = event->text();
+    if (text.length() == 1 && text.at(0).isLetter()) {
+        text.append(") "); // Example: "a) "
+        QWidget *tab = this->object_tabs->currentWidget(); // Search in the current tab
+        QList<QPushButton *> buttons = tab->findChildren<QPushButton *>();
+        for (int i = 0; i < buttons.size(); i++) {
+            if (buttons.at(i)->text().startsWith(text)) {
+                event->accept();
+                buttons.at(i)->click();
+                break;
+            }
+        }
+    }
+}
+
 // Receives the number of the button pressed.
 void ObjectSelectDialog::help_press(QString num_string)
 {
@@ -136,10 +153,12 @@ void ObjectSelectDialog::build_floor_tab()
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
 
+        /*
         // Add a shortkey based on the label
         QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
         connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
         button_values->setMapping(this_shortcut, text_num);
+        */
 
         // Add a weight button
         QLabel *weight_label = new QLabel(format_object_weight(o_ptr));
@@ -239,9 +258,9 @@ void ObjectSelectDialog::build_inven_tab()
         button_values->setMapping(button, text_num);
 
         // Add a shortkey based on the label
-        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
-        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
-        button_values->setMapping(this_shortcut, text_num);
+//        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
+//        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
+//        button_values->setMapping(this_shortcut, text_num);
 
         // Add a weight button
         QLabel *weight_label = new QLabel(format_object_weight(o_ptr));
@@ -335,9 +354,9 @@ void ObjectSelectDialog::build_equip_tab()
         button_values->setMapping(button, text_num);
 
         // Add a shortkey based on the label
-        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
-        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
-        button_values->setMapping(this_shortcut, text_num);
+//        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
+//        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
+//        button_values->setMapping(this_shortcut, text_num);
 
         // Add a weight button
         QLabel *weight_label = new QLabel(format_object_weight(o_ptr));
@@ -434,9 +453,9 @@ void ObjectSelectDialog::build_quiver_tab()
         button_values->setMapping(button, text_num);
 
         // Add a shortkey based on the label
-        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
-        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
-        button_values->setMapping(this_shortcut, text_num);
+//        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
+//        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
+//        button_values->setMapping(this_shortcut, text_num);
 
         // Add a weight button
         QLabel *weight_label = new QLabel(format_object_weight(o_ptr));
