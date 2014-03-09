@@ -327,11 +327,6 @@ void ObjectSelectDialog::build_equip_tab()
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
 
-        // Add a shortkey based on the label
-//        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
-//        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
-//        button_values->setMapping(this_shortcut, text_num);
-
         // Add a weight button
         QLabel *weight_label = new QLabel(format_object_weight(o_ptr));
         weight_label->setAlignment(Qt::AlignRight);
@@ -418,11 +413,6 @@ void ObjectSelectDialog::build_quiver_tab()
         // Let the button tell us the number button that was clicked
         connect(button, SIGNAL(clicked()), button_values, SLOT(map()));
         button_values->setMapping(button, text_num);
-
-        // Add a shortkey based on the label
-//        QShortcut *this_shortcut = new QShortcut(QKeySequence(QString(which_char)), this);
-//        connect(this_shortcut, SIGNAL(activated()), button_values, SLOT(map()));
-//        button_values->setMapping(this_shortcut, text_num);
 
         // Add a weight button
         QLabel *weight_label = new QLabel(format_object_weight(o_ptr));

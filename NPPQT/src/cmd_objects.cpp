@@ -144,77 +144,6 @@ static cmd_arg obj_study(object_type *o_ptr, cmd_arg args)
 }
 
 
-/*
- * Inscribe an item
- */
-static cmd_arg obj_inscribe(object_type *o_ptr, cmd_arg args)
-{
-    /* Get the item (in the pack) */
-    if (args.item >= 0)
-    {
-        o_ptr = &inventory[args.item];
-    }
-
-    /* Get the item (on the floor) */
-    else
-    {
-        o_ptr = &o_list[0 - args.item];
-    }
-
-    QString o_name;
-    QString tmp;
-
-    object_kind *k_ptr = &k_info[o_ptr->k_idx];
-
-    /* Describe the activity */
-    o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
-
-    /* Message */
-    QString tmp2 = (QString("Inscribing %1.") .arg(o_name));
-
-    tmp = get_string(QString(tmp2));
-
-    /* Get a new inscription (possibly empty) */
-    if (!tmp.isEmpty())
-    {
-        QString tmp_val;
-        QString o_name2;
-
-        /*make a fake object so we can give a proper message*/
-        object_type *i_ptr;
-        object_type object_type_body;
-
-        /* Get local object */
-        i_ptr = &object_type_body;
-
-        /* Wipe the object */
-        i_ptr->object_wipe();
-
-        /* Create the object */
-        object_prep(i_ptr, o_ptr->k_idx);
-
-        /*now describe with correct amount*/
-        o_name2 = object_desc(i_ptr, ODESC_FULL | ODESC_PLURAL);
-
-        /* Prompt */
-        tmp_val = (QString("Automatically inscribe all %1 with %2?") .arg(o_name2) .arg(tmp));
-
-        /* Auto-Inscribe if they want that */
-        if (get_check(tmp_val)) k_ptr->autoinscribe = tmp;
-
-        /* Save the inscription */
-        o_ptr->inscription = tmp;
-
-        /* Combine / Reorder the pack */
-        p_ptr->notice |= (PN_COMBINE | PN_REORDER | PN_SORT_QUIVER);
-
-        /* Redraw stuff */
-        p_ptr->redraw |= (PR_INVEN | PR_EQUIP | PR_ITEMLIST);
-    }
-    args.verify = TRUE;
-    return (args);
-}
-
 
 
 cmd_arg obj_wield(object_type *o_ptr, cmd_arg args)
@@ -295,7 +224,7 @@ static item_act_t item_actions[] =
       obj_has_inscrip, (USE_EQUIP | USE_INVEN | USE_FLOOR | USE_QUIVER), NULL },
 
     /* ACTION_INSCRIBE */
-    { obj_inscribe, FALSE, "inscribe",
+    { NULL, FALSE, "inscribe",
       "Inscribe which item? ", "You have nothing to inscribe.",
       NULL, (USE_EQUIP | USE_INVEN | USE_FLOOR | IS_HARMLESS | USE_QUIVER), NULL },
 
@@ -420,9 +349,9 @@ static bool trap_related_object(object_type *o_ptr)
 
 
 /*
- * Generic "do item action" function
+ * Generic "select item action" function
  */
-static cmd_arg do_item(item_act act)
+static cmd_arg select_item(item_act act)
 {
     object_type *o_ptr;
 
@@ -527,15 +456,9 @@ static int check_devices(object_type *o_ptr)
 
 
 /*** Inscriptions ***/
-
-
-/*
- * Remove inscription
- */
-void do_cmd_uninscribe(void)
+void command_uninscribe(cmd_arg args)
 {
-    cmd_arg args = do_item(ACTION_UNINSCRIBE);
-
+    bool check_autoinscribe = FALSE;
     object_type *o_ptr = object_from_item_idx(args.item);
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
@@ -545,11 +468,19 @@ void do_cmd_uninscribe(void)
         return;
     }
 
+    // See if the inscriptions match
+    if (!k_ptr->autoinscribe.isEmpty())
+    {
+        if (operator==(k_ptr->autoinscribe, o_ptr->inscription)) check_autoinscribe = TRUE;
+    }
+
     /* Remove the inscription */
     o_ptr->inscription.clear();
 
+    message(QString("Inscription removed."));
+
     /*The object kind has an autoinscription*/
-    if (!k_ptr->autoinscribe.isEmpty())
+    if (check_autoinscribe)
     {
         QString tmp_val;
         QString o_name2;
@@ -573,31 +504,88 @@ void do_cmd_uninscribe(void)
         /* Prompt */
         tmp_val = (QString("Remove automatic inscription for %1?") .arg(o_name2));
 
-        /* Auto-Inscribe if they want that */
+        /* Clear Auto-Inscribe if they want that */
         if (get_check(tmp_val)) k_ptr->autoinscribe.clear();
     }
-
-    message(QString("Inscription removed."));
-
-    o_ptr->inscription.clear();
 
     p_ptr->notice |= (PN_COMBINE | PN_REORDER | PN_SORT_QUIVER);
     p_ptr->redraw |= (PR_INVEN | PR_EQUIP | PR_ITEMLIST);
 }
 
+/*
+ * Remove inscription
+ */
+void do_cmd_uninscribe(void)
+{
+    cmd_arg args = select_item(ACTION_UNINSCRIBE);
+
+    command_uninscribe(args);
+}
+
+void command_inscribe(cmd_arg args)
+{
+    object_type *o_ptr = object_from_item_idx(args.item);
+    object_kind *k_ptr = &k_info[o_ptr->k_idx];
+
+    QString o_name;
+    QString new_inscription;
+
+    /* Describe the activity */
+    o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
+
+    /* Message */
+    QString tmp2 = (QString("Inscribing %1.") .arg(o_name));
+
+    new_inscription = get_string("Please enter an inscription", QString(tmp2), o_ptr->inscription);
+
+    // Nothing inscribed
+    if (new_inscription.isEmpty()) return;
+
+    /* Get a new inscription */
+    QString tmp_val;
+    QString o_name2;
+
+    /*make a fake object so we can give a proper message*/
+    object_type *i_ptr;
+    object_type object_type_body;
+
+    /* Get local object */
+    i_ptr = &object_type_body;
+
+    /* Wipe the object */
+    i_ptr->object_wipe();
+
+    /* Create the object */
+    object_prep(i_ptr, o_ptr->k_idx);
+
+    /*now describe with correct amount*/
+    o_name2 = object_desc(i_ptr, ODESC_FULL | ODESC_PLURAL);
+
+    /* Prompt */
+    tmp_val = (QString("Automatically inscribe all %1 with %2?") .arg(o_name2) .arg(new_inscription));
+
+    /* Auto-Inscribe if they want that */
+    if (get_check(tmp_val)) k_ptr->autoinscribe = new_inscription;
+
+    /* Save the inscription */
+    o_ptr->inscription = new_inscription;
+
+    /* Combine / Reorder the pack */
+    p_ptr->notice |= (PN_COMBINE | PN_REORDER | PN_SORT_QUIVER);
+
+    /* Redraw stuff */
+    p_ptr->redraw |= (PR_INVEN | PR_EQUIP | PR_ITEMLIST);
+
+}
 
 /*
  * Add inscription
  */
 void do_cmd_inscribe(void)
 {
-    cmd_arg args = do_item(ACTION_INSCRIBE);
-    object_type *o_ptr = object_from_item_idx(args.item);
+    cmd_arg args = select_item(ACTION_INSCRIBE);
 
-    o_ptr->inscription = args.string;
-
-    p_ptr->notice |= (PN_COMBINE | PN_REORDER | PN_SORT_QUIVER);
-    p_ptr->redraw |= (PR_INVEN | PR_EQUIP | PR_ITEMLIST);
+    command_inscribe(args);
 }
 
 
@@ -607,7 +595,7 @@ void do_cmd_observe(void)
     // Paranoia
     if (!p_ptr->playing) return;
 
-    do_item(ACTION_EXAMINE);
+    select_item(ACTION_EXAMINE);
 }
 
 /*** Taking off/putting on ***/
@@ -645,7 +633,7 @@ void do_cmd_takeoff(void)
     // Paranoia
     if (!p_ptr->playing) return;
 
-    cmd_arg args = do_item(ACTION_TAKEOFF);
+    cmd_arg args = select_item(ACTION_TAKEOFF);
 
     (void)command_takeoff(args);
 }
@@ -741,7 +729,7 @@ void do_cmd_wield()
     // Paranoia
     if (!p_ptr->playing) return;
 
-    cmd_arg args = do_item(ACTION_WIELD);
+    cmd_arg args = select_item(ACTION_WIELD);
 
     (void)command_wield(args);
 }
@@ -752,7 +740,7 @@ void do_cmd_wield()
  */
 void do_cmd_drop(void)
 {
-    cmd_arg args = do_item(ACTION_DROP);
+    cmd_arg args = select_item(ACTION_DROP);
 
     int item = args.item;
     object_type *o_ptr = object_from_item_idx(item);
