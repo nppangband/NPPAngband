@@ -1555,7 +1555,7 @@ QString screen_out_head(object_type *o_ptr)
     QString o_name;
 
     /* Description */
-    o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_SINGULAR | ODESC_FULL);
+    o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
     o_name = capitilize_first(o_name);
 
     /* Print, in colour */
@@ -1596,7 +1596,7 @@ QString screen_out_head(object_type *o_ptr)
 void object_info_screen(object_type *o_ptr)
 {
     QString output = screen_out_head(o_ptr);
-    QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_SINGULAR | ODESC_FULL);
+    QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
 
     object_info_out_flags = object_flags_known;
 
@@ -1631,15 +1631,11 @@ void object_info_screen(object_type *o_ptr)
             output.append(QString("<font color=blue>%1</font>") .arg(buf));
         }
 
-        int weight = o_ptr->weight * o_ptr->number;
-        qreal weight_rounded = weight/10;
-
-
         if (o_ptr->number > 1)
         {
-            output.append(QString("<br>   They weigh %1 lb.<br>") .arg(weight_rounded));
+            output.append(QString("<br>   They weigh %1.<br>") .arg(format_object_weight(o_ptr)));
         }
-        else output.append(QString("<br>   It weighs %1 lb.<br>") .arg(weight_rounded));
+        else output.append(QString("<br>   It weighs %1.<br>") .arg(format_object_weight(o_ptr)));
 
         /* Print resale value */
         output.append("<br>  ");

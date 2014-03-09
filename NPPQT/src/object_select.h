@@ -24,6 +24,10 @@ class ObjectSelectDialog : public QDialog
 public:
     explicit ObjectSelectDialog(int *item, QString prompt, int mode, bool *success, bool *cancelled, int sq_y, int sq_x);
 
+
+protected:
+    void keyPressEvent(QKeyEvent* which_key);
+
 private slots:
     // Receives the number of the button pressed.
     void button_press(QString num_string);
@@ -76,8 +80,6 @@ private:
 
     //Record an item selection
     int  get_selected_object(int num_tracker);
-
-    void keyPressEvent(QKeyEvent *);
 
     // Variables for keeping track of which item is selected
     QVector<byte> tab_order;
