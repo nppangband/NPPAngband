@@ -1148,6 +1148,8 @@ bool get_aim_dir(int *dp, bool target_trap)
     {
         ui_toolbar_show(TOOLBAR_TARGETTING);
 
+        ui_show_cursor(p_ptr->py, p_ptr->px);
+
         /* Choose a prompt */
         if (!target_okay())
             p = "Direction ('*' or <click> to target, 'c' for closest, Escape to cancel)? ";
@@ -1197,6 +1199,8 @@ bool get_aim_dir(int *dp, bool target_trap)
     }
 
     ui_toolbar_hide(TOOLBAR_TARGETTING);
+
+    ui_show_cursor(-1, -1);
 
     /* No direction */
     if (!dir) return (FALSE);
