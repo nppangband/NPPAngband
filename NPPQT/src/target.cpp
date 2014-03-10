@@ -18,6 +18,7 @@
 
 #include "src/npp.h"
 
+#include <QObject>
 
 /*
  * Determine if a trap makes a reasonable target
@@ -409,7 +410,7 @@ bool target_set_interactive(int mode, int x, int y)
     bool temp_animate_flicker = animate_flicker;
     animate_flicker = FALSE;
 
-    color_message("Going into interactive mode", TERM_SKY_BLUE);
+    color_message("Entering interactive mode", TERM_SKY_BLUE);
 
     /* If we haven't been given an initial location, start on the
        player. */
@@ -450,6 +451,8 @@ bool target_set_interactive(int mode, int x, int y)
     /* Interact */
     while (!done)
     {
+        ui_toolbar_show(TOOLBAR_TARGETTING_INTERACTIVE);
+
         /* Interesting grids */
         if (flag && temp_n)
         {
@@ -514,7 +517,7 @@ bool target_set_interactive(int mode, int x, int y)
                 case Qt::Key_Escape:
                 case Qt::Key_Q:
                 {
-                    color_message("Going out from interactive mode", TERM_SKY_BLUE);
+                    color_message(QObject::tr("Exiting interactive mode"), TERM_SKY_BLUE);
                     done = TRUE;
                     break;
                 }
@@ -750,7 +753,7 @@ bool target_set_interactive(int mode, int x, int y)
                 case Qt::Key_Escape:
                 case Qt::Key_Q:
                 {
-                    color_message("Going out from interactive mode", TERM_SKY_BLUE);
+                    color_message(QObject::tr("Exiting interactive mode"), TERM_SKY_BLUE);
                     done = TRUE;
                     break;
                 }
@@ -1140,12 +1143,16 @@ bool get_aim_dir(int *dp, bool target_trap)
     /* Initialize */
     (*dp) = 0;
 
+    color_message(QObject::tr("Entering targetting mode"), TERM_YELLOW);
+
     /* Hack -- auto-target if requested */
     if (use_old_target && target_okay() && !dir) dir = 5;
 
     /* Ask until satisfied */
     while (!dir)
     {
+        ui_toolbar_show(TOOLBAR_TARGETTING);
+
         /* Choose a prompt */
         if (!target_okay())
             p = "Direction ('*' or <click> to target, 'c' for closest, Escape to cancel)? ";
@@ -1159,7 +1166,7 @@ bool get_aim_dir(int *dp, bool target_trap)
         if (input.mode == INPUT_MODE_NONE) break;
 
         if (input.key == Qt::Key_Escape) {
-            color_message("Goint out from targetting", TERM_VIOLET);
+            color_message(QObject::tr("Exiting targetting mode"), TERM_VIOLET);
             break;
         }
 
@@ -1193,6 +1200,8 @@ bool get_aim_dir(int *dp, bool target_trap)
         /* Error */
         if (!dir) color_message("Illegal aim direction!", TERM_ORANGE);
     }
+
+    ui_toolbar_hide(TOOLBAR_TARGETTING);
 
     /* No direction */
     if (!dir) return (FALSE);
