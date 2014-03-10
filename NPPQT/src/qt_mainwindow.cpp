@@ -180,8 +180,6 @@ QPixmap rotate_pix(QPixmap src, qreal angle)
 
 void MainWindow::slot_something()
 {
-    color_message("Going to targetting mode", TERM_YELLOW);
-
     int dir;
     p_ptr->command_dir = 0;
     graphics_view->setFocus();
@@ -794,6 +792,7 @@ MainWindow::MainWindow()
     lay2->addWidget(b2);
     connect(b2, SIGNAL(clicked()), this, SLOT(slot_redraw()));
 
+    /*
     QPushButton *b3 = new QPushButton("Zoom out");
     lay2->addWidget(b3);
     connect(b3, SIGNAL(clicked()), this, SLOT(slot_zoom_out()));
@@ -801,6 +800,7 @@ MainWindow::MainWindow()
     QPushButton *b4 = new QPushButton("Zoom in");
     lay2->addWidget(b4);
     connect(b4, SIGNAL(clicked()), this, SLOT(slot_zoom_in()));
+    */
 
     QPushButton *b5 = new QPushButton("Test something");
     lay2->addWidget(b5);
@@ -1387,6 +1387,83 @@ void MainWindow::create_toolbars()
     file_toolbar->addAction(options_act);
     file_toolbar->addSeparator();
     file_toolbar->addAction(exit_npp);
+
+    toolbar1 = new QToolBar;
+    toolbar1->setObjectName("toolbar1");
+    addToolBar(Qt::BottomToolBarArea, toolbar1);
+    toolbar1->setVisible(false);
+
+    struct ButtonData {
+        QString command;
+        int key;
+        QString tooltip;
+    };
+
+    struct ButtonData buttons[] =
+    {
+        {"ESCAPE", Qt::Key_Escape, tr("Cancel current targetting mode")},
+        {"5", Qt::Key_5, tr("Accept current target")},
+        {"c", Qt::Key_C, tr("Target closest")},
+        {"*", Qt::Key_Asterisk, tr("Interactive targetting mode")},
+        {"o", Qt::Key_O, tr("Manual targetting")},
+        {"p", Qt::Key_P, tr("Target player location")},
+        {"f", Qt::Key_F, tr("Toggle terrain description")},
+        {"", 0, ""}
+    };
+
+    for (int i = 0; buttons[i].command.length() > 0; i++) {
+        QAction *act = toolbar1->addAction(buttons[i].command);
+        act->setObjectName(buttons[i].command);
+        act->setProperty("key", QVariant(buttons[i].key));
+        act->setToolTip(buttons[i].tooltip);
+        connect(act, SIGNAL(triggered()), this, SLOT(slot_targetting_button()));
+    }
+}
+
+void ui_toolbar_show(int toolbar)
+{
+    QToolBar *tb = main_window->toolbar1;
+    switch (toolbar)
+    {
+    case TOOLBAR_TARGETTING:
+        tb->findChild<QAction *>("c")->setVisible(true);
+        tb->findChild<QAction *>("*")->setVisible(true);
+        tb->findChild<QAction *>("o")->setVisible(false);
+        tb->findChild<QAction *>("p")->setVisible(false);
+        tb->findChild<QAction *>("f")->setVisible(false);
+        tb->show();
+        break;
+    case TOOLBAR_TARGETTING_INTERACTIVE:
+        tb->findChild<QAction *>("c")->setVisible(false);
+        tb->findChild<QAction *>("*")->setVisible(false);
+        tb->findChild<QAction *>("o")->setVisible(true);
+        tb->findChild<QAction *>("p")->setVisible(true);
+        tb->findChild<QAction *>("f")->setVisible(true);
+        tb->show();
+        break;
+    }
+}
+
+void ui_toolbar_hide(int toolbar)
+{
+    switch (toolbar)
+    {
+    case TOOLBAR_TARGETTING:
+    case TOOLBAR_TARGETTING_INTERACTIVE:
+        main_window->toolbar1->hide();
+        break;
+    }
+}
+
+void MainWindow::slot_targetting_button()
+{
+    if (!ev_loop.isRunning()) return;
+
+    QObject *snd = QObject::sender();
+    input.text = snd->objectName();
+    input.key = snd->property("key").toInt();
+    input.mode = INPUT_MODE_KEY;
+    ev_loop.quit();
 }
 
 // Just find an initial font to start the game

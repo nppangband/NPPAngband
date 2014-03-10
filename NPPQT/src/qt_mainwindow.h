@@ -62,6 +62,8 @@ public:
 
     QTextEdit *message_area;
 
+    QToolBar *toolbar1; // Targetting
+
     MainWindow();
 
     void load_messages();
@@ -105,6 +107,8 @@ private slots:
     void slot_zoom_in();
     void slot_something();
     void slot_finish_bolt();
+
+    void slot_targetting_button();
 
     void slot_multiplier_clicked(QAction *);
 
