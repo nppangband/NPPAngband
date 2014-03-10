@@ -1415,6 +1415,7 @@ void MainWindow::create_toolbars()
         QAction *act = toolbar1->addAction(buttons[i].command);
         act->setObjectName(buttons[i].command);
         act->setProperty("key", QVariant(buttons[i].key));
+        act->setStatusTip(buttons[i].tooltip);
         act->setToolTip(buttons[i].tooltip);
         connect(act, SIGNAL(triggered()), this, SLOT(slot_targetting_button()));
     }
@@ -1561,6 +1562,7 @@ void MainWindow::load_file(const QString &file_name)
                 update_file_menu_game_active();
                 launch_game();
                 ui_player_moved();
+                graphics_view->setFocus();
                 redraw();
             }
         }
@@ -1582,6 +1584,7 @@ void MainWindow::launch_birth(bool quick_start)
         launch_game();
         save_character();
         ui_player_moved();
+        graphics_view->setFocus();
         redraw();
     } else {
         cleanup_npp_games();
