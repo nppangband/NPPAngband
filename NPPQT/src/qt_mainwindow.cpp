@@ -118,6 +118,16 @@ public:
 
 UserInput ui_get_input()
 {
+    // Avoid reentrant calls
+    if (main_window->ev_loop.isRunning()) {
+        UserInput temp;
+        temp.mode = INPUT_MODE_NONE;
+        temp.key = 0;
+        temp.x = temp.y = -1;
+        temp.text.clear();
+        return temp;
+    }
+
     main_window->ui_mode = UI_MODE_INPUT;
 
     main_window->input.mode = INPUT_MODE_NONE;
@@ -1681,14 +1691,16 @@ void ui_ensure(int y, int x)
 bool ui_modify_panel(int y, int x)
 {
     QRect vis = visible_dungeon();
-    if (y == vis.y() && x == vis.x()) return false;
 
     if (y < 0) y = 0;
     if (y >= p_ptr->cur_map_hgt) y = p_ptr->cur_map_hgt - 1;
-    main_window->graphics_view->verticalScrollBar()->setValue(y * main_window->cell_hgt);
 
     if (x < 0) x = 0;
     if (x >= p_ptr->cur_map_wid) x = p_ptr->cur_map_wid - 1;
+
+    if (y == vis.y() && x == vis.x()) return false;
+
+    main_window->graphics_view->verticalScrollBar()->setValue(y * main_window->cell_hgt);    
     main_window->graphics_view->horizontalScrollBar()->setValue(x * main_window->cell_wid);
 
     return true;
@@ -1698,23 +1710,26 @@ bool ui_adjust_panel(int y, int x)
 {
     QRect vis = visible_dungeon();
 
-    int y2 = y;
-    int x2 = x;
+    int y2 = vis.y();
+    int x2 = vis.x();
 
-    while (y < vis.y()) y += vis.height() / 2;
-    while (y >= vis.y() + vis.height()) y -= vis.height() / 2;
+    while (y < y2) y2 -= vis.height() / 2;
+    while (y >= y2 + vis.height()) y2 += vis.height() / 2;
 
-    while (x < vis.x()) x += vis.width() / 2;
-    while (x >= vis.x() + vis.width()) x -= vis.width() / 2;
+    while (x < x2) x2 -= vis.width() / 2;
+    while (x >= x2 + vis.width()) x2 += vis.width() / 2;
 
-    if (x != x2 || y != y2) return ui_modify_panel(y, x);
-
-    return false;
+    return ui_modify_panel(y2, x2);
 }
 
 bool ui_change_panel(int dir)
 {
+    QRect vis = visible_dungeon();
 
+    int y = vis.y() + ddy[dir] * vis.height() / 2;
+    int x = vis.x() + ddx[dir] * vis.width() / 2;
+
+    return ui_modify_panel(y, x);
 }
 
 void ui_center(int y, int x)

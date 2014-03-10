@@ -650,15 +650,16 @@ bool target_set_interactive(int mode, int x, int y)
                 /* Find a new monster */
                 i = target_pick(old_y, old_x, ddy[d], ddx[d]);
 
-#if 0
                 /* Scroll to find interesting grid */
                 if (i < 0)
                 {
-                    int old_wy = Term->offset_y;
-                    int old_wx = Term->offset_x;
+                    QRect vis = visible_dungeon();
+
+                    int old_wy = vis.y();
+                    int old_wx = vis.x();
 
                     /* Change if legal */
-                    if (change_panel(d))
+                    if (ui_change_panel(d))
                     {
                         /* Recalculate interesting grids */
                         target_set_interactive_prepare(mode);
@@ -667,17 +668,13 @@ bool target_set_interactive(int mode, int x, int y)
                         i = target_pick(old_y, old_x, ddy[d], ddx[d]);
 
                         /* Restore panel if needed */
-                        if ((i < 0) && modify_panel(Term, old_wy, old_wx))
+                        if ((i < 0) && ui_modify_panel(old_wy, old_wx))
                         {
                             /* Recalculate interesting grids */
                             target_set_interactive_prepare(mode);
                         }
-
-                        /* Handle stuff */
-                        handle_stuff();
                     }
                 }
-#endif
 
                 /* Use interesting grid if found */
                 if (i >= 0) m = i;
@@ -921,9 +918,6 @@ bool target_set_interactive(int mode, int x, int y)
                 /* Adjust panel if needed */
                 if (ui_adjust_panel(y, x))
                 {
-                    // TODO Testing
-                    pop_up_message_box("Adjusting panel");
-
                     /* Recalculate interesting grids */
                     target_set_interactive_prepare(mode);
                 }
