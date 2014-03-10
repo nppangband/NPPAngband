@@ -587,6 +587,10 @@ extern void process_greater_vault_quest(void);
 extern void process_guild_quests(void);
 
 // qt_mainwindow.cpp
+#define TOOLBAR_TARGETTING 1
+#define TOOLBAR_TARGETTING_INTERACTIVE 2
+extern void ui_toolbar_show(int toolbar);
+extern void ui_toolbar_hide(int toolbar);
 extern void ui_show_message(int idx);
 extern QString rect_to_string(QRect rect);
 extern QRect visible_dungeon();

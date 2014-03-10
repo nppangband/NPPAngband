@@ -47,7 +47,7 @@ void ObjectSelectDialog::keyPressEvent(QKeyEvent* which_key)
     key_pressed = key_pressed.toLower();
 
     // Make sure we are dealing with the item name buttons and not the info buttons
-    // or future other buttons
+    // or other future buttons
     key_pressed.append(") ");
 
     QWidget *tab = this->object_tabs->currentWidget(); // Search in the current tab
