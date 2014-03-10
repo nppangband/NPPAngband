@@ -19,20 +19,15 @@ bool ui_draw_path(u16b path_n, u16b *path_g, int y1, int x1, int cur_tar_y, int 
 
     for (int i = 0; i < path_n; i++) {
         int y = GRID_Y(path_g[i]);
-        int x = GRID_X(path_g[i]);
-
-        bool do_rect = false;
+        int x = GRID_X(path_g[i]);        
 
         QColor col("yellow");
-        if (y == cur_tar_y && x == cur_tar_x) {
-            col = QColor("red");
-            do_rect = true;
-        }
 
-        if (dungeon_info[y][x].has_visible_monster() ||
-                dungeon_info[y][x].has_visible_object()) do_rect = true;
+        // Don't touch the cursor
+        if (y == cur_tar_y && x == cur_tar_x) continue;
 
-        if (!do_rect) continue;
+        if (!dungeon_info[y][x].has_visible_monster() &&
+                !dungeon_info[y][x].has_visible_object()) continue;
 
         QGraphicsRectItem *item = main_window->dungeon_scene->addRect(
                     x * main_window->cell_wid, y * main_window->cell_hgt,
@@ -51,7 +46,8 @@ bool ui_draw_path(u16b path_n, u16b *path_g, int y1, int x1, int cur_tar_y, int 
                 cur_tar_y * main_window->cell_hgt + main_window->cell_hgt / 2,
                 QColor("yellow"));
 
-    item2->setZValue(95);
+    item2->setOpacity(1);
+    item2->setZValue(120);
 
     main_window->path_items.append(item2);
 
@@ -87,27 +83,6 @@ QRect visible_dungeon()
     return rect2;
 }
 
-UserInput ui_get_input()
-{
-    main_window->ui_mode = UI_MODE_INPUT;
-
-    main_window->input.mode = INPUT_MODE_NONE;
-
-    main_window->ev_loop.exec();
-
-    main_window->ui_mode = UI_MODE_DEFAULT;
-
-    if (main_window->input.mode == INPUT_MODE_KEY) {
-        main_window->input.x = main_window->input.y = -1;
-    }
-    else {
-        main_window->input.key = 0;
-        main_window->input.text.clear();
-    }
-
-    return main_window->input;
-}
-
 class DungeonGrid: public QGraphicsItem
 {
 public:
@@ -140,6 +115,31 @@ public:
 
     void cellSizeChanged();
 };
+
+UserInput ui_get_input()
+{
+    main_window->ui_mode = UI_MODE_INPUT;
+
+    main_window->input.mode = INPUT_MODE_NONE;
+
+    main_window->cursor->update();
+
+    main_window->ev_loop.exec();
+
+    main_window->ui_mode = UI_MODE_DEFAULT;
+
+    main_window->cursor->update();
+
+    if (main_window->input.mode == INPUT_MODE_KEY) {
+        main_window->input.x = main_window->input.y = -1;
+    }
+    else {
+        main_window->input.key = 0;
+        main_window->input.text.clear();
+    }
+
+    return main_window->input;
+}
 
 void ui_player_moved()
 {
@@ -323,15 +323,26 @@ void DungeonCursor::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     if (!in_bounds(c_y, c_x)) return;
 
     painter->save();
+
+    if (parent->ui_mode == UI_MODE_INPUT) {
+        painter->setOpacity(0.5);
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(QColor("red"));
+        painter->drawRect(this->boundingRect());
+    }
+
+    painter->setOpacity(1);
+    painter->setBrush(Qt::NoBrush);
     painter->setPen(QColor("yellow"));
     painter->drawRect(0, 0, parent->cell_wid - 1, parent->cell_hgt - 1);
-    if ((parent->cell_wid > 16) && (parent->cell_hgt > 16)){
+    if ((parent->cell_wid > 16) && (parent->cell_hgt > 16)) {
         int z = 3;
         painter->drawRect(0, 0, z, z);
         painter->drawRect(parent->cell_wid - z - 1, 0, z, z);
         painter->drawRect(0, parent->cell_hgt - z - 1, z, z);
         painter->drawRect(parent->cell_wid - z - 1, parent->cell_hgt - z - 1, z, z);
     }
+
     painter->restore();
 }
 
