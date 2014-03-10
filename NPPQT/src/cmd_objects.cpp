@@ -105,7 +105,7 @@ cmd_arg obj_cast(object_type *o_ptr, cmd_arg args)
 
 cmd_arg obj_drop(object_type *o_ptr, cmd_arg args)
 {
-    int amt = get_quantity(NULL, o_ptr->number);
+    int amt = get_quantity("Please enter an amount to drop.", o_ptr->number);
     if (amt <= 0)
     {
         args.verify = FALSE;
@@ -462,9 +462,18 @@ void command_uninscribe(cmd_arg args)
     object_type *o_ptr = object_from_item_idx(args.item);
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
+    // Command cancelled
+    if(!args.verify) return;
+
+    if (!item_is_available(args.item, NULL, USE_FLOOR | USE_INVEN | USE_EQUIP | USE_QUIVER))
+    {
+        pop_up_message_box("You do not have that item to uninscribe.");
+        return;
+    }
+
     if (!o_ptr->has_inscription())
     {
-        message(QString("That item had no inscription to remove."));
+        pop_up_message_box("That item had no inscription to remove.");
         return;
     }
 
@@ -517,6 +526,9 @@ void command_uninscribe(cmd_arg args)
  */
 void do_cmd_uninscribe(void)
 {
+    // Paranoia
+    if (!p_ptr->playing) return;
+
     cmd_arg args = select_item(ACTION_UNINSCRIBE);
 
     command_uninscribe(args);
@@ -530,6 +542,15 @@ void command_inscribe(cmd_arg args)
 
     QString o_name;
     QString new_inscription;
+
+    // Command cancelled
+    if(!args.verify) return;
+
+    if (!item_is_available(args.item, NULL, USE_FLOOR | USE_INVEN | USE_EQUIP | USE_QUIVER))
+    {
+        pop_up_message_box("You do not have that item to inscribe.");
+        return;
+    }
 
     /* Describe the activity */
     o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
@@ -589,6 +610,9 @@ void command_inscribe(cmd_arg args)
  */
 void do_cmd_inscribe(void)
 {
+    // Paranoia
+    if (!p_ptr->playing) return;
+
     cmd_arg args = select_item(ACTION_INSCRIBE);
 
     command_inscribe(args);
@@ -615,7 +639,7 @@ bool command_takeoff(cmd_arg args)
 
     if (!item_is_available(args.item, NULL, USE_EQUIP | USE_QUIVER))
     {
-        message(QString("You are not wielding that item."));
+        pop_up_message_box("You are not wielding that item.");
         return (FALSE);
     }
 
@@ -657,7 +681,7 @@ bool command_wield(cmd_arg args)
 
     if (!item_is_available(args.item, NULL, USE_INVEN | USE_FLOOR))
     {
-        message(QString("You do not have that item to wield."));
+        pop_up_message_box("You do not have that item to wield.");
         return (FALSE);
     }
 
@@ -666,14 +690,14 @@ bool command_wield(cmd_arg args)
     {
         o_name = object_desc(o_ptr,  ODESC_PREFIX | ODESC_FULL);
 
-        message(QString("You cannot wield that item there."));
+        pop_up_message_box("You cannot wield that item there.");
         return (FALSE);
     }
 
     /*Hack - don't allow quest items to be worn*/
     if(o_ptr->ident & (IDENT_QUEST))
     {
-        message(QString("You cannot wield quest items."));
+        pop_up_message_box("You cannot wield quest items.");
         return (FALSE);
     }
 
@@ -707,7 +731,7 @@ bool command_wield(cmd_arg args)
     if (equip_o_ptr->is_cursed())
     {
         o_name = object_desc(equip_o_ptr,  ODESC_BASE);
-        message(QString("The %1 you are %2 appears to be cursed.") .arg(o_name) .arg(describe_use(args.slot)));
+        pop_up_message_box(QString("The %1 you are %2 appears to be cursed.") .arg(o_name) .arg(describe_use(args.slot)));
         return(FALSE);
     }
 
@@ -740,43 +764,55 @@ void do_cmd_wield()
     (void)command_wield(args);
 }
 
-
-/*
- * Drop an item
- */
-void do_cmd_drop(void)
+bool command_drop(cmd_arg args)
 {
-    cmd_arg args = select_item(ACTION_DROP);
-
     int item = args.item;
     object_type *o_ptr = object_from_item_idx(item);
     int amt = args.number;
 
+    // Command cancelled
+    if(!args.verify) return (FALSE);
+
     if (!item_is_available(item, NULL, USE_INVEN | USE_EQUIP | USE_QUIVER))
     {
-        message(QString("You do not have that item to drop it."));
-        return;
+        message(QString("You do not have that item to drop."));
+        return (FALSE);
     }
 
     /* Hack -- Cannot remove cursed items */
     if ((item >= INVEN_WIELD) && o_ptr->is_cursed())
     {
-        message(QString("Hmmm, it seems to be cursed."));
-        return;
+        pop_up_message_box("Hmmm, it seems to be cursed.");
+        return (FALSE);
     }
 
     /* Cursed quiver */
     else if (IS_QUIVER_SLOT(item) && p_ptr->state.cursed_quiver)
     {
         /* Oops */
-        message(QString("Your quiver is cursed!"));
+        pop_up_message_box("Your quiver is cursed!");
 
         /* Nope */
-        return;
+        return(FALSE);
     }
 
     inven_drop(item, amt);
     process_player_energy(BASE_ENERGY_MOVE / 2);
+
+    return (TRUE);
+}
+
+/*
+ * Drop an item
+ */
+void do_cmd_drop(void)
+{
+    // Paranoia
+    if (!p_ptr->playing) return;
+
+    cmd_arg args = select_item(ACTION_DROP);
+
+    (void) command_drop(args);
 }
 
 static void swap_weapons(void)
