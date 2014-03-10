@@ -165,23 +165,18 @@ void popup1(QString message, int id)
 // return TRUE/FALSE;
 bool get_check(QString question)
 {
-    QMessageBox get_check;
-    // get_check.setParent();  TODO - set as parent of main window
-    get_check.setWindowTitle("Please respond yes or no");
-    get_check.setText(question);
-    get_check.setStandardButtons(QMessageBox::Yes);
-    get_check.setStandardButtons(QMessageBox::No);
-    if (get_check.exec() == QMessageBox::Yes) return (TRUE);
-    else return (FALSE);
+    int answer = QMessageBox::question(0, "Please respond yes or no", question, QMessageBox::Yes, QMessageBox::Ok);
+    if (answer == QMessageBox::Yes) return (TRUE);
+    return (FALSE);
 }
 
 // Post a question to the player and wait for player to enter a string.
 // returns the string;
-QString get_string(QString question)
+QString get_string(QString question, QString description, QString answer)
 {
 
     bool ok;
-    QString text = QInputDialog::getText(0, "Please enter a response", question, QLineEdit::Normal,"", &ok);
+    QString text = QInputDialog::getText(0, question, description, QLineEdit::Normal, answer, &ok, Qt::Dialog, 0);
 
     if (!ok) return NULL;
 

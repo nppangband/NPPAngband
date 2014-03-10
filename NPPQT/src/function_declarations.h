@@ -72,11 +72,15 @@ extern void delete_notes_file(void);
 
 //cmd_objects
 extern cmd_arg obj_uninscribe(object_type *o_ptr, cmd_arg args);
+extern void command_uninscribe(cmd_arg args);
 extern void do_cmd_uninscribe(void);
+extern void command_inscribe(cmd_arg args);
 extern void do_cmd_inscribe(void);
 extern cmd_arg obj_examine(object_type *o_ptr, cmd_arg args);
 extern void do_cmd_observe(void);
+extern bool command_takeoff(cmd_arg args);
 extern void do_cmd_takeoff(void);
+extern bool command_wield(cmd_arg args);
 extern void do_cmd_wield(void);
 extern void do_cmd_drop(void);
 extern void do_cmd_swap_weapon(void);
@@ -844,7 +848,7 @@ extern bool is_a_vowel(QChar single_letter);
 extern QString capitilize_first(QString line);
 extern void pop_up_message_box(QString message, QMessageBox::Icon the_icon = QMessageBox::Information);
 extern bool get_check(QString question);
-extern QString get_string(QString question);
+extern QString get_string(QString question, QString description, QString answer);
 extern s16b get_quantity(QString prompt, int max);
 extern QColor add_preset_color(int which_color);
 extern void message(QString msg);

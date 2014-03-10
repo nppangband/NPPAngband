@@ -1029,6 +1029,16 @@ void MainWindow::keyPressEvent(QKeyEvent* which_key)
             do_cmd_observe();
             return;
         }
+        case Qt::Key_BraceLeft:
+        {
+            do_cmd_inscribe();
+            return;
+        }
+        case Qt::Key_BraceRight:
+        {
+            do_cmd_uninscribe();
+            return;
+        }
 
         default:
         {
