@@ -191,7 +191,7 @@ QString get_string(QString question, QString description, QString answer)
 s16b get_quantity(QString prompt, int max)
 {
 
-    bool ok;
+
 
     int amt = 1;
 
@@ -213,19 +213,29 @@ s16b get_quantity(QString prompt, int max)
         return (amt);
     }
 
-    /* Build a prompt if needed */
-    if (prompt.isEmpty())
+    if (max > 1)
     {
+        bool ok;
 
-        /* Build a prompt */
-        prompt = (QString("Quantity (0-%1) hit ") .arg(max));
+        /* Build a prompt if needed */
+        if (prompt.isEmpty())
+        {
+            /* Build a prompt */
+            prompt = (QString("Please enter a quantity (0-%1)") .arg(max));
+        }
+        else prompt.append(QString(" (0-%1)") .arg(max));
+
+        // Input dialog (this, title, prompt, initial value, min, max, step, ok, flags)
+        amt = QInputDialog::getInt(0, "Please enter a number", prompt, amt, 1, max, 1, &ok, 0);
+
+        if (!ok) return (0);
     }
 
+    /* Enforce the maximum */
+    if (amt > max) amt = max;
 
-    // Input dialog (this, title, prompt, initial value, min, max, step, ok, flags)
-    amt = QInputDialog::getInt(0, "Please enter a number", prompt, amt, 1, max, 1, &ok, 0);
-
-    if (!ok) return (0);
+    /* Enforce the minimum */
+    if (amt < 0) amt = 0;
 
     /* Return the result */
     return (amt);

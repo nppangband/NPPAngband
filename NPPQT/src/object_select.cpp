@@ -628,7 +628,7 @@ ObjectSelectDialog::ObjectSelectDialog(int *item, QString prompt, int mode, bool
         /* Report failure */
         *success = FALSE;
 
-        /* TODO return FALSE Done here */
+        /* Done here */
         return;
     }
 
@@ -853,7 +853,7 @@ bool get_item_beside(int *cp, QString pmt, QString str, int sq_y, int sq_x)
     item_tester_hook = NULL;
 
     /* Warning if needed */
-    if (!success && !str.isEmpty()) message(str);
+    if (!success && !cancelled && !str.isEmpty()) message(str);
 
     /* Result */
     return (success);
