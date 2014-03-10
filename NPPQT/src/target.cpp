@@ -919,12 +919,13 @@ bool target_set_interactive(int mode, int x, int y)
                 else if (y <= 0) y++;
 
                 /* Adjust panel if needed */
-                ui_ensure(y, x);
-                if (true)
+                if (ui_adjust_panel(y, x))
                 {
+                    // TODO Testing
+                    pop_up_message_box("Adjusting panel");
+
                     /* Recalculate interesting grids */
                     target_set_interactive_prepare(mode);
-
                 }
             }
         }
@@ -949,7 +950,7 @@ bool target_set_interactive(int mode, int x, int y)
 #endif
 
     /* Recenter around player */
-    ui_center(py, px);
+    ui_ensure(py, px);
 
     /* Re-set animate flicker */
     //animate_flicker = temp_animate_flicker;

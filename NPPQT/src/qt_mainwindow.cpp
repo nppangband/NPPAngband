@@ -1678,6 +1678,45 @@ void ui_ensure(int y, int x)
                                                      main_window->cell_wid, main_window->cell_hgt));
 }
 
+bool ui_modify_panel(int y, int x)
+{
+    QRect vis = visible_dungeon();
+    if (y == vis.y() && x == vis.x()) return false;
+
+    if (y < 0) y = 0;
+    if (y >= p_ptr->cur_map_hgt) y = p_ptr->cur_map_hgt - 1;
+    main_window->graphics_view->verticalScrollBar()->setValue(y * main_window->cell_hgt);
+
+    if (x < 0) x = 0;
+    if (x >= p_ptr->cur_map_wid) x = p_ptr->cur_map_wid - 1;
+    main_window->graphics_view->horizontalScrollBar()->setValue(x * main_window->cell_wid);
+
+    return true;
+}
+
+bool ui_adjust_panel(int y, int x)
+{
+    QRect vis = visible_dungeon();
+
+    int y2 = y;
+    int x2 = x;
+
+    while (y < vis.y()) y += vis.height() / 2;
+    while (y >= vis.y() + vis.height()) y -= vis.height() / 2;
+
+    while (x < vis.x()) x += vis.width() / 2;
+    while (x >= vis.x() + vis.width()) x -= vis.width() / 2;
+
+    if (x != x2 || y != y2) return ui_modify_panel(y, x);
+
+    return false;
+}
+
+bool ui_change_panel(int dir)
+{
+
+}
+
 void ui_center(int y, int x)
 {
     main_window->graphics_view->centerOn(x * main_window->cell_wid, y * main_window->cell_hgt);
