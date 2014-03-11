@@ -815,6 +815,276 @@ void do_cmd_drop(void)
     (void) command_drop(args);
 }
 
+static void refill_lamp(object_type *j_ptr, object_type *o_ptr, int item)
+{
+
+    /* Refuel from a lantern */
+    if (o_ptr->sval == SV_LIGHT_LANTERN)
+    {
+        j_ptr->timeout += o_ptr->timeout;
+    }
+    /* Refuel from a flask */
+    else
+    {
+        j_ptr->timeout += o_ptr->pval;
+    }
+
+    /* Message */
+    message(QString("You fuel your lamp."));
+
+    /* Comment */
+    if (j_ptr->timeout >= FUEL_LAMP)
+    {
+        j_ptr->timeout = FUEL_LAMP;
+        message(QString("Your lamp is full."));
+    }
+
+    /* Refilled from a lantern */
+    if (o_ptr->sval == SV_LIGHT_LANTERN)
+    {
+
+        /* Unstack if necessary */
+        if (o_ptr->number > 1)
+        {
+            object_type *i_ptr;
+            object_type object_type_body;
+
+            /* Get local object */
+            i_ptr = &object_type_body;
+
+            /* Obtain a local object */
+            i_ptr->object_copy(o_ptr);
+
+            /* Modify quantity */
+            i_ptr->number = 1;
+
+            /* Remove fuel */
+            i_ptr->timeout = 0;
+
+            /* Unstack the used item */
+            o_ptr->number--;
+
+            /* Carry or drop */
+            if (item >= 0)
+                item = inven_carry(i_ptr);
+            else
+                drop_near(i_ptr, 0, p_ptr->py, p_ptr->px);
+        }
+
+        /* Empty a single lantern */
+        else
+        {
+            /* No more fuel */
+            o_ptr->timeout = 0;
+        }
+
+        /* Combine / Reorder the pack (later) */
+        p_ptr->update |= (PU_BONUS);
+        p_ptr->notice |= (PN_COMBINE | PN_REORDER | PN_SORT_QUIVER);
+
+        /* Redraw stuff */
+        p_ptr->redraw |= (PR_INVEN | PR_ITEMLIST);
+    }
+
+    /* Refilled from a flask */
+    else
+    {
+        /* Decrease the item (from the pack) */
+        if (item >= 0)
+        {
+            inven_item_increase(item, -1);
+            inven_item_describe(item);
+            inven_item_optimize(item);
+        }
+
+        /* Decrease the item (from the floor) */
+        else
+        {
+            floor_item_increase(0 - item, -1);
+            floor_item_describe(0 - item);
+            floor_item_optimize(0 - item);
+        }
+    }
+
+    /* Recalculate torch */
+    p_ptr->update |= (PU_TORCH);
+
+    /* Redraw stuff */
+    p_ptr->redraw |= (PR_EQUIP);
+}
+
+
+static void refuel_torch(object_type *j_ptr, object_type *o_ptr, int item)
+{
+    /* Refuel */
+    j_ptr->timeout += o_ptr->timeout + 5;
+
+    /* Message */
+    message(QString("You combine the torches."));
+
+    /* Over-fuel message */
+    if (j_ptr->timeout >= FUEL_TORCH)
+    {
+        j_ptr->timeout = FUEL_TORCH;
+        message(QString("Your torch is fully fueled."));
+    }
+
+    /* Refuel message */
+    else
+    {
+        message(QString("Your torch glows more brightly."));
+    }
+
+    /* Decrease the item (from the pack) */
+    if (item >= 0)
+    {
+        inven_item_increase(item, -1);
+        inven_item_describe(item);
+        inven_item_optimize(item);
+    }
+
+    /* Decrease the item (from the floor) */
+    else
+    {
+        floor_item_increase(0 - item, -1);
+        floor_item_describe(0 - item);
+        floor_item_optimize(0 - item);
+    }
+
+    /* Recalculate torch */
+    p_ptr->update |= (PU_TORCH);
+
+    /* Redraw stuff */
+    p_ptr->redraw |= (PR_EQUIP);
+}
+
+
+/*
+ * Lanterns can be filled with oil on the dungeon's floor.
+ * Returns TRUE if the amount of fuel could be filled in this way.
+ */
+static bool do_cmd_refill_lamp_from_terrain(void)
+{
+    object_type *j_ptr;
+
+    /* Get player coordinates */
+    int y = p_ptr->py;
+    int x = p_ptr->px;
+
+    /* Assume that the oil can be dry */
+    bool can_dry = TRUE;
+
+    /* Check presence of oil */
+    if (!(cave_ff3_match(y, x, FF3_OIL) && cave_passable_bold(y, x))) return (FALSE);
+
+    /* Ask the user if he/she wants to use the oil on the grid */
+    if (!get_check("Do you want to refill your lamp from the oil on the floor? ")) return (FALSE);
+
+    /* Get the lantern */
+    j_ptr = &inventory[INVEN_LIGHT];
+
+    /* Increase fuel amount (not too much) */
+    j_ptr->timeout += (200 + rand_int(3) * 50);
+
+    /* Increase fuel amount even more if there is more oil on that grid */
+    if (cave_ff2_match(y, x, FF2_DEEP)) j_ptr->timeout += (100 + rand_int(2) * 50);
+
+    /* Message */
+    message(QString("You fuel your lamp."));
+
+    /* Comment */
+    if (j_ptr->timeout >= FUEL_LAMP)
+    {
+        /* Some oil was unused */
+        if (j_ptr->timeout > FUEL_LAMP)
+        {
+            /* Set oil to the max. value */
+            j_ptr->timeout = FUEL_LAMP;
+
+            /* Give the remaining oil to the grid */
+            can_dry = FALSE;
+        }
+
+        /* Message */
+        message(QString("Your lamp is full."));
+    }
+
+    /* Sometimes we remove the oil grid to stop oil-abuse */
+    if (can_dry && !f_info[FEAT_EARTH].f_name.length() && one_in_(7))
+    {
+        /* Transform to earth */
+        cave_set_feat(y, x, FEAT_EARTH);
+
+        /* Message */
+        message(QString("The oil patch dries."));
+    }
+
+    /* Recalculate torch */
+    p_ptr->update |= (PU_TORCH);
+
+    /* Window stuff */
+    p_ptr->redraw |= (PR_EQUIP);
+
+    /* Success */
+    return (TRUE);
+}
+
+/*
+ * Refill the players lamp, or restock his torches
+ */
+void command_refuel(cmd_arg args)
+{
+    object_type *j_ptr = &inventory[INVEN_LIGHT];
+
+    int item = args.item;
+    object_type *o_ptr = object_from_item_idx(item);
+
+    if (!item_is_available(item, NULL, USE_INVEN | USE_FLOOR))
+    {
+        pop_up_message_box("You do not have that item to refill with it.");
+        return;
+    }
+
+    /* It is nothing */
+    if (j_ptr->tval != TV_LIGHT)
+    {
+        pop_up_message_box("You are not wielding a light.");
+        return;
+    }
+
+    /* It's a lamp */
+    else if (j_ptr->sval == SV_LIGHT_LANTERN)
+    {
+        /* First we check if the lamp can be filled from the oil on the floor */
+        if (!do_cmd_refill_lamp_from_terrain())
+        {
+            refill_lamp(j_ptr, o_ptr, item);
+        }
+    }
+
+    /* It's a torch */
+    else if (j_ptr->sval == SV_LIGHT_TORCH)
+        refuel_torch(j_ptr, o_ptr, item);
+
+
+    process_player_energy(BASE_ENERGY_MOVE / 2);
+}
+
+
+/*
+ * Refill the players lamp, or restock his torches
+ */
+void do_cmd_refuel(void)
+{
+    // Paranoia
+    if (!p_ptr->playing) return;
+
+    cmd_arg args = select_item(ACTION_REFILL);
+
+    (void) command_refuel(args);
+
+}
+
 static void swap_weapons(void)
 {
     object_type *o_ptr = &inventory[INVEN_MAIN_WEAPON];
