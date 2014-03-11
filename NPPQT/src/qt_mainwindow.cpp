@@ -1046,6 +1046,7 @@ void MainWindow::keyPressEvent(QKeyEvent* which_key)
             if (keystring.operator ==("t")) do_cmd_takeoff();
             else if (keystring.operator ==("w")) do_cmd_wield();
             else if (keystring.operator ==("d")) do_cmd_drop();
+            else if (keystring.operator ==("g")) do_cmd_pickup();
             else
             {
                 //  TODO something useful with unused keypresses

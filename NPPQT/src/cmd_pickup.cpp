@@ -389,7 +389,7 @@ void do_cmd_pickup_from_pile(bool pickup, bool msg)
 		{
             if (!msg) break;
 
-            message(QString("You do not have any room for these items."));
+            pop_up_message_box("You do not have any room for these items.");
 			break;
 		}
 
@@ -762,6 +762,21 @@ void py_pickup(bool pickup)
 	}
 
 	/* Done */
+}
+
+/*
+ * Pick up objects on the floor beneath you.
+ */
+void do_cmd_pickup(void)
+{
+
+    do_cmd_pickup_from_pile(TRUE, TRUE);
+
+    /*
+     * Intentionally use some energy in case
+     * the player is intentionally using a turn.
+     */
+    process_player_energy(BASE_ENERGY_MOVE);
 }
 
 

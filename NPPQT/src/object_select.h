@@ -57,8 +57,9 @@ private:
 
     byte find_starting_tab(int mode);
 
-    void track_longest_object_name(object_type *o_ptr);
-    QString format_button_name(QChar char_index, object_type *o_ptr);
+    void track_longest_object_name(object_type *o_ptr, byte which_tab, int slot);
+    QString add_equip_use(int slot);
+    QString format_button_name(QChar char_index, object_type *o_ptr, byte which_tab, int slot);
 
     //Functions to track the list of possible items
     void floor_items_count(int mode, int sq_y, int sq_x);

@@ -10,10 +10,7 @@
 //was externs.h
 
 
-// cmd1.cpp
-extern bool put_object_in_inventory(object_type *o_ptr);
-extern void py_pickup_gold(void);
-extern void move_player(int dir, int jumping);
+
 
 //calcs.cpp
 extern int stat_adj_moria(int stat);
@@ -85,6 +82,14 @@ extern void do_cmd_wield(void);
 extern void do_cmd_drop(void);
 extern void do_cmd_swap_weapon(void);
 extern cmd_arg obj_cast(object_type *o_ptr, cmd_arg args);
+
+// cmd_pickup.cpp
+extern bool put_object_in_inventory(object_type *o_ptr);
+extern void do_cmd_pickup_from_pile(bool pickup, bool message);
+extern void py_pickup_gold(void);
+extern void py_pickup(bool pickup);
+extern void do_cmd_pickup(void);
+extern void move_player(int dir, int jumping);
 
 // cmd_spell.cpp
 extern s16b spell_chance(int spell);

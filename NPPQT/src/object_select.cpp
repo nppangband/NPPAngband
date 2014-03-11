@@ -80,16 +80,41 @@ void ObjectSelectDialog::help_press(QString num_string)
     object_info_screen(o_ptr);
 }
 
-void ObjectSelectDialog::track_longest_object_name(object_type *o_ptr)
+// Format the "equipment description", ex. "about body"
+QString ObjectSelectDialog::add_equip_use(int slot)
+{
+    QString equip_add = QString ("%1") .arg(mention_use(slot));
+
+    while (equip_add.length() < 14) equip_add.append(" ");
+    equip_add.append(": ");
+
+    return (equip_add);
+}
+
+void ObjectSelectDialog::track_longest_object_name(object_type *o_ptr, byte which_tab, int slot)
 {
     QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
+
+    //Add description for equipment.
+    if (which_tab == TAB_EQUIP)
+    {
+        o_name.prepend(add_equip_use(slot));
+    }
+
     if (o_name.length() <= max_object_desc_length) return;
     max_object_desc_length = o_name.length();
 }
 
-QString ObjectSelectDialog::format_button_name(QChar char_index, object_type *o_ptr)
+QString ObjectSelectDialog::format_button_name(QChar char_index, object_type *o_ptr, byte which_tab, int slot)
 {
     QString o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
+
+    //Add description for equipment.
+    if (which_tab == TAB_EQUIP)
+    {
+        o_name.prepend(add_equip_use(slot));
+    }
+
 
     while (o_name.length() < max_object_desc_length)o_name.append(" ");
     QString final_name = (QString("%1) %2") .arg(char_index) .arg(o_name));
@@ -126,7 +151,7 @@ void ObjectSelectDialog::floor_items_count(int mode, int sq_y, int sq_x)
         floor_items.append(this_o_idx);
         allow_floor = TRUE;
 
-        track_longest_object_name(o_ptr);
+        track_longest_object_name(o_ptr, TAB_FLOOR, this_o_idx);
     }
 }
 
@@ -168,7 +193,7 @@ void ObjectSelectDialog::build_floor_tab()
         object_type *o_ptr = &o_list[floor_items[i]];
 
         // Make the button for the object.
-        QString button_name = format_button_name(which_char, o_ptr);
+        QString button_name = format_button_name(which_char, o_ptr, TAB_FLOOR, floor_items[i]);
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
@@ -226,7 +251,7 @@ void ObjectSelectDialog::inven_items_count(int mode)
         /* Get the object */
         object_type *o_ptr = &inventory[i];
 
-        track_longest_object_name(o_ptr);
+        track_longest_object_name(o_ptr, TAB_INVEN, i);
     }
 }
 
@@ -264,7 +289,7 @@ void ObjectSelectDialog::build_inven_tab()
         object_type *o_ptr = &inventory[inven_items[i]];
 
         // Make the button for the object.
-        QString button_name = format_button_name(which_char, o_ptr);
+        QString button_name = format_button_name(which_char, o_ptr, TAB_INVEN, inven_items[i]);
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
@@ -321,7 +346,7 @@ void ObjectSelectDialog::equip_items_count(int mode)
         /* Get the object */
         object_type *o_ptr = &inventory[i];
 
-        track_longest_object_name(o_ptr);
+        track_longest_object_name(o_ptr, TAB_EQUIP, i);
     }
 }
 
@@ -359,7 +384,7 @@ void ObjectSelectDialog::build_equip_tab()
         object_type *o_ptr = &inventory[equip_items[i]];
 
         // Make the button for the object.
-        QString button_name = format_button_name(which_char, o_ptr);
+        QString button_name = format_button_name(which_char, o_ptr, TAB_EQUIP, equip_items[i]);
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
@@ -417,7 +442,7 @@ void ObjectSelectDialog::quiver_items_count(int mode)
         /* Get the object */
         object_type *o_ptr = &inventory[i];
 
-        track_longest_object_name(o_ptr);
+        track_longest_object_name(o_ptr, TAB_QUIVER, i);
     }
 
     return;
@@ -457,7 +482,7 @@ void ObjectSelectDialog::build_quiver_tab()
         object_type *o_ptr = &inventory[quiver_items[i]];
 
         // Make the button for the object.
-        QString button_name = format_button_name(which_char, o_ptr);
+        QString button_name = format_button_name(which_char, o_ptr, TAB_QUIVER, quiver_items[i]);
         QString text_num = QString::number(num_buttons);
         QPushButton *button = new QPushButton(text_num);
         button->setText(button_name);
