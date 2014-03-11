@@ -407,8 +407,8 @@ bool target_set_interactive(int mode, int x, int y)
     byte path_attr[MAX_RANGE];
 
     /* Temporarily turn off animate_flicker, must be re-set before exiting the function  */
-    bool temp_animate_flicker = animate_flicker;
-    animate_flicker = FALSE;
+    //bool temp_animate_flicker = animate_flicker;
+    //animate_flicker = FALSE;
 
     color_message("Entering interactive mode", TERM_SKY_BLUE);
 
@@ -650,15 +650,16 @@ bool target_set_interactive(int mode, int x, int y)
                 /* Find a new monster */
                 i = target_pick(old_y, old_x, ddy[d], ddx[d]);
 
-#if 0
                 /* Scroll to find interesting grid */
                 if (i < 0)
                 {
-                    int old_wy = Term->offset_y;
-                    int old_wx = Term->offset_x;
+                    QRect vis = visible_dungeon();
+
+                    int old_wy = vis.y();
+                    int old_wx = vis.x();
 
                     /* Change if legal */
-                    if (change_panel(d))
+                    if (ui_change_panel(d))
                     {
                         /* Recalculate interesting grids */
                         target_set_interactive_prepare(mode);
@@ -667,17 +668,13 @@ bool target_set_interactive(int mode, int x, int y)
                         i = target_pick(old_y, old_x, ddy[d], ddx[d]);
 
                         /* Restore panel if needed */
-                        if ((i < 0) && modify_panel(Term, old_wy, old_wx))
+                        if ((i < 0) && ui_modify_panel(old_wy, old_wx))
                         {
                             /* Recalculate interesting grids */
                             target_set_interactive_prepare(mode);
                         }
-
-                        /* Handle stuff */
-                        handle_stuff();
                     }
                 }
-#endif
 
                 /* Use interesting grid if found */
                 if (i >= 0) m = i;
@@ -919,12 +916,10 @@ bool target_set_interactive(int mode, int x, int y)
                 else if (y <= 0) y++;
 
                 /* Adjust panel if needed */
-                ui_ensure(y, x);
-                if (true)
+                if (ui_adjust_panel(y, x))
                 {
                     /* Recalculate interesting grids */
                     target_set_interactive_prepare(mode);
-
                 }
             }
         }
@@ -949,10 +944,10 @@ bool target_set_interactive(int mode, int x, int y)
 #endif
 
     /* Recenter around player */
-    ui_center(py, px);
+    ui_ensure(py, px);
 
     /* Re-set animate flicker */
-    animate_flicker = temp_animate_flicker;
+    //animate_flicker = temp_animate_flicker;
 
     /* Failure to set target */
     if (!p_ptr->target_set) return (FALSE);
@@ -1153,6 +1148,8 @@ bool get_aim_dir(int *dp, bool target_trap)
     {
         ui_toolbar_show(TOOLBAR_TARGETTING);
 
+        ui_show_cursor(p_ptr->py, p_ptr->px);
+
         /* Choose a prompt */
         if (!target_okay())
             p = "Direction ('*' or <click> to target, 'c' for closest, Escape to cancel)? ";
@@ -1202,6 +1199,8 @@ bool get_aim_dir(int *dp, bool target_trap)
     }
 
     ui_toolbar_hide(TOOLBAR_TARGETTING);
+
+    ui_show_cursor(-1, -1);
 
     /* No direction */
     if (!dir) return (FALSE);
@@ -1267,7 +1266,7 @@ bool target_set_closest(int mode)
     m_ptr = &mon_list[m_idx];
     m_name = monster_desc(m_ptr, 0x00);
     if (!(mode & TARGET_QUIET))
-        message(QString("%^1 is targeted.") .arg(m_name));
+        message(QString("%1 is targeted.").arg(m_name));
 
     /* Set up target inQStringion */
     monster_race_track(m_ptr->r_idx);

@@ -491,8 +491,8 @@ int sidebar_monsters[SIDEBAR_MONSTER_MAX];
  */
 byte quest_indicator_complete = FALSE;
 
-u16b panel_change_offset_y;
-u16b panel_change_offset_x;
+u16b panel_change_offset_y = MIN_PANEL_CHANGE_OFFSET_Y;
+u16b panel_change_offset_x = MIN_PANEL_CHANGE_OFFSET_X;
 
 /*
  * The current capabilities of the dungeon
