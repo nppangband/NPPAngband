@@ -214,7 +214,7 @@ void MainWindow::slot_something()
 
     QPointF p2(p_ptr->target_col, p_ptr->target_row);
     if (dir != 5) {
-        p2 = QPointF(p_ptr->px + ddx[dir] * 5, p_ptr->py + ddy[dir] * 5);
+        p2 = QPointF(p_ptr->px + ddx[dir] * 20, p_ptr->py + ddy[dir] * 20);
     }
 
     /*
@@ -1451,11 +1451,11 @@ void MainWindow::create_toolbars()
 
     struct ButtonData buttons[] =
     {
-        {"ESCAPE", Qt::Key_Escape, tr("Cancel current targetting mode")},
+        {"ESCAPE", Qt::Key_Escape, tr("Cancel current targeting mode")},
         {"5", Qt::Key_5, tr("Accept current target")},
         {"c", Qt::Key_C, tr("Target closest")},
-        {"*", Qt::Key_Asterisk, tr("Interactive targetting mode")},
-        {"o", Qt::Key_O, tr("Manual targetting")},
+        {"*", Qt::Key_Asterisk, tr("Interactive targeting mode")},
+        {"o", Qt::Key_O, tr("Manual targeting")},
         {"p", Qt::Key_P, tr("Target player location")},
         {"f", Qt::Key_F, tr("Toggle terrain description")},
         {"", 0, ""}

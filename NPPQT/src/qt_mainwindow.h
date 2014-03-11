@@ -62,7 +62,7 @@ public:
 
     QTextEdit *message_area;
 
-    QToolBar *toolbar1; // Targetting
+    QToolBar *toolbar1; // Targeting
 
     MainWindow();
 
