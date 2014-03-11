@@ -810,21 +810,7 @@ static void map_terrain (s16b y, s16b x)
 
     //Assume som things normal;
     dun_ptr->special_lighting = FLOOR_LIGHT_NORMAL;
-    dun_ptr->dtrap = FALSE;
-
-    // TODO REMOVE THIS    
-    /*
-    int dist = distance(p_ptr->py, p_ptr->px, y, x);
-    if (dist < 2) {
-        dun_ptr->ui_flags |= (UI_LIGHT_TORCH | UI_COSMIC_TORCH);
-    }
-    else if (dist < 3) {
-        dun_ptr->ui_flags |= UI_LIGHT_BRIGHT;
-    }
-    else if (dist < 4) {
-        dun_ptr->ui_flags |= UI_LIGHT_DIM;
-    }
-    */
+    dun_ptr->dtrap = FALSE;    
 
     /* Boring grids (floors, etc) */
     if (!(f_info[feat].f_flags1 & (FF1_REMEMBER)))
@@ -901,8 +887,8 @@ static void map_terrain (s16b y, s16b x)
             /* Get the darkness feature */
             f_ptr = &f_info[FEAT_NONE];
             dun_ptr->dun_color = f_ptr->d_color;
-            dun_ptr->dun_char = f_ptr->d_char;
-            dun_ptr->dun_tile = f_ptr->tile_id;
+            dun_ptr->dun_char = f_ptr->d_char;            
+            dun_ptr->dun_tile = f_ptr->tile_id;            
         }
     }
 

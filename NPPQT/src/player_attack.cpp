@@ -18,7 +18,6 @@
  */
 #include "src/npp.h"
 
-
 /*
  * Determine if the player "hits" a monster.
  *
@@ -707,8 +706,8 @@ void py_attack(int y, int x)
         if ((r_ptr->flags2 & (RF2_EVASIVE)) && (!was_asleep) &&
             (!m_ptr->m_timed[MON_TMD_STUN]) && (!m_ptr->m_timed[MON_TMD_CONF]) &&
             (!m_ptr->m_timed[MON_TMD_FEAR]) && (one_in_(2)))
-        {
-            color_message(QString("%^1 evades your blow!") .arg(m_name), TERM_YELLOW);
+        {            
+            color_message(QString("%1 evades your blow!") .arg(capitalize_first(m_name)), TERM_YELLOW);
 
             /* Learn that monster can dodge */
             l_ptr->r_l_flags2 |= (RF2_EVASIVE);

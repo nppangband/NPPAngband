@@ -1266,7 +1266,7 @@ bool target_set_closest(int mode)
     m_ptr = &mon_list[m_idx];
     m_name = monster_desc(m_ptr, 0x00);
     if (!(mode & TARGET_QUIET))
-        message(QString("%1 is targeted.").arg(m_name));
+        message(QString("%1 is targeted.").arg(capitalize_first(m_name)));
 
     /* Set up target inQStringion */
     monster_race_track(m_ptr->r_idx);

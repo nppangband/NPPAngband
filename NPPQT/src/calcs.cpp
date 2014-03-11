@@ -2153,7 +2153,6 @@ void redraw_stuff(void)
 {
     size_t i;
 
-
     /* Redraw stuff */
     if (!p_ptr->redraw) return;
 
@@ -2184,8 +2183,7 @@ void redraw_stuff(void)
     /* Then the ones that require parameters to be supplied. */
     if (p_ptr->redraw & (PR_MAP))
     {
-        /* Mark the whole map to be redrawn */
-        // TODO event_signal_point(EVENT_MAP, -1, -1);
+        /* Mark the whole map to be redrawn */        
         ui_redraw_all();
     }
 

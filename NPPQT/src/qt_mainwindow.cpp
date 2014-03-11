@@ -26,8 +26,10 @@ bool ui_draw_path(u16b path_n, u16b *path_g, int y1, int x1, int cur_tar_y, int 
         // Don't touch the cursor
         if (y == cur_tar_y && x == cur_tar_x) continue;
 
+        /*
         if (!dungeon_info[y][x].has_visible_monster() &&
                 !dungeon_info[y][x].has_visible_object()) continue;
+        */
 
         QGraphicsRectItem *item = main_window->dungeon_scene->addRect(
                     x * main_window->cell_wid, y * main_window->cell_hgt,
@@ -39,6 +41,7 @@ bool ui_draw_path(u16b path_n, u16b *path_g, int y1, int x1, int cur_tar_y, int 
         main_window->path_items.append(item);
     }
 
+    /*
     QGraphicsItem *item2 = main_window->dungeon_scene->addLine(
                 x1 * main_window->cell_wid + main_window->cell_wid / 2,
                 y1 * main_window->cell_hgt + main_window->cell_hgt / 2,
@@ -50,6 +53,7 @@ bool ui_draw_path(u16b path_n, u16b *path_g, int y1, int x1, int cur_tar_y, int 
     item2->setZValue(120);
 
     main_window->path_items.append(item2);
+    */
 
     return true;
 }

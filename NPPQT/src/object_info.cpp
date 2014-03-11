@@ -1556,7 +1556,7 @@ QString screen_out_head(object_type *o_ptr)
 
     /* Description */
     o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
-    o_name = capitilize_first(o_name);
+    o_name = capitalize_first(o_name);
 
     /* Print, in colour */
     output.append(QString("<b><big>%1</big></b>") .arg(o_name));
@@ -1626,7 +1626,7 @@ void object_info_screen(object_type *o_ptr)
         {
             buf.append("<br>   ");
 
-            buf = capitilize_first(buf);
+            buf = capitalize_first(buf);
 
             output.append(QString("<font color=blue>%1</font>") .arg(buf));
         }

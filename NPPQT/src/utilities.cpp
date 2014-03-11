@@ -133,7 +133,7 @@ bool is_a_vowel(QChar single_letter)
     return (FALSE);
 }
 // Capitilize the first character in a string.
-QString capitilize_first(QString line)
+QString capitalize_first(QString line)
 {
     // Paranoia
     if (line.isEmpty()) return (line);
