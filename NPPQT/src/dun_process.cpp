@@ -1449,202 +1449,6 @@ static void change_player_level(void)
     /* Play ambient sound on change of level. */
     play_ambient_sound();
 
-    int i;
-
-    /* TODO figure out why these lines of code are hereHack -- enforce illegal panel */
-    //Term->offset_y = p_ptr->cur_map_hgt;
-    //Term->offset_x = p_ptr->cur_map_wid;
-
-    /* Not leaving */
-    p_ptr->leaving_level = FALSE;
-
-    /* Reset the "command" vars */
-    p_ptr->command_cmd = 0;
-    p_ptr->command_new = 0;
-    p_ptr->command_rep = 0;
-    p_ptr->command_arg = 0;
-    p_ptr->command_dir = 0;
-
-    /* Cancel the target */
-    target_set_monster(0);
-
-    /* Cancel the health bar */
-    health_track(0);
-
-    /* Reset shimmer flags */
-    shimmer_monsters = TRUE;
-    shimmer_objects = TRUE;
-
-    /* Reset repair flags */
-    repair_mflag_show = TRUE;
-    repair_mflag_mark = TRUE;
-
-    /* Reset terrain damage */
-    p_ptr->cumulative_terrain_damage = 0;
-
-    /* Disturb */
-    disturb(1, 0);
-
-    /* Track maximum player level */
-    if (p_ptr->max_lev < p_ptr->lev)
-    {
-        p_ptr->max_lev = p_ptr->lev;
-    }
-
-    /* Track maximum dungeon level */
-    if (p_ptr->max_depth < p_ptr->depth)
-    {
-        p_ptr->max_depth = p_ptr->depth;
-    }
-
-    /* Track maximum quest level */
-    if ((p_ptr->max_depth > 1) &&
-        (p_ptr->max_depth > p_ptr->quest_depth))
-    {
-        p_ptr->quest_depth = p_ptr->max_depth;
-    }
-
-    /* Track recall dungeon level */
-    if (p_ptr->recall_depth < p_ptr->depth)
-    {
-        p_ptr->recall_depth = p_ptr->depth;
-    }
-
-    /* If autosave is pending, do it now. */
-    if (p_ptr->autosave)
-    {
-        save_player();
-        p_ptr->autosave = FALSE;
-    }
-
-    /* No stairs down from fixed or guardian quests */
-    if (no_down_stairs(p_ptr->depth))
-    {
-        if ((p_ptr->create_stair == FEAT_MORE) ||
-            (p_ptr->create_stair == FEAT_MORE_SHAFT))
-             p_ptr->create_stair = FALSE;
-    }
-
-    /* No stairs from town or if not allowed */
-    if (!p_ptr->depth)
-    {
-        p_ptr->create_stair = FALSE;
-    }
-
-    /* Make a staircase */
-    if (p_ptr->create_stair)
-    {
-        /* Place a staircase */
-        if (cave_valid_bold(p_ptr->py, p_ptr->px))
-        {
-            /* XXX XXX XXX */
-            delete_object(p_ptr->py, p_ptr->px);
-
-            cave_set_feat(p_ptr->py, p_ptr->px, p_ptr->create_stair);
-
-            /* Mark the stairs as known */
-            dungeon_info[p_ptr->py][p_ptr->px].cave_info |= (CAVE_MARK);
-        }
-
-        /* Cancel the stair request */
-        p_ptr->create_stair = FALSE;
-    }
-
-    /* Choose panel */
-    // TODO verify_panel();
-
-    /* Hack -- Increase "xtra" depth */
-    character_xtra++;
-
-    /* Clear */
-   // TODO clear the screen Term_clear();
-
-    /* Update stuff */
-    p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_NATIVE);
-
-    /* Calculate torch radius */
-    p_ptr->update |= (PU_TORCH);
-
-    /* RE-do the flow */
-    p_ptr->update |= (PU_FLOW_DOORS | PU_FLOW_NO_DOORS);
-
-    /* Update stuff */
-    update_stuff();
-
-    /* Fully update the visuals (and monster distances) */
-    p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_DISTANCE);
-
-    /* Redraw dungeon */
-    p_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_MAP);
-
-    /* Redraw "statusy" things */
-    p_ptr->redraw |= (PR_INVEN | PR_EQUIP | PR_MONSTER | PR_MONLIST | PR_ITEMLIST);
-
-    /* Update stuff */
-    update_stuff();
-
-    /* Redraw stuff */
-    redraw_stuff();
-
-    /* Hack -- Decrease "xtra" depth */
-    character_xtra--;
-
-    /* Update stuff */
-    p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_NATIVE);
-
-    /* Combine / Reorder the pack */
-    p_ptr->notice |= (PN_COMBINE | PN_REORDER | PN_SORT_QUIVER);
-
-    /* Noun-verb menu by command only */
-    p_ptr->noun_verb = FALSE;
-
-    /* Notice stuff */
-    notice_stuff();
-
-    /* Update stuff */
-    update_stuff();
-
-    /* Redraw stuff */
-    redraw_stuff();
-
-    /* Handle delayed death */
-    if (p_ptr->is_dead) return;
-
-    /* Check quests */
-    for (i = 0; i < z_info->q_max; i++)
-    {
-        quest_type *q_ptr = &q_info[i];
-
-        /* Already complete */
-        if (is_quest_complete(i)) continue;
-
-        /* No quest */
-        if (!q_ptr->base_level) continue;
-
-        /* Check for quest */
-        if (q_ptr->base_level == p_ptr->depth)
-        {
-            q_info[i].q_flags |= (QFLAG_STARTED);
-
-            p_ptr->redraw = (PR_QUEST_ST);
-            break;
-        }
-    }
-
-    /* Announce (or repeat) the feeling */
-    if (p_ptr->depth && (do_feeling)) do_cmd_feeling();
-
-    /* Announce a player ghost challenge. -LM- */
-    ghost_challenge();
-
-    /*** Process this dungeon level ***/
-
-    /* Reset the monster generation level */
-    monster_level = p_ptr->depth;
-
-    /* Reset the object generation level */
-    object_level = p_ptr->depth;
-
     /* Notice stuff */
     if (p_ptr->notice) notice_stuff();
 
@@ -1757,6 +1561,192 @@ static void change_player_level(void)
 
     /* Make a new level */
     generate_cave();
+
+    int i;    
+
+    /* Not leaving */
+    p_ptr->leaving_level = FALSE;
+
+    /* Reset the "command" vars */
+    p_ptr->command_cmd = 0;
+    p_ptr->command_new = 0;
+    p_ptr->command_rep = 0;
+    p_ptr->command_arg = 0;
+    p_ptr->command_dir = 0;
+
+    /* Cancel the target */
+    target_set_monster(0);
+
+    /* Cancel the health bar */
+    health_track(0);
+
+    /* Reset shimmer flags */
+    shimmer_monsters = TRUE;
+    shimmer_objects = TRUE;
+
+    /* Reset repair flags */
+    repair_mflag_show = TRUE;
+    repair_mflag_mark = TRUE;
+
+    /* Reset terrain damage */
+    p_ptr->cumulative_terrain_damage = 0;
+
+    /* Disturb */
+    disturb(1, 0);
+
+    /* Track maximum player level */
+    if (p_ptr->max_lev < p_ptr->lev)
+    {
+        p_ptr->max_lev = p_ptr->lev;
+    }
+
+    /* Track maximum dungeon level */
+    if (p_ptr->max_depth < p_ptr->depth)
+    {
+        p_ptr->max_depth = p_ptr->depth;
+    }
+
+    /* Track maximum quest level */
+    if ((p_ptr->max_depth > 1) &&
+        (p_ptr->max_depth > p_ptr->quest_depth))
+    {
+        p_ptr->quest_depth = p_ptr->max_depth;
+    }
+
+    /* Track recall dungeon level */
+    if (p_ptr->recall_depth < p_ptr->depth)
+    {
+        p_ptr->recall_depth = p_ptr->depth;
+    }
+
+    /* If autosave is pending, do it now. */
+    if (p_ptr->autosave)
+    {
+        save_player();
+        p_ptr->autosave = FALSE;
+    }
+
+    /* No stairs down from fixed or guardian quests */
+    if (no_down_stairs(p_ptr->depth))
+    {
+        if ((p_ptr->create_stair == FEAT_MORE) ||
+            (p_ptr->create_stair == FEAT_MORE_SHAFT))
+             p_ptr->create_stair = FALSE;
+    }
+
+    /* No stairs from town or if not allowed */
+    if (!p_ptr->depth)
+    {
+        p_ptr->create_stair = FALSE;
+    }
+
+    /* Make a staircase */
+    if (p_ptr->create_stair)
+    {
+        /* Place a staircase */
+        if (cave_valid_bold(p_ptr->py, p_ptr->px))
+        {
+            /* XXX XXX XXX */
+            delete_object(p_ptr->py, p_ptr->px);
+
+            cave_set_feat(p_ptr->py, p_ptr->px, p_ptr->create_stair);
+
+            /* Mark the stairs as known */
+            dungeon_info[p_ptr->py][p_ptr->px].cave_info |= (CAVE_MARK);
+        }
+
+        /* Cancel the stair request */
+        p_ptr->create_stair = FALSE;
+    }    
+
+    /* Hack -- Increase "xtra" depth */
+    character_xtra++;
+
+    /* Update stuff */
+    p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_NATIVE);
+
+    /* Calculate torch radius */
+    p_ptr->update |= (PU_TORCH);
+
+    /* RE-do the flow */
+    p_ptr->update |= (PU_FLOW_DOORS | PU_FLOW_NO_DOORS);
+
+    /* Update stuff */
+    update_stuff();
+
+    /* Fully update the visuals (and monster distances) */
+    p_ptr->update |= (PU_FORGET_VIEW | PU_UPDATE_VIEW | PU_DISTANCE);
+
+    /* Redraw dungeon */
+    p_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_MAP);
+
+    /* Redraw "statusy" things */
+    p_ptr->redraw |= (PR_INVEN | PR_EQUIP | PR_MONSTER | PR_MONLIST | PR_ITEMLIST);
+
+    /* Update stuff */
+    update_stuff();
+
+    /* Redraw stuff */
+    redraw_stuff();
+
+    /* Hack -- Decrease "xtra" depth */
+    character_xtra--;
+
+    /* Update stuff */
+    p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_NATIVE | PU_PANEL);
+
+    /* Combine / Reorder the pack */
+    p_ptr->notice |= (PN_COMBINE | PN_REORDER | PN_SORT_QUIVER);
+
+    /* Noun-verb menu by command only */
+    p_ptr->noun_verb = FALSE;
+
+    /* Notice stuff */
+    notice_stuff();
+
+    /* Update stuff */
+    update_stuff();
+
+    /* Redraw stuff */
+    redraw_stuff();
+
+    /* Handle delayed death */
+    if (p_ptr->is_dead) return;
+
+    /* Check quests */
+    for (i = 0; i < z_info->q_max; i++)
+    {
+        quest_type *q_ptr = &q_info[i];
+
+        /* Already complete */
+        if (is_quest_complete(i)) continue;
+
+        /* No quest */
+        if (!q_ptr->base_level) continue;
+
+        /* Check for quest */
+        if (q_ptr->base_level == p_ptr->depth)
+        {
+            q_info[i].q_flags |= (QFLAG_STARTED);
+
+            p_ptr->redraw = (PR_QUEST_ST);
+            break;
+        }
+    }
+
+    /* Announce (or repeat) the feeling */
+    if (p_ptr->depth && (do_feeling)) do_cmd_feeling();
+
+    /* Announce a player ghost challenge. -LM- */
+    ghost_challenge();
+
+    /*** Process this dungeon level ***/
+
+    /* Reset the monster generation level */
+    monster_level = p_ptr->depth;
+
+    /* Reset the object generation level */
+    object_level = p_ptr->depth;
 }
 
 

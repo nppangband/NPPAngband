@@ -697,7 +697,7 @@ void MainWindow::redraw()
         return;
     }
 
-    // TODO REMOVE THIS
+    // TODO PLAYTESTING. DONT REMOVE YET
     wiz_light();
 
     // Adjust scrollbars
