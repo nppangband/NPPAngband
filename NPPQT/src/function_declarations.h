@@ -84,7 +84,10 @@ extern bool command_takeoff(cmd_arg args);
 extern void do_cmd_takeoff(void);
 extern bool command_wield(cmd_arg args);
 extern void do_cmd_wield(void);
+extern bool command_drop(cmd_arg args);
 extern void do_cmd_drop(void);
+extern void command_refuel(cmd_arg args);
+extern void do_cmd_refuel(void);
 extern void do_cmd_swap_weapon(void);
 extern cmd_arg obj_cast(object_type *o_ptr, cmd_arg args);
 

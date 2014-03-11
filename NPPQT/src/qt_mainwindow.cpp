@@ -1045,6 +1045,11 @@ void MainWindow::keyPressEvent(QKeyEvent* which_key)
             move_player(3, FALSE);
             return;
         }
+        case Qt::Key_F:
+        {
+            do_cmd_refuel();
+            return;
+        }
         case Qt::Key_I:
         {
             do_cmd_observe();
