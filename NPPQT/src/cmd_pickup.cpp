@@ -186,7 +186,7 @@ static bool put_object_in_quiver(object_type *o_ptr)
     QString o_name;
 	int slot;
 
-    u16b msgt = MSG_GENERIC;
+    u16b msgt = TERM_WHITE;
 
 	/*hack - don't pickup &nothings*/
 	if (!o_ptr->k_idx) return (FALSE);
@@ -258,7 +258,7 @@ bool put_object_in_inventory(object_type *o_ptr)
 {
     QString o_name;
 
-    u16b msgt = MSG_GENERIC;
+    u16b msgt = TERM_WHITE;
 
 	int slot = inven_carry(o_ptr);
 
@@ -740,7 +740,7 @@ void py_pickup(bool pickup)
 	/* Only one object */
 	if (objects_left == 1)
 	{
-        u16b msgt = MSG_GENERIC;
+        u16b msgt = TERM_WHITE;
 
 		/* Get the object */
         o_ptr = &o_list[dungeon_info[py][px].object_idx];
