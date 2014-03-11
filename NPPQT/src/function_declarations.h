@@ -55,6 +55,11 @@ extern void monster_race_track(int r_idx);
 extern void feature_kind_track(int f_idx);
 extern void disturb(int stop_search, int unused_flag);
 
+// cmd_actions.cpp
+extern bool do_cmd_test(int y, int x, int action, bool do_message);
+extern void do_cmd_go_up(void);
+extern void do_cmd_go_down(void);
+
 // cmd3.cpp
 extern void wield_in_quiver(object_type *o_ptr, int slot);
 extern void wield_item(object_type *o_ptr, int item, int slot);

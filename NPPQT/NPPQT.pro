@@ -16,6 +16,7 @@ SOURCES +=  src/qt_main.cpp\
             src/birthdialog.cpp \
             src/birth.cpp \
             src/calcs.cpp \
+            src/cmd_actions.cpp \
             src/cmd3.cpp \
             src/cmd4.cpp \
             src/cmd_objects.cpp \
@@ -74,6 +75,7 @@ SOURCES +=  src/qt_main.cpp\
             src/target.cpp \
             src/timed.cpp \
             src/utilities.cpp
+
 
 
 

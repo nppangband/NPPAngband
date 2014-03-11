@@ -1060,6 +1060,16 @@ void MainWindow::keyPressEvent(QKeyEvent* which_key)
             do_cmd_uninscribe();
             return;
         }
+        case Qt::Key_Greater:
+        {
+            do_cmd_go_down();
+            return;
+        }
+        case Qt::Key_Less:
+        {
+            do_cmd_go_up();
+            return;
+        }
 
         default:
         {

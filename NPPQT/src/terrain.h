@@ -94,7 +94,6 @@
 #define MAX_DISTANCE_BETWEEN_UPDATES 12
 
 
-
 /*
  * Number of feats we change to (Excluding default). Used in f_info.txt.
  */
@@ -767,7 +766,7 @@ _feat_ff3_match(f_info + dungeon_info[y][x].feat, flags)
  * Line 4-5 -- shop doors
  */
 #define cave_perma_bold(Y,X) \
-    (f_info[dungeon_info[Y][X].cave_info].f_flags1  & (FF1_PERMANENT))
+    (f_info[dungeon_info[Y][X].feat].f_flags1  & (FF1_PERMANENT))
 
 /*
  * Determine if a "legal" grid is a door but not secret.

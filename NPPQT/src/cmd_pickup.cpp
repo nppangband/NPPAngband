@@ -770,6 +770,9 @@ void py_pickup(bool pickup)
 void do_cmd_pickup(void)
 {
 
+    // Paranoia
+    if (!p_ptr->playing) return;
+
     do_cmd_pickup_from_pile(TRUE, TRUE);
 
     /*
