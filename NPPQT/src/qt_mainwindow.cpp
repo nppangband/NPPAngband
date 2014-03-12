@@ -1068,6 +1068,11 @@ void MainWindow::keyPressEvent(QKeyEvent* which_key)
             do_cmd_observe();
             return;
         }
+        case Qt::Key_D:
+        {
+            do_cmd_destroy();
+            return;
+        }
         case Qt::Key_BraceLeft:
         {
             do_cmd_inscribe();
@@ -1091,11 +1096,12 @@ void MainWindow::keyPressEvent(QKeyEvent* which_key)
 
         default:
         {
-            // handle lowercase keystrokes
-            if (keystring.operator ==("t")) do_cmd_takeoff();
-            else if (keystring.operator ==("w")) do_cmd_wield();
-            else if (keystring.operator ==("d")) do_cmd_drop();
+            // handle lowercase keystrokes        
+            if (keystring.operator ==("d")) do_cmd_drop();
             else if (keystring.operator ==("g")) do_cmd_pickup();
+            else if (keystring.operator ==("t")) do_cmd_takeoff();
+            else if (keystring.operator ==("w")) do_cmd_wield();
+            else if (keystring.operator ==("x")) do_cmd_swap_weapon();
             else
             {
                 //  TODO something useful with unused keypresses

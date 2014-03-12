@@ -118,6 +118,21 @@ cmd_arg obj_drop(object_type *o_ptr, cmd_arg args)
     return (args);
 }
 
+cmd_arg obj_destroy(object_type *o_ptr, cmd_arg args)
+{
+    int amt = get_quantity("Please enter an amount to destroy.", o_ptr->number);
+    if (amt <= 0)
+    {
+        args.verify = FALSE;
+        return (args);
+    }
+
+    args.verify = TRUE;
+    args.number = amt;
+
+    return (args);
+}
+
 /*
  * Study a book to gain a new spell
  */
@@ -303,6 +318,11 @@ static item_act_t item_actions[] =
     "Refuel with what fuel source? ", "You have nothing to refuel with.",
     obj_can_refill, (USE_INVEN | USE_FLOOR), NULL },
 
+    /* ACTION_DESTROY */
+   { obj_destroy, FALSE, "destroy",
+    "Destroy which item? ", "You have nothing to destroy.",
+    NULL, (USE_INVEN | USE_FLOOR | USE_EQUIP | USE_QUIVER), NULL },
+
 };
 
 
@@ -327,7 +347,8 @@ typedef enum
     ACTION_EAT_FOOD,
     ACTION_QUAFF_POTION,
     ACTION_READ_SCROLL,
-    ACTION_REFILL
+    ACTION_REFILL,
+    ACTION_DESTROY,
 } item_act;
 
 static bool trap_related_object(object_type *o_ptr)
@@ -1036,6 +1057,9 @@ void command_refuel(cmd_arg args)
 {
     object_type *j_ptr = &inventory[INVEN_LIGHT];
 
+    // Command cancelled
+    if(!args.verify) return;
+
     int item = args.item;
     object_type *o_ptr = object_from_item_idx(item);
 
@@ -1097,7 +1121,7 @@ static void swap_weapons(void)
     /* Not holding anything */
     if ((!o_ptr->k_idx) && (!j_ptr->k_idx))
     {
-        message(QString("But you are wielding no weapons."));
+        pop_up_message_box(QString("But you are wielding no weapons."));
         return;
     }
 
@@ -1105,7 +1129,7 @@ static void swap_weapons(void)
     if (o_ptr->is_cursed())
     {
         o_name = object_desc(o_ptr,  ODESC_BASE);
-        message(QString("The %1 you are %2 appears to be cursed.") .arg(o_name) .arg(describe_use(INVEN_MAIN_WEAPON)));
+        pop_up_message_box(QString("The %1 you are %2 appears to be cursed.") .arg(o_name) .arg(describe_use(INVEN_MAIN_WEAPON)));
         return;
     }
 
@@ -1162,7 +1186,7 @@ static void wield_swap_weapon(void)
         QString o_name;
 
         o_name = object_desc(o_ptr,  ODESC_BASE);
-        message(QString("The %1 you are %2 appears to be cursed.") .arg(o_name) .arg(describe_use(INVEN_MAIN_WEAPON)));
+        pop_up_message_box(QString("The %1 you are %2 appears to be cursed.") .arg(o_name) .arg(describe_use(INVEN_MAIN_WEAPON)));
         return;
     }
 
@@ -1195,7 +1219,7 @@ static void wield_swap_weapon(void)
     }
 
     /* Didn't find anything */
-    message(QString("Please inscribe a weapon with '@x' in order to swap it."));
+    pop_up_message_box("Please inscribe a weapon with '@x' in order to swap it.");
 }
 
 /*
@@ -1204,7 +1228,170 @@ static void wield_swap_weapon(void)
  */
 void do_cmd_swap_weapon()
 {
+    // Paranoia
+    if (!p_ptr->playing) return;
+
     if (adult_swap_weapons) swap_weapons();
     else wield_swap_weapon();
 }
+
+/*
+ * Destroy an item
+ */
+void command_destroy(cmd_arg args)
+{
+    // Command cancelled
+    if(!args.verify) return;
+
+    int item = args.item;
+    object_type *o_ptr = object_from_item_idx(item);
+
+    if (!item_is_available(item, NULL, USE_INVEN | USE_FLOOR))
+    {
+        pop_up_message_box("You do not have that item to destroy.");
+        return;
+    }
+
+    int amt = args.number;
+    int old_number;
+    int old_charges = 0;
+
+    QString o_name;
+
+    QString out_val;
+
+    /* Can't destroy cursed items we're wielding. */
+    if ((item >= INVEN_WIELD) && o_ptr->is_cursed())
+    {
+        message(QString("You cannot destroy the cursed item."));
+        return;
+    }
+
+    /* Cursed quiver */
+    else if (IS_QUIVER_SLOT(item) && p_ptr->state.cursed_quiver)
+    {
+        /* Oops */
+        message(QString("Your quiver is cursed!"));
+        return;
+    }
+
+    /* Allow user abort */
+    if (amt <= 0) return;
+
+    /* Describe the object */
+    old_number = o_ptr->number;
+
+    /*Hack, state the correct number of charges to be destroyed if wand, rod or staff*/
+    if (((o_ptr->tval == TV_WAND) || (o_ptr->tval == TV_STAFF) || o_ptr->tval == TV_ROD)
+        && (amt < o_ptr->number))
+    {
+        /*save the number of charges*/
+        old_charges = o_ptr->pval;
+
+        /*distribute the charges*/
+        o_ptr->pval -= o_ptr->pval * amt / o_ptr->number;
+
+        o_ptr->pval = old_charges - o_ptr->pval;
+    }
+
+    /*hack -  make sure we get the right amount displayed*/
+    o_ptr->number = amt;
+
+    /*now describe with correct amount*/
+    o_name = object_desc(o_ptr, ODESC_PREFIX | ODESC_FULL);
+
+    /*reverse the hack*/
+    o_ptr->number = old_number;
+
+    /* Verify destruction */
+    if (verify_destroy)
+    {
+        /* Check for known ego-items */
+        out_val = (QString("Really Destroy %1?") .arg(o_name));
+
+        if (!get_check(out_val)) return;
+
+        // TODO special dialog box for squelching ego-items and object kinds
+    }
+
+
+    /* Artifacts cannot be destroyed */
+    if (o_ptr->is_artifact())
+    {
+        /* Message */
+        message(QString("You cannot destroy %s.") .arg(o_name));
+
+        /* Don't mark id'ed objects */
+        if (o_ptr->is_known()) return;
+
+        /* It has already been sensed */
+        if (o_ptr->ident & (IDENT_SENSE))
+        {
+            /* Already sensed objects always get improved feelings */
+            if (o_ptr->is_cursed() || o_ptr->is_broken())
+                o_ptr->discount = INSCRIP_TERRIBLE;
+            else
+                o_ptr->discount = INSCRIP_SPECIAL;
+        }
+        else
+        {
+            /* Mark the object as indestructible */
+            o_ptr->discount = INSCRIP_INDESTRUCTIBLE;
+        }
+
+        /* Combine the pack */
+        p_ptr->notice |= (PN_COMBINE);
+
+        p_ptr->update |= (PU_NATIVE);
+
+        p_ptr->redraw |= (PR_INVEN | PR_EQUIP | PR_RESIST | PR_EXP |
+                          PR_STATS | PU_NATIVE | PR_ITEMLIST);
+
+        /* Done */
+        return;
+    }
+
+    /* Message */
+    message(QString("You destroy %1.") .arg(o_name));
+
+    /*hack, restore the proper number of charges after the messages have printed
+     * so the proper number of charges are destroyed*/
+    if (old_charges) o_ptr->pval = old_charges;
+
+    /* Reduce the charges of rods/wands */
+    reduce_charges(o_ptr, amt);
+
+    /* Eliminate the item (from the pack) */
+    if (item >= 0)
+    {
+        inven_item_increase(item, -amt);
+        inven_item_describe(item);
+        inven_item_optimize(item);
+    }
+
+    /* Eliminate the item (from the floor) */
+    else
+    {
+        floor_item_increase(0 - item, -amt);
+        floor_item_describe(0 - item);
+        floor_item_optimize(0 - item);
+    }
+
+    process_player_energy(BASE_ENERGY_MOVE);
+}
+
+
+/*
+ * Handle the user command to destroy an item
+ */
+void do_cmd_destroy(void)
+{
+    // Paranoia
+    if (!p_ptr->playing) return;
+
+    cmd_arg args = select_item(ACTION_DESTROY);
+
+    command_destroy(args);
+}
+
 

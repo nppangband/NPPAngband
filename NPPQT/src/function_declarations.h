@@ -74,6 +74,7 @@ extern void delete_notes_file(void);
 
 //cmd_objects
 extern cmd_arg obj_uninscribe(object_type *o_ptr, cmd_arg args);
+extern cmd_arg obj_cast(object_type *o_ptr, cmd_arg args);
 extern void command_uninscribe(cmd_arg args);
 extern void do_cmd_uninscribe(void);
 extern void command_inscribe(cmd_arg args);
@@ -89,7 +90,8 @@ extern void do_cmd_drop(void);
 extern void command_refuel(cmd_arg args);
 extern void do_cmd_refuel(void);
 extern void do_cmd_swap_weapon(void);
-extern cmd_arg obj_cast(object_type *o_ptr, cmd_arg args);
+extern void command_destroy(cmd_arg args);
+extern void do_cmd_destroy(void);
 
 // cmd_pickup.cpp
 extern bool put_object_in_inventory(object_type *o_ptr);
